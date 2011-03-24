@@ -254,7 +254,6 @@ void SAL_CALL ZipOutputStream::finish(  )
 void ZipOutputStream::doDeflate()
 {
     sal_Int32 nLength = aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
-    sal_Int32 nOldLength = m_aDeflateBuffer.getLength();
 
     if ( nLength > 0 )
     {

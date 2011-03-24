@@ -157,11 +157,11 @@ public:
 
 class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 {
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >&, sal_Int32 )
+    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence< sal_Int8 >&, sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
         { return 0; }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >&, sal_Int32 )
+    virtual sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< sal_Int8 >&, sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
         { return 0; }
 
@@ -217,7 +217,6 @@ void ZipPackage::parseManifest()
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
     {
         sal_Bool bManifestParsed = sal_False;
-        bool bStartKeyGenerationImported = false;
         bool bDifferentStartKeyAlgorithm = false;
         const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
         if ( m_xRootFolder->hasByName( sMeta ) )
@@ -253,9 +252,9 @@ void ZipPackage::parseManifest()
                             const OUString sPropEncryptionAlgorithm ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) );
                             const OUString sPropStartKeyAlgorithm ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) );
 
-                            Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                            uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                             sal_Int32 nLength = aManifestSequence.getLength();
-                            const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+                            const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
                             ZipPackageStream *pStream = NULL;
                             ZipPackageFolder *pFolder = NULL;
 
@@ -605,7 +604,7 @@ void ZipPackage::getZipFileContents()
 }
 
 //--------------------------------------------------------
-void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException )
 {
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
@@ -981,7 +980,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
     return xRef;
 }
 //--------------------------------------------------------
-uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
+uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException )
 {
     sal_Bool bArg = sal_False;
@@ -1006,7 +1005,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     ZipEntry * pEntry = new ZipEntry;
     sal_Int32 nBufferLength = m_pRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
-    Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
+    uno::Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
                                 nBufferLength );
 
 
@@ -1035,7 +1034,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 }
 
 //--------------------------------------------------------
-void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
     uno::Reference < XOutputStream > xManOutStream;
@@ -1052,10 +1051,10 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
         pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
         pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-        // Convert vector into a Sequence
-        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+        // Convert vector into a uno::Sequence
+        uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
         sal_Int32 nInd = 0;
-        for ( vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+        for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
              aIter != aEnd;
              aIter++, nInd++ )
         {
@@ -1083,7 +1082,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
 }
 
 //--------------------------------------------------------
-void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
     const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
@@ -1097,7 +1096,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequ
     pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-    // Convert vector into a Sequence
+    // Convert vector into a uno::Sequence
     // TODO/LATER: use Defaulst entries in future
     uno::Sequence< beans::StringPair > aDefaultsSequence;
     uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
@@ -1236,7 +1235,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         }
 
         // Create a vector to store data for the manifest.xml file
-        vector < Sequence < PropertyValue > > aManList;
+        vector < uno::Sequence < PropertyValue > > aManList;
 
         const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
         const OUString sVersion ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
@@ -1244,7 +1243,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
+            uno::Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
             aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_pRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
@@ -1377,7 +1376,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                aArg.Mode        = OpenMode::DOCUMENT;
                aArg.Priority    = 0; // unused
                aArg.Sink       = xSink;
-               aArg.Properties = Sequence< Property >( 0 ); // unused
+               aArg.Properties = uno::Sequence< Property >( 0 ); // unused
 
             aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
         }
@@ -1632,7 +1631,7 @@ sal_Bool SAL_CALL ZipPackage::hasPendingChanges()
 Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
         throw( RuntimeException )
 {
-    return Sequence < ElementChange > ();
+    return uno::Sequence < ElementChange > ();
 }
 
 /**
@@ -1654,7 +1653,7 @@ OUString ZipPackage::static_getImplementationName()
 //--------------------------------------------------------
 Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
 {
-    Sequence< OUString > aNames( 1 );
+    uno::Sequence< OUString > aNames( 1 );
     aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.Package" ) );
     return aNames;
 }
@@ -1703,7 +1702,7 @@ Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
 }
 
 //--------------------------------------------------------
-sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
     if ( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
@@ -1740,7 +1739,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
     {
         // this property is only necessary to support raw passwords in storage API;
-        // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;\
+        // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
         // when this support is removed, the storage will get only one key from outside
         // TODO/LATER: Get rid of this property as well as of support of raw passwords in storages
         uno::Sequence< beans::NamedValue > aKeys;

@@ -153,7 +153,7 @@ public:
                                      sal_Int32 &rStartKeyGenID,
                                      sal_Int32 &rSize,
                                      ::rtl::OUString& aMediaType,
-                                     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );
+                                     const ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,

@@ -159,7 +159,6 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     try
     {
         uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
-        rtlDigestError nErr = rtl_Digest_E_None;
         if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
                             aDerivedKey.getLength(),
                             reinterpret_cast< const sal_uInt8 * > (xEncryptionData->m_aKey.getConstArray() ),
@@ -304,7 +303,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
                                     sal_Int32 &rStartKeyGenID,
                                     sal_Int32 &rSize,
                                     ::rtl::OUString& aMediaType,
-                                    uno::Reference < XInputStream > &rStream )
+                                    const uno::Reference< XInputStream >& rStream )
 {
     sal_Bool bOk = sal_False;
     const sal_Int32 nHeaderSize = n_ConstHeaderSize - 4;

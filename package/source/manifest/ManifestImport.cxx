@@ -90,9 +90,9 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sSHA1_Name                    ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) )
 , sSHA1_URL                     ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_URL ) )
 
+, sSHA256_1k_URL                ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) )
 , sSHA1_1k_Name                 ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_NAME ) )
 , sSHA1_1k_URL                  ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_URL ) )
-, sSHA256_1k_URL                ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) )
 
 , sBlowfish_Name                ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_NAME ) )
 , sBlowfish_URL                 ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_URL ) )

@@ -42,7 +42,8 @@ public:
     : m_nIterationCount ( 0 ){}
 
     BaseEncryptionData( const BaseEncryptionData& aData )
-    : m_aSalt( aData.m_aSalt )
+    : cppu::OWeakObject()
+    , m_aSalt( aData.m_aSalt )
     , m_aInitVector( aData.m_aInitVector )
     , m_aDigest( aData.m_aDigest )
     , m_nIterationCount( aData.m_nIterationCount )
