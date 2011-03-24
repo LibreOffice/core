@@ -225,7 +225,7 @@ endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CFLAGS += -g
