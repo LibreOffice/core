@@ -701,6 +701,10 @@ AC_ARG_WITH(system-python,
         [Use python already on system.]),
 ,with_system_python=yes)
 
+AC_ARG_WITH(system-translate-toolkit,
+    AS_HELP_STRING([--with-system-translate-toolkit],
+        [Use translate-toolkit already on system.]))
+
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
         [Use icu already on system.]))
@@ -4145,6 +4149,30 @@ else
    DISABLE_PYTHON=TRUE
    AC_SUBST(DISABLE_PYTHON)
 fi
+
+dnl ===================================================================
+dnl Check for system translate-toolkit
+dnl ===================================================================
+AC_MSG_CHECKING([which translate-toolkit to use])
+if test "$with_system_translate_toolkit" = "yes" ; then
+    AC_PATH_PROGS(OO2PO, oo2po)
+    if test -z "$OO2PO"; then
+        AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
+    fi
+
+    AC_PATH_PROGS(PO2OO, po2oo)
+    if test -z "$PO2OO"; then
+        AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
+    fi
+    
+    AC_MSG_RESULT([system])
+    SYSTEM_TRANSLATE_TOOLKIT=YES
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_TRANSLATE_TOOLKIT=NO
+   BUILD_TYPE="$BUILD_TYPE TRANSLATE_TOOLKIT"
+fi
+AC_SUBST(SYSTEM_TRANSLATE_TOOLKIT)
 
 dnl ===================================================================
 dnl Check for system berkley db

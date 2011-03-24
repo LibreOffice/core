@@ -1933,6 +1933,7 @@ ToFile( "WITH_EXTRA_GALLERY",       "@WITH_EXTRA_GALLERY@",      "e" );
 ToFile( "WITH_EXTRA_TEMPLATE",       "@WITH_EXTRA_TEMPLATE@",      "e" );
 ToFile( "WITH_EXTRA_SAMPLE",       "@WITH_EXTRA_SAMPLE@",      "e" );
 ToFile( "WITH_EXTRA_FONT",       "@WITH_EXTRA_FONT@",      "e" );
+ToFile( "SYSTEM_TRANSLATE_TOOLKIT", "@SYSTEM_TRANSLATE_TOOLKIT@",        "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
