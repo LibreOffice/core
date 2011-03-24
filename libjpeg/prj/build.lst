@@ -1,3 +1,0 @@
-ljpeg   libjpeg : soltools NULL
-ljpeg   libjpeg  usr1   -   all	ljpeg_mkout NULL
-ljpeg   libjpeg  nmake  -   all	ljpeg_libjpeg NULL

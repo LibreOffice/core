@@ -1,5 +1,5 @@
---- misc/libpng-1.5.1/makefile.mk	2011-03-01 00:01:58.221734678 +0100
-+++ misc/build/libpng-1.5.1/makefile.mk	2011-02-28 23:52:40.953319424 +0100
+--- misc/libpng-1.5.1/makefile.mk	2011-03-24 21:49:50.911397154 +0100
++++ misc/build/libpng-1.5.1/makefile.mk	2011-03-24 21:47:23.379397048 +0100
 @@ -1 +1,49 @@
 -dummy
 +#*************************************************************************
@@ -51,8 +51,8 @@
 +
 +.INCLUDE :  target.mk
 +
---- misc/libpng-1.5.1/pnglibconf.h	2011-03-02 15:19:29.537422800 +0100
-+++ misc/build/libpng-1.5.1/pnglibconf.h	2011-03-02 15:18:11.492358700 +0100
+--- misc/libpng-1.5.1/pnglibconf.h	2011-03-24 21:49:50.913397154 +0100
++++ misc/build/libpng-1.5.1/pnglibconf.h	2011-03-24 21:47:23.380397048 +0100
 @@ -1 +1,176 @@
 -dummy
 +
@@ -232,7 +232,7 @@
 +/* end of options */
 +#endif /* PNGLCONF_H */
 --- misc/libpng-1.5.1/pngstruct.h	2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngstruct.h	2011-03-02 16:28:53.289801400 +0100
++++ misc/build/libpng-1.5.1/pngstruct.h	2011-03-24 21:47:23.380397048 +0100
 @@ -24,7 +24,11 @@
   * in this structure and is required for decompressing the LZ compressed
   * data in PNG files.
@@ -244,9 +244,9 @@
 +#endif
 
  struct png_struct_def
- { 
---- misc/libpng-1.5.1/pngtest.c 	2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngtest.c	    2011-03-02 16:30:09.881914600 +0100
+ {
+--- misc/libpng-1.5.1/pngtest.c	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.1/pngtest.c	2011-03-24 21:47:23.380397048 +0100
 @@ -31,7 +31,12 @@
   * of files at once by typing "pngtest -m file1.png file2.png ..."
   */
@@ -260,9 +260,9 @@
  #include "png.h"
  /* Copied from pngpriv.h but only used in error messages below. */
  #ifndef PNG_ZBUF_SIZE
---- misc/libpng-1.5.1/pngvalid.c        2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngvalid.c    2011-03-02 19:15:38.583630100 +0100
-@@ -51,7 +51,11 @@ typedef png_byte *png_const_bytep;
+--- misc/libpng-1.5.1/pngvalid.c	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.1/pngvalid.c	2011-03-24 21:47:23.381397048 +0100
+@@ -51,7 +51,11 @@
  #define PNG_READ_16BIT_SUPPORTED
  #endif
 
@@ -275,4 +275,3 @@
 
  #include <float.h>  /* For floating point constants */
  #include <stdlib.h> /* For malloc */
- 

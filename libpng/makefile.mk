@@ -47,7 +47,7 @@ LIBPNGVERSION=1.5.1
 TARFILE_NAME=$(PRJNAME)-$(LIBPNGVERSION)
 TARFILE_MD5=220035f111ea045a51e290906025e8b5
 
-PATCH_FILES=libpng.patch
+PATCH_FILES=$(PRJNAME)-$(LIBPNGVERSION).patch
 ADDITIONAL_FILES=makefile.mk pnglibconf.h
 
 #relative to CONFIGURE_DIR
@@ -61,4 +61,3 @@ OUT2INC=png.h pnglibconf.h pngconf.h pngstruct.h
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
