@@ -919,7 +919,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     [pProto release];
 }
 
-static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttachOffset*/,
                     const rtl::OUString& rText,
                     const rtl::OUString& rProperty, const Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
                     std::vector<ColumnItem >& rLeftColumn,

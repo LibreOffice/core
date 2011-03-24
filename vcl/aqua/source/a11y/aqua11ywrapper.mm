@@ -164,7 +164,8 @@ static BOOL isPopupMenuOpen = NO;
         if ( ! asGetter ) {
             [ methodName appendString: @"set" ];
         }
-        NSString * firstChar = [ attribute substringWithRange: NSMakeRange ( 2, 1 ) ]; // drop leading "AX" and get first char
+        NSRange aRange = { 2, 1 };
+        NSString * firstChar = [ attribute substringWithRange: aRange ]; // drop leading "AX" and get first char
         if ( asGetter ) {
             [ methodName appendString: [ firstChar lowercaseString ] ]; 
         } else {
@@ -831,7 +832,10 @@ static BOOL isPopupMenuOpen = NO;
     return nil; // TODO: to be completed
 }
 
--(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute {
+-(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute
+{
+    (void)value;
+    (void)attribute;
     return NO; // TODO
 }
 

@@ -65,6 +65,7 @@
 
 -(NSPoint)locationOfPrintRect: (NSRect)aRect
 {
+    (void)aRect;
     NSPoint aPoint = { 0, 0 };
     return aPoint;
 }

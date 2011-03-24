@@ -38,6 +38,7 @@
 @implementation TimerCallbackCaller
 -(void)timerElapsed:(NSTimer*)pTimer
 {
+    (void)pTimer;
     ImplSVData* pSVData = ImplGetSVData();
     if( AquaSalTimer::bDispatchTimer )
     {

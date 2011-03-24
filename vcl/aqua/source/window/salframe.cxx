@@ -288,6 +288,7 @@ SalGraphics* AquaSalFrame::GetGraphics()
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
+    (void)pGraphics;
     DBG_ASSERT( pGraphics == mpGraphics, "graphics released on wrong frame" );
     mbGraphics = FALSE;
 }

@@ -68,6 +68,7 @@ using namespace ::com::sun::star::uno;
 
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper
 {
+    (void)wrapper;
     if ( [ attribute isEqualToString: NSAccessibilitySelectedChildrenAttribute ] )
     {
         return YES;

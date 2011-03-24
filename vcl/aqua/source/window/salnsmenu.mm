@@ -45,6 +45,7 @@
 
 -(void)menuNeedsUpdate: (NSMenu*)pMenu
 {
+    (void)pMenu;
     YIELD_GUARD;
     
     if( mpMenu )
@@ -84,6 +85,7 @@
 }
 -(void)menuItemTriggered: (id)aSender
 {
+    (void)aSender;
     YIELD_GUARD;
     
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;

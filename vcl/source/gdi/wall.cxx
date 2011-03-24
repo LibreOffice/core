@@ -40,7 +40,7 @@
 #include <wall2.hxx>
 
 
-DBG_NAME( Wallpaper );
+DBG_NAME( Wallpaper )
 
 // -----------------------------------------------------------------------
 

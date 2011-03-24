@@ -53,6 +53,7 @@
 {
     // do nothing, this is just to start an NSThread and therefore put
     // Cocoa into multithread mode
+    (void)param;
 }
 @end
 
@@ -285,11 +286,13 @@
  
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
+    (void)sender;
     return AquaSalInstance::GetDynamicDockMenu();
 }
 
 -(BOOL)application: (NSApplication*)app openFile: (NSString*)pFile
 {
+    (void)app;
     const rtl::OUString aFile( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile ) )
     {
@@ -302,6 +305,7 @@
 
 -(void)application: (NSApplication*) app openFiles: (NSArray*)files
 {
+    (void)app;
     rtl::OUStringBuffer aFileList( 256 );
     
     NSEnumerator* it = [files objectEnumerator];
@@ -331,6 +335,7 @@
 
 -(BOOL)application: (NSApplication*)app printFile: (NSString*)pFile
 {
+    (void)app;
     const rtl::OUString aFile( GetOUString( pFile ) );
 	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
                                                 APPEVENT_PRINT_STRING, aFile );
@@ -339,6 +344,9 @@
 }
 -(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
 {
+    (void)app;
+    (void)printSettings;
+    (void)bShowPrintPanels;
     // currently ignores print settings an bShowPrintPanels
     rtl::OUStringBuffer aFileList( 256 );
     
@@ -361,6 +369,7 @@
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
+    (void)app;
     NSApplicationTerminateReply aReply = NSTerminateNow;
     {
         YIELD_GUARD;
@@ -388,6 +397,7 @@
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
     
     const SalData* pSalData = GetSalData();
@@ -397,6 +407,7 @@
 
 -(void)screenParametersChanged: (NSNotification*) pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
     
     SalData* pSalData = GetSalData();
@@ -409,11 +420,13 @@
 
 -(void)scrollbarVariantChanged: (NSNotification*) pNotification
 {
+    (void)pNotification;
     GetSalData()->mpFirstInstance->delayedSettingsChanged( true );
 }
 
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification
 {
+    (void)pNotification;
     GetSalData()->mpFirstInstance->delayedSettingsChanged( false );
 }
 
@@ -437,7 +450,9 @@
 
 #pragma mark -
 #pragma mark NSApplication Delegates
-- (void)applicationWillBecomeActive:(NSNotification *)aNotification {
+- (void)applicationWillBecomeActive:(NSNotification *)pNotification
+{
+    (void)pNotification;
     if (GetSalData()->mpMainController->remoteControl) {
 
         // [remoteControl startListening: self];
@@ -453,7 +468,9 @@
     }
 }
 
-- (void)applicationWillResignActive:(NSNotification *)aNotification {
+- (void)applicationWillResignActive:(NSNotification *)pNotification
+{
+    (void)pNotification;
     if (GetSalData()->mpMainController->remoteControl) {
 
         // [remoteControl stopListening: self];
@@ -471,6 +488,8 @@
 
 - (BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL) bWinVisible
 {
+    (void)pApp;
+    (void)bWinVisible;
     NSObject* pHdl = GetSalData()->mpDockIconClickHandler;
     if( pHdl && [pHdl respondsToSelector: @selector(dockIconClicked:)] )
     {
