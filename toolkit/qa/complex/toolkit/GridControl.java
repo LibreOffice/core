@@ -205,6 +205,8 @@ public class GridControl
         TMutableGridDataModel test = new TMutableGridDataModel( m_dataModel );
         test.testAddRow();
         test.testAddRows();
+        test.testInsertRow();
+        test.testInsertRows();
         test.testRemoveRow();
         test.testRemoveAllRows();
         test.testUpdateCellData();
