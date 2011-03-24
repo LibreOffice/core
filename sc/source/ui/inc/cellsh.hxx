@@ -67,6 +67,7 @@ private:
                     const String& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
 
     void ExecuteDataPilotDialog();
+    void ExecuteSubtotals(SfxRequest& rReq);
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
