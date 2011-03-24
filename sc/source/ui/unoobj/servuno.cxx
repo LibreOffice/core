@@ -121,7 +121,9 @@ public:
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
-        if ( sName == pDoc->GetCodeName() )
+        // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+        // from the code name
+        if( sName.EqualsIgnoreCaseAscii( pDoc->GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
         {
@@ -130,7 +132,9 @@ public:
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
-                if( sCodeName == sName )
+                // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+                // from the code name
+                if( sCodeName.EqualsIgnoreCaseAscii( sName ) )
                 {
                     String sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
