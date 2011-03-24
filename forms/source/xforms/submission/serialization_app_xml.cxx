@@ -30,7 +30,6 @@
 #include "serialization.hxx"
 #include "serialization_app_xml.hxx"
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -39,7 +38,12 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 
+#include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
+
 #include <libxml/tree.h>
+
+#include <limits>
 
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(comphelper::getProcessServiceFactory())
@@ -63,33 +67,39 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
         CSS::uno::Reference< CSS::xml::dom::XDocument > aDoc(rNode, CSS::uno::UNO_QUERY_THROW);
         aNode = CSS::uno::Reference< CSS::xml::dom::XNode >(aDoc->getDocumentElement(), CSS::uno::UNO_QUERY_THROW);
     }
-    if (aNode->getNodeType() != CSS::xml::dom::NodeType_ELEMENT_NODE)
-        return;
+    ENSURE_OR_RETURN_VOID( aNode->getNodeType() == CSS::xml::dom::NodeType_ELEMENT_NODE,
+        "CSerializationAppXML::serialize_node: invalid node type!" );
 
     // clone the node to a new document and serialize that document
-    CSS::uno::Reference< CSS::lang::XUnoTunnel > aTunnel(aNode, CSS::uno::UNO_QUERY);
-    if (aTunnel.is())
-    {
-        xmlNodePtr aNodePtr = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >()) );
-        xmlDocPtr aDocPtr = xmlNewDoc((xmlChar*)"1.0");
-        xmlNodePtr aDocNodePtr = xmlDocCopyNode(aNodePtr, aDocPtr, 1);
-        if (aDocNodePtr != NULL) {
-            xmlAddChild((xmlNodePtr)aDocPtr, aDocNodePtr);
-            xmlChar *buffer = NULL;
-            sal_Int32 size = 0;
-            xmlDocDumpMemory(aDocPtr, &buffer, (int*)&size);
+    CSS::uno::Reference< CSS::lang::XUnoTunnel > xTunnel( aNode, CSS::uno::UNO_QUERY );
+    ENSURE_OR_RETURN_VOID( xTunnel.is(), "CSerializationAppXML::serialize_node: unknown implementation, cannot serialize!" );
 
-            // write the xml into the pipe through it's XOutputStream interface
-            m_aPipe->writeBytes(CSS::uno::Sequence< sal_Int8 >((sal_Int8*)buffer, size));
-            xmlFree(buffer);
+    xmlNodePtr aNodePtr = reinterpret_cast< xmlNodePtr >( xTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >()) );
+    ENSURE_OR_RETURN_VOID( aNodePtr != NULL, "CSerializationAppXML::serialize_node: unable to obtain the xmlNodePtr!" );
+
+    xmlDocPtr aDocPtr = xmlNewDoc((xmlChar*)"1.0");
+    ENSURE_OR_RETURN_VOID( aDocPtr != NULL, "CSerializationAppXML::serialize_node: unable to create a temporary doc!" );
+
+    xmlNodePtr aDocNodePtr = xmlDocCopyNode(aNodePtr, aDocPtr, 1);
+    if (aDocNodePtr != NULL)
+    {
+        xmlAddChild( (xmlNodePtr)aDocPtr, aDocNodePtr );
+
+        xmlChar *buffer = NULL;
+        int size = 0;
+        xmlDocDumpMemory( aDocPtr, &buffer, &size );
+
+        if ( size > ::std::numeric_limits< sal_Int32 >::max() )
+        {
+            OSL_ENSURE( false, "CSerializationAppXML::serialize_node: document too large, doesn't fit into a UNO sequence!" );
+            size = ::std::numeric_limits< sal_Int32 >::max();
         }
 
-    } else {
-        // can't get tunnel to native backend
-        // logic for generic implementation could be implemented here...
-        OSL_FAIL("unkown dom implementation, cannot serialize");
-        return;
+        // write the xml into the pipe through it's XOutputStream interface
+        m_aPipe->writeBytes(CSS::uno::Sequence< sal_Int8 >((sal_Int8*)buffer, size));
+        xmlFree(buffer);
     }
+    xmlFreeDoc( aDocPtr );
 }
 
 void
