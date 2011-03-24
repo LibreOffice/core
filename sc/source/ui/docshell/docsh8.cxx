@@ -251,6 +251,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 {
     sal_uLong nErr = eERR_OK;
     long i;
+    long nColCount = 0;
 
     try
     {
@@ -262,14 +263,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
 
-        long nRowCount = 0;
-        if ( nRowCount < 0 )
-        {
-            DBG_ERROR("can't get row count");
-            nRowCount = 0;
-        }
-
-        ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), nRowCount );
+        ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), 0 );
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
                             rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
@@ -296,7 +290,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 
         xRowSet->execute();
 
-        long nColCount = 0;
         uno::Reference<sdbc::XResultSetMetaData> xMeta;
         uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xRowSet, uno::UNO_QUERY );
         if ( xMetaSupp.is() )
@@ -310,10 +303,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
             nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning
         }
 
-        if ( nColCount > 0 )
-            aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1,
-                    static_cast<SCSIZE>(nRowCount) + 1 );
-
         uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRow.is(), "can't get Row" );
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
@@ -326,6 +315,9 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 
         //  read column names
         //! add type descriptions
+
+        aProgress.SetState( 0 );
+        ScColumn::bDoubleAlloc = sal_True;      // row count isn't readily available in advance
 
         for (i=0; i<nColCount; i++)
         {
@@ -384,9 +376,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                 bEnd = sal_True;                            // don't continue
                 nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning message
             }
-
-            if ( nRowCount )
-                aProgress.SetStateOnPercent( nRow );
         }
     }
     catch ( sdbc::SQLException& )
@@ -398,6 +387,10 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         DBG_ERROR("Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
+
+    ScColumn::bDoubleAlloc = sal_False;
+    if ( nColCount > 0 )
+        aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1, 0 );
 
     return nErr;
 }

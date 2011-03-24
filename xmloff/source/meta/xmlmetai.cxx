@@ -30,6 +30,7 @@
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder.hpp>
+#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
@@ -124,6 +125,71 @@ void XMLDocumentBuilderContext::EndElement()
 
 //===========================================================================
 
+static void
+lcl_initDocumentProperties(SvXMLImport & rImport,
+        uno::Reference<xml::sax::XDocumentHandler> const& xDocBuilder,
+        uno::Reference<document::XDocumentProperties> const& xDocProps)
+{
+    uno::Sequence< uno::Any > aSeq(1);
+    uno::Reference< xml::dom::XSAXDocumentBuilder > const xDB(xDocBuilder,
+        uno::UNO_QUERY_THROW);
+    aSeq[0] <<= xDB->getDocument();
+    uno::Reference< lang::XInitialization > const xInit(xDocProps,
+        uno::UNO_QUERY_THROW);
+    try {
+        xInit->initialize(aSeq);
+        rImport.SetStatistics(xDocProps->getDocumentStatistics());
+        // convert all URLs from relative to absolute
+        xDocProps->setTemplateURL(rImport.GetAbsoluteReference(
+            xDocProps->getTemplateURL()));
+        xDocProps->setAutoloadURL(rImport.GetAbsoluteReference(
+            xDocProps->getAutoloadURL()));
+        SvXMLMetaDocumentContext::setBuildId(
+            xDocProps->getGenerator(), rImport.getImportInfo());
+    } catch (uno::RuntimeException) {
+        throw;
+    } catch (uno::Exception & e) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "SvXMLMetaDocumentContext::initDocumentProperties: "
+                "properties init exception"),
+            rImport, makeAny(e));
+    }
+}
+
+static void
+lcl_initGenerator(SvXMLImport & rImport,
+        uno::Reference<xml::sax::XDocumentHandler> const& xDocBuilder)
+{
+    uno::Reference< xml::dom::XSAXDocumentBuilder > const xDB(xDocBuilder,
+        uno::UNO_QUERY_THROW);
+    uno::Reference< xml::dom::XDocument > const xDoc(xDB->getDocument(),
+        uno::UNO_SET_THROW);
+    try {
+        uno::Reference< xml::xpath::XXPathAPI > const xPath(
+            rImport.getServiceFactory()->createInstance(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.xml.xpath.XPathAPI"))),
+            uno::UNO_QUERY_THROW );
+        xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
+        xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
+
+        ::rtl::OUString const expr(RTL_CONSTASCII_USTRINGPARAM(
+            "string(/office:document-meta/office:meta/meta:generator)"));
+        uno::Reference< xml::xpath::XXPathObject > const xObj(
+            xPath->eval(xDoc.get(), expr), uno::UNO_SET_THROW);
+        OUString const value(xObj->getString());
+        SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());
+    } catch (uno::RuntimeException) {
+        throw;
+    } catch (uno::Exception & e) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "SvXMLMetaDocumentContext::initGenerator: exception"),
+            rImport, makeAny(e));
+    }
+}
+
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
             sal_uInt16 nPrfx, const rtl::OUString& rLName,
             const uno::Reference<document::XDocumentProperties>& xDocProps,
@@ -132,8 +198,9 @@ SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
     mxDocProps(xDocProps),
     mxDocBuilder(xDocBuilder)
 {
-    DBG_ASSERT(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
-    DBG_ASSERT(xDocBuilder.is(), "SvXMLMetaDocumentContext: no document hdlr");
+// #i103539#: must always read meta.xml for generator, xDocProps unwanted then
+//    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
+    OSL_ENSURE(xDocBuilder.is(), "SvXMLMetaDocumentContext: no document hdlr");
     // here are no attributes
 }
 
@@ -166,6 +233,7 @@ void SvXMLMetaDocumentContext::StartElement(
     mxDocBuilder->startElement(
         GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
             GetXMLToken(XML_DOCUMENT_META)), xAttrList);
+
 }
 
 void SvXMLMetaDocumentContext::EndElement()
@@ -175,43 +243,16 @@ void SvXMLMetaDocumentContext::EndElement()
         GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
             GetXMLToken(XML_DOCUMENT_META)));
     mxDocBuilder->endDocument();
-    initDocumentProperties();
-}
-
-void SvXMLMetaDocumentContext::initDocumentProperties()
-{
-    uno::Sequence< uno::Any > aSeq(1);
-    uno::Reference< xml::dom::XSAXDocumentBuilder > xDB (mxDocBuilder,
-        uno::UNO_QUERY_THROW);
-    aSeq[0] <<= xDB->getDocument();
-    uno::Reference< lang::XInitialization > xInit(mxDocProps,
-        uno::UNO_QUERY_THROW);
-    try {
-        xInit->initialize(aSeq);
-        GetImport().SetStatistics(mxDocProps->getDocumentStatistics());
-        // convert all URLs from relative to absolute
-        mxDocProps->setTemplateURL(GetImport().GetAbsoluteReference(
-            mxDocProps->getTemplateURL()));
-        mxDocProps->setAutoloadURL(GetImport().GetAbsoluteReference(
-            mxDocProps->getAutoloadURL()));
-        setBuildId(mxDocProps->getGenerator());
-    } catch (uno::RuntimeException) {
-        throw;
-    } catch (uno::Exception & e) {
-        throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
-                "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
-            GetImport(), makeAny(e));
+    if (mxDocProps.is())
+    {
+        lcl_initDocumentProperties(GetImport(), mxDocBuilder, mxDocProps);
+    }
+    else
+    {
+        lcl_initGenerator(GetImport(), mxDocBuilder);
     }
 }
 
-void SvXMLMetaDocumentContext::setBuildId(const ::rtl::OUString & i_rBuildId)
-{
-    SvXMLMetaDocumentContext::setBuildId( i_rBuildId, GetImport().getImportInfo() );
-}
-
-//static
 void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )
 {
     OUString sBuildId;

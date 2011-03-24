@@ -374,10 +374,15 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     {
         //  import of database data into table
 
-        String sDataDesc;
-        if ( aDataHelper.GetString( nFormatId, sDataDesc ) )
+        const DataFlavorExVector& rVector = aDataHelper.GetDataFlavorExVector();
+        if ( svx::ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
         {
-            SfxStringItem aDataDesc(SID_SBA_IMPORT, sDataDesc);
+            // transport the whole ODataAccessDescriptor as slot parameter
+            svx::ODataAccessDescriptor aDesc = svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
+            uno::Any aDescAny;
+            uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
+            aDescAny <<= aProperties;
+            SfxUsrAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             SCTAB nTab = GetViewData()->GetTabNo();
@@ -401,20 +406,10 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             sal_Bool bAreaIsNew = !pDBData;
             SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
-            ::svx::ODataAccessDescriptor aDesc;
-            DataFlavorExVector& rVector = aDataHelper.GetDataFlavorExVector();
-            ::std::auto_ptr<SfxUsrAnyItem> pCursorItem;
-            if ( ::svx::ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
-            {
-                aDesc = ::svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
-                if ( aDesc.has(::svx::daCursor) )
-                    pCursorItem.reset(new SfxUsrAnyItem(FN_PARAM_3, aDesc[::svx::daCursor]));
-            }
-
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
-                                        &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get(), (void*)0 );
+                                        &aDataDesc, &aTarget, &aAreaNew, (void*)0 );
 
             bRet = sal_True;
         }

@@ -31,22 +31,25 @@
 #include "vcl/graph.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/gfxlink.hxx"
+#include "vcl/dllapi.h"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 
 
 #include <boost/shared_ptr.hpp>
 #include <set>
+#include <map>
 
 namespace vcl
 {
-struct PDFExtOutDevDataSync
+struct SAL_DLLPRIVATE PDFExtOutDevDataSync
 {
     enum Action{    CreateNamedDest,
                     CreateDest,
                     CreateLink,
                     SetLinkDest,
                     SetLinkURL,
+                    RegisterDest,
                     CreateOutlineItem,
                     SetOutlineItemParent,
                     SetOutlineItemText,
@@ -73,7 +76,15 @@ struct PDFExtOutDevDataSync
     Action      eAct;
 };
 
-struct GlobalSyncData
+struct SAL_DLLPRIVATE PDFLinkDestination
+{
+    Rectangle               mRect;
+    MapMode                 mMapMode;
+    sal_Int32               mPageNr;
+    PDFWriter::DestAreaType mAreaType;
+};
+
+struct SAL_DLLPRIVATE GlobalSyncData
 {
     std::deque< PDFExtOutDevDataSync::Action >  mActions;
     std::deque< MapMode >                       mParaMapModes;
@@ -84,6 +95,7 @@ struct GlobalSyncData
     std::deque< PDFWriter::DestAreaType >       mParaDestAreaTypes;
     std::deque< PDFNote >                       mParaPDFNotes;
     std::deque< PDFWriter::PageTransition >     mParaPageTransitions;
+    ::std::map< sal_Int32, PDFLinkDestination > mFutureDestinations;
 
     sal_Int32 GetMappedId();
     sal_Int32 GetMappedStructId( sal_Int32 );
@@ -145,7 +157,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
     {
         switch( *aIter )
         {
-        case PDFExtOutDevDataSync::CreateNamedDest : //i56629
+            case PDFExtOutDevDataSync::CreateNamedDest : //i56629
             {
                  rWriter.Push( PUSH_MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
@@ -195,6 +207,21 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 sal_Int32 nLinkId = GetMappedId();
                 rWriter.SetLinkURL( nLinkId, mParaOUStrings.front() );
                 mParaOUStrings.pop_front();
+            }
+            break;
+            case PDFExtOutDevDataSync::RegisterDest :
+            {
+                const sal_Int32 nDestId = mParaInts.front();
+                mParaInts.pop_front();
+                OSL_ENSURE( mFutureDestinations.find( nDestId ) != mFutureDestinations.end(),
+                    "GlobalSyncData::PlayGlobalActions: DescribeRegisteredRequest has not been called for that destination!" );
+
+                PDFLinkDestination& rDest = mFutureDestinations[ nDestId ];
+
+                rWriter.Push( PUSH_MAPMODE );
+                rWriter.SetMapMode( rDest.mMapMode );
+                mParaIds.push_back( rWriter.RegisterDestReference( nDestId, rDest.mRect, rDest.mPageNr, rDest.mAreaType ) );
+                rWriter.Pop();
             }
             break;
             case PDFExtOutDevDataSync::CreateOutlineItem :
@@ -459,6 +486,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             case PDFExtOutDevDataSync::CreateLink:
             case PDFExtOutDevDataSync::SetLinkDest:
             case PDFExtOutDevDataSync::SetLinkURL:
+            case PDFExtOutDevDataSync::RegisterDest:
             case PDFExtOutDevDataSync::CreateOutlineItem:
             case PDFExtOutDevDataSync::SetOutlineItemParent:
             case PDFExtOutDevDataSync::SetOutlineItemText:
@@ -617,9 +645,28 @@ sal_Int32 PDFExtOutDevData::CreateNamedDest(const String& sDestName,  const Rect
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
     mpGlobalSyncData->mParaDestAreaTypes.push_back( eType );
+
     return mpGlobalSyncData->mCurId++;
 }
 //<---i56629
+sal_Int32 PDFExtOutDevData::RegisterDest()
+{
+    const sal_Int32 nLinkDestID = mpGlobalSyncData->mCurId++;
+    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::RegisterDest );
+    mpGlobalSyncData->mParaInts.push_back( nLinkDestID );
+
+    return nLinkDestID;
+}
+void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    OSL_PRECOND( nDestId != -1, "PDFExtOutDevData::DescribeRegisteredDest: invalid destination Id!" );
+    PDFLinkDestination aLinkDestination;
+    aLinkDestination.mRect = rRect;
+    aLinkDestination.mMapMode = mrOutDev.GetMapMode();
+    aLinkDestination.mPageNr = nPageNr == -1 ? mnPage : nPageNr;
+    aLinkDestination.mAreaType = eType;
+    mpGlobalSyncData->mFutureDestinations[ nDestId ] = aLinkDestination;
+}
 sal_Int32 PDFExtOutDevData::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateDest );

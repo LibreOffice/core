@@ -423,6 +423,7 @@ private:
     SCTAB           nTab;
     SCCOL           nStartCol;
     SCCOL           nEndCol;
+    SCROW           nStartRow;
     SCROW           nEndRow;
     SCROW*          pNextRows;
     SCSIZE*         pNextIndices;
@@ -437,9 +438,44 @@ public:
 
     ScBaseCell*     GetNext( SCCOL& rCol, SCROW& rRow );
     sal_Bool            ReturnNext( SCCOL& rCol, SCROW& rRow );
+    /// Set a(nother) sheet and (re)init.
+    void            SetTab( SCTAB nTab );
 
 private:
     void            Advance();
+};
+
+
+/** Row-wise value iterator. */
+class ScHorizontalValueIterator
+{
+private:
+    ScDocument               *pDoc;
+    const ScAttrArray        *pAttrArray;
+    ScHorizontalCellIterator *pCellIter;
+    sal_uLong                 nNumFormat;     // for CalcAsShown
+    sal_uLong                 nNumFmtIndex;
+    SCTAB                     nEndTab;
+    SCCOL                     nCurCol;
+    SCROW                     nCurRow;
+    SCTAB                     nCurTab;
+    SCROW                     nAttrEndRow;
+    short                     nNumFmtType;
+    bool                      bNumValid;
+    bool                      bSubTotal;
+    bool                      bCalcAsShown;
+    bool                      bTextAsZero;
+
+public:
+
+                    ScHorizontalValueIterator( ScDocument* pDocument,
+                                               const ScRange& rRange,
+                                               bool bSTotal = false,
+                                               bool bTextAsZero = false );
+                    ~ScHorizontalValueIterator();
+    void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
+    /// Does NOT reset rValue if no value found!
+    bool            GetNext( double& rValue, sal_uInt16& rErr );
 };
 
 

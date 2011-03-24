@@ -206,7 +206,7 @@ public:
                             rtl_TextEncoding eTextEnc );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
     ControlConverter    maConverter;
 };

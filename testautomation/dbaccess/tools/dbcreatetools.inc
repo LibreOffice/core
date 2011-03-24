@@ -238,6 +238,104 @@ function fCreateMySQL_JDBC_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,
         
 end function
 '-------------------------------------------------------------------------
+function fCreateMySQL_native_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,optional sRegister) as boolean
+    '/// create a new MySQL database via JDBC file with the given filename 
+    '///+ and the given URL 
+    '/// <u>parameter:</u>
+    '/// <b>sFielName:</b> the file name for the database file
+    '/// <b>sDatabaseName:</b> the name of the mysql database
+    '/// <b>sHost:</b> the host where the mysql database is running
+    '/// <b>sPort:</b> the port where the mysql database is running
+    '/// <b>sUser:</b> the user for the connection        
+    '/// <b><i>optional</i> sRegister:</b> the name under which the database is be registered 
+    dim bOK as boolean
+    bOK = FALSE
+    
+    dim sEntry as string
+
+    ' delete the file
+    if ( app.Dir( ConvertPath(sFileName) ) ) <> "" then
+        app.kill(ConvertPath(sFileName))
+    endif	
+
+    Kontext "DocumentWriter"
+        if (DocumentWriter.exists(1)) then        
+            DocumentWriter.UseMenu
+        else
+            Kontext "DocumentBackground"
+            DocumentBackground.UseMenu
+        endif  
+        hMenuSelectNr(1)
+        hMenuSelectNr(1)
+        hMenuSelectNr(5)
+        
+        sleep(4)    
+
+    Kontext "DatabaseWizard"    
+        ConnectToDatabase.Check
+        sleep(1)
+        sEntry = hGetDatabaseDisplayName( "sdbc:mysqlc:*" )
+        'cut off the (JDBC) string
+        sEntry = Left( sEntry , Instr(sEntry,"(") - 2 )
+        printlog "entry = " + sEntry
+        DatabaseType.select( sEntry )
+        sleep(1)
+        NextBtn.Click
+        sleep(1)
+        MySQLnative.Check
+        NextBtn.Click
+        sleep(1)
+        DatabaseWizard.typeKeys("<TAB>",true)
+        DatabaseWizard.typeKeys(sDatabaseName,true)
+	DatabaseWizard.typeKeys("<TAB>",true)
+        DatabaseWizard.typeKeys("<TAB>",true)
+        DatabaseWizard.typeKeys(sHost,true)
+        'MySQLDatabaseName.setText(sDatabaseName)
+        'MySQLHostName.setText(sHost)
+        'MySQLPort.setText(sPort)
+        
+        NextBtn.Click
+        sleep(1)
+
+        '/// add the user name 
+        printlog "add the user name"		
+        UserName.setText sUser
+        
+        '/// check the password required checkbox
+        printlog "check the password required checkbox"        
+        PasswordRequired.Check
+
+        NextBtn.Click
+        FinishBtn.Click
+	
+    Kontext "SpeichernDlg"
+        Dateiname.setText ConvertPath(sFileName)    
+        Speichern.click
+
+        sleep(5)
+        
+    if ( IsMissing(sRegister) ) then
+            printlog "don't register datasource"
+    else        
+        printlog "register datasource with name " + sRegister        
+        call fRegisterDatabaseFile(ConvertPath(sFilename),sRegister)
+    end if  
+    
+	bOK = true
+	if bOK = true then
+		printlog "--- End of function - *** Succeed ***"
+	else
+    	warnlog "--- End of function - *** Failed *** Data source was not created"
+	endif	
+	
+	fCreateMySQL_native_Datasource = bOK
+    
+	sleep(1)
+    
+    call fCloseDatabase(true)
+        
+end function
+'-------------------------------------------------------------------------
 function  fCreateAdabasDatasource(sFileName,sURL,sUser, optional sRegister) as boolean    
     '/// create a new adabas database file with the given filename 
     '///+ and the given URL

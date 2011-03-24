@@ -102,7 +102,8 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),
       pShapePropertyState(NULL),
       pImplementationId(NULL),
-      bIsTextShape(sal_False),
+      bIsTextShape(false),
+      bIsNoteCaption(false),
       bInitializedNotifier(false)
 {
     comphelper::increment( m_refCount );
@@ -127,6 +128,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
         {
+            bIsNoteCaption = ScDrawLayer::IsNoteCaption( pObj );
             lcl_initializeNotifier( *pObj, *this );
             bInitializedNotifier = true;
         }
@@ -150,6 +152,9 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
 
     if ( !aRet.hasValue() && bIsTextShape )
         aRet = ScShapeObj_TextBase::queryInterface( rType );
+
+    if ( !aRet.hasValue() && bIsNoteCaption )
+        aRet = ScShapeObj_ChildBase::queryInterface( rType );
 
     if ( !aRet.hasValue() && mxShapeAgg.is() )
         aRet = mxShapeAgg->queryAggregation( rType );
@@ -1261,6 +1266,48 @@ void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::Run
         throw uno::RuntimeException();
 }
 
+// XChild
+
+uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent() throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    // receive cell position from caption object (parent of a note caption is the note cell)
+    SdrObject* pObj = GetSdrObject();
+    if( pObj )
+    {
+        ScDrawLayer* pModel = (ScDrawLayer*)pObj->GetModel();
+        SdrPage* pPage = pObj->GetPage();
+        if ( pModel )
+        {
+            ScDocument* pDoc = pModel->GetDocument();
+            if ( pDoc )
+            {
+                SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+                if ( pObjSh && pObjSh->ISA(ScDocShell) )
+                {
+                    ScDocShell* pDocSh = (ScDocShell*)pObjSh;
+
+                    SCTAB nTab = 0;
+                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    {
+                        const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab );
+                        if( pCaptData )
+                            return static_cast< ::cppu::OWeakObject* >( new ScCellObj( pDocSh, pCaptData->maStart ) );
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+void SAL_CALL ScShapeObj::setParent( const uno::Reference< uno::XInterface >& ) throw (lang::NoSupportException, uno::RuntimeException)
+{
+    throw lang::NoSupportException();
+}
+
 // XTypeProvider
 
 uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeException)
@@ -1517,5 +1564,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScShapeObj::getSupportedServiceNames( 
 
     aSupported.realloc( aSupported.getLength() + 1 );
     aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Shape" ) );
+
+    if( bIsNoteCaption )
+    {
+        aSupported.realloc( aSupported.getLength() + 1 );
+        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.CellAnnotationShape" ) );
+    }
+
     return aSupported;
 }

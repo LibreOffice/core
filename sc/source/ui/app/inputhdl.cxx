@@ -514,6 +514,13 @@ void ScInputHandler::UpdateRefDevice()
         return;
 
     sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    bool bInPlace = pActiveViewSh && pActiveViewSh->GetViewFrame()->GetFrame().IsInPlace();
+    sal_uInt32 nCtrl = pEngine->GetControlWord();
+    if ( bTextWysiwyg || bInPlace )
+        nCtrl |= EE_CNTRL_FORMAT100;    // EditEngine default: always format for 100%
+    else
+        nCtrl &= ~EE_CNTRL_FORMAT100;   // when formatting for screen, use the actual MapMode
+    pEngine->SetControlWord( nCtrl );
     if ( bTextWysiwyg && pActiveViewSh )
         pEngine->SetRefDevice( pActiveViewSh->GetViewData()->GetDocument()->GetPrinter() );
     else
@@ -601,9 +608,7 @@ void ScInputHandler::UpdateSpellSettings( sal_Bool bFromStartTab )
                 pEngine->SetControlWord(nCntrl);
 
             ScDocument* pDoc = pViewData->GetDocument();
-            pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
-            pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
-            pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
+            pDoc->ApplyAsianEditSettings( *pEngine );
             pEngine->SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( pViewData->GetTabNo() ) );
             pEngine->SetFirstWordCapitalization( sal_False );

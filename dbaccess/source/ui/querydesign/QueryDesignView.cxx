@@ -2061,6 +2061,13 @@ namespace
                 break;
             }
 
+            const OSQLParseNode* pTableExp = pParseTree->getChild(3);
+            if ( pTableExp->getChild(6)->count() > 0 || pTableExp->getChild(7)->count() > 0 || pTableExp->getChild(8)->count() > 0)
+            {
+                eErrorCode = eStatementTooComplex;
+                break;
+            }
+
             Reference< XConnection> xConnection = rController.getConnection();
             if ( !xConnection.is() )
             {
@@ -2142,7 +2149,7 @@ namespace
                         pTableView->RemoveTabWin(aIterTableMap->second);
                 }
 
-                if ( eOk == (eErrorCode = FillOuterJoins(_pView,pParseTree->getChild(3)->getChild(0)->getChild(1))) )
+                if ( eOk == (eErrorCode = FillOuterJoins(_pView,pTableExp->getChild(0)->getChild(1))) )
                 {
                     // check if we have a distinct statement
                     if(SQL_ISTOKEN(pParseTree->getChild(1),DISTINCT))

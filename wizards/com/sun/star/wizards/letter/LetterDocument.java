@@ -268,7 +268,7 @@ public class LetterDocument extends TextDocument
 
                 Helper.setUnoPropertyValue(xFrame, "TextWrap", WrapTextMode.THROUGHT);
                 Helper.setUnoPropertyValue(xFrame, "Opaque", Boolean.TRUE);
-                Helper.setUnoPropertyValue(xFrame, "BackColor", new Integer(15790320));
+                Helper.setUnoPropertyValue(xFrame, "BackColor", 15790320);
 
                 BorderLine myBorder = new BorderLine();
                 myBorder.OuterLineWidth = 0;
@@ -287,7 +287,7 @@ public class LetterDocument extends TextDocument
                 XTextCursor xFrameCursor = xFrameText.createTextCursor();
                 XPropertySet xCursorProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xFrameCursor);
                 xCursorProps.setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD));
-                xCursorProps.setPropertyValue("CharColor", new Integer(16777215));
+                xCursorProps.setPropertyValue("CharColor", 16777215);
                 xCursorProps.setPropertyValue("CharFontName", new String("Albany"));
                 xCursorProps.setPropertyValue("CharHeight", new Float(18));
 

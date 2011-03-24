@@ -42,14 +42,23 @@ class VbaInputStream : public BinaryInputStream
 public:
     explicit            VbaInputStream( BinaryInputStream& rInStrm );
 
+    /** Returns -1, stream size is not determinable. */
+    virtual sal_Int64   size() const;
+    /** Returns -1, stream position is not tracked. */
+    virtual sal_Int64   tell() const;
+    /** Does nothing, stream is not seekable. */
+    virtual void        seek( sal_Int64 nPos );
+    /** Closes the input stream but not the wrapped stream. */
+    virtual void        close();
+
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Reads nBytes bytes to the (existing) buffer opMem.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Seeks the stream forward by the passed number of bytes. */
-    virtual void        skip( sal_Int32 nBytes );
+    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 );
 
 private:
     /** If no data left in chunk buffer, reads the next chunk from stream. */
@@ -58,7 +67,7 @@ private:
 private:
     typedef ::std::vector< sal_uInt8 > ChunkBuffer;
 
-    BinaryInputStream&  mrInStrm;
+    BinaryInputStream*  mpInStrm;
     ChunkBuffer         maChunk;
     size_t              mnChunkPos;
 };

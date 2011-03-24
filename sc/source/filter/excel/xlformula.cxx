@@ -93,7 +93,9 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocCurrency,           13,     1,  2,  V, { VR }, 0, 0 },
     { ocFixed,              14,     1,  2,  V, { VR, VR, C }, 0, 0 },
     { ocSin,                15,     1,  1,  V, { VR }, 0, 0 },
+    { ocCosecant,           15,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocCos,                16,     1,  1,  V, { VR }, 0, 0 },
+    { ocSecant,             16,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocTan,                17,     1,  1,  V, { VR }, 0, 0 },
     { ocCot,                17,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocArcTan,             18,     1,  1,  V, { VR }, 0, 0 },
@@ -230,7 +232,9 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocMedian,             227,    1,  MX, V, { RX }, 0, 0 },
     { ocSumProduct,         228,    1,  MX, V, { VA }, 0, 0 },
     { ocSinHyp,             229,    1,  1,  V, { VR }, 0, 0 },
+    { ocCosecantHyp,        229,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocCosHyp,             230,    1,  1,  V, { VR }, 0, 0 },
+    { ocSecantHyp,          230,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocTanHyp,             231,    1,  1,  V, { VR }, 0, 0 },
     { ocCotHyp,             231,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocArcSinHyp,          232,    1,  1,  V, { VR }, 0, 0 },
@@ -415,16 +419,16 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         from earlier tables. */
     XclBiff eBiff = rRoot.GetBiff();
     if( eBiff >= EXC_BIFF2 )
-        (this->*pFillFunc)( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
+        (this->*pFillFunc)( saFuncTable_2, STATIC_ARRAY_END( saFuncTable_2 ) );
     if( eBiff >= EXC_BIFF3 )
-        (this->*pFillFunc)( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
+        (this->*pFillFunc)( saFuncTable_3, STATIC_ARRAY_END( saFuncTable_3 ) );
     if( eBiff >= EXC_BIFF4 )
-        (this->*pFillFunc)( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
+        (this->*pFillFunc)( saFuncTable_4, STATIC_ARRAY_END( saFuncTable_4 ) );
     if( eBiff >= EXC_BIFF5 )
-        (this->*pFillFunc)( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
+        (this->*pFillFunc)( saFuncTable_5, STATIC_ARRAY_END( saFuncTable_5 ) );
     if( eBiff >= EXC_BIFF8 )
-        (this->*pFillFunc)( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-    (this->*pFillFunc)( saFuncTable_Odf, STATIC_TABLE_END( saFuncTable_Odf ) );
+        (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
+    (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const

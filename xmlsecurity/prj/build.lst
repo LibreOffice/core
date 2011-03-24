@@ -1,4 +1,4 @@
-xs	xmlsecurity	:    L10N:l10n xmloff unotools offapi unoil svx MOZ:moz SO:moz_prebuilt LIBXMLSEC:libxmlsec NSS:nss LIBXSLT:libxslt NULL
+xs	xmlsecurity	:    L10N:l10n xmloff unotools offapi unoil svx MOZ:moz SO:moz_prebuilt LIBXMLSEC:libxmlsec NSS:nss LIBXSLT:libxslt NEON:neon NULL
 xs	xmlsecurity                                                        usr1	 -	all	xs_mkout	NULL
 xs	xmlsecurity\inc				                                       nmake -	all	xs_inc NULL
 xs	xmlsecurity\source\framework                                       nmake -	all	xs_fw xs_inc NULL
@@ -9,3 +9,4 @@ xs	xmlsecurity\source\helper                                          nmake -	al
 xs	xmlsecurity\source\dialogs                                         nmake -	all	xs_dialogs xs_inc NULL
 xs	xmlsecurity\source\component                                       nmake -	all	xs_component xs_inc NULL
 xs	xmlsecurity\util                                                   nmake -	all	xs_util xs_fw xs_xmlsec xs_nss xs_mscrypt xs_helper xs_dialogs xs_component NULL
+xs	xmlsecurity\qa\certext                                             nmake -	all	xs_certext xs_util NULL

@@ -31,6 +31,7 @@
 #include <rtl/uuid.h>
 #include "x509certificate_mscryptimpl.hxx"
 #include "certificateextension_xmlsecimpl.hxx"
+#include "sanextension_mscryptimpl.hxx"
 
 //MM : added by MM
 #include "oid.hxx"
@@ -392,7 +393,13 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
             pExtn = &(m_pCertContext->pCertInfo->rgExtension[i]) ;
 
-            xExtn = new CertificateExtension_XmlSecImpl() ;
+
+            ::rtl::OUString objId = ::rtl::OUString::createFromAscii( pExtn->pszObjId );
+
+            if ( objId.equalsAscii("2.5.29.17") )
+                xExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
+            else
+                xExtn = new CertificateExtension_XmlSecImpl() ;
             if( xExtn == NULL )
                 throw RuntimeException() ;
 

@@ -269,7 +269,7 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 // BIFF12 import --------------------------------------------------------------
 
-/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
+/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen, bool bAllowNulChars )
 {
     OUString aString;
     if( !rStrm.isEof() )
@@ -279,16 +279,9 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         OSL_ENSURE( !rStrm.isEof() && (nCharCount >= -1), "BiffHelper::readString - invalid string length" );
         if( !rStrm.isEof() && (nCharCount > 0) )
         {
-            ::std::vector< sal_Unicode > aBuffer;
-            aBuffer.reserve( getLimitedValue< size_t, sal_Int32 >( nCharCount + 1, 0, 0xFFFF ) );
-            for( sal_Int32 nCharIdx = 0; !rStrm.isEof() && (nCharIdx < nCharCount); ++nCharIdx )
-            {
-                sal_uInt16 nChar;
-                rStrm.readValue( nChar );
-                aBuffer.push_back( static_cast< sal_Unicode >( nChar ) );
-            }
-            aBuffer.push_back( 0 );
-            aString = OUString( &aBuffer.front() );
+            // SequenceInputStream always supports getRemaining()
+            nCharCount = ::std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
+            aString = rStrm.readUnicodeArray( nCharCount, bAllowNulChars );
         }
     }
     return aString;

@@ -28,11 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-// XXX xelink.hxx MUST be included before xeformula.hxx because of the
-// redifinition of the CREATE_OUSTRING() macro, which is in oox/helper.hxx
-// (indirectly included via xelink.hxx) and ../inc/ftools.hxx (indirectly
-// included via xeformula.hxx) that does an undef first. Ugly.
-#include "xelink.hxx"
 #include "xeformula.hxx"
 
 #include <list>
@@ -46,6 +41,7 @@
 #include "token.hxx"
 #include "tokenarray.hxx"
 #include "xehelper.hxx"
+#include "xelink.hxx"
 #include "xename.hxx"
 #include "xestream.hxx"
 
@@ -508,7 +504,7 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     mnMaxRowMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Row() ) )
 {
     // build the configuration map
-    for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_TABLE_END( spConfigTable ); ++pEntry )
+    for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_ARRAY_END( spConfigTable ); ++pEntry )
         maCfgMap[ pEntry->meType ] = *pEntry;
 }
 
@@ -1439,7 +1435,11 @@ void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
 {
     switch( rFuncData.GetOpCode() )
     {
+        case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+        case ocSecant:                  // simulate SEC(x) by (1/COS(x))
         case ocCot:                     // simulate COT(x) by (1/TAN(x))
+        case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+        case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
         case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
             AppendIntToken( 1 );
         break;
@@ -1489,7 +1489,11 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
                 FinishChooseFunction( rFuncData );
             break;
 
+            case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+            case ocSecant:                  // simulate SEC(x) by (1/COS(x))
             case ocCot:                     // simulate COT(x) by (1/TAN(x))
+            case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+            case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
             case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
                 AppendBinaryOperatorToken( EXC_TOKID_DIV, true );
                 AppendParenToken();

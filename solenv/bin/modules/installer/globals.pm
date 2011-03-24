@@ -385,6 +385,10 @@ BEGIN
     %allcomponents_in_this_database = ();
     %allshortcomponents = ();
     %alluniquedirectorynames = ();
+    %allregistrycomponents_ = ();
+    %allregistrycomponents_in_this_database_ = ();
+    %allshortregistrycomponents = ();
+    %allregistryidentifier = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;

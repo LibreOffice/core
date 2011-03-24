@@ -112,6 +112,7 @@ ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cpp
     ,m_bIgnoreResult(sal_False)
     ,m_bBeforeFirst(sal_True) // changed from sal_False
     ,m_bAfterLast(sal_False)
+    ,m_bIsInsertRow(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::ORowSetBase" );
     DBG_CTOR(ORowSetBase,NULL);
@@ -257,6 +258,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         // currentrow is null when the clone moves the window
         positionCache( MOVE_NONE_REFRESH_ONLY );
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
 
         bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
@@ -398,6 +400,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     {
         positionCache( MOVE_NONE_REFRESH_ONLY );
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
 
         bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
@@ -1121,6 +1124,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         m_aBookmark     = m_pCache->getBookmark();
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
@@ -1136,6 +1140,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
 #endif
         OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
@@ -1147,6 +1152,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         {
             positionCache( MOVE_NONE_REFRESH_ONLY );
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
+            m_bIsInsertRow  = sal_False;
             OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
         }
     }
@@ -1574,7 +1580,8 @@ void ORowSetNotifier::firePropertyChange()
         {
             m_pRowSet->firePropertyChange((*aIter)-1 ,m_pImpl->aRow[(*aIter)-1], ORowSetBase::GrantNotifierAccess());
         }
-        m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False, ORowSetBase::GrantNotifierAccess());
+        if ( !m_pImpl->aChangedColumns.empty() )
+            m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False, ORowSetBase::GrantNotifierAccess());
     }
 }
 }   // namespace dbaccess

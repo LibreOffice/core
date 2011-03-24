@@ -98,12 +98,12 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
 
 // ============================================================================
 
-class WorkbookData
+class WorkbookGlobals
 {
 public:
-    explicit            WorkbookData( ExcelFilter& rFilter );
-    explicit            WorkbookData( ExcelBiffFilter& rFilter, BiffType eBiff );
-                        ~WorkbookData();
+    explicit            WorkbookGlobals( ExcelFilter& rFilter );
+    explicit            WorkbookGlobals( ExcelBiffFilter& rFilter, BiffType eBiff );
+                        ~WorkbookGlobals();
 
     /** Returns true, if this helper refers to a valid document. */
     inline bool         isValid() const { return mxDoc.is(); }
@@ -118,14 +118,15 @@ public:
     inline FilterType   getFilterType() const { return meFilterType; }
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     inline bool         isWorkbookFile() const { return mbWorkbook; }
-    /** Returns the index of the current sheet in the Calc document. */
-    inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
-    /** Sets the index of the current sheet in the Calc document. */
-    inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
     /** Returns the VBA project storage. */
     inline StorageRef   getVbaProjectStorage() const { return mxVbaPrjStrg; }
-    /** Sets the VBA project storage. */
+    /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
+    inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
+
+    /** Sets the VBA project storage used to import VBA source code and forms. */
     inline void         setVbaProjectStorage( const StorageRef& rxVbaPrjStrg ) { mxVbaPrjStrg = rxVbaPrjStrg; }
+    /** Sets the index of the current Calc sheet, if filter currently processes a sheet. */
+    inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
 
     // document model ---------------------------------------------------------
 
@@ -286,7 +287,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-WorkbookData::WorkbookData( ExcelFilter& rFilter ) :
+WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
     mrExcelBase( rFilter ),
     meFilterType( FILTER_OOXML ),
@@ -295,11 +296,11 @@ WorkbookData::WorkbookData( ExcelFilter& rFilter ) :
     meBiff( BIFF_UNKNOWN )
 {
     // register at the filter, needed for virtual callbacks (even during construction)
-    mrExcelBase.registerWorkbookData( *this );
+    mrExcelBase.registerWorkbookGlobals( *this );
     initialize( true );
 }
 
-WorkbookData::WorkbookData( ExcelBiffFilter& rFilter, BiffType eBiff ) :
+WorkbookGlobals::WorkbookGlobals( ExcelBiffFilter& rFilter, BiffType eBiff ) :
     mrBaseFilter( rFilter ),
     mrExcelBase( rFilter ),
     meFilterType( FILTER_BIFF ),
@@ -308,19 +309,19 @@ WorkbookData::WorkbookData( ExcelBiffFilter& rFilter, BiffType eBiff ) :
     meBiff( eBiff )
 {
     // register at the filter, needed for virtual callbacks (even during construction)
-    mrExcelBase.registerWorkbookData( *this );
+    mrExcelBase.registerWorkbookGlobals( *this );
     initialize( eBiff >= BIFF5 );
 }
 
-WorkbookData::~WorkbookData()
+WorkbookGlobals::~WorkbookGlobals()
 {
     finalize();
-    mrExcelBase.unregisterWorkbookData();
+    mrExcelBase.unregisterWorkbookGlobals();
 }
 
 // document model -------------------------------------------------------------
 
-Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) const
+Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) const
 {
     Reference< XNameContainer > xStylesNC;
     try
@@ -332,11 +333,11 @@ Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) con
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xStylesNC.is(), "WorkbookData::getStyleFamily - cannot access style family" );
+    OSL_ENSURE( xStylesNC.is(), "WorkbookGlobals::getStyleFamily - cannot access style family" );
     return xStylesNC;
 }
 
-Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bool bPageStyle ) const
+Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName, bool bPageStyle ) const
 {
     Reference< XStyle > xStyle;
     try
@@ -347,11 +348,11 @@ Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bo
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xStyle.is(), "WorkbookData::getStyleObject - cannot access style object" );
+    OSL_ENSURE( xStyle.is(), "WorkbookGlobals::getStyleObject - cannot access style object" );
     return xStyle;
 }
 
-Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
+Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
@@ -369,11 +370,11 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xNamedRange.is(), "WorkbookData::createNamedRangeObject - cannot create defined name" );
+    OSL_ENSURE( xNamedRange.is(), "WorkbookGlobals::createNamedRangeObject - cannot create defined name" );
     return xNamedRange;
 }
 
-Reference< XDatabaseRange > WorkbookData::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
 {
     // validate cell range
     CellRangeAddress aDestRange = rRangeAddr;
@@ -395,11 +396,11 @@ Reference< XDatabaseRange > WorkbookData::createDatabaseRangeObject( OUString& o
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
+    OSL_ENSURE( xDatabaseRange.is(), "WorkbookGlobals::createDatabaseRangeObject - cannot create database range" );
     return xDatabaseRange;
 }
 
-Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
+Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
     Reference< XStyle > xStyle;
     try
@@ -411,63 +412,62 @@ Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xStyle.is(), "WorkbookData::createStyleObject - cannot create style" );
+    OSL_ENSURE( xStyle.is(), "WorkbookGlobals::createStyleObject - cannot create style" );
     return xStyle;
 }
 
 // BIFF specific --------------------------------------------------------------
 
-void WorkbookData::setTextEncoding( rtl_TextEncoding eTextEnc )
+void WorkbookGlobals::setTextEncoding( rtl_TextEncoding eTextEnc )
 {
     if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
         meTextEnc = eTextEnc;
 }
 
-void WorkbookData::setCodePage( sal_uInt16 nCodePage )
+void WorkbookGlobals::setCodePage( sal_uInt16 nCodePage )
 {
     setTextEncoding( BiffHelper::calcTextEncodingFromCodePage( nCodePage ) );
     mbHasCodePage = true;
 }
 
-void WorkbookData::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
+void WorkbookGlobals::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
 {
     if( !mbHasCodePage )
         setTextEncoding( eAppFontEnc );
 }
 
-void WorkbookData::setIsWorkbookFile()
+void WorkbookGlobals::setIsWorkbookFile()
 {
-    OSL_ENSURE( meBiff == BIFF4, "WorkbookData::setIsWorkbookFile - invalid call" );
+    OSL_ENSURE( meBiff == BIFF4, "WorkbookGlobals::setIsWorkbookFile - invalid call" );
     mbWorkbook = true;
 }
 
-void WorkbookData::createBuffersPerSheet( sal_Int16 nSheet )
+void WorkbookGlobals::createBuffersPerSheet( sal_Int16 nSheet )
 {
-    // set mnCurrSheet to enable usage of WorkbookHelper::getCurrentSheetIndex()
-    mnCurrSheet = nSheet;
     switch( meBiff )
     {
         case BIFF2:
         case BIFF3:
-            OSL_ENSURE( mnCurrSheet == 0, "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
-            mxDefNames->setLocalCalcSheet( mnCurrSheet );
+            OSL_ENSURE( nSheet == 0, "WorkbookGlobals::createBuffersPerSheet - unexpected sheet index" );
+            mxDefNames->setLocalCalcSheet( nSheet );
         break;
 
         case BIFF4:
-            OSL_ENSURE( mbWorkbook || (mnCurrSheet == 0), "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
+            OSL_ENSURE( mbWorkbook || (nSheet == 0), "WorkbookGlobals::createBuffersPerSheet - unexpected sheet index" );
             // #i11183# sheets in BIFF4W files have own styles and names
-            if( mbWorkbook && (mnCurrSheet > 0) )
+            if( nSheet > 0 )
             {
                 mxStyles.reset( new StylesBuffer( *this ) );
                 mxDefNames.reset( new DefinedNamesBuffer( *this ) );
                 mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
             }
-            mxDefNames->setLocalCalcSheet( mnCurrSheet );
+            mxDefNames->setLocalCalcSheet( nSheet );
         break;
 
         case BIFF5:
             // BIFF5 stores external references per sheet
-            mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
+            if( nSheet > 0 )
+                mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
         break;
 
         case BIFF8:
@@ -476,12 +476,11 @@ void WorkbookData::createBuffersPerSheet( sal_Int16 nSheet )
         case BIFF_UNKNOWN:
         break;
     }
-    mnCurrSheet = -1;
 }
 
 // private --------------------------------------------------------------------
 
-void WorkbookData::initialize( bool bWorkbookFile )
+void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
     maCellStyles = CREATE_OUSTRING( "CellStyles" );
     maPageStyles = CREATE_OUSTRING( "PageStyles" );
@@ -494,7 +493,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
 
     // the spreadsheet document
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
-    OSL_ENSURE( mxDoc.is(), "WorkbookData::initialize - no spreadsheet document" );
+    OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
 
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
     mxViewSettings.reset( new ViewSettings( *this ) );
@@ -557,7 +556,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     }
 }
 
-void WorkbookData::finalize()
+void WorkbookGlobals::finalize()
 {
     // set some document properties needed after import
     if( mrBaseFilter.isImportFilter() )
@@ -588,62 +587,73 @@ WorkbookHelper::~WorkbookHelper()
 {
 }
 
+/*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelFilter& rFilter )
+{
+    WorkbookGlobalsRef xBookGlob( new WorkbookGlobals( rFilter ) );
+    if( !xBookGlob->isValid() )
+        xBookGlob.reset();
+    return xBookGlob;
+}
+
+/*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelBiffFilter& rFilter, BiffType eBiff )
+{
+    WorkbookGlobalsRef xBookGlob( new WorkbookGlobals( rFilter, eBiff ) );
+    if( !xBookGlob->isValid() )
+        xBookGlob.reset();
+    return xBookGlob;
+}
+
 // filter ---------------------------------------------------------------------
 
 FilterBase& WorkbookHelper::getBaseFilter() const
 {
-    return mrBookData.getBaseFilter();
-}
-
-Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
-{
-    return mrBookData.getBaseFilter().getServiceFactory();
+    return mrBookGlob.getBaseFilter();
 }
 
 FilterType WorkbookHelper::getFilterType() const
 {
-    return mrBookData.getFilterType();
+    return mrBookGlob.getFilterType();
 }
 
 SegmentProgressBar& WorkbookHelper::getProgressBar() const
 {
-    return mrBookData.getProgressBar();
+    return mrBookGlob.getProgressBar();
 }
 
 bool WorkbookHelper::isWorkbookFile() const
 {
-    return mrBookData.isWorkbookFile();
+    return mrBookGlob.isWorkbookFile();
 }
 
 sal_Int16 WorkbookHelper::getCurrentSheetIndex() const
 {
-    return mrBookData.getCurrentSheetIndex();
-}
-
-void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
-{
-    mrBookData.setCurrentSheetIndex( nSheet );
+    return mrBookGlob.getCurrentSheetIndex();
 }
 
 void WorkbookHelper::setVbaProjectStorage( const StorageRef& rxVbaPrjStrg )
 {
-    mrBookData.setVbaProjectStorage( rxVbaPrjStrg );
+    mrBookGlob.setVbaProjectStorage( rxVbaPrjStrg );
+}
+
+void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
+{
+    mrBookGlob.setCurrentSheetIndex( nSheet );
 }
 
 void WorkbookHelper::finalizeWorkbookImport()
 {
     // workbook settings, document and sheet view settings
-    mrBookData.getWorkbookSettings().finalizeImport();
-    mrBookData.getViewSettings().finalizeImport();
+    mrBookGlob.getWorkbookSettings().finalizeImport();
+    mrBookGlob.getViewSettings().finalizeImport();
 
     /*  Insert all pivot tables. Must be done after loading all sheets, because
         data pilots expect existing source data on creation. */
-    mrBookData.getPivotTables().finalizeImport();
+    mrBookGlob.getPivotTables().finalizeImport();
 
     /*  Insert scenarios after all sheet processing is done, because new hidden
         sheets are created for scenarios which would confuse code that relies
         on certain sheet indexes. Must be done after pivot tables too. */
-    mrBookData.getScenarios().finalizeImport();
+    mrBookGlob.getScenarios().finalizeImport();
 
     /*  Set 'Default' page style to automatic page numbering (default is manual
         number 1). Otherwise hidden sheets (e.g. for scenarios) which have
@@ -654,7 +664,7 @@ void WorkbookHelper::finalizeWorkbookImport()
 
     /*  Import the VBA project (after finalizing workbook settings which
         contains the workbook code name). */
-    StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
+    StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
@@ -663,12 +673,7 @@ void WorkbookHelper::finalizeWorkbookImport()
 
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 {
-    return mrBookData.getDocument();
-}
-
-Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
-{
-    return mrBookData.getBaseFilter().getModelFactory();
+    return mrBookGlob.getDocument();
 }
 
 Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
@@ -729,129 +734,129 @@ Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const CellRangeAddr
 
 Reference< XNameContainer > WorkbookHelper::getStyleFamily( bool bPageStyles ) const
 {
-    return mrBookData.getStyleFamily( bPageStyles );
+    return mrBookGlob.getStyleFamily( bPageStyles );
 }
 
 Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, bool bPageStyle ) const
 {
-    return mrBookData.getStyleObject( rStyleName, bPageStyle );
+    return mrBookGlob.getStyleObject( rStyleName, bPageStyle );
 }
 
 Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
-    return mrBookData.createNamedRangeObject( orName, nNameFlags );
+    return mrBookGlob.createNamedRangeObject( orName, nNameFlags );
 }
 
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
 {
-    return mrBookData.createDatabaseRangeObject( orName, rRangeAddr );
+    return mrBookGlob.createDatabaseRangeObject( orName, rRangeAddr );
 }
 
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
-    return mrBookData.createStyleObject( orStyleName, bPageStyle );
+    return mrBookGlob.createStyleObject( orStyleName, bPageStyle );
 }
 
 // buffers --------------------------------------------------------------------
 
 WorkbookSettings& WorkbookHelper::getWorkbookSettings() const
 {
-    return mrBookData.getWorkbookSettings();
+    return mrBookGlob.getWorkbookSettings();
 }
 
 ViewSettings& WorkbookHelper::getViewSettings() const
 {
-    return mrBookData.getViewSettings();
+    return mrBookGlob.getViewSettings();
 }
 
 WorksheetBuffer& WorkbookHelper::getWorksheets() const
 {
-    return mrBookData.getWorksheets();
+    return mrBookGlob.getWorksheets();
 }
 
 ThemeBuffer& WorkbookHelper::getTheme() const
 {
-    return mrBookData.getTheme();
+    return mrBookGlob.getTheme();
 }
 
 StylesBuffer& WorkbookHelper::getStyles() const
 {
-    return mrBookData.getStyles();
+    return mrBookGlob.getStyles();
 }
 
 SharedStringsBuffer& WorkbookHelper::getSharedStrings() const
 {
-    return mrBookData.getSharedStrings();
+    return mrBookGlob.getSharedStrings();
 }
 
 ExternalLinkBuffer& WorkbookHelper::getExternalLinks() const
 {
-    return mrBookData.getExternalLinks();
+    return mrBookGlob.getExternalLinks();
 }
 
 DefinedNamesBuffer& WorkbookHelper::getDefinedNames() const
 {
-    return mrBookData.getDefinedNames();
+    return mrBookGlob.getDefinedNames();
 }
 
 TableBuffer& WorkbookHelper::getTables() const
 {
-    return mrBookData.getTables();
+    return mrBookGlob.getTables();
 }
 
 ScenarioBuffer& WorkbookHelper::getScenarios() const
 {
-    return mrBookData.getScenarios();
+    return mrBookGlob.getScenarios();
 }
 
 ConnectionsBuffer& WorkbookHelper::getConnections() const
 {
-    return mrBookData.getConnections();
+    return mrBookGlob.getConnections();
 }
 
 PivotCacheBuffer& WorkbookHelper::getPivotCaches() const
 {
-    return mrBookData.getPivotCaches();
+    return mrBookGlob.getPivotCaches();
 }
 
 PivotTableBuffer& WorkbookHelper::getPivotTables() const
 {
-    return mrBookData.getPivotTables();
+    return mrBookGlob.getPivotTables();
 }
 
 // converters -----------------------------------------------------------------
 
 FormulaParser& WorkbookHelper::getFormulaParser() const
 {
-    return mrBookData.getFormulaParser();
+    return mrBookGlob.getFormulaParser();
 }
 
 UnitConverter& WorkbookHelper::getUnitConverter() const
 {
-    return mrBookData.getUnitConverter();
+    return mrBookGlob.getUnitConverter();
 }
 
 AddressConverter& WorkbookHelper::getAddressConverter() const
 {
-    return mrBookData.getAddressConverter();
+    return mrBookGlob.getAddressConverter();
 }
 
 ExcelChartConverter& WorkbookHelper::getChartConverter() const
 {
-    return mrBookData.getChartConverter();
+    return mrBookGlob.getChartConverter();
 }
 
 PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
 {
-    return mrBookData.getPageSettingsConverter();
+    return mrBookGlob.getPageSettingsConverter();
 }
 
 // OOXML/BIFF12 specific ------------------------------------------------------
 
 XmlFilterBase& WorkbookHelper::getOoxFilter() const
 {
-    OSL_ENSURE( mrBookData.getFilterType() == FILTER_OOXML, "WorkbookHelper::getOoxFilter - invalid call" );
-    return mrBookData.getOoxFilter();
+    OSL_ENSURE( mrBookGlob.getFilterType() == FILTER_OOXML, "WorkbookHelper::getOoxFilter - invalid call" );
+    return mrBookGlob.getOoxFilter();
 }
 
 bool WorkbookHelper::importOoxFragment( const ::rtl::Reference< FragmentHandler >& rxHandler )
@@ -863,82 +868,48 @@ bool WorkbookHelper::importOoxFragment( const ::rtl::Reference< FragmentHandler 
 
 BinaryFilterBase& WorkbookHelper::getBiffFilter() const
 {
-    OSL_ENSURE( mrBookData.getFilterType() == FILTER_BIFF, "WorkbookHelper::getBiffFilter - invalid call" );
-    return mrBookData.getBiffFilter();
+    OSL_ENSURE( mrBookGlob.getFilterType() == FILTER_BIFF, "WorkbookHelper::getBiffFilter - invalid call" );
+    return mrBookGlob.getBiffFilter();
 }
 
 BiffType WorkbookHelper::getBiff() const
 {
-    return mrBookData.getBiff();
+    return mrBookGlob.getBiff();
 }
 
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
-    return mrBookData.getTextEncoding();
+    return mrBookGlob.getTextEncoding();
 }
 
 void WorkbookHelper::setTextEncoding( rtl_TextEncoding eTextEnc )
 {
-    mrBookData.setTextEncoding( eTextEnc );
+    mrBookGlob.setTextEncoding( eTextEnc );
 }
 
 void WorkbookHelper::setCodePage( sal_uInt16 nCodePage )
 {
-    mrBookData.setCodePage( nCodePage );
+    mrBookGlob.setCodePage( nCodePage );
 }
 
 void WorkbookHelper::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
 {
-    mrBookData.setAppFontEncoding( eAppFontEnc );
+    mrBookGlob.setAppFontEncoding( eAppFontEnc );
 }
 
 void WorkbookHelper::setIsWorkbookFile()
 {
-    mrBookData.setIsWorkbookFile();
+    mrBookGlob.setIsWorkbookFile();
 }
 
 void WorkbookHelper::createBuffersPerSheet( sal_Int16 nSheet )
 {
-    mrBookData.createBuffersPerSheet( nSheet );
+    mrBookGlob.createBuffersPerSheet( nSheet );
 }
 
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const
 {
-    return mrBookData.getCodecHelper();
-}
-
-// ============================================================================
-
-namespace prv {
-
-WorkbookDataOwner::WorkbookDataOwner( WorkbookDataRef xBookData ) :
-    mxBookData( xBookData )
-{
-}
-
-WorkbookDataOwner::~WorkbookDataOwner()
-{
-}
-
-} // namespace prv
-
-// ----------------------------------------------------------------------------
-
-WorkbookHelperRoot::WorkbookHelperRoot( ExcelFilter& rFilter ) :
-    prv::WorkbookDataOwner( prv::WorkbookDataRef( new WorkbookData( rFilter ) ) ),
-    WorkbookHelper( *mxBookData )
-{
-}
-
-WorkbookHelperRoot::WorkbookHelperRoot( ExcelBiffFilter& rFilter, BiffType eBiff ) :
-    prv::WorkbookDataOwner( prv::WorkbookDataRef( new WorkbookData( rFilter, eBiff ) ) ),
-    WorkbookHelper( *mxBookData )
-{
-}
-
-bool WorkbookHelperRoot::isValid() const
-{
-    return mxBookData->isValid();
+    return mrBookGlob.getCodecHelper();
 }
 
 // ============================================================================

@@ -147,7 +147,7 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
                 *mpSlidePersistPtr->getTheme()->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
-            xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColorRef() ) );
+            xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;

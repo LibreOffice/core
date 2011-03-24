@@ -64,8 +64,9 @@ private:
     FmFormView*     pDrawView;
 
                                         // intern:
-    sal_Bool            bInPaint;
-    sal_Bool            bInGetState;
+    bool            bInPaint;
+    bool            bInSetZoom;
+    sal_Bool        bInGetState;
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 

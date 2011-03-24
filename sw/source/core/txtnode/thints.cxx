@@ -2101,7 +2101,7 @@ struct RemovePresentAttrs
         const SwTxtAttr* const pAutoStyle(i_rAttrSpan.second);
         SfxItemIter aIter(m_rAttrSet);
         const SfxPoolItem* pItem(aIter.GetCurItem());
-        while (true)
+        while (pItem)
         {
             const sal_uInt16 nWhich(pItem->Which());
             if (CharFmt::IsItemIncluded(nWhich, pAutoStyle))
@@ -2143,7 +2143,8 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
             const AttrSpan_t aSpan(*pHint->GetStart(), *pHint->GetEnd());
             o_rSpanMap.insert(AttrSpanMap_t::value_type(aSpan, pHint));
 
-            if (aSpan.first != nLastEnd)
+            // < not != because there may be multiple CHARFMT at same range
+            if (nLastEnd < aSpan.first)
             {
                 // insert dummy span covering the gap
                 o_rSpanMap.insert(AttrSpanMap_t::value_type(

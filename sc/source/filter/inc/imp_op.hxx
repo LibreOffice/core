@@ -110,8 +110,10 @@ protected:
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
     sal_Int16               mnLastRefIdx;
-    sal_uInt16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
-    sal_uInt16                  nLastXF;            // letzter XF in Formula-Record
+    sal_uInt16              mnIxfeIndex;        /// Current XF identifier from IXFE record.
+    bool                    mbBiff2HasXfs;      /// Select XF formatting or direct formatting in BIFF2.
+    bool                    mbBiff2HasXfsValid; /// False = mbBiff2HasXfs is undetermined yet.
+
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
@@ -121,7 +123,7 @@ protected:
     // Record-Funktionen
     void                    ReadFileSharing();
 
-    sal_uInt16              ReadXFIndex( bool bBiff2 );
+    sal_uInt16              ReadXFIndex( const ScAddress& rScPos, bool bBiff2 );
 
     void                    ReadDimensions();
     void                    ReadBlank();

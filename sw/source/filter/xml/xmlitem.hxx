@@ -53,7 +53,7 @@ public:
                          const ::rtl::OUString& rLName,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                          SfxItemSet&  rItemSet,
-                         const SvXMLImportItemMapper& rIMappper,
+                         SvXMLImportItemMapper& rIMap,
                          const SvXMLUnitConverter& rUnitConv );
 
     virtual ~SvXMLItemSetContext();

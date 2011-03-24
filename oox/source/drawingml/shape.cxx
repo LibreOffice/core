@@ -30,6 +30,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
@@ -413,7 +414,6 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
 
-        ModelObjectHelper& rModelObjectHelper = rFilterBase.getModelObjectHelper();
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
 
         LineProperties aLineProperties;
@@ -448,26 +448,20 @@ Reference< XShape > Shape::createAndInsert(
         aLineProperties.assignUsed( getLineProperties() );
         aFillProperties.assignUsed( getFillProperties() );
 
-        PropertyMap aShapeProperties;
-        PropertyMap::const_iterator aShapePropIter;
+        ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
-        {
-            for ( aShapePropIter = mpTextBody->getTextProperties().maPropertyMap.begin();
-                aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); aShapePropIter++ )
-                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
-        }
+            aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
 
-        aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         // applying properties
-        PropertySet aPropSet( xSet );
+        aShapeProps.assignUsed( getShapeProperties() );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rGraphicHelper );
+            mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, LineProperties::DEFAULT_IDS, nLinePhClr );
+        aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr );
+        aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -475,12 +469,12 @@ Reference< XShape > Shape::createAndInsert(
         Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
         const OUString& rPropName = PropertyMap::getPropertyName( PROP_TextAutoGrowHeight );
         if( xSetInfo.is() && xSetInfo->hasPropertyByName( rPropName ) )
-            if( /*const Any* pAutoGrowHeight =*/ aShapeProperties.getProperty( PROP_TextAutoGrowHeight ) )
+            if( aShapeProps.hasProperty( PROP_TextAutoGrowHeight ) )
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
         // do not set properties at a group shape (this causes assertions from svx)
         if( aServiceName != OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) )
-            aPropSet.setProperties( aShapeProperties );
+            PropertySet( xSet ).setProperties( aShapeProps );
 
         if( bIsCustomShape )
         {

@@ -49,8 +49,7 @@
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
 #include <list>
-#include "dpobject.hxx"
-#include "dptabdat.hxx"
+class ScDPTableDataCache;
 // End Comments
 
 class KeyEvent;
@@ -120,6 +119,7 @@ class ScViewOptions;
 class ScStrCollection;
 class TypedScStrCollection;
 class ScChangeTrack;
+class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 class ScNoteEditEngine;
 struct ScConsolidateParam;
@@ -241,6 +241,7 @@ class ScDocument
 {
 friend class ScDocumentIterator;
 friend class ScValueIterator;
+friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
@@ -273,7 +274,6 @@ private:
     ScDPCollection*     pDPCollection;
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
-    std::list<ScDPObject>        m_listDPObjectsInClip;
     std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
     // End Comments
     ScChartCollection*  pChartCollection;
@@ -790,6 +790,7 @@ public:
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    sal_uInt16                  GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, sal_uLong nFormat );
@@ -924,10 +925,10 @@ public:
                         selection, but the bounds of the sheet's data area
                         instead.
 
-                        @returns sal_True if the area passed intersected the data
-                                 area, sal_False if not, in which case the values
+                        @returns True if the area passed intersected the data
+                                 area, false if not, in which case the values
                                  obtained may be out of bounds, not in order or
-                                 unmodified. sal_True does not mean that there
+                                 unmodified. True does not mean that there
                                  actually is any data within the selection.
                      */
     bool            ShrinkToDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
@@ -935,9 +936,9 @@ public:
                     /** Shrink a range to only include used data area.
 
                         @param o_bShrunk
-                               Out parameter, sal_True if area was shrunk, sal_False if not.
+                               Out parameter, True if area was shrunk, false if not.
 
-                        @returns sal_True if there is any data, sal_False if not.
+                        @returns True if there is any data, fakse if not.
                      */
     bool            ShrinkToUsedDataArea( bool& o_bShrunk,
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
@@ -1596,6 +1597,8 @@ public:
     sal_Bool            IsValidAsianKerning() const;
     void            SetAsianKerning(sal_Bool bNew);
 
+    void            ApplyAsianEditSettings(ScEditEngineDefaulter& rEngine);
+
     sal_uInt8           GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
@@ -1790,7 +1793,6 @@ public:
     SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
-//UNUSED2009-05 SfxItemPool&            GetNoteItemPool();
 
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }

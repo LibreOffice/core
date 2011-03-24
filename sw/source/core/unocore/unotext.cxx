@@ -1754,13 +1754,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             // DelFullPara is called
             const uno::Reference< text::XTextRange> xInsertTextRange =
                 new SwXTextRange(aStartPam, this);
+            aStartPam.DeleteMark(); // mark position node may be deleted!
             pNewFrame->attach( xInsertTextRange );
             pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
 
-        if (!aStartPam.GetTxt().Len())
+        SwTxtNode *const pTxtNode(aStartPam.GetNode()->GetTxtNode());
+        OSL_ASSERT(pTxtNode);
+        if (!pTxtNode || !pTxtNode->Len()) // don't remove if it contains text!
         {
-            bool bMoved = false;
             {   // has to be in a block to remove the SwIndexes before
                 // DelFullPara is called
                 SwPaM aMovePam( *aStartPam.GetNode() );
@@ -1772,14 +1774,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     m_pImpl->m_pDoc->SetAttr(
                         aNewAnchor, *pNewFrame->GetFrmFmt() );
                 }
-                bMoved = true;
             }
-            if (bMoved)
-            {
-                aStartPam.DeleteMark();
-//                    SwPaM aDelPam( *aStartPam.GetNode() );
-                m_pImpl->m_pDoc->DelFullPara(aStartPam/*aDelPam*/);
-            }
+            m_pImpl->m_pDoc->DelFullPara(aStartPam);
         }
     }
     catch (lang::IllegalArgumentException& rIllegal)

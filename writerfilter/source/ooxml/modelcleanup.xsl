@@ -40,6 +40,9 @@
   <xsl:key name="resources"
            match="resource[not(@generated)]" use="@name" />
 
+  <xsl:key name="resourcetags"
+           match="resource/@tag" use="ancestor::resource/@name"/>
+
   <xsl:template name="generateresource">
     <xsl:param name="resource"/>
     <xsl:element name="resource">
@@ -52,6 +55,11 @@
       <xsl:attribute name="generated">
         <xsl:text>yes</xsl:text>
       </xsl:attribute>
+      <xsl:for-each select="key('resourcetags', @name)">
+        <xsl:attribute name="tag">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
     </xsl:element>
   </xsl:template>
 
@@ -66,6 +74,11 @@
       </xsl:attribute>
       <xsl:attribute name="resource">List</xsl:attribute>
       <xsl:attribute name="generated">yes</xsl:attribute>
+      <xsl:for-each select="key('resourcetags', @name)">
+        <xsl:attribute name="tag">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
       <xsl:for-each select=".//rng:value">
         <xsl:element name="value">
           <xsl:attribute name="name">
@@ -148,12 +161,18 @@
         
     <xsl:template name="generatevalueresource">
         <xsl:variable name="name" select="@name"/>
+        <xsl:variable name="ns_id" select="generate-id(ancestor::namespace)"/>
         <resource>
             <xsl:attribute name="name">
                 <xsl:value-of select="@name"/>
             </xsl:attribute>
             <xsl:attribute name="resource">Value</xsl:attribute>
             <xsl:attribute name="generated">yes</xsl:attribute>
+            <xsl:for-each select="key('resourcetags', @name)[generate-id(ancestor::namespace) = $ns_id]">
+              <xsl:attribute name="tag">
+                <xsl:value-of select="."/>
+              </xsl:attribute>
+            </xsl:for-each>
             <xsl:for-each select=".//rng:attribute">
                 <xsl:variable name="type">
                     <xsl:choose>

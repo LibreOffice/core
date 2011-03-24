@@ -24,7 +24,7 @@ public interface UIConsts
     public static final int RID_IMG_REPORT = 1000;
     public static final int RID_IMG_FORM = 1100;
     public static final int RID_IMG_WEB = 1200;
-    public static final Integer INVISIBLESTEP = new Integer(99);
+    public static final Integer INVISIBLESTEP = 99;
     public static final String INFOIMAGEURL = "private:resource/dbu/image/19205";
     public static final String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
     /**
@@ -32,12 +32,12 @@ public interface UIConsts
      * high tabindex because on every step their taborder must appear at the end
      */
     public static final short SOFIRSTWIZARDNAVITABINDEX = 30000;
-    public static final Integer INTEGER_8 = new Integer(8);
-    public static final Integer INTEGER_12 = new Integer(12);
-    public static final Integer INTEGER_14 = new Integer(14);
-    public static final Integer INTEGER_16 = new Integer(16);
-    public static final Integer INTEGER_40 = new Integer(40);
-    public static final Integer INTEGER_50 = new Integer(50);
+    public static final Integer INTEGER_8 = 8;
+    public static final Integer INTEGER_12 = 12;
+    public static final Integer INTEGER_14 = 14;
+    public static final Integer INTEGER_16 = 16;
+    public static final Integer INTEGER_40 = 40;
+    public static final Integer INTEGER_50 = 50;
     /**Steps of the QueryWizard
      *
      */
@@ -51,7 +51,7 @@ public interface UIConsts
     public static final int SOSUMMARYPAGE = 8;
     public static final Integer[] INTEGERS = new Integer[]
     {
-        new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7), new Integer(8), new Integer(9), new Integer(10)
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
     };
 
     class CONTROLTYPE

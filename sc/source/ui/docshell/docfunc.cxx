@@ -4479,7 +4479,11 @@ sal_Bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, sal_Bool /* bApi 
         pDoc->CompileNameFormula( sal_False );  // CompileFormulaString
 
     aModificator.SetDocumentModified();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+
+    // #i114072# don't broadcast while loading a file
+    // (navigator and input line for other open documents would be notified)
+    if ( bCompile )
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 
     return sal_True;
 }

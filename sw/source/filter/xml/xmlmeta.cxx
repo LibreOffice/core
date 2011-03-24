@@ -57,22 +57,34 @@ using namespace ::xmloff::token;
 
 // ---------------------------------------------------------------------
 
+uno::Reference<document::XDocumentProperties>
+SwXMLImport::GetDocumentProperties() const
+{
+    if (IsOrganizerMode() || IsStylesOnlyMode() ||
+        IsBlockMode() || IsInsertMode())
+    {
+        return 0;
+    }
+    uno::Reference<document::XDocumentPropertiesSupplier> const xDPS(
+        GetModel(), UNO_QUERY_THROW);
+    return xDPS->getDocumentProperties();
+}
+
 SvXMLImportContext *SwXMLImport::CreateMetaContext(
                                        const OUString& rLocalName )
 {
     SvXMLImportContext *pContext = 0;
 
-    if( !(IsStylesOnlyMode() || IsInsertMode()) )
+    if (getImportFlags() & IMPORT_META)
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+        uno::Reference<xml::sax::XDocumentHandler> const xDocBuilder(
             mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
                 "com.sun.star.xml.dom.SAXDocumentBuilder")),
-                uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            GetModel(), UNO_QUERY_THROW);
+            uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> const xDocProps(
+                GetDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
-                        XML_NAMESPACE_OFFICE, rLocalName,
-                        xDPS->getDocumentProperties(), xDocBuilder);
+                    XML_NAMESPACE_OFFICE, rLocalName, xDocProps, xDocBuilder);
     }
 
     if( !pContext )

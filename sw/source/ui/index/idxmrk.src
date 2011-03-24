@@ -287,6 +287,14 @@ ModalDialog DLG_EDIT_IDXMARK
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   118
     IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
 };
 ModalDialog DLG_EDIT_IDXMARK_CJK
 {
@@ -306,6 +314,14 @@ ModalDialog DLG_EDIT_IDXMARK_CJK
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   118
     IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
 };
 ModelessDialog DLG_INSIDXMARK
 {
@@ -328,6 +344,14 @@ ModelessDialog DLG_INSIDXMARK
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   138
     IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
 };
 ModelessDialog DLG_INSIDXMARK_CJK
 {
@@ -349,6 +373,14 @@ ModelessDialog DLG_INSIDXMARK_CJK
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   138
     IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
 };
 ModalDialog DLG_NEW_USER_IDX
 {
@@ -529,6 +561,7 @@ ModalDialog DLG_EDIT_AUTHMARK
     Size = MAP_APPFONT ( 218 , 118 ) ;
     #define RADIO_BUTTON_HEIGHT 0
     AUTH_DIALOG_WINDOW
+    #undef RADIO_BUTTON_HEIGHT
 };
 ModelessDialog DLG_INSAUTHMARK
 {
@@ -543,6 +576,7 @@ ModelessDialog DLG_INSAUTHMARK
     Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;
 //  Moveable = TRUE ;
     AUTH_DIALOG_WINDOW
+    #undef RADIO_BUTTON_HEIGHT
 };
 ModalDialog DLG_CREATE_AUTH_ENTRY
 {

@@ -40,8 +40,11 @@ struct CommentModel
 {
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// Position of the comment in the worksheet.
-    RichStringRef       mxText;             /// Formatted text of the comment.
-    sal_Int32           mnAuthorId;         /// Identifier of the comment's author.
+    RichStringRef       mxText;             /// Formatted text of the comment (not used in BIFF8).
+    ::rtl::OUString     maAuthor;           /// Comment author (BIFF8 only).
+    sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
+    sal_uInt16          mnObjId;            /// Drawing object identifier (BIFF8 only).
+    bool                mbVisible;          /// True = comment is always shown (BIFF2-BIFF8 only).
 
     explicit            CommentModel();
 };
@@ -57,12 +60,22 @@ public:
     void                importComment( const AttributeList& rAttribs );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( SequenceInputStream& rStrm );
+    /** Imports a cell comment from the passed stream of a NOTE record. */
+    void                importNote( BiffInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
     RichStringRef       createText();
 
     /** Finalizes the formatted string of the comment. */
     void                finalizeImport();
+
+private:
+    /** Reads a BIFF2-BIFF5 NOTE record. */
+    void                importNoteBiff2( BiffInputStream& rStrm );
+    /** Reads a BIFF8 NOTE record. */
+    void                importNoteBiff8( BiffInputStream& rStrm );
+    /** Reads a NOTESOUND record. */
+    void                importNoteSound( BiffInputStream& rStrm );
 
 private:
     CommentModel        maModel;

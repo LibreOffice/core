@@ -96,7 +96,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), slblDataStructure, new Integer(95), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)
+                        8, slblDataStructure, 95, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelPos = 0;
@@ -115,10 +115,10 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", new Integer(95), new Integer(37), new short[]
+                        108, "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", 95, 37, new short[]
                         {
                             iSelPos
-                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), new Integer(99)
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), 99
                     });
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblLayout",
@@ -128,7 +128,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), slblPageLayout, new Integer(205), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)
+                        8, slblPageLayout, 205, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelLayoutPos = 0;
@@ -150,10 +150,10 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", new Integer(205), new Integer(37), new short[]
+                        108, "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", 205, 37, new short[]
                         {
                             iSelLayoutPos
-                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), 99
                     });
             iOldLayoutPos = (int) iSelPos;
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
@@ -163,7 +163,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), sOrientationHeader, new Integer(95), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(74)
+                        8, sOrientationHeader, 95, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 74
                     });
 
             short m_nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
@@ -174,7 +174,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, new Integer(101), new Integer(158), new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
             short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
@@ -185,17 +185,17 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, new Integer(101), new Integer(171), new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
                     new String[]
                     {
-                        "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Short("0"), new Integer(23), new Integer(164), new Integer(158), new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(30)
+                        new Short("0"), 23, 164, 158, new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), 30
                     });
 
             String sNote = ReportWizard.getBlindTextNote(CurReportDocument, CurUnoDialog.m_oResource);
@@ -206,7 +206,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(34), sNote, new Boolean(true), new Integer(205), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(99)
+                        34, sNote, new Boolean(true), 205, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), 99
                     });
             if (m_nLandscapeState == 1)
             {

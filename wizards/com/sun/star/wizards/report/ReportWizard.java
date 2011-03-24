@@ -109,13 +109,13 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT,
-                        "Moveable",
+                        PropertyNames.PROPERTY_MOVEABLE,
                         PropertyNames.PROPERTY_NAME,
                         PropertyNames.PROPERTY_POSITION_X,
                         PropertyNames.PROPERTY_POSITION_Y,
                         PropertyNames.PROPERTY_STEP,
                         PropertyNames.PROPERTY_TABINDEX,
-                        "Title",
+                        PropertyNames.PROPERTY_TITLE,
                         PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
@@ -123,12 +123,12 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                         Integer.valueOf(210),
                         Boolean.TRUE,
                         "DialogReport",
-                        new Integer(102),
-                        new Integer(41),
-                        new Integer(1),
+                        102,
+                        41,
+                        1,
                         new Short((short) 0),
                         sMsgWizardName,
-                        new Integer(310)
+                        310
                     });
             drawNaviBar();
             setRightPaneHeaders(this.WizardHeaderText);
@@ -329,7 +329,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     },
                     new Object[]
                     {
-                        new Integer(16), sShowBinaryFields, new Integer(95), new Integer(162), new Integer(1), new Integer(210)
+                        16, sShowBinaryFields, 95, 162, 1, 210
                     });
         }
         // CurReportDocument.getDoc().xProgressBar.setValue(40);

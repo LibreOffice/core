@@ -59,6 +59,7 @@ using namespace ::com::sun::star;
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/multisel.hxx>
+#include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fmview.hxx>
 #include <svx/pageitem.hxx>
@@ -200,52 +201,27 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
-
-        //  SID_SBA_QRY_CHANGETARGET gibts nicht mehr - auch in idl raus
-
         case SID_SBA_IMPORT:
         {
             if (pReqArgs)
             {
-                const sal_Unicode cSbaSep = 11;     // Trennzeichen
-
                 const SfxPoolItem* pItem;
-                String sSbaData, sTarget;
+                svx::ODataAccessDescriptor aDesc;
                 if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
-                    sSbaData = ((const SfxStringItem*)pItem)->GetValue();
+                {
+                    uno::Any aAny = static_cast<const SfxUsrAnyItem*>(pItem)->GetValue();
+                    uno::Sequence<beans::PropertyValue> aProperties;
+                    if ( aAny >>= aProperties )
+                        aDesc.initializeFrom( aProperties );
+                }
+
+                String sTarget;
                 if ( pReqArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
                     sTarget = ((const SfxStringItem*)pItem)->GetValue();
 
                 sal_Bool bIsNewArea = sal_True;         // Default sal_True (keine Nachfrage)
                 if ( pReqArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
                     bIsNewArea = ((const SfxBoolItem*)pItem)->GetValue();
-
-                ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet > xResultSet;
-                if ( pReqArgs->GetItemState( FN_PARAM_3, sal_False, &pItem ) == SFX_ITEM_SET && pItem )
-                    xResultSet.set(((const SfxUsrAnyItem*)pItem)->GetValue(),::com::sun::star::uno::UNO_QUERY);
-
-                String sDBName  = sSbaData.GetToken(0,cSbaSep);     // Datenbankname
-                String sDBTable = sSbaData.GetToken(1,cSbaSep);     // Tabellen- oder Query-Name
-                String sTabFlag = sSbaData.GetToken(2,cSbaSep);
-                String sDBSql   = sSbaData.GetToken(3,cSbaSep);     // SQL im Klartext
-
-                sal_uInt8 nType = ScDbTable;        // "0" oder "1"
-                if ( sTabFlag.EqualsAscii("0") )        // "0" = Query, "1" = Table (Default)
-                    nType = ScDbQuery;
-
-                SbaSelectionListRef pSelectionList = new SbaSelectionList;
-                xub_StrLen nCount = sSbaData.GetTokenCount(cSbaSep);
-
-                for (xub_StrLen i = 4; i < nCount; i++)
-                {
-                    String aSelItem = sSbaData.GetToken(i,cSbaSep);
-                    if (aSelItem.Len())
-                    {
-                        void *pPtr = (void*)aSelItem.ToInt32();
-                        pSelectionList->Insert( pPtr, LIST_APPEND );
-                    }
-                }
 
                 // bei Bedarf neuen Datenbankbereich anlegen
                 sal_Bool bMakeArea = sal_False;
@@ -287,9 +263,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if (bDo)
                 {
-                    ScDBDocFunc(*this).UpdateImport( sTarget, sDBName,
-                            sDBTable, sDBSql, sal_True, nType, xResultSet,
-                            pSelectionList );
+                    ScDBDocFunc(*this).UpdateImport( sTarget, aDesc );
                     rReq.Done();
 
                     //  UpdateImport aktualisiert auch die internen Operationen

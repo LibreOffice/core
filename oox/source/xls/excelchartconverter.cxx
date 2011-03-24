@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include "oox/core/filterbase.hxx"
 #include "oox/drawingml/chart/datasourcemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
@@ -64,8 +65,7 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
     try
     {
         Reference< XDataReceiver > xDataRec( rxChartDoc, UNO_QUERY_THROW );
-        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
-        Reference< XDataProvider > xDataProv( xFactory->createInstance(
+        Reference< XDataProvider > xDataProv( getBaseFilter().getModelFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.chart2.data.DataProvider" ) ), UNO_QUERY_THROW );
         xDataRec->attachDataProvider( xDataProv );
     }
@@ -85,13 +85,12 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         {
             // parse the formula string, create a token sequence
             FormulaParser& rParser = getFormulaParser();
-            TokensFormulaContext aContext( true, true );
-            aContext.setBaseAddress( CellAddress( getCurrentSheetIndex(), 0, 0 ) );
-            rParser.importFormula( aContext, rDataSeq.maFormula );
+            CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
+            ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
 
             // create a range list from the token sequence
             ApiCellRangeList aRanges;
-            rParser.extractCellRangeList( aRanges, aContext.getTokens(), false );
+            rParser.extractCellRangeList( aRanges, aTokens, false );
             aRangeRep = rParser.generateApiRangeListString( aRanges );
         }
         else if( !rDataSeq.maData.empty() )

@@ -1149,7 +1149,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
     xub_StrLen nLen = rString.Len();
     ScanState eState = SsStart;
     sSymbol.Erase();
-    const String* pKeywords = rScan.GetKeywords();
+    const NfKeywordTable & rKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)
     {
         cToken = rString.GetChar(nPos);
@@ -1267,9 +1267,9 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                                 BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
                             eState = SsGetPrefix;
                         }
-                        else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
-                            cUpper == pKeywords[NF_KEY_MI].GetChar(0)   ||  // M
-                            cUpper == pKeywords[NF_KEY_S].GetChar(0)    )   // S
+                        else if (cUpper == rKeywords[NF_KEY_H].GetChar(0)   ||  // H
+                            cUpper == rKeywords[NF_KEY_MI].GetChar(0)   ||  // M
+                            cUpper == rKeywords[NF_KEY_S].GetChar(0)    )   // S
                         {
                             sSymbol += cToken;
                             eState = SsGetTime;
@@ -1306,9 +1306,9 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 else
                 {
                     sal_Unicode cUpper = rChrCls().toUpper( rString, nPos-1, 1 ).GetChar(0);
-                    if (cUpper == pKeywords[NF_KEY_H].GetChar(0)    ||  // H
-                        cUpper == pKeywords[NF_KEY_MI].GetChar(0)   ||  // M
-                        cUpper == pKeywords[NF_KEY_S].GetChar(0)    )   // S
+                    if (cUpper == rKeywords[NF_KEY_H].GetChar(0)    ||  // H
+                        cUpper == rKeywords[NF_KEY_MI].GetChar(0)   ||  // M
+                        cUpper == rKeywords[NF_KEY_S].GetChar(0)    )   // S
                     {
                         if (cLetter == cToken)
                         {
@@ -4230,10 +4230,10 @@ String SvNumberformat::GetMappedFormatstring(
         const String& rColorName = NumFor[n].GetColorName();
         if ( rColorName.Len() )
         {
-            const String* pKey = rScan.GetKeywords() + NF_KEY_FIRSTCOLOR;
-            for ( int j=NF_KEY_FIRSTCOLOR; j<=NF_KEY_LASTCOLOR; j++, pKey++ )
+            const NfKeywordTable & rKey = rScan.GetKeywords();
+            for ( int j=NF_KEY_FIRSTCOLOR; j<=NF_KEY_LASTCOLOR; j++ )
             {
-                if ( *pKey == rColorName )
+                if ( rKey[j] == rColorName )
                 {
                     aPrefix += '[';
                     aPrefix += rKeywords[j];

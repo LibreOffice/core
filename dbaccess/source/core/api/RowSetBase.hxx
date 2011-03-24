@@ -158,6 +158,7 @@ namespace dbaccess
         sal_Bool                                m_bIgnoreResult ;
         sal_Bool                                m_bBeforeFirst  : 1;
         sal_Bool                                m_bAfterLast    : 1;
+        sal_Bool                                m_bIsInsertRow  : 1;
 
     protected:
         ORowSetBase(
@@ -383,7 +384,7 @@ namespace dbaccess
         inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
         inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
         inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
-        inline  sal_Bool    isInsertRow() { return isNew() || isModified(); }
+        inline  sal_Bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
         inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );

@@ -370,7 +370,9 @@ void DeInitVCL()
             aBuf.append( rtl::OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) );
             aBuf.append( "\" type = \"" );
             aBuf.append( typeid(*pWin).name() );
-            aBuf.append( "\"\n" );
+            aBuf.append( "\", ptr = 0x" );
+            aBuf.append( sal_Int64( pWin ), 16 );
+            aBuf.append( "\n" );
         }
     }
     DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );

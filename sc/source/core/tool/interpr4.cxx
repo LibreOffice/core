@@ -1445,7 +1445,7 @@ bool ScInterpreter::ConvertMatrixParameters()
     for ( sal_uInt16 i=1; i <= nParams && i <= sp; ++i )
     {
         FormulaToken* p = pStack[ sp - i ];
-        if ( p->GetOpCode() != ocPush )
+        if ( p->GetOpCode() != ocPush && p->GetOpCode() != ocMissing  )
         {
             DBG_ERRORFILE( "ConvertMatrixParameters: not a push");
         }
@@ -3459,6 +3459,10 @@ StackVar ScInterpreter::Interpret()
                 case ocArcCosHyp        : ScArcCosHyp();                break;
                 case ocArcTanHyp        : ScArcTanHyp();                break;
                 case ocArcCotHyp        : ScArcCotHyp();                break;
+                case ocCosecant         : ScCosecant();                 break;
+                case ocSecant           : ScSecant();                   break;
+                case ocCosecantHyp      : ScCosecantHyp();              break;
+                case ocSecantHyp        : ScSecantHyp();                break;
                 case ocExp              : ScExp();                      break;
                 case ocLn               : ScLn();                       break;
                 case ocLog10            : ScLog10();                    break;

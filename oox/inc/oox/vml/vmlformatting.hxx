@@ -32,9 +32,8 @@
 
 namespace oox {
     class GraphicHelper;
-    class ModelObjectHelper;
-    class PropertyMap;
     namespace drawingml { class Color; }
+    namespace drawingml { class ShapePropertyMap; }
 }
 
 namespace oox {
@@ -91,7 +90,7 @@ public:
         @param bDefaultAsPixel  Set to true if omitted measure unit means
             pixel. Set to false if omitted measure unit means EMU.
      */
-    static sal_Int32    decodeMeasureToEmu(
+    static sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
@@ -179,8 +178,7 @@ struct StrokeModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
@@ -206,8 +204,7 @@ struct FillModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 

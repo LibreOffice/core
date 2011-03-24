@@ -214,8 +214,8 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     Reference< XShape > xShape;
     if( (rService.getLength() > 0) && rxShapes.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( mrFilter.getModelFactory(), UNO_SET_THROW );
-        xShape.set( xFactory->createInstance( rService ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xModelFactory( mrFilter.getModelFactory(), UNO_SET_THROW );
+        xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );
         // insert shape into passed shape collection (maybe drawpage or group shape)
         rxShapes->add( xShape );
         xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );

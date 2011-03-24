@@ -129,6 +129,8 @@ void SAL_CALL OSharedConnection::rollback(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL OSharedConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    if ( !m_xConnection.is() )
+        return sal_True;
 
     return m_xConnection->isClosed();
 }

@@ -88,6 +88,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ARC_COS_HYP { Text = "ACOSH" ; };
     String SC_OPCODE_ARC_TAN_HYP { Text = "ATANH" ; };
     String SC_OPCODE_ARC_COT_HYP { Text = "ACOTH" ; };
+    String SC_OPCODE_COSECANT { Text = "CSC" ; };
+    String SC_OPCODE_SECANT { Text = "SEC" ; };
+    String SC_OPCODE_COSECANT_HYP { Text = "CSCH" ; };
+    String SC_OPCODE_SECANT_HYP { Text = "SECH" ; };
     String SC_OPCODE_EXP { Text = "EXP" ; };
     String SC_OPCODE_LN { Text = "LN" ; };
     String SC_OPCODE_SQRT { Text = "SQRT" ; };
@@ -412,6 +416,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ARC_COS_HYP { Text = "ACOSH" ; };
     String SC_OPCODE_ARC_TAN_HYP { Text = "ATANH" ; };
     String SC_OPCODE_ARC_COT_HYP { Text = "ACOTH" ; };
+    String SC_OPCODE_COSECANT { Text = "CSC" ; };
+    String SC_OPCODE_SECANT { Text = "SEC" ; };
+    String SC_OPCODE_COSECANT_HYP { Text = "CSCH" ; };
+    String SC_OPCODE_SECANT_HYP { Text = "SECH" ; };
     String SC_OPCODE_EXP { Text = "EXP" ; };
     String SC_OPCODE_LN { Text = "LN" ; };
     String SC_OPCODE_SQRT { Text = "SQRT" ; };
@@ -829,6 +837,22 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_ARC_COT_HYP
     {
         Text [ en-US ] = "ACOTH" ;
+    };
+    String SC_OPCODE_COSECANT
+    {
+        Text  = "CSC" ;
+    };
+    String SC_OPCODE_SECANT
+    {
+        Text  = "SEC" ;
+    };
+    String SC_OPCODE_COSECANT_HYP
+    {
+        Text  = "CSCH" ;
+    };
+    String SC_OPCODE_SECANT_HYP
+    {
+        Text  = "SECH" ;
     };
     String SC_OPCODE_EXP
     {

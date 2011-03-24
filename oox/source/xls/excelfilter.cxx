@@ -56,29 +56,29 @@ using ::oox::drawingml::table::TableStyleListPtr;
 // ============================================================================
 
 ExcelFilterBase::ExcelFilterBase() :
-    mpData( 0 )
+    mpBookGlob( 0 )
 {
 }
 
 ExcelFilterBase::~ExcelFilterBase()
 {
-    OSL_ENSURE( !mpData, "ExcelFilterBase::~ExcelFilterBase - workbook data not cleared" );
+    OSL_ENSURE( !mpBookGlob, "ExcelFilterBase::~ExcelFilterBase - workbook data not cleared" );
 }
 
-void ExcelFilterBase::registerWorkbookData( WorkbookData& rData )
+void ExcelFilterBase::registerWorkbookGlobals( WorkbookGlobals& rBookGlob )
 {
-    mpData = &rData;
+    mpBookGlob = &rBookGlob;
 }
 
-WorkbookData& ExcelFilterBase::getWorkbookData() const
+WorkbookGlobals& ExcelFilterBase::getWorkbookGlobals() const
 {
-    OSL_ENSURE( mpData, "ExcelFilterBase::getWorkbookData - missing workbook data" );
-    return *mpData;
+    OSL_ENSURE( mpBookGlob, "ExcelFilterBase::getWorkbookGlobals - missing workbook data" );
+    return *mpBookGlob;
 }
 
-void ExcelFilterBase::unregisterWorkbookData()
+void ExcelFilterBase::unregisterWorkbookGlobals()
 {
-    mpData = 0;
+    mpBookGlob = 0;
 }
 
 // ============================================================================
@@ -125,8 +125,11 @@ bool ExcelFilter::importDocument() throw()
     if( aWorkbookPath.getLength() == 0 )
         return false;
 
-    WorkbookHelperRoot aHelper( *this );
-    return aHelper.isValid() && importFragment( new WorkbookFragment( aHelper, aWorkbookPath ) );
+    /*  Construct the WorkbookGlobals object referred to by every instance of
+        the class WorkbookHelper, and execute the import filter by constructing
+        an instance of WorkbookFragment and loading the file. */
+    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this );
+    return xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) );
 }
 
 bool ExcelFilter::exportDocument() throw()
@@ -136,7 +139,7 @@ bool ExcelFilter::exportDocument() throw()
 
 const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
 {
-    return &WorkbookHelper( getWorkbookData() ).getTheme();
+    return &WorkbookHelper( getWorkbookGlobals() ).getTheme();
 }
 
 ::oox::vml::Drawing* ExcelFilter::getVmlDrawing()
@@ -151,12 +154,12 @@ const TableStyleListPtr ExcelFilter::getTableStyles()
 
 ::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
 {
-    return WorkbookHelper( getWorkbookData() ).getChartConverter();
+    return WorkbookHelper( getWorkbookGlobals() ).getChartConverter();
 }
 
 GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
 {
-    return new ExcelGraphicHelper( getWorkbookData() );
+    return new ExcelGraphicHelper( getWorkbookGlobals() );
 }
 
 ::oox::ole::VbaProject* ExcelFilter::implCreateVbaProject() const
@@ -225,8 +228,11 @@ bool ExcelBiffFilter::importDocument() throw()
     if( eBiff == BIFF_UNKNOWN )
         return false;
 
-    WorkbookHelperRoot aHelper( *this, eBiff );
-    return aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
+    /*  Construct the WorkbookGlobals object referred to by every instance of
+        the class WorkbookHelper, and execute the import filter by constructing
+        an instance of BiffWorkbookFragment and loading the file. */
+    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this, eBiff );
+    return xBookGlob.get() && BiffWorkbookFragment( *xBookGlob, aWorkbookName ).importFragment();
 }
 
 bool ExcelBiffFilter::exportDocument() throw()
@@ -236,7 +242,7 @@ bool ExcelBiffFilter::exportDocument() throw()
 
 GraphicHelper* ExcelBiffFilter::implCreateGraphicHelper() const
 {
-    return new ExcelGraphicHelper( getWorkbookData() );
+    return new ExcelGraphicHelper( getWorkbookGlobals() );
 }
 
 ::oox::ole::VbaProject* ExcelBiffFilter::implCreateVbaProject() const
@@ -289,11 +295,16 @@ bool ExcelVbaProjectFilter::importDocument() throw()
     if( !xVbaPrjStrg || !xVbaPrjStrg->isStorage() )
         return false;
 
-    WorkbookHelperRoot aHelper( *this, eBiff );
+    /*  Construct the WorkbookGlobals object referred to by every instance of
+        the class WorkbookHelper. */
+    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this, eBiff );
+    if( !xBookGlob.get() )
+        return false;
+
     // set palette colors passed in service constructor
     Any aPalette = getArgument( CREATE_OUSTRING( "ColorPalette" ) );
-    aHelper.getStyles().importPalette( aPalette );
-    // import the VBA project
+    WorkbookHelper( *xBookGlob ).getStyles().importPalette( aPalette );
+    // import the VBA project (getVbaProject() implemented in base class)
     getVbaProject().importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
     return true;
 }

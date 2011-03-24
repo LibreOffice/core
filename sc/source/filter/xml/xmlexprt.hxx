@@ -182,14 +182,14 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
-    void WriteCell (ScMyCell& aCell);
+    void WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
     void ExportShape(const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape, com::sun::star::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);
     void WriteTableShapes();
-    void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
+    void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
      sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;

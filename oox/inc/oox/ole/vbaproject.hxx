@@ -189,7 +189,7 @@ private:
     typedef ::std::map< ::rtl::OUString, sal_Int32 >    DummyModuleMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        mxCompContext;      /// Component context with service manager.
+                        mxContext;          /// Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         mxDocModel;         /// Document model used to import/export the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >

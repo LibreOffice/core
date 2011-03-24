@@ -346,6 +346,7 @@ public class LinuxInstaller extends Installer {
 
             String forceDebianString = "";
             String nodepsString = "";
+            String noscriptsString = "";
 
             if ( ! data.debianInvestigated() ) {
                 helper.investigateDebian(data);
@@ -358,6 +359,10 @@ public class LinuxInstaller extends Installer {
                 if ( data.useForceDebian() ) {
                     forceDebianString = "--force-debian";
                 }
+            }
+
+            if (( data.isErrorInstallation() ) && ( data.isFirstPackage() )) {
+                noscriptsString = "--noscripts";
             }
 
             // Defining a Vector that contains the full rpm command. Then the string array can be
@@ -373,6 +378,10 @@ public class LinuxInstaller extends Installer {
 
             if ( ! nodepsString.equals("") ) {
                 rpmVector.add(nodepsString);
+            }
+
+            if ( ! noscriptsString.equals("") ) {
+                rpmVector.add(noscriptsString);
             }
 
             rpmVector.add("-ev");

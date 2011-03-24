@@ -53,6 +53,7 @@ import com.sun.star.wizards.ui.TitlesComponent;
 
 public class QueryWizard extends DatabaseObjectWizard
 {
+
     public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
     private static final int SOFIELDSELECTION_PAGE = 1;
     private static final int SOSORTING_PAGE = 2;
@@ -81,16 +82,19 @@ public class QueryWizard extends DatabaseObjectWizard
     private String resmsgNonNumericAsGroupBy;
     private String m_createdQuery;
 
-    public QueryWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
+    public QueryWizard(XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext)
     {
-        super( xMSF, 40970, i_wizardContext );
+        super(xMSF, 40970, i_wizardContext);
         addResourceHandler("QueryWizard", "dbw");
         m_DBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
     public static void main(String i_args[])
     {
-        final String settings[] = new String[] { null, null, null };
+        final String settings[] = new String[]
+        {
+            null, null, null
+        };
         final int IDX_PIPE_NAME = 0;
         final int IDX_LOCATION = 1;
         final int IDX_DSN = 2;
@@ -98,28 +102,28 @@ public class QueryWizard extends DatabaseObjectWizard
         // some simple parsing
         boolean failure = false;
         int settingsIndex = -1;
-        for ( int i=0; i<i_args.length; ++i )
+        for (int i = 0; i < i_args.length; ++i)
         {
-            if ( settingsIndex >= 0 )
+            if (settingsIndex >= 0)
             {
-                settings[ settingsIndex ] = i_args[i];
+                settings[ settingsIndex] = i_args[i];
                 settingsIndex = -1;
                 continue;
             }
 
-            if ( i_args[i].equals( "--pipe-name" ) )
+            if (i_args[i].equals("--pipe-name"))
             {
                 settingsIndex = IDX_PIPE_NAME;
                 continue;
             }
 
-            if ( i_args[i].equals( "--database-location" ) )
+            if (i_args[i].equals("--database-location"))
             {
                 settingsIndex = IDX_LOCATION;
                 continue;
             }
 
-            if ( i_args[i].equals( "--data-source-name" ) )
+            if (i_args[i].equals("--data-source-name"))
             {
                 settingsIndex = IDX_DSN;
                 continue;
@@ -128,18 +132,22 @@ public class QueryWizard extends DatabaseObjectWizard
             failure = true;
         }
 
-        if ( settings[ IDX_PIPE_NAME ] == null )
-            failure = true;
-
-        if ( ( settings[ IDX_DSN ] == null ) && ( settings[ IDX_LOCATION ] == null ) )
-            failure = true;
-
-        if ( failure )
+        if (settings[ IDX_PIPE_NAME] == null)
         {
-            System.err.println( "supported arguments: " );
-            System.err.println( "  --pipe-name <name>           : specifies the name of the pipe to connect to the running OOo instance" );
-            System.err.println( "  --database-location <url>    : specifies the URL of the database document to work with" );
-            System.err.println( "  --data-source-name <name>    : specifies the name of the data source to work with" );
+            failure = true;
+        }
+
+        if ((settings[ IDX_DSN] == null) && (settings[ IDX_LOCATION] == null))
+        {
+            failure = true;
+        }
+
+        if (failure)
+        {
+            System.err.println("supported arguments: ");
+            System.err.println("  --pipe-name <name>           : specifies the name of the pipe to connect to the running OOo instance");
+            System.err.println("  --database-location <url>    : specifies the URL of the database document to work with");
+            System.err.println("  --data-source-name <name>    : specifies the name of the data source to work with");
             return;
         }
 
@@ -150,12 +158,16 @@ public class QueryWizard extends DatabaseObjectWizard
             if (serviceFactory != null)
             {
                 PropertyValue[] curproperties = new PropertyValue[1];
-                if ( settings[ IDX_LOCATION ] != null )
-                    curproperties[0] = Properties.createProperty( "DatabaseLocation", settings[ IDX_LOCATION ] );
+                if (settings[ IDX_LOCATION] != null)
+                {
+                    curproperties[0] = Properties.createProperty("DatabaseLocation", settings[ IDX_LOCATION]);
+                }
                 else
-                    curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
+                {
+                    curproperties[0] = Properties.createProperty("DataSourceName", settings[ IDX_DSN]);
+                }
 
-                QueryWizard CurQueryWizard = new QueryWizard( serviceFactory, curproperties );
+                QueryWizard CurQueryWizard = new QueryWizard(serviceFactory, curproperties);
                 CurQueryWizard.startQueryWizard();
             }
         }
@@ -174,7 +186,7 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-            if ( m_DBMetaData.getConnection( m_wizardContext ) )
+            if (m_DBMetaData.getConnection(m_wizardContext))
             {
                 reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
                 reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
@@ -186,23 +198,23 @@ public class QueryWizard extends DatabaseObjectWizard
                 resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
                 Helper.setUnoPropertyValues(xDialogModel, new String[]
                         {
-                            PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
+                            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_MOVEABLE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
-                            new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)
+                            210, Boolean.TRUE, "DialogQuery", 102, 41, 1, new Short((short) 0), resQueryWizard, 310
                         });
                 drawNaviBar();
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
-                this.m_DBCommandFieldSelectio.preselectCommand( m_wizardContext, false );
+                this.m_DBCommandFieldSelectio.preselectCommand(m_wizardContext, false);
 
-                XWindowPeer windowPeer = UnoRuntime.queryInterface( XWindowPeer.class, m_frame.getContainerWindow() );
+                XWindowPeer windowPeer = UnoRuntime.queryInterface(XWindowPeer.class, m_frame.getContainerWindow());
                 createWindowPeer(windowPeer);
                 m_DBMetaData.setWindowPeer(this.xControl.getPeer());
                 insertQueryRelatedSteps();
-                executeDialog( m_frame.getContainerWindow().getPosSize() );
+                executeDialog(m_frame.getContainerWindow().getPosSize());
             }
         }
         catch (java.lang.Exception jexception)
@@ -310,8 +322,8 @@ public class QueryWizard extends DatabaseObjectWizard
         try
         {
             m_DBCommandFieldSelectio = new CommandFieldSelection(
-                this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables,
-                m_DBMetaData.supportsQueriesInFrom(), 40850);
+                    this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables,
+                    m_DBMetaData.supportsQueriesInFrom(), 40850);
             m_DBCommandFieldSelectio.setAppendMode(true);
             m_DBCommandFieldSelectio.addFieldSelectionListener(new FieldSelectionListener());
             m_sortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
@@ -341,14 +353,13 @@ public class QueryWizard extends DatabaseObjectWizard
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if  (   ( ncurStep == SOSUMMARY_PAGE )
-            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
-            )
+        if ((ncurStep == SOSUMMARY_PAGE)
+                || (switchToStep(ncurStep, SOSUMMARY_PAGE)))
         {
             m_createdQuery = m_finalizer.finish();
-            if ( m_createdQuery.length() > 0 )
+            if (m_createdQuery.length() > 0)
             {
-                loadSubComponent( CommandType.QUERY, m_createdQuery, m_finalizer.displayQueryDesign() );
+                loadSubComponent(CommandType.QUERY, m_createdQuery, m_finalizer.displayQueryDesign());
                 xDialog.endExecute();
                 return true;
             }

@@ -613,6 +613,9 @@ private:
        dest id is always the dest's position in this vector
      */
     std::vector<PDFDest>                m_aDests;
+    /** contains destinations accessible via a public Id, instead of being linked to by an ordinary link
+    */
+    ::std::map< sal_Int32, sal_Int32 >  m_aDestinationIdTranslation;
     /* contains all links ever set during PDF creation,
        link id is always the link's position in this vector
     */
@@ -1279,6 +1282,7 @@ public:
     // links
     sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
     sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
     sal_Int32 setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     sal_Int32 setLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL );
     void setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );

@@ -513,6 +513,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         { MAP_LEN( "BuildId" ), 0,
               &::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "OrganizerMode" ), 0,
+              &::getBooleanCppuType(),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
 
@@ -630,6 +633,13 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
+    if (SDXMLMODE_Organizer == meFilterMode)
+    {
+        ::rtl::OUString const sOrganizerMode(
+            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
+    }
+
     // -------------------------------------
 
     if( 0 == nRet )
@@ -655,13 +665,14 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         sal_uInt32 nWarn = 0;
         sal_uInt32 nWarn2 = 0;
         // read storage streams
+        // #i103539#: always read meta.xml for generator
+        nWarn = ReadThroughComponent(
+            xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            pServices->mpMeta,
+            aEmptyArgs, aName, sal_False );
+
         if( meFilterMode != SDXMLMODE_Organizer )
         {
-            nWarn = ReadThroughComponent(
-                xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-                pServices->mpMeta,
-                aEmptyArgs, aName, sal_False );
-
             nWarn2 = ReadThroughComponent(
                 xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
                 pServices->mpSettings,

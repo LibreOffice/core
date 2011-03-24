@@ -111,20 +111,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     {
         case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable2 );
+            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable2 );
         break;
         case EXC_BIFF3:
         case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable3 );
+            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable3 );
         break;
         case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable5 );
+            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable5 );
         break;
         case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable8 );
+            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();
@@ -1513,7 +1513,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
     XclBuiltInMap aBuiltInMap;
     for( const XclBuiltInFormatTable* pTable = spBuiltInFormatTables;
-            pTable != STATIC_TABLE_END( spBuiltInFormatTables ); ++pTable )
+            pTable != STATIC_ARRAY_END( spBuiltInFormatTables ); ++pTable )
         aBuiltInMap[ pTable->meLanguage ] = pTable;
 
     // build a list of table pointers for the current language, with all parent tables

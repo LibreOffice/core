@@ -101,9 +101,10 @@ public class QueryMetaData extends CommandMetaData
 //          FieldColumns = LocFieldColumns;
 //      }
 //    }
+
     public void addSeveralFieldColumns(String[] _FieldNames, String _sCommandName)
     {
-        Vector oToBeAddedFieldColumns = new Vector();
+        ArrayList<FieldColumn> oToBeAddedFieldColumns = new ArrayList<FieldColumn>();
         for (int i = 0; i < _FieldNames.length; i++)
         {
             FieldColumn oFieldColumn = getFieldColumn(_FieldNames[i], _sCommandName);
@@ -119,7 +120,7 @@ public class QueryMetaData extends CommandMetaData
             System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, nOldFieldCount);
             for (int i = 0; i < oToBeAddedFieldColumns.size(); i++)
             {
-                LocFieldColumns[nOldFieldCount + i] = (FieldColumn) oToBeAddedFieldColumns.elementAt(i);
+                LocFieldColumns[nOldFieldCount + i] = oToBeAddedFieldColumns.get(i);
             }
             FieldColumns = LocFieldColumns;
         }
@@ -138,7 +139,7 @@ public class QueryMetaData extends CommandMetaData
 
     public void removeSeveralFieldColumnsByDisplayFieldName(String[] _DisplayFieldNames)
     {
-        Vector oRemainingFieldColumns = new Vector();
+        ArrayList<FieldColumn> oRemainingFieldColumns = new ArrayList<FieldColumn>();
         int a = 0;
         for (int n = 0; n < FieldColumns.length; n++)
         {
@@ -161,13 +162,10 @@ public class QueryMetaData extends CommandMetaData
             FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length - 1];
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                if (!FieldColumns[i].getFieldName().equals(_sFieldName))
+                if (!FieldColumns[i].getFieldName().equals(_sFieldName) && !FieldColumns[i].getCommandName().equals(_sCommandName))
                 {
-                    if (!FieldColumns[i].getCommandName().equals(_sCommandName))
-                    {
-                        LocFieldColumns[a] = FieldColumns[i];
-                        a++;
-                    }
+                    LocFieldColumns[a] = FieldColumns[i];
+                    a++;
                 }
             }
             FieldColumns = LocFieldColumns;
@@ -177,7 +175,7 @@ public class QueryMetaData extends CommandMetaData
     public String[] getIncludedCommandNames()
     {
         // FieldColumn CurQueryField;
-        Vector CommandNamesV = new Vector(1);
+        ArrayList<String> CommandNamesV = new ArrayList<String>(1);
         // String CurCommandName;
         for (int i = 0; i < FieldColumns.length; i++)
         {
@@ -185,7 +183,7 @@ public class QueryMetaData extends CommandMetaData
             final String CurCommandName = CurQueryField.getCommandName();
             if (!CommandNamesV.contains(CurCommandName))
             {
-                CommandNamesV.addElement(CurCommandName);
+                CommandNamesV.add(CurCommandName);
             }
         }
         String[] sIncludedCommandNames = new String[CommandNamesV.size()];
@@ -195,7 +193,7 @@ public class QueryMetaData extends CommandMetaData
 
     public static String[] getIncludedCommandNames(String[] _FieldNames)
     {
-        Vector CommandNames = new Vector(1);
+        ArrayList<String> CommandNames = new ArrayList<String>(1);
         for (int i = 0; i < _FieldNames.length; i++)
         {
             String CurCommandName = "";
@@ -208,7 +206,7 @@ public class QueryMetaData extends CommandMetaData
                 }
                 if (!CommandNames.contains(CurCommandName))
                 {
-                    CommandNames.addElement(CurCommandName);
+                    CommandNames.add(CurCommandName);
                 }
             }
         }
@@ -257,7 +255,7 @@ public class QueryMetaData extends CommandMetaData
 
     public String[] getUniqueAggregateFieldNames()
     {
-        Vector UniqueAggregateFieldVector = new Vector(0);
+        ArrayList<String> UniqueAggregateFieldVector = new ArrayList<String>();
         for (int i = 0; i < AggregateFieldNames.length; i++)
         {
             if (!UniqueAggregateFieldVector.contains(AggregateFieldNames[i][0]))
@@ -291,10 +289,13 @@ public class QueryMetaData extends CommandMetaData
         }
         return iAggregate;
     }
+
     public SQLQueryComposer getSQLQueryComposer()
     {
-        if ( oSQLQueryComposer == null )
+        if (oSQLQueryComposer == null)
+        {
             oSQLQueryComposer = new SQLQueryComposer(this);
+        }
         return oSQLQueryComposer;
     }
 }

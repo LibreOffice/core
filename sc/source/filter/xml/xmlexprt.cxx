@@ -1814,16 +1814,14 @@ void ScXMLExport::_ExportContent()
                                         ++nEqualCells;
                                     else
                                     {
-                                        SetRepeatAttribute(nEqualCells);
-                                        WriteCell(aPrevCell);
+                                        WriteCell(aPrevCell, nEqualCells);
                                         nEqualCells = 0;
                                         aPrevCell = aCell;
                                     }
                                 }
                                 else
                                 {
-                                    SetRepeatAttribute(nEqualCells);
-                                    WriteCell(aPrevCell);
+                                    WriteCell(aPrevCell, nEqualCells);
                                     ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
                                         aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
                                     nEqualCells = 0;
@@ -1833,8 +1831,7 @@ void ScXMLExport::_ExportContent()
                         }
                         if (!bIsFirst)
                         {
-                            SetRepeatAttribute(nEqualCells);
-                            WriteCell(aPrevCell);
+                            WriteCell(aPrevCell, nEqualCells);
                             ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
                                 pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
                         }
@@ -2898,8 +2895,11 @@ sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) con
     }
 }
 
-void ScXMLExport::WriteCell (ScMyCell& aCell)
+void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 {
+    // nEqualCellCount is the number of additional cells
+    SetRepeatAttribute(nEqualCellCount, (aCell.nType != table::CellContentType_EMPTY));
+
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, aCell.aCellAddress );
     if (aCell.nStyleIndex != -1)
@@ -3470,14 +3470,16 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
     }
 }
 
-void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
+void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress)
 {
+    // nEqualCellCount is additional cells, so the attribute value is nEqualCellCount+1
     if (nEqualCellCount > 0)
     {
         sal_Int32 nTemp(nEqualCellCount + 1);
         OUString sOUEqualCellCount(OUString::valueOf(nTemp));
         AddAttribute(sAttrColumnsRepeated, sOUEqualCellCount);
-        IncrementProgressBar(sal_False, nEqualCellCount);
+        if (bIncProgress)
+            IncrementProgressBar(sal_False, nEqualCellCount);
     }
 }
 

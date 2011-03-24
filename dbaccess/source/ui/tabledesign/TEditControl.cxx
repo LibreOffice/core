@@ -443,20 +443,14 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                    sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    String aText( GetCellText( m_nCurrentPos, nColumnId ));
-    Point aPos(rRect.TopLeft());
-    Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
+    const String aText( GetCellText( m_nCurrentPos, nColumnId ));
+    const Point aPos(rRect.TopLeft());
+    const Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
 
-    if (aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
-        aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
-        rDev.SetClipRegion( rRect );
-
-    rDev.DrawText(aPos, aText);
-
-    if (rDev.IsClipRegion())
-        rDev.SetClipRegion();
-//  rDev.DrawText(rRect.TopLeft(), aText);
-//  rDev.SetClipRegion( );
+    rDev.Push( PUSH_CLIPREGION );
+    rDev.SetClipRegion( rRect );
+    rDev.DrawText( rRect, aText, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER );
+    rDev.Pop();
 }
 
 //------------------------------------------------------------------------------

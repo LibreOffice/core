@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -66,8 +67,11 @@ typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::beans::XPropertySet
                                 >   ScShapeObj_Base;
 typedef ::cppu::ImplHelper1     <   ::com::sun::star::text::XText
                                 >   ScShapeObj_TextBase;
+typedef ::cppu::ImplHelper1     <   ::com::sun::star::container::XChild
+                                >   ScShapeObj_ChildBase;
 class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_TextBase
+                    ,public ScShapeObj_ChildBase
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
@@ -76,7 +80,8 @@ private:
     ::com::sun::star::beans::XPropertyState*                                pShapePropertyState;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
-    sal_Bool                                                                    bIsTextShape;
+    bool                                                                    bIsTextShape;
+    bool                                                                    bIsNoteCaption;
     bool                                                                    bInitializedNotifier;
 
     SdrObject* GetSdrObject() const throw();
@@ -218,6 +223,12 @@ public:
     virtual ::rtl::OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+    // XChild
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
+                            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent )
+                            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()

@@ -31,6 +31,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
@@ -430,15 +431,15 @@ public:
     void                writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const;
     /** Writes a source field item value into the passed sheet. */
     void                writeSourceDataCell( WorksheetHelper& rSheetHelper,
-                            sal_Int32 nCol, sal_Int32 nRow,
+                            sal_Int32 nColIdx, sal_Int32 nRowIdx,
                             const PivotCacheItem& rItem ) const;
 
     /** Reads a PCRECORD record and writes all item values to the passed sheet. */
     void                importPCRecord( SequenceInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
+                            WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
     /** Reads a PCITEM_INDEXLIST record and writes all item values to the passed sheet. */
     void                importPCItemIndexList( BiffInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
+                            WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
 private:
     /** Reads the worksheet source range from the DCONREF record. */
@@ -456,6 +457,8 @@ private:
     void                finalizeExternalSheetSource();
     /** Creates a dummy sheet that will be filled with the pivot cache data. */
     void                prepareSourceDataSheet();
+    /** Checks, if the row index has changed since last call, and initializes the sheet data buffer. */
+    void                updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
 
 private:
     typedef RefVector< PivotCacheField >    PivotCacheFieldVector;
@@ -467,7 +470,9 @@ private:
     PCDefinitionModel   maDefModel;         /// Global pivot cache settings.
     PCSourceModel       maSourceModel;      /// Pivot cache source settings.
     PCWorksheetSourceModel maSheetSrcModel; /// Sheet source data if cache type is sheet.
+    ValueRangeSet       maColSpans;         /// Column spans used by SheetDataBuffer for optimized cell import.
     ::rtl::OUString     maTargetUrl;        /// URL of an external source document.
+    mutable sal_Int32   mnCurrRow;          /// Current row index in dummy sheet.
     bool                mbValidSource;      /// True = pivot cache is based on supported data source.
     bool                mbDummySheet;       /// True = pivot cache is based on a dummy sheet.
 };

@@ -2515,8 +2515,6 @@ SetRedlineMode( eOld );
             rPam.GetMark()->nNode = aPtNd;
             rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                 nPtCnt );
-            if( bJoinTxt )
-                rPam.Move( fnMoveBackward );
 
             if( pUndoRpl )
             {
@@ -2642,8 +2640,15 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
                 return sal_False;
             }
         }
-            // text::Bookmarks usw. verschieben
-        CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        // move bookmarks, redlines etc.
+        if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
+        {
+            CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, sal_True );
+        }
+        else
+        {
+            CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        }
 
             // was ist mit Fly's ??
         {

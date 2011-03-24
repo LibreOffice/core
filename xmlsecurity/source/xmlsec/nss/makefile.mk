@@ -131,7 +131,8 @@ SLOFILES = \
     $(SLO)$/x509certificate_nssimpl.obj \
     $(SLO)$/seinitializer_nssimpl.obj \
     $(SLO)$/xsec_nss.obj \
-        $(SLO)$/secerror.obj
+    $(SLO)$/sanextension_nssimpl.obj \
+    $(SLO)$/secerror.obj
 
 
     

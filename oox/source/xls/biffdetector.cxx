@@ -82,14 +82,14 @@ BiffDetector::~BiffDetector()
 /*static*/ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
 {
     BiffType eBiff = BIFF_UNKNOWN;
-    if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.getLength() > 4) )
+    if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.size() > 4) )
     {
         sal_Int64 nOldPos = rInStream.tell();
         rInStream.seekToStart();
         sal_uInt16 nBofId, nBofSize;
         rInStream >> nBofId >> nBofSize;
 
-        if( (4 <= nBofSize) && (nBofSize <= 16) && (rInStream.tell() + nBofSize <= rInStream.getLength()) )
+        if( (4 <= nBofSize) && (nBofSize <= 16) && (rInStream.tell() + nBofSize <= rInStream.size()) )
         {
             switch( nBofId )
             {
@@ -207,9 +207,8 @@ OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor )
     MediaDescriptor aDescriptor( rDescriptor );
     aDescriptor.addInputStream();
 
-    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XInputStream > xInStrm( aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY_THROW );
-    StorageRef xStorage( new ::oox::ole::OleStorage( xFactory, xInStrm, true ) );
+    StorageRef xStorage( new ::oox::ole::OleStorage( mxContext, xInStrm, true ) );
 
     OUString aWorkbookName;
     switch( detectStorageBiffVersion( aWorkbookName, xStorage ) )

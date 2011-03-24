@@ -188,6 +188,9 @@ public:
                             sal_uInt16& rnRawRecId, sal_uInt16& rnRawRecSize, sal_uInt16& rnRawRecLeft,
                             bool& rbValid ) const;
 
+    /** Returns the stored stream position. */
+    inline sal_Size     GetPos() const { return mnPos; }
+
 private:
     sal_Size            mnPos;          /// Absolute position of the stream.
     sal_Size            mnNextPos;      /// Absolute position of next record.
@@ -286,6 +289,14 @@ public:
         started with StartNextRecord(). */
     void                ResetRecord( bool bContLookup,
                             sal_uInt16 nAltContId = EXC_ID_UNKNOWN );
+    /** Sets stream pointer before current record and invalidates stream.
+        @descr  The next call to StartNextRecord() will start again the current
+        record. This can be used in situations where a loop or a function
+        leaves on a specific record, but the parent context expects to start
+        this record by itself. The stream is invalid as long as the first
+        record has not been started (it is not allowed to call any other stream
+        operation then). */
+    void                RewindRecord();
 
     /** Enables decryption of record contents for the rest of the stream. */
     void                SetDecrypter( XclImpDecrypterRef xDecrypter );

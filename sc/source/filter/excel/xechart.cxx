@@ -718,7 +718,7 @@ bool XclExpChEscherFormat::HasSubRecords() const
 void XclExpChEscherFormat::WriteSubRecords( XclExpStream& rStrm )
 {
     rStrm.StartRecord( EXC_ID_CHPICFORMAT, 14 );
-    rStrm << maPicFmt.mnBmpMode << maPicFmt.mnFormat << maPicFmt.mnFlags << maPicFmt.mfScale;
+    rStrm << maPicFmt.mnBmpMode << sal_uInt16( 0 ) << maPicFmt.mnFlags << maPicFmt.mfScale;
     rStrm.EndRecord();
 }
 

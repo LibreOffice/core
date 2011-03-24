@@ -66,7 +66,7 @@ public:
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
     CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
 
-    const String* GetKeywords() const
+    const NfKeywordTable & GetKeywords() const
         {
             if ( bKeywordsNeedInit )
                 InitKeywords();

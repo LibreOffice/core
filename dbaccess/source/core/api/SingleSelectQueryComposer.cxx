@@ -58,6 +58,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <connectivity/predicateinput.hxx>
 #include <rtl/logfile.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
@@ -1243,16 +1244,12 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         ::rtl::OUString aValue;
         ::rtl::OUString aColumnName;
 
-        pCondition->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+        pCondition->getChild(2)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
         pCondition->getChild(0)->parseNodeToPredicateStr( aColumnName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep .toChar() ) );
-
-        // don't display the column name
-        aValue = aValue.copy(aColumnName.getLength());
-        aValue.trim();
 
         aItem.Name = getColumnName(pCondition->getChild(0),_rIterator);
         aItem.Value <<= aValue;
-        aItem.Handle = pCondition->getNodeType();
+        aItem.Handle = getPredicateType(pCondition->getChild(1));
         rFilter.push_back(aItem);
     }
     else // kann sich nur um einen Expr. Ausdruck handeln
@@ -1269,7 +1266,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
              pLhs->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
         // Kriterium
-        aItem.Handle = pCondition->getChild(1)->getNodeType();
+        aItem.Handle = getPredicateType(pCondition->getChild(1));
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
             pRhs->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
@@ -1514,7 +1511,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns( 
 // -----------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter )
+    ::rtl::OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter,const OPredicateInputController& i_aPredicateInputController,const Reference< XNameAccess >& i_xSelectColumns)
     {
         ::rtl::OUStringBuffer sRet;
         const Sequence< PropertyValue >* pOrIter = filter.getConstArray();
@@ -1531,6 +1528,15 @@ namespace
                     sRet.append(pAndIter->Name);
                     ::rtl::OUString sValue;
                     pAndIter->Value >>= sValue;
+                    if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(pAndIter->Name) )
+                    {
+                        Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(pAndIter->Name),UNO_QUERY);
+                        sValue = i_aPredicateInputController.getPredicateValue(sValue,xColumn,sal_True);
+                    }
+                    else
+                    {
+                        sValue = i_aPredicateInputController.getPredicateValue(pAndIter->Name,sValue,sal_True);
+                    }
                     lcl_addFilterCriteria_throw(pAndIter->Handle,sValue,sRet);
                     ++pAndIter;
                     if ( pAndIter != pAndEnd )
@@ -1549,13 +1555,15 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredFilter" );
-    setFilter(lcl_getCondition(filter));
+    OPredicateInputController aPredicateInput(m_aContext.getLegacyServiceFactory(),m_xConnection);
+    setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredHavingClause" );
-    setHavingClause(lcl_getCondition(filter));
+    OPredicateInputController aPredicateInput(m_aContext.getLegacyServiceFactory(),m_xConnection);
+    setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 // -----------------------------------------------------------------------------
 void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,::rtl::OUString>& _aSetFunctor,sal_Int32 filterOperator)

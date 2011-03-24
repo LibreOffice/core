@@ -28,6 +28,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include <vector>
 #include <rtl/ustrbuf.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -35,14 +36,13 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/token/tokens.hxx"
 
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 using ::rtl::OUString;
@@ -58,24 +58,6 @@ namespace drawingml {
 // ============================================================================
 
 namespace {
-
-static const sal_Int32 spnDefaultLineIds[ LineId_END ] =
-{
-    PROP_LineStyle,
-    PROP_LineWidth,
-    PROP_LineColor,
-    PROP_LineTransparence,
-    PROP_LineDash,
-    PROP_LineJoint,
-    PROP_LineStartName,
-    PROP_LineStartWidth,
-    PROP_LineStartCenter,
-    PROP_LineEndName,
-    PROP_LineEndWidth,
-    PROP_LineEndCenter
-};
-
-// ----------------------------------------------------------------------------
 
 void lclSetDashData( LineDash& orLineDash, sal_Int16 nDots, sal_Int32 nDotLen,
         sal_Int16 nDashes, sal_Int32 nDashLen, sal_Int32 nDistance )
@@ -195,15 +177,16 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
 
 // ----------------------------------------------------------------------------
 
-void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& rArrowProps,
-        ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nLineWidth, bool bLineEnd )
+void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
+        const LineArrowProperties& rArrowProps, sal_Int32 nLineWidth, bool bLineEnd )
 {
-    PolyPolygonBezierCoords aMarker;
-    OUString aMarkerName;
-    sal_Int32 nMarkerWidth = 0;
-    bool bMarkerCenter = false;
+    /*  Store the marker polygon and the marker name in a single value, to be
+        able to pass both to the ShapePropertyMap::setProperty() function. */
+    NamedValue aNamedMarker;
 
     OUStringBuffer aBuffer;
+    sal_Int32 nMarkerWidth = 0;
+    bool bMarkerCenter = false;
     sal_Int32 nArrowType = rArrowProps.moArrowType.get( XML_none );
     switch( nArrowType )
     {
@@ -233,7 +216,7 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
 
         sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
         aBuffer.append( sal_Unicode( ' ' ) ).append( nNameIndex );
-        aMarkerName = aBuffer.makeStringAndClear();
+        OUString aMarkerName = aBuffer.makeStringAndClear();
 
         bool bIsArrow = nArrowType == XML_arrow;
         double fArrowLength = 1.0;
@@ -250,12 +233,15 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
             case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 4.5 : 3.0);  break;
             case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
         }
-        // set arrow width relative to line width (convert line width from EMUs to 1/100 mm)
-        sal_Int32 nApiLineWidth = ::std::max< sal_Int32 >( GetCoordinate( nLineWidth ), 70 );
-        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nApiLineWidth );
+        // set arrow width relative to line width
+        sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
+        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nBaseLineWidth );
 
-        // test if the arrow already exists, do not create it again in this case
-        if( !rPropIds.mbNamedLineMarker || !rModelObjHelper.hasLineMarker( aMarkerName ) )
+        /*  Test if the marker already exists in the marker table, do not
+            create it again in this case. If markers are inserted explicitly
+            instead by their name, the polygon will be created always.
+            TODO: this can be optimized by using a map. */
+        if( !rPropMap.hasNamedLineMarkerInTable( aMarkerName ) )
         {
 // pass X and Y as percentage to OOX_ARROW_POINT
 #define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
@@ -310,61 +296,49 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
             }
 #undef OOX_ARROW_POINT
 
-            OSL_ENSURE( !aPoints.empty(), "ApiLineMarkerProperties::ApiLineMarkerProperties - missing arrow coordinates" );
+            OSL_ENSURE( !aPoints.empty(), "lclPushMarkerProperties - missing arrow coordinates" );
             if( !aPoints.empty() )
             {
-                aMarker.Coordinates.realloc( 1 );
-                aMarker.Coordinates[ 0 ] = ContainerHelper::vectorToSequence( aPoints );
+                PolyPolygonBezierCoords aMarkerCoords;
+                aMarkerCoords.Coordinates.realloc( 1 );
+                aMarkerCoords.Coordinates[ 0 ] = ContainerHelper::vectorToSequence( aPoints );
 
                 ::std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
-                aMarker.Flags.realloc( 1 );
-                aMarker.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
+                aMarkerCoords.Flags.realloc( 1 );
+                aMarkerCoords.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
 
-                if( rPropIds.mbNamedLineMarker && !rModelObjHelper.insertLineMarker( aMarkerName, aMarker ) )
-                    aMarkerName = OUString();
+                aNamedMarker.Name = aMarkerName;
+                aNamedMarker.Value <<= aMarkerCoords;
             }
-            else
-            {
-                aMarkerName = OUString();
-            }
-        }
-    }
-
-    // push the properties (filled aMarkerName indicates valid marker)
-    if( aMarkerName.getLength() > 0 )
-    {
-        if( bLineEnd )
-        {
-            if( rPropIds.mbNamedLineMarker )
-                rPropMap.setProperty( rPropIds[ LineEndId ], aMarkerName );
-            else
-                rPropMap.setProperty( rPropIds[ LineEndId ], aMarker );
-            rPropMap.setProperty( rPropIds[ LineEndWidthId ], nMarkerWidth );
-            rPropMap.setProperty( rPropIds[ LineEndCenterId ], bMarkerCenter );
         }
         else
         {
-            if( rPropIds.mbNamedLineMarker )
-                rPropMap.setProperty( rPropIds[ LineStartId ], aMarkerName );
-            else
-                rPropMap.setProperty( rPropIds[ LineStartId ], aMarker );
-            rPropMap.setProperty( rPropIds[ LineStartWidthId ], nMarkerWidth );
-            rPropMap.setProperty( rPropIds[ LineStartCenterId ], bMarkerCenter );
+            /*  Named marker object exists already in the marker table, pass
+                its name only. This will set the name as property value, but
+                does not create a new object in the marker table. */
+            aNamedMarker.Name = aMarkerName;
+        }
+    }
+
+    // push the properties (filled aNamedMarker.Name indicates valid marker)
+    if( aNamedMarker.Name.getLength() > 0 )
+    {
+        if( bLineEnd )
+        {
+            rPropMap.setProperty( SHAPEPROP_LineEnd, aNamedMarker );
+            rPropMap.setProperty( SHAPEPROP_LineEndWidth, nMarkerWidth );
+            rPropMap.setProperty( SHAPEPROP_LineEndCenter, bMarkerCenter );
+        }
+        else
+        {
+            rPropMap.setProperty( SHAPEPROP_LineStart, aNamedMarker );
+            rPropMap.setProperty( SHAPEPROP_LineStartWidth, nMarkerWidth );
+            rPropMap.setProperty( SHAPEPROP_LineStartCenter, bMarkerCenter );
         }
     }
 }
 
 } // namespace
-
-// ============================================================================
-
-LinePropertyIds::LinePropertyIds( const sal_Int32* pnPropertyIds, bool bNamedLineDash, bool bNamedLineMarker ) :
-    mpnPropertyIds( pnPropertyIds ),
-    mbNamedLineDash( bNamedLineDash ),
-    mbNamedLineMarker( bNamedLineMarker )
-{
-    OSL_ENSURE( mpnPropertyIds != 0, "LinePropertyIds::LinePropertyIds - missing property identifiers" );
-}
 
 // ============================================================================
 
@@ -376,8 +350,6 @@ void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
 }
 
 // ============================================================================
-
-LinePropertyIds LineProperties::DEFAULT_IDS( spnDefaultLineIds, false, true );
 
 void LineProperties::assignUsed( const LineProperties& rSourceProps )
 {
@@ -393,14 +365,17 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
     moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
 }
 
-void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rModelObjHelper,
-        const GraphicHelper& rGraphicHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
+void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
+        const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( maLineFill.moFillType.has() )
     {
         // line style (our core only supports none and solid)
         LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? LineStyle_NONE : LineStyle_SOLID;
+
+        // convert line width from EMUs to 1/100mm
+        sal_Int32 nLineWidth = convertEmuToHmm( moLineWidth.get( 0 ) );
 
         // create line dash from preset dash token (not for invisible line)
         if( (eLineStyle != LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
@@ -415,59 +390,38 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
                 lclConvertCustomDash( aLineDash, maCustomDash );
 
             // convert relative dash/dot length to absolute length
-            sal_Int32 nLineWidth = GetCoordinate( moLineWidth.get( 103500 ) );
-            aLineDash.DotLen *= nLineWidth;
-            aLineDash.DashLen *= nLineWidth;
-            aLineDash.Distance *= nLineWidth;
+            sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
+            aLineDash.DotLen *= nBaseLineWidth;
+            aLineDash.DashLen *= nBaseLineWidth;
+            aLineDash.Distance *= nBaseLineWidth;
 
-            if( rPropIds.mbNamedLineDash )
-            {
-                OUString aDashName = rModelObjHelper.insertLineDash( aLineDash );
-                if( aDashName.getLength() > 0 )
-                {
-                    rPropMap.setProperty( rPropIds[ LineDashId ], aDashName );
-                    eLineStyle = LineStyle_DASH;
-                }
-            }
-            else
-            {
-                rPropMap.setProperty( rPropIds[ LineDashId ], aLineDash );
+            if( rPropMap.setProperty( SHAPEPROP_LineDash, aLineDash ) )
                 eLineStyle = LineStyle_DASH;
-            }
         }
 
         // set final line style property
-        rPropMap.setProperty( rPropIds[ LineStyleId ], eLineStyle );
+        rPropMap.setProperty( SHAPEPROP_LineStyle, eLineStyle );
 
         // line joint type
         if( moLineJoint.has() )
-            rPropMap.setProperty( rPropIds[ LineJointId ], lclGetLineJoint( moLineJoint.get() ) );
+            rPropMap.setProperty( SHAPEPROP_LineJoint, lclGetLineJoint( moLineJoint.get() ) );
 
-        // convert line width from EMUs to 1/100 mm
-        if( moLineWidth.has() )
-            rPropMap.setProperty( rPropIds[ LineWidthId ], GetCoordinate( moLineWidth.get() ) );
+        // line width in 1/100mm
+        rPropMap.setProperty( SHAPEPROP_LineWidth, nLineWidth );
 
         // line color and transparence
         Color aLineColor = maLineFill.getBestSolidColor();
         if( aLineColor.isUsed() )
         {
-            rPropMap.setProperty( rPropIds[ LineColorId ], aLineColor.getColor( rGraphicHelper, nPhClr ) );
-            if( aLineColor.hasTransparence() )
-                rPropMap.setProperty( rPropIds[ LineTransparenceId ], aLineColor.getTransparence() );
+            rPropMap.setProperty( SHAPEPROP_LineColor, aLineColor.getColor( rGraphicHelper, nPhClr ) );
+            if( aLineColor.hasTransparency() )
+                rPropMap.setProperty( SHAPEPROP_LineTransparency, aLineColor.getTransparency() );
         }
 
         // line markers
-        lclPushMarkerProperties( rPropMap, maStartArrow, rModelObjHelper, rPropIds, moLineWidth.get( 0 ), false );
-        lclPushMarkerProperties( rPropMap, maEndArrow,   rModelObjHelper, rPropIds, moLineWidth.get( 0 ), true );
+        lclPushMarkerProperties( rPropMap, maStartArrow, nLineWidth, false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   nLineWidth, true );
     }
-}
-
-void LineProperties::pushToPropSet( PropertySet& rPropSet, ModelObjectHelper& rModelObjHelper,
-        const GraphicHelper& rGraphicHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
-{
-    PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rModelObjHelper, rGraphicHelper, rPropIds, nPhClr );
-    rPropSet.setProperties( aPropMap );
 }
 
 // ============================================================================

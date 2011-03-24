@@ -48,6 +48,8 @@ using namespace ::xmloff::token;
     { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 #define M_E_SE( p, l, w, m ) \
     { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_EXPORT|m }
+#define M_E_SIE( p, l, w, m ) \
+    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_EXPORT|MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 
 #define M_END { 0, XML_TOKEN_INVALID, 0, 0 }
 
@@ -61,11 +63,12 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     // RES_PAPER_BIN
     // not required
     // TODO: RES_LR_SPACE
-    M_E_SE( FO, MARGIN_LEFT,        RES_LR_SPACE,   MID_L_MARGIN ),
-    M_E_SE( FO, MARGIN_RIGHT,       RES_LR_SPACE,   MID_R_MARGIN ),
+    M_E_SE( FO,     MARGIN,             -1,     MID_SW_FLAG_NO_ITEM_IMPORT),
+    M_E_SIE( FO,    MARGIN_LEFT,        RES_LR_SPACE,   MID_L_MARGIN ),
+    M_E_SIE( FO,    MARGIN_RIGHT,       RES_LR_SPACE,   MID_R_MARGIN ),
     // RES_UL_SPACE
-    MAP_ENTRY( FO,   MARGIN_TOP,         RES_UL_SPACE,   MID_UP_MARGIN ),
-    MAP_ENTRY( FO,   MARGIN_BOTTOM,      RES_UL_SPACE,   MID_LO_MARGIN ),
+    M_E_SI( FO,     MARGIN_TOP,         RES_UL_SPACE,   MID_UP_MARGIN ),
+    M_E_SI( FO,     MARGIN_BOTTOM,      RES_UL_SPACE,   MID_LO_MARGIN ),
     // RES_PAGEDESC
     MAP_ENTRY( STYLE,    PAGE_NUMBER,        RES_PAGEDESC,   MID_PAGEDESC_PAGENUMOFFSET),
     // RES_BREAK

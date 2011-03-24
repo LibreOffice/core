@@ -92,17 +92,6 @@ static const LanguageDependentProp aLanguageDependentProp[] =
     { 0, 0                 }
 };
 
-WorkWindow* lcl_GetDefaultWindow()
-{
-    static WorkWindow* pW = NULL;
-    if ( !pW )
-    {
-        pW = new WorkWindow( NULL, 0 );
-        pW->EnableChildTransparentMode();
-    }
-    return pW;
-}
-
 static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
 {
     Sequence< ::rtl::OUString> aNames;
@@ -238,14 +227,15 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
         Reference< XControl > xMe;
         OWeakAggObject::queryInterface( ::getCppuType( &xMe ) ) >>= xMe;
 
-        WorkWindow* pWW;
+        Window* pParentWindow( NULL );
         {
             osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-            pWW = lcl_GetDefaultWindow();
+            pParentWindow = dynamic_cast< Window* >( Application::GetDefaultDevice() );
+            ENSURE_OR_THROW( pParentWindow != NULL, "could obtain a default parent window!" );
         }
         try
         {
-            xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
+            xMe->createPeer( NULL, pParentWindow->GetComponentInterface( sal_True ) );
         }
         catch( const Exception& )
         {

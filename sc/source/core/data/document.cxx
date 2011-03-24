@@ -2696,6 +2696,60 @@ void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rSt
 }
 
 
+sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString )
+{
+    // Used in formulas (add-in parameters etc), so it must use the same semantics as
+    // ScInterpreter::GetCellString: always format values as numbers.
+    // The return value is the error code.
+
+    sal_uInt16 nErr = 0;
+    String aStr;
+    ScBaseCell* pCell = GetCell( rPos );
+    if (pCell)
+    {
+        SvNumberFormatter* pFormatter = GetFormatTable();
+        switch (pCell->GetCellType())
+        {
+            case CELLTYPE_STRING:
+                static_cast<ScStringCell*>(pCell)->GetString(aStr);
+            break;
+            case CELLTYPE_EDIT:
+                static_cast<ScEditCell*>(pCell)->GetString(aStr);
+            break;
+            case CELLTYPE_FORMULA:
+            {
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                nErr = pFCell->GetErrCode();
+                if (pFCell->IsValue())
+                {
+                    double fVal = pFCell->GetValue();
+                    sal_uInt32 nIndex = pFormatter->GetStandardFormat(
+                                        NUMBERFORMAT_NUMBER,
+                                        ScGlobal::eLnge);
+                    pFormatter->GetInputLineString(fVal, nIndex, aStr);
+                }
+                else
+                    pFCell->GetString(aStr);
+            }
+            break;
+            case CELLTYPE_VALUE:
+            {
+                double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
+                sal_uInt32 nIndex = pFormatter->GetStandardFormat(
+                                        NUMBERFORMAT_NUMBER,
+                                        ScGlobal::eLnge);
+                pFormatter->GetInputLineString(fVal, nIndex, aStr);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    rString = aStr;
+    return nErr;
+}
+
+
 void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue )
 {
     if ( VALIDTAB(nTab) && pTab[nTab] )

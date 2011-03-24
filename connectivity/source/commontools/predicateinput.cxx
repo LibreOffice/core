@@ -31,8 +31,10 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <osl/diagnose.h>
 #include <connectivity/sqlnode.hxx>
+#include <connectivity/PColumn.hxx>
 #include <comphelper/numbers.hxx>
 
 //.........................................................................
@@ -325,63 +327,117 @@ namespace dbtools
 
             ::rtl::OUString sError;
             OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
-            if ( _pErrorMessage ) *_pErrorMessage = sError;
+            if ( _pErrorMessage )
+                *_pErrorMessage = sError;
 
-            if ( pParseNode )
+            sReturn = implParseNode(pParseNode,_bForStatementUse);
+        }
+
+        return sReturn;
+    }
+
+    ::rtl::OUString OPredicateInputController::getPredicateValue(
+        const ::rtl::OUString& _sField, const ::rtl::OUString& _rPredicateValue, sal_Bool _bForStatementUse, ::rtl::OUString* _pErrorMessage ) const
+    {
+        ::rtl::OUString sReturn = _rPredicateValue;
+        ::rtl::OUString sError;
+        ::rtl::OUString sField = _sField;
+        sal_Int32 nIndex = 0;
+        sField = sField.getToken(0,'(',nIndex);
+        if(nIndex == -1)
+            sField = _sField;
+        sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());
+        if ( nType == DataType::OTHER || !sField.getLength() )
+        {
+            // first try the international version
+            ::rtl::OUString sSql;
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * "));
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x WHERE "));
+            sSql += sField;
+            sSql += _rPredicateValue;
+            ::std::auto_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );
+            nType = DataType::DOUBLE;
+            if ( pParseNode.get() )
             {
-                OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
-                if ( pOdbcSpec )
+                OSQLParseNode* pColumnRef = pParseNode->getByRule(OSQLParseNode::column_ref);
+                if ( pColumnRef )
                 {
-                    if ( !_bForStatementUse )
-                    {
-                        if  (   ( pOdbcSpec->count() >= 2 )
-                            &&  ( SQL_NODE_STRING == pOdbcSpec->getChild(1)->getNodeType() )
-                            )
-                        {
+                }
+            }
+        }
 
-                            sReturn = pOdbcSpec->getChild(1)->getTokenValue();
-                        }
-                        else
-                            OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
-                    }
-                    else
-                    {
-                        OSQLParseNode* pFuncSpecParent = pOdbcSpec->getParent();
-                        OSL_ENSURE( pFuncSpecParent, "OPredicateInputController::getPredicateValue: an ODBC func spec node without parent?" );
-                        if ( pFuncSpecParent )
-                            pFuncSpecParent->parseNodeToStr(
-                                sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
-                            );
-                    }
+        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+        parse::OParseColumn* pColumn = new parse::OParseColumn( sField,
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString(),
+                                                                ColumnValue::NULLABLE_UNKNOWN,
+                                                                0,
+                                                                0,
+                                                                nType,
+                                                                sal_False,
+                                                                sal_False,
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+        Reference<XPropertySet> xColumn = pColumn;
+        pColumn->setFunction(sal_True);
+        pColumn->setRealName(sField);
+
+        OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
+        if ( _pErrorMessage )
+            *_pErrorMessage = sError;
+        return pParseNode ? implParseNode(pParseNode,_bForStatementUse) : sReturn;
+    }
+
+    ::rtl::OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const
+    {
+        ::rtl::OUString sReturn;
+        if ( pParseNode )
+        {
+            ::std::auto_ptr<OSQLParseNode> pTemp(pParseNode);
+            OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
+            if ( pOdbcSpec )
+            {
+                if ( _bForStatementUse )
+                {
+                    OSQLParseNode* pFuncSpecParent = pOdbcSpec->getParent();
+                    OSL_ENSURE( pFuncSpecParent, "OPredicateInputController::getPredicateValue: an ODBC func spec node without parent?" );
+                    if ( pFuncSpecParent )
+                        pFuncSpecParent->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
                 }
                 else
                 {
-                    if  ( pParseNode->count() >= 3 )
+                    OSQLParseNode* pValueNode = pOdbcSpec->getChild(1);
+                    if ( SQL_NODE_STRING == pValueNode->getNodeType() )
+                        sReturn = pValueNode->getTokenValue();
+                    else
+                        pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
+                    // sReturn = pOdbcSpec->getChild(1)->getTokenValue();
+                }
+            }
+            else
+            {
+                if  ( pParseNode->count() >= 3 )
+                {
+                    OSQLParseNode* pValueNode = pParseNode->getChild(2);
+                    OSL_ENSURE( pValueNode, "OPredicateInputController::getPredicateValue: invalid node child!" );
+                    if ( !_bForStatementUse )
                     {
-                        OSQLParseNode* pValueNode = pParseNode->getChild(2);
-                        OSL_ENSURE( pValueNode, "OPredicateInputController::getPredicateValue: invalid node child!" );
-                        if ( !_bForStatementUse )
-                        {
-                            if ( SQL_NODE_STRING == pValueNode->getNodeType() )
-                                sReturn = pValueNode->getTokenValue();
-                            else
-                                pValueNode->parseNodeToStr(
-                                    sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
-                                );
-                        }
+                        if ( SQL_NODE_STRING == pValueNode->getNodeType() )
+                            sReturn = pValueNode->getTokenValue();
                         else
                             pValueNode->parseNodeToStr(
                                 sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
                             );
                     }
                     else
-                        OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
+                        pValueNode->parseNodeToStr(
+                            sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
+                        );
                 }
-
-                delete pParseNode;
+                else
+                    OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
             }
         }
-
         return sReturn;
     }
 //.........................................................................

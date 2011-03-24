@@ -52,8 +52,24 @@ namespace vcl
 */
 struct PDFExtOutDevBookmarkEntry
 {
+    /** ID of the link pointing to the bookmark, or -1 if the entry denotes a destination instead of a link.
+    */
     sal_Int32       nLinkId;
+
+    /** ID of the named destination denoted by the bookmark, or -1 if the entry denotes a link instead of a named destination.
+    */
+    sal_Int32       nDestId;
+
+    /** link target name, respectively destination name
+    */
     rtl::OUString   aBookmark;
+
+    PDFExtOutDevBookmarkEntry()
+        :nLinkId( -1 )
+        ,nDestId( -1 )
+        ,aBookmark()
+    {
+    }
 };
 
 /*
@@ -195,6 +211,24 @@ public :
     -1 if page id does not exist
     */
     sal_Int32 CreateNamedDest( const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+
+    /** registers a destination for which a destinatin ID needs to be known immediately, instead of later on setting it via
+        SetLinkDest.
+
+        This is used in contexts where a destination is referenced by means other than a link.
+
+        Later in the export process, a call to DescribeRegisteredDest must be made, providing the information about
+        the destination.
+
+        @return
+            the unique Id of the destination
+    */
+    sal_Int32   RegisterDest();
+
+    /** provides detailed information about a destination range which previously has been registered using RegisterDest.
+    */
+    void        DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+
 //<---i56629
 
     /** Create a new destination to be used in a link

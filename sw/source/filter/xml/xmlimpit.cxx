@@ -78,11 +78,17 @@ SvXMLImportItemMapper::~SvXMLImportItemMapper()
 {
 }
 
+void
+SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
+{
+    mrMapEntries = rMapEntries;
+}
+
 /** fills the given itemset with the attributes in the given list */
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                       uno::Reference< xml::sax::XAttributeList > xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
-                                       const SvXMLNamespaceMap& rNamespaceMap ) const
+                                      const SvXMLNamespaceMap& rNamespaceMap )
 {
     sal_Int16 nAttr = xAttrList->getLength();
 
@@ -193,7 +199,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
         delete pUnknownItem;
     }
 
-    finished( rSet );
+    finished(rSet, rUnitConverter);
 }
 
 /** this method is called for every item that has the
@@ -204,7 +210,7 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             SfxItemSet& /*rSet*/,
                                             const OUString& /*rValue*/,
                                             const SvXMLUnitConverter& /*rUnitConverter*/,
-                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
+                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
     DBG_ERROR( "unsuported special item in xml import" );
     return sal_False;
@@ -216,13 +222,14 @@ sal_Bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*
                                            SfxItemSet& /*rSet*/,
                                            const OUString& /*rValue*/,
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
-                                           const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
+                                           const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
     DBG_ERROR( "unsuported no item in xml import" );
     return sal_False;
 }
 
-void SvXMLImportItemMapper::finished( SfxItemSet& ) const
+void
+SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
 {
     // nothing to do here
 }

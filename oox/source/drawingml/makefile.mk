@@ -62,6 +62,7 @@ SLOFILES =	\
         $(SLO)$/shapecontext.obj\
         $(SLO)$/shapegroupcontext.obj\
         $(SLO)$/shapepropertiescontext.obj\
+        $(SLO)$/shapepropertymap.obj\
         $(SLO)$/shapestylecontext.obj\
         $(SLO)$/spdefcontext.obj\
         $(SLO)$/textbody.obj\

@@ -242,30 +242,30 @@ public:
 
     // BinaryStreamBase interface (seeking) -----------------------------------
 
-    /** Returns true, as the BIFF input stream is required to be seekable. */
-    virtual bool        isSeekable() const;
+    /** Returns the data size of the whole record without record headers. */
+    virtual sal_Int64   size() const;
     /** Returns the position inside of the whole record content. */
     virtual sal_Int64   tell() const;
-    /** Returns the data size of the whole record without record headers. */
-    virtual sal_Int64   getLength() const;
     /** Seeks in record content to the specified position. */
     virtual void        seek( sal_Int64 nRecPos );
+    /** Closes the input stream but not the wrapped stream. */
+    virtual void        close();
 
     /** Returns the absolute position in the wrapped binary stream. */
     sal_Int64           tellBase() const;
     /** Returns the total size of the wrapped binary stream. */
-    sal_Int64           getBaseLength() const;
+    sal_Int64           sizeBase() const;
 
     // BinaryInputStream interface (stream read access) -----------------------
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Reads nBytes bytes and copies them to the passed buffer opMem.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Seeks forward inside the current record. */
-    virtual void        skip( sal_Int32 nBytes );
+    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 );
 
     /** Stream operator for integral and floating-point types. */
     template< typename Type >
@@ -352,9 +352,6 @@ public:
 
     // ------------------------------------------------------------------------
 private:
-    /** Forwards calls of readValue() template functions to the record buffer. */
-    virtual void        readAtom( void* opMem, sal_uInt8 nSize );
-
     /** Initializes all members after base stream has been seeked to new record. */
     void                setupRecord();
     /** Restarts the current record from the beginning. */
@@ -383,16 +380,9 @@ private:
         records, stores the length in mnComplRecSize. */
     void                calcRecordLength();
 
-    /** Ensures that reading nBytes bytes is possible with next stream access.
-        @descr  Stream must be located at the end of a raw record, and handling
-        of CONTINUE records must be enabled.
-        @return  True if nBytes can be read from stream. */
-    bool                ensureRawReadSize( sal_uInt16 nBytes );
     /** Returns the maximum size of raw data possible to read in one block. */
-    sal_uInt16          getMaxRawReadSize( sal_Int32 nBytes ) const;
+    sal_uInt16          getMaxRawReadSize( sal_Int32 nBytes, size_t nAtomSize ) const;
 
-    /** Reads an array of Unicode characters and appends them to the passed buffer. */
-    void                appendUnicodeArray( ::rtl::OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars );
     /** Reads the BIFF8 Unicode string header fields. */
     void                readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize );
 

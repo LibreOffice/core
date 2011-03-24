@@ -314,13 +314,13 @@ public class Control extends Shape
             }
             else if (getControlType() == FormHandler.SODATECONTROL)
             {
-                xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
+                xPropertySet.setPropertyValue("Date", 4711);       //TODO find a better date
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Date", com.sun.star.uno.Any.VOID);
             }
             else if (getControlType() == FormHandler.SOTIMECONTROL)
             {
-                xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
+                xPropertySet.setPropertyValue("Time", 47114);      //TODO find a better time
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Time", com.sun.star.uno.Any.VOID);
             }

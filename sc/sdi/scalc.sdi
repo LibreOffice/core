@@ -2795,10 +2795,10 @@ SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 //-->Added by PengYunQuan for Validity Cell Range Picker
@@ -5390,7 +5390,7 @@ SfxUInt16Item RowHeight FID_ROW_HEIGHT
 
 //--------------------------------------------------------------------------
 SfxVoidItem SbaImport SID_SBA_IMPORT
-(SfxStringItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
+(SfxUsrAnyItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,

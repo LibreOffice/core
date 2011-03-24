@@ -340,7 +340,9 @@ function fCreateTable(aFieldTypeContent(),sTableName,optional sCatalog,optional 
         sleep 1
         FieldType.TypeKeys "<RETURN>" , TRUE
         Description.TypeKeys "<RETURN>" , TRUE
-        CellDescription.TypeKeys "<RETURN>" , TRUE
+        if( CellDescription.isVisible() ) then
+            CellDescription.TypeKeys "<RETURN>" , TRUE
+        endif
         printlog "-------------------------------"
     next 
     sleep(1)    

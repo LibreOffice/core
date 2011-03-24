@@ -34,7 +34,6 @@
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
-    namespace lang { class XMultiServiceFactory; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }

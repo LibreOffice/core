@@ -97,7 +97,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     public IRenderer counterRenderer = new SimpleCounterRenderer();
     private Object dialogModel;
     private ImageKeyListener imageKeyListener;
-    private static final Integer BACKGROUND_COLOR = new Integer(16777216);  //new Integer(SystemColor.window.getRGB() + 16777216);
+    private static final Integer BACKGROUND_COLOR = 16777216;  //new Integer(SystemColor.window.getRGB() + 16777216);
     private final static Short HIDE_PAGE = new Short((short) 99);
     private final static Integer TRANSPARENT = new Integer(-1);
     private final static int LINE_HEIGHT = 8;    //private MethodInvocation METHOD_MOUSE_ENTER_IMAGE;
@@ -163,7 +163,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 new String[]
                 {
                     "BackgroundColor",
-                    "Border",
+                    PropertyNames.PROPERTY_BORDER,
                     PropertyNames.PROPERTY_HEIGHT,
                     PropertyNames.PROPERTY_POSITION_X,
                     PropertyNames.PROPERTY_POSITION_Y,
@@ -202,7 +202,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         grbxSelectedImage = dialog.insertLabel(name + "_grbxSelected", new String[]
                 {
                     "BackgroundColor",
-                    "Border",
+                    PropertyNames.PROPERTY_BORDER,
                     PropertyNames.PROPERTY_HEIGHT,
                     PropertyNames.PROPERTY_POSITION_X,
                     PropertyNames.PROPERTY_POSITION_Y,
@@ -215,8 +215,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     new Short((short) 1),
                     new Integer(imageSize.Height + (selectionGap.Height * 2)),
                     //height
-                    new Integer(0), //posx
-                    new Integer(0), //posy
+                    0, //posx
+                    0, //posy
                     step,
                     Boolean.TRUE,
                     new Integer(selectionWidth)
@@ -252,7 +252,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         if (showButtons)
         {
-            final Integer btnSize = new Integer(14);
+            final Integer btnSize = 14;
 
             btnBack = dialog.insertButton(name + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
@@ -290,7 +290,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                         new Integer(cols * (imageSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
-            Helper.setUnoPropertyValue(getModel(lblCounter), "Align", new Short((short) 1));
+            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, new Short((short) 1));
             Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
             Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
 
@@ -331,7 +331,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private Integer m_imageHeight,  m_imageWidth;
     private final static String[] IMAGE_PROPS = new String[]
     {
-        "Border",
+        PropertyNames.PROPERTY_BORDER,
         "BackgroundColor",
         PropertyNames.PROPERTY_HEIGHT,
         PropertyNames.PROPERTY_HELPURL,
@@ -894,7 +894,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
      */
     private void setBorder(Object control, Short border)
     {
-        Helper.setUnoPropertyValue(getModel(control), "Border", border);
+        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
     //XWindowPeer peer = ((XControl)UnoRuntime.queryInterface(XControl.class,control)).getPeer();
     //peer.invalidate(InvalidateStyle.CHILDREN);
     }

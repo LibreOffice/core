@@ -45,7 +45,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -59,7 +59,7 @@ public:
     explicit            Dumper( const ::oox::core::FilterBase& rFilter );
 
     explicit            Dumper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
                             const ::rtl::OUString& rSysFileName );
 
@@ -75,4 +75,3 @@ protected:
 
 #endif
 #endif
-

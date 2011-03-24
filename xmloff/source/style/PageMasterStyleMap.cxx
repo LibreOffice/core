@@ -28,10 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
-#include "xmloff/xmlnmspe.hxx"
+
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::xmloff::token;
@@ -54,10 +53,11 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "NumberingType",         XML_NAMESPACE_STYLE,    XML_NUM_LETTER_SYNC,            XML_PM_TYPE_NUMLETTERSYNC,                              0 ),
     PLMAP( "PrinterPaperTray",      XML_NAMESPACE_STYLE,    XML_PAPER_TRAY_NAME,            XML_TYPE_STRING | MID_FLAG_PROPERTY_MAY_EXCEPT,         0 ),
     PLMAP( "IsLandscape",               XML_NAMESPACE_STYLE,    XML_PRINT_ORIENTATION,          XML_PM_TYPE_PRINTORIENTATION,                           0 ),
-    PLMAP( "TopMargin",             XML_NAMESPACE_FO,       XML_MARGIN_TOP,                 XML_TYPE_MEASURE,                                       0 ),
-    PLMAP( "BottomMargin",          XML_NAMESPACE_FO,       XML_MARGIN_BOTTOM,              XML_TYPE_MEASURE,                                       0 ),
-    PLMAP( "LeftMargin",                XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,                                       0 ),
-    PLMAP( "RightMargin",               XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,                                       0 ),
+    PLMAP( "TopMargin",             XML_NAMESPACE_FO,       XML_MARGIN,                     XML_TYPE_MEASURE,                                       CTF_PM_MARGINALL ),
+    PLMAP( "TopMargin",             XML_NAMESPACE_FO,       XML_MARGIN_TOP,                 XML_TYPE_MEASURE,                                       CTF_PM_MARGINTOP ),
+    PLMAP( "BottomMargin",          XML_NAMESPACE_FO,       XML_MARGIN_BOTTOM,              XML_TYPE_MEASURE,                                       CTF_PM_MARGINBOTTOM ),
+    PLMAP( "LeftMargin",                XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,                                       CTF_PM_MARGINLEFT ),
+    PLMAP( "RightMargin",               XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,                                       CTF_PM_MARGINRIGHT ),
     PLMAP( "TopBorder",             XML_NAMESPACE_FO,       XML_BORDER,                     XML_TYPE_BORDER,                                        CTF_PM_BORDERALL ),
     PLMAP( "TopBorder",             XML_NAMESPACE_FO,       XML_BORDER_TOP,                 XML_TYPE_BORDER,                                        CTF_PM_BORDERTOP ),
     PLMAP( "BottomBorder",          XML_NAMESPACE_FO,       XML_BORDER_BOTTOM,              XML_TYPE_BORDER,                                        CTF_PM_BORDERBOTTOM ),
@@ -130,9 +130,10 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "HeaderHeight",              XML_NAMESPACE_SVG,      XML_HEIGHT,                     XML_TYPE_MEASURE,       CTF_PM_HEADERHEIGHT ),
     HFMAP( "HeaderHeight",              XML_NAMESPACE_FO,       XML_MIN_HEIGHT,                 XML_TYPE_MEASURE,       CTF_PM_HEADERMINHEIGHT ),
     HFMAP( "HeaderIsDynamicHeight",     XML_NAMESPACE_STYLE,    XML__EMPTY,                     XML_TYPE_BOOL,          CTF_PM_HEADERDYNAMIC ),
-    HFMAP( "HeaderLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderRightMargin",         XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderBodyDistance",            XML_NAMESPACE_FO,       XML_MARGIN_BOTTOM,              XML_TYPE_MEASURE,       CTF_PM_HEADERFLAG ),
+    HFMAP( "HeaderLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN,                     XML_TYPE_MEASURE,       CTF_PM_HEADERMARGINALL ),
+    HFMAP( "HeaderLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,       CTF_PM_HEADERMARGINLEFT ),
+    HFMAP( "HeaderRightMargin",         XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,       CTF_PM_HEADERMARGINRIGHT ),
+    HFMAP( "HeaderBodyDistance",        XML_NAMESPACE_FO,       XML_MARGIN_BOTTOM,              XML_TYPE_MEASURE,       CTF_PM_HEADERMARGINBOTTOM ),
     HFMAP( "HeaderTopBorder",               XML_NAMESPACE_FO,       XML_BORDER,                     XML_TYPE_BORDER,        CTF_PM_HEADERBORDERALL ),
     HFMAP( "HeaderTopBorder",               XML_NAMESPACE_FO,       XML_BORDER_TOP,                 XML_TYPE_BORDER,        CTF_PM_HEADERBORDERTOP ),
     HFMAP( "HeaderBottomBorder",            XML_NAMESPACE_FO,       XML_BORDER_BOTTOM,              XML_TYPE_BORDER,        CTF_PM_HEADERBORDERBOTTOM ),
@@ -160,9 +161,10 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterHeight",              XML_NAMESPACE_SVG,      XML_HEIGHT,                     XML_TYPE_MEASURE,       CTF_PM_FOOTERHEIGHT ),
     HFMAP( "FooterHeight",              XML_NAMESPACE_FO,       XML_MIN_HEIGHT,                 XML_TYPE_MEASURE,       CTF_PM_FOOTERMINHEIGHT ),
     HFMAP( "FooterIsDynamicHeight",     XML_NAMESPACE_STYLE,    XML__EMPTY,                     XML_TYPE_BOOL,          CTF_PM_FOOTERDYNAMIC ),
-    HFMAP( "FooterLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterRightMargin",         XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterBodyDistance",            XML_NAMESPACE_FO,       XML_MARGIN_TOP,                 XML_TYPE_MEASURE,       CTF_PM_FOOTERFLAG ),
+    HFMAP( "FooterLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN,                     XML_TYPE_MEASURE,       CTF_PM_FOOTERMARGINALL ),
+    HFMAP( "FooterLeftMargin",          XML_NAMESPACE_FO,       XML_MARGIN_LEFT,                XML_TYPE_MEASURE,       CTF_PM_FOOTERMARGINLEFT ),
+    HFMAP( "FooterRightMargin",         XML_NAMESPACE_FO,       XML_MARGIN_RIGHT,               XML_TYPE_MEASURE,       CTF_PM_FOOTERMARGINRIGHT ),
+    HFMAP( "FooterBodyDistance",        XML_NAMESPACE_FO,       XML_MARGIN_TOP,                 XML_TYPE_MEASURE,       CTF_PM_FOOTERMARGINTOP ),
     HFMAP( "FooterTopBorder",               XML_NAMESPACE_FO,       XML_BORDER,                     XML_TYPE_BORDER,        CTF_PM_FOOTERBORDERALL ),
     HFMAP( "FooterTopBorder",               XML_NAMESPACE_FO,       XML_BORDER_TOP,                 XML_TYPE_BORDER,        CTF_PM_FOOTERBORDERTOP ),
     HFMAP( "FooterBottomBorder",            XML_NAMESPACE_FO,       XML_BORDER_BOTTOM,              XML_TYPE_BORDER,        CTF_PM_FOOTERBORDERBOTTOM ),

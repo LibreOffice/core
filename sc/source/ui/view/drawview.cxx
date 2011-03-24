@@ -377,7 +377,7 @@ void ScDrawView::RecalcScale()
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
-        nEndRow = 1000;
+        nEndRow = 20;   // #i116848# instead of a large row number for an empty sheet, heights are multiplied in CalcScale
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );

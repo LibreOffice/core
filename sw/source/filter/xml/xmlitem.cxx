@@ -39,15 +39,14 @@ SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                                           const OUString& rLName,
                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                           SfxItemSet& rISet,
-                                          const SvXMLImportItemMapper& rIMap,
+                                          SvXMLImportItemMapper& rIMap,
                                           const SvXMLUnitConverter& rUnitConverter ):
     SvXMLImportContext( rImp, nPrfx, rLName ),
     rItemSet( rISet ),
     rIMapper( rIMap ),
     rUnitConv( rUnitConverter )
-
 {
-    rIMapper.importXML( rItemSet, xAttrList, rUnitConv,
+    rIMap.importXML( rItemSet, xAttrList, rUnitConv,
                            GetImport().GetNamespaceMap() );
 }
 

@@ -72,8 +72,7 @@ public:
     void                setPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
 
     /** Calculates the resulting shape anchor in EMUs. */
-    ::com::sun::star::awt::Rectangle
-                        calcEmuLocation( const EmuRectangle& rEmuChartRect ) const;
+    EmuRectangle        calcAnchorRectEmu( const EmuRectangle& rChartRect ) const;
 
 private:
     AnchorPosModel      maFrom;             /// Top-left position relative to chart object.
@@ -109,7 +108,7 @@ private:
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
-    EmuRectangle        maEmuChartRect;         /// Position and size of the chart object for embedded shapes (in EMUs).
+    EmuRectangle        maChartRectEmu;         /// Position and size of the chart object for embedded shapes (in EMUs).
     bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };
 

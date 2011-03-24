@@ -87,9 +87,9 @@ typedef ::cppu::WeakImplHelper5<
         ::com::sun::star::document::XImporter,
         ::com::sun::star::document::XExporter,
         ::com::sun::star::document::XFilter >
-    FilterBaseBase;
+    FilterBase_BASE;
 
-class OOX_DLLPUBLIC FilterBase : public FilterBaseBase, public ::cppu::BaseMutex
+class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(

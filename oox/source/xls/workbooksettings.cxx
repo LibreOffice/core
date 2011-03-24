@@ -299,7 +299,7 @@ void WorkbookSettings::finalizeImport()
     {
         getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
 
-        Reference< XPropertySet > xDocumentSettings( getDocumentFactory()->createInstance(
+        Reference< XPropertySet > xDocumentSettings( getBaseFilter().getModelFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.document.Settings" ) ), UNO_QUERY_THROW );
         PropertySet aSettingsProp( xDocumentSettings );
         if( maFileSharing.mbRecommendReadOnly )

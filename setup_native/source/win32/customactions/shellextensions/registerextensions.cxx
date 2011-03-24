@@ -317,14 +317,13 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
 extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 {
-    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    // std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("CustomActionData") );
     std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
     std::_tstring mystr;
 
     WIN32_FIND_DATA aFindFileData;
-
-    mystr = "unopkg file: " + sUnoPkgFile;
-    //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+    bool registrationError = false;
 
     // Find unopkg.exe
     HANDLE hFindUnopkg = FindFirstFile( sUnoPkgFile.c_str(), &aFindFileData );
@@ -333,32 +332,44 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
     {
         // unopkg.exe exists in program directory
         std::_tstring sCommand = sUnoPkgFile + " sync";
-        mystr = "Command: " + sCommand;
-        //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
         DWORD exitCode = 0;
         bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
 
-//         if ( fSuccess )
-//         {
-//             mystr = "Executed successfully!";
-//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-//         }
-//         else
-//         {
-//             mystr = "An error occured during execution!";
-//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-//         }
+//          if ( fSuccess )
+//          {
+//              mystr = "Executed successfully!";
+//              MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//          }
+//          else
+//          {
+//              mystr = "An error occured during execution!";
+//              MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//          }
+
+        if ( ! fSuccess )
+        {
+            mystr = "ERROR: An error occured during registration of extensions!";
+            MessageBox(NULL, mystr.c_str(), "ERROR", MB_OK);
+            registrationError = true;
+        }
 
         FindClose( hFindUnopkg );
     }
-//     else
-//     {
-//         mystr = "Error: Did not find " + sUnoPkgFile;
-//         MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-//     }
+    // else
+    // {
+    //     mystr = "Error: Did not find " + sUnoPkgFile;
+    //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+    // }
 
-    return ERROR_SUCCESS;
+    if ( registrationError )
+    {
+        return 1;
+    }
+    else
+    {
+        return ERROR_SUCCESS;
+    }
 }
 
 

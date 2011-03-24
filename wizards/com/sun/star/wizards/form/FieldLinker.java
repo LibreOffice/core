@@ -98,7 +98,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                        new Boolean(bDoEnable), new Integer(8), sSlaveListHeader[i], new Integer(97), new Integer(iCurPosY), IStep, new Short(curtabindex++), new Integer(97)
+                        new Boolean(bDoEnable), 8, sSlaveListHeader[i], 97, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
             lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
@@ -121,11 +121,11 @@ public class FieldLinker extends DBLimitedFieldSelection
                         UIConsts.INTEGER_12,
                         sSlaveHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
-                        new Integer(97),
+                        97,
                         new Integer(iCurPosY + 10),
                         IStep,
                         new Short(curtabindex++),
-                        new Integer(97)
+                        97
                     });
 
             lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + new Integer(i + 1).toString(),
@@ -135,7 +135,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                        new Boolean(bDoEnable), new Integer(8), sMasterListHeader[i], new Integer(206), new Integer(iCurPosY), IStep, new Short(curtabindex++), new Integer(97)
+                        new Boolean(bDoEnable), 8, sMasterListHeader[i], 206, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
 
             lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
@@ -159,11 +159,11 @@ public class FieldLinker extends DBLimitedFieldSelection
                         UIConsts.INTEGER_12,
                         sMasterHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
-                        new Integer(206),
+                        206,
                         new Integer(iCurPosY + 10),
                         IStep,
                         new Short(curtabindex++),
-                        new Integer(97)
+                        97
                     });
             iCurPosY = iCurPosY + 38;
         }

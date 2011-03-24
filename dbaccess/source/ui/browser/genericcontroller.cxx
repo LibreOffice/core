@@ -965,6 +965,9 @@ void OGenericUnoController::disposing()
     m_xMasterDispatcher = NULL;
     m_xSlaveDispatcher = NULL;
     m_xServiceFactory = NULL;
+    m_xTitleHelper.clear();
+    m_xUrlTransformer.clear();
+    m_aInitParameters.clear();
 }
 
 // -----------------------------------------------------------------------------

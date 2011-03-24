@@ -247,14 +247,6 @@ public:
                                  const ScPrintState& rState,
                                  const ScPrintOptions* pOptions );
 
-                    ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
-                                 long nPage = 0, long nDocP = 0,
-                                 const ScRange* pArea = NULL,
-                                 const ScPrintOptions* pOptions = NULL );
-
-                    ScPrintFunc( ScDocShell* pShell, Window* pWindow,
-                                 const ScPrintState& rState,
-                                 const ScPrintOptions* pOptions );
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
@@ -276,10 +268,8 @@ public:
 
     void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
     long            DoPrint( const MultiSelection& rPageRanges,
-                                /*long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
-                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );*/
-                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint = sal_True,
-                                SfxProgress* pProgress = NULL, ScPreviewLocationData* pLocationData = NULL);
+                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
+                                ScPreviewLocationData* pLocationData );
 
                     //  Werte abfragen - sofort
 

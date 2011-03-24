@@ -466,6 +466,11 @@ void OConnection::buildTypeInfo() throw( SQLException)
                 aInfo->aSimpleType.aLocalTypeName   = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.nMinimumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.nMaximumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                if ( adCurrency == aInfo->eType && !aInfo->aSimpleType.nMaximumScale)
+                {
+                    aInfo->aSimpleType.nMinimumScale = 4;
+                    aInfo->aSimpleType.nMaximumScale = 4;
+                }
                 aInfo->aSimpleType.nNumPrecRadix    = ADOS::getField(pRecordset,nPos++).get_Value();
                 // Now that we have the type info, save it
                 // in the Hashtable if we don't already have an

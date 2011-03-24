@@ -28,6 +28,7 @@
 #ifndef OOX_XLS_WORKSHEETHELPER_HXX
 #define OOX_XLS_WORKSHEETHELPER_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/ole/olehelper.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -44,7 +45,6 @@ namespace com { namespace sun { namespace star {
     namespace table { class XCellRange; }
     namespace table { class XTableColumns; }
     namespace table { class XTableRows; }
-    namespace util { struct DateTime; }
 } } }
 
 namespace oox {
@@ -53,12 +53,15 @@ namespace xls {
 class AutoFilterBuffer;
 struct BinAddress;
 struct BinRange;
+class BiffSheetDrawing;
 class BinRangeList;
 class CommentsBuffer;
 class CondFormatBuffer;
+class Font;
 class PageSettings;
 class QueryTableBuffer;
-class SharedFormulaBuffer;
+class RichString;
+class SheetDataBuffer;
 class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
@@ -79,47 +82,10 @@ enum WorksheetType
 
 // ============================================================================
 
-/** Stores some data about a cell. */
-struct CellModel
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > mxCell;
-    ::com::sun::star::table::CellAddress maAddress;
-    ::rtl::OUString     maValueStr;         /// String containing cell value data.
-    ::rtl::OUString     maFormulaRef;       /// String containing formula range for array/shared formulas.
-    sal_Int32           mnCellType;         /// Data type of the cell.
-    sal_Int32           mnFormulaType;      /// Type of the imported formula.
-    sal_Int32           mnSharedId;         /// Shared formula identifier for current cell.
-    sal_Int32           mnXfId;             /// XF identifier for the cell.
-    sal_Int32           mnNumFmtId;         /// Forced number format for the cell.
-    bool                mbHasValueStr;      /// True = contents of maValueStr are valid.
-    bool                mbShowPhonetic;     /// True = show phonetic text.
-
-    inline explicit     CellModel() { reset(); }
-    void                reset();
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores data about a data table a.k.a. multiple operation range. */
-struct DataTableModel
-{
-    ::rtl::OUString     maRef1;             /// String containing first reference cell for data table formulas.
-    ::rtl::OUString     maRef2;             /// String containing second reference cell for data table formulas.
-    bool                mb2dTable;          /// True = 2-dimensional data table.
-    bool                mbRowTable;         /// True = row oriented data table.
-    bool                mbRef1Deleted;      /// True = first reference cell deleted.
-    bool                mbRef2Deleted;      /// True = second reference cell deleted.
-
-    explicit            DataTableModel();
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores formatting data about a range of columns. */
+/** Stores settings and formatting data about a range of sheet columns. */
 struct ColumnModel
 {
-    sal_Int32           mnFirstCol;         /// 1-based (!) index of first column.
-    sal_Int32           mnLastCol;          /// 1-based (!) index of last column.
+    ValueRange          maRange;            /// 1-based (!) range of the described columns.
     double              mfWidth;            /// Column width in number of characters.
     sal_Int32           mnXfId;             /// Column default formatting.
     sal_Int32           mnLevel;            /// Column outline level.
@@ -129,17 +95,17 @@ struct ColumnModel
 
     explicit            ColumnModel();
 
-    /** Expands this entry with the passed column range, if column settings are equal. */
-    bool                tryExpand( const ColumnModel& rModel );
+    /** Returns true, if this entry can be merged with the passed column range (column settings are equal). */
+    bool                isMergeable( const ColumnModel& rModel ) const;
 };
 
 // ----------------------------------------------------------------------------
 
-/** Stores formatting data about a range of rows. */
+/** Stores settings and formatting data about a sheet row. */
 struct RowModel
 {
-    sal_Int32           mnFirstRow;         /// 1-based (!) index of first row.
-    sal_Int32           mnLastRow;          /// 1-based (!) index of last row.
+    sal_Int32           mnRow;              /// 1-based (!) index of the described row.
+    ValueRangeSet       maColSpans;         /// 0-based (!) column ranges of used cells.
     double              mfHeight;           /// Row height in points.
     sal_Int32           mnXfId;             /// Row default formatting (see mbIsFormatted).
     sal_Int32           mnLevel;            /// Row outline level.
@@ -153,8 +119,10 @@ struct RowModel
 
     explicit            RowModel();
 
-    /** Expands this entry with the passed row range, if row settings are equal. */
-    bool                tryExpand( const RowModel& rModel );
+    /** Inserts the passed column span into the row model. */
+    void                insertColSpan( const ValueRange& rColSpan );
+    /** Returns true, if this entry can be merged with the passed row range (row settings are equal). */
+    bool                isMergeable( const RowModel& rModel ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -215,12 +183,21 @@ struct ValidationModel
 // ============================================================================
 // ============================================================================
 
-class WorksheetData;
+class WorksheetGlobals;
+typedef ::boost::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
 
 class WorksheetHelper : public WorkbookHelper
 {
 public:
-    /*implicit*/        WorksheetHelper( WorksheetData& rSheetData );
+    /*implicit*/        WorksheetHelper( WorksheetGlobals& rSheetGlob );
+
+    static WorksheetGlobalsRef constructGlobals(
+                            const WorkbookHelper& rHelper,
+                            const ISegmentProgressBarRef& rxProgressBar,
+                            WorksheetType eSheetType,
+                            sal_Int16 nSheet );
+
+    // ------------------------------------------------------------------------
 
     /** Returns the type of this sheet. */
     WorksheetType       getSheetType() const;
@@ -232,47 +209,13 @@ public:
 
     /** Returns the XCell interface for the passed cell address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell(
-                            const ::com::sun::star::table::CellAddress& rAddress ) const;
-    /** Returns the XCell interface for the passed cell address string. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell(
-                            const ::rtl::OUString& rAddressStr,
-                            ::com::sun::star::table::CellAddress* opAddress = 0 ) const;
-    /** Returns the XCell interface for the passed cell address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell(
-                            const BinAddress& rBinAddress,
-                            ::com::sun::star::table::CellAddress* opAddress = 0 ) const;
-
+                        getCell( const ::com::sun::star::table::CellAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getCellRange(
-                            const ::com::sun::star::table::CellRangeAddress& rRange ) const;
-    /** Returns the XCellRange interface for the passed range address string. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getCellRange(
-                            const ::rtl::OUString& rRangeStr,
-                            ::com::sun::star::table::CellRangeAddress* opRange = 0 ) const;
-    /** Returns the XCellRange interface for the passed range address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getCellRange(
-                            const BinRange& rBinRange,
-                            ::com::sun::star::table::CellRangeAddress* opRange = 0 ) const;
-
+                        getCellRange( const ::com::sun::star::table::CellRangeAddress& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges >
                         getCellRangeList( const ApiCellRangeList& rRanges ) const;
-    /** Returns the XSheetCellRanges interface for the passed space-separated range list. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges >
-                        getCellRangeList(
-                            const ::rtl::OUString& rRangesStr,
-                            ApiCellRangeList* opRanges = 0 ) const;
-    /** Returns the XSheetCellRanges interface for the passed range list. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges >
-                        getCellRangeList(
-                            const BinRangeList& rBinRanges,
-                            ApiCellRangeList* opRanges = 0 ) const;
 
     /** Returns the address of the passed cell. The cell reference must be valid. */
     static ::com::sun::star::table::CellAddress
@@ -292,10 +235,10 @@ public:
 
     /** Returns the XTableColumns interface for a range of columns. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableColumns >
-                        getColumns( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const;
+                        getColumns( const ValueRange& rColRange ) const;
     /** Returns the XTableRows interface for a range of rows. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows >
-                        getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
+                        getRows( const ValueRange& rRowRange ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
@@ -308,10 +251,8 @@ public:
     /** Returns the size of the entire drawing page in 1/100 mm. */
     ::com::sun::star::awt::Size getDrawPageSize() const;
 
-    /** Returns the worksheet settings object. */
-    WorksheetSettings&  getWorksheetSettings() const;
-    /** Returns the buffer containing all shared formulas in this sheet. */
-    SharedFormulaBuffer& getSharedFormulas() const;
+    /** Returns the buffer for cell contents and cell formatting. */
+    SheetDataBuffer&    getSheetData() const;
     /** Returns the conditional formattings in this sheet. */
     CondFormatBuffer&   getCondFormats() const;
     /** Returns the buffer for all cell comments in this sheet. */
@@ -320,66 +261,27 @@ public:
     AutoFilterBuffer&   getAutoFilters() const;
     /** Returns the buffer for all web query tables in this sheet. */
     QueryTableBuffer&   getQueryTables() const;
+    /** Returns the worksheet settings object. */
+    WorksheetSettings&  getWorksheetSettings() const;
     /** Returns the page/print settings for this sheet. */
     PageSettings&       getPageSettings() const;
     /** Returns the view settings for this sheet. */
     SheetViewSettings&  getSheetViewSettings() const;
-    /** Returns the VML drawing page for this sheet. */
+    /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     VmlDrawing&         getVmlDrawing() const;
-
-    /** Sets the passed string to the cell. */
-    void                setStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            const ::rtl::OUString& rText ) const;
-    /** Sets the shared string with the passed identifier to the cell. */
-    void                setSharedStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            sal_Int32 nStringId,
-                            sal_Int32 nXfId ) const;
-    /** Sets the passed date/time value to the cell and adjusts number format. */
-    void                setDateTimeCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            const ::com::sun::star::util::DateTime& rDateTime ) const;
-    /** Sets the passed boolean value to the cell and adjusts number format. */
-    void                setBooleanCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            bool bValue ) const;
-    /** Sets the passed BIFF error code to the cell (by converting it to a formula). */
-    void                setErrorCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            const ::rtl::OUString& rErrorCode ) const;
-    /** Sets the passed BIFF error code to the cell (by converting it to a formula). */
-    void                setErrorCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            sal_uInt8 nErrorCode ) const;
-    /** Sets cell contents to the cell specified in the passed cell model. */
-    void                setCell( CellModel& orModel ) const;
-
-    /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the passed cell. */
-    void                setStandardNumFmt(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
-                            sal_Int16 nStdNumFmt ) const;
+    /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
+    BiffSheetDrawing&   getBiffDrawing() const;
 
     /** Changes the current sheet type. */
     void                setSheetType( WorksheetType eSheetType );
-    /** Stores the cell formatting data of the current cell. */
-    void                setCellFormat( const CellModel& rModel );
-    /** Merges the cells in the passed cell range. */
-    void                setMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
     void                setHyperlink( const HyperlinkModel& rModel );
     /** Inserts the data validation settings into the spreadsheet. */
     void                setValidation( const ValidationModel& rModel );
-    /** Sets a multiple table operation to the passed range. */
-    void                setTableOperation(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
-                            const DataTableModel& rModel ) const;
     /** Sets the passed label ranges to the current sheet. */
-    void                setLabelRanges(
-                            const ApiCellRangeList& rColRanges,
-                            const ApiCellRangeList& rRowRanges );
+    void                setLabelRanges( const ApiCellRangeList& rColRanges, const ApiCellRangeList& rRowRanges );
     /** Sets the path to the DrawingML fragment of this sheet. */
     void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
@@ -413,6 +315,26 @@ public:
         @descr  Row default formatting is converted directly, other settings
         are cached and converted in the finalizeWorksheetImport() call. */
     void                setRowModel( const RowModel& rModel );
+    /** Specifies that the passed row needs to set its height manually. */
+    void                setManualRowHeight( sal_Int32 nRow );
+
+    /** Inserts a value cell directly into the Calc sheet. */
+    void                putValue(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            double fValue ) const;
+    /** Inserts a string cell directly into the Calc sheet. */
+    void                putString(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ::rtl::OUString& rText ) const;
+    /** Inserts a rich-string cell directly into the Calc sheet. */
+    void                putRichString(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const RichString& rString,
+                            const Font* pFirstPortionFont ) const;
+    /** Inserts a formula cell directly into the Calc sheet. */
+    void                putFormulaTokens(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ApiTokenSequence& rTokens ) const;
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();
@@ -420,50 +342,7 @@ public:
     void                finalizeWorksheetImport();
 
 private:
-    WorksheetData&      mrSheetData;
-};
-
-// ============================================================================
-
-namespace prv {
-
-typedef ::boost::shared_ptr< WorksheetData > WorksheetDataRef;
-
-struct WorksheetDataOwner
-{
-    explicit            WorksheetDataOwner( WorksheetDataRef xSheetData );
-    virtual             ~WorksheetDataOwner();
-    WorksheetDataRef    mxSheetData;
-};
-
-} // namespace prv
-
-// ----------------------------------------------------------------------------
-
-class WorksheetHelperRoot : private prv::WorksheetDataOwner, public WorksheetHelper
-{
-public:
-    /** Returns true, if this helper refers to an existing Calc sheet. */
-    bool                isValidSheet() const;
-
-protected:
-    /** Constructs from the passed data, creates and owns a new data object. */
-    explicit            WorksheetHelperRoot(
-                            const WorkbookHelper& rHelper,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
-
-    /** Constructs from another sheet helper, does not create a data object. */
-    explicit            WorksheetHelperRoot(
-                            const WorksheetHelper& rHelper );
-
-    /** Constructs from another sheet helper, shares ownership of the passed helper. */
-    explicit            WorksheetHelperRoot(
-                            const WorksheetHelperRoot& rHelper );
-
-private:
-    WorksheetHelperRoot& operator=( const WorksheetHelperRoot& );
+    WorksheetGlobals&   mrSheetGlob;
 };
 
 // ============================================================================

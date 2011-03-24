@@ -44,9 +44,9 @@ namespace xls {
 /** Model for a single rule in a conditional formatting. */
 struct CondFormatRuleModel
 {
-    typedef ::std::vector< TokensFormulaContext > ContextVector;
+    typedef ::std::vector< ApiTokenSequence > ApiTokenSequenceVector;
 
-    ContextVector       maFormulas;         /// Formulas for rule conditions.
+    ApiTokenSequenceVector maFormulas;      /// Formulas for rule conditions.
     ::rtl::OUString     maText;             /// Text for 'contains' rules.
     sal_Int32           mnPriority;         /// Priority of this rule.
     sal_Int32           mnType;             /// Type of the rule.

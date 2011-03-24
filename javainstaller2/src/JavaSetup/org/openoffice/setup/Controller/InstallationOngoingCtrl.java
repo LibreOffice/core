@@ -39,6 +39,7 @@ import org.openoffice.setup.Util.InfoDir;
 import org.openoffice.setup.Util.PackageCollector;
 import org.openoffice.setup.Util.SystemManager;
 import java.io.File;
+import java.util.Collections;
 import java.util.Vector;
 
 public class InstallationOngoingCtrl extends PanelController {
@@ -105,6 +106,7 @@ public class InstallationOngoingCtrl extends PanelController {
             private Vector installedPackages = new Vector();
 
             public void run() {
+                boolean ignoreMajorUpgrade = false;
                 LogManager.setCommandsHeaderLine("Installation");
                 Installer installer = InstallerFactory.getInstance();
                 String titleText = ResourceManager.getString("String_InstallationOngoing1");
@@ -131,32 +133,46 @@ public class InstallationOngoingCtrl extends PanelController {
                     installer.installPackage(packageData);
                     installedPackages.add(packageData);
 
-                    if ( installData.isAbortedInstallation() ) {
+                    if (( installData.isAbortedInstallation() ) || ( installData.isErrorInstallation() )) {
+                        ignoreMajorUpgrade = true;
                         break;
                     }
                 }
 
-                if ( installData.isMajorUpgrade() ) {
+                if (( installData.isMajorUpgrade() ) && ( ! ignoreMajorUpgrade )) {
                     for (int i = 0; i < removePackages.size(); i++) {
                         PackageDescription packageData = (PackageDescription) removePackages.get(i);
                         installer.uninstallPackage(packageData);
                     }
                 }
 
-                if ( installData.isAbortedInstallation() ) {
+                if (( installData.isAbortedInstallation() ) || ( installData.isErrorInstallation() )) {
                     // undoing the installation
-                    LogManager.setCommandsHeaderLine("Installation aborted!");
-                    titleText = ResourceManager.getString("String_UninstallationOngoing1");
+                    if ( installData.isAbortedInstallation() ) {
+                        LogManager.setCommandsHeaderLine("Installation aborted!");
+                        titleText = ResourceManager.getString("String_UninstallationOngoing1");
+                    } else {
+                        LogManager.setCommandsHeaderLine("Error during installation!");
+                        titleText = ResourceManager.getString("String_UninstallationOngoing1");
+                    }
                     panel.setTitle(titleText);
                     panel.setStopButtonEnabled(false);
 
                     LogManager.setCommandsHeaderLine("Uninstallation");
+
+                    // Inverting the package order for uninstallation
+                    Collections.reverse(installedPackages);
 
                     for (int i = 0; i < installedPackages.size(); i++) {
                         PackageDescription packageData = (PackageDescription) installedPackages.get(i);
                         int progress = java.lang.Math.round(100/installedPackages.size()) * (i+1);
                         panel.setProgressValue(progress);
                         panel.setProgressText(packageData.getPackageName());
+                        if ( i == 0 ) {
+                            installData.setIsFirstPackage(true);
+                        } else {
+                            installData.setIsFirstPackage(false);
+                        }
                         installer.uninstallPackage(packageData);
                      }
 
@@ -185,7 +201,7 @@ public class InstallationOngoingCtrl extends PanelController {
         getSetupFrame().setButtonEnabled(true, getSetupFrame().BUTTON_CANCEL);
 
         InstallData installData = InstallData.getInstance();
-        if ( ! installData.isAbortedInstallation() ) {
+        if (( ! installData.isAbortedInstallation() ) && ( ! installData.isErrorInstallation() )) {
             InfoDir.prepareUninstallation();
         }
 

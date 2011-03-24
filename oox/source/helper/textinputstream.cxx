@@ -27,102 +27,209 @@
 
 #include "oox/helper/textinputstream.hxx"
 
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/io/XTextInputStream.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/tencinfo.h>
 #include "oox/helper/binaryinputstream.hxx"
 
 namespace oox {
 
 // ============================================================================
 
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
 using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
 namespace {
 
-/** Reads a text line from stream. First, tries to skip the second character of
-    a two-character line end sequence. Returns the new line-end character. */
-template< typename BufferType, typename CharType, typename StreamDataType >
-sal_Unicode lclReadLine( BufferType& orBuffer, BinaryInputStream& rInStrm, sal_Unicode cLastEolChar )
-{
-    // try to skip LF following CR, or CR following LF
-    if( !rInStrm.isEof() && (cLastEolChar != 0) )
-    {
-        CharType cChar = static_cast< CharType >( rInStrm.readValue< StreamDataType >() );
-        // return on EOF after line-end
-        if( rInStrm.isEof() )
-            return 0;
-        // return on sequence of equal line-end characters
-        bool bIsEolChar = (cChar == 10) || (cChar == 13);
-        if( bIsEolChar && (cChar == cLastEolChar) )
-            return cChar;
-        // append the character, if it is not the other line-end charcter
-        if( !bIsEolChar )
-            orBuffer.append( cChar );
-    }
+typedef ::cppu::WeakImplHelper1< XInputStream > UnoBinaryInputStream_BASE;
 
-    // read chars until EOF or line end character (LF or CR)
-    while( true )
-    {
-        CharType cChar = static_cast< CharType >( rInStrm.readValue< StreamDataType >() );
-        if( rInStrm.isEof() )
-            return 0;
-        if( (cChar == 10) || (cChar == 13) )
-            return cChar;
-        orBuffer.append( cChar );
-    }
+/** Implementation of a UNO input stream wrapping a binary input stream.
+ */
+class UnoBinaryInputStream : public UnoBinaryInputStream_BASE
+{
+public:
+    explicit            UnoBinaryInputStream( BinaryInputStream& rInStrm );
+
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+    virtual sal_Int32 SAL_CALL available()
+                        throw (NotConnectedException, IOException, RuntimeException);
+    virtual void SAL_CALL closeInput()
+                        throw (NotConnectedException, IOException, RuntimeException);
+
+private:
+    void                ensureConnected() const throw (NotConnectedException);
+
+private:
+    BinaryInputStream*  mpInStrm;
+};
+
+// ----------------------------------------------------------------------------
+
+UnoBinaryInputStream::UnoBinaryInputStream( BinaryInputStream& rInStrm ) :
+    mpInStrm( &rInStrm )
+{
+}
+
+sal_Int32 SAL_CALL UnoBinaryInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    ensureConnected();
+    return mpInStrm->readData( rData, nBytesToRead, 1 );
+}
+
+sal_Int32 SAL_CALL UnoBinaryInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    ensureConnected();
+    return mpInStrm->readData( rData, nMaxBytesToRead, 1 );
+}
+
+void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    ensureConnected();
+    mpInStrm->skip( nBytesToSkip, 1 );
+}
+
+sal_Int32 SAL_CALL UnoBinaryInputStream::available() throw (NotConnectedException, IOException, RuntimeException)
+{
+    ensureConnected();
+    throw RuntimeException( CREATE_OUSTRING( "Functionality not supported" ), Reference< XInputStream >() );
+}
+
+void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException)
+{
+    ensureConnected();
+    mpInStrm->close();
+    mpInStrm = 0;
+}
+
+void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)
+{
+    if( !mpInStrm )
+        throw NotConnectedException( CREATE_OUSTRING( "Stream closed" ), Reference< XInterface >() );
 }
 
 } // namespace
 
 // ============================================================================
 
-TextInputStream::TextInputStream( BinaryInputStream& rInStrm, rtl_TextEncoding eTextEnc ) :
-    mrInStrm( rInStrm ),
-    meTextEnc( eTextEnc ),
-    mcLastEolChar( 0 )
+TextInputStream::TextInputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
+{
+    init( rxContext, rxInStrm, eTextEnc );
+}
+
+TextInputStream::TextInputStream( const Reference< XComponentContext >& rxContext, BinaryInputStream& rInStrm, rtl_TextEncoding eTextEnc )
+{
+    init( rxContext, new UnoBinaryInputStream( rInStrm ), eTextEnc );
+}
+
+TextInputStream::~TextInputStream()
 {
 }
 
 bool TextInputStream::isEof() const
 {
-    // do not return EOF, if last text line missed line-end character (see below)
-    return mrInStrm.isEof() && (mcLastEolChar == 0);
+    if( mxTextStrm.is() ) try
+    {
+        return mxTextStrm->isEOF();
+    }
+    catch( Exception& )
+    {
+    }
+    return true;
 }
 
 OUString TextInputStream::readLine()
 {
-    if( mrInStrm.isEof() )
+    if( mxTextStrm.is() ) try
     {
-        mcLastEolChar = 0;
-        return OUString();
+        /*  The function createFinalString() adds a character that may have
+            been buffered in the previous call of readToChar() (see below). */
+        return createFinalString( mxTextStrm->readLine() );
     }
-
-    OUString aLine;
-    if( meTextEnc == RTL_TEXTENCODING_UCS2 )
+    catch( Exception& )
     {
-        // read 16-bit characters for UCS2 encoding
-        OUStringBuffer aBuffer;
-        mcLastEolChar = lclReadLine< OUStringBuffer, sal_Unicode, sal_uInt16 >( aBuffer, mrInStrm, mcLastEolChar );
-        aLine = aBuffer.makeStringAndClear();
+        mxTextStrm.clear();
     }
-    else
+    return OUString();
+}
+
+OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
+{
+    if( mxTextStrm.is() ) try
     {
-        // otherwise, read 8-bit characters and convert according to text encoding
-        OStringBuffer aBuffer;
-        mcLastEolChar = lclReadLine< OStringBuffer, sal_Char, sal_uInt8 >( aBuffer, mrInStrm, mcLastEolChar );
-        aLine = OStringToOUString( aBuffer.makeStringAndClear(), meTextEnc );
+        Sequence< sal_Unicode > aDelimiters( 1 );
+        aDelimiters[ 0 ] = cChar;
+        /*  Always get the delimiter character from the UNO text input stream.
+            In difference to this implementation, it will not return it in the
+            next call but silently skip it. If caller specifies to exclude the
+            character in this call, it will be returned in the next call of one
+            of the own member functions. The function createFinalString() adds
+            a character that has been buffered in the previous call. */
+        OUString aString = createFinalString( mxTextStrm->readString( aDelimiters, sal_False ) );
+        // remove last character from string and remember it for next call
+        if( !bIncludeChar && (aString.getLength() > 0) && (aString[ aString.getLength() - 1 ] == cChar) )
+        {
+            mcPendingChar = cChar;
+            aString = aString.copy( 0, aString.getLength() - 1 );
+        }
+        return aString;
     }
+    catch( Exception& )
+    {
+        mxTextStrm.clear();
+    }
+    return OUString();
+}
 
-    // if last line is not empty but line-end character is missing, do not return EOF
-    if( mrInStrm.isEof() && (aLine.getLength() > 0) )
-        mcLastEolChar = 10;
+/*static*/ Reference< XTextInputStream > TextInputStream::createXTextInputStream(
+        const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
+{
+    Reference< XTextInputStream > xTextStrm;
+    const char* pcCharset = rtl_getMimeCharsetFromTextEncoding( eTextEnc );
+    OSL_ENSURE( pcCharset, "TextInputStream::createXTextInputStream - unsupported text encoding" );
+    if( rxContext.is() && rxInStrm.is() && pcCharset ) try
+    {
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XActiveDataSink > xDataSink( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextInputStream" ) ), UNO_QUERY_THROW );
+        xDataSink->setInputStream( rxInStrm );
+        xTextStrm.set( xDataSink, UNO_QUERY_THROW );
+        xTextStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
+    }
+    catch( Exception& )
+    {
+    }
+    return xTextStrm;
+}
 
-    return aLine;
+// private --------------------------------------------------------------------
+
+OUString TextInputStream::createFinalString( const OUString& rString )
+{
+    if( mcPendingChar == 0 )
+        return rString;
+
+    OUString aString = OUString( mcPendingChar ) + rString;
+    mcPendingChar = 0;
+    return aString;
+}
+
+void TextInputStream::init( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
+{
+    mcPendingChar = 0;
+    mxTextStrm = createXTextInputStream( rxContext, rxInStrm, eTextEnc );
 }
 
 // ============================================================================

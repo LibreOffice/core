@@ -373,12 +373,12 @@ void XclImpChRoot::ConvertAreaFormat( ScfPropertySet& rPropSet,
 }
 
 void XclImpChRoot::ConvertEscherFormat( ScfPropertySet& rPropSet,
-        const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
-        XclChPropertyMode ePropMode ) const
+        const XclChEscherFormat& rEscherFmt, const XclChPicFormat* pPicFmt,
+        sal_uInt32 nDffFillType, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteEscherProperties( rPropSet,
         *mxChData->mxGradientTable, *mxChData->mxHatchTable, *mxChData->mxBitmapTable,
-        rEscherFmt, rPicFmt, ePropMode );
+        rEscherFmt, pPicFmt, nDffFillType, ePropMode );
 }
 
 void XclImpChRoot::ConvertFont( ScfPropertySet& rPropSet,
@@ -526,7 +526,8 @@ void XclImpChAreaFormat::Convert( const XclImpChRoot& rRoot,
 
 // ----------------------------------------------------------------------------
 
-XclImpChEscherFormat::XclImpChEscherFormat( const XclImpRoot& rRoot )
+XclImpChEscherFormat::XclImpChEscherFormat( const XclImpRoot& rRoot ) :
+    mnDffFillType( mso_fillSolid )
 {
     maData.mxItemSet.reset(
         new SfxItemSet( rRoot.GetDoc().GetDrawLayer()->GetItemPool() ) );
@@ -540,9 +541,8 @@ void XclImpChEscherFormat::ReadHeaderRecord( XclImpStream& rStrm )
     rStrm >> aPropSet;
     // get the data
     aPropSet.FillToItemSet( *maData.mxItemSet );
-    // get bitmap mode from DFF item set
-    sal_uInt32 nType = aPropSet.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
-    maPicFmt.mnBmpMode = (nType == mso_fillPicture) ? EXC_CHPICFORMAT_STRETCH : EXC_CHPICFORMAT_STACK;
+    // get fill type from DFF property set
+    mnDffFillType = aPropSet.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
 }
 
 void XclImpChEscherFormat::ReadSubRecord( XclImpStream& rStrm )
@@ -550,16 +550,18 @@ void XclImpChEscherFormat::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHPICFORMAT:
-            rStrm >> maPicFmt.mnBmpMode >> maPicFmt.mnFormat >> maPicFmt.mnFlags >> maPicFmt.mfScale;
+            rStrm >> maPicFmt.mnBmpMode;
+            rStrm.Ignore( 2 );
+            rStrm >> maPicFmt.mnFlags >> maPicFmt.mfScale;
         break;
     }
 }
 
 void XclImpChEscherFormat::Convert( const XclImpChRoot& rRoot,
-        ScfPropertySet& rPropSet, XclChObjectType eObjType ) const
+        ScfPropertySet& rPropSet, XclChObjectType eObjType, bool bUsePicFmt ) const
 {
     const XclChFormatInfo& rFmtInfo = rRoot.GetFormatInfo( eObjType );
-    rRoot.ConvertEscherFormat( rPropSet, maData, maPicFmt, rFmtInfo.mePropMode );
+    rRoot.ConvertEscherFormat( rPropSet, maData, bUsePicFmt ? &maPicFmt : 0, mnDffFillType, rFmtInfo.mePropMode );
 }
 
 // ----------------------------------------------------------------------------
@@ -620,23 +622,23 @@ void XclImpChFrameBase::ConvertLineBase( const XclImpChRoot& rRoot,
 }
 
 void XclImpChFrameBase::ConvertAreaBase( const XclImpChRoot& rRoot,
-        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx ) const
+        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const
 {
     if( rRoot.GetFormatInfo( eObjType ).mbIsFrame )
     {
         // CHESCHERFORMAT overrides CHAREAFORMAT (even if it is auto)
         if( mxEscherFmt.is() )
-            mxEscherFmt->Convert( rRoot, rPropSet, eObjType );
+            mxEscherFmt->Convert( rRoot, rPropSet, eObjType, bUsePicFmt );
         else if( mxAreaFmt.is() )
             mxAreaFmt->Convert( rRoot, rPropSet, eObjType, nFormatIdx );
     }
 }
 
 void XclImpChFrameBase::ConvertFrameBase( const XclImpChRoot& rRoot,
-        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx ) const
+        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const
 {
     ConvertLineBase( rRoot, rPropSet, eObjType, nFormatIdx );
-    ConvertAreaBase( rRoot, rPropSet, eObjType, nFormatIdx );
+    ConvertAreaBase( rRoot, rPropSet, eObjType, nFormatIdx, bUsePicFmt );
 }
 
 // ----------------------------------------------------------------------------
@@ -699,9 +701,9 @@ void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclOb
     }
 }
 
-void XclImpChFrame::Convert( ScfPropertySet& rPropSet ) const
+void XclImpChFrame::Convert( ScfPropertySet& rPropSet, bool bUsePicFmt ) const
 {
-    ConvertFrameBase( GetChRoot(), rPropSet, meObjType );
+    ConvertFrameBase( GetChRoot(), rPropSet, meObjType, EXC_CHDATAFORMAT_UNKNOWN, bUsePicFmt );
 }
 
 // Source links ===============================================================
@@ -1520,8 +1522,15 @@ void XclImpChDataFormat::UpdateTrendLineFormat()
 
 void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const
 {
-    // line and area format
-    ConvertFrameBase( GetChRoot(), rPropSet, rTypeInfo.GetSeriesObjectType(), maData.mnFormatIdx );
+    /*  Line and area format.
+        #i71810# If the data points are filled with bitmaps, textures, or
+        patterns, then only bar charts will use the CHPICFORMAT record to
+        determine stacking/streching mode. All other chart types ignore this
+        record and always use the property 'fill-type' from the DFF property
+        set (streched for bitmaps, and stacked for textures and patterns). */
+    bool bUsePicFmt = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR;
+    ConvertFrameBase( GetChRoot(), rPropSet, rTypeInfo.GetSeriesObjectType(), maData.mnFormatIdx, bUsePicFmt );
+
 #if EXC_CHART2_3DBAR_HAIRLINES_ONLY
     // #i83151# only hair lines in 3D charts with filled data points
     if( rTypeInfo.mb3dChart && rTypeInfo.IsSeriesFrameFormat() && mxLineFmt.is() && mxLineFmt->HasLine() )
@@ -1553,9 +1562,9 @@ void XclImpChDataFormat::ConvertLine( ScfPropertySet& rPropSet, XclChObjectType 
     ConvertLineBase( GetChRoot(), rPropSet, eObjType );
 }
 
-void XclImpChDataFormat::ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
+void XclImpChDataFormat::ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const
 {
-    ConvertAreaBase( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx );
+    ConvertAreaBase( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx, bUsePicFmt );
 }
 
 void XclImpChDataFormat::RemoveUnusedFormats( const XclChExtTypeInfo& rTypeInfo )
@@ -1999,7 +2008,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
             for( sal_uInt16 nPointIdx = 0, nPointCount = mxValueLink->GetCellCount(); nPointIdx < nPointCount; ++nPointIdx )
             {
                 ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
-                mxSeriesFmt->ConvertArea( aPointProp, bVarPointFmt ? nPointIdx : mnSeriesIdx );
+                mxSeriesFmt->ConvertArea( aPointProp, bVarPointFmt ? nPointIdx : mnSeriesIdx, false );
             }
         }
 
@@ -3338,8 +3347,9 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
 
 void XclImpChAxis::ConvertWall( ScfPropertySet& rPropSet ) const
 {
+    // #i71810# walls and floor in 3D charts use the CHPICFORMAT record for bitmap mode
     if( mxWallFrame.is() )
-        mxWallFrame->Convert( rPropSet );
+        mxWallFrame->Convert( rPropSet, true );
 }
 
 void XclImpChAxis::ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpChTypeGroup& rTypeGroup ) const

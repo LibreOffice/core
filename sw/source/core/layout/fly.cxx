@@ -2352,7 +2352,10 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     // Assure the control objects and group objects containing controls are on the control layer
     if ( ::CheckControlLayer( _rNewObj.DrawObj() ) )
     {
-        const IDocumentDrawModelAccess* pIDDMA = GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess* pIDDMA = (IsFlyFrm())
+            ? static_cast<SwFlyFrm*>(this)->GetFmt()->
+                    getIDocumentDrawModelAccess()
+            : GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
         const SdrLayerID aCurrentLayer(_rNewObj.DrawObj()->GetLayer());
         const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
         const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());

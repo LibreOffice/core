@@ -901,19 +901,19 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_USE_WIZARDS:
                 if  ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
-                else if (!m_bDesignMode || !GetFormModel())
+                else if (!GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, GetImpl()->GetWizardUsing() ) );
                 break;
             case SID_FM_AUTOCONTROLFOCUS:
-                if (!m_bDesignMode || !GetFormModel())
+                if (!GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, GetFormModel()->GetAutoControlFocus() ) );
                 break;
             case SID_FM_OPEN_READONLY:
-                if (!m_bDesignMode || !GetFormModel())
+                if (!GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, GetFormModel()->GetOpenInDesignMode() ) );

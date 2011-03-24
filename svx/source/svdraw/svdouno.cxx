@@ -318,68 +318,25 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     SdrRectObj::operator = (rObj);
 
     // release the reference to the current control model
-    SetUnoControlModel(uno::Reference< awt::XControlModel >());
+    SetUnoControlModel( NULL );
 
-    aUnoControlModelTypeName = ((SdrUnoObj&) rObj).aUnoControlModelTypeName;
-    aUnoControlTypeName = ((SdrUnoObj&) rObj).aUnoControlTypeName;
+    const SdrUnoObj& rUnoObj = dynamic_cast< const SdrUnoObj& >( rObj );
+
+    aUnoControlModelTypeName = rUnoObj.aUnoControlModelTypeName;
+    aUnoControlTypeName = rUnoObj.aUnoControlTypeName;
 
     // copy the uno control model
-    uno::Reference< awt::XControlModel > xCtrl( ((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
-    uno::Reference< util::XCloneable > xClone( xCtrl, uno::UNO_QUERY );
-
-    if ( xClone.is() )
+    const uno::Reference< awt::XControlModel > xSourceControlModel( rUnoObj.GetUnoControlModel(), uno::UNO_QUERY );
+    if ( xSourceControlModel.is() )
     {
-        // copy the model by cloning
-        uno::Reference< awt::XControlModel > xNewModel( xClone->createClone(), uno::UNO_QUERY );
-        DBG_ASSERT( xNewModel.is(), "SdrUnoObj::operator =, no control model!");
-        xUnoControlModel = xNewModel;
-    }
-    else
-    {
-        // copy the model by streaming
-        uno::Reference< io::XPersistObject > xObj( xCtrl, uno::UNO_QUERY );
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-
-        if ( xObj.is() && xFactory.is() )
+        try
         {
-            // creating a pipe
-            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
-            uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
-
-            // creating the mark streams
-            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
-            uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
-
-            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
-            uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
-
-            // connect mark and sink
-            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
-
-            // connect mark and source
-            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
-
-            uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
-            uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
-
-            if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is())
-            {
-                xMarkSink->setInputStream(xInPipe);
-                xMarkSource->setOutputStream(xOutPipe);
-                xSink->setInputStream(xMarkIn);
-                xSource->setOutputStream(xMarkOut);
-
-                // write the object to source
-                xOutStrm->writeObject(xObj);
-                xOutStrm->closeOutput();
-                // read the object
-                uno::Reference< awt::XControlModel > xModel(xInStrm->readObject(), uno::UNO_QUERY);
-                xInStrm->closeInput();
-
-                DBG_ASSERT(xModel.is(), "SdrUnoObj::operator =, keine Model erzeugt");
-
-                xUnoControlModel = xModel;
-            }
+            uno::Reference< util::XCloneable > xClone( xSourceControlModel, uno::UNO_QUERY_THROW );
+            xUnoControlModel.set( xClone->createClone(), uno::UNO_QUERY_THROW );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

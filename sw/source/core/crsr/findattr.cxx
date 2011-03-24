@@ -311,15 +311,33 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         pItem = aIter.NextItem();
     }
 }
+
+static bool
+lcl_IsAttributeIgnorable(xub_StrLen const nNdStart, xub_StrLen const nNdEnd,
+        _SwSrchChrAttr const& rTmp)
+{
+    // #i115528#: if there is a paragraph attribute, it has been added by the
+    // SwAttrCheckArr ctor, and nFound is 1.
+    // if the paragraph is entirely covered by hints that override the paragraph
+    // attribute, then this function must find an attribute to decrement nFound!
+    // so check for an empty search range, let attributes that start/end there
+    // cover it, and hope for the best...
+    return ((nNdEnd == nNdStart)
+            ? ((rTmp.nEnd <  nNdStart) || (nNdEnd <  rTmp.nStt))
+            : ((rTmp.nEnd <= nNdStart) || (nNdEnd <= rTmp.nStt)));
+}
+
 int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 {
     _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
-    // alle die nicht im Bereich sind -> ignorieren
-    if( aTmp.nEnd <= nNdStt || aTmp.nStt >= nNdEnd )
+
+    // ignore all attributes not in search range
+    if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
+    {
         return Found();
+    }
 
     const SfxPoolItem* pItem;
-
 // --------------------------------------------------------------
 // Hier wird jetzt ausdruecklich auch in Zeichenvorlagen gesucht
 // --------------------------------------------------------------
@@ -473,9 +491,12 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 {
     _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
-    // alle die nicht im Bereich sind -> ignorieren
-    if( aTmp.nEnd < nNdStt || aTmp.nStt >= nNdEnd )
+
+    // ignore all attributes not in search range
+    if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
+    {
         return Found();
+    }
 
     const SfxPoolItem* pItem;
 // --------------------------------------------------------------

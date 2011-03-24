@@ -939,6 +939,29 @@ The following structure describes the permissions used in PDF security
     -1 if page id does not exist
     */
     sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
+
+    /** creates a destination which is not intended to be referred to by a link, but by a public destination Id.
+
+        Form widgets, for instance, might refer to a destination, without ever actually creating a source link to
+        point to this destination. In such cases, a public destination Id will be assigned to the form widget,
+        and later on, the concrete destination data for this public Id will be registered using RegisterDestReference.
+
+        @param rRect
+            target rectangle on page to be displayed if dest is jumped to
+
+        @param nPageNr
+            number of page the dest is on (as returned by NewPage)
+            or -1 in which case the current page is used
+
+        @param eType
+            what dest type to use
+
+        @returns
+            the internal destination Id.
+    */
+    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+
+
     /** Set the destination for a link
         <p>will change a URL type link to a dest link if necessary</p>
 

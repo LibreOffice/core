@@ -316,7 +316,12 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
     XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
-    sal_uInt16 i; // for the "for" loop
+    XMLPropertyState* pAllParaMargin = 0;
+    XMLPropertyState* pParaMargins[4] = { 0, 0, 0, 0 };
+    ::std::auto_ptr<XMLPropertyState> pNewParaMargins[4];
+    XMLPropertyState* pAllMargin = 0;
+    XMLPropertyState* pMargins[4] = { 0, 0, 0, 0 };
+    ::std::auto_ptr<XMLPropertyState> pNewMargins[4];
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -384,7 +389,31 @@ void XMLTextImportPropertyMapper::finished(
                                         bHasAnyWidth = sal_True; break;
         case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
         case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
-
+        case CTF_PARAMARGINALL:
+        case CTF_PARAMARGINALL_REL:
+                pAllParaMargin = property; break;
+        case CTF_PARALEFTMARGIN:
+        case CTF_PARALEFTMARGIN_REL:
+                pParaMargins[XML_LINE_LEFT] = property; break;
+        case CTF_PARARIGHTMARGIN:
+        case CTF_PARARIGHTMARGIN_REL:
+                pParaMargins[XML_LINE_RIGHT] = property; break;
+        case CTF_PARATOPMARGIN:
+        case CTF_PARATOPMARGIN_REL:
+                pParaMargins[XML_LINE_TOP] = property; break;
+        case CTF_PARABOTTOMMARGIN:
+        case CTF_PARABOTTOMMARGIN_REL:
+                pParaMargins[XML_LINE_BOTTOM] = property; break;
+        case CTF_MARGINALL:
+                pAllMargin = property; break;
+        case CTF_MARGINLEFT:
+                pMargins[XML_LINE_LEFT] = property; break;
+        case CTF_MARGINRIGHT:
+                pMargins[XML_LINE_RIGHT] = property; break;
+        case CTF_MARGINTOP:
+                pMargins[XML_LINE_TOP] = property; break;
+        case CTF_MARGINBOTTOM:
+                pMargins[XML_LINE_BOTTOM] = property; break;
         }
     }
 
@@ -401,8 +430,31 @@ void XMLTextImportPropertyMapper::finished(
         FontFinished( pFontFamilyNameCTL, pFontStyleNameCTL, pFontFamilyCTL,
                       pFontPitchCTL, pFontCharSetCTL );
 
-    for( i = 0; i < 4; i++ )
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
+        if (pAllParaMargin && !pParaMargins[i])
+        {
+#ifdef DBG_UTIL
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                        pAllParaMargin->mnIndex + (2*i) + 2 );
+            OSL_ENSURE( nTmp >= CTF_PARALEFTMARGIN &&
+                        nTmp <= CTF_PARABOTTOMMARGIN_REL,
+                        "wrong property context id" );
+#endif
+            pNewParaMargins[i].reset(new XMLPropertyState(
+                pAllParaMargin->mnIndex + (2*i) + 2, pAllParaMargin->maValue));
+        }
+        if (pAllMargin && !pMargins[i])
+        {
+#ifdef DBG_UTIL
+            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                        pAllMargin->mnIndex + i + 1 );
+            OSL_ENSURE( nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM,
+                        "wrong property context id" );
+#endif
+            pNewMargins[i].reset(new XMLPropertyState(
+                pAllMargin->mnIndex + i + 1, pAllMargin->maValue));
+        }
         if( pAllBorderDistance && !pBorderDistances[i] )
         {
 #ifdef DBG_UTIL
@@ -506,6 +558,16 @@ void XMLTextImportPropertyMapper::finished(
         }
 #endif
     }
+
+    if (pAllParaMargin)
+    {
+        pAllParaMargin->mnIndex = -1;
+    }
+    if (pAllMargin)
+    {
+        pAllMargin->mnIndex = -1;
+    }
+
     if( pAllBorderDistance )
         pAllBorderDistance->mnIndex = -1;
 
@@ -649,8 +711,16 @@ void XMLTextImportPropertyMapper::finished(
         delete pNewFontCharSetCTL;
     }
 
-    for( i=0; i<4; i++ )
+    for (sal_uInt16 i=0; i<4; i++)
     {
+        if (pNewParaMargins[i].get())
+        {
+            rProperties.push_back(*pNewParaMargins[i]);
+        }
+        if (pNewMargins[i].get())
+        {
+            rProperties.push_back(*pNewMargins[i]);
+        }
         if( pNewBorderDistances[i] )
         {
             rProperties.push_back( *pNewBorderDistances[i] );

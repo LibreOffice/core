@@ -638,24 +638,15 @@ void ScTabViewShell::DoReadUserData( const String& rData )
 
 //------------------------------------------------------------------
 
-//UNUSED2008-05  void ScTabViewShell::ExecuteShowNIY( SfxRequest& /* rReq */ )
-//UNUSED2008-05  {
-//UNUSED2008-05      ErrorMessage(STR_BOX_YNI);
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  //------------------------------------------------------------------
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabViewShell::StateDisabled( SfxItemSet& rSet )
-//UNUSED2008-05  {
-//UNUSED2008-05      SfxWhichIter aIter( rSet );
-//UNUSED2008-05      sal_uInt16       nWhich = aIter.FirstWhich();
-//UNUSED2008-05
-//UNUSED2008-05      while ( nWhich )
-//UNUSED2008-05      {
-//UNUSED2008-05          rSet.DisableItem( nWhich );
-//UNUSED2008-05          nWhich = aIter.NextWhich();
-//UNUSED2008-05      }
-//UNUSED2008-05  }
+void ScTabViewShell::UpdateDrawShell()
+{
+    // Called after user interaction that may delete the selected drawing object.
+    // Remove DrawShell if nothing is selected.
+
+    SdrView* pDrView = GetSdrView();
+    if ( pDrView && !pDrView->AreObjectsMarked() && !IsDrawSelMode() )
+        SetDrawShell( sal_False );
+}
 
 void ScTabViewShell::SetDrawShellOrSub()
 {

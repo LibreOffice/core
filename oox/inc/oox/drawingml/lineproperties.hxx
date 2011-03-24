@@ -35,40 +35,6 @@ namespace drawingml {
 
 // ============================================================================
 
-enum LinePropertyId
-{
-    LineStyleId,
-    LineWidthId,
-    LineColorId,
-    LineTransparenceId,
-    LineDashId,
-    LineJointId,
-    LineStartId,
-    LineStartWidthId,
-    LineStartCenterId,
-    LineEndId,
-    LineEndWidthId,
-    LineEndCenterId,
-    LineId_END
-};
-
-struct LinePropertyIds
-{
-    const sal_Int32*    mpnPropertyIds;
-    bool                mbNamedLineDash;
-    bool                mbNamedLineMarker;
-
-    explicit            LinePropertyIds(
-                            const sal_Int32* pnPropertyIds,
-                            bool bNamedLineDash,
-                            bool bNamedLineMarker );
-
-    inline bool         has( LinePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
-    inline sal_Int32    operator[]( LinePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
-};
-
-// ============================================================================
-
 struct LineArrowProperties
 {
     OptValue< sal_Int32 > moArrowType;
@@ -96,25 +62,13 @@ struct LineProperties
     OptValue< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
     OptValue< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
 
-    static LinePropertyIds DEFAULT_IDS;     /// Default line property identifiers.
-
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineProperties& rSourceProps );
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjHelper,
+                            ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
-                            const LinePropertyIds& rPropIds = DEFAULT_IDS,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
-
-    /** Writes the properties to the passed property map. */
-    void                pushToPropSet(
-                            PropertySet& rPropSet,
-                            ModelObjectHelper& rModelObjHelper,
-                            const GraphicHelper& rGraphicHelper,
-                            const LinePropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 

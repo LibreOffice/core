@@ -382,5 +382,5 @@ TabDialog DLG_DATABASE_ADVANCED
         Text [ en-US ] = "Special Settings";
     };
 
-    Text [ en-US ] = "Advanced Properties" ;
+    Text [ en-US ] = "Advanced Settings" ;
 };

@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLMETAI_HXX
-#define _XMLOFF_XMLMETAI_HXX
+#ifndef XMLOFF_XMLMETAI_HXX
+#define XMLOFF_XMLMETAI_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -68,12 +68,6 @@ public:
              ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
-
-protected:
-    /// initialize DocumentProperties object with DOM and base URL
-    void initDocumentProperties();
-    // set the BuildId property at the importer
-    void setBuildId(const ::rtl::OUString & i_rBuildId);
 
 public:
     static void setBuildId(const ::rtl::OUString & rGenerator,

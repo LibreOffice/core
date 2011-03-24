@@ -171,6 +171,19 @@ void deleteRootsModule()
     }
 }
 
+namespace{
+    void getAndPrintPRErrorText()
+    {
+        char error[1024] = "Cannot get error text from function PR_GetErrorText().";
+        PRInt32 size = PR_GetErrorTextLength();
+        if (size < (int) sizeof(error))
+        {
+            PR_GetErrorText(error);
+        }
+        xmlsec_trace("%s",error);
+    }
+}
+
 //Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
 //the roots certificate module (libnssckbi.so), which they use, into the
 //profile. This module will then already be loaded during NSS_Init (and the
@@ -206,11 +219,7 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
         if( NSS_InitReadWrite( token ) != SECSuccess )
         {
             xmlsec_trace("Initializing NSS with profile failed.");
-            char * error = NULL;
-
-            PR_GetErrorText(error);
-            if (error)
-                xmlsec_trace("%s",error);
+            getAndPrintPRErrorText();
             return false ;
         }
     }
@@ -220,10 +229,7 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
         if ( NSS_NoDB_Init(NULL) != SECSuccess )
         {
             xmlsec_trace("Initializing NSS without profile failed.");
-            char * error = NULL;
-            PR_GetErrorText(error);
-            if (error)
-                xmlsec_trace("%s",error);
+            getAndPrintPRErrorText();
             return false ;
         }
     }
@@ -295,7 +301,6 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
 
     return return_value;
 }
-
 
 // must be extern "C" because we pass the function pointer to atexit
 extern "C" void nsscrypto_finalize()
@@ -410,19 +415,16 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             rtl::OUString ouCertDir;
 
 
-
             if ( getMozillaCurrentProfile(mxMSF, ouCertDir) )
                 *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
         }
         sCertDir = *pDefaultCertDir;
 
     }
-
     if( ! *initNSS( sCertDir.getStr() ) )
     {
         return NULL;
     }
-
     pCertHandle = CERT_GetDefaultCertDB() ;
 
     try

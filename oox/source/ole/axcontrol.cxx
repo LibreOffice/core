@@ -226,11 +226,11 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
 {
     if( !rConverter.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( rxDocModel, UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xModelFactory( rxDocModel, UNO_QUERY_THROW );
         OUString aServiceName = bRange ?
             CREATE_OUSTRING( "com.sun.star.table.CellRangeAddressConversion" ) :
             CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
-        rConverter.set( xFactory->createInstance( aServiceName ) );
+        rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
     catch( Exception& )
     {
@@ -344,8 +344,8 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         aArgs[ 0 ] <<= aValue;
 
         // create the CellValueBinding instance and set at the control model
-        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XValueBinding > xBinding( xFactory->createInstanceWithArguments(
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
@@ -376,8 +376,8 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         aArgs[ 0 ] <<= aValue;
 
         // create the EntrySource instance and set at the control model
-        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }

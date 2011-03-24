@@ -84,7 +84,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldNames, new Integer(91), new Integer(27), IFieldFormatStep, new Short(curtabindex++), new Integer(90)
+                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, new Short(curtabindex++), 90
                 });
 
         try
@@ -96,7 +96,7 @@ public class FieldFormatter implements XItemListener
                     },
                     new Object[]
                     {
-                        new Integer(133), "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES", new Integer(92), new Integer(37), IFieldFormatStep, new Short(curtabindex++), new Integer(62)
+                        133, "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES", 92, 37, IFieldFormatStep, new Short(curtabindex++), 62
                     });
         }
         catch (Exception e)
@@ -114,7 +114,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), new Integer(158), new Integer(139), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), 158, 139, IFieldFormatStep, new Short(curtabindex++), 14
                 });
 
         btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
@@ -124,7 +124,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN", String.valueOf((char) 8744), new Integer(158), new Integer(156), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN", String.valueOf((char) 8744), 158, 156, IFieldFormatStep, new Short(curtabindex++), 14
                 });
         oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
@@ -136,7 +136,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", new Integer(118), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", 118, 175, IFieldFormatStep, new Short(curtabindex++), 14
                 });
 
         btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
@@ -146,7 +146,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDPLUS", "+", new Integer(137), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDPLUS", "+", 137, 175, IFieldFormatStep, new Short(curtabindex++), 14
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "ColDescriptorHeader",
@@ -156,7 +156,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    new Integer(8), sfieldinfo, new Integer(0), new Integer(158), new Integer(27), IFieldFormatStep, new Short(curtabindex++), new Integer(165)
+                    8, sfieldinfo, 0, 158, 27, IFieldFormatStep, new Short(curtabindex++), 165
                 });
 
 
@@ -167,7 +167,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldName, new Integer(158), new Integer(39), IFieldFormatStep, new Short(curtabindex++), new Integer(94)
+                    UIConsts.INTEGERS[8], sFieldName, 158, 39, IFieldFormatStep, new Short(curtabindex++), 94
                 });
 
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
@@ -177,7 +177,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_COLNAME", new Integer(274), new Integer(37), IFieldFormatStep, new Short(curtabindex++), "", new Integer(50)
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_COLNAME", 274, 37, IFieldFormatStep, new Short(curtabindex++), "", 50
                 });
         txtfieldname.addTextListener(CurUnoDialog);
         CurUnoDialog.getPeerConfiguration().setAccessibleName(btnplus, sbtnplushelptext);
@@ -195,7 +195,7 @@ public class FieldFormatter implements XItemListener
                     }, // PropertyNames.PROPERTY_HELPURL
                     new Object[]
                     {
-                        new Integer(85), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(166), new Integer(50)
+                        85, 158, 49, IFieldFormatStep, new Short(curtabindex++), 166, 50
                     });  //, "HID:WIZARDS_HID_DLGTABLE_COLMODIFIER"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "ActiveConnection", _curTableDescriptor.DBConnection);

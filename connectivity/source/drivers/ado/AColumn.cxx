@@ -165,7 +165,8 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    m_aColumn.put_NumericScale((sal_Int8)nVal);
+                    if ( !m_IsCurrency )
+                        m_aColumn.put_NumericScale((sal_Int8)nVal);
                 }
                 break;
             case PROPERTY_ID_ISNULLABLE:
@@ -212,6 +213,8 @@ void OAdoColumn::fillPropertyValues()
 
         DataTypeEnum eType  = m_aColumn.get_Type();
         m_IsCurrency        = (eType == adCurrency);
+        if ( m_IsCurrency && !m_Scale)
+            m_Scale = 4;
         m_Type              = ADOS::MapADOType2Jdbc(eType);
 
         sal_Bool bForceTo = sal_True;
