@@ -172,6 +172,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
         aLbGroup.SelectEntryPos( GetFieldSelPos( nField )+1 );
 
+        sal_uInt16 nFirstChecked = 0;
         for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
@@ -179,8 +180,12 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
             aLbColumns.CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
+
+            if (i == 0 || (i > 0 && nCheckPos < nFirstChecked))
+                nFirstChecked = nCheckPos;
         }
-        aLbColumns.SelectEntryPos( 0 );
+        // Select the first checked field from the top.
+        aLbColumns.SelectEntryPos(nFirstChecked);
     }
     else
     {
