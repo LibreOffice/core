@@ -54,3 +54,6 @@ mkdir: %_DEST%\inc%_EXT%\external\libgsf-1\gsf
 ..\%__SRC%\lib\libgsf-1.114.dylib %_DEST%\lib%_EXT%\libgsf-1.114.dylib
 symlink: %_DEST%\lib%_EXT%\libgsf-1.114.dylib %_DEST%\lib%_EXT%\libgsf-1.dylib
 
+..\%__SRC%\bin\gsf-1.dll %_DEST%\bin%_EXT%\gsf-1.dll
+..\%__SRC%\lib\igsf-1.lib %_DEST%\lib%_EXT%\igsf-1.lib
+
