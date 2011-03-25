@@ -312,7 +312,6 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pNewBorders[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pAllBorderWidth = 0;
     XMLPropertyState* pBorderWidths[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pAnchorType = 0;
     XMLPropertyState* pVertOrient = 0;
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
@@ -363,7 +362,7 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_RIGHTBORDERWIDTH:      pBorderWidths[XML_LINE_RIGHT] = property; break;
         case CTF_TOPBORDERWIDTH:        pBorderWidths[XML_LINE_TOP] = property; break;
         case CTF_BOTTOMBORDERWIDTH:     pBorderWidths[XML_LINE_BOTTOM] = property; break;
-        case CTF_ANCHORTYPE:            pAnchorType = property; break;
+        case CTF_ANCHORTYPE:            break;
         case CTF_VERTICALPOS:           pVertOrient = property; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsChar = property; break;
 
