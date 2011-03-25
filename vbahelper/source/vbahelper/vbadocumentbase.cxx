@@ -270,13 +270,12 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
     {
         uno::Reference< XApplicationBase > xApp( Application(), uno::UNO_QUERY_THROW );
         uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Any > aArgs( 3 );
+        uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[ 0 ] <<= xVBE;          // the VBE
-        aArgs[ 1 ] <<= xVBE;          // parent of a VBA project is the VBE
         aArgs[ 2 ] <<= getModel();    // document model for script container access
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBProject" ) ), aArgs, mxContext );
     }
     catch( uno::Exception& )
     {

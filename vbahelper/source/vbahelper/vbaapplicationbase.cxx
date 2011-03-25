@@ -392,7 +392,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
         aArgs[ 0 ] <<= getCurrentDocument();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBE" ) ), aArgs, mxContext );
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBE" ) ), aArgs, mxContext );
         return uno::Any( xVBE );
     }
     catch( uno::Exception& )
