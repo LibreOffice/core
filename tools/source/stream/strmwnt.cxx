@@ -35,7 +35,9 @@
 #include <string.h>
 #include <limits.h>
 
-#include <tools/svwin.h>
+#ifdef WNT
+#include <windows.h>
+#endif
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>

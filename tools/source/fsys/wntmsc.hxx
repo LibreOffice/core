@@ -38,14 +38,7 @@
 #include <sys\stat.h>
 #include <direct.h>
 
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <winbase.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <windows.h>
 #include <tools/solar.h>
 
 #include <tools/string.hxx>

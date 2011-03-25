@@ -36,13 +36,7 @@
 #define INCL_DOSDATETIME
 #include <svpm.h>
 #elif defined( WNT )
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <windows.h>
 #elif defined UNX
 #include <unistd.h>
 #include <limits.h>

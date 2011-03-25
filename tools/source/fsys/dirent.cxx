@@ -30,6 +30,10 @@
 #include "precompiled_tools.hxx"
 
 #if !defined UNX
+#ifdef WNT
+#include <windows.h>
+#undef GetObject
+#endif
 #include <io.h>
 #include <process.h>
 #endif
