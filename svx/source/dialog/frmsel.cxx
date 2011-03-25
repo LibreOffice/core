@@ -41,6 +41,8 @@
 
 #include <tools/rcid.h>
 
+using namespace ::editeng;
+
 namespace svx {
 
 using ::com::sun::star::uno::Reference;

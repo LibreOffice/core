@@ -44,6 +44,8 @@
 #define THINTHICKLG_OUT_WIDTH long( 30 )
 #define THINTHICKLG_DIST_WIDTH long( 40 )
 
+using namespace editeng;
+
 namespace {
 
 class BorderLineTest : public CppUnit::TestFixture

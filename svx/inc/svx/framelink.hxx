@@ -116,21 +116,21 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mnType( SOLID ) {}
+    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mnType( editeng::SOLID ) {}
     /** Constructs a frame style with passed line widths. */
-    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, SvxBorderStyle nType ) :
+    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )
                             { Set( nP, nD, nS ); }
     /** Constructs a frame style with passed color and line widths. */
     inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, SvxBorderStyle nType ) :
+                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )
                             { Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. */
-    inline explicit     Style( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
+    inline explicit     Style( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
                             meRefMode( REFMODE_CENTERED ) { Set( rBorder, fScale, nMaxWidth ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    inline explicit     Style( const SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
+    inline explicit     Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
                             meRefMode( REFMODE_CENTERED ) { Set( pBorder, fScale, nMaxWidth ); }
 
     inline RefMode      GetRefMode() const { return meRefMode; }
@@ -141,7 +141,7 @@ public:
     inline sal_uInt16   Prim() const { return mnPrim; }
     inline sal_uInt16   Dist() const { return mnDist; }
     inline sal_uInt16   Secn() const { return mnSecn; }
-    inline SvxBorderStyle Type() const { return mnType; }
+    inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
     inline sal_uInt16   GetWidth() const { return mnPrim + mnDist + mnSecn; }
@@ -154,9 +154,9 @@ public:
     void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
                             sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
-    void                Set( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void                Set( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    void                Set( const SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void                Set( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
     inline void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
@@ -165,7 +165,7 @@ public:
     inline void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
     inline void         SetColorGap( bool bUseIt, const Color& rColor ) { maColorGap = rColor; mbUseGapColor = bUseIt; }
     /** Sets whether to use dotted style for single hair lines. */
-    inline void         SetType( SvxBorderStyle nType ) { mnType = nType; }
+    inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 
     /** Scales the style by the specified scaling factor. Ensures that visible lines keep visible. */
     Style&              ScaleSelf( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
@@ -186,7 +186,7 @@ private:
     sal_uInt16          mnPrim;     /// Width of primary (single, left, or top) line.
     sal_uInt16          mnDist;     /// Distance between primary and secondary line.
     sal_uInt16          mnSecn;     /// Width of secondary (right or bottom) line.
-    SvxBorderStyle      mnType;
+    editeng::SvxBorderStyle      mnType;
 };
 
 bool operator==( const Style& rL, const Style& rR );

@@ -39,6 +39,31 @@
 
 // class SvxBorderLine  --------------------------------------------------
 
+namespace {
+
+    Color lcl_compute3DColor( Color aMain, int nLight, int nMedium, int nDark )
+    {
+        basegfx::BColor color = aMain.getBColor( );
+        basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
+
+        int nCoef = 0;
+        if ( hsl.getZ( ) >= 0.5 )
+            nCoef = nLight;
+        else if ( 0.5 > hsl.getZ() && hsl.getZ() >= 0.25 )
+            nCoef = nMedium;
+        else
+            nCoef = nDark;
+
+        double L = hsl.getZ() * 255.0 + nCoef;
+        hsl.setZ( L / 255.0 );
+        color = basegfx::tools::hsl2rgb( hsl );
+
+        return Color( color );
+    }
+} // Anonymous namespace
+
+namespace editeng {
+
 Color SvxBorderLine::darkColor( Color aMain )
 {
     return aMain;
@@ -56,25 +81,6 @@ Color SvxBorderLine::lightColor( Color aMain )
     return Color( color );
 }
 
-Color lcl_compute3DColor( Color aMain, int nLight, int nMedium, int nDark )
-{
-    basegfx::BColor color = aMain.getBColor( );
-    basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
-
-    int nCoef = 0;
-    if ( hsl.getZ( ) >= 0.5 )
-        nCoef = nLight;
-    else if ( 0.5 > hsl.getZ() && hsl.getZ() >= 0.25 )
-        nCoef = nMedium;
-    else
-        nCoef = nDark;
-
-    double L = hsl.getZ() * 255.0 + nCoef;
-    hsl.setZ( L / 255.0 );
-    color = basegfx::tools::hsl2rgb( hsl );
-
-    return Color( color );
-}
 
 Color SvxBorderLine::threeDLightColor( Color aMain )
 {
@@ -483,5 +489,7 @@ bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
         }
     }
 }
+
+} // namespace editeng
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

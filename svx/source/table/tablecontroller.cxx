@@ -73,6 +73,7 @@
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;

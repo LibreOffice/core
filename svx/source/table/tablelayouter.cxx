@@ -48,6 +48,7 @@
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using ::com::sun::star::awt::XLayoutConstrains;
 using namespace ::com::sun::star::uno;

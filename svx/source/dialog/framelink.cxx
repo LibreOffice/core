@@ -58,6 +58,8 @@
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
 
+using namespace editeng;
+
 namespace svx {
 namespace frame {
 

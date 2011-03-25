@@ -95,6 +95,7 @@
 #define BRACELEFT   '{'
 #define BRACERIGHT  '}'
 
+using namespace editeng;
 
 // Some helper functions
 // char

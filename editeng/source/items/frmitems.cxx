@@ -94,6 +94,7 @@
 #include <editeng/memberids.hrc>
 #include <editeng/editerr.hxx>
 
+using namespace ::editeng;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 

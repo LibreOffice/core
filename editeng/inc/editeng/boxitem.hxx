@@ -52,10 +52,10 @@ namespace rtl { class OUString; }
 
 class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 {
-    SvxBorderLine  *pTop,
-                   *pBottom,
-                   *pLeft,
-                   *pRight;
+    editeng::SvxBorderLine  *pTop,
+                            *pBottom,
+                            *pLeft,
+                            *pRight;
     sal_uInt16          nTopDist,
                     nBottomDist,
                     nLeftDist,
@@ -87,15 +87,15 @@ public:
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    const   SvxBorderLine* GetTop()    const { return pTop; }
-    const   SvxBorderLine* GetBottom() const { return pBottom; }
-    const   SvxBorderLine* GetLeft()   const { return pLeft; }
-    const   SvxBorderLine* GetRight()  const { return pRight; }
+    const   editeng::SvxBorderLine* GetTop()    const { return pTop; }
+    const   editeng::SvxBorderLine* GetBottom() const { return pBottom; }
+    const   editeng::SvxBorderLine* GetLeft()   const { return pLeft; }
+    const   editeng::SvxBorderLine* GetRight()  const { return pRight; }
 
-    const   SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
+    const   editeng::SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
 
         //The Pointers are being copied!
-    void    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
+    void    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
 
     sal_uInt16  GetDistance( sal_uInt16 nLine ) const;
     sal_uInt16  GetDistance() const;
@@ -106,9 +106,9 @@ public:
         // Line width plus Space plus inward distance
         //bIgnoreLine = TRUE -> Also return distance, when no Line is set
     sal_uInt16  CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine = sal_False ) const;
-    static com::sun::star::table::BorderLine2 SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
-    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
-    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, sal_Bool bConvert );
+    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
 };
 
 inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
@@ -140,8 +140,8 @@ inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
-    SvxBorderLine* pHori;   //inner horizontal Line
-    SvxBorderLine* pVert;   //inner vertical Line
+    editeng::SvxBorderLine* pHori;   //inner horizontal Line
+    editeng::SvxBorderLine* pVert;   //inner vertical Line
 
     bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.
@@ -194,11 +194,11 @@ public:
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    const SvxBorderLine*    GetHori() const { return pHori; }
-    const SvxBorderLine*    GetVert() const { return pVert; }
+    const editeng::SvxBorderLine*   GetHori() const { return pHori; }
+    const editeng::SvxBorderLine*   GetVert() const { return pVert; }
 
         //The Pointers are being copied!
-    void                    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
+    void                    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
 
     sal_Bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
     void    SetTable( sal_Bool bNew )       { mbEnableHor = mbEnableVer = bNew; }

@@ -42,10 +42,12 @@
 
 /*
 [Description]
-This Item transports a SvxBorderLine.
+This Item transports a editeng::SvxBorderLine.
 */
 
-class SvxBorderLine;
+namespace editeng {
+    class SvxBorderLine;
+}
 
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
@@ -71,11 +73,11 @@ public:
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    const   SvxBorderLine*  GetLine     () const { return pLine; }
-    void                    SetLine     ( const SvxBorderLine *pNew );
+    const   editeng::SvxBorderLine*  GetLine     () const { return pLine; }
+    void                    SetLine     ( const editeng::SvxBorderLine *pNew );
 
 private:
-    SvxBorderLine*  pLine;
+    editeng::SvxBorderLine*  pLine;
 };
 
 

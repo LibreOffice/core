@@ -115,6 +115,7 @@ sal_Bool lcl_FontChangedHint( const SfxHint &rHint );
 
 // namespaces
 using ::rtl::OUString;
+using namespace ::editeng;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
