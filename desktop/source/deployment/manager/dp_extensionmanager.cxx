@@ -1499,8 +1499,6 @@ sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & reposito
     return getPackageManager(repository)->isReadOnly();
 }
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<ExtensionManager> servicePIP;

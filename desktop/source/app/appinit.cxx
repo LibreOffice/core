@@ -152,7 +152,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                         cb->getContentProviderManagerInterface();
 
 
-            // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
+            //Instanciate GNOME-VFS-UCP in the thread that initialized
              // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
             // a different thread. The latter may happen when calling the Office remotely via UNO.
             // THIS IS NOT A FIX, JUST A WORKAROUND!

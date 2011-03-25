@@ -204,7 +204,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     return Reference<deployment::XPackage>();
 }
 
-//##############################################################################
 
 
 // Package
@@ -326,7 +325,6 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
     return bSuccess;
 }
 
-//##############################################################################
 
 
 } // anon namespace

@@ -152,7 +152,6 @@ int Db::del(Dbt *key, u_int32_t flags)
     if ((err = db->del(db, 0, key, flags)) != 0) {
         // DB_NOTFOUND is a "normal" return, so should not be
         // thrown as an error
-        //
         if (err != DB_NOTFOUND) {
             db_internal::check_error(err, "Db::del");
             return (err);

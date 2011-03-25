@@ -454,7 +454,6 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
     {
         // get current migration step
         theNameAccess->getByName(seqMigrations[i]) >>= tmpAccess;
-        // tmpStepPtr = new migration_step();
         migration_step tmpStep;
         tmpStep.name = seqMigrations[i];
 

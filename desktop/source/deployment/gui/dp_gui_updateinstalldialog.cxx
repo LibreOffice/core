@@ -487,8 +487,6 @@ void UpdateInstallDialog::Thread::installExtensions()
              }
             m_dialog.m_ft_extension_name.SetText(i->aInstalledPackage->getDisplayName());
         }
-//         TimeValue v = {1, 0};
-//       osl::Thread::wait(v);
         bool bError = false;
         bool bLicenseDeclined = false;
         cssu::Reference<css::deployment::XPackage> xExtension;

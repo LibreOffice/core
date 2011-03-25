@@ -280,15 +280,12 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
 //=============================================================================
 // shows a simple error box with the given message ... but exits from these process !
-//
 // Fatal errors cant be solved by the process ... nor any recovery can help.
 // Mostly the installation was damaged and must be repaired manually .. or by calling
 // setup again.
-//
 // On the other side we must make sure that no further actions will be possible within
 // the current office process ! No pipe requests, no menu/toolbar/shortuct actions
 // are allowed. Otherwise we will force a "crash inside a crash".
-//
 // Thats why we have to use a special native message box here which does not use yield :-)
 //=============================================================================
 void FatalError(const ::rtl::OUString& sMessage)
@@ -1690,7 +1687,7 @@ int Desktop::Main()
         SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
-        // Check special env variable #111015#
+        // Check special env variable
         std::vector< String > aUnrestrictedFolders;
         svt::getUnrestrictedFolders( aUnrestrictedFolders );
 
@@ -2970,7 +2967,6 @@ String GetURL_Impl(
 
     // Use the provided parameters for smartRel2Abs to support the usage of '%' in system paths.
     // Otherwise this char won't get encoded and we are not able to load such files later,
-    // see #110156#
     bool bWasAbsolute;
     INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::WAS_ENCODED,
                                                 RTL_TEXTENCODING_UTF8, true );

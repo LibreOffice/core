@@ -1619,7 +1619,6 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     }
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()

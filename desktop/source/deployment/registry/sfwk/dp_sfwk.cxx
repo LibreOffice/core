@@ -292,7 +292,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 void BackendImpl::PackageImpl:: initPackageHandler()
 {

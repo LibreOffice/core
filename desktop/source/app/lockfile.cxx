@@ -100,7 +100,7 @@ namespace desktop {
         int tmpByte = 0;
         for (int i = 0; i<nIdBytes; i++) {
             tmpByte = rand( ) % 0xFF;
-            sprintf( tmpId+i*2, "%02X", tmpByte ); // #100211# - checked
+            sprintf( tmpId+i*2, "%02X", tmpByte );
         }
         tmpId[nIdBytes*2]=0x00;
         m_aId = OUString::createFromAscii( tmpId );

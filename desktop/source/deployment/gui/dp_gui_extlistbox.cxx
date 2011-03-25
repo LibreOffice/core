@@ -352,7 +352,6 @@ void ExtensionBox_Impl::select( const rtl::OUString & sName )
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 // Title + description
 void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
 {

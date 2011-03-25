@@ -177,7 +177,6 @@ bool readArgument(
     return false;
 }
 
-//##############################################################################
 
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
@@ -256,7 +255,6 @@ OUString makeAbsoluteFileUrl(
         ? abs.copy( 0, abs.getLength() -1 ) : abs;
 }
 
-//##############################################################################
 
 namespace {
 
@@ -369,7 +367,6 @@ void printf_packages(
 }
 
 
-//##############################################################################
 
 namespace {
 

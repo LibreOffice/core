@@ -448,7 +448,6 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
 //______________________________________________________________________________
 void BackendImpl::ComponentPackageImpl::disposing()
 {
-//    m_xRemoteContext.clear();
     Package::disposing();
 }
 
@@ -877,7 +876,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 void BackendImpl::unorc_verify_init(
@@ -1653,7 +1651,6 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     }
 }
 
-//##############################################################################
 BackendImpl::TypelibraryPackageImpl::TypelibraryPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,

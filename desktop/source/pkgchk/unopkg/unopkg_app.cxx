@@ -222,7 +222,6 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     }
 }
 
-//##############################################################################
 extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();

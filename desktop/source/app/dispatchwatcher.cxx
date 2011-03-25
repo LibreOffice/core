@@ -364,7 +364,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             }
 
             // if we are called in viewmode, open document read-only
-            // #95425#
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);

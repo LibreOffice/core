@@ -167,7 +167,6 @@ class FileDoesNotExistFilter
                                       css::task::XInteractionHandler >
 
 {
-    //css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
     bool m_bExist;
     css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
 

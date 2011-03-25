@@ -223,7 +223,6 @@ void LicenseCommandEnv::handle(
 }
 
 //================================================================================
-//================================================================================
 
 NoLicenseCommandEnv::NoLicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler):

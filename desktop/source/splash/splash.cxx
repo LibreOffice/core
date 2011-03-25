@@ -263,7 +263,6 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 {
     if ( inEvent != 0 )
     {
-        // Paint( Rectangle() );
         switch ( inEvent->GetId() )
         {
             case VCLEVENT_WINDOW_SHOW:

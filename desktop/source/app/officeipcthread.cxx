@@ -562,7 +562,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         aStreamPipe.write( "\0", 1 );
 
-        // wait for confirmation #95361# #95425#
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
         int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
@@ -595,7 +594,6 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
         osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
-        //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         if (aPipe.is())
         {
             aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
@@ -662,8 +660,6 @@ void SAL_CALL OfficeIPCThread::run()
 
         if( nError == osl_Pipe_E_None )
         {
-
-            // #111143# and others:
             // if we receive a request while the office is displaying some dialog or error during
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
@@ -693,7 +689,7 @@ void SAL_CALL OfficeIPCThread::run()
             }
             // don't close pipe ...
 
-            // #90717# Is this a lookup message from another application? if so, ignore
+            // Is this a lookup message from another application? if so, ignore
             if ( aArguments.Len() == 0 )
                 continue;
 

@@ -171,7 +171,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         {
             break;
         }
-        // convert file URLs to internal form #112849#
+        // convert file URLs to internal form
         if (aArg.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("file:"))==0 &&
             xTranslator.is())
         {

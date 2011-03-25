@@ -67,8 +67,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     {
         BackendImpl * getMyBackend() const;
 
-//        HelpBackendDb::Data m_dbData;
-
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -258,7 +256,6 @@ bool BackendImpl::activateEntry(OUString const & url)
 }
 
 
-//##############################################################################
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
@@ -383,8 +380,6 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
 
     return beans::Optional<OUString>(true, OUString());
 }
-
-//##############################################################################
 
 static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
 static rtl::OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));

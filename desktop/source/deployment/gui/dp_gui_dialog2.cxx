@@ -210,8 +210,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 {
     Size aMinSize( ExtensionBox_Impl::GetMinOutputSizePixel() );
@@ -960,7 +958,6 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 //------------------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
 {
-    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -1375,7 +1372,6 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 //------------------------------------------------------------------------------
 IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
 {
-    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -1823,8 +1819,6 @@ sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
     return nRet;
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 SelectedPackage::~SelectedPackage() {}
 

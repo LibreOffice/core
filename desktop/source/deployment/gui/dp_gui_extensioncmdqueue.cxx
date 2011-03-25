@@ -1108,8 +1108,6 @@ OUString ExtensionCmdQueue::Thread::searchAndReplaceAll( const OUString &rSource
 
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
                                       TheExtensionManager *pManager,
                                       const uno::Reference< uno::XComponentContext > &rContext )

@@ -286,7 +286,6 @@ bool LanguageSelection::prepareLanguage()
 void LanguageSelection::setDefaultLanguage(const OUString& sLocale)
 {
     // #i32939# setting of default document language
-    //
     // See #i42730# for rules for determining source of settings
 
     // determine script type of locale

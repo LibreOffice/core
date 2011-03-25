@@ -150,8 +150,6 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtensionId )
@@ -332,8 +330,6 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;

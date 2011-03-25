@@ -115,7 +115,6 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
     }
 
     // Add SID subauthorities to the string.
-    //
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(*StringSid + dwSidSize, TEXT("-%lu"),

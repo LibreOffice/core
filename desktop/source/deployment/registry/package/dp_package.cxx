@@ -484,7 +484,6 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
 }
 
 
-//##############################################################################
 
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
