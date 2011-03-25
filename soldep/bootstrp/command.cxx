@@ -74,7 +74,7 @@
 #endif
 
 #if defined WNT
-#include <tools/svwin.h>
+#include <windows.h>
 #endif
 
 #if defined(WNT) || defined(OS2)
