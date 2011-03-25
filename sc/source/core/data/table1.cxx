@@ -272,6 +272,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
     bActiveScenario( false ),
+    pDBDataNoName(NULL),
     mpRangeName(NULL),
     mbPageBreaksValid(false)
 {
@@ -341,6 +342,7 @@ ScTable::~ScTable()
     delete pRepeatRowRange;
     delete pScenarioRanges;
     delete mpRangeName;
+    delete pDBDataNoName;
     DestroySortCollator();
 }
 
@@ -1433,6 +1435,8 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
 
     if (IsStreamValid())
         SetStreamValid(false);
+   if (pDBDataNoName)
+        pDBDataNoName->UpdateMoveTab(nOldPos, nNewPos);
 }
 
 void ScTable::UpdateCompile( sal_Bool bForceIfNameInUse )
@@ -1805,6 +1809,19 @@ ScBaseCell* ScTable::VisibleDataCellIterator::next()
 SCROW ScTable::VisibleDataCellIterator::getRow() const
 {
     return mnCurRow;
+}
+
+void ScTable::SetAnonymousDBData(ScDBData* aDBData)
+{
+    //don't delete old dbdata, will still be used by undo/redo
+    if (!(rtl::OUString(aDBData->GetName()) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unnamed"))))
+        OSL_FAIL("Falscher Name für lokale DB");
+    pDBDataNoName = aDBData;
+}
+
+ScDBData* ScTable::GetAnonymousDBData()
+{
+    return pDBDataNoName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

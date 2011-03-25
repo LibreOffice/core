@@ -176,6 +176,13 @@ public:
 
             sal_Bool        IsModified() const          { return bModified; }
             void        SetModified(sal_Bool bMod)      { bModified = bMod; }
+
+            void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+            void    UpdateReference(UpdateRefMode eUpdateRefMode,
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                                ScDocument* pDoc  );
 };
 
 
@@ -206,6 +213,7 @@ public:
     virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData*   GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;
 
@@ -213,7 +221,7 @@ public:
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     ScDBData* FindIndex(sal_uInt16 nIndex);

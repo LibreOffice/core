@@ -42,6 +42,7 @@
 #include "document.hxx"
 #include "dbcolect.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "global.hxx"
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
@@ -98,22 +99,18 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
         {
             String aName;
             pUndoData->GetName( aName );
-            if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
+            if ( rtl::OUString(aName) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) ) )
                 bWasTemp = sal_True;
         }
         DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
         (void)bWasTemp;
-
-        sal_uInt16 nIndex;
-        ScDBCollection* pColl = pDoc->GetDBCollection();
-        if (pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nIndex ))
-            pRet = (*pColl)[nIndex];
-        else
+        pRet = pDoc->GetAnonymousDBData(nTab);
+        if (!pRet)
         {
-            pRet = new ScDBData( ScGlobal::GetRscString( STR_DB_NONAME ), nTab,
+            pRet = new ScDBData( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)), nTab,
                                 nCol1,nRow1, nCol2,nRow2, sal_True,
                                 pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
-            pColl->Insert( pRet );
+            pDoc->SetAnonymousDBData(nTab,pRet);
         }
     }
 

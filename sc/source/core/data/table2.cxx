@@ -472,6 +472,8 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         pTable->CopyColHidden(*this, 0, nCol2);
         pTable->CopyColFiltered(*this, 0, nCol2);
+        if (pDBDataNoName)
+            pTable->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
 
         if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
         {
@@ -759,6 +761,8 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
         return;
 
+    if (pDBDataNoName)
+        pDestTab->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
     //  Charts muessen beim Ein-/Ausblenden angepasst werden
     ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
 

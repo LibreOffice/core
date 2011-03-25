@@ -50,6 +50,7 @@
 #include "docsh.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "undodat.hxx"
 #include "undotab.hxx"
 #include "undoblk.hxx"
@@ -130,43 +131,6 @@ void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCR
     aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 }
 
-ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    //! nach document/dbcolect verschieben
-
-    if (!pColl)
-        return NULL;
-
-    ScDBData* pNoNameData = NULL;
-    ScDBData* pNearData = NULL;
-    sal_uInt16 nCount = pColl->GetCount();
-    String aNoName = ScGlobal::GetRscString( STR_DB_NONAME );
-    SCTAB nAreaTab;
-    SCCOL nStartCol, nEndCol;
-    SCROW nStartRow, nEndRow;
-    for (sal_uInt16 i = 0; i < nCount; i++)
-    {
-        ScDBData* pDB = (*pColl)[i];
-        pDB->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
-        if ( nTab == nAreaTab && nCol+1 >= nStartCol && nCol <= nEndCol+1 &&
-                                 nRow+1 >= nStartRow && nRow <= nEndRow+1 )
-        {
-            if ( pDB->GetName() == aNoName )
-                pNoNameData = pDB;
-            else if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
-            {
-                if (!pNearData)
-                    pNearData = pDB;    // ersten angrenzenden Bereich merken
-            }
-            else
-                return pDB;             // nicht "unbenannt" und Cursor steht wirklich drin
-        }
-    }
-    if (pNearData)
-        return pNearData;               // angrenzender, wenn nichts direkt getroffen
-    return pNoNameData;                 // "unbenannt" nur zurueck, wenn sonst nichts gefunden
-}
-
 ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     SCCOL nCol = rMarked.aStart.Col();
@@ -179,14 +143,13 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     SCCOL nEndCol = rMarked.aEnd.Col();
     SCROW nEndRow = rMarked.aEnd.Row();
     SCTAB nEndTab = rMarked.aEnd.Tab();
-
     //  Nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
     //  fuer "unbenannt" (GetDataArea) kann neben dem Cursor legen, also muss auch ein
     //  benannter DB-Bereich dort gesucht werden.
-
+    ScDBCollection* pColl = aDocument.GetDBCollection();
     ScDBData* pData = aDocument.GetDBAtArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-    if (!pData)
-        pData = lcl_GetDBNearCursor( aDocument.GetDBCollection(), nCol, nRow, nTab );
+    if (!pData && pColl)
+        pData = pColl->GetDBNearCursor(nCol, nRow, nTab );
 
     sal_Bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
             (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
@@ -203,7 +166,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         SCCOL nOldCol2;
         SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
-        sal_Bool bIsNoName = ( pData->GetName() == ScGlobal::GetRscString( STR_DB_NONAME ) );
+        sal_Bool bIsNoName = ( rtl::OUString(pData->GetName()) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)) );
 
         if (!bSelected)
         {
@@ -282,13 +245,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
         sal_Bool bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
 
-        ScDBData* pNoNameData;
-        sal_uInt16 nNoNameIndex;
-        ScDBCollection* pColl = aDocument.GetDBCollection();
-        if ( eMode != SC_DB_IMPORT &&
-                pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        ScDBData* pNoNameData = aDocument.GetAnonymousDBData(nTab);
+        if ( eMode != SC_DB_IMPORT && pNoNameData)
         {
-            pNoNameData = (*pColl)[nNoNameIndex];
 
             if ( !pOldAutoDBRange )
             {
@@ -334,13 +293,21 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                     aNewName += String::CreateFromInt32( nCount );
                 }
                 while (pColl->SearchName( aNewName, nDummy ));
-            }
-            else
-                aNewName = ScGlobal::GetRscString( STR_DB_NONAME );
-            pNoNameData = new ScDBData( aNewName, nTab,
+                pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );
-            pColl->Insert( pNoNameData );
+                pColl->Insert( pNoNameData );
+            }
+            else
+            {
+                aNewName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+                pNoNameData = new ScDBData(aNewName , nTab,
+                                nStartCol,nStartRow, nEndCol,nEndRow,
+                                sal_True, bHasHeader );
+                aDocument.SetAnonymousDBData(nTab, pNoNameData);
+            }
+
+
 
             if ( pUndoColl )
             {
@@ -372,23 +339,22 @@ ScDBData* ScDocShell::GetOldAutoDBRange()
 void ScDocShell::CancelAutoDBRange()
 {
     // called when dialog is cancelled
+//moggi:TODO
     if ( pOldAutoDBRange )
     {
-        sal_uInt16 nNoNameIndex;
-        ScDBCollection* pColl = aDocument.GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        SCTAB nTab = GetCurTab();
+        ScDBData* pDBData = aDocument.GetAnonymousDBData(nTab);
+        if ( pDBData )
         {
-            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
-
             SCCOL nRangeX1;
             SCROW nRangeY1;
             SCCOL nRangeX2;
             SCROW nRangeY2;
             SCTAB nRangeTab;
-            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
             DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
 
-            *pNoNameData = *pOldAutoDBRange;    // restore old settings
+            *pDBData = *pOldAutoDBRange;    // restore old settings
 
             if ( pOldAutoDBRange->HasAutoFilter() )
             {
@@ -507,8 +473,7 @@ String lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
     if (pData)
     {
         pData->GetName( aName );
-        if ( aName != ScGlobal::GetRscString( STR_DB_NONAME ) )
-            bOk = sal_True;
+        bOk = sal_True;
     }
 
     if (!bOk)

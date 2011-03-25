@@ -39,6 +39,7 @@
 #include "xmlsorti.hxx"
 #include "document.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "docuno.hxx"
 #include "dbcolect.hxx"
 #include "datauno.hxx"
@@ -121,7 +122,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sDatabaseRangeName(ScGlobal::GetRscString(STR_DB_NONAME)),
+    sDatabaseRangeName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
     aSortSequence(),
     eOrientation(table::TableOrientation_ROWS),
     nRefresh(0),
@@ -344,10 +345,31 @@ void ScXMLDatabaseRangeContext::EndElement()
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISNATIVE)))
                                     aImportDescriptor[i].Value <<= bNative;
                             }
+                            ScDBData* pDBData = NULL;
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                            sal_uInt16 nIndex;
-                            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                            ScDBData* pDBData = (*pDBCollection)[nIndex];
+                            rtl::OUString aLocalNoName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+                            rtl::OUString aGlobalNoName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+                            if (sDatabaseRangeName.match(aLocalNoName)||sDatabaseRangeName==aGlobalNoName)
+                            {
+                                SCTAB nTab = 0;
+                                if (sDatabaseRangeName==aGlobalNoName)//convert old global anonymous db ranges to new sheet local ones
+                                {
+                                    nTab = static_cast<SCTAB> (aCellRangeAddress.Sheet);
+                                }
+                                else
+                                {
+                                    rtl::OUString aDBNoName(sDatabaseRangeName);
+                                    aDBNoName = aDBNoName.replaceAt(0,aLocalNoName.getLength(),rtl::OUString());
+                                    nTab = aDBNoName.toInt32();
+                                }
+                                pDBData = pDoc->GetAnonymousDBData(nTab);
+                            }
+                            else
+                            {
+                                sal_uInt16 nIndex;
+                                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
+                                pDBData = (*pDBCollection)[nIndex];
+                            }
                             pDBData->SetImportSelection(bIsSelection);
                             pDBData->SetAutoFilter(bAutoFilter);
                             if (bAutoFilter)

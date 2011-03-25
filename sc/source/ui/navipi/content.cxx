@@ -708,13 +708,11 @@ void ScContentTree::GetDbNames()
     sal_uInt16 nCount = pDbNames->GetCount();
     if ( nCount > 0 )
     {
-        String aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) );
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             ScDBData* pData = (*pDbNames)[i];
             String aStrName = pData->GetName();
-            if ( aStrName != aStrNoName )
-                InsertContent( SC_CONTENT_DBAREA, aStrName );
+            InsertContent( SC_CONTENT_DBAREA, aStrName );
         }
     }
 }

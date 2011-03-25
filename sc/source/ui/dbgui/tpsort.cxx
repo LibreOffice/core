@@ -43,6 +43,7 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "dbcolect.hxx"
 #include "userlist.hxx"
 #include "rangeutl.hxx"
@@ -582,7 +583,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
         aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         //
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         rSortData       ( ((const ScSortItem&)
@@ -648,8 +648,8 @@ void ScTabPageSortOptions::Init()
         String          theArea;
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         String          theDbArea;
-        String          theDbName   = aStrNoName;
         const SCTAB nCurTab     = pViewData->GetTabNo();
+        String          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();

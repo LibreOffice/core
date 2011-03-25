@@ -90,7 +90,6 @@ private:
     HelpButton      aBtnHelp;
     MoreButton      aBtnMore;
     const String    aStrUndefined;
-    const String    aStrNoName;
     const String    aStrNone;
     const String    aStrEmpty;
     const String    aStrNotEmpty;

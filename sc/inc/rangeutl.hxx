@@ -304,7 +304,6 @@ public:
 class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
-    String          aStrNoName;
     ScRangeName*    pRangeName;
     ScRangeName::const_iterator maRNPos;
     ScRangeName::const_iterator maRNEnd;

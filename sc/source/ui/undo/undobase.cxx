@@ -371,13 +371,11 @@ void ScDBFuncUndo::EndUndo()
 
     if ( pAutoDBRange )
     {
-        sal_uInt16 nNoNameIndex;
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScDBCollection* pColl = pDoc->GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        SCTAB nTab = pDoc->GetVisibleTab();
+        ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+        if (pNoNameData )
         {
-            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
-
             SCCOL nRangeX1;
             SCROW nRangeY1;
             SCCOL nRangeX2;
@@ -406,12 +404,10 @@ void ScDBFuncUndo::BeginRedo()
     {
         // move the database range to this function's position again (see ScDocShell::GetDBData)
 
-        sal_uInt16 nNoNameIndex;
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScDBCollection* pColl = pDoc->GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        ScDBData* pNoNameData = pDoc->GetAnonymousDBData(aOriginalRange.aStart.Tab());
+        if ( pNoNameData )
         {
-            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
 
             SCCOL nRangeX1;
             SCROW nRangeY1;

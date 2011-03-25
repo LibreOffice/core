@@ -188,7 +188,6 @@ private:
     LocalizedString aStrRowLabel;
     LocalizedString aStrColLabel;
     LocalizedString aStrUndefined;
-    String              aStrNoName;
     String              aStrAreaLabel;
 
     const sal_uInt16        nWhichSort;

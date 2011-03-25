@@ -35,6 +35,7 @@
 
 #include "dbcolect.hxx"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "document.hxx"
@@ -579,7 +580,79 @@ ScDataObject*   ScDBData::Clone() const
     return new ScDBData(*this);
 }
 
+void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
+{
+        ScRange aRange;
+        GetArea( aRange );
+        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
 
+        //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
+
+        if ( nTab == nOldPos )                          // verschobene Tabelle
+            nTab = nNewPos;
+        else if ( nOldPos < nNewPos )                   // nach hinten verschoben
+        {
+            if ( nTab > nOldPos && nTab <= nNewPos )    // nachrueckender Bereich
+                --nTab;
+        }
+        else                                            // nach vorne verschoben
+        {
+            if ( nTab >= nNewPos && nTab < nOldPos )    // nachrueckender Bereich
+                ++nTab;
+        }
+
+        sal_Bool bChanged = ( nTab != aRange.aStart.Tab() );
+        if (bChanged)
+            SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(),aRange.aEnd .Row() );
+
+        //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
+
+        SetModified(bChanged);
+
+}
+
+void ScDBData::UpdateReference(UpdateRefMode eUpdateRefMode,
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                                ScDocument* pDoc )
+{
+    SCCOL theCol1;
+    SCROW theRow1;
+    SCTAB theTab1;
+    SCCOL theCol2;
+    SCROW theRow2;
+    SCTAB theTab2;
+    GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
+    theTab2 = theTab1;
+
+    sal_Bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                            nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
+                                            theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
+    if (bDoUpdate)
+        MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
+
+    ScRange aRangeAdvSource;
+    if ( GetAdvancedQuerySource(aRangeAdvSource) )
+    {
+        aRangeAdvSource.GetVars( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
+        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                    nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
+                                    theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
+        {
+            aRangeAdvSource.aStart.Set( theCol1,theRow1,theTab1 );
+            aRangeAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
+            SetAdvancedQuerySource( &aRangeAdvSource );
+
+            bDoUpdate = sal_True;       // DBData is modified
+        }
+    }
+
+    SetModified(bDoUpdate);
+
+    //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
+}
 //---------------------------------------------------------------------------------------
 //  Compare zum Sortieren
 
@@ -599,46 +672,46 @@ sal_Bool ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
 {
-    ScDBData* pNoNameData = NULL;
+    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pItems)
     {
-        const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
-
         for (sal_uInt16 i = 0; i < nCount; i++)
+        {
             if (((ScDBData*)pItems[i])->IsDBAtCursor(nCol, nRow, nTab, bStartOnly))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->GetName() == rNoName )
-                    pNoNameData = pDB;
-                else
-                    return pDB;
+                return pDB; //return AnonymousDBData only if nothing else was found
             }
+        }
     }
-    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
+            return pNoNameData;
+    return NULL;
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    ScDBData* pNoNameData = NULL;
+    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pItems)
     {
-        const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
-
         for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->GetName() == rNoName )
-                    pNoNameData = pDB;
-                else
-                    return pDB;
+                return pDB; //return AnonymousDBData only if nothing else was found
             }
     }
-    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
+            return pNoNameData;
+    return NULL;
 }
 
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const
 {
+    if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+        DBG_ASSERT(false,"search for noname string");
     ScDBData aDataObj( rName, 0,0,0,0,0 );
     return Search( &aDataObj, rIndex );
 }
@@ -668,40 +741,25 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
 {
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        SCCOL theCol1;
-        SCROW theRow1;
-        SCTAB theTab1;
-        SCCOL theCol2;
-        SCROW theRow2;
-        SCTAB theTab2;
-        ((ScDBData*)pItems[i])->GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
-        theTab2 = theTab1;
-
-        sal_Bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                                nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                                                theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
-        if (bDoUpdate)
-            ((ScDBData*)pItems[i])->MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
-
-        ScRange aAdvSource;
-        if ( ((ScDBData*)pItems[i])->GetAdvancedQuerySource(aAdvSource) )
+        ((ScDBData*)pItems[i])->UpdateReference(eUpdateRefMode,
+                                                nCol1, nRow1, nTab1,
+                                                nCol2, nRow2, nTab2,
+                                                nDx, nDy, nDz, pDoc);
+    }
+    ScDBData* pData = pDoc->GetAnonymousDBData(nTab1);
+    if (pData)
+    {
+        if (nTab1==nTab2&&nDz==0)
         {
-            aAdvSource.GetVars( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
-            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                        nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                                        theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
-            {
-                aAdvSource.aStart.Set( theCol1,theRow1,theTab1 );
-                aAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
-                ((ScDBData*)pItems[i])->SetAdvancedQuerySource( &aAdvSource );
-
-                bDoUpdate = sal_True;       // DBData is modified
-            }
+            pData->UpdateReference(eUpdateRefMode,
+                                                nCol1, nRow1, nTab1,
+                                                nCol2, nRow2, nTab2,
+                                                nDx, nDy, nDz, pDoc);
         }
-
-        ((ScDBData*)pItems[i])->SetModified(bDoUpdate);
-
-        //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
+        else
+        {
+            //this will perhabs break undo
+        }
     }
 }
 
@@ -712,34 +770,8 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ScRange aRange;
         ScDBData* pData = (ScDBData*)pItems[i];
-        pData->GetArea( aRange );
-        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
-
-        //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
-
-        if ( nTab == nOldPos )                          // verschobene Tabelle
-            nTab = nNewPos;
-        else if ( nOldPos < nNewPos )                   // nach hinten verschoben
-        {
-            if ( nTab > nOldPos && nTab <= nNewPos )    // nachrueckender Bereich
-                --nTab;
-        }
-        else                                            // nach vorne verschoben
-        {
-            if ( nTab >= nNewPos && nTab < nOldPos )    // nachrueckender Bereich
-                ++nTab;
-        }
-
-        sal_Bool bChanged = ( nTab != aRange.aStart.Tab() );
-        if (bChanged)
-            pData->SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(),aRange.aEnd .Row() );
-
-        //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
-
-        pData->SetModified(bChanged);
+        pData->UpdateMoveTab(nOldPos, nNewPos);
     }
 }
 
@@ -770,7 +802,32 @@ sal_Bool ScDBCollection::Insert(ScDataObject* pScDataObject)
     return bInserted;
 }
 
-
+ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
+{
+    ScDBData* pNearData = NULL;
+    SCTAB nAreaTab;
+    SCCOL nStartCol, nEndCol;
+    SCROW nStartRow, nEndRow;
+    for (sal_uInt16 i = 0; i < nCount; i++)
+    {
+        ScDBData* pDB = (ScDBData*)pItems[i];
+        pDB->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        if ( nTab == nAreaTab && nCol+1 >= nStartCol && nCol <= nEndCol+1 &&
+                                 nRow+1 >= nStartRow && nRow <= nEndRow+1 )
+        {
+            if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
+            {
+                if (!pNearData)
+                    pNearData = pDB;    // ersten angrenzenden Bereich merken
+            }
+            else
+                return pDB;             // nicht "unbenannt" und Cursor steht wirklich drin
+        }
+    }
+    if (pNearData)
+        return pNearData;               // angrenzender, wenn nichts direkt getroffen
+    return pDoc->GetAnonymousDBData(nTab);                  // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,6 +46,7 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "tabvwsh.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
@@ -82,10 +83,18 @@ sal_Bool ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, sa
     // so CompileDBFormula would never find any name (index) tokens, and would
     // unnecessarily loop through all cells.
     sal_Bool bCompile = !pDoc->IsImportingXML();
-
+    sal_Bool bOk;
     if ( bCompile )
         pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    sal_Bool bOk = pDocColl->Insert( pNew );
+    if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    {
+        pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
+        bOk = true;
+    }
+    else
+    {
+        bOk = pDocColl->Insert( pNew );
+    }
     if ( bCompile )
         pDoc->CompileDBFormula( false );    // CompileFormulaString
 
@@ -200,13 +209,23 @@ sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi *
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
     sal_Bool bUndo (pDoc->IsUndoEnabled());
 
-    sal_uInt16 nPos = 0;
-    if (pDocColl->SearchName( rNewData.GetName(), nPos ))
+    ScDBData* pData = NULL;
+    if (rtl::OUString(rNewData.GetName())==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    {
+        ScRange aRange;
+        rNewData.GetArea(aRange);
+        SCTAB nTab = aRange.aStart.Tab();
+        pData = pDoc->GetAnonymousDBData(nTab);
+    }
+    else
+    {
+        sal_uInt16 nPos = 0;
+        if (pDocColl->SearchName( rNewData.GetName(), nPos ))
+            pData = (*pDocColl)[nPos];
+    }
+    if (pData)
     {
         ScDocShellModificator aModificator( rDocShell );
-
-        ScDBData* pData = (*pDocColl)[nPos];
-
         ScRange aOldRange, aNewRange;
         pData->GetArea(aOldRange);
         rNewData.GetArea(aNewRange);

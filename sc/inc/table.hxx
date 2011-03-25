@@ -38,6 +38,7 @@
 #include "column.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
+#include "dbcolect.hxx"
 
 #include <memory>
 #include <set>
@@ -187,6 +188,7 @@ private:
     Color           aTabBgColor;
     sal_uInt16          nScenarioFlags;
     sal_Bool            bActiveScenario;
+    ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
     bool            mbPageBreaksValid;
 
@@ -269,6 +271,9 @@ public:
 
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
+
+    void        SetAnonymousDBData(ScDBData* aDBData);
+    ScDBData*      GetAnonymousDBData();
 
     void        GetCodeName( String& rName ) const {  rName = aCodeName; }
     void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
@@ -795,6 +800,7 @@ public:
 
     void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
+    void        UpdateMoveTab(SCTAB nOldPos,SCTAB nNewPos);
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

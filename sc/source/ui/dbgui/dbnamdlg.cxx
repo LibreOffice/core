@@ -43,6 +43,7 @@
 #include "globstr.hrc"
 #include "dbnamdlg.hrc"
 #include "rangenam.hxx"     // IsNameValid
+#include "globalnames.hxx"
 
 #define _DBNAMDLG_CXX
 #include "dbnamdlg.hxx"
@@ -165,7 +166,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
+        aStrNoName      ( RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
         aStrInvalid     ( ScResId( STR_DB_INVALID ) ),
         //
         pViewData       ( ptrViewData ),
@@ -272,7 +273,7 @@ void ScDbNameDlg::Init()
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
                     pDBData->GetName( theDbName );
-                    if ( theDbName != aStrNoName )
+                    if (theDbName!=aStrNoName )
                         aEdName.SetText( theDbName );
                     else
                         aEdName.SetText( EMPTY_STRING );
@@ -384,7 +385,7 @@ void ScDbNameDlg::UpdateNames()
             if ( pDbData )
             {
                 pDbData->GetName( aString );
-                if ( aString != aStrNoName )
+                if (aString!=aStrNoName )
                     aEdName.InsertEntry( aString );
             }
         }

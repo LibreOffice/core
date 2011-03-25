@@ -56,6 +56,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "document.hxx"
@@ -722,7 +723,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        const String    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) );
+                        const String    aStrNoName( RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) );
                         List            aList;
                         sal_uInt16          nDBCount = pDBCol->GetCount();
                         ScDBData*       pDbData  = NULL;
@@ -736,7 +737,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 pDBName = new String;
                                 pDbData->GetName( *pDBName );
 
-                                if ( *pDBName != aStrNoName )
+                                if ( *pDBName!=aStrNoName )
                                     aList.Insert( pDBName );
                                 else
                                     DELETEZ(pDBName);

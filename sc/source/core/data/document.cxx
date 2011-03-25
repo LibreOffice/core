@@ -218,6 +218,16 @@ sal_Bool ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
     return false;
 }
 
+ScDBData* ScDocument::GetAnonymousDBData(SCTAB nTab)
+{
+    return pTab[nTab]->GetAnonymousDBData();
+}
+
+void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
+{
+    pTab[nTab]->SetAnonymousDBData(pDBData);
+}
+
 
 bool ScDocument::ValidTabName( const String& rName )
 {
@@ -4831,6 +4841,24 @@ sal_Bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
     for (i=0; i<nCount; i++)
     {
         pData = (*pDBCollection)[i];
+        if (pData->HasAutoFilter())
+        {
+            pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
+            if ( nDBTab==nTab && nDBStartRow<=nEndRow && nDBEndRow>=nStartRow &&
+                                    nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
+            {
+                if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
+                                    nDBTab, SC_MF_AUTO ))
+                    bChange = sal_True;
+            }
+        }
+    }
+    if (pTab[nTab])
+        pData = pTab[nTab]->GetAnonymousDBData();
+    else
+        pData=NULL;
+    if (pData)
+    {
         if (pData->HasAutoFilter())
         {
             pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );

@@ -45,6 +45,7 @@
 #include "pivot.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "target.hxx"
 #include "chartarr.hxx"
 #include "dbdocfun.hxx"
@@ -1111,10 +1112,22 @@ void ScUndoAutoFilter::DoChange( sal_Bool bUndo )
 
     sal_uInt16 nIndex;
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScDBCollection* pColl = pDoc->GetDBCollection();
-    if ( pColl->SearchName( aDBName, nIndex ) )
+    ScDBData* pDBData=NULL;
+    if (rtl::OUString(aDBName) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
     {
-        ScDBData* pDBData = (*pColl)[nIndex];
+        SCTAB nTab = aOriginalRange.aStart.Tab();
+        pDBData = pDoc->GetAnonymousDBData(nTab);
+    }
+    else
+    {
+        ScDBCollection* pColl = pDoc->GetDBCollection();
+        if (pColl->SearchName( aDBName, nIndex ))
+            pDBData = (*pColl)[nIndex];
+    }
+
+
+    if ( pDBData )
+    {
         pDBData->SetAutoFilter( bNewFilter );
 
         SCCOL nRangeX1;

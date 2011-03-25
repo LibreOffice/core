@@ -111,6 +111,7 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 
 void ScFilterOptionsMgr::Init()
 {
+//moggi:TODO
     DBG_ASSERT( pViewData && pDoc, "Init failed :-/" );
 
     rLbCopyPos.SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbPosSelHdl ) );
@@ -191,7 +192,7 @@ void ScFilterOptionsMgr::Init()
                 rBtnHeader.Check( pDBData->HasHeader() );
                 pDBData->GetName( theDbName );
 
-                if ( theDbName != rStrNoName )
+                if ( theDbName!=rStrNoName )
                 {
                     rBtnHeader.Disable();
                 }

@@ -43,6 +43,7 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "dbcolect.hxx"
 #include "scresid.hxx"
 
@@ -90,7 +91,6 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrNone        ( ScResId( SCSTR_NONE ) ),
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
@@ -175,7 +175,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         String          theDbArea;
-        String          theDbName   = aStrNoName;
+        String          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen

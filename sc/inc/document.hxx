@@ -525,6 +525,10 @@ public:
     SC_DLLPUBLIC sal_Bool           GetCodeName( SCTAB nTab, String& rName ) const;
     SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
     SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;
+
+    void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
+    ScDBData*       GetAnonymousDBData(SCTAB nTab);
+
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 

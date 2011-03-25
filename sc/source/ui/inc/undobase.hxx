@@ -101,6 +101,7 @@ protected:
 
 class ScDBFuncUndo: public ScSimpleUndo
 {
+protected:
     ScDBData*       pAutoDBRange;
     ScRange         aOriginalRange;
     SdrUndoAction*  mpDrawUndo;

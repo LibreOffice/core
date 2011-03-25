@@ -1037,7 +1037,6 @@ sal_Bool ScArea::operator==( const ScArea& r ) const
 //------------------------------------------------------------------------
 
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
-    aStrNoName(ScGlobal::GetRscString(STR_DB_NONAME)),
     pRangeName(pDoc->GetRangeName()),
     pDBCollection(pDoc->GetDBCollection()),
     bFirstPass(true),
@@ -1079,12 +1078,9 @@ sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             if ( pDBCollection && nPos < pDBCollection->GetCount() )
             {
                 ScDBData* pData = (*pDBCollection)[nPos++];
-                if (pData && pData->GetName() != aStrNoName)
-                {
-                    pData->GetArea( rRange );
-                    rName = pData->GetName();
-                    return sal_True;                            // gefunden
-                }
+                pData->GetArea( rRange );
+                rName = pData->GetName();
+                return sal_True;                            // gefunden
             }
             else
                 return false;                               // gibt nichts mehr

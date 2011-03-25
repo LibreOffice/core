@@ -44,6 +44,7 @@
 #include "dbcolect.hxx"
 #include "document.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "XMLExportSharedData.hxx"
 #include "rangeutl.hxx"
 #include "subtotalparam.hxx"
@@ -98,8 +99,9 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                     if (xDatabaseRange.is())
                     {
                         uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
-                        if (xDatabaseRangePropertySet.is() &&
-                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
+                        bool xDatabaseRangePropertySetis = xDatabaseRangePropertySet.is();
+                        bool propVal = ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT))));
+                        if (xDatabaseRangePropertySetis && propVal)
                         {
                             uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
                             sal_Int32 nLength = aImportProperties.getLength();
@@ -591,17 +593,26 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                         uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
                         if (xDatabaseRange.is())
                         {
-                            rtl::OUString sOUUnbenannt (ScGlobal::GetRscString(STR_DB_NONAME));
-                            if (sOUUnbenannt != sDatabaseRangeName)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
                             table::CellRangeAddress aRangeAddress(xDatabaseRange->getDataArea());
                             rtl::OUString sOUAddress;
                             ScRangeStringConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                             rExport.AddAttribute (XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUAddress);
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                            sal_uInt16 nIndex;
-                            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                            ScDBData* pDBData = (*pDBCollection)[nIndex];
+
+                            ScDBData* pDBData= NULL;
+                            if (sDatabaseRangeName.match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME))))
+                            {
+                                rtl::OUString aDBNoName = sDatabaseRangeName.replaceAt(0,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)).getLength(),rtl::OUString());
+                                SCTAB nTab = aDBNoName.toInt32();;
+                                pDBData=pDoc->GetAnonymousDBData(nTab);
+                            }
+                            else
+                            {
+                                sal_uInt16 nIndex;
+                                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
+                                pDBData = (*pDBCollection)[nIndex];
+                            }
                             if (pDBData->HasImportSelection())
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
                             if (pDBData->HasAutoFilter())
