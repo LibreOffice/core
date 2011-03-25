@@ -31,9 +31,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include <prewin.h>
-#include <postwin.h>
-
 #include <OpenGL/gl.h>
 #include <vector>
 

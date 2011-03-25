@@ -61,8 +61,6 @@
 
 
 #if defined( WNT )
-    #include <prewin.h>
-    #include <postwin.h>
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
     #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #elif defined( OS2 )

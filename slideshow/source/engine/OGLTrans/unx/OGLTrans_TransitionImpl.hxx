@@ -31,17 +31,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include <prewin.h>
-#include <postwin.h>
-
-#if defined( WNT )
-#include <prewin.h>
-#include <postwin.h>
-#elif defined( OS2 )
-#elif defined( QUARTZ )
-#elif defined( UNX )
-#endif
-
 #include <vector>
 #include <GL/gl.h>
 
