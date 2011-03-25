@@ -25,40 +25,46 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_script_vba_XVBACompatibility_idl__
-#define __com_sun_star_script_vba_XVBACompatibility_idl__
+#ifndef __com_sun_star_script_vba_VBAScriptEvent_idl__
+#define __com_sun_star_script_vba_VBAScriptEvent_idl__
 
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/script/vba/XVBAScriptListener.idl>
+#include <com/sun/star/lang/EventObject.idl>
 
 //=============================================================================
 
-module com {  module sun {  module star {  module script { module vba {
+module com {  module sun {  module star { module script { module vba {
 
-interface XVBACompatibility
+//=============================================================================
+
+/** Describes a VBA script event fired via <member>XVBACompatibility::
+    broadcastVBAScriptEvent</member>, and received by <member>
+    XVBAScriptListener::notifyVBAScriptEvent</member>.
+
+    @see XVBACompatibility
+    @see XVBAScriptListener
+ */
+struct VBAScriptEvent : ::com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    [attribute] boolean VBACompatibilityMode;
+    /** Identifies the type of the event.
+
+        @see VBAScriptEventId
+     */
+    long Identifier;
 
     //-------------------------------------------------------------------------
 
-    [attribute, readonly] long RunningVBAScripts;
+    /** Contains the name of the involved VBA module.
 
-    //-------------------------------------------------------------------------
-
-    [oneway] void addVBAScriptListener( [in] XVBAScriptListener Listener );
-
-    //-------------------------------------------------------------------------
-
-    [oneway] void removeVBAScriptListener( [in] XVBAScriptListener Listener );
-
-    //-------------------------------------------------------------------------
-
-    void broadcastVBAScriptEvent( [in] long Identifier, [in] string ModuleName );
+        @see VBAScriptEventId
+     */
+    string ModuleName;
 
     //-------------------------------------------------------------------------
 };
+
+//=============================================================================
 
 }; }; }; }; };
 
