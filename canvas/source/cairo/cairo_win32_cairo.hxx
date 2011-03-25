@@ -29,11 +29,6 @@
 #ifndef _CAIROCANVAS_WIN32_CAIRO_HXX
 #define _CAIROCANVAS_WIN32_CAIRO_HXX
 
-#ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
-#endif
-
 #include "cairo_cairo.hxx"
 
 namespace cairo {

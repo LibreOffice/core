@@ -56,10 +56,7 @@
 #include <rtl/uuid.h>
 #include <rtl/process.h>
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#elif (defined QUARTZ)
+#ifdef QUARTZ
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"

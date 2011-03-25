@@ -48,11 +48,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
-#endif
-
 #include <vcl/sysdata.hxx>
 
 #include "cairo_canvas.hxx"

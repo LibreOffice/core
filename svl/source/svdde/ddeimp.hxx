@@ -42,9 +42,7 @@
 
 #else
 
-#include <prewin.h>
 #include <ddeml.h>
-#include <postwin.h>
 #include "ddewrap.hxx"
 
 #endif

@@ -44,8 +44,6 @@
 #include "rtl/strbuf.hxx"
 #ifdef WNT
 #include <direct.h>
-#include <prewin.h>
-#include <postwin.h>
 #endif
 
 /*****************************************************************************/

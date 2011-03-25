@@ -30,10 +30,8 @@
 #include "precompiled_vcl.hxx"
 
 #ifdef WNT
-#include <prewin.h>
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
-#include <postwin.h>
 #endif
 
 // [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define

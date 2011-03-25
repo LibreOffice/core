@@ -32,9 +32,7 @@
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 
 #ifdef WNT
-#include <prewin.h>
 #include <windows.h>
-#include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

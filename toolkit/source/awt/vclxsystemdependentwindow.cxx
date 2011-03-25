@@ -40,10 +40,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#elif defined ( QUARTZ )
+#ifdef QUARTZ
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"

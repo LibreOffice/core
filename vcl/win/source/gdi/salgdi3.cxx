@@ -32,8 +32,6 @@
 #include <string.h>
 #include <malloc.h>
 
-#include <prewin.h>
-#include <postwin.h>
 #include <vcl/sysdata.hxx>
 #include "tools/svwin.h"
 

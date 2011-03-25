@@ -38,10 +38,7 @@
 #include <iostream>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
-#ifdef __MINGW32__
-#include <prewin.h>
-#include <postwin.h>
-#endif
+
 using namespace std;
 using namespace osl;
 

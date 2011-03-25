@@ -29,8 +29,6 @@
 #include "precompiled_svl.hxx"
 
 #ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
 # undef ERROR
 #endif
 

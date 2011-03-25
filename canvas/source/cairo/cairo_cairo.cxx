@@ -32,11 +32,6 @@
 
 #include "cairo_cairo.hxx"
 
-#ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
-#endif
-
 #include <vcl/sysdata.hxx>
 #include <vcl/syschild.hxx>
 

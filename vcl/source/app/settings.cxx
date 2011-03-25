@@ -47,11 +47,6 @@
 #include "unotools/confignode.hxx"
 #include <unotools/syslocaleoptions.hxx>
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 using ::rtl::OUString;
 // =======================================================================
 

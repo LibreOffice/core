@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifdef WNT
-#include <prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
@@ -38,7 +37,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <postwin.h>
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>

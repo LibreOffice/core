@@ -26,11 +26,6 @@
  * instead of those above.
  */
 
-#ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
-#endif
-
 #include "precompiled_tools.hxx"
 #include "sal/config.h"
 

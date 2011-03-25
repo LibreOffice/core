@@ -29,11 +29,6 @@
 #ifndef _SVWIN_H
 #define _SVWIN_H
 
-#if defined WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
