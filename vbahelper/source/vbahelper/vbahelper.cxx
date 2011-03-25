@@ -654,6 +654,8 @@ bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
 {
     switch( rAny.getValueType().getTypeClass() )
     {
+        case uno::TypeClass_BOOLEAN:
+            return rAny.get< bool >();
         case uno::TypeClass_FLOAT:
             return rAny.get< float >() != 0.0;
         case uno::TypeClass_DOUBLE:
