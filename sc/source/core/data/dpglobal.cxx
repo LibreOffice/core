@@ -33,6 +33,7 @@
 #include "precompiled_sc.hxx"
 
 #include "dpglobal.hxx"
+#include "dpobject.hxx"
 #include "document.hxx"
 
 #include <stdio.h>

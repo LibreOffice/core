@@ -39,12 +39,27 @@
 
 #include "rangeseq.hxx"
 #include "document.hxx"
+#include "dociter.hxx"
 #include "scmatrix.hxx"
 #include "cell.hxx"
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
+
+bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
+{
+    // no need to look at empty cells - just use ScCellIterator
+    ScCellIterator aIter( pDoc, rRange );
+    ScBaseCell* pCell = aIter.GetFirst();
+    while (pCell)
+    {
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->GetErrCode() != 0 )
+            return true;
+        pCell = aIter.GetNext();
+    }
+    return false;   // no error found
+}
 
 long lcl_DoubleToLong( double fVal )
 {
@@ -78,7 +93,7 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, con
     }
 
     rAny <<= aRowSeq;
-    return sal_True;        //! check for errors
+    return !lcl_HasErrors( pDoc, rRange );
 }
 
 
@@ -134,7 +149,7 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, c
     }
 
     rAny <<= aRowSeq;
-    return sal_True;        //! check for errors
+    return !lcl_HasErrors( pDoc, rRange );
 }
 
 
@@ -176,7 +191,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
-    String aDocStr;
+    bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
     uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
@@ -186,14 +201,17 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
         rtl::OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            pDoc->GetString( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab, aDocStr );
-            pColAry[nCol] = rtl::OUString( aDocStr );
+            sal_uInt16 nErrCode = pDoc->GetStringForFormula(
+                        ScAddress((SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab),
+                        pColAry[nCol] );
+            if ( nErrCode != 0 )
+                bHasErrors = true;
         }
         pRowAry[nRow] = aColSeq;
     }
 
     rAny <<= aRowSeq;
-    return sal_True;        //! check for errors
+    return !bHasErrors;
 }
 
 

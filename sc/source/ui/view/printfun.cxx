@@ -52,7 +52,6 @@
 #include <editeng/ulspitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
 #include <tools/multisel.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -287,54 +286,6 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         pPageData           ( NULL )
 {
     pDev = pOutDev;
-
-    nPrintTab   = rState.nPrintTab;
-    nStartCol   = rState.nStartCol;
-    nStartRow   = rState.nStartRow;
-    nEndCol     = rState.nEndCol;
-    nEndRow     = rState.nEndRow;
-    nZoom       = rState.nZoom;
-    nPagesX     = rState.nPagesX;
-    nPagesY     = rState.nPagesY;
-    nTabPages   = rState.nTabPages;
-    nTotalPages = rState.nTotalPages;
-    nPageStart  = rState.nPageStart;
-    nDocPages   = rState.nDocPages;
-    bState      = sal_True;
-
-    Construct( pOptions );
-}
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
-                            long nPage, long nDocP, const ScRange* pArea,
-                            const ScPrintOptions* pOptions )
-    :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
-        nPrintTab           ( nTab ),
-        nPageStart          ( nPage ),
-        nDocPages           ( nDocP ),
-        pUserArea           ( pArea ),
-        bState              ( sal_False ),
-        bPrintCurrentTable  ( sal_False ),
-        bMultiArea          ( sal_False ),
-        nTabPages           ( 0 ),
-        nTotalPages         ( 0 ),
-        pPageData           ( NULL )
-{
-    pDev = pWindow;
-    Construct( pOptions );
-}
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
-                             const ScPrintState& rState, const ScPrintOptions* pOptions )
-    :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
-        pUserArea           ( NULL ),
-        bPrintCurrentTable  ( sal_False ),
-        bMultiArea          ( sal_False ),
-        pPageData           ( NULL )
-{
-    pDev = pWindow;
 
     nPrintTab   = rState.nPrintTab;
     nStartCol   = rState.nStartCol;
@@ -1768,6 +1719,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
         pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
+        pDoc->ApplyAsianEditSettings( *pEditEngine );
         pEditEngine->EnableAutoColor( bUseStyleColor );
 
         //  Default-Set fuer Ausrichtung
@@ -2460,9 +2412,8 @@ void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
     aTableParam.bNotes = false;
     aTableParam.bGrid = false;
     aTableParam.bHeaders = false;
-    aTableParam.bFormulas = false;;
-    aTableParam.bNullVals = false;;
-    aTableParam.bNullVals = false;;
+    aTableParam.bFormulas = false;
+    aTableParam.bNullVals = false;
 }
 
 //
@@ -2715,7 +2666,7 @@ void ScPrintFunc::ApplyPrintSettings()
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
-                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
+                                ScPreviewLocationData* pLocationData )
 {
     DBG_ASSERT(pDev,"Device == NULL");
     if (!pParamSet)
@@ -2734,9 +2685,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     }
 
     MakeTableString();
-
-    if ( pProgress )
-        pProgress->SetText( String( ScResId( SCSTR_STAT_PRINT ) ) );
 
     //--------------------------------------------------------------------
 
@@ -2778,12 +2726,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                         {
                             PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
                                         bDoPrint, pLocationData );
-
-                            if ( pProgress )
-                            {
-                                pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-                            }
                             ++nPrinted;
                         }
                         ++nPageNo;
@@ -2808,12 +2750,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                         {
                             PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
                                         bDoPrint, pLocationData );
-
-                            if ( pProgress )
-                            {
-                                pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-                            }
                             ++nPrinted;
                         }
                         ++nPageNo;
@@ -2838,11 +2774,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
             if ( nNoteAdd )
             {
                 nNoteNr += nNoteAdd;
-                if ( pProgress && bPageSelected )
-                {
-                    pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                    pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-                }
                 if (bPageSelected)
                 {
                     ++nPrinted;

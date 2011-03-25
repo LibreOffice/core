@@ -749,6 +749,14 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             }
         }
 
+        // also transfer grand total name
+        if (pOldSaveData)
+        {
+            const OUString* pGrandTotalName = pOldSaveData->GetGrandTotalName();
+            if (pGrandTotalName)
+                aSaveData.SetGrandTotalName(*pGrandTotalName);
+        }
+
         sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhich( SID_PIVOT_TABLE );
         ScPivotItem aOutItem( nWhichPivot, &aSaveData, &aOutRange, bToNewTable );
 

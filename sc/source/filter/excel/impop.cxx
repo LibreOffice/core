@@ -123,11 +123,13 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     XclImpRoot( rImpData ),
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm ),
-    maScOleSize( ScAddress::INITIALIZE_INVALID )
+    maScOleSize( ScAddress::INITIALIZE_INVALID ),
+    mnLastRefIdx( 0 ),
+    mnIxfeIndex( 0 ),
+    mbBiff2HasXfs( false ),
+    mbBiff2HasXfsValid( false )
 {
-    mnLastRefIdx = 0;
     nBdshtTab = 0;
-    nIxfeIndex = 0;     // zur Sicherheit auf 0
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
     pExcRoot = &GetOldRoot();
@@ -193,17 +195,40 @@ void ImportExcel::ReadFileSharing()
     }
 }
 
-sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
+sal_uInt16 ImportExcel::ReadXFIndex( const ScAddress& rScPos, bool bBiff2 )
 {
     sal_uInt16 nXFIdx = 0;
     if( bBiff2 )
     {
-        sal_uInt8 nXFIdx2;
-        maStrm >> nXFIdx2;
-        maStrm.Ignore( 2 );
-        nXFIdx = nXFIdx2 & 0x3F;
-        if( nXFIdx == 63 )
-            nXFIdx = nIxfeIndex;
+        /*  #i71453# On first call, check if the file contains XF records (by
+            trying to access the first XF with index 0). If there are no XFs,
+            the explicit formatting information contained in each cell record
+            will be used instead. */
+        if( !mbBiff2HasXfsValid )
+        {
+            mbBiff2HasXfsValid = true;
+            mbBiff2HasXfs = GetXFBuffer().GetXF( 0 ) != 0;
+        }
+        // read formatting information (includes the XF identifier)
+        sal_uInt8 nFlags1, nFlags2, nFlags3;
+        maStrm >> nFlags1 >> nFlags2 >> nFlags3;
+        /*  If the file contains XFs, extract and set the XF identifier,
+            otherwise get the explicit formatting. */
+        if( mbBiff2HasXfs )
+        {
+            nXFIdx = ::extract_value< sal_uInt16 >( nFlags1, 0, 6 );
+            /*  If the identifier is equal to 63, then the real identifier is
+                contained in the preceding IXFE record (stored in mnBiff2XfId). */
+            if( nXFIdx == 63 )
+                nXFIdx = mnIxfeIndex;
+        }
+        else
+        {
+            /*  Let the XclImpXF class do the conversion of the imported
+                formatting. The XF buffer is empty, therefore will not do any
+                conversion based on the XF index later on. */
+            XclImpXF::ApplyPatternForBiff2CellFormat( GetRoot(), rScPos, nFlags1, nFlags2, nFlags3 );
+        }
     }
     else
         aIn >> nXFIdx;
@@ -258,7 +283,7 @@ void ImportExcel::ReadBlank()
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_BLANK );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_BLANK );
 
         GetXFRangeBuffer().SetBlankXF( aScPos, nXFIdx );
     }
@@ -272,7 +297,7 @@ void ImportExcel::ReadInteger()
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        sal_uInt16 nXFIdx = ReadXFIndex( true );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, true );
         sal_uInt16 nValue;
         maStrm >> nValue;
 
@@ -289,7 +314,7 @@ void ImportExcel::ReadNumber()
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_NUMBER );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_NUMBER );
         double fValue;
         maStrm >> fValue;
 
@@ -312,7 +337,7 @@ void ImportExcel::ReadLabel()
             0x0204      2-7     2 byte      16-bit length, byte string
             0x0204      8       2 byte      16-bit length, unicode string */
         bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
-        sal_uInt16 nXFIdx = ReadXFIndex( bBiff2 );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, bBiff2 );
         XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
         XclImpString aString;
 
@@ -337,7 +362,7 @@ void ImportExcel::ReadBoolErr()
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_BOOLERR );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_BOOLERR );
         sal_uInt8 nValue, nType;
         maStrm >> nValue >> nType;
 
@@ -362,7 +387,7 @@ void ImportExcel::ReadRk()
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
-        sal_uInt16 nXFIdx = ReadXFIndex( false );
+        sal_uInt16 nXFIdx = ReadXFIndex( aScPos, false );
         sal_Int32 nRk;
         maStrm >> nRk;
 
@@ -628,7 +653,7 @@ void ImportExcel::Codepage( void )
 
 void ImportExcel::Ixfe( void )
 {
-    aIn >> nIxfeIndex;
+    maStrm >> mnIxfeIndex;
 }
 
 

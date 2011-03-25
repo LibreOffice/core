@@ -1347,6 +1347,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableElemTokenMap()
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL        },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE      },
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL,  XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL       },
+            { XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY      },
             { XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE,          XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE    },
             { XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE,       XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE },
@@ -1911,7 +1912,7 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 {
     SvXMLImportContext *pContext(0);
 
-    if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
+    if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
             mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
@@ -1919,9 +1920,11 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> const xDocProps(
+            (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
             XML_NAMESPACE_OFFICE, rLocalName,
-            xDPS->getDocumentProperties(), xDocBuilder);
+            xDocProps, xDocBuilder);
     }
 
     if( !pContext )
@@ -2632,6 +2635,23 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
             const SvXMLNamespaceMap& rNamespaces = GetNamespaceMap();
             pSheetData->StoreInitialNamespaces(rNamespaces);
+        }
+    }
+
+    uno::Reference< beans::XPropertySet > const xImportInfo( getImportInfo() );
+    uno::Reference< beans::XPropertySetInfo > const xPropertySetInfo(
+            xImportInfo.is() ? xImportInfo->getPropertySetInfo() : 0);
+    if (xPropertySetInfo.is())
+    {
+        ::rtl::OUString const sOrganizerMode(
+            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
+        {
+            sal_Bool bStyleOnly(sal_False);
+            if (xImportInfo->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
+            {
+                bLoadDoc = !bStyleOnly;
+            }
         }
     }
 

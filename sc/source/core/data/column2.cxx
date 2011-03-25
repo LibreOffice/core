@@ -427,12 +427,17 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();
 
             pEngine->SetUpdateMode( sal_False );
+            sal_Bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
+            sal_uInt32 nCtrl = pEngine->GetControlWord();
+            if ( bTextWysiwyg )
+                nCtrl |= EE_CNTRL_FORMAT100;
+            else
+                nCtrl &= ~EE_CNTRL_FORMAT100;
+            pEngine->SetControlWord( nCtrl );
             MapMode aOld = pDev->GetMapMode();
             pDev->SetMapMode( aHMMMode );
             pEngine->SetRefDevice( pDev );
-            pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
-            pEngine->SetAsianCompressionMode( pDocument->GetAsianCompression() );
-            pEngine->SetKernAsianPunctuation( pDocument->GetAsianKerning() );
+            pDocument->ApplyAsianEditSettings( *pEngine );
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
 
@@ -451,7 +456,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             else if (bBreak)
             {
                 double fWidthFactor = nPPTX;
-                sal_Bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
                 if ( bTextWysiwyg )
                 {
                     //  #95593# if text is formatted for printer, don't use PixelToLogic,
@@ -564,6 +568,17 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             {
                 nValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ),
                                     aHMMMode).Height();
+
+                // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
+                if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
+                     ( pEngine->GetParagraphCount() > 1 || ( bBreak && pEngine->GetLineCount(0) > 1 ) ) )
+                {
+                    pEngine->SetControlWord( nCtrl | EE_CNTRL_FORMAT100 );
+                    pEngine->QuickFormatDoc( sal_True );
+                    long nSecondValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ), aHMMMode).Height();
+                    if ( nSecondValue > nValue )
+                        nValue = nSecondValue;
+                }
             }
 
             if ( nValue && bAddMargin )
@@ -1042,9 +1057,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 pEngine = new ScFieldEditEngine( pDocument->GetEditPool() );
                 //  EE_CNTRL_ONLINESPELLING falls schon Fehler drin sind
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
-                pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
-                pEngine->SetAsianCompressionMode( pDocument->GetAsianCompression() );
-                pEngine->SetKernAsianPunctuation( pDocument->GetAsianKerning() );
+                pDocument->ApplyAsianEditSettings( *pEngine );
             }
             pEngine->SetText( *pData );
             sal_uInt16 nParCount = pEngine->GetParagraphCount();

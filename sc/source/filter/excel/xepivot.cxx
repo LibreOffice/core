@@ -976,8 +976,10 @@ const String& XclExpPTItem::GetItemName() const
 
 void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
 {
-    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN, !rSaveMem.GetIsVisible() );
-    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, !rSaveMem.GetShowDetails() );
+    // #i115659# GetIsVisible() is not valid if HasIsVisible() returns false, default is 'visible' then
+    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN, rSaveMem.HasIsVisible() && !rSaveMem.GetIsVisible() );
+    // #i115659# GetShowDetails() is not valid if HasShowDetails() returns false, default is 'show detail' then
+    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, rSaveMem.HasShowDetails() && !rSaveMem.GetShowDetails() );
 
     // visible name
     const OUString* pVisName = rSaveMem.GetLayoutName();
@@ -1072,8 +1074,8 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     DBG_ASSERT( eOrient != DataPilotFieldOrientation_DATA, "XclExpPTField::SetPropertiesFromDim - called for data field" );
     maFieldInfo.AddApiOrient( eOrient );
 
-    // show empty items
-    ::set_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL, rSaveDim.GetShowEmpty() );
+    // show empty items (#i115659# GetShowEmpty() is not valid if HasShowEmpty() returns false, default is false then)
+    ::set_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL, rSaveDim.HasShowEmpty() && rSaveDim.GetShowEmpty() );
 
     // visible name
     const OUString* pLayoutName = rSaveDim.GetLayoutName();

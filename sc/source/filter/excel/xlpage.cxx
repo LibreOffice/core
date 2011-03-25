@@ -203,7 +203,7 @@ void XclPageData::SetDefaults()
 Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
-    if( mnPaperSize < STATIC_TABLE_SIZE( pPaperSizeTable ) )
+    if( mnPaperSize < STATIC_ARRAY_SIZE( pPaperSizeTable ) )
         pEntry += mnPaperSize;
 
     Size aSize;
@@ -230,7 +230,7 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait )
     long nHeight = bPortrait ? rSize.Height() : rSize.Width();
     long nMaxWDiff = 80;
     long nMaxHDiff = 50;
-    for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_TABLE_END( pPaperSizeTable ); ++pEntry )
+    for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_ARRAY_END( pPaperSizeTable ); ++pEntry )
     {
         long nWDiff = Abs( pEntry->mnWidth - nWidth );
         long nHDiff = Abs( pEntry->mnHeight - nHeight );
