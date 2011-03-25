@@ -6,7 +6,8 @@ ar-SA 1256  1025
 as       0  1101   # Assamese
 as-IN    0  1101   # Assamese
 ast   1252  1610
-be-BY 1251  1059   # Belarusian
+be    1251  1059   # Belarusian
+be-BY 1251  1059
 bg    1251  1026   # Bulgarian
 bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
