@@ -34,11 +34,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
+#include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

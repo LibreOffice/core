@@ -36,6 +36,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
