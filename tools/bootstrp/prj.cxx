@@ -38,8 +38,6 @@
 #include "bootstrp/prj.hxx"
 #include "bootstrp/inimgr.hxx"
 
-DECLARE_LIST( UniStringList, UniString* )
-
 #if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
 #define PATH_DELIMETER '\\'

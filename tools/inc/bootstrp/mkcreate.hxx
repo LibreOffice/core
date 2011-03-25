@@ -32,8 +32,6 @@
 #include <tools/string.hxx>
 //#include "bootstrp/sstring.hxx"
 
-DECLARE_LIST( UniStringList, UniString* )
-
 #include "bootstrp/prj.hxx"
 
 class SvStream;
