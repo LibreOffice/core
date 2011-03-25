@@ -98,7 +98,9 @@ public class DOMTest
         //FIXME TODO
     }
 
-    @Test public void testXDocumentBuilder() throws Exception
+    // fd#35668 disabled, this crashes LibreOffice
+    //@Test
+    public void testXDocumentBuilder() throws Exception
     {
         XDocumentBuilder xBuilder =
             UnoRuntime.queryInterface(XDocumentBuilder.class,
