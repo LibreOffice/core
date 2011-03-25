@@ -43,9 +43,7 @@
 #include <unotools/pathoptions.hxx>
 
 #ifndef ODMA_LIB_HXX
-#include <prewin.h>
 #include <odma_lib.hxx>
-#include <postwin.h>
 #endif
 
 // using ----------------------------------------------------------------

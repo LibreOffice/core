@@ -34,16 +34,11 @@
 
 #undef WB_LEFT
 #undef WB_RIGHT
-#include <prewin.h>
-}   // close extern "C" {
 
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
 #include <oleauto.h>
-
-extern "C" {    // reopen extern "C" {
-#include <postwin.h>
 
 #endif
 #endif

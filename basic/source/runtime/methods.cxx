@@ -52,8 +52,6 @@
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
 #include <tools/fsys.hxx>
 #else
 #include <osl/file.hxx>

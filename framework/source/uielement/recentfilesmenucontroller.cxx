@@ -59,8 +59,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 #ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
 #include <odma_lib.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>

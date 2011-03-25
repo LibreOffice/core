@@ -26,13 +26,11 @@
  *
  ************************************************************************/
 
-#include <prewin.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
 #include <Qedit.h>
 #include <uuids.h>
-#include <postwin.h>
 
 #include "framegrabber.hxx"
 #include "player.hxx"

@@ -30,10 +30,6 @@
 #include "precompiled_basic.hxx"
 
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
 #include <tools/errcode.hxx>
 #include <basic/sbxcore.hxx>
 #include <tools/string.hxx>

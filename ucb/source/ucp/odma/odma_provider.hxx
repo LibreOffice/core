@@ -30,8 +30,6 @@
 #define ODMA_PROVIDER_HXX
 
 #include <ucbhelper/providerhelper.hxx>
-#include <prewin.h>
-#include <postwin.h>
 #include "odma_lib.hxx"
 
 #include "rtl/ref.hxx"

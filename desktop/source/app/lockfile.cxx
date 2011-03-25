@@ -30,10 +30,7 @@
 #include "precompiled_desktop.hxx"
 #include <stdlib.h>
 #include <time.h>
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#else
+#ifndef WNT
 #include <unistd.h>
 #endif
 #include <sal/types.h>
