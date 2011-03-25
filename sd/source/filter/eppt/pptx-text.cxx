@@ -1352,8 +1352,6 @@ void FontCollectionEntry::ImplInit( const String& rName )
 
 FontCollection::~FontCollection()
 {
-    for( void* pStr = List::First(); pStr; pStr = List::Next() )
-        delete (FontCollectionEntry*)pStr;
     delete pVDev;
     xPPTBreakIter = NULL;
     xScriptTypeDetector = NULL;
@@ -1391,7 +1389,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 {
     if( rEntry.Name.Len() )
     {
-        const sal_uInt32 nFonts = GetCount();
+        const sal_uInt32 nFonts = maFonts.size();
 
         for( sal_uInt32 i = 0; i < nFonts; i++ )
         {
@@ -1419,7 +1417,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
                 rEntry.Scaling = fScaling;
         }
 
-        List::Insert( new FontCollectionEntry( rEntry ), LIST_APPEND );
+        maFonts.push_back(new FontCollectionEntry(rEntry));
         return nFonts;
     }
     return 0;
@@ -1427,7 +1425,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 
 const FontCollectionEntry* FontCollection::GetById( sal_uInt32 nId )
 {
-    return (FontCollectionEntry*)List::GetObject( nId );
+    return nId < maFonts.size() ? &maFonts[nId] : NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

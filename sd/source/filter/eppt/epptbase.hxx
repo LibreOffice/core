@@ -29,8 +29,9 @@
 #ifndef EPPT_EPPTBASE_HXX
 #define EPPT_EPPTBASE_HXX
 
-#include "grouptable.hxx"
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vcl/mapmod.hxx>
 #include <tools/list.hxx>
 #include <tools/string.hxx>
@@ -44,6 +45,8 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+
+#include "grouptable.hxx"
 
 // PLACEMENT_ID
 #define EPP_LAYOUT_TITLESLIDE             0 /* The slide is a title slide                                                             */
@@ -180,18 +183,28 @@ struct FontCollectionEntry
 };
 
 class VirtualDevice;
-class FontCollection : private List
+class FontCollection
 {
-        VirtualDevice* pVDev;
-    public :
-                    FontCollection();
-                    ~FontCollection();
+public :
 
-        short       GetScriptDirection( const String& rText ) const;
-        sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
-    sal_uInt32  GetCount() const { return List::Count(); };
-        const FontCollectionEntry*                      GetById( sal_uInt32 nId );
-        FontCollectionEntry&    GetLast() { return *(FontCollectionEntry*)List::Last(); };
+    FontCollection();
+
+    ~FontCollection();
+
+    short GetScriptDirection( const String& rText ) const;
+
+    sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
+
+    inline sal_uInt32  GetCount() const { return maFonts.size(); };
+
+    const FontCollectionEntry* GetById( sal_uInt32 nId );
+
+    FontCollectionEntry& GetLast() { return *(maFonts.rbegin()); };
+
+private:
+
+    VirtualDevice* pVDev;
+    boost::ptr_vector<FontCollectionEntry> maFonts;
 };
 
 // ------------------------------------------------------------------------
