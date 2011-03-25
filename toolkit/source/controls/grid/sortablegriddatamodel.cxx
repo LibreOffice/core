@@ -615,7 +615,7 @@ namespace toolkit
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
         aGuard.clear();
-        delegator->insertRow( i_index, i_heading, i_data );
+        delegator->insertRow( rowIndex, i_heading, i_data );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -629,7 +629,7 @@ namespace toolkit
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
         aGuard.clear();
-        delegator->insertRows( i_index, i_headings, i_data );
+        delegator->insertRows( rowIndex, i_headings, i_data );
     }
 
     //------------------------------------------------------------------------------------------------------------------
