@@ -27,36 +27,17 @@
 #ifndef __ooo_vba_excel_XRange_idl__
 #define __ooo_vba_excel_XRange_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-#ifndef __com_sun_star_script_XDefaultProperty_idl__
 #include <com/sun/star/script/XDefaultProperty.idl>
-#endif
-#ifndef __com_sun_star_script_XDefaultMethod_idl__
 #include <com/sun/star/script/XDefaultMethod.idl>
-#endif
-#ifndef __com_sun_star_script_XErrorQuery_idl__
 #include <com/sun/star/script/XErrorQuery.idl>
-#endif
-#ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
-#endif
-#ifndef __ooo_vba_excel_XFormat_idl__
 #include <ooo/vba/excel/XFormat.idl>
-#endif
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-#ifndef __com_sun_star_helper_script_BasicErrorException_idl__
 #include <com/sun/star/script/BasicErrorException.idl>
-#endif
+
 //=============================================================================
 
 module ooo {  module vba {  module excel {

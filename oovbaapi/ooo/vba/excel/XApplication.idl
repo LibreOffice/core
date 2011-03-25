@@ -31,14 +31,8 @@
 #include <com/sun/star/script/XInvocation.idl>
 #include <ooo/vba/XHelperInterface.idl>
 #include <ooo/vba/XAssistant.idl>
-
-#ifndef __ooo_vba_excel_XFileDialog_idl__
 #include <ooo/vba/XFileDialog.idl>
-#endif
-
-#ifndef __ooo_vba_XFileSearch_idl__
 #include <ooo/vba/XFileSearch.idl>
-#endif
 
 module ooo {  module vba {  module excel {
 

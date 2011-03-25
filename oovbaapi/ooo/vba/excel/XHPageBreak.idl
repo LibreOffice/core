@@ -27,9 +27,7 @@
 #ifndef __ooo_vba_excel_XHPageBreak_idl__
 #define __ooo_vba_excel_XHPageBreak_idl__
 
-#ifndef __ooo_vba_excel_XPageBreak_idl__
 #include <ooo/vba/excel/XPageBreak.idl>
-#endif
 
 
 //=============================================================================
