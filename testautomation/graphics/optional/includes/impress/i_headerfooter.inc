@@ -29,7 +29,7 @@
 '*
 '* short description : Tests the header-footer-function in Impress
 '*
-'*******************************************************************
+'\*******************************************************************
 
 testcase tiHeaderFooterSlide
 
