@@ -155,7 +155,7 @@ public class FieldDescription
             if (propertyexists("DefaultValue"))
             {
                 aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
-            //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
+            //Type =  4; // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }
         catch (Exception e)

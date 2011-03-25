@@ -619,7 +619,7 @@ public class UnoDialog implements EventNames
         try
         {
             int ncurstep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
-            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(99));
+            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, 99);
             Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(ncurstep));
         }
         catch (com.sun.star.uno.Exception exception)
