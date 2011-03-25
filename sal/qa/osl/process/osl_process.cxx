@@ -48,6 +48,7 @@
 #include <sal/macros.h>
 
 #if ( defined WNT )                     // Windows
+#   include <windows.h>
 #   include <tchar.h>
 #endif
 
