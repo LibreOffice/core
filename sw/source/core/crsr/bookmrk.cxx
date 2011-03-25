@@ -109,7 +109,7 @@ namespace sw { namespace mark
         , m_aName(rName)
     {
         lcl_FixPosition(*m_pPos1);
-        if(aPaM.HasMark())
+        if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
         {
             MarkBase::SetOtherMarkPos(*(aPaM.GetMark()));
             lcl_FixPosition(*m_pPos2);
