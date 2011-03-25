@@ -27,15 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <tools/debug.hxx>
-#include "xmloff/xmlnmspe.hxx"
-#include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TXTPRHDL_HXX
-#include "txtprhdl.hxx"
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
+
 #include <xmloff/txtprmap.hxx>
-#endif
+
+#include <tools/debug.hxx>
+
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmltoken.hxx>
+#include "txtprhdl.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -91,6 +90,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_UNKNOWNATR_CONTAINER
     MP_E( "ParaUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     // RES_LR_SPACE
+    // !!! DO NOT REORDER THE MARGINS !!!
+    MP_E( "ParaLeftMargin",         FO, MARGIN,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAMARGINALL ),
+    MP_E( "ParaLeftMarginRelative", FO, MARGIN,     XML_TYPE_PERCENT16, CTF_PARAMARGINALL_REL ),
     MP_E( "ParaLeftMargin",         FO, MARGIN_LEFT,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
     MP_E( "ParaLeftMarginRelative", FO, MARGIN_LEFT,        XML_TYPE_PERCENT16, CTF_PARALEFTMARGIN_REL ),
     MP_E( "ParaRightMargin",            FO, MARGIN_RIGHT,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
@@ -578,11 +580,12 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     MG_ED( "VertOrientPosition",    SVG,    Y,        XML_TYPE_MEASURE, 0 ),
     // ***** The map for automatic styles starts here *****
     // RES_LR_SPACE
-    MG_E( "LeftMargin",             FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  0),
-    MG_E( "RightMargin",                FO, MARGIN_RIGHT,       XML_TYPE_MEASURE, 0 ),
+    MG_E( "LeftMargin",             FO, MARGIN,     XML_TYPE_MEASURE,  CTF_MARGINALL ),
+    MG_E( "LeftMargin",             FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  CTF_MARGINLEFT ),
+    MG_E( "RightMargin",                FO, MARGIN_RIGHT,       XML_TYPE_MEASURE, CTF_MARGINRIGHT ),
     // RES_UL_SPACE
-    MG_E( "TopMargin",              FO, MARGIN_TOP,         XML_TYPE_MEASURE, 0 ),
-    MG_E( "BottomMargin",           FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE, 0 ),
+    MG_E( "TopMargin",              FO, MARGIN_TOP,         XML_TYPE_MEASURE, CTF_MARGINTOP ),
+    MG_E( "BottomMargin",           FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE, CTF_MARGINBOTTOM ),
     // RES_PAGEDESC
     // not required
     // RES_BREAK
@@ -852,7 +855,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_SHAPE_PARA:
         pMap = &(aXMLParaPropMap[1]);
-        DBG_ASSERT( pMap->meXMLName == XML_MARGIN_LEFT, "shape para map changed" );
+        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "shape para map changed" );
         break;
     case TEXT_PROP_MAP_PARA:
         pMap = aXMLParaPropMap;
@@ -862,7 +865,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_AUTO_FRAME:
         pMap = &(aXMLFramePropMap[13]);
-        DBG_ASSERT( pMap->meXMLName == XML_MARGIN_LEFT, "frame map changed" );
+        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "frame map changed" );
         break;
     case TEXT_PROP_MAP_SHAPE:
         pMap = aXMLShapePropMap;
