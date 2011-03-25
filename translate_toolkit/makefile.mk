@@ -48,16 +48,16 @@ TARGET=trt
 # --- Python paths --------------------------------------------------
 
 .IF "$(SYSTEM_PYTHON)"!="YES"
-PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
+PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/$(PYTHON)
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
-PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
+PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(PYTHON)
 .ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
 
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=translate-toolkit-1.8.1
 TARFILE_MD5=b4cae0700aa1c2aef7eb7f345365e6f1
-BUILD_ACTION=$(PYTHON) setup.py build
+BUILD_ACTION=$(PY_CMD) setup.py build
 BUILD_DIR=
 
 # --- Targets ------------------------------------------------------
