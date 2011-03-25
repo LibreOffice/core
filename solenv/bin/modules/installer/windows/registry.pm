@@ -61,11 +61,12 @@ sub get_registry_component_name
 
     # Attention: Maximum length for the componentname is 72
 
+    # identifying this component as registryitem component
+    $componentname = "registry_" . $componentname;
+
     $componentname =~ s/gid_module_/g_m_/g;
     $componentname =~ s/_optional_/_o_/g;
     $componentname =~ s/_javafilter_/_jf_/g;
-
-    $componentname = $componentname . "_registry";  # identifying this component as registryitem component
 
     # This componentname must be more specific
     my $addon = "_";
@@ -95,9 +96,72 @@ sub get_registry_component_name
     if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }
     if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
 
+    # Attention: Maximum length for the componentname is 72
+    # %installer::globals::allregistrycomponents_in_this_database_ : resetted for each database
+    # %installer::globals::allregistrycomponents_ : not resetted for each database
+    # Component strings must be unique for the complete product, because they are used for
+    # the creation of the globally unique identifier.
+
+    my $fullname = $componentname;  # This can be longer than 72
+
+    if (( exists($installer::globals::allregistrycomponents_{$fullname}) ) && ( ! exists($installer::globals::allregistrycomponents_in_this_database_{$fullname}) ))
+    {
+        # This is not allowed: One component cannot be installed with different packages.
+        installer::exiter::exit_program("ERROR: Windows registry component \"$fullname\" is already included into another package. This is not allowed.", "get_registry_component_name");
+    }
+
+    if ( exists($installer::globals::allregistrycomponents_{$fullname}) )
+    {
+        $componentname = $installer::globals::allregistrycomponents_{$fullname};
+    }
+    else
+    {
+        if ( length($componentname) > 60 )
+        {
+            $componentname = generate_new_short_registrycomponentname($componentname); # This has to be unique for the complete product, not only one package
+        }
+
+        $installer::globals::allregistrycomponents_{$fullname} = $componentname;
+        $installer::globals::allregistrycomponents_in_this_database_{$fullname} = 1;
+    }
+
     if ( $isrootmodule ) { $installer::globals::registryrootcomponent = $componentname; }
 
     return $componentname;
+}
+
+#########################################################
+# Create a shorter version of a long component name,
+# because maximum length in msi database is 72.
+# Attention: In multi msi installation sets, the short
+# names have to be unique over all packages, because
+# this string is used to create the globally unique id
+# -> no resetting of
+# %installer::globals::allshortregistrycomponents
+# after a package was created.
+#########################################################
+
+sub generate_new_short_registrycomponentname
+{
+    my ($componentname) = @_;
+
+    my $shortcomponentname = "";
+    my $counter = 1;
+
+    my $startversion = substr($componentname, 0, 60); # taking only the first 60 characters
+    $startversion = $startversion . "_";
+
+    $shortcomponentname = $startversion . $counter;
+
+    while ( exists($installer::globals::allshortregistrycomponents{$shortcomponentname}) )
+    {
+        $counter++;
+        $shortcomponentname = $startversion . $counter;
+    }
+
+    $installer::globals::allshortregistrycomponents{$shortcomponentname} = 1;
+
+    return $shortcomponentname;
 }
 
 ##############################################################
@@ -121,8 +185,16 @@ sub get_registry_identifier
     $identifier =~ s/_clsid_/_c_/;
     $identifier =~ s/_currentversion_/_cv_/;
     $identifier =~ s/_microsoft_/_ms_/;
+    $identifier =~ s/_manufacturer_/_mf_/;
+    $identifier =~ s/_productname_/_pn_/;
+    $identifier =~ s/_productversion_/_pv_/;
     $identifier =~ s/_staroffice_/_so_/;
+    $identifier =~ s/_software_/_sw_/;
+    $identifier =~ s/_capabilities_/_cap_/;
     $identifier =~ s/_classpath_/_cp_/;
+    $identifier =~ s/_extension_/_ex_/;
+    $identifier =~ s/_fileassociations_/_fa_/;
+    $identifier =~ s/_propertysheethandlers_/_psh_/;
     $identifier =~ s/__/_/g;
 
     # Saving this in the registry collector
