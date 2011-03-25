@@ -32,6 +32,9 @@
 //------------------------------------------------------------------------
 // header file
 //------------------------------------------------------------------------
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <osl_Security_Const.h>
 
 using namespace osl;
