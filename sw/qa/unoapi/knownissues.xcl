@@ -190,3 +190,6 @@ sw.DocumentSettings::com::sun::star::text::PrintSettings
 
 ### fd#35661 ###
 sw.SwXViewSettings::com::sun::star::text::ViewSettings
+
+### fd#35662 ###
+sw.SwXPrintSettings::com::sun::star::text::PrintSettings
