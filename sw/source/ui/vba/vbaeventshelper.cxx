@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "vbaeventshelper.hxx"
+#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <vbahelper/helperdecl.hxx>
 
@@ -38,12 +39,13 @@ using namespace ::ooo::vba;
 SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& xContext ) :
     VbaEventsHelperBase( aArgs, xContext )
 {
-    registerEventHandler( DOCUMENT_NEW,     "Document_New",     EVENTHANDLER_DOCUMENT );
-    registerEventHandler( AUTO_NEW,         "AutoNew",          EVENTHANDLER_GLOBAL );
-    registerEventHandler( DOCUMENT_OPEN,    "Document_Open",    EVENTHANDLER_DOCUMENT );
-    registerEventHandler( AUTO_OPEN,        "AutoOpen",         EVENTHANDLER_GLOBAL );
-    registerEventHandler( DOCUMENT_CLOSE,   "Document_Close",   EVENTHANDLER_DOCUMENT );
-    registerEventHandler( AUTO_CLOSE,       "AutoClose",        EVENTHANDLER_GLOBAL );
+    using namespace ::com::sun::star::script::ModuleType;
+    registerEventHandler( DOCUMENT_NEW,     DOCUMENT,   "Document_New" );
+    registerEventHandler( AUTO_NEW,         NORMAL,     "AutoNew" );
+    registerEventHandler( DOCUMENT_OPEN,    DOCUMENT,   "Document_Open" );
+    registerEventHandler( AUTO_OPEN,        NORMAL,     "AutoOpen" );
+    registerEventHandler( DOCUMENT_CLOSE,   DOCUMENT,   "Document_Close" );
+    registerEventHandler( AUTO_CLOSE,       NORMAL,     "AutoClose" );
 }
 
 SwVbaEventsHelper::~SwVbaEventsHelper()
@@ -76,7 +78,7 @@ uno::Sequence< uno::Any > SwVbaEventsHelper::implBuildArgumentList( const EventH
 }
 
 void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
-        const EventHandlerInfo& /*rInfo*/, bool /*bSuccess*/, bool /*bCancel*/ ) throw (uno::RuntimeException)
+        const EventHandlerInfo& /*rInfo*/, bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
     // nothing to do after any event
 }
