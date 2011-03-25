@@ -247,7 +247,7 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
     return NULL;
 }
 
-uno::Reference< vba::XHelperInterface >
+uno::Reference< XHelperInterface >
 getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) throw ( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
@@ -258,8 +258,7 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) thro
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
     // the document in the future could fix this, especially IF the switching of the vba mode takes care to
     // create the special document module objects if they don't exist.
-    uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) ), uno::UNO_QUERY );
-    return xParent;
+    return getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) );
 }
 
 uno::Reference< XHelperInterface >

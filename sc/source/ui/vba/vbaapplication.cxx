@@ -40,6 +40,7 @@
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <ooo/vba/XExecutableDialog.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -97,17 +98,6 @@ using namespace ::com::sun::star;
 #endif
 
 uno::Any sbxToUnoValue( SbxVariable* pVar );
-
-class ActiveWorkbook : public ScVbaWorkbook
-{
-protected:
-    virtual uno::Reference< frame::XModel > getModel()
-    {
-        return getCurrentExcelDoc(mxContext);
-    }
-public:
-    ActiveWorkbook( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
-};
 
 // ============================================================================
 
@@ -215,47 +205,15 @@ ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeE
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWrkbk;
-    ScDocShell* pShell = excel::getDocShell( getCurrentExcelDoc( mxContext ) );
-    if ( pShell )
-    {
-        String aName;
-        if ( pShell->GetDocument() )
-        {
-            aName = pShell->GetDocument()->GetCodeName();
-            xWrkbk.set( getUnoDocModule(  aName, pShell ), uno::UNO_QUERY );
-            // fallback ( e.g. it's possible a new document was created via the api )
-            // in that case the document will not have the appropriate Document Modules
-            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
-            // vba mode etc. )
-            if ( !xWrkbk.is() )
-                return new ActiveWorkbook( this, mxContext );
-        }
-    }
-    return xWrkbk;
+    // will throw if active document is not in VBA compatibility mode (no object for codename)
+    return uno::Reference< excel::XWorkbook >( getVBADocument( getCurrentExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
 }
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWrkbk;
-    ScDocShell* pShell = excel::getDocShell( getThisExcelDoc( mxContext ) );
-    if ( pShell )
-    {
-        String aName;
-        if ( pShell->GetDocument() )
-        {
-            aName = pShell->GetDocument()->GetCodeName();
-            xWrkbk.set( getUnoDocModule( aName, pShell ), uno::UNO_QUERY );
-            // fallback ( e.g. it's possible a new document was created via the api )
-            // in that case the document will not have the appropriate Document Modules
-            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
-            // vba mode etc. )
-            if ( !xWrkbk.is() )
-                return new ActiveWorkbook( this, mxContext );
-        }
-    }
-    return xWrkbk;
+    // should never throw as this model is in VBA compatibility mode
+    return uno::Reference< excel::XWorkbook >( getVBADocument( getThisExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -343,17 +301,8 @@ ScVbaApplication::Workbooks( const uno::Any& aIndex ) throw (uno::RuntimeExcepti
 uno::Any SAL_CALL
 ScVbaApplication::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_QUERY );
-        uno::Any result;
-    if ( xWorkbook.is() )
-        result  = xWorkbook->Worksheets( aIndex );
-
-    else
-        // Fixme - check if this is reasonable/desired behavior
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-            "No ActiveWorkBook available" ), uno::Reference< uno::XInterface >() );
-
-    return result;
+    uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_SET_THROW );
+    return xWorkbook->Worksheets( aIndex );
 }
 
 uno::Any SAL_CALL
@@ -384,10 +333,10 @@ ScVbaApplication::Dialogs( const uno::Any &aIndex ) throw (uno::RuntimeException
 uno::Reference< excel::XWindow > SAL_CALL
 ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 {
-    // #FIXME sofar can't determine Parent
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
-    ScVbaWindow* pWin = new ScVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel );
-    uno::Reference< excel::XWindow > xWin( pWin );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< XHelperInterface > xParent( getActiveWorkbook(), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( xParent, mxContext, xModel, xController ) );
     return xWin;
 }
 
@@ -792,37 +741,36 @@ rtl::OUString ScVbaApplication::getOfficePath( const rtl::OUString& _sPathType )
     }
     return sRetPath;
 }
+
 void SAL_CALL
-ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getPathSettingsService( mxContext );
     rtl::OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( DefaultFilePath, aURL );
-    xProps->setPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")), uno::makeAny( aURL ) );
-
-
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")), uno::Any( aURL ) );
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::getDefaultFilePath(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaApplication::getDefaultFilePath() throw (uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::LibraryPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaApplication::getLibraryPath() throw (uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Basic")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::TemplatesPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Template")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::PathSeparator(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
 {
     static rtl::OUString sPathSep( RTL_CONSTASCII_USTRINGPARAM( FILE_PATH_SEPERATOR ) );
     return sPathSep;
@@ -1172,6 +1120,40 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
         aRet = sbxToUnoValue( pNew );
     }
     return aRet;
+}
+
+uno::Any SAL_CALL ScVbaApplication::GetOpenFilename(
+        const uno::Any& rFileFilter, const uno::Any& rFilterIndex, const uno::Any& rTitle,
+        const uno::Any& rButtonText, const uno::Any& rMultiSelect ) throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Any > aArgs( 6 );
+    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
+    aArgs[ 1 ] = rFileFilter;
+    aArgs[ 2 ] = rFilterIndex;
+    aArgs[ 3 ] = rTitle;
+    aArgs[ 4 ] = rButtonText;
+    aArgs[ 5 ] = rMultiSelect;
+    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.OpenFilePicker" ) ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
+    return xFilePicker->execute();
+}
+
+uno::Any SAL_CALL ScVbaApplication::GetSaveAsFilename(
+        const uno::Any& rInitialFileName, const uno::Any& rFileFilter, const uno::Any& rFilterIndex,
+        const uno::Any& rTitle, const uno::Any& rButtonText ) throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Any > aArgs( 6 );
+    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
+    aArgs[ 1 ] = rInitialFileName;
+    aArgs[ 2 ] = rFileFilter;
+    aArgs[ 3 ] = rFilterIndex;
+    aArgs[ 4 ] = rTitle;
+    aArgs[ 5 ] = rButtonText;
+    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.SaveAsFilePicker" ) ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
+    return xFilePicker->execute();
 }
 
 uno::Reference< frame::XModel >

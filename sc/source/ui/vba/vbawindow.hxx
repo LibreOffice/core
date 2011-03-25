@@ -27,7 +27,6 @@
 #ifndef SC_VBA_WINDOW_HXX
 #define SC_VBA_WINDOW_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XViewPane.hpp>
@@ -46,19 +45,30 @@ typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::excel::XWindow > Window
 class ScVbaWindow : public WindowImpl_BASE
 {
 private:
-    css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
-    css::uno::Reference< css::sheet::XViewFreezable > m_xViewFreezable;
-    css::uno::Reference< css::sheet::XViewSplitable > m_xViewSplitable;
     css::uno::Reference< ov::excel::XPane > m_xPane;
-    css::uno::Reference< css::awt::XDevice > m_xDevice;
+
     void init();
+    css::uno::Reference< css::beans::XPropertySet > getControllerProps() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::beans::XPropertySet > getFrameProps() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XDevice > getDevice() throw (css::uno::RuntimeException);
+
 protected:
     void SplitAtDefinedPosition(sal_Bool _bUnFreezePane);
+
 public:
-    void  Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll = false ) throw (css::uno::RuntimeException);
+    void Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll = false ) throw (css::uno::RuntimeException);
+
 public:
-    ScVbaWindow( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
-    ScVbaWindow( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext );
+    ScVbaWindow(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::frame::XController >& xController )
+        throw (css::uno::RuntimeException);
+    ScVbaWindow(
+        const css::uno::Sequence< css::uno::Any >& aArgs,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext )
+        throw (css::uno::RuntimeException);
 
     // XWindow
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

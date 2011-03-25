@@ -52,7 +52,6 @@ protected:
     css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
     css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
     css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::lang::XServiceInfo > mxServiceInfo;
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
     sal_Bool mbCheckAmbiguoity;
     sal_Bool mbAddIndent;
@@ -69,7 +68,6 @@ public:
     ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
     virtual ~ScVbaFormat() {}
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
-    css::uno::Reference< css::lang::XServiceInfo > getXServiceInfo() { return mxServiceInfo; }
      void SAL_CALL setAddIndent( const css::uno::Any& _BAddIndent) throw( css::uno::RuntimeException ) { _BAddIndent >>= mbAddIndent; }
      css::uno::Any SAL_CALL getAddIndent() throw( css::uno::RuntimeException ) { return css::uno::makeAny( mbAddIndent ); }
         // Interface Methods
