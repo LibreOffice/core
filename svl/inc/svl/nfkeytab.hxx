@@ -28,6 +28,7 @@
 #ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
 #define INCLUDED_SVTOOLS_NFKEYTAB_HXX
 
+#include <vector>
 #include <tools/string.hxx>
 
 //! For ImpSvNumberformatScan: first the short symbols, then the long symbols!
@@ -111,7 +112,18 @@ enum NfKeywordIndex
     NF_KEYWORD_ENTRIES_COUNT
 };
 
-typedef String NfKeywordTable [NF_KEYWORD_ENTRIES_COUNT];
+class NfKeywordTable
+{
+    typedef ::std::vector<String> Keywords_t;
+    Keywords_t m_keywords;
+
+public:
+    NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
+    virtual ~NfKeywordTable() {}
+
+    String & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }
+    const String & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }
+};
 
 #endif // INCLUDED_SVTOOLS_NFKEYTAB_HXX
 

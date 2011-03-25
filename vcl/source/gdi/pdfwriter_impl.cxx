@@ -5613,7 +5613,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             if(!m_bIsPDF_A1)
             {
                 OStringBuffer aDest;
-                if( rWidget.m_nDest != -1 && appendDest( rWidget.m_nDest, aDest ) )
+                if( rWidget.m_nDest != -1 && appendDest( m_aDestinationIdTranslation[ rWidget.m_nDest ], aDest ) )
                 {
                     aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
                     aLine.append( aDest.makeStringAndClear() );
@@ -10837,6 +10837,11 @@ sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, 
     m_aPages[nPageNr].convertRect( m_aDests.back().m_aRect );
 
     return nRet;
+}
+
+sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    return m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
 }
 
 sal_Int32 PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )

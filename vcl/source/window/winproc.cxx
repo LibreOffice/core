@@ -1646,7 +1646,13 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                         // #i42750# presentation wants to be informed about resize
                         // as early as possible
                         WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow->ImplGetWindowImpl()->mpClientWindow);
-                        if( pWorkWindow && pWorkWindow->IsPresentationMode() )
+                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
+                            bStartTimer = false;
+                    }
+                    else
+                    {
+                        WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow);
+                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
                             bStartTimer = false;
                     }
                 }
