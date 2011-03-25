@@ -187,3 +187,6 @@ sw.SwXTextViewCursor::com::sun::star::view::XScreenCursor
 
 ### fd#35660 ###
 sw.DocumentSettings::com::sun::star::text::PrintSettings
+
+### fd#35661 ###
+sw.SwXViewSettings::com::sun::star::text::ViewSettings
