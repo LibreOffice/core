@@ -28,9 +28,7 @@
 #define __ooo_vba_msforms_XPictureFormat_idl__
 
 
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba { module msforms {
 interface XPictureFormat : ooo::vba::XHelperInterface

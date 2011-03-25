@@ -27,21 +27,10 @@
 #ifndef __ooo_vba_msforms_XShape_idl__
 #define __ooo_vba_msforms_XShape_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __ooo_vba_msforms_XLineFormat_idl__
 #include <ooo/vba/msforms/XLineFormat.idl>
-#endif
-
-#ifndef __ooo_vba_msforms_XFillFormat_idl__
 #include <ooo/vba/msforms/XFillFormat.idl>
-#endif
-
-#ifndef __ooo_vba_msforms_XPictureFormat_idl__
 #include <ooo/vba/msforms/XPictureFormat.idl>
-#endif
 
 module ooo {  module vba { module msforms {
 interface XShapeRange;

@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_msforms_XFillFormat_idl__
 #define __ooo_vba_msforms_XFillFormat_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __ooo_vba_msforms_XColorFormat_idl__
 #include <ooo/vba/msforms/XColorFormat.idl>
-#endif
 
 module ooo {  module vba { module msforms {
 interface XFillFormat : ooo::vba::XHelperInterface
