@@ -29,10 +29,11 @@
 #ifndef _LEX_HXX
 #define _LEX_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <hash.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,
@@ -127,8 +128,6 @@ inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr )
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )
 : nType( nTypeP ) {}
 
-DECLARE_LIST( SvTokenList, SvToken * )
-
 class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
@@ -144,8 +143,8 @@ class SvTokenStream
     SvFileStream *  pInStream;
     SvStream &      rInStream;
     String          aFileName;
-    SvTokenList     aTokList;
-    SvToken *       pCurToken;
+    boost::ptr_vector<SvToken> aTokList;
+    boost::ptr_vector<SvToken>::iterator pCurToken;
 
     void        InitCtor();
 
@@ -192,30 +191,37 @@ public:
                     { nTabSize = nTabSizeP; }
     sal_uInt16          GetTabSize() const { return nTabSize; }
 
-    SvToken *       GetToken_PrevAll()
-                    {
-                        SvToken * pRetToken = pCurToken;
-                        if( NULL == (pCurToken = aTokList.Prev()) )
-                            // current pointer never null
-                            pCurToken = pRetToken;
+    SvToken* GetToken_PrevAll()
+    {
+        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken;
 
-                        return pRetToken;
-                    }
-    SvToken *       GetToken_NextAll()
-                    {
-                        SvToken * pRetToken = pCurToken;
-                        if( NULL == (pCurToken = aTokList.Next()) )
-                            // current pointer never null
-                            pCurToken = pRetToken;
-                        SetMax();
-                        return pRetToken;
-                    }
-    SvToken *       GetToken_Next()
-                    {
-                        // comments get removed initially
-                        return GetToken_NextAll();
-                    }
-    SvToken *       GetToken() const { return pCurToken; }
+        // current iterator always valid
+        if(pCurToken != aTokList.begin())
+            --pCurToken;
+
+        return &(*pRetToken);
+    }
+
+    SvToken* GetToken_NextAll()
+    {
+        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken++;
+
+        if (pCurToken == aTokList.end())
+            pCurToken = pRetToken;
+
+        SetMax();
+
+        return &(*pRetToken);
+    }
+
+    SvToken* GetToken_Next()
+    {
+        // comments get removed initially
+        return GetToken_NextAll();
+    }
+
+    SvToken* GetToken() const { return &(*pCurToken); }
+
     sal_Bool            Read( char cChar )
                     {
                         if( pCurToken->IsChar()
@@ -227,6 +233,7 @@ public:
                         else
                             return sal_False;
                     }
+
     void            ReadDelemiter()
                     {
                         if( pCurToken->IsChar()
@@ -237,22 +244,29 @@ public:
                         }
                     }
 
-    sal_uInt32          Tell() const
-                    { return aTokList.GetCurPos(); }
-    void            Seek( sal_uInt32 nPos )
-                    {
-                        pCurToken = aTokList.Seek( nPos );
-                        SetMax();
-                    }
-    void            SeekRel( sal_Int32 nRelPos )
-                    {
-                        pCurToken = aTokList.Seek( Tell() + nRelPos );
-                        SetMax();
-                    }
-    void            SeekEnd()
-                    {
-                        pCurToken = aTokList.Seek( nMaxPos );
-                    }
+    sal_uInt32 Tell() const { return pCurToken-aTokList.begin(); }
+
+    void Seek( sal_uInt32 nPos )
+    {
+        pCurToken = aTokList.begin() + nPos;
+        SetMax();
+    }
+
+    void SeekRel( sal_uInt32 nRelPos )
+    {
+        sal_uInt32 relIdx = Tell() + nRelPos;
+
+        if ( relIdx < aTokList.size())
+        {
+            pCurToken = aTokList.begin()+ (Tell() + nRelPos );
+            SetMax();
+        }
+    }
+
+    void SeekEnd()
+    {
+        pCurToken = aTokList.begin()+nMaxPos;
+    }
 };
 
 

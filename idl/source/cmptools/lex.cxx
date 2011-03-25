@@ -105,7 +105,6 @@ void SvTokenStream::InitCtor()
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nTabSize    = 4;
-    pCurToken   = NULL;
     nMaxPos     = 0;
     c           = GetNextChar();
     FillTokenList();
@@ -115,7 +114,6 @@ SvTokenStream::SvTokenStream( const String & rFileName )
     : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | STREAM_NOCREATE ) )
     , rInStream( *pInStream )
     , aFileName( rFileName )
-    , aTokList( 0x8000, 0x8000 )
 {
     InitCtor();
 }
@@ -124,7 +122,6 @@ SvTokenStream::SvTokenStream( SvStream & rStream, const String & rFileName )
     : pInStream( NULL )
     , rInStream( rStream )
     , aFileName( rFileName )
-    , aTokList( 0x8000, 0x8000 )
 {
     InitCtor();
 }
@@ -132,28 +129,23 @@ SvTokenStream::SvTokenStream( SvStream & rStream, const String & rFileName )
 SvTokenStream::~SvTokenStream()
 {
     delete pInStream;
-    SvToken * pTok = aTokList.Last();
-    while( pTok )
-    {
-        delete pTok;
-        pTok = aTokList.Prev();
-    }
 }
 
 void SvTokenStream::FillTokenList()
 {
     SvToken * pToken = new SvToken();
-    aTokList.Insert( pToken, LIST_APPEND );
+    aTokList.push_back(pToken);
     do
     {
         if( !MakeToken( *pToken ) )
         {
-            SvToken * p = aTokList.Prev();
-            *pToken = SvToken();
-            if( p )
+            if (!aTokList.empty())
             {
-                pToken->SetLine( p->GetLine() );
-                pToken->SetColumn( p->GetColumn() );
+                *pToken = SvToken();
+                boost::ptr_vector<SvToken>::const_iterator it = aTokList.begin();
+
+                pToken->SetLine(it->GetLine());
+                pToken->SetColumn(it->GetColumn());
             }
             break;
         }
@@ -164,11 +156,11 @@ void SvTokenStream::FillTokenList()
         else
         {
             pToken = new SvToken();
-            aTokList.Insert( pToken, LIST_APPEND );
+            aTokList.push_back(pToken);
         }
     }
     while( !pToken->IsEof() );
-    pCurToken = aTokList.First();
+    pCurToken = aTokList.begin();
 }
 
 void SvTokenStream::SetCharSet( CharSet nSet )
