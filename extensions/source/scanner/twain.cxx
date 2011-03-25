@@ -33,7 +33,7 @@
 #include <math.h>
 
 #if defined( WNT )
-#include <tools/svwin.h>
+#include <windows.h>
 #endif
 #ifdef OS2
 #include <svpm.h>
