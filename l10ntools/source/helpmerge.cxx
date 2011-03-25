@@ -43,6 +43,8 @@
 #include <vector>
 #include "rtl/strbuf.hxx"
 #ifdef WNT
+#include <windows.h>
+#undef CopyFile
 #include <direct.h>
 #endif
 
