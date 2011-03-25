@@ -1168,7 +1168,7 @@ AC_ARG_WITH(poor-help-localizations,
         [Use this option to specify which languages have unusable help localizations.
          Separate multiple languages with space.])
     [
-                          Usage:     --with-poor-help-localizations="af be-BY"
+                          Usage:     --with-poor-help-localizations="af be"
     ],
 ,)
 
