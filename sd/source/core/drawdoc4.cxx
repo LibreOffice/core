@@ -620,7 +620,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT) );
 
     Color aWhite( COL_WHITE );
-    SvxBorderLine aBorderLine( &aWhite, 1, SOLID );
+    ::editeng::SvxBorderLine aBorderLine( &aWhite, 1, ::editeng::SOLID );
 
     SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );

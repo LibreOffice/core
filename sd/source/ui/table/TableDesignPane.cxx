@@ -812,7 +812,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     // draw top border
                     for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
                     {
-                        const SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
+                        const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
                         if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
                             continue;
 
@@ -825,7 +825,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             if( xBorderInfo.get() )
                             {
                                 const sal_uInt16 nOtherLine = nLine ^ 1;
-                                const SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
+                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
                             }
