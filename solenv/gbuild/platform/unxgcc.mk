@@ -72,7 +72,6 @@ gb_CFLAGS := \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
-	-fno-strict-aliasing \
 	-fvisibility=hidden \
 	-pipe \
 
@@ -86,10 +85,17 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
-	-fno-strict-aliasing \
 	-fvisibility-inlines-hidden \
 	-fvisibility=hidden \
 	-pipe \
+
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
+gb_StrictAliasingUnsafe := $(shell expr $(gb_CCVER) \< 40600)
+
+ifeq ($(gb_StrictAliasingUnsafe),1)
+gb_CFLAGS += -fno-strict-aliasing
+gb_CXXFLAGS += -fno-strict-aliasing
+endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
