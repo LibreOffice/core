@@ -838,7 +838,7 @@ sed "s/wml/</xsl:text>
 
   <xsl:template match="/">
     <out>
-      <xsl:apply-templates select="//rng:define[@name='CT_DocGrid']" 
+      <xsl:apply-templates select="//rng:define[@name='CT_SdtContentCell']" 
                            mode='resourcesPropertySetValue'/>
     </out>
   </xsl:template>

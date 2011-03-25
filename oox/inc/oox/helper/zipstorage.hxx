@@ -31,7 +31,7 @@
 #include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
@@ -43,11 +43,11 @@ class ZipStorage : public StorageBase
 {
 public:
     explicit            ZipStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream );
 
     explicit            ZipStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream );
 
     virtual             ~ZipStorage();
@@ -83,9 +83,8 @@ private:
     virtual void        implCommit() const;
 
 private:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > XStorageRef;
-
-    XStorageRef         mxStorage;      /// Storage based on input or output stream.
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                        mxStorage;      /// Storage based on input or output stream.
 };
 
 // ============================================================================

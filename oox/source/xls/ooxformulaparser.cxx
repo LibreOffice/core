@@ -47,7 +47,7 @@ using ::rtl::OUString;
 class OOXMLFormulaParserImpl : private FormulaFinalizer
 {
 public:
-    explicit            OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxFactory );
+    explicit            OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxModelFactory );
 
     Sequence< FormulaToken > parseFormula( const OUString& rFormula, const CellAddress& rReferencePos );
 
@@ -60,9 +60,9 @@ private:
 
 // ----------------------------------------------------------------------------
 
-OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxFactory ) :
-    FormulaFinalizer( OpCodeProvider( rxFactory, FILTER_OOXML, BIFF_UNKNOWN, true ) ),
-    maApiParser( rxFactory, *this )
+OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxModelFactory ) :
+    FormulaFinalizer( OpCodeProvider( rxModelFactory, FILTER_OOXML, BIFF_UNKNOWN, true ) ),
+    maApiParser( rxModelFactory, *this )
 {
 }
 
@@ -115,7 +115,7 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
 class OOXMLFormulaPrinterImpl : public OpCodeProvider
 {
 public:
-    explicit            OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxFactory );
+    explicit            OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxModelFactory );
 
 private:
     ApiParserWrapper    maApiParser;
@@ -123,9 +123,9 @@ private:
 
 // ----------------------------------------------------------------------------
 
-OOXMLFormulaPrinterImpl::OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxFactory ) :
-    OpCodeProvider( rxFactory, FILTER_OOXML, BIFF_UNKNOWN, false ),
-    maApiParser( rxFactory, *this )
+OOXMLFormulaPrinterImpl::OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxModelFactory ) :
+    OpCodeProvider( rxModelFactory, FILTER_OOXML, BIFF_UNKNOWN, false ),
+    maApiParser( rxModelFactory, *this )
 {
 }
 
@@ -202,8 +202,8 @@ Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
 {
     if( !mxParserImpl )
     {
-        Reference< XMultiServiceFactory > xFactory( mxComponent, UNO_QUERY_THROW );
-        mxParserImpl.reset( new OOXMLFormulaParserImpl( xFactory ) );
+        Reference< XMultiServiceFactory > xModelFactory( mxComponent, UNO_QUERY_THROW );
+        mxParserImpl.reset( new OOXMLFormulaParserImpl( xModelFactory ) );
     }
     return mxParserImpl->parseFormula( rFormula, rReferencePos );
 }

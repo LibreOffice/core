@@ -1201,7 +1201,8 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
         catch( const uno::Exception & rEx )
         {
             ( void ) rEx;
-            OSL_ENSURE( false, "Exception in makeRedline" );
+// disabled: current writer redline impl. rather primitive, so it gets annoying
+//            OSL_ENSURE( false, "Exception in makeRedline" );
         }
     }
 }

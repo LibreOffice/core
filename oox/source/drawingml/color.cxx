@@ -512,12 +512,12 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
     return mnC1;
 }
 
-bool Color::hasTransparence() const
+bool Color::hasTransparency() const
 {
     return mnAlpha < MAX_PERCENT;
 }
 
-sal_Int16 Color::getTransparence() const
+sal_Int16 Color::getTransparency() const
 {
     return static_cast< sal_Int16 >( (MAX_PERCENT - mnAlpha) / PER_PERCENT );
 }

@@ -1952,7 +1952,7 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
     // get the current locale
     try
     {
-        Reference< XMultiServiceFactory > xConfigProv( getGlobalFactory()->createInstance(
+        Reference< XMultiServiceFactory > xConfigProv( getBaseFilter().getServiceFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ), UNO_QUERY_THROW );
 
         // try user-defined locale setting

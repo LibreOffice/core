@@ -72,344 +72,6 @@ using ::rtl::OUStringToOString;
 // DrawingML
 // ============================================================================
 
-namespace {
-
-/** Converts the passed 64-bit integer value from the passed unit to EMUs. */
-sal_Int64 lclCalcEmu( const UnitConverter& rUnitConv, sal_Int64 nValue, Unit eFromUnit )
-{
-    return (eFromUnit == UNIT_EMU) ? nValue :
-        static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( nValue ), eFromUnit, UNIT_EMU ) + 0.5 );
-}
-
-} // namespace
-
-// ============================================================================
-
-AnchorCellModel::AnchorCellModel() :
-    mnCol( -1 ),
-    mnRow( -1 ),
-    mnColOffset( 0 ),
-    mnRowOffset( 0 )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-AnchorClientDataModel::AnchorClientDataModel() :
-    mbLocksWithSheet( true ),
-    mbPrintsWithSheet( true )
-{
-}
-
-// ============================================================================
-
-ShapeAnchor::ShapeAnchor( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper ),
-    meType( ANCHOR_INVALID ),
-    mnEditAs( XML_twoCell )
-{
-}
-
-void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttribs )
-{
-    switch( nElement )
-    {
-        case XDR_TOKEN( absoluteAnchor ):
-            meType = ANCHOR_ABSOLUTE;
-        break;
-        case XDR_TOKEN( oneCellAnchor ):
-            meType = ANCHOR_ONECELL;
-        break;
-        case XDR_TOKEN( twoCellAnchor ):
-            meType = ANCHOR_TWOCELL;
-            mnEditAs = rAttribs.getToken( XML_editAs, XML_twoCell );
-        break;
-        default:
-            OSL_ENSURE( false, "ShapeAnchor::importAnchor - unexpected element" );
-    }
-}
-
-void ShapeAnchor::importPos( const AttributeList& rAttribs )
-{
-    OSL_ENSURE( meType == ANCHOR_ABSOLUTE, "ShapeAnchor::importPos - unexpected 'xdr:pos' element" );
-    maPos.X = rAttribs.getHyper( XML_x, 0 );
-    maPos.Y = rAttribs.getHyper( XML_y, 0 );
-}
-
-void ShapeAnchor::importExt( const AttributeList& rAttribs )
-{
-    OSL_ENSURE( (meType == ANCHOR_ABSOLUTE) || (meType == ANCHOR_ONECELL), "ShapeAnchor::importExt - unexpected 'xdr:ext' element" );
-    maSize.Width = rAttribs.getHyper( XML_cx, 0 );
-    maSize.Height = rAttribs.getHyper( XML_cy, 0 );
-}
-
-void ShapeAnchor::importClientData( const AttributeList& rAttribs )
-{
-    maClientData.mbLocksWithSheet  = rAttribs.getBool( XML_fLocksWithSheet, true );
-    maClientData.mbPrintsWithSheet = rAttribs.getBool( XML_fPrintsWithSheet, true );
-}
-
-void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
-{
-    AnchorCellModel* pAnchorCell = 0;
-    switch( nParentContext )
-    {
-        case XDR_TOKEN( from ):
-            OSL_ENSURE( (meType == ANCHOR_ONECELL) || (meType == ANCHOR_TWOCELL), "ShapeAnchor::setCellPos - unexpected 'xdr:from' element" );
-            pAnchorCell = &maFrom;
-        break;
-        case XDR_TOKEN( to ):
-            OSL_ENSURE( meType == ANCHOR_TWOCELL, "ShapeAnchor::setCellPos - unexpected 'xdr:to' element" );
-            pAnchorCell = &maTo;
-        break;
-        default:
-            OSL_ENSURE( false, "ShapeAnchor::setCellPos - unexpected parent element" );
-    }
-    if( pAnchorCell ) switch( nElement )
-    {
-        case XDR_TOKEN( col ):      pAnchorCell->mnCol = rValue.toInt32();          break;
-        case XDR_TOKEN( row ):      pAnchorCell->mnRow = rValue.toInt32();          break;
-        case XDR_TOKEN( colOff ):   pAnchorCell->mnColOffset = rValue.toInt64();    break;
-        case XDR_TOKEN( rowOff ):   pAnchorCell->mnRowOffset = rValue.toInt64();    break;
-        default:    OSL_ENSURE( false, "ShapeAnchor::setCellPos - unexpected element" );
-    }
-}
-
-void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
-{
-    meType = ANCHOR_VML;
-
-    ::std::vector< OUString > aTokens;
-    sal_Int32 nIndex = 0;
-    while( nIndex >= 0 )
-        aTokens.push_back( rAnchor.getToken( 0, ',', nIndex ).trim() );
-
-    OSL_ENSURE( aTokens.size() >= 8, "ShapeAnchor::importVmlAnchor - missing anchor tokens" );
-    if( aTokens.size() >= 8 )
-    {
-        maFrom.mnCol       = aTokens[ 0 ].toInt32();
-        maFrom.mnColOffset = aTokens[ 1 ].toInt32();
-        maFrom.mnRow       = aTokens[ 2 ].toInt32();
-        maFrom.mnRowOffset = aTokens[ 3 ].toInt32();
-        maTo.mnCol         = aTokens[ 4 ].toInt32();
-        maTo.mnColOffset   = aTokens[ 5 ].toInt32();
-        maTo.mnRow         = aTokens[ 6 ].toInt32();
-        maTo.mnRowOffset   = aTokens[ 7 ].toInt32();
-    }
-}
-
-bool ShapeAnchor::isValidAnchor() const
-{
-    bool bValid = false;
-    switch( meType )
-    {
-        case ANCHOR_ABSOLUTE:
-            OSL_ENSURE( maPos.isValid(), "ShapeAnchor::isValidAnchor - invalid position" );
-            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
-            bValid = maPos.isValid() && maSize.isValid() && (maSize.Width > 0) && (maSize.Height > 0);
-        break;
-        case ANCHOR_ONECELL:
-            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
-            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
-            bValid = maFrom.isValid() && maSize.isValid() && (maSize.Width > 0) && (maSize.Height > 0);
-        break;
-        case ANCHOR_TWOCELL:
-        case ANCHOR_VML:
-            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
-            OSL_ENSURE( maTo.isValid(), "ShapeAnchor::isValidAnchor - invalid to position" );
-            bValid = maFrom.isValid() && maTo.isValid() &&
-                ((maFrom.mnCol < maTo.mnCol) || ((maFrom.mnCol == maTo.mnCol) && (maFrom.mnColOffset < maTo.mnColOffset))) &&
-                ((maFrom.mnRow < maTo.mnRow) || ((maFrom.mnRow == maTo.mnRow) && (maFrom.mnRowOffset < maTo.mnRowOffset)));
-        break;
-        case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::isValidAnchor - invalid anchor" );
-        break;
-    }
-    return bValid;
-}
-
-Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorSizeModel& rEmuSheetSize ) const
-{
-    AddressConverter& rAddrConv = getAddressConverter();
-    UnitConverter& rUnitConv = getUnitConverter();
-    Rectangle aApiLoc( -1, -1, -1, -1 );
-    Unit eUnitX = (meType == ANCHOR_VML) ? UNIT_SCREENX : UNIT_EMU;
-    Unit eUnitY = (meType == ANCHOR_VML) ? UNIT_SCREENY : UNIT_EMU;
-
-    // calculate shape position
-    switch( meType )
-    {
-        case ANCHOR_ABSOLUTE:
-            OSL_ENSURE( maPos.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
-            if( maPos.isValid() && (maPos.X < rEmuSheetSize.Width) && (maPos.Y < rEmuSheetSize.Height) )
-            {
-                aApiLoc.X = rUnitConv.scaleToMm100( static_cast< double >( maPos.X ), UNIT_EMU );
-                aApiLoc.Y = rUnitConv.scaleToMm100( static_cast< double >( maPos.Y ), UNIT_EMU );
-            }
-        break;
-        case ANCHOR_ONECELL:
-        case ANCHOR_TWOCELL:
-        case ANCHOR_VML:
-            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
-            if( maFrom.isValid() && rAddrConv.checkCol( maFrom.mnCol, true ) && rAddrConv.checkRow( maFrom.mnRow, true ) )
-            {
-                Point aPoint = getCellPosition( maFrom.mnCol, maFrom.mnRow );
-                aApiLoc.X = aPoint.X + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnColOffset ), eUnitX );
-                aApiLoc.Y = aPoint.Y + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnRowOffset ), eUnitY );
-            }
-        break;
-        case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::calcApiLocation - invalid anchor" );
-        break;
-    }
-
-    // calculate shape size
-    if( (aApiLoc.X >= 0) && (aApiLoc.Y >= 0) ) switch( meType )
-    {
-        case ANCHOR_ABSOLUTE:
-        case ANCHOR_ONECELL:
-            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::calcApiLocation - invalid size" );
-            if( maSize.isValid() )
-            {
-                aApiLoc.Width = ::std::min< sal_Int32 >(
-                    rUnitConv.scaleToMm100( static_cast< double >( maSize.Width ), UNIT_EMU ),
-                    rApiSheetSize.Width - aApiLoc.X );
-                aApiLoc.Height = ::std::min< sal_Int32 >(
-                    rUnitConv.scaleToMm100( static_cast< double >( maSize.Height ), UNIT_EMU ),
-                    rApiSheetSize.Height - aApiLoc.Y );
-            }
-        break;
-        case ANCHOR_TWOCELL:
-        case ANCHOR_VML:
-            OSL_ENSURE( maTo.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
-            if( maTo.isValid() )
-            {
-                /*  Pass a valid cell address to getCellPosition(), otherwise
-                    nothing is returned, even if either row or column is valid. */
-                CellAddress aToCell = rAddrConv.createValidCellAddress( BinAddress( maTo.mnCol, maTo.mnRow ), getSheetIndex(), true );
-                Point aPoint = getCellPosition( aToCell.Column, aToCell.Row );
-                // width
-                aApiLoc.Width = rApiSheetSize.Width - aApiLoc.X;
-                if( aToCell.Column == maTo.mnCol )
-                {
-                    aPoint.X += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnColOffset ), eUnitX );
-                    aApiLoc.Width = ::std::min< sal_Int32 >( aPoint.X - aApiLoc.X + 1, aApiLoc.Width );
-                }
-                // height
-                aApiLoc.Height = rApiSheetSize.Height - aApiLoc.Y;
-                if( aToCell.Row == maTo.mnRow )
-                {
-                    aPoint.Y += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnRowOffset ), eUnitY );
-                    aApiLoc.Height = ::std::min< sal_Int32 >( aPoint.Y - aApiLoc.Y + 1, aApiLoc.Height );
-                }
-            }
-        break;
-        case ANCHOR_INVALID:
-        break;
-    }
-
-    return aApiLoc;
-}
-
-Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const
-{
-    AddressConverter& rAddrConv = getAddressConverter();
-    UnitConverter& rUnitConv = getUnitConverter();
-
-    Size aSheetSize(
-        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.Width, 0, SAL_MAX_INT32 ),
-        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.Height, 0, SAL_MAX_INT32 ) );
-    Rectangle aLoc( -1, -1, -1, -1 );
-    Unit eUnitX = (meType == ANCHOR_VML) ? UNIT_SCREENX : UNIT_EMU;
-    Unit eUnitY = (meType == ANCHOR_VML) ? UNIT_SCREENY : UNIT_EMU;
-
-    // calculate shape position
-    switch( meType )
-    {
-        case ANCHOR_ABSOLUTE:
-            OSL_ENSURE( maPos.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
-            if( maPos.isValid() && (maPos.X < aSheetSize.Width) && (maPos.Y < aSheetSize.Height) )
-            {
-                aLoc.X = static_cast< sal_Int32 >( maPos.X );
-                aLoc.Y = static_cast< sal_Int32 >( maPos.Y );
-            }
-        break;
-        case ANCHOR_ONECELL:
-        case ANCHOR_TWOCELL:
-        case ANCHOR_VML:
-            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
-            if( maFrom.isValid() && rAddrConv.checkCol( maFrom.mnCol, true ) && rAddrConv.checkRow( maFrom.mnRow, true ) )
-            {
-                Point aPoint = getCellPosition( maFrom.mnCol, maFrom.mnRow );
-                sal_Int64 nX = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.X, UNIT_EMU ) ) + lclCalcEmu( rUnitConv, maFrom.mnColOffset, eUnitX );
-                sal_Int64 nY = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.Y, UNIT_EMU ) ) + lclCalcEmu( rUnitConv, maFrom.mnRowOffset, eUnitY );
-                if( (nX < aSheetSize.Width) && (nY < aSheetSize.Height) )
-                {
-                    aLoc.X = static_cast< sal_Int32 >( nX );
-                    aLoc.Y = static_cast< sal_Int32 >( nY );
-                }
-            }
-        break;
-        case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::calcEmuLocation - invalid anchor" );
-        break;
-    }
-
-    // calculate shape size
-    if( (aLoc.X >= 0) && (aLoc.Y >= 0) ) switch( meType )
-    {
-        case ANCHOR_ABSOLUTE:
-        case ANCHOR_ONECELL:
-            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::calcEmuLocation - invalid size" );
-            if( maSize.isValid() )
-            {
-                aLoc.Width = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.Width, aSheetSize.Width - aLoc.X ) );
-                aLoc.Height = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.Height, aSheetSize.Height - aLoc.Y ) );
-            }
-        break;
-        case ANCHOR_TWOCELL:
-        case ANCHOR_VML:
-            OSL_ENSURE( maTo.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
-            if( maTo.isValid() )
-            {
-                /*  Pass a valid cell address to getCellPosition(), otherwise
-                    nothing is returned, even if either row or column is valid. */
-                CellAddress aToCell = rAddrConv.createValidCellAddress( BinAddress( maTo.mnCol, maTo.mnRow ), getSheetIndex(), true );
-                Point aPoint = getCellPosition( aToCell.Column, aToCell.Row );
-                sal_Int64 nX = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.X, UNIT_EMU ) );
-                sal_Int64 nY = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.Y, UNIT_EMU ) );
-                // width
-                aLoc.Width = aSheetSize.Width - aLoc.X;
-                if( aToCell.Column == maTo.mnCol )
-                {
-                    nX += lclCalcEmu( rUnitConv, maTo.mnColOffset, eUnitX );
-                    aLoc.Width = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( nX - aLoc.X + 1, aLoc.Width ) );
-                }
-                // height
-                aLoc.Height = aSheetSize.Height - aLoc.Y;
-                if( aToCell.Row == maTo.mnRow )
-                {
-                    nY += lclCalcEmu( rUnitConv, maTo.mnRowOffset, eUnitY );
-                    aLoc.Height = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( nY - aLoc.Y + 1, aLoc.Height ) );
-                }
-            }
-        break;
-        case ANCHOR_INVALID:
-        break;
-    }
-
-    // add 0.75 mm (27,000 EMUs) in X direction to correct display error
-    if( aLoc.X >= 0 )
-        aLoc.X += 27000;
-    // remove 0.25 mm (9,000 EMUs) in Y direction to correct display error
-    if( aLoc.Y >= 9000 )
-        aLoc.Y -= 9000;
-
-    return aLoc;
-}
-
-// ============================================================================
-
 ShapeMacroAttacher::ShapeMacroAttacher( const OUString& rMacroName, const Reference< XShape >& rxShape ) :
     VbaMacroAttacherBase( rMacroName ),
     mxShape( rxShape )
@@ -518,9 +180,6 @@ DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString
     mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
 {
     OSL_ENSURE( mxDrawPage.is(), "DrawingFragment::DrawingFragment - missing drawing page" );
-    maApiSheetSize = getDrawPageSize();
-    maEmuSheetSize.Width = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
-    maEmuSheetSize.Height = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
 }
 
 ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -595,20 +254,23 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() && mxAnchor->isValidAnchor() )
+            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
             {
-                Rectangle aShapeRect = mxAnchor->calcEmuLocation( maEmuSheetSize );
-                if( (aShapeRect.X >= 0) && (aShapeRect.Y >= 0) && (aShapeRect.Width >= 0) && (aShapeRect.Height >= 0) )
+                EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
+                if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRect );
+                    // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
+                    Rectangle aShapeRectEmu32(
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRectEmu32 );
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
-                    const UnitConverter& rUnitConv = getUnitConverter();
                     Rectangle aShapeRectHmm(
-                        rUnitConv.scaleToMm100( aShapeRect.X, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Y, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Width, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Height, UNIT_EMU ) );
+                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
+                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
                 }
             }
@@ -770,7 +432,7 @@ bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rS
         return false;
     ShapeAnchor aAnchor( *this );
     aAnchor.importVmlAnchor( rShapeAnchor );
-    orShapeRect = aAnchor.calcApiLocation( getDrawPageSize(), AnchorSizeModel() );
+    orShapeRect = aAnchor.calcAnchorRectHmm( getDrawPageSize() );
     return (orShapeRect.Width >= 0) && (orShapeRect.Height >= 0);
 }
 
