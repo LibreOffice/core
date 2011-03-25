@@ -71,7 +71,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dSphereObj* Clone() const;
 
     void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }

@@ -225,7 +225,8 @@ public:
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
         Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrObjCustomShape* Clone() const;
+    SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

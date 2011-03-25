@@ -3107,12 +3107,20 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::operator=(const SdrObject& rObj)
+SdrObjCustomShape* SdrObjCustomShape::Clone() const
 {
+    return CloneHelper< SdrObjCustomShape >();
+}
+
+SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrTextObj::operator=( rObj );
-    aName =((SdrObjCustomShape&)rObj).aName;
-    fObjectRotation = ((SdrObjCustomShape&)rObj).fObjectRotation;
+    aName = rObj.aName;
+    fObjectRotation = rObj.fObjectRotation;
     InvalidateRenderGeometry();
+    return *this;
 }
 
 

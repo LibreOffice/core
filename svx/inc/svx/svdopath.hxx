@@ -96,7 +96,8 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrPathObj* Clone() const;
+    SdrPathObj& operator=(const SdrPathObj& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

@@ -72,6 +72,11 @@ sal_uInt16 E3dPolyScene::GetObjIdentifier() const
     return E3D_POLYSCENE_ID;
 }
 
+E3dPolyScene* E3dPolyScene::Clone() const
+{
+    return CloneHelper< E3dPolyScene >();
+}
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

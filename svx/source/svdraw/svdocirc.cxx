@@ -349,12 +349,9 @@ void SdrCircObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(nID);
 }
 
-void SdrCircObj::operator=(const SdrObject& rObj)
+SdrCircObj* SdrCircObj::Clone() const
 {
-    SdrRectObj::operator=(rObj);
-
-    nStartWink = ((SdrCircObj&)rObj).nStartWink;
-    nEndWink = ((SdrCircObj&)rObj).nEndWink;
+    return CloneHelper< SdrCircObj >();
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const

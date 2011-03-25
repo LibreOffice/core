@@ -734,12 +734,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 }
 
-void SdrMeasureObj::operator=(const SdrObject& rObj)
+SdrMeasureObj* SdrMeasureObj::Clone() const
 {
-    SdrTextObj::operator=(rObj);
-    aPt1=((SdrMeasureObj&)rObj).aPt1;
-    aPt2=((SdrMeasureObj&)rObj).aPt2;
-    bTextDirty=((SdrMeasureObj&)rObj).bTextDirty;
+    return CloneHelper< SdrMeasureObj >();
 }
 
 void SdrMeasureObj::TakeObjNameSingul(XubString& rName) const

@@ -30,6 +30,7 @@
 #define _SVDOBJ_HXX
 
 #include <memory>
+#include <typeinfo>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/weakbase.hxx>
@@ -686,9 +687,16 @@ public:
     sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
     sal_Bool LineGeometryUsageIsNecessary() const;
 
-    // Clone() soll eine komplette Kopie des Objektes erzeugen.
+    /**
+      Returns a copy of the object. Every inherited class must reimplement this (in class Foo
+      it should be sufficient to do "virtual Foo* Clone() const { return CloneHelper< Foo >(); }".
+      Note that this function uses operator= internally.
+    */
     virtual SdrObject* Clone() const;
-    virtual void operator=(const SdrObject& rObj);
+    /**
+      Implemented mainly for the purposes of Clone().
+    */
+    SdrObject& operator=(const SdrObject& rObj);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual void TakeObjNameSingul(String& rName) const;
@@ -1129,6 +1137,11 @@ public:
 protected:
     void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 
+    /**
+     Helper function for reimplementing Clone().
+    */
+    template< typename T > T* CloneHelper() const;
+
 private:
     /** only for internal use!
     */
@@ -1182,6 +1195,15 @@ public:
 };
 
 typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;
+
+template< typename T > T* SdrObject::CloneHelper() const
+{
+    OSL_ASSERT( typeid( T ) == typeid( *this ));
+    T* pObj = dynamic_cast< T* >( SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL));
+    if (pObj!=NULL)
+        *pObj=*static_cast< const T* >( this );
+    return pObj;
+}
 
 #endif //_SVDOBJ_HXX
 

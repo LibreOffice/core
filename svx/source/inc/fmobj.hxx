@@ -86,9 +86,9 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void NbcReformatText();
 
-    virtual SdrObject*  Clone() const;
+    virtual FmFormObj* Clone() const;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
-    virtual void        operator= (const SdrObject& rObj);
+    FmFormObj& operator= (const FmFormObj& rObj);
 
     virtual void SetModel(SdrModel* pNewModel);
 

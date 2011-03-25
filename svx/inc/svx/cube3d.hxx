@@ -73,7 +73,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dCubeObj* Clone() const;
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);

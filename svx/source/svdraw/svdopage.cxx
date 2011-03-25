@@ -168,10 +168,18 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPolyLineToArea=sal_False;
 }
 
-void SdrPageObj::operator=(const SdrObject& rObj)
+SdrPageObj* SdrPageObj::Clone() const
 {
+    return CloneHelper< SdrPageObj >();
+}
+
+SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrObject::operator=(rObj);
-    SetReferencedPage(((const SdrPageObj&)rObj).GetReferencedPage());
+    SetReferencedPage( rObj.GetReferencedPage());
+    return *this;
 }
 
 void SdrPageObj::TakeObjNameSingul(XubString& rName) const

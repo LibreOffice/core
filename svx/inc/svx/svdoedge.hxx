@@ -247,7 +247,8 @@ public:
 
     virtual void RecalcSnapRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrEdgeObj* Clone() const;
+    SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 

@@ -295,26 +295,31 @@ const Rectangle& SdrObjGroup::GetSnapRect() const
     }
 }
 
-void SdrObjGroup::operator=(const SdrObject& rObj)
+SdrObjGroup* SdrObjGroup::Clone() const
 {
-    if(rObj.IsGroupObject())
-    {
-        // copy SdrObject stuff
-        SdrObject::operator=(rObj);
+    return CloneHelper< SdrObjGroup >();
+}
 
-        // #i36404#
-        // copy SubList, init model and page first
-        SdrObjList& rSourceSubList = *rObj.GetSubList();
-        pSub->SetPage(rSourceSubList.GetPage());
-        pSub->SetModel(rSourceSubList.GetModel());
-        pSub->CopyObjects(*rObj.GetSubList());
+SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    // copy SdrObject stuff
+    SdrObject::operator=(rObj);
 
-        // copy local paremeters
-        nDrehWink  =((SdrObjGroup&)rObj).nDrehWink;
-        nShearWink =((SdrObjGroup&)rObj).nShearWink;
-        aRefPoint  =((SdrObjGroup&)rObj).aRefPoint;
-        bRefPoint  =((SdrObjGroup&)rObj).bRefPoint;
-    }
+    // #i36404#
+    // copy SubList, init model and page first
+    SdrObjList& rSourceSubList = *rObj.GetSubList();
+    pSub->SetPage(rSourceSubList.GetPage());
+    pSub->SetModel(rSourceSubList.GetModel());
+    pSub->CopyObjects(*rObj.GetSubList());
+
+    // copy local paremeters
+    nDrehWink  = rObj.nDrehWink;
+    nShearWink = rObj.nShearWink;
+    aRefPoint  = rObj.aRefPoint;
+    bRefPoint  = rObj.bRefPoint;
+    return *this;
 }
 
 

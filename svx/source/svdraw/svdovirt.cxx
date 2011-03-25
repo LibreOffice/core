@@ -160,16 +160,16 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-SdrObject* SdrVirtObj::Clone() const
+SdrVirtObj* SdrVirtObj::Clone() const
 {
-    SdrObject* pObj=new SdrVirtObj(((SdrVirtObj*)this)->rRefObj); // Nur eine weitere Referenz
-    return pObj;
+    return new SdrVirtObj(this->rRefObj); // Nur eine weitere Referenz
 }
 
-void SdrVirtObj::operator=(const SdrObject& rObj)
+SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
 {   // ???anderes Objekt referenzieren???
     SdrObject::operator=(rObj);
-    aAnchor=((SdrVirtObj&)rObj).aAnchor;
+    aAnchor=rObj.aAnchor;
+    return *this;
 }
 
 void SdrVirtObj::TakeObjNameSingul(XubString& rName) const

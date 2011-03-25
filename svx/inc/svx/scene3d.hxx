@@ -210,7 +210,8 @@ public:
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dScene* Clone() const;
+    E3dScene& operator=(const E3dScene&);
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;

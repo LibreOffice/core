@@ -388,16 +388,14 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormObj::Clone() const
+FmFormObj* FmFormObj::Clone() const
 {
-    SdrObject* pReturn = SdrUnoObj::Clone();
-
-    FmFormObj* pFormObject = PTR_CAST(FmFormObj, pReturn);
+    FmFormObj* pFormObject = CloneHelper< FmFormObj >();
     DBG_ASSERT(pFormObject != NULL, "FmFormObj::Clone : invalid clone !");
     if (pFormObject)
         pFormObject->clonedFrom(this);
 
-    return pReturn;
+    return pFormObject;
 }
 
 //------------------------------------------------------------------
@@ -408,30 +406,29 @@ void FmFormObj::NbcReformatText()
 }
 
 //------------------------------------------------------------------
-void FmFormObj::operator= (const SdrObject& rObj)
+FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 {
+    if( this == &rObj )
+        return *this;
     SdrUnoObj::operator= (rObj);
 
-    FmFormObj* pFormObj = PTR_CAST(FmFormObj, &rObj);
-    if (pFormObj)
+    // liegt das UnoControlModel in einer Eventumgebung,
+    // dann koennen noch Events zugeordnet sein
+    Reference< XFormComponent >  xContent(rObj.xUnoControlModel, UNO_QUERY);
+    if (xContent.is())
     {
-        // liegt das UnoControlModel in einer Eventumgebung,
-        // dann koennen noch Events zugeordnet sein
-        Reference< XFormComponent >  xContent(pFormObj->xUnoControlModel, UNO_QUERY);
-        if (xContent.is())
+        Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
+        Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
+        if (xManagerAsIndex.is())
         {
-            Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
-            Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
-            if (xManagerAsIndex.is())
-            {
-                sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
-                if ( nPos >= 0 )
-                    aEvts = xManager->getScriptEvents( nPos );
-            }
+            sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
+            if ( nPos >= 0 )
+                aEvts = xManager->getScriptEvents( nPos );
         }
-        else
-            aEvts = pFormObj->aEvts;
     }
+    else
+        aEvts = rObj.aEvts;
+    return *this;
 }
 
 //------------------------------------------------------------------

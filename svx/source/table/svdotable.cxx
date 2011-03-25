@@ -1874,31 +1874,35 @@ void SdrTableObj::TakeObjNamePlural(XubString& rName) const
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::operator=(const SdrObject& rObj)
+SdrTableObj* SdrTableObj::Clone() const
 {
+    return CloneHelper< SdrTableObj >();
+}
+
+SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     // call parent
     SdrObject::operator=(rObj);
 
-    const SdrTableObj* pTableObj = dynamic_cast< const SdrTableObj* >( &rObj );
-    if (pTableObj!=NULL)
-    {
-        TableModelNotifyGuard aGuard( mpImpl ? mpImpl->mxTable.get() : 0 );
+    TableModelNotifyGuard aGuard( mpImpl ? mpImpl->mxTable.get() : 0 );
 
-        maLogicRect = pTableObj->maLogicRect;
-        aRect = pTableObj->aRect;
-        aGeo = pTableObj->aGeo;
-        eTextKind = pTableObj->eTextKind;
-        bTextFrame = pTableObj->bTextFrame;
-        aTextSize = pTableObj->aTextSize;
-        bTextSizeDirty = pTableObj->bTextSizeDirty;
-        bNoShear = pTableObj->bNoShear;
-        bNoRotate = pTableObj->bNoRotate;
-        bNoMirror = pTableObj->bNoMirror;
-        bDisableAutoWidthOnDragging = pTableObj->bDisableAutoWidthOnDragging;
+    maLogicRect = rObj.maLogicRect;
+    aRect = rObj.aRect;
+    aGeo = rObj.aGeo;
+    eTextKind = rObj.eTextKind;
+    bTextFrame = rObj.bTextFrame;
+    aTextSize = rObj.aTextSize;
+    bTextSizeDirty = rObj.bTextSizeDirty;
+    bNoShear = rObj.bNoShear;
+    bNoRotate = rObj.bNoRotate;
+    bNoMirror = rObj.bNoMirror;
+    bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
-        if( pTableObj->mpImpl )
-            *mpImpl = *pTableObj->mpImpl;
-    }
+    if( rObj.mpImpl )
+        *mpImpl = *rObj.mpImpl;
+    return *this;
 }
 
 // --------------------------------------------------------------------

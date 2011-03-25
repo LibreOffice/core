@@ -529,14 +529,21 @@ void E3dScene::removeAllNonSelectedObjects()
     }
 }
 
+E3dScene* E3dScene::Clone() const
+{
+    return CloneHelper< E3dScene >();
+}
+
 /*************************************************************************
 |*
 |* Zuweisungsoperator
 |*
 \************************************************************************/
 
-void E3dScene::operator=(const SdrObject& rObj)
+E3dScene& E3dScene::operator=(const E3dScene& rObj)
 {
+    if( this == &rObj )
+        return *this;
     E3dObject::operator=(rObj);
 
     const E3dScene& r3DObj = (const E3dScene&) rObj;
@@ -566,6 +573,7 @@ void E3dScene::operator=(const SdrObject& rObj)
     // ActionChanged at the VC which will for this class
     // flush that cached data and initalize it's valid reconstruction
     GetViewContact().ActionChanged();
+    return *this;
 }
 
 /*************************************************************************

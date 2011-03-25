@@ -281,9 +281,9 @@ void SdrRectObj::TakeObjNamePlural(XubString& rName) const
     }
 }
 
-void SdrRectObj::operator=(const SdrObject& rObj)
+SdrRectObj* SdrRectObj::Clone() const
 {
-    SdrTextObj::operator=(rObj);
+    return CloneHelper< SdrRectObj >();
 }
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const

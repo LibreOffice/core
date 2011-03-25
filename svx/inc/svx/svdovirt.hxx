@@ -79,8 +79,8 @@ public:
     virtual const Rectangle& GetLastBoundRect() const;
     virtual void RecalcBoundRect();
     virtual void SetChanged();
-    virtual SdrObject* Clone() const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrVirtObj* Clone() const;
+    SdrVirtObj& operator=(const SdrVirtObj& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

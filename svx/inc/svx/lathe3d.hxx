@@ -102,7 +102,7 @@ private:
     virtual sal_uInt16 GetObjIdentifier() const;
     void    ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs);
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dLatheObj* Clone() const;
 
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 

@@ -135,17 +135,20 @@ void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::operator=(const SdrObject& rObj)
+SdrMediaObj* SdrMediaObj::Clone() const
 {
+    return CloneHelper< SdrMediaObj >();
+}
+
+SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrRectObj::operator=( rObj );
 
-    if( rObj.ISA( SdrMediaObj ) )
-    {
-        const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
-
-        setMediaProperties( rMediaObj.getMediaProperties() );
-        setGraphic( rMediaObj.mapGraphic.get() );
-    }
+    setMediaProperties( rObj.getMediaProperties() );
+    setGraphic( rObj.mapGraphic.get() );
+    return *this;
 }
 
 // ------------------------------------------------------------------------------

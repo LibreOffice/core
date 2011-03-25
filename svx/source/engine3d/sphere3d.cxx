@@ -151,22 +151,9 @@ void E3dSphereObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
     }
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dSphereObj::operator=(const SdrObject& rObj)
+E3dSphereObj* E3dSphereObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dSphereObj& r3DObj = (const E3dSphereObj&) rObj;
-
-    aCenter       = r3DObj.aCenter;
-    aSize         = r3DObj.aSize;
+    return CloneHelper< E3dSphereObj >();
 }
 
 /*************************************************************************

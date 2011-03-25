@@ -94,7 +94,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrCaptionObj* Clone() const;
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = sal_True; }

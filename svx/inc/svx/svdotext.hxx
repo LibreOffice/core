@@ -438,7 +438,8 @@ public:
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrTextObj* Clone() const;
+    SdrTextObj& operator=(const SdrTextObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
     virtual void RecalcSnapRect();

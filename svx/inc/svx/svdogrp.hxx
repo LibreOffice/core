@@ -80,7 +80,8 @@ public:
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetSnapRect() const;
 
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrObjGroup* Clone() const;
+    SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

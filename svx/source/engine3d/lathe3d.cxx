@@ -136,21 +136,9 @@ sal_uInt16 E3dLatheObj::GetObjIdentifier() const
     return E3D_LATHEOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dLatheObj::operator=(const SdrObject& rObj)
+E3dLatheObj* E3dLatheObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
-
-    maPolyPoly2D  = r3DObj.maPolyPoly2D;
+    return CloneHelper< E3dLatheObj >();
 }
 
 /*************************************************************************

@@ -1879,11 +1879,18 @@ sal_uInt16 SdrPathObj::GetObjIdentifier() const
     return sal_uInt16(meKind);
 }
 
-void SdrPathObj::operator=(const SdrObject& rObj)
+SdrPathObj* SdrPathObj::Clone() const
 {
+    return CloneHelper< SdrPathObj >();
+}
+
+SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrTextObj::operator=(rObj);
-    SdrPathObj& rPath=(SdrPathObj&)rObj;
-    maPathPolygon=rPath.GetPathPoly();
+    maPathPolygon=rObj.GetPathPoly();
+    return *this;
 }
 
 void SdrPathObj::TakeObjNameSingul(XubString& rName) const

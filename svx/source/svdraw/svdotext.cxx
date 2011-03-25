@@ -1208,47 +1208,51 @@ void SdrTextObj::TakeObjNamePlural(XubString& rName) const
     } // switch
 }
 
-void SdrTextObj::operator=(const SdrObject& rObj)
+SdrTextObj* SdrTextObj::Clone() const
 {
+    return CloneHelper< SdrTextObj >();
+}
+
+SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     // call parent
     SdrObject::operator=(rObj);
 
-    const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >( &rObj );
-    if (pTextObj!=NULL)
+    aRect     =rObj.aRect;
+    aGeo      =rObj.aGeo;
+    eTextKind =rObj.eTextKind;
+    bTextFrame=rObj.bTextFrame;
+    aTextSize=rObj.aTextSize;
+    bTextSizeDirty=rObj.bTextSizeDirty;
+
+    // #101776# Not all of the necessary parameters were copied yet.
+    bNoShear = rObj.bNoShear;
+    bNoRotate = rObj.bNoRotate;
+    bNoMirror = rObj.bNoMirror;
+    bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
+
+    OutlinerParaObject* pNewOutlinerParaObject = 0;
+
+    SdrText* pText = getActiveText();
+
+    if( pText && rObj.HasText() )
     {
-        aRect     =pTextObj->aRect;
-        aGeo      =pTextObj->aGeo;
-        eTextKind =pTextObj->eTextKind;
-        bTextFrame=pTextObj->bTextFrame;
-        aTextSize=pTextObj->aTextSize;
-        bTextSizeDirty=pTextObj->bTextSizeDirty;
-
-        // #101776# Not all of the necessary parameters were copied yet.
-        bNoShear = pTextObj->bNoShear;
-        bNoRotate = pTextObj->bNoRotate;
-        bNoMirror = pTextObj->bNoMirror;
-        bDisableAutoWidthOnDragging = pTextObj->bDisableAutoWidthOnDragging;
-
-        OutlinerParaObject* pNewOutlinerParaObject = 0;
-
-        SdrText* pText = getActiveText();
-
-        if( pText && pTextObj->HasText() )
+        const Outliner* pEO=rObj.pEdtOutl;
+        if (pEO!=NULL)
         {
-            const Outliner* pEO=pTextObj->pEdtOutl;
-            if (pEO!=NULL)
-            {
-                pNewOutlinerParaObject = pEO->CreateParaObject();
-            }
-            else
-            {
-                pNewOutlinerParaObject = new OutlinerParaObject(*pTextObj->getActiveText()->GetOutlinerParaObject());
-            }
+            pNewOutlinerParaObject = pEO->CreateParaObject();
         }
-
-        mpText->SetOutlinerParaObject( pNewOutlinerParaObject );
-        ImpSetTextStyleSheetListeners();
+        else
+        {
+            pNewOutlinerParaObject = new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject());
+        }
     }
+
+    mpText->SetOutlinerParaObject( pNewOutlinerParaObject );
+    ImpSetTextStyleSheetListeners();
+    return *this;
 }
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const

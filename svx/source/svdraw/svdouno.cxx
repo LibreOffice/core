@@ -314,18 +314,25 @@ void SdrUnoObj::TakeObjNamePlural(XubString& rName) const
     rName = ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-void SdrUnoObj::operator = (const SdrObject& rObj)
+SdrUnoObj* SdrUnoObj::Clone() const
 {
-    SdrRectObj::operator = (rObj);
+    return CloneHelper< SdrUnoObj >();
+}
+
+SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    SdrRectObj::operator= (rObj);
 
     // release the reference to the current control model
     SetUnoControlModel(uno::Reference< awt::XControlModel >());
 
-    aUnoControlModelTypeName = ((SdrUnoObj&) rObj).aUnoControlModelTypeName;
-    aUnoControlTypeName = ((SdrUnoObj&) rObj).aUnoControlTypeName;
+    aUnoControlModelTypeName = rObj.aUnoControlModelTypeName;
+    aUnoControlTypeName = rObj.aUnoControlTypeName;
 
     // copy the uno control model
-    uno::Reference< awt::XControlModel > xCtrl( ((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel > xCtrl( rObj.GetUnoControlModel(), uno::UNO_QUERY );
     uno::Reference< util::XCloneable > xClone( xCtrl, uno::UNO_QUERY );
 
     if ( xClone.is() )
@@ -398,6 +405,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
     if (xComp.is())
         m_pImpl->pEventListener->StartListening(xComp);
+    return *this;
 }
 
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

@@ -476,7 +476,7 @@ public:
     SdrPage(const SdrPage& rSrcPage);
     virtual ~SdrPage();
     // pModel, pPage, pUpList, pOwnerObj und mbInserted werden Zuweisungeoperator nicht veraendert!
-    virtual void operator=(const SdrPage& rSrcPage);
+    SdrPage& operator=(const SdrPage& rSrcPage);
     virtual SdrPage* Clone() const;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool IsMasterPage() const       { return mbMaster; }

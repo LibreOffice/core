@@ -80,7 +80,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dPolygonObj* Clone() const;
 
     // LineOnly?
     sal_Bool GetLineOnly() { return bLineOnly; }

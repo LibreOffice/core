@@ -1592,16 +1592,24 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-void SdrEdgeObj::operator=(const SdrObject& rObj)
+SdrEdgeObj* SdrEdgeObj::Clone() const
 {
+    return CloneHelper< SdrEdgeObj >();
+}
+
+SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrTextObj::operator=(rObj);
-    *pEdgeTrack    =*((SdrEdgeObj&)rObj).pEdgeTrack;
-    bEdgeTrackDirty=((SdrEdgeObj&)rObj).bEdgeTrackDirty;
-    aCon1          =((SdrEdgeObj&)rObj).aCon1;
-    aCon2          =((SdrEdgeObj&)rObj).aCon2;
+    *pEdgeTrack    =*rObj.pEdgeTrack;
+    bEdgeTrackDirty=rObj.bEdgeTrackDirty;
+    aCon1          =rObj.aCon1;
+    aCon2          =rObj.aCon2;
     aCon1.pObj=NULL;
     aCon2.pObj=NULL;
-    aEdgeInfo=((SdrEdgeObj&)rObj).aEdgeInfo;
+    aEdgeInfo=rObj.aEdgeInfo;
+    return *this;
 }
 
 void SdrEdgeObj::TakeObjNameSingul(XubString& rName) const

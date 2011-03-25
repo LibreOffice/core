@@ -122,21 +122,9 @@ sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
     return E3D_EXTRUDEOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dExtrudeObj::operator=(const SdrObject& rObj)
+E3dExtrudeObj* E3dExtrudeObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dExtrudeObj& r3DObj = (const E3dExtrudeObj&)rObj;
-
-    maExtrudePolygon = r3DObj.maExtrudePolygon;
+    return CloneHelper< E3dExtrudeObj >();
 }
 
 /*************************************************************************

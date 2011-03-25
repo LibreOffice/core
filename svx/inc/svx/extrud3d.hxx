@@ -92,7 +92,7 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dExtrudeObj* Clone() const;
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual void TakeObjNameSingul(String& rName) const;

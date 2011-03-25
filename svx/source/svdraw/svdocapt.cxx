@@ -251,10 +251,9 @@ sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_CAPTION);
 }
 
-void SdrCaptionObj::operator=(const SdrObject& rObj)
+SdrCaptionObj* SdrCaptionObj::Clone() const
 {
-    SdrRectObj::operator=(rObj);
-    aTailPoly=((SdrCaptionObj&)rObj).aTailPoly;
+    return CloneHelper< SdrCaptionObj >();
 }
 
 void SdrCaptionObj::TakeObjNameSingul(XubString& rName) const

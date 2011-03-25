@@ -62,7 +62,8 @@ public:
         virtual void                TakeObjNameSingul(String& rName) const;
         virtual void                TakeObjNamePlural(String& rName) const;
 
-        virtual void                operator=(const SdrObject& rObj);
+        virtual SdrMediaObj*            Clone() const;
+        SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
         virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

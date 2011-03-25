@@ -868,14 +868,21 @@ void E3dObject::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralObj3d);
 }
 
+E3dObject* E3dObject::Clone() const
+{
+    return CloneHelper< E3dObject >();
+}
+
 /*************************************************************************
 |*
 |* Zuweisungsoperator
 |*
 \************************************************************************/
 
-void E3dObject::operator=(const SdrObject& rObj)
+E3dObject& E3dObject::operator=(const E3dObject& rObj)
 {
+    if( this == &rObj )
+        return *this;
     SdrObject::operator=(rObj);
 
     const E3dObject& r3DObj = (const E3dObject&) rObj;
@@ -894,6 +901,7 @@ void E3dObject::operator=(const SdrObject& rObj)
 
     // Selektionsstatus kopieren
     mbIsSelected = r3DObj.mbIsSelected;
+    return *this;
 }
 
 /*************************************************************************
@@ -1183,23 +1191,9 @@ void E3dCompoundObject::RecalcSnapRect()
     }
 }
 
-/*************************************************************************
-|*
-|* Copy-Operator
-|*
-\************************************************************************/
-
-void E3dCompoundObject::operator=(const SdrObject& rObj)
+E3dCompoundObject* E3dCompoundObject::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dCompoundObject& r3DObj = (const E3dCompoundObject&) rObj;
-
-    bCreateNormals = r3DObj.bCreateNormals;
-    bCreateTexture = r3DObj.bCreateTexture;
-    aMaterialAmbientColor = r3DObj.aMaterialAmbientColor;
+    return CloneHelper< E3dCompoundObject >();
 }
 
 /*************************************************************************

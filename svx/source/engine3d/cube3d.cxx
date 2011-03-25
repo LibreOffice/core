@@ -104,24 +104,9 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dCubeObj::operator=(const SdrObject& rObj)
+E3dCubeObj* E3dCubeObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dCubeObj& r3DObj = (const E3dCubeObj&)rObj;
-
-    aCubePos = r3DObj.aCubePos;
-    aCubeSize = r3DObj.aCubeSize;
-    bPosIsCenter = r3DObj.bPosIsCenter;
-    nSideFlags = r3DObj.nSideFlags;
+    return CloneHelper< E3dCubeObj >();
 }
 
 /*************************************************************************

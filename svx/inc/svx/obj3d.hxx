@@ -196,7 +196,8 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     sal_uInt16 GetLogicalGroup() { return 0; }
-    virtual void operator=(const SdrObject&);
+    virtual E3dObject* Clone() const;
+    E3dObject& operator=( const E3dObject& rObj );
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -316,8 +317,7 @@ public :
     sal_Bool GetCreateTexture() const { return bCreateTexture; }
     void SetCreateTexture(sal_Bool bNew);
 
-    // copy operator
-    virtual void operator=(const SdrObject&);
+    virtual E3dCompoundObject* Clone() const;
 
     // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }

@@ -992,17 +992,14 @@ sal_Bool SdrObject::LineGeometryUsageIsNecessary() const
 
 SdrObject* SdrObject::Clone() const
 {
-    SdrObject* pObj=SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL);
-    if (pObj!=NULL) {
-        pObj->pModel=pModel;
-        pObj->pPage=pPage;
-        *pObj=*this;
-    }
-    return pObj;
+    return CloneHelper< SdrObject >();
 }
 
-void SdrObject::operator=(const SdrObject& rObj)
+SdrObject& SdrObject::operator=(const SdrObject& rObj)
 {
+    if( this == &rObj )
+        return *this;
+
     if(mpProperties)
     {
         delete mpProperties;
@@ -1022,6 +1019,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     mpProperties = &rObj.GetProperties().Clone(*this);
 
     pModel  =rObj.pModel;
+    pPage = rObj.pPage;
     aOutRect=rObj.aOutRect;
     mnLayerID = rObj.mnLayerID;
     aAnchor =rObj.aAnchor;
@@ -1037,7 +1035,8 @@ void SdrObject::operator=(const SdrObject& rObj)
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
     bSnapRectDirty=sal_True; //rObj.bSnapRectDirty;
     bNotMasterCachable=rObj.bNotMasterCachable;
-    if (pPlusData!=NULL) { delete pPlusData; pPlusData=NULL; }
+    delete pPlusData;
+    pPlusData=NULL;
     if (rObj.pPlusData!=NULL) {
         pPlusData=rObj.pPlusData->Clone(this);
     }
@@ -1045,6 +1044,7 @@ void SdrObject::operator=(const SdrObject& rObj)
         delete pPlusData->pBroadcast; // der Broadcaster wird nicht mitkopiert
         pPlusData->pBroadcast=NULL;
     }
+    return *this;
 }
 
 void SdrObject::TakeObjNameSingul(XubString& rName) const

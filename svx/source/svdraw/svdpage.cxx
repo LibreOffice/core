@@ -1422,8 +1422,10 @@ SdrPage::~SdrPage()
     DBG_DTOR(SdrPage,NULL);
 }
 
-void SdrPage::operator=(const SdrPage& rSrcPage)
+SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
 {
+    if( this == &rSrcPage )
+        return *this;
     if(mpViewContact)
     {
         delete mpViewContact;
@@ -1490,6 +1492,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
 
     // Now copy the contained obejcts (by cloning them)
     SdrObjList::operator=(rSrcPage);
+    return *this;
 }
 
 SdrPage* SdrPage::Clone() const

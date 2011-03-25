@@ -324,24 +324,9 @@ SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dPolygonObj::operator=(const SdrObject& rObj)
+E3dPolygonObj* E3dPolygonObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dPolygonObj& r3DObj = (const E3dPolygonObj&)rObj;
-
-    aPolyPoly3D      = r3DObj.aPolyPoly3D;
-    aPolyNormals3D   = r3DObj.aPolyNormals3D;
-    aPolyTexture2D   = r3DObj.aPolyTexture2D;
-    bLineOnly        = r3DObj.bLineOnly;
+    return CloneHelper< E3dPolygonObj >();
 }
 
 /*************************************************************************

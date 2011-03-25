@@ -1599,7 +1599,12 @@ void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::operator=(const SdrObject& rObj)
+SdrOle2Obj* SdrOle2Obj::Clone() const
+{
+    return CloneHelper< SdrOle2Obj >();
+}
+
+SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 {
     //TODO/LATER: who takes over control of my old object?!
     if( &rObj != this )
@@ -1680,6 +1685,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             }
         }
     }
+    return *this;
 }
 
 // -----------------------------------------------------------------------------

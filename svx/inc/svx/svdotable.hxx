@@ -226,7 +226,8 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrTableObj* Clone() const;
+    SdrTableObj& operator=(const SdrTableObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
     virtual void RecalcSnapRect();

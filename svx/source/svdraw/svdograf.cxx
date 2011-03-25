@@ -815,24 +815,30 @@ SdrObject* SdrGrafObj::getFullDragClone() const
     return pRetval;
 }
 
-void SdrGrafObj::operator=( const SdrObject& rObj )
+SdrGrafObj* SdrGrafObj::Clone() const
 {
+    return CloneHelper< SdrGrafObj >();
+}
+
+SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
+{
+    if( this == &rObj )
+        return *this;
     SdrRectObj::operator=( rObj );
 
-    const SdrGrafObj& rGraf = (SdrGrafObj&) rObj;
+    pGraphic->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
+    aCropRect = rObj.aCropRect;
+    aFileName = rObj.aFileName;
+    aFilterName = rObj.aFilterName;
+    bMirrored = rObj.bMirrored;
 
-    pGraphic->SetGraphic( rGraf.GetGraphic(), &rGraf.GetGraphicObject() );
-    aCropRect = rGraf.aCropRect;
-    aFileName = rGraf.aFileName;
-    aFilterName = rGraf.aFilterName;
-    bMirrored = rGraf.bMirrored;
-
-    if( rGraf.pGraphicLink != NULL)
+    if( rObj.pGraphicLink != NULL)
     {
         SetGraphicLink( aFileName, aFilterName );
     }
 
     ImpSetAttrToGrafInfo();
+    return *this;
 }
 
 // -----------------------------------------------------------------------------
