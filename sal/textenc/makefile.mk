@@ -107,7 +107,7 @@ OBJTARGET=$(LB)$/$(TARGET).lib
 
 # be nicer to avoid DLLPRE
 .IF "$(GUI)" == "WNT"
-CDEFS+=-DPLUGIN_NAME=$(DLLPRE)uno_sal_textenc$(UDK_MAJOR)$(DLLPOST)
+CDEFS+=-DPLUGIN_NAME=$(DLLPRE)sal_textenc$(UDK_MAJOR)$(DLLPOST)
 .ELSE
 CDEFS+=-DPLUGIN_NAME=$(DLLPRE)uno_sal_textenc$(DLLPOST).$(UDK_MAJOR)
 .ENDIF
