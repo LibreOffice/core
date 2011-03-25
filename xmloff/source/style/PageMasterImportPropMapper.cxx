@@ -28,14 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "PageMasterImportPropMapper.hxx"
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -129,7 +124,15 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pFooterHeight = NULL;
     XMLPropertyState* pFooterMinHeight = NULL;
     XMLPropertyState* pFooterDynamic = NULL;
-    sal_uInt16 i;  // for the "for" loop
+    XMLPropertyState* pAllMarginProperty = NULL;
+    XMLPropertyState* pMargins[4] = { NULL, NULL, NULL, NULL };
+    ::std::auto_ptr<XMLPropertyState> pNewMargins[4];
+    XMLPropertyState* pAllHeaderMarginProperty = NULL;
+    XMLPropertyState* pHeaderMargins[4] = { NULL, NULL, NULL, NULL };
+    ::std::auto_ptr<XMLPropertyState> pNewHeaderMargins[4];
+    XMLPropertyState* pAllFooterMarginProperty = NULL;
+    XMLPropertyState* pFooterMargins[4] = { NULL, NULL, NULL, NULL };
+    ::std::auto_ptr<XMLPropertyState> pNewFooterMargins[4];
 
     ::std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
     for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)
@@ -189,12 +192,60 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
                 case CTF_PM_HEADERMINHEIGHT             : pHeaderMinHeight = property; break;
                 case CTF_PM_FOOTERHEIGHT                : pFooterHeight = property; break;
                 case CTF_PM_FOOTERMINHEIGHT             : pFooterMinHeight = property; break;
+                case CTF_PM_MARGINALL   :
+                      pAllMarginProperty = property; break;
+                case CTF_PM_MARGINTOP   :
+                      pMargins[XML_LINE_TOP] = property; break;
+                case CTF_PM_MARGINBOTTOM:
+                      pMargins[XML_LINE_BOTTOM] = property; break;
+                case CTF_PM_MARGINLEFT  :
+                      pMargins[XML_LINE_LEFT] = property; break;
+                case CTF_PM_MARGINRIGHT :
+                      pMargins[XML_LINE_RIGHT] = property; break;
+                case CTF_PM_HEADERMARGINALL   :
+                      pAllHeaderMarginProperty = property; break;
+                case CTF_PM_HEADERMARGINTOP   :
+                      pHeaderMargins[XML_LINE_TOP] = property; break;
+                case CTF_PM_HEADERMARGINBOTTOM:
+                      pHeaderMargins[XML_LINE_BOTTOM] = property; break;
+                case CTF_PM_HEADERMARGINLEFT  :
+                      pHeaderMargins[XML_LINE_LEFT] = property; break;
+                case CTF_PM_HEADERMARGINRIGHT :
+                      pHeaderMargins[XML_LINE_RIGHT] = property; break;
+                case CTF_PM_FOOTERMARGINALL   :
+                      pAllFooterMarginProperty = property; break;
+                case CTF_PM_FOOTERMARGINTOP   :
+                      pFooterMargins[XML_LINE_TOP] = property; break;
+                case CTF_PM_FOOTERMARGINBOTTOM:
+                      pFooterMargins[XML_LINE_BOTTOM] = property; break;
+                case CTF_PM_FOOTERMARGINLEFT  :
+                      pFooterMargins[XML_LINE_LEFT] = property; break;
+                case CTF_PM_FOOTERMARGINRIGHT :
+                      pFooterMargins[XML_LINE_RIGHT] = property; break;
             }
         }
     }
 
-    for ( i = 0; i < 4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
+        if (pAllMarginProperty && !pMargins[i])
+        {
+            pNewMargins[i].reset(new XMLPropertyState(
+                pAllMarginProperty->mnIndex + 1 + i,
+                pAllMarginProperty->maValue));
+        }
+        if (pAllHeaderMarginProperty && !pHeaderMargins[i])
+        {
+            pNewHeaderMargins[i].reset(new XMLPropertyState(
+                pAllHeaderMarginProperty->mnIndex + 1 + i,
+                pAllHeaderMarginProperty->maValue));
+        }
+        if (pAllFooterMarginProperty && !pFooterMargins[i])
+        {
+            pNewFooterMargins[i].reset(new XMLPropertyState(
+                pAllFooterMarginProperty->mnIndex + 1 + i,
+                pAllFooterMarginProperty->maValue));
+        }
         if (pAllPaddingProperty && !pPadding[i])
             pNewPadding[i] = new XMLPropertyState(pAllPaddingProperty->mnIndex + 1 + i, pAllPaddingProperty->maValue);
         if (pAllBorderProperty && !pBorders[i])
@@ -294,8 +345,20 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
         aAny.setValue( &bValue, ::getBooleanCppuType() );
         pFooterDynamic = new XMLPropertyState(pFooterMinHeight->mnIndex + 1, aAny);
     }
-    for (i = 0; i < 4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
+        if (pNewMargins[i].get())
+        {
+            rProperties.push_back(*pNewMargins[i]);
+        }
+        if (pNewHeaderMargins[i].get())
+        {
+            rProperties.push_back(*pNewHeaderMargins[i]);
+        }
+        if (pNewFooterMargins[i].get())
+        {
+            rProperties.push_back(*pNewFooterMargins[i]);
+        }
         if (pNewPadding[i])
         {
             rProperties.push_back(*pNewPadding[i]);
