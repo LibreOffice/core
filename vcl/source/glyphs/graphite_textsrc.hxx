@@ -40,9 +40,9 @@
 #include <stdexcept>
 // Platform
 
-#include <tools/svwin.h>
-
-#include <svsys.h>
+#ifdef WNT
+#include <windows.h>
+#endif
 
 #include <vcl/salgdi.hxx>
 

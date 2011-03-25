@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#include <tools/svwin.h>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #ifndef _SV_WORKWIN
@@ -38,6 +37,7 @@
 #include <vcl/window.hxx>
 
 #ifdef WNT
+#include <windows.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

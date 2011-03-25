@@ -36,7 +36,6 @@
 #include <svpm.h>
 
 #define _SV_SALGDI3_CXX
-#include <tools/svwin.h>
 #include <rtl/tencinfo.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>

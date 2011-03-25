@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/svwin.h>
-
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 #include <salgdi.h>

@@ -31,7 +31,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <tools/svwin.h>
+#include <windows.h>
 #include <tools/debug.hxx>
 #include <wincomp.hxx>
 #include <salbmp.h>

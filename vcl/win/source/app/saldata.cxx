@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/svwin.h>
+#include <windows.h>
 #include "rtl/tencinfo.h"
 #include <saldata.hxx>
 #include <vcl/svapp.hxx>

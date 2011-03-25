@@ -31,7 +31,7 @@
 
 #include <string.h>
 
-#include <tools/svwin.h>
+#include <windows.h>
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salinst.h>

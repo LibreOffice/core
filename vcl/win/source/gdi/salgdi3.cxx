@@ -33,7 +33,7 @@
 #include <malloc.h>
 
 #include <vcl/sysdata.hxx>
-#include "tools/svwin.h"
+#include <windows.h>
 
 #include "wincomp.hxx"
 #include "saldata.hxx"

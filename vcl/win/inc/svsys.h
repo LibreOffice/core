@@ -29,8 +29,6 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#include <tools/svwin.h>
-
 #endif // _SV_SVSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

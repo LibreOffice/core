@@ -30,8 +30,8 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
-#include <tools/svwin.h>
 #ifdef WNT
+#include <windows.h>
 #include <process.h>
 #endif
 #ifdef __MINGW32__

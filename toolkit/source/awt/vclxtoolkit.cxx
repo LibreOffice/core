@@ -33,7 +33,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <tools/svwin.h>
 #include <stdio.h>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>

@@ -54,8 +54,7 @@
 
 // Platform
 #ifdef WNT
-#include <tools/svwin.h>
-#include <svsys.h>
+#include <windows.h>
 #endif
 
 #include <vcl/salgdi.hxx>
