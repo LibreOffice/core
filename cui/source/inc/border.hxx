@@ -41,7 +41,10 @@
 
 // forward ---------------------------------------------------------------
 
-class SvxBorderLine;
+namespace editeng
+{
+    class SvxBorderLine;
+}
 class XColorTable;
 
 #include <svx/flagsdef.hxx>
@@ -150,7 +153,7 @@ private:
 
     // share for individual Frame-/Core-Line
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
-                                             const SvxBorderLine* pCurLine,
+                                             const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
 #endif
 };

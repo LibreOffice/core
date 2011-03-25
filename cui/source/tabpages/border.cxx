@@ -56,6 +56,8 @@
 #include <sal/macros.h>
 #include "borderconn.hxx"
 
+using namespace ::editeng;
+
 // -----------------------------------------------------------------------
 
 /*

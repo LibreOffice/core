@@ -46,20 +46,20 @@ of the tab page.
 
 // 1st: item wrappers ---------------------------------------------------------
 
-class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const SvxBorderLine* >
+class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const editeng::SvxBorderLine* >
 {
 public:
     inline explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
 
-    virtual const SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
+    virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
                             { return rItem.GetLine(); }
-    virtual void        SetItemValue( SvxLineItem& rItem, const SvxBorderLine* pLine ) const
+    virtual void        SetItemValue( SvxLineItem& rItem, const editeng::SvxBorderLine* pLine ) const
                             { rItem.SetLine( pLine ); }
 };
 
 // 2nd: control wrappers ------------------------------------------------------
 
-class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const SvxBorderLine* >
+class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const editeng::SvxBorderLine* >
 {
 public:
     inline explicit     FrameSelectorWrapper( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
@@ -68,8 +68,8 @@ public:
     virtual bool        IsControlDontKnow() const;
     virtual void        SetControlDontKnow( bool bSet );
 
-    virtual const SvxBorderLine* GetControlValue() const;
-    virtual void        SetControlValue( const SvxBorderLine* pLine );
+    virtual const editeng::SvxBorderLine* GetControlValue() const;
+    virtual void        SetControlValue( const editeng::SvxBorderLine* pLine );
 
 private:
     FrameBorderType       meBorder;         /// The line this wrapper works with.
@@ -86,12 +86,12 @@ void FrameSelectorWrapper::SetControlDontKnow( bool bSet )
         GetControl().SetBorderDontCare( meBorder );
 }
 
-const SvxBorderLine* FrameSelectorWrapper::GetControlValue() const
+const editeng::SvxBorderLine* FrameSelectorWrapper::GetControlValue() const
 {
     return GetControl().GetFrameBorderStyle( meBorder );
 }
 
-void FrameSelectorWrapper::SetControlValue( const SvxBorderLine* pLine )
+void FrameSelectorWrapper::SetControlValue( const editeng::SvxBorderLine* pLine )
 {
     GetControl().ShowBorder( meBorder, pLine );
 }
