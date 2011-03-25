@@ -118,7 +118,6 @@ gb_CXXFLAGS := \
 	-Wuninitialized \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
-	-fno-use-cxa-atexit \
 	-pipe \
 	-nostdinc \
 
