@@ -299,8 +299,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
             //  leave draw shell if nothing selected (layer may be locked)
-            if ( pView->GetMarkedObjectList().GetMarkCount() == 0 )
-                pViewData->GetViewShell()->SetDrawShell( sal_False );
+            pViewData->GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_FRAME_TO_TOP:
@@ -370,14 +369,12 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_DELETE:
         case SID_DELETE_CONTENTS:
             pView->DeleteMarked();
-            if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( sal_False );
+            pViewData->GetViewShell()->UpdateDrawShell();
         break;
 
         case SID_CUT:
             pView->DoCut();
-            if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( sal_False );
+            pViewData->GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_COPY:

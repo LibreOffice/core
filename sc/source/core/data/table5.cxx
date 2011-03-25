@@ -308,7 +308,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         if (nEndRow+2 <= MAXROW)
             RemoveRowPageBreaks(nEndRow+2, MAXROW);
     }
-    mbPageBreaksValid = true;
+    mbPageBreaksValid = !pUserArea;     // #i116881# the valid flag can only apply to the "no user area" case
 }
 
 void ScTable::RemoveManualBreaks()

@@ -1222,12 +1222,21 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
                     if( pSet )
                     {
-                        const SvxUnderlineItem& rUnderline = (const SvxUnderlineItem&)pSet->Get( ATTR_FONT_UNDERLINE );
+                        const SfxPoolItem& rUnderline = pSet->Get( ATTR_FONT_UNDERLINE );
 
                         if( rUnderline.ISA(SvxUnderlineItem) )
                         {
                             pTabViewShell->ApplyAttr( rUnderline );
                             pNewSet->Put( rUnderline,rUnderline.Which() );
+                        }
+                        else if ( rUnderline.ISA(SvxTextLineItem) )
+                        {
+                            // #i106580# also allow SvxTextLineItem (base class of SvxUnderlineItem)
+                            const SvxTextLineItem& rTextLineItem = static_cast<const SvxTextLineItem&>(rUnderline);
+                            SvxUnderlineItem aNewItem( rTextLineItem.GetLineStyle(), rTextLineItem.Which() );
+                            aNewItem.SetColor( rTextLineItem.GetColor() );
+                            pTabViewShell->ApplyAttr( aNewItem );
+                            pNewSet->Put( aNewItem, aNewItem.Which() );
                         }
                     }
                     else

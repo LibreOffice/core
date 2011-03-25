@@ -62,7 +62,7 @@ using namespace ::com::sun::star::chart2;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& rPosAndSize, const awt::Size aOriginalSize )
+void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size aOriginalSize )
 {
     long nPosX(0);
     long nPosY(0);
@@ -121,7 +121,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
             break;
     }
 
-    rPosAndSize = Rectangle(Point(nPosX,nPosY),Size(nSizX,nSizY));
+    rPosAndSize = awt::Rectangle(nPosX,nPosY,nSizX,nSizY);
 }
 
 void SAL_CALL ChartController::executeDispatch_PositionAndSize()
@@ -166,19 +166,18 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             const SfxItemSet* pOutItemSet = pDlg->GetOutputItemSet();
             if(pOutItemSet)
             {
-                Rectangle aObjectRect;
+                awt::Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
-                Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
+                awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                 bool bChanged = false;
                 if ( eObjectType == OBJECTTYPE_LEGEND )
                     bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
 
                 bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
-                            , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                            , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
+                            , aObjectRect, aPageRect );
                 if( bMoved || bChanged )
                     aUndoGuard.commit();
             }

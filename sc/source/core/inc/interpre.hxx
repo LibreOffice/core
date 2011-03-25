@@ -411,6 +411,10 @@ void ScArcSinHyp();
 void ScArcCosHyp();
 void ScArcTanHyp();
 void ScArcCotHyp();
+void ScCosecant();
+void ScSecant();
+void ScCosecantHyp();
+void ScSecantHyp();
 void ScExp();
 void ScLn();
 void ScLog10();
@@ -639,7 +643,6 @@ void ScLCM();
 
 void ScMatValue();
 void MEMat(ScMatrix* mM, SCSIZE n);
-void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
@@ -652,13 +655,6 @@ void ScSumX2MY2();
 void ScSumX2DY2();
 void ScSumXMY2();
 void ScGrowth();
-// multiple Regression: Varianzen der Koeffizienten
-sal_Bool RGetVariances( ScMatrix* pV, ScMatrix* pX, SCSIZE nC, SCSIZE nR,
-    sal_Bool bSwapColRow, sal_Bool bZeroConstant );
-void Calculate(ScMatrixRef& pResMat,ScMatrixRef& pE,ScMatrixRef& pQ,ScMatrixRef& pV,ScMatrixRef& pMatX,sal_Bool bConstant,SCSIZE N,SCSIZE M,sal_uInt8 nCase);
-ScMatrixRef Calculate2(const sal_Bool bConstant,const SCSIZE M ,const SCSIZE N,ScMatrixRef& pMatX,ScMatrixRef& pMatY,sal_uInt8 nCase);
-bool Calculate3(const SCSIZE M ,ScMatrixRef& pQ);
-bool Calculate4(sal_Bool _bExp,ScMatrixRef& pResMat,ScMatrixRef& pQ,sal_Bool bConstant,SCSIZE N,SCSIZE M);
 bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
 void CalculateSlopeIntercept(sal_Bool bSlope);
 void CalculateSmallLarge(sal_Bool bSmall);
@@ -670,12 +666,11 @@ bool CalculateTest( sal_Bool _bTemplin
 void CalculateLookup(sal_Bool HLookup);
 bool FillEntry(ScQueryEntry& rEntry);
 void CalculateAddSub(sal_Bool _bSub);
-void CalculateTrendGrowth(sal_Bool _bGrowth);
-void CalulateRGPRKP(sal_Bool _bRKP);
+void CalculateTrendGrowth(bool _bGrowth);
+void CalulateRGPRKP(bool _bRKP);
 void CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2);
 void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
-bool CheckMatrix(sal_Bool _bLOG,sal_Bool _bTrendGrowth,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
-
+bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
 void ScRGP();
 void ScRKP();
 void ScForecast();

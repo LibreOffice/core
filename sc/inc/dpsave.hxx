@@ -69,16 +69,16 @@ public:
     sal_Bool                    operator== ( const ScDPSaveMember& r ) const;
 
     const String&           GetName() const { return aName; }
-    sal_Bool                    HasIsVisible() const;
-    SC_DLLPUBLIC void                   SetIsVisible(sal_Bool bSet);
-    sal_Bool                    GetIsVisible() const { return sal_Bool(nVisibleMode); }
-    sal_Bool                    HasShowDetails() const;
-    SC_DLLPUBLIC void                   SetShowDetails(sal_Bool bSet);
-    sal_Bool                    GetShowDetails() const { return sal_Bool(nShowDetailsMode); }
+    SC_DLLPUBLIC sal_Bool   HasIsVisible() const;
+    SC_DLLPUBLIC void       SetIsVisible(sal_Bool bSet);
+    sal_Bool                GetIsVisible() const { return sal_Bool(nVisibleMode); }
+    SC_DLLPUBLIC sal_Bool   HasShowDetails() const;
+    SC_DLLPUBLIC void       SetShowDetails(sal_Bool bSet);
+    sal_Bool                GetShowDetails() const { return sal_Bool(nShowDetailsMode); }
 
     void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
-    SC_DLLPUBLIC void                    SetLayoutName( const ::rtl::OUString& rName );
+    SC_DLLPUBLIC void       SetLayoutName( const ::rtl::OUString& rName );
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
     void                    RemoveLayoutName();
 

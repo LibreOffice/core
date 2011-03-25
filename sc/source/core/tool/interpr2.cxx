@@ -297,7 +297,11 @@ void ScInterpreter::ScGetTime()
         double nSec = GetDouble();
         double nMin = GetDouble();
         double nHour = GetDouble();
-        PushDouble( ( (nHour * 3600) + (nMin * 60) + nSec ) / D_TIMEFACTOR );
+        double fTime = fmod( (nHour * 3600) + (nMin * 60) + nSec, D_TIMEFACTOR) / D_TIMEFACTOR;
+        if (fTime < 0)
+            PushIllegalArgument();
+        else
+            PushDouble( fTime);
     }
 }
 
@@ -650,8 +654,15 @@ void ScInterpreter::ScNPV()
                     break;
                     case svSingleRef :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nZins, (double)nCount));
-                        nCount++;
+                        ScAddress aAdr;
+                        PopSingleRef( aAdr );
+                        ScBaseCell* pCell = GetCell( aAdr );
+                        if (!HasCellEmptyData(pCell) && HasCellValueData(pCell))
+                        {
+                            double nCellVal = GetCellValue( aAdr, pCell );
+                            nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
+                            nCount++;
+                        }
                     }
                     break;
                     case svDoubleRef :
@@ -660,18 +671,14 @@ void ScInterpreter::ScNPV()
                         sal_uInt16 nErr = 0;
                         double nCellVal;
                         PopDoubleRef( aRange, nParamCount, nRefInList);
-                        ScValueIterator aValIter(pDok, aRange, glSubTotal);
-                        if (aValIter.GetFirst(nCellVal, nErr))
+                        ScHorizontalValueIterator aValIter( pDok, aRange, glSubTotal);
+                        while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                         {
                             nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
                             nCount++;
-                            while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
-                            {
-                                nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
-                                nCount++;
-                            }
-                            SetError(nErr);
                         }
+                        if ( nErr != 0 )
+                            SetError(nErr);
                     }
                     break;
                     default : SetError(errIllegalParameter); break;
@@ -1122,24 +1129,23 @@ void ScInterpreter::ScLIA()
     }
 }
 
-double ScInterpreter::ScGetRmz(double fZins, double fZzr, double fBw,
-                       double fZw, double fF)
+double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
+                       double fFv, double fPaytype)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetRmz" );
-    double fRmz;
-    if (fZins == 0.0)
-        fRmz = (fBw + fZw) / fZzr;
+    double fPayment;
+    if (fRate == 0.0)
+        fPayment = (fPv + fFv) / fNper;
     else
     {
-        double fTerm = pow(1.0 + fZins, fZzr);
-        if (fF > 0.0)
-            fRmz = (fZw * fZins / (fTerm - 1.0)
-                        + fBw * fZins / (1.0 - 1.0 / fTerm)) / (1.0+fZins);
-        else
-            fRmz = fZw * fZins / (fTerm - 1.0)
-                        + fBw * fZins / (1.0 - 1.0 / fTerm);
+        if (fPaytype > 0.0) // payment in advance
+            fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
+                (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
+        else  // payment in arrear
+            fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
+                ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) );
     }
-    return -fRmz;
+    return -fPayment;
 }
 
 void ScInterpreter::ScRMZ()

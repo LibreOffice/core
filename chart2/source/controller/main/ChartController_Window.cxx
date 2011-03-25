@@ -1686,7 +1686,16 @@ bool ChartController::requestQuickHelp(
 
     if ( bSuccess )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        if ( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
+        {
+            this->EndTextEdit();
+        }
         this->impl_selectObjectAndNotiy();
+        if ( m_pChartWindow )
+        {
+            m_pChartWindow->Invalidate();
+        }
         return sal_True;
     }
 

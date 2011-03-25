@@ -532,9 +532,9 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     if (eType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-        if (pFCell->GetErrCode() != 0)
+        if (pFCell->GetErrCode() != 0 || pOutput->bShowFormulas)
         {
-            SetHashText();      // If the error string doesn't fit, always use "###"
+            SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
             return;
         }
         // If it's formula, the result must be a value.
@@ -1905,6 +1905,26 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
 //  -------------------------------------------------------------------------------
 
+ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
+{
+    ScFieldEditEngine* pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
+    pEngine->SetUpdateMode( sal_False );
+    // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
+    pEngine->SetRefDevice( pFmtDevice );
+    sal_uInt32 nCtrl = pEngine->GetControlWord();
+    if ( bShowSpellErrors )
+        nCtrl |= EE_CNTRL_ONLINESPELLING;
+    if ( eType == OUTTYPE_PRINTER )
+        nCtrl &= ~EE_CNTRL_MARKFIELDS;
+    if ( eType == OUTTYPE_WINDOW && pRefDevice == pFmtDevice )
+        nCtrl &= ~EE_CNTRL_FORMAT100;       // use the actual MapMode
+    pEngine->SetControlWord( nCtrl );
+    pDoc->ApplyAsianEditSettings( *pEngine );
+    pEngine->EnableAutoColor( bUseStyleColor );
+    pEngine->SetDefaultHorizontalTextDirection( (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
+    return pEngine;
+}
+
 void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( sal_False );
@@ -2221,28 +2241,9 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         //
 
                         if (!pEngine)
-                        {
-                            //  Ein RefDevice muss auf jeden Fall gesetzt werden,
-                            //  sonst legt sich die EditEngine ein VirtualDevice an!
-                            pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-                            pEngine->SetUpdateMode( sal_False );
-                            pEngine->SetRefDevice( pFmtDevice );    // always set
-                            sal_uLong nCtrl = pEngine->GetControlWord();
-                            if ( bShowSpellErrors )
-                                nCtrl |= EE_CNTRL_ONLINESPELLING;
-                            if ( eType == OUTTYPE_PRINTER )
-                                nCtrl &= ~EE_CNTRL_MARKFIELDS;
-                            pEngine->SetControlWord( nCtrl );
-                            pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
-                            pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
-                            pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
-                            pEngine->EnableAutoColor( bUseStyleColor );
-                            pEngine->SetDefaultHorizontalTextDirection(
-                                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
-                        }
+                            pEngine = CreateOutputEditEngine();
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
-
 
                         sal_Bool bCellIsValue = lcl_SafeIsValue(pCell);
 
@@ -2284,8 +2285,6 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                             if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD )
                                 eHorJust = SVX_HOR_JUSTIFY_RIGHT;
                         }
-
-
 
                         SvxCellHorJustify eOutHorJust =
                             ( eHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? eHorJust :
@@ -3054,25 +3053,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                     if (!bHidden)
                     {
                         if (!pEngine)
-                        {
-                            //  Ein RefDevice muss auf jeden Fall gesetzt werden,
-                            //  sonst legt sich die EditEngine ein VirtualDevice an!
-                            pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-                            pEngine->SetUpdateMode( sal_False );
-                            pEngine->SetRefDevice( pFmtDevice );    // always set
-                            sal_uLong nCtrl = pEngine->GetControlWord();
-                            if ( bShowSpellErrors )
-                                nCtrl |= EE_CNTRL_ONLINESPELLING;
-                            if ( eType == OUTTYPE_PRINTER )
-                                nCtrl &= ~EE_CNTRL_MARKFIELDS;
-                            pEngine->SetControlWord( nCtrl );
-                            pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
-                            pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
-                            pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
-                            pEngine->EnableAutoColor( bUseStyleColor );
-                            pEngine->SetDefaultHorizontalTextDirection(
-                                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
-                        }
+                            pEngine = CreateOutputEditEngine();
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 

@@ -32,6 +32,7 @@
 #include "precompiled_sc.hxx"
 // INCLUDE ---------------------------------------------------------------
 #include "dptablecache.hxx"
+#include "dptabdat.hxx"
 #include "document.hxx"
 #include "cell.hxx"
 #include "globstr.hrc"

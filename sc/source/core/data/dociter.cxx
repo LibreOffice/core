@@ -541,7 +541,8 @@ SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     DataAccess(pParent),
     mpParam(pParam),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
     nCol = mpParam->mnField;
     nRow = mpParam->nRow1;
@@ -1673,22 +1674,38 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     nTab( nTable ),
     nStartCol( nCol1 ),
     nEndCol( nCol2 ),
+    nStartRow( nRow1 ),
     nEndRow( nRow2 ),
     nCol( nCol1 ),
     nRow( nRow1 ),
     bMore( sal_True )
 {
-    SCCOL i;
-    SCSIZE nIndex;
 
     pNextRows = new SCROW[ nCol2-nCol1+1 ];
     pNextIndices = new SCSIZE[ nCol2-nCol1+1 ];
 
-    for (i=nStartCol; i<=nEndCol; i++)
+    SetTab( nTab );
+}
+
+ScHorizontalCellIterator::~ScHorizontalCellIterator()
+{
+    delete [] pNextRows;
+    delete [] pNextIndices;
+}
+
+void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
+{
+    nTab = nTabP;
+    nRow = nStartRow;
+    nCol = nStartCol;
+    bMore = sal_True;
+
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
         ScColumn* pCol = &pDoc->pTab[nTab]->aCol[i];
 
-        pCol->Search( nRow1, nIndex );
+        SCSIZE nIndex;
+        pCol->Search( nStartRow, nIndex );
         if ( nIndex < pCol->nCount )
         {
             pNextRows[i-nStartCol] = pCol->pItems[nIndex].nRow;
@@ -1701,14 +1718,8 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
         }
     }
 
-    if (pNextRows[0] != nRow1)
+    if (pNextRows[0] != nStartRow)
         Advance();
-}
-
-ScHorizontalCellIterator::~ScHorizontalCellIterator()
-{
-    delete [] pNextRows;
-    delete [] pNextIndices;
 }
 
 ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
@@ -1778,6 +1789,156 @@ void ScHorizontalCellIterator::Advance()
 
     if ( !bFound )
         bMore = sal_False;
+}
+
+//------------------------------------------------------------------------
+
+ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
+        const ScRange& rRange, bool bSTotal, bool bTextZero ) :
+    pDoc( pDocument ),
+    nNumFmtIndex(0),
+    nEndTab( rRange.aEnd.Tab() ),
+    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
+    bNumValid( false ),
+    bSubTotal( bSTotal ),
+    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
+    bTextAsZero( bTextZero )
+{
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCTAB nStartTab = rRange.aStart.Tab();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    PutInOrder( nStartCol, nEndCol);
+    PutInOrder( nStartRow, nEndRow);
+    PutInOrder( nStartTab, nEndTab );
+
+    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
+    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
+    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
+    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
+    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
+    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+
+    nCurCol = nStartCol;
+    nCurRow = nStartRow;
+    nCurTab = nStartTab;
+
+    nNumFormat = 0;                 // will be initialized in GetNumberFormat()
+    pAttrArray = 0;
+    nAttrEndRow = 0;
+
+    pCellIter = new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
+            nStartRow, nEndCol, nEndRow );
+}
+
+ScHorizontalValueIterator::~ScHorizontalValueIterator()
+{
+    delete pCellIter;
+}
+
+bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
+{
+    bool bFound = false;
+    while ( !bFound )
+    {
+        ScBaseCell* pCell = pCellIter->GetNext( nCurCol, nCurRow );
+        while ( !pCell )
+        {
+            if ( nCurTab < nEndTab )
+            {
+                pCellIter->SetTab( ++nCurTab);
+                pCell = pCellIter->GetNext( nCurCol, nCurRow );
+            }
+            else
+                return false;
+        }
+        if ( !bSubTotal || !pDoc->pTab[nCurTab]->RowFiltered( nCurRow ) )
+        {
+            switch (pCell->GetCellType())
+            {
+                case CELLTYPE_VALUE:
+                    {
+                        bNumValid = false;
+                        rValue = ((ScValueCell*)pCell)->GetValue();
+                        rErr = 0;
+                        if ( bCalcAsShown )
+                        {
+                            ScColumn* pCol = &pDoc->pTab[nCurTab]->aCol[nCurCol];
+                            lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
+                                    nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
+                            rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
+                        }
+                        bFound = true;
+                    }
+                    break;
+                case CELLTYPE_FORMULA:
+                    {
+                        if (!bSubTotal || !((ScFormulaCell*)pCell)->IsSubTotal())
+                        {
+                            rErr = ((ScFormulaCell*)pCell)->GetErrCode();
+                            if ( rErr || ((ScFormulaCell*)pCell)->IsValue() )
+                            {
+                                rValue = ((ScFormulaCell*)pCell)->GetValue();
+                                bNumValid = false;
+                                bFound = true;
+                            }
+                            else if ( bTextAsZero )
+                            {
+                                rValue = 0.0;
+                                bNumValid = false;
+                                bFound = true;
+                            }
+                        }
+                    }
+                    break;
+                case CELLTYPE_STRING :
+                case CELLTYPE_EDIT :
+                    {
+                        if ( bTextAsZero )
+                        {
+                            rErr = 0;
+                            rValue = 0.0;
+                            nNumFmtType = NUMBERFORMAT_NUMBER;
+                            nNumFmtIndex = 0;
+                            bNumValid = true;
+                            bFound = true;
+                        }
+                    }
+                    break;
+                default:
+                    ;   // nothing
+            }
+        }
+    }
+    return bFound;
+}
+
+void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
+{
+    if (!bNumValid)
+    {
+        const ScColumn* pCol = &(pDoc->pTab[nCurTab])->aCol[nCurCol];
+        nNumFmtIndex = pCol->GetNumberFormat( nCurRow );
+        if ( (nNumFmtIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+        {
+            const ScBaseCell* pCell;
+            SCSIZE nCurIndex;
+            if ( pCol->Search( nCurRow, nCurIndex ) )
+                pCell = pCol->pItems[nCurIndex].pCell;
+            else
+                pCell = NULL;
+            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                ((const ScFormulaCell*)pCell)->GetFormatInfo( nNumFmtType, nNumFmtIndex );
+            else
+                nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
+        }
+        else
+            nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
+        bNumValid = true;
+    }
+    nType = nNumFmtType;
+    nIndex = nNumFmtIndex;
 }
 
 //-------------------------------------------------------------------------------

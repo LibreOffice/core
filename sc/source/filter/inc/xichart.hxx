@@ -158,7 +158,8 @@ public:
     void                ConvertEscherFormat(
                             ScfPropertySet& rPropSet,
                             const XclChEscherFormat& rEscherFmt,
-                            const XclChPicFormat& rPicFmt,
+                            const XclChPicFormat* pPicFmt,
+                            sal_uInt32 nDffFillType,
                             XclChPropertyMode ePropMode ) const;
     /** Writes font properties to the passed property set. */
     void                ConvertFont(
@@ -299,12 +300,13 @@ public:
     virtual void        ReadSubRecord( XclImpStream& rStrm );
 
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( const XclImpChRoot& rRoot,
-                            ScfPropertySet& rPropSet, XclChObjectType eObjType ) const;
+    void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
+                            XclChObjectType eObjType, bool bUsePicFmt ) const;
 
 private:
     XclChEscherFormat   maData;             /// Fill properties for complex areas (CHESCHERFORMAT record).
     XclChPicFormat      maPicFmt;           /// Image options, e.g. stretched, stacked (CHPICFORMAT record).
+    sal_uInt32          mnDffFillType;      /// Fill type imported from the DFF property set.
 };
 
 typedef ScfRef< XclImpChEscherFormat > XclImpChEscherFormatRef;
@@ -348,11 +350,11 @@ protected:
     /** Converts and writes the contained area formatting to the passed property set. */
     void                ConvertAreaBase( const XclImpChRoot& rRoot,
                             ScfPropertySet& rPropSet, XclChObjectType eObjType,
-                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN ) const;
+                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN, bool bUsePicFmt = false ) const;
     /** Converts and writes the contained data to the passed property set. */
     void                ConvertFrameBase( const XclImpChRoot& rRoot,
                             ScfPropertySet& rPropSet, XclChObjectType eObjType,
-                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN ) const;
+                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN, bool bUsePicFmt = false ) const;
 
 protected:
     XclImpChLineFormatRef mxLineFmt;        /// Line format (CHLINEFORMAT record).
@@ -382,7 +384,7 @@ public:
     void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
 
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet ) const;
+    void                Convert( ScfPropertySet& rPropSet, bool bUsePicFmt = false ) const;
 
 private:
     XclChFrame          maData;             /// Contents of the CHFRAME record.
@@ -705,7 +707,7 @@ public:
     /** Writes the line format only, e.g. for trend lines or error bars. */
     void                ConvertLine( ScfPropertySet& rPropSet, XclChObjectType eObjType ) const;
     /** Writes the area format only for the series or a data point. */
-    void                ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
+    void                ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, bool bUsePicFmt ) const;
 
 private:
     /** Removes unused formatting (e.g. pie distance in a bar chart). */

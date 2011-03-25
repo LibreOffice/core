@@ -1548,6 +1548,12 @@ void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
     PaintExtras();
 }
 
+void ScTabView::UpdateVisibleRange()
+{
+    for (sal_uInt16 i=0; i<4; i++)
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->UpdateVisibleRange();
+}
 
 //  SetTabNo    - angezeigte Tabelle
 
@@ -1735,6 +1741,9 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
         if (bResize)
             RepeatResize();
         InvalidateSplit();
+
+        // #163911# Update the visible range in each GridWin directly, don't wait for the repaint event.
+        UpdateVisibleRange();
 
         if ( aViewData.IsPagebreakMode() )
             UpdatePageBreakData();              //! asynchron ??

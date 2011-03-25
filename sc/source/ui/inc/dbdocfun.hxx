@@ -40,7 +40,6 @@ struct ScSortParam;
 struct ScSubTotalParam;
 
 class SfxViewFrame;
-class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
 class ScAddress;
@@ -51,21 +50,14 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         struct PropertyValue;
     }
-    namespace sdbc {
-        class XResultSet;
-    }
 } } }
+
+namespace svx {
+    class ODataAccessDescriptor;
+}
 
 // ---------------------------------------------------------------------------
 // -----------------------------------------------------------------
-class SbaSelectionList: public List , public SvRefBase
-{
-public:
-    SbaSelectionList():
-        List(CONTAINER_MAXBLOCKSIZE,100,100){}
-};
-
-SV_DECL_IMPL_REF(SbaSelectionList)
 
 
 class ScDBDocFunc
@@ -79,29 +71,23 @@ public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDBDocFunc() {}
 
-    void            UpdateImport( const String& rTarget, const String& rDBName,
-                        const String& rTableName, const String& rStatement,
-                        sal_Bool bNative, sal_uInt8 nType,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection );
+    void            UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 
-    sal_Bool            DoImport( SCTAB nTab, const ScImportParam& rParam,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection, sal_Bool bRecord,
+    sal_Bool        DoImport( SCTAB nTab, const ScImportParam& rParam,
+                        const svx::ODataAccessDescriptor* pDescriptor,      // used for selection and existing ResultSet
+                        sal_Bool bRecord,
                         sal_Bool bAddrInsert = sal_False );
 
-    sal_Bool            DoImportUno( const ScAddress& rPos,
+    sal_Bool        DoImportUno( const ScAddress& rPos,
                                 const com::sun::star::uno::Sequence<
                                     com::sun::star::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
-    sal_Bool            Sort( SCTAB nTab, const ScSortParam& rSortParam,
+    sal_Bool        Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    SC_DLLPUBLIC sal_Bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
+    SC_DLLPUBLIC sal_Bool Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, sal_Bool bRecord, sal_Bool bApi );
 
     sal_Bool            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,

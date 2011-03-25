@@ -265,7 +265,7 @@ MapMode ScGridWindow::GetDrawMapMode( sal_Bool bForce )
             SCROW nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
-            if (nEndRow<20) nEndRow = 1000;
+            if (nEndRow<20) nEndRow = 20;
             ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, this,
                                     pViewData->GetZoomX(),pViewData->GetZoomY(),
                                     pViewData->GetPPTX(),pViewData->GetPPTY(),
