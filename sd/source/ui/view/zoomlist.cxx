@@ -36,159 +36,73 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-
 #include "ViewShell.hxx"
 
 namespace sd {
 
 #define MAX_ENTRYS  10
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
-
 ZoomList::ZoomList(ViewShell* pViewShell)
-: List()
-, mpViewShell (pViewShell)
+: mpViewShell (pViewShell)
 , mnCurPos(0)
 {
 }
 
-
-/*************************************************************************
-|*
-|* Destructor
-|*
-\************************************************************************/
-
-ZoomList::~ZoomList()
-{
-#if ( defined GCC && defined C272 )
-    for (sal_uLong nObject=0; nObject<List::Count(); nObject++)
-#else
-    for (sal_uLong nObject=0; nObject<Count(); nObject++)
-#endif
-    {
-        // delete ZoomRects if necessary
-        delete ((Rectangle*) GetObject(nObject));
-    }
-}
-
-
-/*************************************************************************
-|*
-|* Insert new ZoomRect
-|*
-\************************************************************************/
-
 void ZoomList::InsertZoomRect(const Rectangle& rRect)
 {
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
     if (nRectCount >= MAX_ENTRYS)
-    {
-        delete ((Rectangle*) GetObject(0));
-        Remove((sal_uLong) 0);
-    }
+        maRectangles.erase(maRectangles.begin());
     else if (nRectCount == 0)
-    {
         mnCurPos = 0;
-    }
     else
-    {
         mnCurPos++;
-    }
 
-    Rectangle* pRect = new Rectangle(rRect);
-    Insert(pRect, mnCurPos);
+    maRectangles.insert(maRectangles.begin()+mnCurPos,rRect);
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
-
-/*************************************************************************
-|*
-|* Return next ZoomRect
-|*
-\************************************************************************/
 
 Rectangle ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
     if (nRectCount > 0 && mnCurPos > nRectCount - 1)
-    {
         mnCurPos = nRectCount - 1;
-    }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    return maRectangles[mnCurPos];
 }
-
-/*************************************************************************
-|*
-|* Return last ZoomRect
-|*
-\************************************************************************/
 
 Rectangle ZoomList::GetPreviousZoomRect()
 {
     if (mnCurPos > 0)
-    {
         mnCurPos--;
-    }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    return maRectangles[mnCurPos];
 }
-
-/*************************************************************************
-|*
-|* Is there a next ZoomRect?
-|*
-\************************************************************************/
 
 sal_Bool ZoomList::IsNextPossible() const
 {
-    sal_Bool bPossible = sal_False;
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
-    if (nRectCount > 0 && mnCurPos < nRectCount - 1)
-    {
-        bPossible = sal_True;
-    }
-
-    return (bPossible);
+    return nRectCount > 0 && mnCurPos < nRectCount - 1;
 }
-
-/*************************************************************************
-|*
-|* Is there a previous ZoomRect?
-|*
-\************************************************************************/
 
 sal_Bool ZoomList::IsPreviousPossible() const
 {
-    sal_Bool bPossible = sal_False;
-
-    if (mnCurPos > 0)
-    {
-        bPossible = sal_True;
-    }
-
-    return (bPossible);
+    return mnCurPos > 0;
 }
 
 } // end of namespace sd
