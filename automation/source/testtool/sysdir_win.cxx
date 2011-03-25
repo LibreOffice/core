@@ -36,7 +36,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include <prewin.h>
 #ifndef _SHOBJ_H
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -47,7 +46,6 @@
 #pragma warning(pop)
 #endif
 #endif
-#include <postwin.h>
 // as we define it ourselves further down the line we remove it here
 #ifdef IS_ERROR
     #undef IS_ERROR

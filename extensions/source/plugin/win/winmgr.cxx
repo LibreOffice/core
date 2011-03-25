@@ -43,11 +43,9 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-#include <prewin.h>
 #include <string.h>
 #include <tchar.h>
 #include <objbase.h>
-#include <postwin.h>
 
 #pragma warning (pop)
 

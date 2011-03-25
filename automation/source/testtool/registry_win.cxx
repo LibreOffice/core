@@ -36,13 +36,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include <prewin.h>
-#include <postwin.h>
-// as we define it ourselves further down the line we remove it here
-#ifdef IS_ERROR
-//    #undef IS_ERROR
-#endif
-
 #include "registry_win.hxx"
 #include <osl/thread.h>
 #include <sal/macros.h>

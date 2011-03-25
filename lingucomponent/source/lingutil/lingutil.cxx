@@ -30,17 +30,8 @@
 #include "precompiled_lingucomponent.hxx"
 
 #if defined(WNT)
-#include <prewin.h>
+#include <windows.h>
 #endif
-
-#if defined(WNT)
-#include <Windows.h>
-#endif
-
-#if defined(WNT)
-#include <postwin.h>
-#endif
-
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
