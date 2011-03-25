@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>

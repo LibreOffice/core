@@ -35,8 +35,6 @@
 #include <tools/urlobj.hxx>
 
 #ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
 #include <tchar.h>
 #endif
 
