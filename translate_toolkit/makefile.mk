@@ -47,6 +47,14 @@ TARGET=trt
 
 # --- Python paths --------------------------------------------------
 
+# watch for the path delimiter
+.IF "$(GUI)"=="WNT"
+PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.ELSE			# "$(GUI)"=="WNT"
+PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
+.ENDIF			# "$(GUI)"=="WNT"
+.EXPORT: PYTHONPATH
+
 .IF "$(SYSTEM_PYTHON)"!="YES"
 PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/$(PYTHON)
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
