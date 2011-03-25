@@ -177,7 +177,7 @@ sub splitfile{
     my $src_root = $ENV{SRC_ROOT};
     my $ooo_src_root = $ENV{SRC_ROOT};
     my $so_l10n_path  = $src_root."/sun/l10n_so/source";
-    my $ooo_l10n_path = $ooo_src_root."/l10n/source";
+    my $ooo_l10n_path = $ooo_src_root."/translations/source";
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";
@@ -346,7 +346,7 @@ sub add_paths
 {
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
-    my $ooo_l10n_dir = "$root_dir/l10n/source";
+    my $ooo_l10n_dir = "$root_dir/translations/source";
     my $so_l10n_dir  = "$root_dir/l10n_so/source";
 
     if( -e $ooo_l10n_dir )
