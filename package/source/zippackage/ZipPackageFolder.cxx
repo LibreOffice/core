@@ -453,7 +453,6 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
                     }
                     else
                     {
-                        VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
                         bSuccess = false;
                         return bSuccess;
                     }
@@ -461,7 +460,6 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
             }
             catch ( uno::Exception& )
             {
-                VOS_ENSURE( 0, "The stream provided to the package component has problems!" );
                 bSuccess = false;
                 return bSuccess;
             }
@@ -535,7 +533,6 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
                 if ( !xStream.is() )
                 {
                     // Make sure that we actually _got_ a new one !
-                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
                     bSuccess = false;
                     return bSuccess;
                 }
@@ -564,12 +561,10 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
             }
             catch ( ZipException& )
             {
-                VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 bSuccess = false;
             }
             catch ( IOException& )
             {
-                VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 bSuccess = false;
             }
         }
@@ -591,7 +586,6 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
                 if ( !xStream.is() )
                 {
                     // Make sure that we actually _got_ a new one !
-                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
                     bSuccess = false;
                     return bSuccess;
                 }
@@ -622,12 +616,10 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
             }
             catch ( ZipException& )
             {
-                VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 bSuccess = false;
             }
             catch ( IOException& )
             {
-                VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 bSuccess = false;
             }
 
@@ -714,12 +706,10 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
         }
         catch ( ZipException& )
         {
-            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
             bWritingFailed = true;
         }
         catch ( IOException& )
         {
-            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
             bWritingFailed = true;
         }
     }
