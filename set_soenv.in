@@ -1516,7 +1516,7 @@ else
 }
 
 $gb_REPOS = $SRC_ROOT;
-my $BUILD_TYPE = "@BUILD_TYPE@";
+$BUILD_TYPE = "@BUILD_TYPE@";
 
 if ('@WITH_LANG@' ne "")
 {
