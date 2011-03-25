@@ -40,7 +40,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
-		-i $(3) \
+		-i $(realpath $(3)) \
 		-o $(1) \
 		-m $(SDF) \
 		-l all)
