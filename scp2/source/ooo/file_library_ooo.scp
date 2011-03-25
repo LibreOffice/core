@@ -1349,7 +1349,10 @@ File gid_File_Lib_Spell
 End
 
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
+
+#ifndef MACOSX
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
+#endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
