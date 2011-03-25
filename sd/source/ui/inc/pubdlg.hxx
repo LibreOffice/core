@@ -41,6 +41,7 @@
 #include "assclass.hxx"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #define NOOFPAGES 6
 
@@ -56,7 +57,6 @@ class Edit;
 class MultiLineEdit;
 class ValueSet;
 class SdHtmlAttrPreview;
-class List;
 class SdPublishingDesign;
 class ButtonSet;
 
@@ -185,7 +185,7 @@ private:
     void    ChangePage();
     void    UpdatePage();
 
-    List*   m_pDesignList;
+    boost::ptr_vector<SdPublishingDesign>   m_aDesignList;
     sal_Bool    m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
     sal_Bool    Load();

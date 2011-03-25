@@ -51,7 +51,6 @@
 #include <svtools/colrdlg.hxx>
 #include <editeng/colritem.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/list.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
@@ -465,13 +464,9 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
 
-    for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
-    {
-        SdPublishingDesign *pDesign = (SdPublishingDesign*)
-                                        m_pDesignList->GetObject(nIndex);
-
-        pPage1_Designs->InsertEntry(pDesign->m_aDesignName);
-    }
+    boost::ptr_vector<SdPublishingDesign>::iterator it;
+    for( it = m_aDesignList.begin(); it != m_aDesignList.end(); ++it )
+        pPage1_Designs->InsertEntry(it->m_aDesignName);
 
     pPage6_Preview->SetBorderStyle(WINDOW_BORDER_MONO);
 
@@ -487,13 +482,6 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 // =====================================================================
 SdPublishingDlg::~SdPublishingDlg()
 {
-    if( m_pDesignList )
-    {
-        for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
-            delete (SdPublishingDesign*)m_pDesignList->GetObject(nIndex);
-    }
-
-    delete m_pDesignList;
     RemovePages();
 }
 
@@ -997,7 +985,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
             pPage1_Designs->SelectEntryPos(0);
 
         sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-        m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
+        m_pDesign = &m_aDesignList[nPos];
         DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
         if(m_pDesign)
@@ -1013,7 +1001,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-    m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
+    m_pDesign = &m_aDesignList[nPos];
     DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
     if(m_pDesign)
@@ -1030,20 +1018,17 @@ IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-    SdPublishingDesign* pDesign = (SdPublishingDesign*)
-                                    m_pDesignList->GetObject(nPos);
-    DBG_ASSERT(pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
-    if(pDesign)
-    {
-        m_pDesignList->Remove(pDesign);
-        pPage1_Designs->RemoveEntry(nPos);
-    }
+    boost::ptr_vector<SdPublishingDesign>::iterator iter = m_aDesignList.begin()+nPos;
 
-    if(m_pDesign == pDesign)
+    DBG_ASSERT(iter != m_aDesignList.end(), "Kein Design? Das darf nicht sein! (CL)");
+
+    pPage1_Designs->RemoveEntry(nPos);
+
+    if(m_pDesign == &(*iter))
         DesignHdl( pPage1_NewDesign );
 
-    delete pDesign;
+    m_aDesignList.erase(iter);
 
     m_bDesignListDirty = sal_True;
 
@@ -1226,32 +1211,26 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
             {
                 pDesign->m_aDesignName = aDlg.GetDesignName();
 
-                SdPublishingDesign* pSameNameDes = NULL;
-                sal_uInt16 nIndex;
-                for( nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
+                boost::ptr_vector<SdPublishingDesign>::iterator iter;
+                for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
                 {
-                    pSameNameDes = (SdPublishingDesign*)
-                                    m_pDesignList->GetObject(nIndex);
-                    if(pSameNameDes->m_aDesignName == pDesign->m_aDesignName)
+                    if (iter->m_aDesignName == pDesign->m_aDesignName)
                         break;
                 }
 
-                if(nIndex < m_pDesignList->Count())
+                if (iter != m_aDesignList.end())
                 {
                     ErrorBox aErrorBox(this, WB_YES_NO,
                                        String(SdResId(STR_PUBDLG_SAMENAME)));
                     bRetry = aErrorBox.Execute() == RET_NO;
 
                     if(!bRetry)
-                    {
-                        m_pDesignList->Remove(pSameNameDes);
-                        delete pSameNameDes;
-                    }
+                        m_aDesignList.erase(iter);
                 }
 
                 if(!bRetry)
                 {
-                    m_pDesignList->Insert(pDesign);
+                    m_aDesignList.push_back(pDesign);
                     m_bDesignListDirty = sal_True;
                     pDesign = NULL;
                 }
@@ -1301,7 +1280,7 @@ void SdPublishingDlg::UpdatePage()
             pPage1_DelDesign->Disable();
         }
 
-        if(m_pDesignList && m_pDesignList->Count() == 0)
+        if(m_aDesignList.empty())
             pPage1_OldDesign->Disable();
         break;
     case 2:
@@ -1610,8 +1589,6 @@ sal_Bool SdPublishingDlg::Load()
 {
     m_bDesignListDirty = sal_False;
 
-    m_pDesignList = new List();
-
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "designs.sod" ) ) );
 
@@ -1654,7 +1631,7 @@ sal_Bool SdPublishingDlg::Load()
         SdPublishingDesign* pDesign = new SdPublishingDesign();
         *pStream >> *pDesign;
 
-        m_pDesignList->Insert(pDesign);
+        m_aDesignList.push_back(pDesign);
     }
 
     return( pStream->GetError() == SVSTREAM_OK );
@@ -1682,17 +1659,13 @@ sal_Bool SdPublishingDlg::Save()
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
-        sal_uInt16 nDesigns = (sal_uInt16) m_pDesignList->Count();
+        sal_uInt16 nDesigns = (sal_uInt16) m_aDesignList.size();
         *pStream << nDesigns;
 
         for( sal_uInt16 nIndex = 0;
              pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
              nIndex++ )
-        {
-            SdPublishingDesign* pDesign = (SdPublishingDesign*)
-                                            m_pDesignList->GetObject(nIndex);
-            *pStream << *pDesign;
-        }
+            *pStream << m_aDesignList[nIndex];
     }
 
     aMedium.Close();
