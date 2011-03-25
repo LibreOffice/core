@@ -1243,7 +1243,7 @@ void ScOutputData::DrawFrame()
 
 //  Linie unter der Zelle
 
-const SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
+const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
                         SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nRotDir,
                         sal_Bool bTopLine )
 {
@@ -1279,12 +1279,12 @@ const SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
 
     if (bTopLine)
         --nRow;
-    const SvxBorderLine* pThisBottom;
+    const ::editeng::SvxBorderLine* pThisBottom;
     if ( ValidRow(nRow) )
         pThisBottom = ((const SvxBoxItem*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ))->GetBottom();
     else
         pThisBottom = NULL;
-    const SvxBorderLine* pNextTop;
+    const ::editeng::SvxBorderLine* pNextTop;
     if ( nRow < MAXROW )
         pNextTop = ((const SvxBoxItem*)pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
     else
@@ -1491,10 +1491,10 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                         if ( nX < nX1 || nX > nX2 )     // Attribute in FillInfo nicht gesetzt
                         {
                             //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
-                            const SvxBorderLine* pLeftLine;
-                            const SvxBorderLine* pTopLine;
-                            const SvxBorderLine* pRightLine;
-                            const SvxBorderLine* pBottomLine;
+                            const ::editeng::SvxBorderLine* pLeftLine;
+                            const ::editeng::SvxBorderLine* pTopLine;
+                            const ::editeng::SvxBorderLine* pRightLine;
+                            const ::editeng::SvxBorderLine* pBottomLine;
                             pDoc->GetBorderLines( nX, nY, nTab,
                                     &pLeftLine, &pTopLine, &pRightLine, &pBottomLine );
                             aTopLine.Set( pTopLine, nPPTY );

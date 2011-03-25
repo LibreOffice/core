@@ -57,6 +57,7 @@
 //  nur Search ohne Optimierung!
 
 // STATIC DATA -----------------------------------------------------------
+using ::editeng::SvxBorderLine;
 using namespace formula;
 
 inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )

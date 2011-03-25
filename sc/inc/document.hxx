@@ -51,6 +51,8 @@
 #include <list>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+namespace editeng { class SvxBorderLine; }
+
 class KeyEvent;
 class OutputDevice;
 class SdrObject;
@@ -67,7 +69,6 @@ class SfxStatusBarManager;
 class SfxStyleSheetBase;
 class SvMemoryStream;
 class SvNumberFormatter;
-class SvxBorderLine;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxBrushItem;
@@ -841,10 +842,10 @@ public:
     SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const;
 
     void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    const SvxBorderLine** ppLeft,
-                                    const SvxBorderLine** ppTop,
-                                    const SvxBorderLine** ppRight,
-                                    const SvxBorderLine** ppBottom ) const;
+                                    const ::editeng::SvxBorderLine** ppLeft,
+                                    const ::editeng::SvxBorderLine** ppTop,
+                                    const ::editeng::SvxBorderLine** ppRight,
+                                    const ::editeng::SvxBorderLine** ppBottom ) const;
 
     void            ResetChanged( const ScRange& rRange );
 
@@ -1216,7 +1217,7 @@ public:
 
     void            ApplySelectionStyle( const ScStyleSheet& rStyle, const ScMarkData& rMark );
     void            ApplySelectionLineStyle( const ScMarkData& rMark,
-                                            const SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                            const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark ) const;

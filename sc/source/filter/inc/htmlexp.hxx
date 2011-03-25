@@ -47,7 +47,8 @@ class OutputDevice;
 class ScDrawLayer;
 class SvStringsSortDtor;
 class ScEditCell;
-class SvxBorderLine;
+
+namespace editeng { class SvxBorderLine; }
 
 struct ScHTMLStyle
 {   // Defaults aus StyleSheet
@@ -153,7 +154,7 @@ class ScHTMLExport : public ScExportBase
                                         SCCOL nEndCol, SCROW nEndRow );
 
     void                BorderToStyle( ByteString& rOut, const char* pBorderName,
-                                       const SvxBorderLine* pLine, bool& bInsertSemicolon );
+                                       const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon );
 
     sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );
     const char*         GetFontSizeCss( sal_uInt16 nHeight );

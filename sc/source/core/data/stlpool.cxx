@@ -265,7 +265,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     ScPageHFItem*   pHeaderItem     = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
     ScPageHFItem*   pFooterItem     = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
     ScStyleSheet*   pSheet          = NULL;
-    SvxBorderLine   aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
+    ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 

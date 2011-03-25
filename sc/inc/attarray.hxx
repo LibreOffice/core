@@ -42,9 +42,10 @@ class ScFlatBoolRowSegments;
 class Rectangle;
 class SfxItemPoolCache;
 class SfxStyleSheetBase;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
+
+namespace editeng { class SvxBorderLine; }
 
 #define SC_LINE_EMPTY           0
 #define SC_LINE_SET             1
@@ -136,7 +137,7 @@ public:
                             ScEditDataArray* pDataArray = NULL );
     bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
-                                const SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
 
     void    ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );
     void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, sal_Bool bIncrement );

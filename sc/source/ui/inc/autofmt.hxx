@@ -112,27 +112,27 @@ private:
                               Font& rCTLFont );
 
     SC_DLLPRIVATE String    MakeNumberString( String cellString, sal_Bool bAddDec );
-    SC_DLLPRIVATE void  DrawFrameLine   ( const SvxBorderLine&  rLineD,
+    SC_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
                               Point                 from,
                               Point                 to,
                               sal_Bool                  bHorizontal,
-                              const SvxBorderLine&  rLineLT,
-                              const SvxBorderLine&  rLineL,
-                              const SvxBorderLine&  rLineLB,
-                              const SvxBorderLine&  rLineRT,
-                              const SvxBorderLine&  rLineR,
-                              const SvxBorderLine&  rLineRB );
+                              const ::editeng::SvxBorderLine&   rLineLT,
+                              const ::editeng::SvxBorderLine&   rLineL,
+                              const ::editeng::SvxBorderLine&   rLineLB,
+                              const ::editeng::SvxBorderLine&   rLineRT,
+                              const ::editeng::SvxBorderLine&   rLineR,
+                              const ::editeng::SvxBorderLine&   rLineRB );
     SC_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
                               AutoFmtLine       eLine,
-                              SvxBorderLine&    rLine );
+                              ::editeng::SvxBorderLine& rLine );
     SC_DLLPRIVATE void  GetLines        ( sal_uInt16 nIndex, AutoFmtLine eLine,
-                              SvxBorderLine&    rLineD,
-                              SvxBorderLine&    rLineLT,
-                              SvxBorderLine&    rLineL,
-                              SvxBorderLine&    rLineLB,
-                              SvxBorderLine&    rLineRT,
-                              SvxBorderLine&    rLineR,
-                              SvxBorderLine&    rLineRB );
+                              ::editeng::SvxBorderLine& rLineD,
+                              ::editeng::SvxBorderLine& rLineLT,
+                              ::editeng::SvxBorderLine& rLineL,
+                              ::editeng::SvxBorderLine& rLineLB,
+                              ::editeng::SvxBorderLine& rLineRT,
+                              ::editeng::SvxBorderLine& rLineR,
+                              ::editeng::SvxBorderLine& rLineRB );
 };
 
 #endif // SC_AUTOFMT_HXX

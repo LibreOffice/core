@@ -75,7 +75,7 @@ TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 //      allgemeine Hilfsfunktionen
 //
 
-sal_Bool ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
+sal_Bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
 {
 
     if (!pThis)

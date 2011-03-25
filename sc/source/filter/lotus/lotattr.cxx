@@ -124,7 +124,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     if( nLine )
     {
         SvxBoxItem      aBox( ATTR_BORDER );
-        SvxBorderLine   aTop, aLeft, aBottom, aRight;
+        ::editeng::SvxBorderLine    aTop, aLeft, aBottom, aRight;
 
         LotusToScBorderLine( nLine, aLeft );
         nLine >>= 2;
@@ -168,19 +168,19 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 }
 
 
-void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& aBL )
+void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& aBL )
 {
     nLine &= 0x03;
 
     switch ( nLine )
     {
         default:
-        case 0: aBL.SetStyle( NO_STYLE ); break;
+        case 0: aBL.SetStyle( ::editeng::NO_STYLE ); break;
         case 1: aBL.SetWidth( DEF_LINE_WIDTH_1 ); break;
         case 2: aBL.SetWidth( DEF_LINE_WIDTH_2 ); break;
         case 3:
         {
-            aBL.SetStyle( DOUBLE );
+            aBL.SetStyle( ::editeng::DOUBLE );
             aBL.SetWidth( DEF_LINE_WIDTH_1 );
         }
         break;

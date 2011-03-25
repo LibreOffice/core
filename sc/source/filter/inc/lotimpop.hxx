@@ -39,7 +39,6 @@
 
 class ScFormulaCell;
 class LotusFontBuffer;
-class SvxBorderLine;
 
 
 class ImportLotus : public ImportTyp

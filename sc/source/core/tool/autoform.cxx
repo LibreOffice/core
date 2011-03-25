@@ -917,7 +917,7 @@ ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
 
     //  black thin border
     Color aBlack( COL_BLACK );
-    SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
+    ::editeng::SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
     SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, BOX_LINE_LEFT);
     aBox.SetLine(&aLine, BOX_LINE_TOP);

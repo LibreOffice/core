@@ -102,6 +102,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+using ::editeng::SvxBorderLine;
 
 //========================================================================
 
@@ -511,22 +512,22 @@ void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
         (rOut += ByteString::CreateFromInt32( nPxWidth )) += "px ";
         switch ( pLine->GetStyle() )
         {
-            case SOLID:     rOut += "solid"; break;
-            case DOTTED:    rOut += "dotted"; break;
-            case DASHED:    rOut += "dashed"; break;
-            case DOUBLE:
-            case THINTHICK_SMALLGAP:
-            case THINTHICK_MEDIUMGAP:
-            case THINTHICK_LARGEGAP:
-            case THICKTHIN_SMALLGAP:
-            case THICKTHIN_MEDIUMGAP:
-            case THICKTHIN_LARGEGAP:
+            case ::editeng::SOLID:     rOut += "solid"; break;
+            case ::editeng::DOTTED:    rOut += "dotted"; break;
+            case ::editeng::DASHED:    rOut += "dashed"; break;
+            case ::editeng::DOUBLE:
+            case ::editeng::THINTHICK_SMALLGAP:
+            case ::editeng::THINTHICK_MEDIUMGAP:
+            case ::editeng::THINTHICK_LARGEGAP:
+            case ::editeng::THICKTHIN_SMALLGAP:
+            case ::editeng::THICKTHIN_MEDIUMGAP:
+            case ::editeng::THICKTHIN_LARGEGAP:
                             rOut += "double";
                             break;
-            case EMBOSSED:  rOut += "ridge"; break;
-            case ENGRAVED:  rOut += "groove"; break;
-            case OUTSET:    rOut += "outset"; break;
-            case INSET:     rOut += "inset"; break;
+            case ::editeng::EMBOSSED:  rOut += "ridge"; break;
+            case ::editeng::ENGRAVED:  rOut += "groove"; break;
+            case ::editeng::OUTSET:    rOut += "outset"; break;
+            case ::editeng::INSET:     rOut += "inset"; break;
             default:        rOut += "hidden";
         }
         rOut += " #";

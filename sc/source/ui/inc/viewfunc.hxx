@@ -46,7 +46,6 @@ class ScPatternAttr;
 class ScAutoFormatData;
 class SvxSearchItem;
 class SfxItemSet;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
 class SfxStyleSheetBase;
@@ -66,6 +65,8 @@ class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
 class ScTableProtection;
+
+namespace editeng { class SvxBorderLine; }
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
@@ -298,7 +299,7 @@ public:
 
     void            InsertDraw();
 
-    void            SetSelectionFrameLines( const SvxBorderLine* pLine,
+    void            SetSelectionFrameLines( const ::editeng::SvxBorderLine* pLine,
                                             sal_Bool bColorOnly );
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
@@ -345,9 +346,9 @@ public:
 
                                                 // interne Hilfsfunktionen
 protected:
-    void            UpdateLineAttrs( SvxBorderLine&       rLine,
-                                     const SvxBorderLine* pDestLine,
-                                     const SvxBorderLine* pSrcLine,
+    void            UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
+                                     const ::editeng::SvxBorderLine* pDestLine,
+                                     const ::editeng::SvxBorderLine* pSrcLine,
                                      sal_Bool                 bColor );
 
 

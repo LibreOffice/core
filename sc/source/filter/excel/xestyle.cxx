@@ -1546,7 +1546,7 @@ namespace {
 
 void lclGetBorderLine(
         sal_uInt8& rnXclLine, sal_uInt32& rnColorId,
-        const SvxBorderLine* pLine, XclExpPalette& rPalette, XclBiff eBiff )
+        const ::editeng::SvxBorderLine* pLine, XclExpPalette& rPalette, XclBiff eBiff )
 {
     rnXclLine = EXC_LINE_NONE;
     if( pLine )
@@ -1560,7 +1560,7 @@ void lclGetBorderLine(
         else if( nOuterWidth > DEF_LINE_WIDTH_1 )
         {
             rnXclLine = EXC_LINE_MEDIUM;
-            if ( pLine->GetStyle( ) == DASHED )
+            if ( pLine->GetStyle( ) == ::editeng::DASHED )
                 rnXclLine = EXC_LINE_MEDIUMDASHED;
         }
         else if( nOuterWidth > DEF_LINE_WIDTH_0 )
@@ -1568,10 +1568,10 @@ void lclGetBorderLine(
             rnXclLine = EXC_LINE_THIN;
             switch ( pLine->GetStyle( ) )
             {
-                case DASHED:
+                case ::editeng::DASHED:
                     rnXclLine = EXC_LINE_DASHED;
                     break;
-                case DOTTED:
+                case ::editeng::DOTTED:
                     rnXclLine = EXC_LINE_DOTTED;
                     break;
                 default:

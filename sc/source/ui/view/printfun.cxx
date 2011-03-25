@@ -178,7 +178,7 @@ size_t ScPageRowEntry::CountVisible() const
 
 //------------------------------------------------------------------------
 
-long lcl_LineTotal(const SvxBorderLine* pLine)
+long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
     return pLine ? ( pLine->GetOutWidth() + pLine->GetInWidth() + pLine->GetDistance() ) : 0;
 }

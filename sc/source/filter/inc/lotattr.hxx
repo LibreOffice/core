@@ -39,10 +39,11 @@
 class ScDocument;
 class ScDocumentPool;
 class ScPatternAttr;
-class SvxBorderLine;
 class SvxColorItem;
 class Color;
 class LotAttrTable;
+
+namespace editeng { class SvxBorderLine; }
 
 struct LotAttrWK3
 {
@@ -101,7 +102,7 @@ private:
         ( ( sal_uInt8* ) &rOut )[ 3 ] = rAttr.nBack;
     }
 
-    static void LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& );
+    static void LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& );
 
     const SvxColorItem& GetColorItem( const sal_uInt8 nLotIndex ) const;
 

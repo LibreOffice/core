@@ -67,7 +67,7 @@ enum FillInfoLinePos
     };
 
 
-inline const SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLinePos eWhich )
+inline const ::editeng::SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLinePos eWhich )
 {
     if (pBox)
     {

@@ -46,7 +46,6 @@ class SdrOle2Obj;
 class SfxBindings;
 class SfxChildWindow;
 class SfxModelessDialog;
-class SvxBorderLine;
 class SvxBoxObjectRef;
 class SvxNumberInfoItem;
 struct SfxChildWinInfo;
@@ -69,6 +68,8 @@ class ScDPObject;
 class ScNavigatorSettings;
 
 struct ScHeaderFieldData;
+
+namespace editeng { class SvxBorderLine; }
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterceptor;
@@ -130,7 +131,7 @@ private:
 
     ScInputHandler*         pInputHandler;              // fuer OLE-Eingabezeile
 
-    SvxBorderLine*          pCurFrameLine;
+    ::editeng::SvxBorderLine*           pCurFrameLine;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProviderInterceptor >
@@ -260,8 +261,8 @@ public:
 
     void            SetActive();
 
-    SvxBorderLine*  GetDefaultFrameLine() const { return pCurFrameLine; }
-    void            SetDefaultFrameLine(const SvxBorderLine* pLine );
+    ::editeng::SvxBorderLine*   GetDefaultFrameLine() const { return pCurFrameLine; }
+    void            SetDefaultFrameLine(const ::editeng::SvxBorderLine* pLine );
 
     SC_DLLPUBLIC void           Execute( SfxRequest& rReq );
     SC_DLLPUBLIC void           GetState( SfxItemSet& rSet );

@@ -949,11 +949,11 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 
 //------------------------------------------------------------------------
 
-const SvxBorderLine* ScHelperFunctions::GetBorderLine( SvxBorderLine& rLine, const table::BorderLine& rStruct )
+const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine( ::editeng::SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
     //  Calc needs Twips, and there are 1/100mm in the Uno structure
     const table::BorderLine2& rBorder2 = static_cast< const table::BorderLine2& >( rStruct );
-    rLine.SetStyle( SvxBorderStyle( rBorder2.LineStyle ) );
+    rLine.SetStyle( ::editeng::SvxBorderStyle( rBorder2.LineStyle ) );
     rLine.GuessLinesWidths( rLine.GetStyle(),
         (sal_uInt16)HMMToTwips( rStruct.OuterLineWidth ),
         (sal_uInt16)HMMToTwips( rStruct.InnerLineWidth ),
@@ -968,7 +968,7 @@ const SvxBorderLine* ScHelperFunctions::GetBorderLine( SvxBorderLine& rLine, con
 
 void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const table::TableBorder& rBorder )
 {
-    SvxBorderLine aLine;
+    ::editeng::SvxBorderLine aLine;
     rOuter.SetDistance( (sal_uInt16)HMMToTwips( rBorder.Distance ) );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),     BOX_LINE_TOP );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      BOX_LINE_BOTTOM );
@@ -986,7 +986,7 @@ void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner
     rInner.SetTable( sal_True );
 }
 
-void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const SvxBorderLine* pLine )
+void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine )
 {
     if (pLine)
     {

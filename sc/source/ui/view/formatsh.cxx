@@ -1500,14 +1500,14 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_FRAME_LINESTYLE:
                 {
                     // Default-Linie aktualisieren
-                    const SvxBorderLine* pLine =
+                    const ::editeng::SvxBorderLine* pLine =
                             ((const SvxLineItem&)
                                 pNewAttrs->Get( SID_FRAME_LINESTYLE )).
                                 GetLine();
 
                     if ( pLine )
                     {
-                        SvxBorderLine* pDefLine = pTabViewShell->GetDefaultFrameLine();
+                        ::editeng::SvxBorderLine* pDefLine = pTabViewShell->GetDefaultFrameLine();
 
                         if ( pDefLine )
                         {
@@ -1525,7 +1525,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     else
                     {
                         Color           aColorBlack( COL_BLACK );
-                        SvxBorderLine   aDefLine( &aColorBlack, 20, SOLID );
+                        ::editeng::SvxBorderLine   aDefLine( &aColorBlack, 20, ::editeng::SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( NULL, false );
                     }
@@ -1534,7 +1534,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_FRAME_LINECOLOR:
                 {
-                    SvxBorderLine*  pDefLine = pTabViewShell->GetDefaultFrameLine();
+                    ::editeng::SvxBorderLine*  pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const Color&    rColor = ((const SvxColorItem&)
                                         pNewAttrs->Get( SID_FRAME_LINECOLOR )).
                                             GetValue();
@@ -1547,7 +1547,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
                     else
                     {
-                        SvxBorderLine   aDefLine( &rColor, 20, SOLID );
+                        ::editeng::SvxBorderLine   aDefLine( &rColor, 20, ::editeng::SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( &aDefLine, false );
                     }
@@ -1557,7 +1557,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_BORDER_OUTER:
             case SID_ATTR_BORDER:
                 {
-                    SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
+                    ::editeng::SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
                     ScDocument*             pDoc = GetViewData()->GetDocument();
                     SfxItemSet*             pOldSet =
@@ -1676,7 +1676,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
+    const ::editeng::SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();

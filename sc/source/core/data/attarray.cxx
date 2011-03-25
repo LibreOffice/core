@@ -59,6 +59,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 //------------------------------------------------------------------------
+using ::editeng::SvxBorderLine;
 
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     nCol( nNewCol ),

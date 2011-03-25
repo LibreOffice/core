@@ -67,7 +67,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 
@@ -2192,8 +2192,8 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
         const SCROW nLastRow = maSize.mnRows - 1;
         const long nOuterLine = DEF_LINE_WIDTH_2;
         const long nInnerLine = DEF_LINE_WIDTH_0;
-        SvxBorderLine aOuterLine( NULL, nOuterLine, SOLID );
-        SvxBorderLine aInnerLine( NULL, nInnerLine, SOLID );
+        SvxBorderLine aOuterLine( NULL, nOuterLine, ::editeng::SOLID );
+        SvxBorderLine aInnerLine( NULL, nInnerLine, ::editeng::SOLID );
         SvxBoxItem aBorderItem( ATTR_BORDER );
 
         for( SCCOL nCol = 0; nCol <= nLastCol; ++nCol )

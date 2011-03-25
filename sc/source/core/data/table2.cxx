@@ -1909,7 +1909,7 @@ void ScTable::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& 
 
 
 void ScTable::ApplySelectionLineStyle( const ScMarkData& rMark,
-                            const SvxBorderLine* pLine, sal_Bool bColorOnly )
+                            const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly )
 {
     if ( bColorOnly && !pLine )
         return;

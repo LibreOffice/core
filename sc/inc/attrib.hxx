@@ -53,9 +53,9 @@
 
 
 class EditTextObject;
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
 
-sal_Bool SC_DLLPUBLIC ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
+sal_Bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
 
 //------------------------------------------------------------------------
 

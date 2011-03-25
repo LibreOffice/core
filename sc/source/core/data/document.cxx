@@ -98,6 +98,7 @@
 #include <map>
 #include <limits>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;

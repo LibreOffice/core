@@ -139,8 +139,8 @@ sal_Bool OutputImpl::AddCol( SCCOL nCol )
 void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
 {
     Color color = SC_DP_FRAME_COLOR;
-    SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
-    SvxBorderLine aOutLine( &color, SC_DP_FRAME_OUTER_BOLD );
+    ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
+    ::editeng::SvxBorderLine aOutLine( &color, SC_DP_FRAME_OUTER_BOLD );
 
     SvxBoxItem aBox( ATTR_BORDER );
 

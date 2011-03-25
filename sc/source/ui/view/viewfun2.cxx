@@ -103,6 +103,7 @@
 using namespace com::sun::star;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUString;
+using ::editeng::SvxBorderLine;
 
 using ::std::vector;
 using ::std::auto_ptr;

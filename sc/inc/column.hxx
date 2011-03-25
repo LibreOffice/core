@@ -36,6 +36,8 @@
 
 #include <set>
 
+namespace editeng { class SvxBorderLine; }
+
 class Fraction;
 class OutputDevice;
 class Rectangle;
@@ -45,7 +47,6 @@ class SfxItemSet;
 class SvtListener;
 class SfxPoolItem;
 class SfxStyleSheetBase;
-class SvxBorderLine;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 
@@ -333,7 +334,7 @@ public:
     void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
-                                    const SvxBorderLine* pLine, bool bColorOnly );
+                                    const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;

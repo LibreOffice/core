@@ -51,8 +51,6 @@
 
 //------------------------------------------------------------------ Forwards -
 
-class SvxBorderLine;
-
 class SvStream;
 class Font;
 class List;

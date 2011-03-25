@@ -505,8 +505,8 @@ public:
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
     void        GetBorderLines( SCCOL nCol, SCROW nRow,
-                                const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
-                                const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
+                                const ::editeng::SvxBorderLine** ppLeft, const ::editeng::SvxBorderLine** ppTop,
+                                const ::editeng::SvxBorderLine** ppRight, const ::editeng::SvxBorderLine** ppBottom ) const;
 
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const;
     bool        HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
@@ -557,7 +557,7 @@ public:
     void        ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
-                                    const SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                    const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCCOL nCol, SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, sal_Bool& rFound ) const;

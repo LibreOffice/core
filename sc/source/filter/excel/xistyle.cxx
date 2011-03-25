@@ -908,26 +908,26 @@ namespace {
 #define XLS_LINE_WIDTH_MEDIUM 18
 #define XLS_LINE_WIDTH_THICK  24
 
-/** Converts the passed line style to a SvxBorderLine, or returns false, if style is "no line". */
-bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
+/** Converts the passed line style to a ::editeng::SvxBorderLine, or returns false, if style is "no line". */
+bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
 {
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
         //  outer width,           type
-        {   0,                     SOLID },                // 0 = none
-        {   XLS_LINE_WIDTH_THIN,   SOLID },                // 1 = thin
-        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // 2 = medium
-        {   XLS_LINE_WIDTH_THIN,   DASHED },               // 3 = dashed
-        {   XLS_LINE_WIDTH_THIN,   DOTTED },               // 4 = dotted
-        {   XLS_LINE_WIDTH_THICK,  SOLID },                // 5 = thick
-        {   XLS_LINE_WIDTH_THIN,   DOUBLE },                 // 6 = double
-        {   XLS_LINE_WIDTH_HAIR,   SOLID },                // 7 = hair
-        {   XLS_LINE_WIDTH_MEDIUM, DASHED },               // 8 = med dash
-        {   XLS_LINE_WIDTH_THIN,   SOLID },                // 9 = thin dashdot
-        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // A = med dashdot
-        {   XLS_LINE_WIDTH_THIN,   SOLID },                // B = thin dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // C = med dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, SOLID }                 // D = med slant dashdot
+        {   0,                     ::editeng::SOLID },                // 0 = none
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // 1 = thin
+        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // 2 = medium
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::DASHED },               // 3 = dashed
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::DOTTED },               // 4 = dotted
+        {   XLS_LINE_WIDTH_THICK,  ::editeng::SOLID },                // 5 = thick
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::DOUBLE },                 // 6 = double
+        {   XLS_LINE_WIDTH_HAIR,   ::editeng::SOLID },                // 7 = hair
+        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::DASHED },               // 8 = med dash
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // 9 = thin dashdot
+        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // A = med dashdot
+        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // B = thin dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // C = med dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID }                 // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )
@@ -937,7 +937,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );
     rLine.SetWidth( ppnLineParam[ nXclLine ][ 0 ] );
-    rLine.SetStyle( (SvxBorderStyle)ppnLineParam[ nXclLine ][ 1 ] );
+    rLine.SetStyle( (::editeng::SvxBorderStyle)ppnLineParam[ nXclLine ][ 1 ] );
     return true;
 }
 
@@ -948,7 +948,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
     if( mbLeftUsed || mbRightUsed || mbTopUsed || mbBottomUsed )
     {
         SvxBoxItem aBoxItem( ATTR_BORDER );
-        SvxBorderLine aLine;
+        ::editeng::SvxBorderLine aLine;
         if( mbLeftUsed && lclConvertBorderLine( aLine, rPalette, mnLeftLine, mnLeftColor ) )
             aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
         if( mbRightUsed && lclConvertBorderLine( aLine, rPalette, mnRightLine, mnRightColor ) )
@@ -963,7 +963,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
     {
         SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
         SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
-        SvxBorderLine aLine;
+        ::editeng::SvxBorderLine aLine;
         if( lclConvertBorderLine( aLine, rPalette, mnDiagLine, mnDiagColor ) )
         {
             if( mbDiagTLtoBR )

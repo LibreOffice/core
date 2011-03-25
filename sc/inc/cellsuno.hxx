@@ -108,10 +108,11 @@ class ScCellRangeObj;
 class SvxUnoText;
 class ScLinkListener;
 class ScPatternAttr;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
 class SvxItemPropertySet;
+
+namespace editeng { class SvxBorderLine; }
 
 class ScLinkListener : public SvtListener
 {
@@ -139,9 +140,9 @@ SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
 class ScHelperFunctions
 {
 public:
-    static const SvxBorderLine* GetBorderLine( SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
+    static const ::editeng::SvxBorderLine* GetBorderLine( ::editeng::SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
     static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const com::sun::star::table::TableBorder& rBorder );
-    static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const SvxBorderLine* pLine );
+    static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine );
     static void FillTableBorder( com::sun::star::table::TableBorder& rBorder,
                             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
     static void ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,

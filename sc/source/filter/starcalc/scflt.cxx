@@ -839,7 +839,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
               lcl_ChangeColor(cTop, ColorTop);
               lcl_ChangeColor(cRight, ColorRight);
               lcl_ChangeColor(cBottom, ColorBottom);
-              SvxBorderLine aLine;
+              ::editeng::SvxBorderLine aLine;
               SvxBoxItem aBox( ATTR_BORDER );
               aLine.SetWidth(nLeft);
               aLine.SetColor(ColorLeft);
@@ -1275,7 +1275,7 @@ void Sc10Import::LoadPatternCollection()
                     lcl_ChangeColor( cRight, ColorRight );
                     lcl_ChangeColor( cBottom, ColorBottom );
 
-                    SvxBorderLine   aLine;
+                    ::editeng::SvxBorderLine    aLine;
                     SvxBoxItem      aBox( ATTR_BORDER );
 
                     aLine.SetWidth( nLeft );
@@ -1930,7 +1930,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         if( ( nStart <= nEnd ) && ( nValue != 0 ) )
         {
             ScPatternAttr   aScPattern(pDoc->GetPool());
-            SvxBorderLine   aLine;
+            ::editeng::SvxBorderLine    aLine;
             SvxBoxItem      aBox( ATTR_BORDER );
 
             aLine.SetWidth( nLeft );
