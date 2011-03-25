@@ -28,9 +28,9 @@
 #*************************************************************************
 
 #please make generic modifications to unxgcc.mk
-gb_CPUDEFS := -D$(CPUNAME)
-gb_Library_DLLPOSTFIX := df
-gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_CPUDEFS := -DX86
+gb_Library_DLLPOSTFIX := ob
+gb_COMPILERDEFAULTOPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

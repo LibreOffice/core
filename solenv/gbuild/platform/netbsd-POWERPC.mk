@@ -27,10 +27,12 @@
 #
 #*************************************************************************
 
-#please make generic modifications to unxgcc.mk
-gb_CPUDEFS := -D$(CPUNAME)
-gb_Library_DLLPOSTFIX := df
+#please make generic modifications to unxgcc.mk or linux.mk
+gb_CPUDEFS += -DPOWERPC -DPPC
+gb_Library_DLLPOSTFIX := bp
 gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_CXXFLAGS += -fsigned-char
+gb_CFLAGS += -fsigned-char
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

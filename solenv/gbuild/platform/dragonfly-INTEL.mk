@@ -27,11 +27,11 @@
 #
 #*************************************************************************
 
-#please make generic modifications to unxgcc.mk or linux.mk
+#please make generic modifications to unxgcc.mk
 gb_CPUDEFS := -DX86
 gb_Library_DLLPOSTFIX := df
 gb_COMPILERDEFAULTOPTFLAGS := -Os
 
-include $(GBUILDDIR)/platform/linux.mk
+include $(GBUILDDIR)/platform/unxgcc.mk
 
 # vim: set noet sw=4:
