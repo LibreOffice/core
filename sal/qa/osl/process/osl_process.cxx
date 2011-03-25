@@ -48,9 +48,7 @@
 #include <sal/macros.h>
 
 #if ( defined WNT )                     // Windows
-#include <prewin.h>
 #   include <tchar.h>
-#include <postwin.h>
 #endif
 
 #include "rtl/allocator.hxx"

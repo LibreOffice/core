@@ -45,9 +45,7 @@
 
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
-#include <prewin.h>
 #include <tchar.h>
-#include <postwin.h>
 #endif
 
 #include <cppunit/TestFixture.h>

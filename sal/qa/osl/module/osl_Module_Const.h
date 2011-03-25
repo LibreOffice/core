@@ -43,9 +43,7 @@
 #   include <unistd.h>
 #endif
 #if ( defined WNT )                     // Windows
-#include <prewin.h>
 #   include <io.h>
-#include <postwin.h>
 #endif
 
 #   define FILE_PREFIX          "file:///"

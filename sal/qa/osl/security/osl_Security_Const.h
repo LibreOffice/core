@@ -30,9 +30,7 @@
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
-#include <prewin.h>
 #include <io.h>
-#include <postwin.h>
 #endif
 
 #include <sal/types.h>
