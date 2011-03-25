@@ -242,8 +242,10 @@ testcase tiInsertGraphic
         DialogTest (GrafikEinfuegenDlg)
         printlog " use file: global\input\graf_inp\stabler.tif) "
         Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif")
+        wait(1000)
         printlog "click 'open' "
         Oeffnen.click
+        wait(1000)
     catch
         Warnlog "Insert graphic doesn't work :-("
     endcatch

@@ -26,7 +26,7 @@
 #***********************************************************************/
 
 PRJ = ..
-PRJNAME = smoketestoo_native
+PRJNAME = smoketestdoc
 TARGET = data
 
 .INCLUDE: settings.mk
@@ -50,21 +50,21 @@ $(MISC)/zip/smoketestdoc.sxw: \
         script-lc.xml \
         settings.xml \
         styles.xml
-    $(RM) -r $(MISC)/zip
-    $(MKDIR) $(MISC)/zip
-    $(COPY) content.xml meta.xml settings.xml styles.xml $(MISC)/zip/
-    printf application/vnd.sun.xml.writer > $(MISC)/zip/mimetype
-    $(MKDIR) $(MISC)/zip/META-INF
-    $(COPY) manifest.xml $(MISC)/zip/META-INF/
-    $(MKDIR) $(MISC)/zip/Basic
-    $(COPY) script-lc.xml $(MISC)/zip/Basic/
-    $(MKDIR) $(MISC)/zip/Basic/Standard
-    $(COPY) script-lb.xml Events.xml Global.xml Test_10er.xml Test_DB.xml \
+    $(COMMAND_ECHO)$(RM) -r $(MISC)/zip
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip
+    $(COMMAND_ECHO)$(COPY) content.xml meta.xml settings.xml styles.xml $(MISC)/zip/
+    $(COMMAND_ECHO)printf application/vnd.sun.xml.writer > $(MISC)/zip/mimetype
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip/META-INF
+    $(COMMAND_ECHO)$(COPY) manifest.xml $(MISC)/zip/META-INF/
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip/Basic
+    $(COMMAND_ECHO)$(COPY) script-lc.xml $(MISC)/zip/Basic/
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip/Basic/Standard
+    $(COMMAND_ECHO)$(COPY) script-lb.xml Events.xml Global.xml Test_10er.xml Test_DB.xml \
         Test_Ext.xml $(MISC)/zip/Basic/Standard/
-    $(MKDIR) $(MISC)/zip/Dialogs
-    $(COPY) dialog-lc.xml $(MISC)/zip/Dialogs/
-    $(MKDIR) $(MISC)/zip/Dialogs/Standard
-    $(COPY) dialog-lb.xml OptionsDlg.xml $(MISC)/zip/Dialogs/Standard/
-    cd $(MISC)/zip && zip -rD $(@:f) .
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip/Dialogs
+    $(COMMAND_ECHO)$(COPY) dialog-lc.xml $(MISC)/zip/Dialogs/
+    $(COMMAND_ECHO)$(MKDIR) $(MISC)/zip/Dialogs/Standard
+    $(COMMAND_ECHO)$(COPY) dialog-lb.xml OptionsDlg.xml $(MISC)/zip/Dialogs/Standard/
+    $(COMMAND_ECHO)cd $(MISC)/zip && zip -rD $(@:f) .
 
 .INCLUDE: target.mk
