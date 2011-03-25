@@ -63,7 +63,7 @@ class OleObjectHelper
 {
 public:
     explicit            OleObjectHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
                         ~OleObjectHelper();
 
     bool                importOleObject(

@@ -98,12 +98,12 @@ const sal_Unicode BIFF_DCON_ENCODED = '\x01';       /// First character of an en
 const sal_Unicode BIFF_DCON_INTERN  = '\x02';       /// First character of an encoded sheet name from DCON* records.
 
 
-inline sal_uInt16 lclGetBiffAddressSize( bool bCol16Bit, bool bRow32Bit )
+inline sal_uInt8 lclGetBiffAddressSize( bool bCol16Bit, bool bRow32Bit )
 {
     return (bCol16Bit ? 2 : 1) + (bRow32Bit ? 4 : 2);
 }
 
-inline sal_uInt16 lclGetBiffRangeSize( bool bCol16Bit, bool bRow32Bit )
+inline sal_uInt8 lclGetBiffRangeSize( bool bCol16Bit, bool bRow32Bit )
 {
     return 2 * lclGetBiffAddressSize( bCol16Bit, bRow32Bit );
 }

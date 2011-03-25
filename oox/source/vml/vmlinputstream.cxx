@@ -27,10 +27,12 @@
 
 #include "oox/vml/vmlinputstream.hxx"
 
+#include <com/sun/star/io/XTextInputStream.hpp>
 #include <map>
-#include <rtl/strbuf.hxx>
+#include <string.h>
 #include <rtl/strbuf.hxx>
 #include "oox/helper/helper.hxx"
+#include "oox/helper/textinputstream.hxx"
 
 namespace oox {
 namespace vml {
@@ -55,7 +57,7 @@ inline const sal_Char* lclFindCharacter( const sal_Char* pcBeg, const sal_Char* 
 
 inline bool lclIsWhiteSpace( sal_Char cChar )
 {
-    return (cChar == ' ') || (cChar == '\t') || (cChar == '\n') || (cChar == '\r');
+    return cChar < 32;
 }
 
 const sal_Char* lclFindWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcEnd )
@@ -151,14 +153,78 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
         lclAppendToBuffer( rBuffer, pcBeg, pcEnd );
 }
 
-void lclProcessContents( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
+void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
+{
+    // check that passed string starts and ends with the brackets of an XML element
+    sal_Int32 nElementLen = rElement.getLength();
+    if( nElementLen == 0 )
+        return;
+
+    const sal_Char* pcOpen = rElement.getStr();
+    const sal_Char* pcClose = pcOpen + nElementLen - 1;
+
+    // no complete element found
+    if( (pcOpen >= pcClose) || (*pcOpen != '<') || (*pcClose != '>') )
+    {
+        // just append all passed characters
+        rBuffer.append( rElement );
+    }
+
+    // skip parser instructions: '<![...]>'
+    else if( (nElementLen >= 5) && (pcOpen[ 1 ] == '!') && (pcOpen[ 2 ] == '[') && (pcClose[ -1 ] == ']') )
+    {
+        // do nothing
+    }
+
+    // replace '<br>' element with newline
+    else if( (nElementLen >= 4) && (pcOpen[ 1 ] == 'b') && (pcOpen[ 2 ] == 'r') && (lclFindNonWhiteSpace( pcOpen + 3, pcClose ) == pcClose) )
+    {
+        rBuffer.append( '\n' );
+    }
+
+    // check start elements and simple elements for repeated attributes
+    else if( pcOpen[ 1 ] != '/' )
+    {
+        // find positions of text content inside brackets, exclude '/' in '<simpleelement/>'
+        const sal_Char* pcContentBeg = pcOpen + 1;
+        bool bIsEmptyElement = pcClose[ -1 ] == '/';
+        const sal_Char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
+        // append opening bracket and element name to buffer
+        const sal_Char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
+        lclAppendToBuffer( rBuffer, pcOpen, pcWhiteSpace );
+        // find begin of attributes, and process all attributes
+        const sal_Char* pcAttribBeg = lclFindNonWhiteSpace( pcWhiteSpace, pcContentEnd );
+        if( pcAttribBeg < pcContentEnd )
+            lclProcessAttribs( rBuffer, pcAttribBeg, pcContentEnd );
+        // close the element
+        if( bIsEmptyElement )
+            rBuffer.append( '/' );
+        rBuffer.append( '>' );
+    }
+
+    // append end elements without further processing
+    else
+    {
+        rBuffer.append( rElement );
+    }
+}
+
+bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
 {
     /*  MSO has a very weird way to store and handle whitespaces. The stream
         may contain lots of spaces, tabs, and newlines which have to be handled
         as single space character. This will be done in this function.
 
         If the element text contains a literal line break, it will be stored as
-        <br> tag (without matching closing </br> element).
+        <br> tag (without matching </br> element). This input stream wrapper
+        will replace this element with a literal LF character (see below).
+
+        A single space character for its own is stored as is. Example: The
+        element
+            <font> </font>
+        represents a single space character. The XML parser will ignore this
+        space character completely without issuing a 'characters' event. The
+        VML import filter implementation has to react on this case manually.
 
         A single space character following another character is stored
         literally and must not be stipped away here. Example: The element
@@ -167,19 +233,22 @@ void lclProcessContents( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sa
 
         Consecutive space characters, or a leading single space character, are
         stored in a <span> element. If there are N space characters (N > 1),
-        then the <span> element contains exactly (N-1) NBSP characters
-        (non-breaking space), followed by a regular space character. Example:
+        then the <span> element contains exactly (N-1) NBSP (non-breaking
+        space) characters, followed by a regular space character. Examples:
         The element
             <font><span style='mso-spacerun:yes'>\xA0\xA0\xA0 </span></font>
         represents 4 consecutive space characters. Has to be handled by the
-        implementation.
-
-        A single space character for its own is stored in an empty element.
-        Example: The element
-            <font></font>
-        represents a single space character. Has to be handled by the
-        implementation.
+        implementation. The element
+            <font><span style='mso-spacerun:yes'> abc</span></font>
+        represents a space characters followed by the letters a, b, c. These
+        strings have to be handled by the VML import filter implementation.
      */
+
+    // passed string ends with the leading opening bracket of an XML element
+    const sal_Char* pcBeg = rChars.getStr();
+    const sal_Char* pcEnd = pcBeg + rChars.getLength();
+    bool bHasBracket = (pcBeg < pcEnd) && (pcEnd[ -1 ] == '<');
+    if( bHasBracket ) --pcEnd;
 
     // skip leading whitespace
     const sal_Char* pcContentsBeg = lclFindNonWhiteSpace( pcBeg, pcEnd );
@@ -191,132 +260,139 @@ void lclProcessContents( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sa
             rBuffer.append( ' ' );
         pcContentsBeg = lclFindNonWhiteSpace( pcWhitespaceBeg, pcEnd );
     }
+
+    return bHasBracket;
 }
 
 } // namespace
 
 // ============================================================================
 
-StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInStrm )
+InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
+    // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
+    mxTextStrm( TextInputStream::createXTextInputStream( rxContext, rxInStrm, RTL_TEXTENCODING_ISO_8859_1 ) ),
+    maOpeningBracket( 1 ),
+    maClosingBracket( 1 ),
+    maOpeningCData( CREATE_OSTRING( "<![CDATA[" ) ),
+    maClosingCData( CREATE_OSTRING( "]]>" ) ),
+    mnBufferPos( 0 )
 {
-    if( rxInStrm.is() ) try
-    {
-        // read all bytes we can read
-        rxInStrm->readBytes( maDataSeq, SAL_MAX_INT32 );
-    }
-    catch( Exception& )
-    {
-    }
-
-    if( maDataSeq.hasElements() )
-    {
-        const OString aCDataOpen = CREATE_OSTRING( "<![CDATA[" );
-        const OString aCDataClose = CREATE_OSTRING( "]]>" );
-
-        OStringBuffer aBuffer;
-        aBuffer.ensureCapacity( maDataSeq.getLength() + 256 );
-        const sal_Char* pcCurr = reinterpret_cast< const sal_Char* >( maDataSeq.getConstArray() );
-        const sal_Char* pcEnd = pcCurr + maDataSeq.getLength();
-        while( pcCurr < pcEnd )
-        {
-            // look for the next opening angle bracket
-            const sal_Char* pcOpen = lclFindCharacter( pcCurr, pcEnd, '<' );
-
-            // copy all characters from current position to opening bracket
-            lclProcessContents( aBuffer, pcCurr, pcOpen );
-
-            // nothing to do if no opening bracket has been found
-            if( pcOpen < pcEnd )
-            {
-                // string length from opening bracket to end
-                sal_Int32 nLengthToEnd = static_cast< sal_Int32 >( pcEnd - pcOpen );
-
-                // check for CDATA part, starting with '<![CDATA['
-                if( rtl_str_compare_WithLength( pcOpen, nLengthToEnd, aCDataOpen.getStr(), aCDataOpen.getLength() ) == 0 )
-                {
-                    // search the position after the end tag ']]>'
-                    sal_Int32 nClosePos = rtl_str_indexOfStr_WithLength( pcOpen, nLengthToEnd, aCDataClose.getStr(), aCDataClose.getLength() );
-                    pcCurr = (nClosePos < 0) ? pcEnd : (pcOpen + nClosePos + aCDataClose.getLength());
-                    // copy the entire CDATA part
-                    lclAppendToBuffer( aBuffer, pcOpen, pcCurr );
-                }
-
-                // no CDATA part - process the element starting at pcOpen
-                else
-                {
-                    // look for the next closing angle bracket
-                    const sal_Char* pcClose = lclFindCharacter( pcOpen + 1, pcEnd, '>' );
-                    // complete element found?
-                    if( pcClose < pcEnd )
-                    {
-                        // continue after closing bracket
-                        pcCurr = pcClose + 1;
-                        // length of entire element with angle brackets
-                        sal_Int32 nElementLen = static_cast< sal_Int32 >( pcCurr - pcOpen );
-
-                        // skip parser instructions: '<![...]>'
-                        if( (nElementLen >= 5) && (pcOpen[ 1 ] == '!') && (pcOpen[ 2 ] == '[') && (pcClose[ -1 ] == ']') )
-                        {
-                            // do nothing
-                        }
-
-                        // replace '<br>' element with newline
-                        else if( (nElementLen >= 4) && (pcOpen[ 1 ] == 'b') && (pcOpen[ 2 ] == 'r') && (lclFindNonWhiteSpace( pcOpen + 3, pcClose ) == pcClose) )
-                        {
-                            aBuffer.append( '\n' );
-                        }
-
-                        // check start elements and empty elements for repeated attributes
-                        else if( pcOpen[ 1 ] != '/' )
-                        {
-                            // find positions of text content inside brackets, exclude '/' in '<emptyelement/>'
-                            const sal_Char* pcContentBeg = pcOpen + 1;
-                            bool bIsEmptyElement = pcClose[ -1 ] == '/';
-                            const sal_Char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
-                            // append element name to buffer
-                            const sal_Char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
-                            lclAppendToBuffer( aBuffer, pcOpen, pcWhiteSpace );
-                            // find begin of attributes, and process all attributes
-                            const sal_Char* pcAttribBeg = lclFindNonWhiteSpace( pcWhiteSpace, pcContentEnd );
-                            if( pcAttribBeg < pcContentEnd )
-                                lclProcessAttribs( aBuffer, pcAttribBeg, pcContentEnd );
-                            // close the element
-                            if( bIsEmptyElement )
-                                aBuffer.append( '/' );
-                            aBuffer.append( '>' );
-                        }
-
-                        // append end elements without further processing
-                        else
-                        {
-                            lclAppendToBuffer( aBuffer, pcOpen, pcCurr );
-                        }
-                    }
-                    else
-                    {
-                        // no complete element found, copy all from opening bracket to end
-                        lclAppendToBuffer( aBuffer, pcOpen, pcEnd );
-                        pcCurr = pcEnd;
-                    }
-                }
-            }
-        }
-
-        // set the final data sequence
-        maDataSeq = ::comphelper::ByteSequence( reinterpret_cast< const sal_Int8* >( aBuffer.getStr() ), aBuffer.getLength() );
-    }
-}
-
-// ============================================================================
-
-InputStream::InputStream( const Reference< XInputStream >& rxInStrm ) :
-    StreamDataContainer( rxInStrm ),
-    ::comphelper::SequenceInputStream( maDataSeq )
-{
+    maOpeningBracket[ 0 ] = '<';
+    maClosingBracket[ 0 ] = '>';
 }
 
 InputStream::~InputStream()
 {
+}
+
+sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    if( nBytesToRead < 0 )
+        throw IOException();
+
+    rData.realloc( nBytesToRead );
+    sal_Int8* pcDest = rData.getArray();
+    sal_Int32 nRet = 0;
+    while( (nBytesToRead > 0) && !mxTextStrm->isEOF() )
+    {
+        updateBuffer();
+        sal_Int32 nReadSize = ::std::min( nBytesToRead, maBuffer.getLength() - mnBufferPos );
+        if( nReadSize > 0 )
+        {
+            memcpy( pcDest + nRet, maBuffer.getStr() + mnBufferPos, static_cast< size_t >( nReadSize ) );
+            mnBufferPos += nReadSize;
+            nBytesToRead -= nReadSize;
+            nRet += nReadSize;
+        }
+    }
+    if( nRet < rData.getLength() )
+        rData.realloc( nRet );
+    return nRet;
+}
+
+sal_Int32 SAL_CALL InputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    return readBytes( rData, nMaxBytesToRead );
+}
+
+void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    if( nBytesToSkip < 0 )
+        throw IOException();
+
+    while( (nBytesToSkip > 0) && !mxTextStrm->isEOF() )
+    {
+        updateBuffer();
+        sal_Int32 nSkipSize = ::std::min( nBytesToSkip, maBuffer.getLength() - mnBufferPos );
+        mnBufferPos += nSkipSize;
+        nBytesToSkip -= nSkipSize;
+    }
+}
+
+sal_Int32 SAL_CALL InputStream::available() throw (NotConnectedException, IOException, RuntimeException)
+{
+    updateBuffer();
+    return maBuffer.getLength() - mnBufferPos;
+}
+
+void SAL_CALL InputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException)
+{
+    mxTextStrm->closeInput();
+}
+
+// private --------------------------------------------------------------------
+
+void InputStream::updateBuffer() throw (IOException, RuntimeException)
+{
+    while( (mnBufferPos >= maBuffer.getLength()) && !mxTextStrm->isEOF() )
+    {
+        // collect new contents in a string buffer
+        OStringBuffer aBuffer;
+
+        // read and process characters until the opening bracket of the next XML element
+        OString aChars = readToElementBegin();
+        bool bHasOpeningBracket = lclProcessCharacters( aBuffer, aChars );
+
+        // read and process characters until (and including) closing bracket (an XML element)
+        OSL_ENSURE( bHasOpeningBracket || mxTextStrm->isEOF(), "InputStream::updateBuffer - missing opening bracket of XML element" );
+        if( bHasOpeningBracket && !mxTextStrm->isEOF() )
+        {
+            // read the element text (add the leading opening bracket manually)
+            OString aElement = OString( '<' ) + readToElementEnd();
+            // check for CDATA part, starting with '<![CDATA['
+            if( aElement.match( maOpeningCData ) )
+            {
+                // search the end tag ']]>'
+                while( ((aElement.getLength() < maClosingCData.getLength()) || !aElement.match( maClosingCData, aElement.getLength() - maClosingCData.getLength() )) && !mxTextStrm->isEOF() )
+                    aElement += readToElementEnd();
+                // copy the entire CDATA part
+                aBuffer.append( aElement );
+            }
+            else
+            {
+                // no CDATA part - process the contents of the element
+                lclProcessElement( aBuffer, aElement );
+            }
+        }
+
+        maBuffer = aBuffer.makeStringAndClear();
+        mnBufferPos = 0;
+    }
+}
+
+OString InputStream::readToElementBegin() throw (IOException, RuntimeException)
+{
+    return OUStringToOString( mxTextStrm->readString( maOpeningBracket, sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
+}
+
+OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
+{
+    OString aText = OUStringToOString( mxTextStrm->readString( maClosingBracket, sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
+    OSL_ENSURE( (aText.getLength() > 0) && (aText[ aText.getLength() - 1 ] == '>'), "InputStream::readToElementEnd - missing closing bracket of XML element" );
+    return aText;
 }
 
 // ============================================================================

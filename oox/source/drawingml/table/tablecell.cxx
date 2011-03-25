@@ -27,6 +27,7 @@
 
 #include "oox/drawingml/table/tablecell.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -355,9 +356,10 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottomLeftToTopRight, PROP_DiagonalBLTR );
 
     aFillProperties.assignUsed( maFillProperties );
-    PropertySet aPropSet( xPropSet );
+    ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
     // TODO: phClr?
-    aFillProperties.pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(), rFilterBase.getGraphicHelper() );
+    aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
+    PropertySet( xPropSet ).setProperties( aPropMap );
 }
 
 } } }

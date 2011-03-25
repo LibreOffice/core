@@ -34,23 +34,23 @@
 namespace oox {
 namespace xls {
 
-class WorkbookData;
+class WorkbookGlobals;
 
 // ============================================================================
 
 class ExcelFilterBase
 {
 public:
-    void                registerWorkbookData( WorkbookData& rData );
-    WorkbookData&       getWorkbookData() const;
-    void                unregisterWorkbookData();
+    void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );
+    WorkbookGlobals&    getWorkbookGlobals() const;
+    void                unregisterWorkbookGlobals();
 
 protected:
     explicit            ExcelFilterBase();
     virtual             ~ExcelFilterBase();
 
 private:
-    WorkbookData*       mpData;
+    WorkbookGlobals*    mpBookGlob;
 };
 
 // ============================================================================
