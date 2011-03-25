@@ -930,23 +930,14 @@ sal_uInt32 UHashMap::getId( const OUString& rCompareString )
 * class SvxUnoPropertyMapProvider                                      *
 ***********************************************************************/
 
-SvxUnoPropertyMapProvider aSvxMapProvider;
-
-EXTERN_C
-#if defined( PM2 )
-int _stdcall
-#else
-#ifdef WNT
-int _cdecl
-#else
-int
-#endif
-#endif
-Svx_CompareMap(const void* pSmaller, const void* pBigger )
+struct theSvxMapProvider :
+    public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
 {
-    int nDiff = strcmp( ((const SfxItemPropertyMapEntry*)pSmaller)->pName,
-                        ((const SfxItemPropertyMapEntry*)pBigger)->pName );
-    return nDiff;
+};
+
+SvxUnoPropertyMapProvider& getSvxMapProvider()
+{
+    return theSvxMapProvider::get();
 }
 
 // ---------------------------------------------------------------------
@@ -965,16 +956,6 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
         delete aSetArr[i];
 }
-
-// ---------------------------------------------------------------------
-
-/*void SvxUnoPropertyMapProvider::Sort(sal_uInt16 nId)
-{
-    SfxItemPropertyMapEntry* pTemp = aMapArr[nId];
-    sal_uInt16 i = 0;
-    while(pTemp[i].pName) { i++; }
-    qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMapEntry), Svx_CompareMap);
-}*/
 
 // ---------------------------------------------------------------------
 
@@ -1179,21 +1160,6 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
 
     return sal_True;
 }
-
-/*sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
-{
-    sal_Int16 nWhich = 0;
-
-    const SfxItemPropertyMapEntry* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
-    if( pMap )
-    {
-        const SfxItemPropertyMapEntry* pFound = SfxItemPropertyMapEntry::getByName( pMap, rPropName );
-        if( pFound )
-            nWhich = pFound->nWID;
-    }
-
-    return nWhich;
-} */
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {

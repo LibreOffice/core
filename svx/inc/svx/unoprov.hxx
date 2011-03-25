@@ -89,7 +89,6 @@ class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(sal_uInt16 nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
@@ -103,8 +102,6 @@ public:
 
 const sal_Int16 OBJ_OLE2_APPLET = 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
-
-extern SvxUnoPropertyMapProvider aSvxMapProvider;
 
 #define E3D_INVENTOR_FLAG           (0x80000000)
 

@@ -97,6 +97,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include "shapeimpl.hxx"
 
 #include <vector>
 
@@ -209,8 +210,8 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
-,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
-,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
+,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
+,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
 ,   mpObj(pObject)
 ,   mpModel(NULL)
 ,   mnLockCount(0)
@@ -239,8 +240,8 @@ SvxShape::SvxShape() throw()
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
-,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
-,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
+,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
+,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
 ,   mpObj(NULL)
 ,   mpModel(NULL)
 ,   mnLockCount(0)
@@ -4020,13 +4021,13 @@ void SvxShape::updateShapeKind()
 * class SvxShapeText                                                   *
 ***********************************************************************/
 SvxShapeText::SvxShapeText() throw ()
-: SvxShape(NULL, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+: SvxShape(NULL, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
 }
 
 //----------------------------------------------------------------------
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+: SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
@@ -4263,7 +4264,7 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* p
 ***********************************************************************/
 DBG_NAME(SvxShapeRect)
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE), aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
+: SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_SHAPE), getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 {
     DBG_CTOR(SvxShapeRect,NULL);
 }
