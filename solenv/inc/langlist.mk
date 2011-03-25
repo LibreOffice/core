@@ -30,7 +30,7 @@ ar \
 as \
 as-IN \
 ast \
-be-BY \
+be \
 bo \
 bg \
 br \
@@ -104,7 +104,6 @@ nb \
 nl \
 nn \
 nr \
-ns \
 nso \
 ny \
 om \
