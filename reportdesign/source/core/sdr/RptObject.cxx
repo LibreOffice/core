@@ -942,9 +942,9 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 // -----------------------------------------------------------------------------
-SdrObject* OUnoObject::Clone() const
+OUnoObject* OUnoObject::Clone() const
 {
-    SdrObject* pClone = SdrUnoObj::Clone();
+    OUnoObject* pClone = CloneHelper< OUnoObject >();
     if ( pClone )
     {
         Reference<XPropertySet> xSource(const_cast<OUnoObject*>(this)->getUnoShape(),uno::UNO_QUERY);
@@ -1130,9 +1130,9 @@ uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const 
 }
 // -----------------------------------------------------------------------------
 // Clone() soll eine komplette Kopie des Objektes erzeugen.
-SdrObject* OOle2Obj::Clone() const
+OOle2Obj* OOle2Obj::Clone() const
 {
-    OOle2Obj* pObj = static_cast<OOle2Obj*>(SdrOle2Obj::Clone());
+    OOle2Obj* pObj = CloneHelper< OOle2Obj >();
     OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
     svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
     pObj->impl_createDataProvider_nothrow(pRptModel->getReportDefinition().get());

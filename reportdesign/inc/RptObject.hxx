@@ -221,7 +221,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
-    virtual SdrObject* Clone() const;
+    virtual OOle2Obj* Clone() const;
     virtual void initializeOle();
 
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
@@ -273,7 +273,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
-    virtual SdrObject* Clone() const;
+    virtual OUnoObject* Clone() const;
 
 private:
     void    impl_setReportComponent_nothrow();
