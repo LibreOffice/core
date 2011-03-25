@@ -936,14 +936,14 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 {
     // get insert position through binary search in slotlist
     sal_uInt16 nId = (sal_uInt16) GetSlotId().GetValue();
-    sal_uInt16 nListCount = (sal_uInt16) rList.Count();
+    sal_uInt16 nListCount = (sal_uInt16) rList.size();
     sal_uInt16 nPos;
     sal_uLong m;  // for inner "for" loop
 
     if ( !nListCount )
         nPos = 0;
     else if ( nListCount == 1 )
-        nPos = rList.GetObject(0)->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
+        nPos = rList[0]->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
     else
     {
         sal_uInt16 nMid = 0, nLow = 0;
@@ -953,7 +953,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         {
             nMid = (nLow + nHigh) >> 1;
             DBG_ASSERT( nMid < nListCount, "bsearch ist buggy" );
-            int nDiff = (int) nId - (int) rList.GetObject(nMid)->xSlot->GetSlotId().GetValue();
+            int nDiff = (int) nId - (int) rList[nMid]->xSlot->GetSlotId().GetValue();
             if ( nDiff < 0)
             {
                 if ( nMid == 0 )
@@ -977,16 +977,16 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     DBG_ASSERT( nPos <= nListCount,
         "nPos too large" );
     DBG_ASSERT( nPos == nListCount || nId <=
-        (sal_uInt16) rList.GetObject(nPos)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[nPos]->xSlot->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
     DBG_ASSERT( nPos == 0 || nId >
-        (sal_uInt16) rList.GetObject(nPos-1)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[nPos-1]->xSlot->GetSlotId().GetValue(),
         "Predecessor has higher SlotId" );
     DBG_ASSERT( nPos+1 >= nListCount || nId <
-        (sal_uInt16) rList.GetObject(nPos+1)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[nPos+1]->xSlot->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
 
-    rList.Insert( new SvSlotElement( this, rPrefix ), nPos );
+    rList.insert(rList.begin()+nPos, new SvSlotElement( this, rPrefix ));
 
     // iron out EnumSlots
     SvMetaTypeEnum * pEnum = NULL;
@@ -1052,19 +1052,17 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         pLinkedSlot = pFirstEnumSlot;
 
         // concatenate slaves among themselves
-        rList.Seek((sal_uLong)0);
         xEnumSlot = pFirstEnumSlot;
-        SvSlotElement *pEle;
-        do
+
+        for (SvSlotElementList::const_iterator it = rList.begin(); it != rList.end(); ++it)
         {
-            pEle = rList.Next();
-            if ( pEle && pEle->xSlot->pLinkedSlot == this )
+            if ((*it)->xSlot->pLinkedSlot == this)
             {
-                xEnumSlot->pNextSlot = pEle->xSlot;
-                xEnumSlot = pEle->xSlot;
+                xEnumSlot->pNextSlot = (*it)->xSlot;
+                xEnumSlot = (*it)->xSlot;
             }
         }
-        while ( pEle );
+
         xEnumSlot->pNextSlot = pFirstEnumSlot;
     }
 }
@@ -1136,6 +1134,7 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
                             const ByteString & rSlotId,
                             SvSlotElementList& rSlotList,
+                            SvSlotElementList::iterator pCurSlot,
                             const ByteString & rPrefix,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
 {
@@ -1192,30 +1191,24 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     {
         // look for the next slot with the same StateMethod like me
         // the slotlist is set to the current slot
-        SvSlotElement * pEle = rSlotList.Next();
-        pNextSlot = pEle ? &pEle->xSlot : NULL;
-        while ( pNextSlot )
+        for (SvSlotElementList::iterator it = pCurSlot+1; it != rSlotList.end(); ++it)
         {
-            if ( !pNextSlot->pNextSlot &&
-                pNextSlot->GetStateMethod() == GetStateMethod() )
+            pNextSlot = (*it)->xSlot;
+
+            if (!pNextSlot || (!pNextSlot->pNextSlot && pNextSlot->GetStateMethod() == GetStateMethod()) )
                 break;
-            pEle = rSlotList.Next();
-            pNextSlot = pEle ? &pEle->xSlot : NULL;
         }
 
         if ( !pNextSlot )
         {
             // There is no slot behind me that has the same ExecMethod.
             // So I search for the first slot with it (could be myself).
-            pEle = rSlotList.First();
-            pNextSlot = pEle ? &pEle->xSlot : NULL;
-            while ( pNextSlot != this )
+            for (SvSlotElementList::iterator it = rSlotList.begin(); it != pCurSlot; ++it)
             {
-                if ( !pNextSlot->pEnumValue &&
-                    pNextSlot->GetStateMethod() == GetStateMethod() )
+                pNextSlot = (*it)->xSlot;
+
+                if (pNextSlot == this || (!pNextSlot->pEnumValue && pNextSlot->GetStateMethod() == GetStateMethod()) )
                     break;
-                pEle = rSlotList.Next();
-                pNextSlot = pEle ? &pEle->xSlot : NULL;
             }
         }
 
@@ -1436,6 +1429,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
 
 sal_uInt16 SvMetaSlot::WriteSlotMap( const ByteString & rShellName, sal_uInt16 nCount,
                                 SvSlotElementList& rSlotList,
+                                SvSlotElementList::iterator pCurSlot,
                                 const ByteString & rPrefix,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
@@ -1456,7 +1450,7 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const ByteString & rShellName, sal_uInt16 n
         nSCount = (sal_uInt16)pType->GetAttrCount();
     }
 
-    WriteSlot( rShellName, nCount, slotId, rSlotList, rPrefix, rBase, rOutStm );
+    WriteSlot( rShellName, nCount, slotId, rSlotList, pCurSlot, rPrefix, rBase, rOutStm );
     return nSCount;
 }
 

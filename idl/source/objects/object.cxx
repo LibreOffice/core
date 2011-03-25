@@ -443,10 +443,10 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvStream & rOutStm )
 {
     sal_uInt16 nCount = 0;
-    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
+    SvMetaSlot *pAttr = NULL;
+    for(SvSlotElementList::iterator it = rSlotList.begin(); it != rSlotList.end(); ++it)
     {
-        SvSlotElement *pEle = rSlotList.GetObject( n );
-        SvMetaSlot *pAttr = pEle->xSlot;
+        pAttr = (*it)->xSlot;
         nCount = nCount + pAttr->WriteSlotParamArray( rBase, rOutStm );
     }
 
@@ -459,13 +459,12 @@ sal_uInt16 SvMetaClass::WriteSlots( const ByteString & rShellName,
                                 SvStream & rOutStm )
 {
     sal_uInt16 nSCount = 0;
-    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
+    SvMetaSlot *pAttr = NULL;
+    for(SvSlotElementList::iterator it = rSlotList.begin(); it != rSlotList.end(); ++it)
     {
-        rSlotList.Seek(n);
-        SvSlotElement * pEle = rSlotList.GetCurObject();
-        SvMetaSlot * pAttr = pEle->xSlot;
+        pAttr = (*it)->xSlot;
         nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nCount + nSCount,
-                                        rSlotList, pEle->aPrefix, rBase,
+                                        rSlotList, it, (*it)->aPrefix, rBase,
                                         rOutStm );
     }
 
@@ -560,13 +559,8 @@ void SvMetaClass::WriteSlotStubs( const ByteString & rShellName,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
 {
-    // write all attributes
-    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
-    {
-        SvSlotElement *pEle = rSlotList.GetObject( n );
-        SvMetaSlot *pAttr = pEle->xSlot;
-        pAttr->WriteSlotStubs( rShellName, rList, rOutStm );
-    }
+    for(SvSlotElementList::iterator it = rSlotList.begin(); it != rSlotList.end(); ++it)
+        (*it)->xSlot->WriteSlotStubs( rShellName, rList, rOutStm );
 }
 
 void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
@@ -592,14 +586,12 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
-    for (sal_uInt32 n=0; n<aSlotList.Count(); n++ )
-    {
-        SvSlotElement *pEle = aSlotList.GetObject( n );
-        SvMetaSlot *pSlot = pEle->xSlot;
-        pSlot->SetListPos(n);
-    }
 
-    sal_uLong nSlotCount = aSlotList.Count();
+    sal_uInt32 k = 0;
+    for(SvSlotElementList::iterator it = aSlotList.begin(); it != aSlotList.end(); ++it, ++k)
+        (*it)->xSlot->SetListPos(k);
+
+    sal_uLong nSlotCount = aSlotList.size();
 
     // write all attributes
     sal_uInt16 nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
@@ -641,16 +633,11 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
     rOutStm << endl << "};" << endl << "#endif" << endl << endl;
 
-    for( sal_uLong n=0; n<aSlotList.Count(); n++ )
+    for(SvSlotElementList::iterator it = aSlotList.begin(); it != aSlotList.end(); ++it)
     {
-        aSlotList.Seek(n);
-        SvSlotElement* pEle = aSlotList.GetCurObject();
-        SvMetaSlot* pAttr = pEle->xSlot;
-        pAttr->ResetSlotPointer();
+        (*it)->xSlot->ResetSlotPointer();
+        delete *it;
     }
-
-    for ( sal_uLong n=0; n<aSlotList.Count(); n++ )
-        delete aSlotList.GetObject(n);
 }
 
 void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,

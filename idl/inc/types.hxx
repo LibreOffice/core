@@ -32,8 +32,8 @@
 #include <tools/ref.hxx>
 #include <basobj.hxx>
 
-class SvSlotElementList;
 struct SvSlotElement;
+typedef std::vector<SvSlotElement*> SvSlotElementList;
 
 SV_DECL_REF(SvMetaType)
 SV_DECL_REF(SvMetaAttribute)
