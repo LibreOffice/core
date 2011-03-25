@@ -160,7 +160,7 @@ include $(GBUILDDIR)/platform/freebsd-$(CPUNAME).mk
 else ifeq ($(OS),NETBSD)
 include $(GBUILDDIR)/platform/netbsd-$(CPUNAME).mk
 else ifeq ($(OS),DRAGONFLY)
-include $(GBUILDDIR)/platform/dragonfly-$(CPUNAME).mk
+include $(GBUILDDIR)/platform/dragonfly.mk
 else ifeq ($(OS),SOLARIS)
 include $(GBUILDDIR)/platform/solaris.mk
 else
