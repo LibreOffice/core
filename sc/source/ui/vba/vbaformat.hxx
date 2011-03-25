@@ -53,7 +53,6 @@ protected:
     css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
     css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
     css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::lang::XServiceInfo > mxServiceInfo;
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
     sal_Bool mbCheckAmbiguoity;
     sal_Bool mbAddIndent;

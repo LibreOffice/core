@@ -105,6 +105,9 @@
 using namespace com::sun::star;
 #define SC_UNO_VBADOCOBJ "ThisVBADocObj" // perhaps we want to actually make this ThisWorkbook ?
 
+// #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
+#define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"
+
 //------------------------------------------------------------------------
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
@@ -119,7 +122,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_DIALOGLIBRARIES),   0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(SC_UNO_VBADOCOBJ),   0, &getCppuType(static_cast< const rtl::OUString * >(0)), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_VBAGLOBNAME),       0, &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       PROP_UNO_CALCASSHOWN, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
@@ -1844,12 +1847,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             aRet <<= pDocShell->GetDialogContainer();
         }
-        else if ( aString.EqualsAscii( SC_UNO_VBADOCOBJ ) )
+        else if ( aString.EqualsAscii( SC_UNO_VBAGLOBNAME ) )
         {
-            // Note: the intention really here is to
-            // store something like a Workbook object... but we don't do that )
-            // yet
-            aRet = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisExcelDoc") ) );
+            /*  #i111553# This property provides the name of the constant that
+                will be used to store this model in the global Basic manager.
+                That constant will be equivelant to 'ThisComponent' but for
+                each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
+                constant can co-exist, as required by VBA. */
+            aRet <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisExcelDoc" ) );
         }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {

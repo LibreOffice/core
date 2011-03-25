@@ -519,82 +519,22 @@ sal_Bool ScDocShell::Load( SfxMedium& rMedium )
 
 void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
-    if ( xVbaEvents.is() ) try
+    if (rHint.ISA(ScTablesHint) )
     {
-        using namespace ::com::sun::star::script::vba::VBAEventId;
-        if (rHint.ISA(ScTablesHint) )
+        const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
+        if (rScHint.GetId() == SC_TAB_INSERTED)
         {
-            const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
-            if (rScHint.GetId() == SC_TAB_INSERTED)
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+            if ( xVbaEvents.is() ) try
             {
                 uno::Sequence< uno::Any > aArgs( 1 );
                 aArgs[0] <<= rScHint.GetTab1();
-                xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
+                xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
-            else if (rScHint.GetId() == SC_TABS_INSERTED)
+            catch( uno::Exception& )
             {
-                for (SCTAB i = 0; i < rScHint.GetTab2(); ++i)
-                {
-                    uno::Sequence< uno::Any > aArgs( 1 );
-                    aArgs[0] <<= static_cast<sal_Int16>(rScHint.GetTab1() + i);
-                    xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
-                }
             }
         }
-        else if ( rHint.ISA( SfxEventHint ) )
-        {
-            sal_uLong nEventId = static_cast< const SfxEventHint& >( rHint ).GetEventId();
-            switch ( nEventId )
-            {
-                case SFX_EVENT_ACTIVATEDOC:
-                {
-                    uno::Sequence< uno::Any > aArgs;
-                    xVbaEvents->processVbaEvent( WORKBOOK_ACTIVATE, aArgs );
-                }
-                break;
-                case SFX_EVENT_DEACTIVATEDOC:
-                {
-                    uno::Sequence< uno::Any > aArgs;
-                    xVbaEvents->processVbaEvent( WORKBOOK_DEACTIVATE, aArgs );
-                }
-                break;
-                case SFX_EVENT_OPENDOC:
-                {
-                    uno::Sequence< uno::Any > aArgs;
-                    xVbaEvents->processVbaEvent( WORKBOOK_OPEN, aArgs );
-                }
-                break;
-                case SFX_EVENT_SAVEDOCDONE:
-                case SFX_EVENT_SAVEASDOCDONE:
-                case SFX_EVENT_SAVETODOCDONE:
-                {
-                    uno::Sequence< uno::Any > aArgs( 1 );
-                    aArgs[ 0 ] <<= true;
-                    xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
-                }
-                break;
-                case SFX_EVENT_SAVEASDOCFAILED:
-                case SFX_EVENT_SAVEDOCFAILED:
-                case SFX_EVENT_SAVETODOCFAILED:
-                {
-                    uno::Sequence< uno::Any > aArgs( 1 );
-                    aArgs[ 0 ] <<= false;
-                    xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
-                }
-                break;
-                case SFX_EVENT_CLOSEDOC:
-                {
-                    // #163655# prevent event processing after model is disposed
-                    aDocument.SetVbaEventProcessor( uno::Reference< script::vba::XVBAEventProcessor >() );
-                    uno::Reference< lang::XEventListener >( xVbaEvents, uno::UNO_QUERY_THROW )->disposing( lang::EventObject() );
-                }
-                break;
-            }
-        }
-    }
-    catch( uno::Exception& )
-    {
     }
 
     if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
