@@ -346,8 +346,8 @@ static const sal_Char* pDbgHelpText[] =
 "Attempt to activate the debugger and produce the message there, in order to "
 "always obtain the corresponding stack trace in the debugger.\n",
 "\n",
-"CoreDump\n",
-"Causes a crash\n",
+"Abort\n",
+"Aborts the application\n",
 "\n",
 "\n",
 "Reroute osl messages - Checkbox\n",
@@ -1083,7 +1083,7 @@ DbgDialog::DbgDialog() :
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
+    maTraceBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
     ImplAppendUserDefinedChannels( maTraceBox );
     ImplSelectChannel( maTraceBox, pData->nTraceOut, 0 );
     maTraceBox.Show();
@@ -1106,7 +1106,7 @@ DbgDialog::DbgDialog() :
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
+    maWarningBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
     ImplAppendUserDefinedChannels( maWarningBox );
     ImplSelectChannel( maWarningBox, pData->nWarningOut, 0 );
     maWarningBox.Show();
@@ -1135,7 +1135,7 @@ DbgDialog::DbgDialog() :
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "MessageBox" ) ) );
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "TestTool" ) ) );
     maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debugger" ) ) );
-    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "CoreDump" ) ) );
+    maErrorBox.InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) ) );
     ImplAppendUserDefinedChannels( maErrorBox );
     ImplSelectChannel( maErrorBox, pData->nErrorOut, mnErrorOff );
     maErrorBox.Show();
@@ -1962,6 +1962,14 @@ void DbgPrintWindow( const char* pLine )
     bIn = sal_False;
 }
 
+// -----------------------------------------------------------------------
+
+void DbgAbort( char const * i_message )
+{
+    ::rtl::OUString const message( i_message, strlen( i_message ), osl_getThreadTextEncoding() );
+    Application::Abort( message );
+}
+
 // =======================================================================
 
 void ImplDbgTestSolarMutex()
@@ -1977,6 +1985,7 @@ void DbgGUIInit()
     DbgSetPrintMsgBox( DbgPrintMsgBox );
     DbgSetPrintWindow( DbgPrintWindow );
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
+    DbgSetAbort( DbgAbort );
 }
 
 // -----------------------------------------------------------------------
@@ -1986,6 +1995,7 @@ void DbgGUIDeInit()
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
     DbgSetTestSolarMutex( NULL );
+    DbgSetAbort( NULL );
 
     DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
     if ( pDbgWindow )
