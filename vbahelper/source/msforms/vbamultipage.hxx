@@ -42,7 +42,14 @@ class ScVbaMultiPage : public MultiPageImpl_BASE
     css::uno::Reference< css::container::XIndexAccess > getPages( sal_Int32 nPages );
     css::uno::Reference< css::beans::XPropertySet > mxDialogProps;
 public:
-    ScVbaMultiPage( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper, const css::uno::Reference< css::uno::XInterface >& xDialog );
+    ScVbaMultiPage(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XInterface >& xControl,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        ov::AbstractGeometryAttributes* pGeomHelper,
+        const css::uno::Reference< css::awt::XControl >& xDialog );
+
    // Attributes
     virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException);

@@ -157,6 +157,7 @@ extern RTLFUNC(Abs);
 extern RTLFUNC(Asc);
 extern RTLFUNC(Atn);
 extern RTLFUNC(Chr);
+extern RTLFUNC(ChrW);
 extern RTLFUNC(Cos);
 extern RTLFUNC(CurDir);
 extern RTLFUNC(ChDir);  // JSM

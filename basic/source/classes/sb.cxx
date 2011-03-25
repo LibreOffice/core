@@ -42,6 +42,7 @@
 #include <tools/shl.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
 #include "sbunoobj.hxx"
 #include "sbjsmeth.hxx"
 #include "sbjsmod.hxx"
@@ -136,6 +137,7 @@ void DocBasicItem::startListening()
     Any aThisComp;
     mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
+    mbDisposed = !xCloseBC.is();
     if( xCloseBC.is() )
         try { xCloseBC->addCloseListener( this ); } catch( uno::Exception& ) {}
 }
@@ -437,7 +439,20 @@ SbxObject* SbiFactory::CreateObject( const String& rClass )
         return new BasicCollection( aCollectionName );
     }
     else
-        return NULL;
+    if( rClass.EqualsIgnoreCaseAscii( "FileSystemObject" ) )
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.FileSystemObject" ) );
+            Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
+            return new SbUnoObject( aServiceName, uno::makeAny( xInterface ) );
+        }
+        catch( Exception& )
+        {}
+    }
+
+    return NULL;
 }
 
 
@@ -934,8 +949,14 @@ void StarBASIC::SetModified( sal_Bool b )
     SbxBase::SetModified( b );
 }
 
+extern void lcl_closeTraceFile();
+
 StarBASIC::~StarBASIC()
 {
+#ifdef DBG_TRACE_BASIC
+    lcl_closeTraceFile();
+#endif
+
     // Needs to be first action as it can trigger events
     disposeComVariablesForBasic( this );
 
@@ -2273,7 +2294,22 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     SbxVariable* p = pPar_->Get( 1 );
     sal_Int32 nIndex = implGetIndex( p );
     if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
+    {
         xItemArray->Remove32( nIndex );
+
+        // Correct for stack if necessary
+        SbiInstance* pInst = pINST;
+        SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+        if( pRT )
+        {
+            SbiForStack* pStack = pRT->FindForStackItemForCollection( this );
+            if( pStack != NULL )
+            {
+                if( pStack->nCurCollectionIndex >= nIndex )
+                    --pStack->nCurCollectionIndex;
+            }
+        }
+    }
     else
         SetError( SbERR_BAD_ARGUMENT );
 }

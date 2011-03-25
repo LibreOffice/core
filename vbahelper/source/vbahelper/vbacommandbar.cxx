@@ -154,14 +154,7 @@ ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeExce
 uno::Any SAL_CALL
 ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    uno::Reference< awt::XMenu > xMenu;
-    if( m_bIsMenu )
-    {
-        uno::Reference< frame::XLayoutManager > xLayoutManager = pCBarHelper->getLayoutManager();
-        uno::Reference< beans::XPropertySet > xPropertySet( xLayoutManager->getElement( m_sResourceUrl ), uno::UNO_QUERY_THROW );
-        xMenu.set( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("XMenuBar") ), uno::UNO_QUERY );
-    }
-    uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl, xMenu ) );
+    uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )
     {
         return xCommandBarControls->Item( aIndex, uno::Any() );

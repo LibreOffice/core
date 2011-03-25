@@ -134,16 +134,20 @@ static const char ITEM_DESCRIPTOR_LABEL[]             = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]              = "Type";
 static const char ITEM_DESCRIPTOR_MODULEIDENTIFIER[]  = "ModuleIdentifier";
 static const char ITEM_DESCRIPTOR_DISPATCHPROVIDER[]  = "DispatchProvider";
-static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
+static const char ITEM_DESCRIPTOR_STYLE[]             = "Style";
+static const char ITEM_DESCRIPTOR_ISVISIBLE[]         = "IsVisible";
+static const char ITEM_DESCRIPTOR_ENABLED[]           = "Enabled";
 
-const sal_Int32   LEN_DESCRIPTOR_COMMANDURL           = 10;
-const sal_Int32   LEN_DESCRIPTOR_HELPURL              = 7;
-const sal_Int32   LEN_DESCRIPTOR_CONTAINER            = 23;
-const sal_Int32   LEN_DESCRIPTOR_LABEL                = 5;
-const sal_Int32   LEN_DESCRIPTOR_TYPE                 = 4;
-const sal_Int32   LEN_DESCRIPTOR_MODULEIDENTIFIER     = 16;
-const sal_Int32   LEN_DESCRIPTOR_DISPATCHPROVIDER     = 16;
-static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
+static const sal_Int32 LEN_DESCRIPTOR_COMMANDURL       = 10;
+static const sal_Int32 LEN_DESCRIPTOR_HELPURL          = 7;
+static const sal_Int32 LEN_DESCRIPTOR_CONTAINER        = 23;
+static const sal_Int32 LEN_DESCRIPTOR_LABEL            = 5;
+static const sal_Int32 LEN_DESCRIPTOR_TYPE             = 4;
+static const sal_Int32 LEN_DESCRIPTOR_MODULEIDENTIFIER = 16;
+static const sal_Int32 LEN_DESCRIPTOR_DISPATCHPROVIDER = 16;
+static const sal_Int32 LEN_DESCRIPTOR_STYLE            = 5;
+static const sal_Int32 LEN_DESCRIPTOR_ISVISIBLE        = 9;
+static const sal_Int32 LEN_DESCRIPTOR_ENABLED          = 7;
 
 const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
 
@@ -1757,6 +1761,8 @@ void MenuBarManager::FillMenu(
         rtl::OUString                   aLabel;
         rtl::OUString                   aHelpURL;
         rtl::OUString                   aModuleIdentifier( rModuleIdentifier );
+        sal_Bool                        bShow(sal_True);
+        sal_Bool                        bEnabled(sal_True);
         sal_uInt16                      nType = 0;
         Reference< XIndexAccess >       xIndexContainer;
         Reference< XDispatchProvider >  xDispatchProvider( rDispatchProvider );
@@ -1768,29 +1774,26 @@ void MenuBarManager::FillMenu(
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     rtl::OUString aPropName = aProp[i].Name;
-                    if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL,
-                                                 LEN_DESCRIPTOR_COMMANDURL ))
+                    if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, LEN_DESCRIPTOR_COMMANDURL ))
                         aProp[i].Value >>= aCommandURL;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL,
-                                                      LEN_DESCRIPTOR_HELPURL ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, LEN_DESCRIPTOR_HELPURL ))
                         aProp[i].Value >>= aHelpURL;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER,
-                                                      LEN_DESCRIPTOR_CONTAINER ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, LEN_DESCRIPTOR_CONTAINER ))
                         aProp[i].Value >>= xIndexContainer;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_LABEL,
-                                                      LEN_DESCRIPTOR_LABEL ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, LEN_DESCRIPTOR_LABEL ))
                         aProp[i].Value >>= aLabel;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_TYPE,
-                                                      LEN_DESCRIPTOR_TYPE ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, LEN_DESCRIPTOR_TYPE ))
                         aProp[i].Value >>= nType;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_MODULEIDENTIFIER,
-                                                      LEN_DESCRIPTOR_MODULEIDENTIFIER ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_MODULEIDENTIFIER, LEN_DESCRIPTOR_MODULEIDENTIFIER ))
                         aProp[i].Value >>= aModuleIdentifier;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_DISPATCHPROVIDER,
-                                                      LEN_DESCRIPTOR_DISPATCHPROVIDER ))
+                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_DISPATCHPROVIDER, LEN_DESCRIPTOR_DISPATCHPROVIDER ))
                         aProp[i].Value >>= xDispatchProvider;
-                   else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, LEN_DESCRIPTOR_STYLE ))
                         aProp[i].Value >>= nStyle;
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_ISVISIBLE, LEN_DESCRIPTOR_ISVISIBLE ))
+                        aProp[i].Value >>= bShow;
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_ENABLED, LEN_DESCRIPTOR_ENABLED ))
+                        aProp[i].Value >>= bEnabled;
                 }
 
                 if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
@@ -1809,6 +1812,17 @@ void MenuBarManager::FillMenu(
                            nBits |= MIB_RADIOCHECK;
                         pMenu->SetItemBits( nId, nBits );
                     }
+
+                    if ( bShow )
+                        pMenu->ShowItem( nId );
+                    else
+                        pMenu->HideItem( nId );
+
+                    if ( bEnabled)
+                        pMenu->EnableItem( nId, sal_True );
+                    else
+                        pMenu->EnableItem( nId, sal_False );
+
                     if ( xIndexContainer.is() )
                     {
                         PopupMenu* pNewPopupMenu = new PopupMenu;

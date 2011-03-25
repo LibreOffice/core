@@ -74,10 +74,10 @@ interface XGraphicObjects : com::sun::star::uno::XInterface
     /** Adds a new graphic object to the sheet this collection belongs to. The
         type of the object is determined by the type of the collection.
 
-        @param fLeft  Position of the left border in points (1/72 inch).
-        @param fTop  Position of the top border in points (1/72 inch).
-        @param fWidth  Width of the object in points (1/72 inch).
-        @param fHeight  Height of the object in points (1/72 inch).
+        @param Left  Position of the left border in points (1/72 inch).
+        @param Top  Position of the top border in points (1/72 inch).
+        @param Width  Width of the object in points (1/72 inch).
+        @param Height  Height of the object in points (1/72 inch).
 
         @return  The created graphic object.
      */
@@ -102,10 +102,10 @@ interface XLineObjects : com::sun::star::uno::XInterface
     /** Adds a new line object to the sheet this collection belongs to. The
         type of the object is determined by the type of the collection.
 
-        @param fX1  Position of the first X coordinate in points (1/72 inch).
-        @param fY1  Position of the first Y coordinate in points (1/72 inch).
-        @param fX2  Position of the last X coordinate in points (1/72 inch).
-        @param fY2  Position of the last Y coordinate in points (1/72 inch).
+        @param X1  Position of the first X coordinate in points (1/72 inch).
+        @param Y1  Position of the first Y coordinate in points (1/72 inch).
+        @param X2  Position of the last X coordinate in points (1/72 inch).
+        @param Y2  Position of the last Y coordinate in points (1/72 inch).
 
         @return  The created line object.
      */
@@ -123,11 +123,11 @@ interface XDrawings : com::sun::star::uno::XInterface
 {
     /** Adds a new polygon object to the sheet this collection belongs to.
 
-        @param fX1  Position of the first X coordinate in points (1/72 inch).
-        @param fY1  Position of the first Y coordinate in points (1/72 inch).
-        @param fX2  Position of the last X coordinate in points (1/72 inch).
-        @param fY2  Position of the last Y coordinate in points (1/72 inch).
-        @param bClosed  True = outline closed (last and first point connected).
+        @param X1  Position of the first X coordinate in points (1/72 inch).
+        @param Y1  Position of the first Y coordinate in points (1/72 inch).
+        @param X2  Position of the last X coordinate in points (1/72 inch).
+        @param Y2  Position of the last Y coordinate in points (1/72 inch).
+        @param Closed  True = outline closed (last and first point connected).
 
         @return  The created polygon object.
      */

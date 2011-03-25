@@ -63,7 +63,12 @@ namespace ooo
                 throw css::lang::IllegalArgumentException();
             return aSomething;
         }
-        VBAHELPER_DLLPUBLIC css::uno::Reference<  css::uno::XInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell );
+
+        class XHelperInterface;
+
+        /** Returns the VBA document implementation object representing the passed UNO document model. */
+        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell );
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell,  const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException);
 
@@ -90,18 +95,32 @@ namespace ooo
         VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, sal_Bool bSelection  );
         VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges,  SfxViewShell* );
 
-        /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
-            Returns false, if the Any is empty or contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( bool& rbValue, const css::uno::Any& rAny );
-        /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
+        /** Extracts a 32-bit integer value from the passed Any, which may contain an integer or floating-point value.
+            Throws, if the Any is empty or contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC sal_Int32 extractIntFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
+        /** Extracts a 32-bit integer value from the passed Any, which may contain an integer or floating-point value.
+            Returns nDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC sal_Int32 extractIntFromAny( const css::uno::Any& rAny, sal_Int32 nDefault ) throw (css::uno::RuntimeException);
+
+        /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
+        /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
+            Returns bDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny, bool bDefault ) throw (css::uno::RuntimeException);
+
+        /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
+            Throws, if the Any is empty or contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC ::rtl::OUString extractStringFromAny( const css::uno::Any& rAny, bool bUppercaseBool = false ) throw (css::uno::RuntimeException);
+        /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
+            Returns rDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
+        VBAHELPER_DLLPUBLIC ::rtl::OUString extractStringFromAny( const css::uno::Any& rAny, const ::rtl::OUString& rDefault, bool bUppercaseBool = false ) throw (css::uno::RuntimeException);
 
         VBAHELPER_DLLPUBLIC rtl::OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
-        VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
-        VBAHELPER_DLLPUBLIC double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
-        VBAHELPER_DLLPUBLIC double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical);
+        VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
+        VBAHELPER_DLLPUBLIC double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
+        VBAHELPER_DLLPUBLIC double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical);
         VBAHELPER_DLLPUBLIC sal_Int32 PointsToHmm( double fPoints );
         VBAHELPER_DLLPUBLIC double HmmToPoints( sal_Int32 nHmm );
         VBAHELPER_DLLPUBLIC sal_Int32 getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
@@ -135,14 +154,21 @@ class VBAHELPER_DLLPUBLIC AbstractGeometryAttributes // probably should replace 
 {
 public:
     virtual ~AbstractGeometryAttributes() {}
-    virtual double getLeft() = 0;
+    virtual double getLeft() const = 0;
     virtual void setLeft( double ) = 0;
-    virtual double getTop() = 0;
+    virtual double getTop() const = 0;
     virtual void setTop( double ) = 0;
-    virtual double getHeight() = 0;
+    virtual double getHeight() const = 0;
     virtual void setHeight( double ) = 0;
-    virtual double getWidth() = 0;
+    virtual double getWidth() const = 0;
     virtual void setWidth( double ) = 0;
+
+    virtual double getInnerHeight() const { return 0.0; }
+    virtual void setInnerHeight( double ) {}
+    virtual double getInnerWidth() const { return 0.0; }
+    virtual void setInnerWidth( double ) {}
+    virtual double getOffsetX() const { return 0.0; }
+    virtual double getOffsetY() const { return 0.0; }
 };
 
 namespace msforms {
@@ -156,20 +182,13 @@ protected:
 public:
     ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException );
 
-    double getHeight();
-
-        void setHeight(double _fheight) throw ( css::script::BasicErrorException );
-
-    double getWidth();
-
+    double getHeight() const;
+       void setHeight(double _fheight) throw ( css::script::BasicErrorException );
+    double getWidth() const;
     void setWidth(double _fWidth) throw ( css::script::BasicErrorException );
-
-    double getLeft();
-
+    double getLeft() const;
     void setLeft(double _fLeft);
-
-    double getTop();
-
+    double getTop() const;
     void setTop(double _fTop);
 };
 
@@ -178,13 +197,13 @@ class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes : public AbstractGeom
     std::auto_ptr< ShapeHelper > m_pShapeHelper;
 public:
     ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
-    virtual double getLeft();
+    virtual double getLeft() const;
     virtual void setLeft( double nLeft );
-    virtual double getTop();
+    virtual double getTop() const;
     virtual void setTop( double nTop );
-    virtual double getHeight();
+    virtual double getHeight() const;
     virtual void setHeight( double nHeight );
-    virtual double getWidth();
+    virtual double getWidth() const;
     virtual void setWidth( double nWidth);
     virtual ~ConcreteXShapeGeometryAttributes();
 };
@@ -195,19 +214,39 @@ public:
 #define VBA_WIDTH "Width"
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
 {
-    css::uno::Reference< css::awt::XWindow > mxWindow;
-    sal_Bool mbDialog;
-
 public:
-    UserFormGeometryHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::awt::XControl >& xControl );
-    virtual double getLeft();
-    virtual void setLeft( double nLeft );
-    virtual double getTop();
-    virtual void setTop( double nTop );
-    virtual double getHeight();
-    virtual void setHeight( double nHeight );
-    virtual double getWidth();
-    virtual void setWidth( double nWidth);
+    UserFormGeometryHelper(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::awt::XControl >& xControl,
+        double fOffsetX, double fOffsetY );
+    virtual double getLeft() const;
+    virtual void setLeft( double fLeft );
+    virtual double getTop() const;
+    virtual void setTop( double fTop );
+    virtual double getWidth() const;
+    virtual void setWidth( double fWidth );
+    virtual double getHeight() const;
+    virtual void setHeight( double fHeight );
+    virtual double getInnerWidth() const;
+    virtual void setInnerWidth( double fWidth );
+    virtual double getInnerHeight() const;
+    virtual void setInnerHeight( double fHeight );
+    virtual double getOffsetX() const;
+    virtual double getOffsetY() const;
+
+private:
+    double implGetPos( bool bPosY ) const;
+    void implSetPos( double fPos, bool bPosY );
+    double implGetSize( bool bHeight, bool bOuter ) const;
+    void implSetSize( double fSize, bool bHeight, bool bOuter );
+
+private:
+    css::uno::Reference< css::awt::XWindow > mxWindow;
+    css::uno::Reference< css::beans::XPropertySet > mxModelProps;
+    css::uno::Reference< css::awt::XUnitConversion > mxUnitConv;
+    double mfOffsetX;
+    double mfOffsetY;
+    sal_Bool mbDialog;
 };
 
 class VBAHELPER_DLLPUBLIC ContainerUtilities
@@ -230,8 +269,8 @@ public:
 
     static void exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException );
 };
-    } // openoffice
-} // org
+    } // vba
+} // ooo
 
 namespace ov = ooo::vba;
 

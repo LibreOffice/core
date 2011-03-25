@@ -45,7 +45,6 @@ interface XApplicationBase
 
     [attribute, readonly] string Version;
     [attribute, readonly] any VBE;
-    [attribute, readonly] any VBProjects;
 
     void Quit();
 

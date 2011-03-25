@@ -24,25 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_msforms_XListBox_idl__
 #define __ooo_vba_msforms_XListBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
 
-
 //=============================================================================
-interface XListBox: com::sun::star::uno::XInterface
+
+interface XListBox
 {
     [attribute] any Value;
     [attribute] string Text;
     [attribute] boolean MultiSelect;
     [attribute] any ListIndex;
-        [attribute, readonly ] long ListCount;
+    [attribute, readonly] long ListCount;
+    [attribute, readonly] XNewFont Font;
+
     void AddItem( [in] any pvargItem, [in] any pvargIndex );
     void removeItem( [in] any index );
     void Clear();

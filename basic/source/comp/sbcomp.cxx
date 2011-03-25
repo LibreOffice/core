@@ -44,12 +44,13 @@
 #include <hash_map>
 
 // Trace ini file (set NULL to ignore)
-static char     GpTraceIniFile[] = "d:\\zBasic.Asm\\BasicTrace.ini";
+// can be overridden with the environment variable OOO_BASICTRACEINI
+static char     GpTraceIniFile[] = "~/BasicTrace.ini";
 //static char*  GpTraceIniFile = NULL;
 
 
 // Trace Settings, used if no ini file / not found in ini file
-static char     GpTraceFileNameDefault[] = "d:\\zBasic.Asm\\BasicTrace.txt";
+static char     GpTraceFileNameDefault[] = "~/BasicTrace.txt";
 static char*    GpTraceFileName = GpTraceFileNameDefault;
 
 // GbTraceOn:
@@ -62,6 +63,12 @@ static bool GbTraceOn = true;
 // true = PCodes are written to trace, default = false, correspondents
 // with TraceCommand( "PCodeOn" / "PCodeOff" ), see below
 static bool GbIncludePCodes = false;
+
+// GbInitOnlyAtOfficeStart:
+// true = Tracing is only intialized onces after Office start when
+// Basic runs the first time. Further calls to Basic, e.g. via events
+// use the same output file. The trace ini file is not read again.
+static bool GbInitOnlyAtOfficeStart = false;
 
 static int  GnIndentPerCallLevel = 4;
 static int  GnIndentForPCode = 2;
@@ -83,6 +90,37 @@ static int  GnIndentForPCode = 2;
     TraceCommand "Print", aVal      writes aVal into the trace file as
                                     long as it can be converted to string
 */
+
+#ifdef DBG_TRACE_PROFILING
+
+#include <algorithm>
+#include <stack>
+#include "canvas/elapsedtime.hxx"
+
+//*** Profiling ***
+// GbTimerOn:
+// true = including time stamps
+static bool GbTimerOn = true;
+
+// GbTimeStampForEachStep:
+// true = prints time stamp after each command / pcode (very slow)
+static bool GbTimeStampForEachStep = false;
+
+// GbBlockAllAfterFirstFunctionUsage:
+// true = everything (commands, pcodes, functions) is only printed
+// for the first usage (improves performance when tracing / pro-
+// filing large macros)
+static bool GbBlockAllAfterFirstFunctionUsage = false;
+
+// GbBlockStepsAfterFirstFunctionUsage:
+// true = commands / pcodes are only printed for the first time
+// a function is executed. Afterwards only the entering/leaving
+// messages are logged (improves performance when tracing / pro-
+// filing large macros)
+static bool GbBlockStepsAfterFirstFunctionUsage = false;
+
+#endif
+
 
 static void lcl_skipWhites( char*& rpc )
 {
@@ -174,11 +212,28 @@ static void lcl_ReadIniFile( const char* pIniFileName )
         if( strcmp( VarNameBuffer, "GbIncludePCodes") == 0 )
             GbIncludePCodes = (strcmp( ValBuffer, "true" ) == 0);
         else
+        if( strcmp( VarNameBuffer, "GbInitOnlyAtOfficeStart") == 0 )
+            GbInitOnlyAtOfficeStart = (strcmp( ValBuffer, "true" ) == 0);
+        else
         if( strcmp( VarNameBuffer, "GnIndentPerCallLevel") == 0 )
             GnIndentPerCallLevel = strtol( ValBuffer, NULL, 10 );
         else
         if( strcmp( VarNameBuffer, "GnIndentForPCode") == 0 )
             GnIndentForPCode = strtol( ValBuffer, NULL, 10 );
+#ifdef DBG_TRACE_PROFILING
+        else
+        if( strcmp( VarNameBuffer, "GbTimerOn") == 0 )
+            GbTimerOn = (strcmp( ValBuffer, "true" ) == 0);
+        else
+        if( strcmp( VarNameBuffer, "GbTimeStampForEachStep") == 0 )
+            GbTimeStampForEachStep = (strcmp( ValBuffer, "true" ) == 0);
+        else
+        if( strcmp( VarNameBuffer, "GbBlockAllAfterFirstFunctionUsage") == 0 )
+            GbBlockAllAfterFirstFunctionUsage = (strcmp( ValBuffer, "true" ) == 0);
+        else
+        if( strcmp( VarNameBuffer, "GbBlockStepsAfterFirstFunctionUsage") == 0 )
+            GbBlockStepsAfterFirstFunctionUsage = (strcmp( ValBuffer, "true" ) == 0);
+#endif
     }
     fclose( pFile );
 }
@@ -209,14 +264,14 @@ static void lcl_PrepareTraceForModule( SbModule* pModule )
     pModule->Disassemble( aDisassemblyStr );
 }
 
-static void lcl_lineOut( const char* pFileName, const char* pStr, const char* pPreStr = NULL )
+static FILE* GpGlobalFile = NULL;
+
+static void lcl_lineOut( const char* pStr, const char* pPreStr = NULL, const char* pPostStr = NULL )
 {
-    const char* pPrintFirst = (pPreStr != NULL) ? pPreStr : "";
-    FILE* pFile = fopen( pFileName, "a+" );
-    if( pFile != NULL )
+    if( GpGlobalFile != NULL )
     {
-        fprintf( pFile, "%s%s\n", pPrintFirst, pStr );
-        fclose( pFile );
+        fprintf( GpGlobalFile, "%s%s%s\n", pPreStr ? pPreStr : "", pStr, pPostStr ? pPostStr : "" );
+        fflush( GpGlobalFile );
     }
 }
 
@@ -304,32 +359,198 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
 
 
 // Public functions
-
 static bool GbSavTraceOn = false;
+
+#ifdef DBG_TRACE_PROFILING
+static canvas::tools::ElapsedTime* GpTimer = NULL;
+static double GdStartTime = 0.0;
+static double GdLastTime = 0.0;
+static bool GbBlockSteps = false;
+static bool GbBlockAll = false;
+
+struct FunctionItem
+{
+    String      m_aCompleteFunctionName;
+    double      m_dTotalTime;
+    double      m_dNetTime;
+    int         m_nCallCount;
+    bool        m_bBlockAll;
+    bool        m_bBlockSteps;
+
+    FunctionItem( void )
+        : m_dTotalTime( 0.0 )
+        , m_dNetTime( 0.0 )
+        , m_nCallCount( 0 )
+        , m_bBlockAll( false )
+        , m_bBlockSteps( false )
+    {}
+};
+typedef std::hash_map< ::rtl::OUString, FunctionItem*, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > FunctionItemMap;
+
+static std::stack< double >             GaCallEnterTimeStack;
+static std::stack< FunctionItem* >      GaFunctionItemStack;
+static FunctionItemMap                  GaFunctionItemMap;
+
+bool compareFunctionNetTime( FunctionItem* p1, FunctionItem* p2 )
+{
+    return (p1->m_dNetTime > p2->m_dNetTime);
+}
+
+void lcl_printTimeOutput( void )
+{
+    // Overall time output
+    lcl_lineOut( "" );
+    lcl_lineOut( "***** Time Output *****" );
+    char TimeBuffer[500];
+    double dTotalTime = GpTimer->getElapsedTime() - GdStartTime;
+    sprintf( TimeBuffer, "Total execution time = %f ms", dTotalTime*1000.0 );
+    lcl_lineOut( TimeBuffer );
+    lcl_lineOut( "" );
+
+    if( GbTimerOn )
+    {
+        lcl_lineOut( "Functions:" );
+
+        std::vector<FunctionItem*> avFunctionItems;
+
+        FunctionItemMap::iterator it;
+        for( it = GaFunctionItemMap.begin() ; it != GaFunctionItemMap.end() ; ++it )
+        {
+            FunctionItem* pFunctionItem = it->second;
+            if( pFunctionItem != NULL )
+                avFunctionItems.push_back( pFunctionItem );
+        }
+
+        std::sort( avFunctionItems.begin(), avFunctionItems.end(), compareFunctionNetTime );
+
+        std::vector<FunctionItem*>::iterator itv;
+        for( itv = avFunctionItems.begin() ; itv != avFunctionItems.end() ; ++itv )
+        {
+            FunctionItem* pFunctionItem = *itv;
+            if( pFunctionItem != NULL )
+            {
+                rtl::OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
+                const char* pName = OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US ).getStr();
+                int nNameLen = aCompleteFunctionName.getLength();
+
+                double dFctTotalTime = pFunctionItem->m_dTotalTime;
+                double dFctNetTime = pFunctionItem->m_dNetTime;
+                double dFctTotalTimePercent = 100.0 * dFctTotalTime / dTotalTime;
+                double dFctNetTimePercent = 100.0 * dFctNetTime / dTotalTime;
+                int nSpaceCount = 30 - nNameLen;
+                if( nSpaceCount < 0 )
+                    nSpaceCount = 2;
+                sprintf( TimeBuffer, "%s:%sCalled %d times\t%f ms (%f%%) / net %f (%f%%) ms",
+                    pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
+                    dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
+                lcl_lineOut( TimeBuffer );
+            }
+        }
+    }
+}
+#endif
+
+
+static bool GbInitTraceAlreadyCalled = false;
+
 void dbg_InitTrace( void )
 {
-    if( GpTraceIniFile != NULL )
+    if( GbInitOnlyAtOfficeStart && GbInitTraceAlreadyCalled )
+    {
+#ifdef DBG_TRACE_PROFILING
+        if( GbTimerOn )
+            GpTimer->continueTimer();
+#endif
+        GpGlobalFile = fopen( GpTraceFileName, "a+" );
+        return;
+    }
+    GbInitTraceAlreadyCalled = true;
+
+    if( const sal_Char* pcIniFileName = ::getenv( "OOO_BASICTRACEINI" ) )
+        lcl_ReadIniFile( pcIniFileName );
+    else if( GpTraceIniFile != NULL )
         lcl_ReadIniFile( GpTraceIniFile );
 
-    FILE* pFile = fopen( GpTraceFileName, "w" );
-    if( pFile != NULL )
-        fclose( pFile );
+    GpGlobalFile = fopen( GpTraceFileName, "w" );
     GbSavTraceOn = GbTraceOn;
     if( !GbTraceOn )
-        lcl_lineOut( GpTraceFileName, "### Program started with trace off ###" );
+        lcl_lineOut( "### Program started with trace off ###" );
+
+#ifdef DBG_TRACE_PROFILING
+    GpTimer = new canvas::tools::ElapsedTime();
+    GdStartTime = GpTimer->getElapsedTime();
+    GdLastTime = GdStartTime;
+    GbBlockSteps = false;
+    GbBlockAll = false;
+#endif
 }
 
 void dbg_DeInitTrace( void )
 {
     GbTraceOn = GbSavTraceOn;
+
+#ifdef DBG_TRACE_PROFILING
+    while( !GaCallEnterTimeStack.empty() )
+        GaCallEnterTimeStack.pop();
+    while( !GaFunctionItemStack.empty() )
+        GaFunctionItemStack.pop();
+
+    lcl_printTimeOutput();
+
+    for( FunctionItemMap::iterator it = GaFunctionItemMap.begin() ; it != GaFunctionItemMap.end() ; ++it )
+        delete it->second;
+    GaFunctionItemMap.clear();
+
+    if( GpGlobalFile )
+    {
+        fclose( GpGlobalFile );
+        GpGlobalFile = NULL;
+    }
+
+    if( GbInitOnlyAtOfficeStart )
+    {
+        if( GbTimerOn )
+            GpTimer->pauseTimer();
+    }
+    else
+    {
+        delete GpTimer;
+    }
+#endif
 }
 
 static sal_Int32 GnLastCallLvl = 0;
+
+void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
+{
+    if( bCallLvlRelativeToCurrent )
+        nCallLvl += GnLastCallLvl;
+
+    int nIndent = nCallLvl * GnIndentPerCallLevel;
+    lcl_lineOut( OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
+}
 
 void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
         return;
+
+#ifdef DBG_TRACE_PROFILING
+    if( GbBlockSteps || GbBlockAll )
+        return;
+
+    double dCurTime = 0.0;
+    bool bPrintTimeStamp = false;
+    if( GbTimerOn )
+    {
+        GpTimer->pauseTimer();
+        dCurTime = GpTimer->getElapsedTime();
+        bPrintTimeStamp = GbTimeStampForEachStep;
+    }
+#else
+    bool bPrintTimeStamp = false;
+#endif
+
     GnLastCallLvl = nCallLvl;
 
     SbModule* pTraceMod = pModule;
@@ -346,14 +567,14 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
         const char* pModuleNameStr = OUStringToOString( rtl::OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: Unknown module \"%s\"", pModuleNameStr );
-        lcl_lineOut( GpTraceFileName, Buffer );
+        lcl_lineOut( Buffer );
         return;
     }
 
     PCToTextDataMap* pInnerMap = it->second;
     if( pInnerMap == NULL )
     {
-        lcl_lineOut( GpTraceFileName, "TRACE INTERNAL ERROR: No inner map" );
+        lcl_lineOut( "TRACE INTERNAL ERROR: No inner map" );
         return;
     }
 
@@ -363,7 +584,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
         const char* pModuleNameStr = OUStringToOString( rtl::OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: No info for PC = %d in module \"%s\"", (int)nPC, pModuleNameStr );
-        lcl_lineOut( GpTraceFileName, Buffer );
+        lcl_lineOut( Buffer );
         return;
     }
 
@@ -371,17 +592,49 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 
     const TraceTextData& rTraceTextData = itInner->second;
     const rtl::OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
+    bool bSTMT = false;
     if( rStr_STMNT.getLength() )
-        lcl_lineOut( GpTraceFileName, rStr_STMNT.getStr(), lcl_getSpaces( nIndent ) );
+        bSTMT = true;
+
+    char TimeBuffer[200];
+#ifdef DBG_TRACE_PROFILING
+    if( bPrintTimeStamp )
+    {
+        double dDiffTime = dCurTime - GdLastTime;
+        GdLastTime = dCurTime;
+        sprintf( TimeBuffer, "\t\t// Time = %f ms / += %f ms", dCurTime*1000.0, dDiffTime*1000.0 );
+    }
+#endif
+
+    if( bSTMT )
+    {
+        lcl_lineOut( rStr_STMNT.getStr(), lcl_getSpaces( nIndent ),
+            (bPrintTimeStamp && !GbIncludePCodes) ? TimeBuffer : NULL );
+    }
 
     if( !GbIncludePCodes )
+    {
+#ifdef DBG_TRACE_PROFILING
+        if( GbTimerOn )
+            GpTimer->continueTimer();
+#endif
         return;
+    }
 
     nIndent += GnIndentForPCode;
     const rtl::OString& rStr_PCode = rTraceTextData.m_aTraceStr_PCode;
     if( rStr_PCode.getLength() )
-        lcl_lineOut( GpTraceFileName, rStr_PCode.getStr(), lcl_getSpaces( nIndent ) );
+    {
+        lcl_lineOut( rStr_PCode.getStr(), lcl_getSpaces( nIndent ),
+            bPrintTimeStamp ? TimeBuffer : NULL );
+    }
+
+#ifdef DBG_TRACE_PROFILING
+    if( GbTimerOn )
+        GpTimer->continueTimer();
+#endif
 }
+
 
 void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallLvl, bool bLeave )
 {
@@ -389,6 +642,17 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
 
     if( !GbTraceOn )
         return;
+
+#ifdef DBG_TRACE_PROFILING
+    double dCurTime = 0.0;
+    double dExecutionTime = 0.0;
+    if( GbTimerOn )
+    {
+        dCurTime = GpTimer->getElapsedTime();
+        GpTimer->pauseTimer();
+    }
+#endif
+
     GnLastCallLvl = nCallLvl;
 
     SbModule* pTraceMod = pModule;
@@ -399,39 +663,116 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
+    String aCompleteFunctionName = pTraceMod->GetName();
+    if( pMethod != NULL )
+    {
+        aCompleteFunctionName.AppendAscii( "::" );
+        String aMethodName = pMethod->GetName();
+        aCompleteFunctionName += aMethodName;
+    }
+    else
+    {
+        aCompleteFunctionName.AppendAscii( "/RunInit" );
+    }
+
+    bool bOwnBlockSteps = false;
+#ifdef DBG_TRACE_PROFILING
+    bool bOwnBlockAll = false;
+    FunctionItem* pFunctionItem = NULL;
+    if( GbTimerOn )
+    {
+        FunctionItemMap::iterator itFunctionItem = GaFunctionItemMap.find( aCompleteFunctionName );
+        if( itFunctionItem != GaFunctionItemMap.end() )
+            pFunctionItem = itFunctionItem->second;
+
+        if( pFunctionItem == NULL )
+        {
+            DBG_ASSERT( !bLeave, "No FunctionItem in leave!" );
+
+            pFunctionItem = new FunctionItem();
+            pFunctionItem->m_aCompleteFunctionName = aCompleteFunctionName;
+            GaFunctionItemMap[ aCompleteFunctionName ] = pFunctionItem;
+        }
+        else if( GbBlockAllAfterFirstFunctionUsage && !bLeave )
+        {
+            pFunctionItem->m_bBlockAll = true;
+        }
+        else if( GbBlockStepsAfterFirstFunctionUsage && !bLeave )
+        {
+            pFunctionItem->m_bBlockSteps = true;
+        }
+
+        if( bLeave )
+        {
+            bOwnBlockAll = GbBlockAll;
+            bOwnBlockSteps = GbBlockSteps;
+            GbBlockAll = false;
+            GbBlockSteps = false;
+
+            dExecutionTime = dCurTime - GaCallEnterTimeStack.top();
+            GaCallEnterTimeStack.pop();
+
+            pFunctionItem->m_dTotalTime += dExecutionTime;
+            pFunctionItem->m_dNetTime += dExecutionTime;
+            pFunctionItem->m_nCallCount++;
+
+            GaFunctionItemStack.pop();
+            if( !GaFunctionItemStack.empty() )
+            {
+                FunctionItem* pParentItem = GaFunctionItemStack.top();
+                if( pParentItem != NULL )
+                {
+                    pParentItem->m_dNetTime -= dExecutionTime;
+
+                    GbBlockSteps = pParentItem->m_bBlockSteps;
+                    GbBlockAll = pParentItem->m_bBlockAll;
+                }
+            }
+        }
+        else
+        {
+            GbBlockSteps = bOwnBlockSteps = pFunctionItem->m_bBlockSteps;
+            GbBlockAll = bOwnBlockAll = pFunctionItem->m_bBlockAll;
+
+            GaCallEnterTimeStack.push( dCurTime );
+            GaFunctionItemStack.push( pFunctionItem );
+        }
+    }
+
+    if( bOwnBlockAll )
+    {
+        if( GbTimerOn )
+            GpTimer->continueTimer();
+        return;
+    }
+#endif
+
     if( nCallLvl > 0 )
         nCallLvl--;
     int nIndent = nCallLvl * GnIndentPerCallLevel;
-    if( !bLeave )
+    if( !bLeave && !bOwnBlockSteps )
     {
-        lcl_lineOut( GpTraceFileName, "" );
-        lcl_lineOut( GpTraceFileName, pSeparator, lcl_getSpaces( nIndent ) );
+        lcl_lineOut( "" );
+        lcl_lineOut( pSeparator, lcl_getSpaces( nIndent ) );
     }
 
     String aStr;
     if( bLeave )
     {
-        lcl_lineOut( GpTraceFileName, "}", lcl_getSpaces( nIndent ) );
-        aStr.AppendAscii( "' Leaving " );
+        if( !bOwnBlockSteps )
+        {
+            lcl_lineOut( "}", lcl_getSpaces( nIndent ) );
+            aStr.AppendAscii( "' Leaving " );
+        }
     }
     else
     {
         aStr.AppendAscii( "Entering " );
     }
-    String aModuleName = pTraceMod->GetName();
-    aStr += aModuleName;
-    if( pMethod != NULL )
-    {
-        aStr.AppendAscii( "::" );
-        String aMethodName = pMethod->GetName();
-        aStr += aMethodName;
-    }
-    else
-    {
-        aStr.AppendAscii( "/RunInit" );
-    }
+    if( !bLeave || !bOwnBlockSteps )
+        aStr += aCompleteFunctionName;
 
-    if( pClassModuleObj != NULL )
+    if( !bOwnBlockSteps && pClassModuleObj != NULL )
     {
         aStr.AppendAscii( "[this=" );
         aStr += pClassModuleObj->GetName();
@@ -440,18 +781,37 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     if( !bLeave )
         aStr += lcl_dumpMethodParameters( pMethod );
 
-    lcl_lineOut( GpTraceFileName, OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
+    const char* pPostStr = NULL;
+#ifdef DBG_TRACE_PROFILING
+    char TimeBuffer[200];
+    if( GbTimerOn && bLeave )
+    {
+        sprintf( TimeBuffer, "    // Execution Time = %f ms", dExecutionTime*1000.0 );
+        pPostStr = TimeBuffer;
+    }
+#endif
+    lcl_lineOut( (!bLeave || !bOwnBlockSteps) ? OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr() : "}",
+        lcl_getSpaces( nIndent ), pPostStr );
     if( !bLeave )
-        lcl_lineOut( GpTraceFileName, "{", lcl_getSpaces( nIndent ) );
+        lcl_lineOut( "{", lcl_getSpaces( nIndent ) );
 
-    if( bLeave )
-        lcl_lineOut( GpTraceFileName, "" );
+    if( bLeave && !bOwnBlockSteps )
+        lcl_lineOut( "" );
+
+#ifdef DBG_TRACE_PROFILING
+    if( GbTimerOn )
+        GpTimer->continueTimer();
+#endif
 }
 
 void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
         return;
+#ifdef DBG_TRACE_PROFILING
+    if( GbBlockSteps || GbBlockAll )
+        return;
+#endif
     GnLastCallLvl = nCallLvl;
 
     rtl::OString aOTraceErrMsg = OUStringToOString( rtl::OUString( aTraceErrMsg ), RTL_TEXTENCODING_ASCII_US );
@@ -460,7 +820,7 @@ void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool b
     const char* pHandledStr = bTraceErrHandled ? " / HANDLED" : "";
     sprintf( Buffer, "*** ERROR%s, Id = %d, Msg = \"%s\" ***", pHandledStr, (int)nTraceErr, aOTraceErrMsg.getStr() );
     int nIndent = nCallLvl * GnIndentPerCallLevel;
-    lcl_lineOut( GpTraceFileName, Buffer, lcl_getSpaces( nIndent ) );
+    lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 }
 
 void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
@@ -540,7 +900,7 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
         sprintf( Buffer, "### TRACE_PRINT: %s ###", pValStr );
         int nIndent = GnLastCallLvl * GnIndentPerCallLevel;
-        lcl_lineOut( GpTraceFileName, Buffer, lcl_getSpaces( nIndent ) );
+        lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 
         if( eOld != SbxERR_OK )
             SbxBase::SetError( eOld );

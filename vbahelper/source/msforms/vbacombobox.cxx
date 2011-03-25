@@ -24,8 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbacombobox.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
+#include <ooo/vba/msforms/fmStyle.hpp>
+#include <ooo/vba/msforms/fmDropButtonStyle.hpp>
+#include <ooo/vba/msforms/fmDragBehavior.hpp>
+#include <ooo/vba/msforms/fmEnterFieldBehavior.hpp>
+#include <ooo/vba/msforms/fmListStyle.hpp>
+#include <ooo/vba/msforms/fmTextAlign.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -41,9 +48,17 @@ const static rtl::OUString CONTROLSOURCEPROP( RTL_CONSTASCII_USTRINGPARAM("DataF
 
 ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper, bool bDialogType ) : ComboBoxImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper ), mbDialogType( bDialogType )
 {
-        mpListHelper.reset( new ListControlHelper( m_xProps ) );
-    // grab the default value property name
-    m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
+    mpListHelper.reset( new ListControlHelper( m_xProps ) );
+    try
+    {
+       // grab the default value property name
+       m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
+    }
+    catch( uno::Exception& )
+    {
+    }
+    if( sSourceName.getLength() == 0 )
+        sSourceName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
 }
 
 // Attributes
@@ -103,7 +118,8 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( sSourceName, _value );
+    // booleans are converted to uppercase strings
+    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, ::rtl::OUString(), true ) ) );
 }
 
 // see Value
@@ -131,22 +147,22 @@ ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) 
 
 void SAL_CALL
 ScVbaComboBox::removeItem( const uno::Any& index ) throw (uno::RuntimeException)
-    {
+{
     mpListHelper->removeItem( index );
 }
 
 void SAL_CALL
 ScVbaComboBox::Clear(  ) throw (uno::RuntimeException)
-        {
+{
     mpListHelper->Clear();
-        }
+}
 
 void SAL_CALL
 ScVbaComboBox::setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException)
 {
     ScVbaControl::setRowSource( _rowsource );
     mpListHelper->setRowSource( _rowsource );
-        }
+}
 
 sal_Int32 SAL_CALL
 ScVbaComboBox::getListCount() throw (uno::RuntimeException)
@@ -158,7 +174,66 @@ uno::Any SAL_CALL
 ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
 {
     return mpListHelper->List( pvargIndex, pvarColumn );
-    }
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getStyle() throw (uno::RuntimeException)
+{
+    return msforms::fmStyle::fmStyleDropDownCombo;
+}
+
+void SAL_CALL ScVbaComboBox::setStyle( sal_Int32 /*nStyle*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getDropButtonStyle() throw (uno::RuntimeException)
+{
+    return msforms::fmDropButtonStyle::fmDropButtonStyleArrow;
+}
+
+void SAL_CALL ScVbaComboBox::setDropButtonStyle( sal_Int32 /*nDropButtonStyle*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getDragBehavior() throw (uno::RuntimeException)
+{
+    return msforms::fmDragBehavior::fmDragBehaviorDisabled;
+}
+
+void SAL_CALL ScVbaComboBox::setDragBehavior( sal_Int32 /*nDragBehavior*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getEnterFieldBehavior() throw (uno::RuntimeException)
+{
+    return msforms::fmEnterFieldBehavior::fmEnterFieldBehaviorSelectAll;
+}
+
+void SAL_CALL ScVbaComboBox::setEnterFieldBehavior( sal_Int32 /*nEnterFieldBehavior*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getListStyle() throw (uno::RuntimeException)
+{
+    return msforms::fmListStyle::fmListStylePlain;
+}
+
+void SAL_CALL ScVbaComboBox::setListStyle( sal_Int32 /*nListStyle*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaComboBox::getTextAlign() throw (uno::RuntimeException)
+{
+    return msforms::fmTextAlign::fmTextAlignLeft;
+}
+
+void SAL_CALL ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ ) throw (uno::RuntimeException)
+{
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
+}
 
 rtl::OUString&
 ScVbaComboBox::getServiceImplName()

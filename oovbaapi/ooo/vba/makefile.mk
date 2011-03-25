@@ -39,6 +39,7 @@ PACKAGE=ooo$/vba
 IDLFILES=\
     XErrObject.idl \
     XCollection.idl\
+    XCollectionBase.idl\
     XVBAToOOEventDescGen.idl\
     XPropValue.idl\
     XHelperInterface.idl\
@@ -58,6 +59,7 @@ IDLFILES=\
     XGlobalsBase.idl\
     XDocumentProperty.idl\
     XDocumentProperties.idl\
+    XExecutableDialog.idl\
     XFontBase.idl\
     XDialogsBase.idl\
     XDialogBase.idl\

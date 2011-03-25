@@ -24,29 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_msforms_XUserForm_idl__
-#define __ooo_vba_msforms_XUserForm_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
-#include <ooo/vba/XHelperInterface.idl>
-#endif
-#ifndef __com_sun_star_script_XInvocation_idl__
-#include <com/sun/star/script/XInvocation.idl>
-#endif
-module ooo {  module vba { module msforms {
-interface XUserForm
+#ifndef __ooo_vba_msforms_XNewFont_idl__
+#define __ooo_vba_msforms_XNewFont_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module ooo {  module vba {  module msforms {
+
+//=============================================================================
+
+interface XNewFont
 {
-    //interface ::ooo::vba::XHelperInterface;
-    interface ::com::sun::star::script::XInvocation;
-    [attribute] string Caption;
-    [attribute] double InnerWidth;
-    [attribute] double InnerHeight;
-    void Show();
-    void Hide();
-    void RePaint();
-    void UnloadObject();
-    any Controls( [in] any index );
+    [attribute] string Name;
+    [attribute] double Size;
+    [attribute] short Charset;
+    [attribute] short Weight;
+    [attribute] boolean Bold;
+    [attribute] boolean Italic;
+    [attribute] boolean Underline;
+    [attribute] boolean Strikethrough;
 };
+
+//=============================================================================
+
 }; }; };
+
+//=============================================================================
 
 #endif

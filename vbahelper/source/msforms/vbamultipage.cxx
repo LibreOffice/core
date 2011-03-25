@@ -68,9 +68,16 @@ ScVbaMultiPage::getPages( sal_Int32 nPages )
     return new PagesImpl( nPages );
 }
 
-ScVbaMultiPage::ScVbaMultiPage( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper, const uno::Reference< uno::XInterface >& xDialog ) : MultiPageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+ScVbaMultiPage::ScVbaMultiPage(
+        const uno::Reference< ov::XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< uno::XInterface >& xControl,
+        const uno::Reference< frame::XModel >& xModel,
+        AbstractGeometryAttributes* pGeomHelper,
+        const uno::Reference< awt::XControl >& xDialog ) :
+    MultiPageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
-    mxDialogProps.set( xDialog, uno::UNO_QUERY_THROW );
+    mxDialogProps.set( xDialog->getModel(), uno::UNO_QUERY_THROW );
     // set dialog step to value of multipage pseudo model
     setValue(getValue());
 }

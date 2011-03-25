@@ -91,50 +91,37 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
 {
-    /*sal_Bool bVisible = sal_True;
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
+    sal_Bool bVisible = sal_True;
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE ) );
     if( aValue.hasValue() )
         aValue >>= bVisible;
-    return bVisible;*/
-    return getEnabled();
-
+    return bVisible;
 }
 void SAL_CALL
 ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
-    /*uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE ) );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible"), uno::makeAny( _visible ) );
+        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE ), uno::makeAny( _visible ) );
         ApplyChange();
-    }*/
-    setEnabled( _visible);
+    }
 }
 
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 {
     sal_Bool bEnabled = sal_True;
-    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
-    rtl::OUString aCommandURL ;
 
-    if( m_xParentMenu.is() )
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ENABLED ) );
+    if( aValue.hasValue() )
     {
-        // currently only the menu in the MenuBat support Enable/Disable
-        // FIXME: how to support the menu item in Toolbar
-        bEnabled = m_xParentMenu->isItemEnabled( m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) ) );
+        aValue >>= bEnabled;
     }
     else
     {
         // emulated with Visible
-        //bEnabled = getVisible();
-        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
-        if (aValue >>= aCommandURL){
-            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
-                    bEnabled = sal_False;
-                }
-            }
-
+        bEnabled = getVisible();
     }
     return bEnabled;
 }
@@ -142,30 +129,16 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
-    rtl::OUString aCommandURL ;
-    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
-    rtl::OUStringBuffer aCommandURLSringBuffer;
-    if( m_xParentMenu.is() )
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ENABLED ) );
+    if( aValue.hasValue() )
     {
-        // currently only the menu in the MenuBat support Enable/Disable
-        m_xParentMenu->enableItem( m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) ), _enabled );
+        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ENABLED ), uno::makeAny( _enabled ) );
+        ApplyChange();
     }
     else
     {
-        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
-        if (aValue >>= aCommandURL){
-            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
-                aCommandURL = aCommandURL.copy(3);
-                }
-            if (false == _enabled){
-                aCommandURLSringBuffer = aCommandURLappendix;
-            }
-            aCommandURLSringBuffer.append(aCommandURL);
-            setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURLSringBuffer.makeStringAndClear()) );
-            ApplyChange();
-        }
         // emulated with Visible
-        //setVisible( _enabled );
+        setVisible( _enabled );
     }
 }
 
@@ -206,14 +179,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
     if( !xSubMenu.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< awt::XMenu > xMenu;
-    if( m_xParentMenu.is() )
-    {
-        sal_Int16 nItemId = m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) );
-        xMenu.set( m_xParentMenu->getPopupMenu( nItemId ), uno::UNO_QUERY );
-    }
-
-    uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, xSubMenu, pCBarHelper, m_xBarSettings, m_sResourceUrl, xMenu ) );
+    uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, xSubMenu, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )
     {
         return xCommandBarControls->Item( aIndex, uno::Any() );
@@ -241,12 +207,11 @@ ScVbaCommandBarControl::getServiceNames()
 }
 
 //////////// ScVbaCommandBarPopup //////////////////////////////
-ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary, const css::uno::Reference< css::awt::XMenu >& xMenu ) throw (css::uno::RuntimeException) : CommandBarPopup_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
+ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException) : CommandBarPopup_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
 {
     m_nPosition = nPosition;
     m_bTemporary = bTemporary;
     m_xCurrentSettings->getByIndex( m_nPosition ) >>= m_aPropertyValues;
-    m_xParentMenu = xMenu;
 }
 
 rtl::OUString&
@@ -268,12 +233,11 @@ ScVbaCommandBarPopup::getServiceNames()
 }
 
 //////////// ScVbaCommandBarButton //////////////////////////////
-ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary, const css::uno::Reference< css::awt::XMenu >& xMenu ) throw (css::uno::RuntimeException) : CommandBarButton_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
+ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException) : CommandBarButton_BASE( xParent, xContext, xSettings, pHelper, xBarSettings, sResourceUrl )
 {
     m_nPosition = nPosition;
     m_bTemporary = bTemporary;
     m_xCurrentSettings->getByIndex( m_nPosition ) >>= m_aPropertyValues;
-    m_xParentMenu = xMenu;
 }
 
 rtl::OUString&

@@ -87,6 +87,7 @@ public:
 
 // #111897 PARAM_INFO flags start at 0x00010000 to not
 // conflict with DefaultId in SbxParamInfo::nUserData
-#define PARAM_INFO_PARAMARRAY   0x0010000
+#define PARAM_INFO_PARAMARRAY       0x0010000
+#define PARAM_INFO_WITHBRACKETS     0x0020000
 
 #endif

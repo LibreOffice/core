@@ -58,6 +58,19 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setStyle( sal_Int32 nStyle ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getDropButtonStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDropButtonStyle( sal_Int32 nDropButtonStyle ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getDragBehavior() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDragBehavior( sal_Int32 nDragBehavior ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getEnterFieldBehavior() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEnterFieldBehavior( sal_Int32 nEnterFieldBehavior ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getListStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setListStyle( sal_Int32 nListStyle ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getTextAlign() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTextAlign( sal_Int32 nTextAlign ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex ) throw (css::uno::RuntimeException);
