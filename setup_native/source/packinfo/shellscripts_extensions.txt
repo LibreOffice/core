@@ -76,6 +76,12 @@ END
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
   "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync 
+  if [ "$$?" != "0" ]; then
+    echo "ERROR: Registration of extensions failed!"
+    exit 1
+  else
+    echo "SUCCESS: unopkg returns successful!"
+  fi
   find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
@@ -87,6 +93,12 @@ END
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
   "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync 
+  if [ "$$?" != "0" ]; then
+    echo "ERROR: Registration of extensions failed!"
+    exit 1
+  else
+    echo "SUCCESS: unopkg returns successful!"
+  fi
   find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
@@ -99,6 +111,12 @@ END
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]; then
   "PRODUCTDIRECTORYNAME/program/unopkg" sync 
+  if [ "$$?" != "0" ]; then
+    echo "ERROR: Registration of extensions failed!"
+    exit 1
+  else
+    echo "SUCCESS: unopkg returns successful!"
+  fi
   find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 
@@ -111,6 +129,12 @@ END
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
 then
   "PRODUCTDIRECTORYNAME/program/unopkg" sync 
+  if [ "$$?" != "0" ]; then
+    echo "ERROR: Registration of extensions failed!"
+    exit 1
+  else
+    echo "SUCCESS: unopkg returns successful!"
+  fi
  find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
 fi
 

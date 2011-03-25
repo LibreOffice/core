@@ -78,6 +78,7 @@ public class InstallData
     static private boolean isDebianSystem = false;
     static private boolean useForceDebian = false;  /* --force-debian */
     static private boolean debianInvestigated = false;
+    static private boolean isFirstPackage = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -666,6 +667,14 @@ public class InstallData
 
     public void setIsDebianSystem(boolean value) {
         isDebianSystem = value;
+    }
+
+    public boolean isFirstPackage() {
+        return isFirstPackage;
+    }
+
+    public void setIsFirstPackage(boolean value) {
+        isFirstPackage = value;
     }
 
     public boolean useForceDebian() {
