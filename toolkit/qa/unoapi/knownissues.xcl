@@ -258,3 +258,6 @@ toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
 ### i114636 ###
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleAction
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleContext
+
+### fd#35666 ###
+toolkit.UnoControlDialogModel::com::sun::star::io::XPersistObject
