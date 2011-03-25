@@ -27,7 +27,7 @@
 
 #include "svx/fmresids.hrc"
 #include <svx/svxids.hrc>
-#include "globlmn.hrc"
+#include "globlmn_tmpl.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxcommands.h>
 
