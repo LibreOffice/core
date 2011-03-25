@@ -1,7 +1,6 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,52 +21,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..$/..$/..
-
-PRJNAME=sysui
-TARGET=soquickstart
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
-TARGETTYPE=GUI
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-UWINAPILIB =
-
-# --- Resources ----------------------------------------------------
-
-RCFILES=QuickStart.rc
-INCPRE=..
-
-# --- Files --------------------------------------------------------
-
-OBJFILES=$(OBJ)$/QuickStart.obj
-
-APP1OBJS=$(OBJFILES)
-APP1NOSAL=TRUE
-APP1TARGET=$(TARGET)
-APP1RPATH=BRAND
-.IF "$(COM)"=="GCC"
-APP1STDLIBS=-luuid
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-APP1STDLIBS=comsupp.lib
-.ENDIF
 
-APP1STDLIBS+=$(SHELL32LIB)\
-            $(OLE32LIB)\
-            $(GDI32LIB)\
-            $(OLEAUT32LIB)\
-            $(COMDLG32LIB)\
-            $(KERNEL32LIB)\
-            $(OLEAUT32LIB)
+PRJ = ../..
+PRJNAME = framework
+TARGET = qa_unoapi
 
-APP1NOSVRES=$(RES)$/$(TARGET).res
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/framework/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-# --- Targets ------------------------------------------------------
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-.INCLUDE :	target.mk
+ALLTAR : javatest
+
+.END

@@ -25,49 +25,53 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..$/..
 
-PRJNAME=basic
-TARGET=runtime
+PRJNAME=sysui
+TARGET=soquickstart
+LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
+TARGETTYPE=GUI
 
-ENABLE_EXCEPTIONS = TRUE
-
-# --- Settings -----------------------------------------------------------
+# --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
+UWINAPILIB =
 
-# --- Allgemein -----------------------------------------------------------
+# --- Resources ----------------------------------------------------
 
-SLOFILES=	\
-    $(SLO)$/basrdll.obj	\
-    $(SLO)$/comenumwrapper.obj	\
-    $(SLO)$/inputbox.obj	\
-    $(SLO)$/runtime.obj	\
-    $(SLO)$/step0.obj	\
-    $(SLO)$/step1.obj	\
-    $(SLO)$/step2.obj	\
-    $(SLO)$/iosys.obj	\
-    $(SLO)$/stdobj.obj	\
-    $(SLO)$/stdobj1.obj	\
-    $(SLO)$/methods.obj	\
-    $(SLO)$/methods1.obj	\
-    $(SLO)$/props.obj	\
-    $(SLO)$/ddectrl.obj	\
-    $(SLO)$/dllmgr.obj \
-    $(SLO)$/sbdiagnose.obj
+.IF "$(LINK_SO)"=="TRUE"
 
-.IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
-SLOFILES+=	$(SLO)$/wnt.obj
-.ELIF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
-SLOFILES+=	$(SLO)$/wnt-mingw.obj
+RCFILES=QuickStart.rc
+INCPRE=..
+
+# --- Files --------------------------------------------------------
+
+OBJFILES=$(OBJ)$/QuickStart.obj
+
+APP1OBJS=$(OBJFILES)
+APP1NOSAL=TRUE
+APP1TARGET=$(TARGET)
+APP1RPATH=BRAND
+.IF "$(COM)"=="GCC"
+APP1STDLIBS=-luuid
+.ELSE
+APP1STDLIBS=comsupp.lib
 .ENDIF
 
-# --- Targets -------------------------------------------------------------
+APP1STDLIBS+=$(SHELL32LIB)\
+            $(OLE32LIB)\
+            $(GDI32LIB)\
+            $(OLEAUT32LIB)\
+            $(COMDLG32LIB)\
+            $(KERNEL32LIB)\
+            $(OLEAUT32LIB)
 
-.INCLUDE :  target.mk
+APP1NOSVRES=$(RES)$/$(TARGET).res
 
-$(SLO)$/%.obj: %.s
-#kendy: Cut'n'paste from bridges/source/cpp_uno/mingw_intel/makefile.mk
-    $(CC) -c -o $(SLO)$/$(@:b).obj $<
-    touch $@
+.ENDIF # "$(LINK_SO)"=="TRUE"
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :	target.mk

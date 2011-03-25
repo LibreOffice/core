@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,49 +25,62 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=basic
-TARGET=runtime
+PRJ=../..
+PRJNAME=sfx2
+TARGET=qa_cppunit
 
-ENABLE_EXCEPTIONS = TRUE
+ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings -----------------------------------------------------------
+# --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-
-# --- Allgemein -----------------------------------------------------------
-
-SLOFILES=	\
-    $(SLO)$/basrdll.obj	\
-    $(SLO)$/comenumwrapper.obj	\
-    $(SLO)$/inputbox.obj	\
-    $(SLO)$/runtime.obj	\
-    $(SLO)$/step0.obj	\
-    $(SLO)$/step1.obj	\
-    $(SLO)$/step2.obj	\
-    $(SLO)$/iosys.obj	\
-    $(SLO)$/stdobj.obj	\
-    $(SLO)$/stdobj1.obj	\
-    $(SLO)$/methods.obj	\
-    $(SLO)$/methods1.obj	\
-    $(SLO)$/props.obj	\
-    $(SLO)$/ddectrl.obj	\
-    $(SLO)$/dllmgr.obj \
-    $(SLO)$/sbdiagnose.obj
-
-.IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
-SLOFILES+=	$(SLO)$/wnt.obj
-.ELIF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
-SLOFILES+=	$(SLO)$/wnt-mingw.obj
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
 .ENDIF
 
-# --- Targets -------------------------------------------------------------
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+DLLPRE = # no leading "lib" on .so files
+
+# --- Libs ---------------------------------------------------------
+
+SHL1OBJS=  \
+    $(SLO)/test_metadatable.obj \
+
+
+SHL1STDLIBS= \
+     $(CPPUNITLIB) \
+     $(SALLIB) \
+     $(CPPULIB) \
+     $(CPPUHELPERLIB) \
+     $(VCLLIB) \
+     $(SFXLIB) \
+
+
+SHL1TARGET= test_metadatable
+SHL1RPATH = NONE
+SHL1IMPLIB= i$(SHL1TARGET)
+# SHL1DEF= $(MISC)/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP= version.map
+
+# --- All object files ---------------------------------------------
+
+SLOFILES= \
+    $(SHL1OBJS) \
+
+
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
-$(SLO)$/%.obj: %.s
-#kendy: Cut'n'paste from bridges/source/cpp_uno/mingw_intel/makefile.mk
-    $(CC) -c -o $(SLO)$/$(@:b).obj $<
-    touch $@
+.END

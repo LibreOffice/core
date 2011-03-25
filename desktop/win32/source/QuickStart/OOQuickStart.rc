@@ -1,6 +1,6 @@
 //Microsoft Developer Studio generated resource script.
 //
-#include "../resource.h"
+#include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -31,10 +31,10 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-ICON_ACTIVE             ICON    DISCARDABLE     "../../../desktop/icons/so9_main_app.ico"
-IDI_QUICKSTART          ICON    DISCARDABLE     "../../../desktop/icons/so9_main_app.ico"
-IDI_SMALL               ICON    DISCARDABLE     "../../../desktop/icons/so9_main_app.ico"
-ICON_INACTIVE           ICON    DISCARDABLE     "../../../desktop/icons/so9_main_app.ico"
+ICON_ACTIVE             ICON    DISCARDABLE     "icons/ooo3_main_app.ico"
+IDI_QUICKSTART          ICON    DISCARDABLE     "icons/ooo3_main_app.ico"
+IDI_SMALL               ICON    DISCARDABLE     "icons/ooo3_main_app.ico"
+ICON_INACTIVE           ICON    DISCARDABLE     "icons/ooo3_main_app.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APP_TITLE           "SoQuickStart"
     IDC_QUICKSTART          "QUICKSTART"
-    IDS_TOOLTIP             "Oracle Open Office 3.2 QuickStart"
+    IDS_TOOLTIP             "StarOffice 6.0 QuickStart"
 END
 
 STRINGTABLE DISCARDABLE 

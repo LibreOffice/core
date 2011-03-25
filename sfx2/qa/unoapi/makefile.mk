@@ -1,7 +1,6 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,45 +21,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=desktop
-TARGET=guiloader
-LIBTARGET=NO
-TARGETTYPE=GUI
-UWINAPILIB=
+PRJ = ../..
+PRJNAME = sfx2
+TARGET = qa_unoapi
 
-# --- Settings -----------------------------------------------------
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/sfx2/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-.INCLUDE :  settings.mk
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-# --- Files --------------------------------------------------------
+ALLTAR : javatest
 
-APP1TARGET=guiloader
-APP1NOSAL=TRUE
-APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP1OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB1=$(SHLWAPILIB)
-
-.IF "$(LINK_SO)"=="TRUE"
-APP2TARGET=so$/guiloader
-APP2NOSAL=TRUE
-APP2ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
-APP2OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB2=$(SHLWAPILIB)
-.ENDIF # "$(LINK_SO)"=="TRUE"
-
-# --- Targets ------------------------------------------------------
-
-
-.INCLUDE :  target.mk
-
+.END

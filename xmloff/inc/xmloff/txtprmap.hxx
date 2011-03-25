@@ -178,6 +178,14 @@
 #define CTF_TEXT_DISPLAY                    (XML_TEXT_CTF_START + 143)
 #define CTF_TEXT_CLIP                       (XML_TEXT_CTF_START + 144)
 #define CTF_TEXT_CLIP11                     (XML_TEXT_CTF_START + 145)
+#define CTF_PARAMARGINALL                   (XML_TEXT_CTF_START + 146)
+#define CTF_PARAMARGINALL_REL               (XML_TEXT_CTF_START + 147)
+#define CTF_MARGINALL                       (XML_TEXT_CTF_START + 148)
+#define CTF_MARGINLEFT                      (XML_TEXT_CTF_START + 149)
+#define CTF_MARGINRIGHT                     (XML_TEXT_CTF_START + 150)
+#define CTF_MARGINTOP                       (XML_TEXT_CTF_START + 151)
+#define CTF_MARGINBOTTOM                    (XML_TEXT_CTF_START + 152)
+
 #define TEXT_PROP_MAP_TEXT 0
 #define TEXT_PROP_MAP_PARA 1
 #define TEXT_PROP_MAP_FRAME 2
