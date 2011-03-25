@@ -25,30 +25,43 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX
+#define INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+#include <string>
+#include <vector>
 
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global
-  C++ object d'tors.
+namespace registry
+{
+namespace tools
+{
+class Options
+{
+    std::string m_program;
 
-  Using a C++ dummy object instead.
-*/
+    Options (Options const &);
+    Options & operator= (Options const &);
 
-#include <stdio.h>
+public:
+    explicit Options (char const * program);
+    virtual ~Options();
 
-extern "C" void rtl_memory_fini (void);
+    static bool checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len);
 
+    bool initOptions (std::vector< std::string > & rArgs);
+    bool badOption (char const * reason, char const * option) const;
 
-struct RTL_Memory_Fini {
-  ~RTL_Memory_Fini() ;
+    std::string const & getProgramName() const { return m_program; }
+    bool printUsage() const;
+
+protected:
+    static  bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
+
+    virtual bool initOptions_Impl(std::vector< std::string > & rArgs) = 0;
+    virtual void printUsage_Impl() const = 0;
 };
 
-RTL_Memory_Fini::~RTL_Memory_Fini() {
-  rtl_memory_fini();
-}
+} // namespace tools
+} // namespace registry
 
-
-static RTL_Memory_Fini rtl_Memory_Fini;
+#endif /* INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX */

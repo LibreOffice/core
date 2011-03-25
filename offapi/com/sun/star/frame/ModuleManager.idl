@@ -48,7 +48,7 @@ module com { module sun { module star { module frame {
     of office modules.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 
 service ModuleManager

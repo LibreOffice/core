@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_ "$Revision: 1.1.2.1 $"
+#define _STORE_OBJECT_HXX_
 
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"

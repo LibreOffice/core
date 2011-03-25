@@ -24,34 +24,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __drafts_com_sun_star_form_IncompatibleTypesException_idl__
-#define __drafts_com_sun_star_form_IncompatibleTypesException_idl__
-
-#ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
-#endif
 
 
-//=============================================================================
+#ifndef __com_sun_star_security_CertAltNameEntry_idl__
+#define __com_sun_star_security_CertAltNameEntry_idl__
 
-module drafts { module com {  module sun {  module star {  module form {
+#include <com/sun/star/security/ExtAltNameType.idl>
 
 //=============================================================================
 
-/** thrown to indicate that the types of an <type>XValueBinding</type> and
-    an <type>XBindableValue</type> are incompatible
+ module com {  module sun {  module star {  module security {
 
-    @deprecated
-        This exception is superseeded by <type scope="com::sun::star::form::binding">IncompatibleTypesException</type>
-*/
-exception IncompatibleTypesException: com::sun::star::uno::Exception
+//=============================================================================
+/**
+ * struct contains a single entry within a Subject Alternative Name Extension of a
+ * X509 certificate.
+ */
+struct CertAltNameEntry
 {
+    /**
+     * defines the type of the value . With this information you can determine how to interprete the Any value.
+     * @see com::sun::star::security::ExtAltNameType
+     */
+    com::sun::star::security::ExtAltNameType Type;
+
+    /**
+     * stores the value of entry.
+     */
+    any     Value;
 };
 
-//=============================================================================
 
-}; }; }; }; };
-
-//=============================================================================
-
+}; }; }; };
 #endif

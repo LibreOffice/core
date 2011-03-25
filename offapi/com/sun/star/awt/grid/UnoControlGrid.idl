@@ -68,7 +68,8 @@
     <member>XGridRowSelection::addSelectionListener()</member>.
     You than will be notified for any selection change.</p>
 
-    @since OOo 3.3.0
+    <p>The <type>XGridSelection</type> interface provides a bunch of methods to set and get selection for the grid control.</p>
+    @since OOo 3.3
  */
 service UnoControlGrid
 {

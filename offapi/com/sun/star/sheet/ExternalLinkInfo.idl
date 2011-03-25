@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module sheet {
 //=============================================================================
 /** describes an external link in a formula.
 
-    @since OOo3.1
+    @since OOo 3.1
  */
 struct ExternalLinkInfo
 {

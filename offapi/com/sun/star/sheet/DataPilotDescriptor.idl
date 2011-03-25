@@ -80,7 +80,7 @@ published service DataPilotDescriptor
     /** specifies parameters to create the data pilot table from a database.
 
     @see DatabaseImportDescriptor
-    @since OOo 3.3.0
+    @since OOo 3.3
 
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
@@ -90,7 +90,7 @@ published service DataPilotDescriptor
     /** specifies the name of a <type>DataPilotSource</type> implementation
         for the data pilot table.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 
      */
     [optional, property] string SourceServiceName;
@@ -100,32 +100,33 @@ published service DataPilotDescriptor
     /** specifies arguments that are passed to the implementation named by
         <member>SourceServiceName</member>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ServiceArguments;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the orientation of the field.
+    /** specifies if empty rows in the source data are ignored.
      */
     [optional, property] boolean IgnoreEmptyRows;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the orientation of the field.
+    /** specifies if empty category cells in the source data should be treated
+        as repetition of the content from the previous row.
      */
     [optional, property] boolean RepeatIfEmpty;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the orientation of the field.
+    /** specifies if columns for grand total results are created.
      */
     [optional, property] boolean ColumnGrand;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the orientation of the field.
+    /** specifies if rows for grand total results are created.
      */
     [optional, property] boolean RowGrand;
 
@@ -140,6 +141,14 @@ published service DataPilotDescriptor
     /** specifies whether to drill down to details or go into edit mode.
      */
     [optional, property] boolean DrillDownOnDoubleClick;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a label for grand total results.
+
+    @since OOo 3.4
+     */
+    [optional, property] string GrandTotalName;
 
     //-------------------------------------------------------------------------
 };

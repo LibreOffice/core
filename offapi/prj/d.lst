@@ -110,12 +110,6 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
-
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
@@ -228,5 +222,3 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\xml\wrapper\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\xml\xpath\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 ..\com\sun\star\xsd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
-
-..\drafts\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form

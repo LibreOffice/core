@@ -78,14 +78,14 @@ published service DefaultProvider
 
     /** Enable setting/getting locale for Provider
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
 
     [optional] interface com::sun::star::lang::XLocalizable;
 
     /** Property to enable/disable asynchronous write-back from in-memory cache to backend(s)
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
 
     [optional,property] boolean EnableAsync;

@@ -37,7 +37,7 @@ module com { module sun { module star { module form { module runtime {
 /** specifies the operations on a user interface form, as supported by the
     <type>XFormOperations</type> interface.
 
-    @since OpenOffice.org 2.2.0
+    @since OOo 2.2
 */
 constants FormFeature
 {
