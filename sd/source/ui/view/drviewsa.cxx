@@ -140,6 +140,7 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
 : ViewShell (pFrame, pParentWindow, rViewShellBase)
 , maTabControl(this, pParentWindow)
+, mbIsLayerModeActive(false)
 , mbIsInSwitchPage(false)
 , nF3ShiftCounter(0)
 {

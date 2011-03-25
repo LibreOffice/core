@@ -72,8 +72,6 @@ class DrawViewShell
     : public ViewShell,
       public SfxListener
 {
-    sal_uInt32  nF3ShiftCounter;
-
 public:
     static const int SLOTARRAY_COUNT = 24;
 
@@ -437,6 +435,8 @@ private:
     /** This flag is used to prevent nested calls to SwitchPage().
     */
     bool mbIsInSwitchPage;
+
+    sal_uInt32  nF3ShiftCounter;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
