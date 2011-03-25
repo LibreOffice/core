@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #define TIMELOG
 
 #include <cppunit/TestSuite.h>
