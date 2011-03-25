@@ -56,7 +56,7 @@ endif
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DVCL_DLLIMPLEMENTATION \
-    -DCUI_DLL_NAME=\"$(or $(call gb_Library_get_dllname,cui),$(call gb_Library_get_filename,cui))\" \
+    -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
     -DDLLPOSTFIX=$(subst $(or $(gb_Library_DLLEXT),$(gb_Library_PLAINEXT)),,$(gb_Library_OOOEXT)) \
 ))
 
@@ -178,7 +178,7 @@ $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_filename,spa)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 ## handle fontconfig
 ifneq ($(ENABLE_FONTCONFIG),)

@@ -113,7 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
 
 $(eval $(call gb_Library_set_defs,vclplug_gen,\
     $$(DEFS) \
-    -D_XSALSET_LIBNAME=\"$(gb_Library_SYSPRE)spa$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
 
