@@ -473,10 +473,10 @@ void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
 Color* ImpSvNumberformatScan::GetColor(String& sStr)
 {
     String sString = pFormatter->GetCharClass()->upper(sStr);
-    const String* pKeyword = GetKeywords();
+    const NfKeywordTable & rKeyword = GetKeywords();
     size_t i = 0;
     while (i < NF_MAX_DEFAULT_COLORS &&
-           sString != pKeyword[NF_KEY_FIRSTCOLOR+i] )
+           sString != rKeyword[NF_KEY_FIRSTCOLOR+i] )
         i++;
     if ( i >= NF_MAX_DEFAULT_COLORS )
     {
@@ -492,7 +492,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     Color* pResult = NULL;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
-        const String& rColorWord = pKeyword[NF_KEY_COLOR];
+        const String& rColorWord = rKeyword[NF_KEY_COLOR];
         xub_StrLen nPos = sString.Match(rColorWord);
         if (nPos > 0)
         {
@@ -529,7 +529,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
             pFormatter->ChangeIntl(eTmpLnge);
         }
         else
-            sStr = pKeyword[NF_KEY_FIRSTCOLOR+i];
+            sStr = rKeyword[NF_KEY_FIRSTCOLOR+i];
 
         pResult = &(StandardColor[i]);
     }
@@ -540,16 +540,16 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
 short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos )
 {
     String sString = pFormatter->GetCharClass()->toUpper( sSymbol, nPos, sSymbol.Len() - nPos );
-    const String* pKeyword = GetKeywords();
+    const NfKeywordTable & rKeyword = GetKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
-    if ( sString.Search( pKeyword[NF_KEY_GENERAL] ) == 0 )
+    if ( sString.Search( rKeyword[NF_KEY_GENERAL] ) == 0 )
         return NF_KEY_GENERAL;
     //! MUST be a reverse search to find longer strings first
     short i = NF_KEYWORD_ENTRIES_COUNT-1;
     sal_Bool bFound = sal_False;
     for ( ; i > NF_KEY_LASTKEYWORD_SO5; --i )
     {
-        bFound = sString.Search(pKeyword[i]) == 0;
+        bFound = sString.Search(rKeyword[i]) == 0;
         if ( bFound )
         {
             break;
@@ -559,15 +559,15 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
     if ( !bFound )
     {   // skip the gap of colors et al between new and old keywords and search on
         i = NF_KEY_LASTKEYWORD;
-        while ( i > 0 && sString.Search(pKeyword[i]) != 0 )
+        while ( i > 0 && sString.Search(rKeyword[i]) != 0 )
             i--;
-        if ( i > NF_KEY_LASTOLDKEYWORD && sString != pKeyword[i] )
+        if ( i > NF_KEY_LASTOLDKEYWORD && sString != rKeyword[i] )
         {   // found something, but maybe it's something else?
             // e.g. new NNN is found in NNNN, for NNNN we must search on
             short j = i - 1;
-            while ( j > 0 && sString.Search(pKeyword[j]) != 0 )
+            while ( j > 0 && sString.Search(rKeyword[j]) != 0 )
                 j--;
-            if ( j && pKeyword[j].Len() > pKeyword[i].Len() )
+            if ( j && rKeyword[j].Len() > rKeyword[i].Len() )
                 return j;
         }
     }
