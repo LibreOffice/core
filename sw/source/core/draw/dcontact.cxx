@@ -2272,20 +2272,21 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
 SwDrawVirtObj::~SwDrawVirtObj()
 {}
 
-void SwDrawVirtObj::operator=( const SdrObject& rObj )
+SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
 {
     SdrVirtObj::operator=(rObj);
     // Note: Members <maAnchoredDrawObj> and <mrDrawContact>
     //       haven't to be considered.
+    return *this;
 }
 
-SdrObject* SwDrawVirtObj::Clone() const
+SwDrawVirtObj* SwDrawVirtObj::Clone() const
 {
     SwDrawVirtObj* pObj = new SwDrawVirtObj( rRefObj, mrDrawContact );
 
     if ( pObj )
     {
-        pObj->operator=(static_cast<const SdrObject&>(*this));
+        pObj->operator=( *this );
         // Note: Member <maAnchoredDrawObj> hasn't to be considered.
     }
 

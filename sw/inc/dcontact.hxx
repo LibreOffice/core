@@ -272,8 +272,8 @@ class SwDrawVirtObj : public SdrVirtObj
         // access to offset
         virtual const Point GetOffset() const;
 
-        virtual SdrObject* Clone() const;
-        virtual void operator=( const SdrObject& rObj );
+        virtual SwDrawVirtObj* Clone() const;
+        SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);
 
         // connection to writer layout
         const SwAnchoredObject* GetAnchoredObj() const;
