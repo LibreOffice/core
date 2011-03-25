@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_package.hxx"
+
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
 

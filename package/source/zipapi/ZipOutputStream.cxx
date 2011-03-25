@@ -267,7 +267,7 @@ void ZipOutputStream::doDeflate()
                 sal_Int32 nEat = ::std::min( nLength, nDiff );
                 uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
                 m_xDigestContext->updateDigest( aTmpSeq );
-                mnDigested = mnDigested + nEat;
+                mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
             }
 
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
