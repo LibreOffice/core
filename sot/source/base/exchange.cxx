@@ -45,6 +45,10 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <comphelper/documentconstants.hxx>
 
+#ifdef GetObject
+#undef GetObject
+#endif
+
 using namespace::com::sun::star::uno;
 using namespace::com::sun::star::datatransfer;
 
