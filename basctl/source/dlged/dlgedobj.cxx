@@ -979,16 +979,14 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone() const
+DlgEdObj* DlgEdObj::Clone() const
 {
-    SdrObject* pReturn = SdrUnoObj::Clone();
-
-    DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pReturn);
+    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >();
     DBG_ASSERT( pDlgEdObj != NULL, "DlgEdObj::Clone: invalid clone!" );
     if ( pDlgEdObj )
         pDlgEdObj->clonedFrom( this );
 
-    return pReturn;
+    return pDlgEdObj;
 }
 
 //----------------------------------------------------------------------------
@@ -1001,13 +999,6 @@ SdrObject* DlgEdObj::getFullDragClone() const
     *pObj = *((const SdrUnoObj*)this);
 
     return pObj;
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdObj::operator= (const SdrObject& rObj)
-{
-    SdrUnoObj::operator= (rObj);
 }
 
 //----------------------------------------------------------------------------
