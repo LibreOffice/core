@@ -728,6 +728,92 @@ void IntrospectionAccessStatic_Impl::checkInterfaceArraySize( Sequence< Referenc
 
 
 //*******************************
+//*** ImplIntrospectionAccess ***
+//*******************************
+
+// Neue Impl-Klasse im Rahmen der Introspection-Umstellung auf Instanz-gebundene
+// Introspection mit Property-Zugriff ueber XPropertySet. Die alte Klasse
+// ImplIntrospectionAccess lebt als IntrospectionAccessStatic_Impl
+class ImplIntrospectionAccess : public IntrospectionAccessHelper
+{
+    friend class ImplIntrospection;
+
+    // Untersuchtes Objekt
+    Any maInspectedObject;
+
+    // Als Interface
+    Reference<XInterface> mxIface;
+
+    // Statische Daten der Introspection
+    IntrospectionAccessStatic_Impl* mpStaticImpl;
+
+    // Adapter-Implementation
+    WeakReference< XInterface > maAdapter;
+
+    // Letzte Sequence, die bei getProperties geliefert wurde (Optimierung)
+    Sequence<Property> maLastPropertySeq;
+    sal_Int32 mnLastPropertyConcept;
+
+    // Letzte Sequence, die bei getMethods geliefert wurde (Optimierung)
+    Sequence<Reference<XIdlMethod> > maLastMethodSeq;
+    sal_Int32 mnLastMethodConcept;
+
+public:
+    ImplIntrospectionAccess( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
+    ~ImplIntrospectionAccess();
+
+    // Methoden von XIntrospectionAccess
+    virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)
+        throw( RuntimeException );
+    virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts(void)
+        throw( RuntimeException );
+    virtual Property SAL_CALL getProperty(const ::rtl::OUString& Name, sal_Int32 PropertyConcepts)
+        throw( NoSuchElementException, RuntimeException );
+    virtual sal_Bool SAL_CALL hasProperty(const ::rtl::OUString& Name, sal_Int32 PropertyConcepts)
+        throw( RuntimeException );
+    virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts)
+          throw( RuntimeException );
+    virtual Reference<XIdlMethod> SAL_CALL getMethod(const ::rtl::OUString& Name, sal_Int32 MethodConcepts)
+          throw( NoSuchMethodException, RuntimeException );
+    virtual sal_Bool SAL_CALL hasMethod(const ::rtl::OUString& Name, sal_Int32 MethodConcepts)
+          throw( RuntimeException );
+    virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts)
+          throw( RuntimeException );
+    virtual Sequence< Type > SAL_CALL getSupportedListeners(void)
+          throw( RuntimeException );
+    using OWeakObject::queryAdapter;
+    virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType )
+          throw( IllegalTypeException, RuntimeException );
+
+    // Methoden von XMaterialHolder
+    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException);
+
+    // Methoden von XExactName
+    virtual ::rtl::OUString SAL_CALL getExactName( const ::rtl::OUString& rApproximateName ) throw( RuntimeException );
+};
+
+ImplIntrospectionAccess::ImplIntrospectionAccess
+    ( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ )
+        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ), maAdapter()
+{
+    mpStaticImpl->acquire();
+
+    // Objekt als Interface merken, wenn moeglich
+    TypeClass eType = maInspectedObject.getValueType().getTypeClass();
+    if( eType == TypeClass_INTERFACE )
+        mxIface = *(Reference<XInterface>*)maInspectedObject.getValue();
+
+    mnLastPropertyConcept = -1;
+    mnLastMethodConcept = -1;
+}
+
+ImplIntrospectionAccess::~ImplIntrospectionAccess()
+{
+    mpStaticImpl->release();
+}
+
+
+//*******************************
 //*** ImplIntrospectionAdapter ***
 //*******************************
 
@@ -896,92 +982,6 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
         }
     }
     return aRet;
-}
-
-
-//*******************************
-//*** ImplIntrospectionAccess ***
-//*******************************
-
-// Neue Impl-Klasse im Rahmen der Introspection-Umstellung auf Instanz-gebundene
-// Introspection mit Property-Zugriff ueber XPropertySet. Die alte Klasse
-// ImplIntrospectionAccess lebt als IntrospectionAccessStatic_Impl
-class ImplIntrospectionAccess : public IntrospectionAccessHelper
-{
-    friend class ImplIntrospection;
-
-    // Untersuchtes Objekt
-    Any maInspectedObject;
-
-    // Als Interface
-    Reference<XInterface> mxIface;
-
-    // Statische Daten der Introspection
-    IntrospectionAccessStatic_Impl* mpStaticImpl;
-
-    // Adapter-Implementation
-    WeakReference< XInterface > maAdapter;
-
-    // Letzte Sequence, die bei getProperties geliefert wurde (Optimierung)
-    Sequence<Property> maLastPropertySeq;
-    sal_Int32 mnLastPropertyConcept;
-
-    // Letzte Sequence, die bei getMethods geliefert wurde (Optimierung)
-    Sequence<Reference<XIdlMethod> > maLastMethodSeq;
-    sal_Int32 mnLastMethodConcept;
-
-public:
-    ImplIntrospectionAccess( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
-    ~ImplIntrospectionAccess();
-
-    // Methoden von XIntrospectionAccess
-    virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)
-        throw( RuntimeException );
-    virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts(void)
-        throw( RuntimeException );
-    virtual Property SAL_CALL getProperty(const ::rtl::OUString& Name, sal_Int32 PropertyConcepts)
-        throw( NoSuchElementException, RuntimeException );
-    virtual sal_Bool SAL_CALL hasProperty(const ::rtl::OUString& Name, sal_Int32 PropertyConcepts)
-        throw( RuntimeException );
-    virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts)
-          throw( RuntimeException );
-    virtual Reference<XIdlMethod> SAL_CALL getMethod(const ::rtl::OUString& Name, sal_Int32 MethodConcepts)
-          throw( NoSuchMethodException, RuntimeException );
-    virtual sal_Bool SAL_CALL hasMethod(const ::rtl::OUString& Name, sal_Int32 MethodConcepts)
-          throw( RuntimeException );
-    virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts)
-          throw( RuntimeException );
-    virtual Sequence< Type > SAL_CALL getSupportedListeners(void)
-          throw( RuntimeException );
-    using OWeakObject::queryAdapter;
-    virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType )
-          throw( IllegalTypeException, RuntimeException );
-
-    // Methoden von XMaterialHolder
-    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException);
-
-    // Methoden von XExactName
-    virtual ::rtl::OUString SAL_CALL getExactName( const ::rtl::OUString& rApproximateName ) throw( RuntimeException );
-};
-
-ImplIntrospectionAccess::ImplIntrospectionAccess
-    ( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ )
-        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ), maAdapter()
-{
-    mpStaticImpl->acquire();
-
-    // Objekt als Interface merken, wenn moeglich
-    TypeClass eType = maInspectedObject.getValueType().getTypeClass();
-    if( eType == TypeClass_INTERFACE )
-        mxIface = *(Reference<XInterface>*)maInspectedObject.getValue();
-
-    mnLastPropertyConcept = -1;
-    mnLastMethodConcept = -1;
-}
-
-ImplIntrospectionAccess::~ImplIntrospectionAccess()
-{
-    mpStaticImpl->release();
 }
 
 
