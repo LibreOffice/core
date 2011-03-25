@@ -30,10 +30,8 @@
 #include "precompiled_tools.hxx"
 
 #if defined WNT
-#ifndef _SVWIN_H
+#include <windows.h>
 #include <io.h>
-#include <tools/svwin.h>
-#endif
 
 #elif defined(OS2)
 #include <sys/types.h>

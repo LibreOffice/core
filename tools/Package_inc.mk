@@ -88,7 +88,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/stream.hxx,tools/stream.hx
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/string.hxx,tools/string.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svborder.hxx,tools/svborder.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svlibrary.hxx,tools/svlibrary.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/svwin.h,tools/svwin.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/table.hxx,tools/table.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tempfile.hxx,tools/tempfile.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tenccvt.hxx,tools/tenccvt.hxx))
