@@ -807,7 +807,7 @@ SvNumberformat::SvNumberformat(String& rString,
                                 bCancel = sal_True;         // break for
                                 nCheckPos = nPosOld;
                             }
-                            else
+                            else if (maLocale.meLanguage != 0)
                             {
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
                                 sStr = sStr + maLocale.generateCode();
@@ -820,12 +820,19 @@ SvNumberformat::SvNumberformat(String& rString,
                 if ( !bCancel )
                 {
                     rString.Erase(nPosOld,nPos-nPosOld);
-                    rString.Insert(sStr,nPosOld);
-                    nPos = nPosOld + sStr.Len();
-                    rString.Insert(']', nPos);
-                    rString.Insert('[', nPosOld);
-                    nPos += 2;
-                    nPosOld = nPos;     // position before string
+                    if (maLocale.meLanguage != 0)
+                    {
+                        rString.Insert(sStr,nPosOld);
+                        nPos = nPosOld + sStr.Len();
+                        rString.Insert(']', nPos);
+                        rString.Insert('[', nPosOld);
+                        nPos += 2;
+                        nPosOld = nPos;     // position before string
+                    }
+                    else
+                    {
+                        nPos = nPosOld;     // Excel LCID removed
+                    }
                 }
             }
         } while ( !bCancel && lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) );
@@ -1283,6 +1290,16 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     {
                         if ( rString.GetChar(nPos) == '-' )
                         {   // [$-xxx] locale
+                            if ( rString.GetChar(nPos+2) == '0' && rString.GetChar(nPos+3) == '7' ) // calendar type code "07" = Thai
+                            {
+                              rString.InsertAscii( "[~buddhist]", nPos+9 );
+                              nLen += 11;
+                            }
+                            if ( rString.GetChar(nPos+1) == 'D' ) // numeral shape code "D" = Thai digits
+                            {
+                              rString.InsertAscii( "[NatNum1]", nPos+9 );
+                              nLen += 9;
+                            }
                             sSymbol.EraseAllChars('[');
                             eSymbolType = BRACKET_SYMBOLTYPE_LOCALE;
                             eState = SsGetPrefix;
@@ -4308,6 +4325,7 @@ String SvNumberformat::GetMappedFormatstring(
             nSem++;
 
         String aPrefix;
+        bool LCIDInserted = false;
 
         if ( !bDefaults )
         {
@@ -4341,14 +4359,6 @@ String SvNumberformat::GetMappedFormatstring(
         }
 
         const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
-        // The Thai T NatNum modifier during Xcl export.
-        if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
-                rKeywords[NF_KEY_THAI_T].EqualsAscii( "T") &&
-                MsLangId::getRealLanguage( rNum.GetLang()) ==
-                LANGUAGE_THAI)
-        {
-            aPrefix += 't';     // must be lowercase, otherwise taken as literal
-        }
 
         sal_uInt16 nAnz = NumFor[n].GetCount();
         if ( nSem && (nAnz || aPrefix.Len()) )
@@ -4408,12 +4418,40 @@ String SvNumberformat::GetMappedFormatstring(
                                 aStr += '"';
                             }
                             break;
+                        case NF_SYMBOLTYPE_CALDEL :
+                            if ( pStr[j+1].EqualsAscii("buddhist") )
+                            {
+                                //aStr.InsertAscii( "[$-", aStr.Len() );
+                                aStr.InsertAscii( "[$-", 0 );
+                                if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
+                                        MsLangId::getRealLanguage( rNum.GetLang() ) ==
+                                        LANGUAGE_THAI )
+                                {
+                                    aStr.InsertAscii( "D07041E]", 3 ); // date in Thai digit, Buddhist era
+                                }
+                                else
+                                {
+                                    aStr.InsertAscii( "107041E]", 3 ); // date in Arabic digit, Buddhist era
+                                }
+                                j = j+2;
+                            }
+                            LCIDInserted = true;
+                        break;
                         default:
                             aStr += pStr[j];
                     }
 
                 }
             }
+        }
+        // The Thai T NatNum modifier during Xcl export.
+        if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
+                rKeywords[NF_KEY_THAI_T].EqualsAscii( "T") &&
+                MsLangId::getRealLanguage( rNum.GetLang()) ==
+                LANGUAGE_THAI && !LCIDInserted )
+        {
+
+            aStr.InsertAscii( "[$-D00041E]", 0 ); // number in Thai digit
         }
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
