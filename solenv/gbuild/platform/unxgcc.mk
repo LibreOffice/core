@@ -68,6 +68,7 @@ gb_CFLAGS := \
 	-Wendif-labels \
 	-Wextra \
 	-Wshadow \
+	-Woverloaded-virtual \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
