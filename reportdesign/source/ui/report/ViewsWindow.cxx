@@ -317,6 +317,7 @@ void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSectio
     ::boost::shared_ptr<OSectionWindow> pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
     m_pParent->setMarked(&pSectionWindow->getReportSection().getSectionView(),m_aSections.size() == 1);
+    Resize();
 }
 //----------------------------------------------------------------------------
 void OViewsWindow::removeSection(sal_uInt16 _nPosition)
