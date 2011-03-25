@@ -419,7 +419,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         DBG_ERROR( "could not create data sequence" );
     }
 
-    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() )
+    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && rRange.getLength() )
     {
         //#i103911# switch to internal data in case the parent cannot provide the requested data
         xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );

@@ -633,7 +633,9 @@ throw()
     else if( TypeToCopy == +1 ) // Folder
     {
         osl::Directory aDir( srcUnqPath );
-        aDir.open();
+        err = aDir.open();
+        if ( err != osl::FileBase::E_None )
+            return err;
 
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;

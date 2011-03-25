@@ -81,8 +81,9 @@ protected:
 
 public:
     FmFormPageImpl( FmFormPage& _rPage );
-    FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl );
     ~FmFormPageImpl();
+
+    void initFrom( FmFormPageImpl& i_foreignImpl );
 
     //  nur wichtig fuer den DesignMode
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
@@ -135,6 +136,7 @@ public:
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );
+    void formModelAssigned( const FmFormObj& _object );
 
     /** returns an object mapping from control models to drawing shapes.
     */
