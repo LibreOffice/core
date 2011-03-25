@@ -231,8 +231,7 @@ void PPTWriterBase::exportPPT()
     }
     if ( !CreateMainNotes() )
         return;
-    maTextRuleList.First();                         // rewind list, so we can get the current or next entry without
-                                                    // searching, all entrys are sorted#
+
     for ( i = 0; i < mnPages; i++ )
     {
         DBG(printf( "call ImplCreateSlide( %"SAL_PRIuUINT32" )\n", i));

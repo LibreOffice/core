@@ -33,7 +33,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <vcl/mapmod.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
@@ -372,8 +371,6 @@ protected:
     PPTExStyleSheet*                mpStyleSheet;
 
     FontCollection      maFontCollection;
-
-    List                maTextRuleList;     // TextRuleEntry's
 
     virtual void ImplWriteSlide( sal_uInt32 /* nPageNum */, sal_uInt32 /* nMasterNum */, sal_uInt16 /* nMode */,
                                  sal_Bool /* bHasBackground */, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > /* aXBackgroundPropSet */ ) {}
