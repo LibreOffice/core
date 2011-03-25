@@ -1350,7 +1350,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
 
-#ifndef MACOSX
+#if defined UNX && !defined MACOSX
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
 
