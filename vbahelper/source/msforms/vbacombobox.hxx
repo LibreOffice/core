@@ -70,6 +70,7 @@ public:
     virtual void SAL_CALL setListStyle( sal_Int32 nListStyle ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getTextAlign() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTextAlign( sal_Int32 nTextAlign ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getTextLength() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
 
     // Methods

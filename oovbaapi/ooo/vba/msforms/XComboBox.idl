@@ -48,6 +48,7 @@ interface XComboBox
     [attribute] long EnterFieldBehavior;
     [attribute] long ListStyle;
     [attribute] long TextAlign;
+    [attribute, readonly] long TextLength;
     [attribute, readonly] XNewFont Font;
 
     void AddItem( [in] any pvargItem, [in] any pvargIndex );

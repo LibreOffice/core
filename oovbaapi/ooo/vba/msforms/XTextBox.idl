@@ -44,6 +44,7 @@ interface XTextBox
     [attribute] boolean Multiline;
     [attribute] long SpecialEffect;
     [attribute] long BorderStyle;
+    [attribute, readonly] long TextLength;
     [attribute, readonly] XNewFont Font;
 };
 

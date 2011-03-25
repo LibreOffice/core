@@ -133,6 +133,11 @@ void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (
 {
 }
 
+sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException)
+{
+    return getText().getLength();
+}
+
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno::RuntimeException)
 {
     return new VbaNewFont( this, mxContext, m_xProps );

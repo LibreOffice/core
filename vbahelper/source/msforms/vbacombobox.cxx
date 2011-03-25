@@ -230,6 +230,11 @@ void SAL_CALL ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ ) throw (uno
 {
 }
 
+sal_Int32 SAL_CALL ScVbaComboBox::getTextLength() throw (uno::RuntimeException)
+{
+    return getText().getLength();
+}
+
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno::RuntimeException)
 {
     return new VbaNewFont( this, mxContext, m_xProps );
