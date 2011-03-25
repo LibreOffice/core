@@ -28,7 +28,6 @@ eval 'exec "$PERL" -Sw "$0" "$@"'
 #***********************************************************************/
 
 use lib("$ENV{SOLARENV}/bin/modules");
-use SourceConfig;
 
 my $keep_going = 0;
 my $dry_run = 0;
@@ -67,26 +66,24 @@ while (@ARGV) {
 }
 
 my @testpaths = ();
-my $sc = SourceConfig->new($ENV{'SOLARSRC'});
 my $module;
-my $gbuildpath = "$ENV{'SOLARSRC'}/GNUmakefile";
-foreach $module ($sc->get_active_modules()) {
-    my $buildlst = $sc->get_module_build_list($module);
-    next unless defined($buildlst);
+my $gbuildpath = "$ENV{'SOLARSRC'}/GNUmakefile.mk";
+foreach $prjdir (`find -L $ENV{'SOLARSRC'} -mindepth 2 -maxdepth 2 -type d -name prj`) {
+    chomp($prjdir);
+    my $buildlst = "$prjdir/build.lst";
     my %deps = ();
-    open(BUILDLST, $buildlst) or die("cannot open $buildlst");
+    open(BUILDLST, $buildlst) or next;
     while (<BUILDLST>) {
         next unless
             /^\s*\w+\s+(\S+)\s+nmake\s+-\s+all\s+(\S+)(\s+(:?\S+\s+)*)NULL\s*$/;
         my ($dir, $id, $ids) = ($1, $2, $3);
         $dir =~ s|\\|/|g;
         $dir =~ s|^[^/]+||;
-        my $path = $sc->get_module_path($module) . $dir;
-        my $makefile = $path . '/makefile.mk';
+        my $makefile = $prjdir . '/../' . $dir . '/makefile.mk';
         open(MAKEFILE, $makefile) or die("cannot open $makefile");
         while (<MAKEFILE>) {
             if (/\bOOO_SUBSEQUENT_TESTS\b/) {
-                push(@testpaths, $path);
+                push(@testpaths, `readlink -f $prjdir/../$dir`);
                 $deps{$id} = $ids;
                 last;
             }
@@ -136,6 +133,7 @@ my $counter = 0;
 while (@testpaths || $running > 0) {
     while (@testpaths && $running < $max_running) {
         my $testpath = shift(@testpaths);
+        chomp($testpath);
         ++$counter;
         print("$counter: make $testpath\n");
         my $pid = fork();
