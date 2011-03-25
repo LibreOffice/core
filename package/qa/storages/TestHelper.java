@@ -1434,8 +1434,8 @@ public class TestHelper  {
 
         try
         {
-            byte pData[][] = new byte[1][22];
-            if ( xHeadRawStream.readBytes( pData, 34 ) != 34 )
+            byte pData[][] = new byte[1][38];
+            if ( xHeadRawStream.readBytes( pData, 38 ) != 38 )
             {
                 Error( "Can't read header of encrypted stream '" + sStreamName + "' raw representations!" );
                 return false;
@@ -1448,10 +1448,10 @@ public class TestHelper  {
             }
 
             int nVariableHeaderLength =
-                        ( pData[0][26] + pData[0][27] * 0x100 ) // salt length
-                        + ( pData[0][28] + pData[0][29] * 0x100 ) // iv length
-                        + ( pData[0][30] + pData[0][31] * 0x100 ) // digest length
-                        + ( pData[0][32] + pData[0][33] * 0x100 ); // mediatype length
+                        ( pData[0][30] + pData[0][31] * 0x100 ) // salt length
+                        + ( pData[0][32] + pData[0][33] * 0x100 ) // iv length
+                        + ( pData[0][34] + pData[0][35] * 0x100 ) // digest length
+                        + ( pData[0][36] + pData[0][37] * 0x100 ); // mediatype length
 
             xHeadRawStream.skipBytes( nVariableHeaderLength );
 
@@ -1467,7 +1467,7 @@ public class TestHelper  {
 
                 if ( nRead1 != nRead2 )
                 {
-                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size!" );
+                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size! nRead1 - nRead2 = " + ( new Integer( nRead1 - nRead2 ) ).toString() );
                     return false;
                 }
 
