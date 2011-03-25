@@ -83,6 +83,7 @@
 #include <i18npool/lang.h>
 
 #include "swevent.hxx"
+#include "switerator.hxx"
 
 // distance between Anchor Y and initial note position
 #define POSTIT_INITIAL_ANCHOR_DISTANCE      20
@@ -1183,17 +1184,16 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFlds.empty();
     SwFieldType* pType = mpView->GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
-    SwClientIter aIter( *pType );
-    SwClient * pFirst = aIter.GoStart();
-    while(pFirst)
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+    SwFmtFld* pSwFmtFld = aIter.First();
+    while(pSwFmtFld)
     {
-        SwFmtFld* pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
         if ( pSwFmtFld->GetTxtFld())
         {
             if ( pSwFmtFld->IsFldInDoc() )
                 InsertItem(pSwFmtFld,bCheckExistance,bFocus);
         }
-        pFirst = aIter++;
+        pSwFmtFld = aIter.Next();
     }
 
     // if we just added the first one we have to update the view for centering

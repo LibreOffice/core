@@ -66,11 +66,12 @@ public:
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwDoc& GetDoc(){return *pDoc;}
 #ifdef DBG_UTIL
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 /* -----------------------------05.08.2002 12:48------------------------------
 
@@ -156,15 +157,15 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
     pAutoCompleteWord = rClient.pAutoCompleteWord;
     pDoc = rClient.pDoc;
     if(rClient.GetRegisteredIn())
-        rClient.pRegisteredIn->Add(this);
+        ((SwModify*)rClient.GetRegisteredIn())->Add(this);
     else if(GetRegisteredIn())
-        pRegisteredIn->Remove(this);
+        GetRegisteredInNonConst()->Remove(this);
     return *this;
 }
 /* -----------------------------05.08.2002 12:49------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
+void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
     {

@@ -47,6 +47,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
+#include <switerator.hxx>
 
 #ifndef DBG_UTIL
 #define CHECK_TABLE(t)
@@ -592,11 +593,9 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
 
 void lcl_InvalidateCellFrm( const SwTableBox& rBox )
 {
-    SwClientIter aIter( *rBox.GetFrmFmt() );
-    SwClient* pLast;
-    for( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+    SwIterator<SwCellFrm,SwFmt> aIter( *rBox.GetFrmFmt() );
+    for( SwCellFrm* pCell = aIter.First(); pCell; pCell = aIter.Next() )
     {
-        SwCellFrm *pCell = (SwCellFrm*)pLast;
         if( pCell->GetTabBox() == &rBox )
         {
             pCell->InvalidateSize();
@@ -1412,7 +1411,7 @@ sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
 
-    if( bSameHeight && pDoc->GetRootFrm() )
+    if( bSameHeight && pDoc->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
         SwSplitLines aRowLines;
         SwSplitLines aSplitLines;

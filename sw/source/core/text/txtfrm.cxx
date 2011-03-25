@@ -41,6 +41,7 @@
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
+#include "rootfrm.hxx"
 #include <pagefrm.hxx>  // InvalidateSpelling
 #include <rootfrm.hxx>
 #include <viewsh.hxx>   // ViewShell
@@ -73,21 +74,16 @@
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
 #include <SwPortionHandler.hxx>
-// OD 2004-01-15 #110582#
 #include <dcontact.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2005-03-30 #???#
 #include <txtflcnt.hxx>     // SwTxtFlyCnt
 #include <fmtflcnt.hxx>     // SwFmtFlyCnt
 #include <fmtcntnt.hxx>     // SwFmtCntnt
-// <--
-// --> OD 2008-01-31 #newlistlevelattrs#
 #include <numrule.hxx>
-// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
+#include <switerator.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <txtpaint.hxx>     // DbgRect
@@ -398,8 +394,8 @@ void SwTxtFrm::InitCtor()
 /*************************************************************************
  *                      SwTxtFrm::SwTxtFrm()
  *************************************************************************/
-SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode)
-    : SwCntntFrm(pNode)
+SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
+    : SwCntntFrm( pNode, pSib )
 {
     InitCtor();
 }
@@ -444,7 +440,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
     const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
     const bool bHiddenParaField = GetTxtNode()->HasHiddenParaField();
-    const ViewShell* pVsh = GetShell();
+    const ViewShell* pVsh = getRootFrm()->GetCurrShell();
 
     if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
     {
@@ -613,7 +609,7 @@ void SwTxtFrm::HideAndShowObjects()
             // paragraph is visible, but can contain hidden text portion.
             // first we check if objects are allowed to be hidden:
             const SwTxtNode& rNode = *GetTxtNode();
-            const ViewShell* pVsh = GetShell();
+            const ViewShell* pVsh = getRootFrm()->GetCurrShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
 
@@ -905,7 +901,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         pTxtNode->SetSmartTagDirty( true );
     }
 
-    SwRootFrm *pRootFrm = rFrm.FindRootFrm();
+    SwRootFrm *pRootFrm = rFrm.getRootFrm();
     if (pRootFrm)
     {
         pRootFrm->SetNeedGrammarCheck( sal_True );
@@ -949,7 +945,7 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
  *                      SwTxtFrm::Modify()
  *************************************************************************/
 
-void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
@@ -958,7 +954,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if( IsInRange( aFrmFmtSetRange, nWhich ) || RES_FMT_CHG == nWhich )
     {
         SwCntntFrm::Modify( pOld, pNew );
-        if( nWhich == RES_FMT_CHG && GetShell() )
+        if( nWhich == RES_FMT_CHG && getRootFrm()->GetCurrShell() )
         {
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
@@ -1073,9 +1069,10 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
 
             // --> OD 2010-02-16 #i104008#
-            if ( GetShell() )
+            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if ( pViewSh  )
             {
-                GetShell()->InvalidateAccessibleParaAttrs( *this );
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -1283,7 +1280,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
             if( nCount )
             {
-                if( GetShell() )
+                if( getRootFrm()->GetCurrShell() )
                 {
                     Prepare( PREP_CLEAR );
                     _InvalidatePrt();
@@ -1329,9 +1326,10 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
 
             // --> OD 2009-01-06 #i88069#
-            if ( GetShell() )
+            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if ( pViewSh  )
             {
-                GetShell()->InvalidateAccessibleParaAttrs( *this );
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -2314,7 +2312,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // <--
     // determine output device
-    ViewShell* pVsh = GetShell();
+    ViewShell* pVsh = getRootFrm()->GetCurrShell();
     ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
     // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
     // There could be no <ViewShell> instance in the case of loading a binary
@@ -2325,7 +2323,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
     OutputDevice* pOut = pVsh->GetOut();
     const IDocumentSettingAccess* pIDSA = GetTxtNode()->getIDocumentSettingAccess();
-    if ( !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
+    if ( !pVsh->GetViewOptions()->getBrowseMode() ||
           pVsh->GetViewOptions()->IsPrtFormat() )
     {
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
@@ -2802,3 +2800,18 @@ void SwTxtFrm::CalcBaseOfstForFly()
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
 }
+
+/* repaint all text frames of the given text node */
+void SwTxtFrm::repaintTextFrames( const SwTxtNode& rNode )
+{
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( rNode );
+    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        SwRect aRec( pFrm->PaintArea() );
+        const SwRootFrm *pRootFrm = pFrm->getRootFrm();
+        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
+        if( pCurShell )
+            pCurShell->InvalidateWindows( aRec );
+    }
+}
+

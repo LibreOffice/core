@@ -270,7 +270,7 @@ const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
     // besorge mal den Frame
-    const SwCntntFrm *pFrm = rTxtNd.GetFrm();
+    const SwCntntFrm *pFrm = rTxtNd.getLayoutFrm( pEditShell->GetLayout() );
     ASSERT( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
     if( aFlags.bAFmtByInput && !pFrm->IsValid() )
     {

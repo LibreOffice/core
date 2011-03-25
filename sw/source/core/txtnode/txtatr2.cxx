@@ -67,7 +67,7 @@ SwTxtCharFmt::~SwTxtCharFmt( )
 {
 }
 
-void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
@@ -77,21 +77,20 @@ void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
-    // erfrage vom Modify Informationen
-sal_Bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return sal_True;
+        return true;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return sal_False;
+    return false;
 }
 
 
@@ -181,12 +180,12 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     if( pRet )
         pRet->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     return pRet;
 }
 
-void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
@@ -196,7 +195,7 @@ void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
@@ -235,7 +234,7 @@ SwTxtRuby::~SwTxtRuby()
 {
 }
 
-void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
@@ -245,7 +244,7 @@ void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
@@ -298,7 +297,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     if( pRet )
         pRet->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     return pRet;
 }

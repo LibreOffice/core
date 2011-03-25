@@ -452,6 +452,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
     virtual void NewCoreSelection();
 
+    virtual void ApplyViewOptions( const SwViewOption &rOpt );
+
     // autom. Update von Vorlagen
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
     void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet);

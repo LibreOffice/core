@@ -41,13 +41,13 @@ class SwCellFrm: public SwLayoutFrm
 
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    SwCellFrm( const SwTableBox &, bool bInsertContent = true );
+    SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
     ~SwCellFrm();
 
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual void CheckDirection( sal_Bool bVert );

@@ -214,22 +214,20 @@ splitPolicy(const sal_uInt16 nWhichNew, const sal_uInt16 nWhichOther)
     }
 }
 
-static void
-lcl_InitINetFmt(SwTxtNode & rNode, SwTxtINetFmt * pNew)
+void SwTxtINetFmt::InitINetFmt(SwTxtNode & rNode)
 {
-    pNew->ChgTxtNode(&rNode);
+    ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
          rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL) );
-    pFmt->Add( pNew );
+    pFmt->Add( this );
 }
 
-static void
-lcl_InitRuby(SwTxtNode & rNode, SwTxtRuby * pNew)
+void SwTxtRuby::InitRuby(SwTxtNode & rNode)
 {
-    pNew->ChgTxtNode(&rNode);
+    ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
         rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_RUBYTEXT) );
-    pFmt->Add( pNew );
+    pFmt->Add( this );
 }
 
 /**
@@ -245,12 +243,12 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
     {
         case RES_TXTATR_INETFMT:
         {
-            lcl_InitINetFmt(rNode, static_cast<SwTxtINetFmt*>(pNew));
+            static_cast<SwTxtINetFmt*>(pNew)->InitINetFmt(rNode);
             break;
         }
         case RES_TXTATR_CJK_RUBY:
         {
-            lcl_InitRuby(rNode, static_cast<SwTxtRuby*>(pNew));
+            static_cast<SwTxtRuby*>(pNew)->InitRuby(rNode);
             break;
         }
         default:
@@ -1194,7 +1192,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
         if( nDelMsg && !pDoc->IsInDtor() && GetNodes().IsDocNodes() )
         {
             SwPtrMsgPoolItem aMsgHint( nDelMsg, (void*)&pAttr->GetAttr() );
-            pDoc->GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
+            pDoc->GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         SwTxtAttr::Destroy( pAttr, pDoc->GetAttrPool() );
@@ -1521,7 +1519,7 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
                 *pAttr->GetStart(), *pAttr->GetEnd(), pAttr->Which() );
         m_pSwpHints->Delete( pAttr );
         SwTxtAttr::Destroy( pAttr, GetDoc()->GetAttrPool() );
-        SwModify::Modify( 0, &aHint ); // notify Frames
+        NotifyClients( 0, &aHint );
 
         TryDeleteSwpHints();
     }
@@ -1589,7 +1587,7 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
                 SwUpdateAttr aHint( nStart, *pEndIdx, nWhich );
                 m_pSwpHints->DeleteAtPos( nPos );    // gefunden, loeschen,
                 SwTxtAttr::Destroy( pTxtHt, GetDoc()->GetAttrPool() );
-                SwModify::Modify( 0, &aHint );     // die Frames benachrichtigen
+                NotifyClients( 0, &aHint );
             }
         }
     }
@@ -2103,7 +2101,7 @@ struct RemovePresentAttrs
         const SwTxtAttr* const pAutoStyle(i_rAttrSpan.second);
         SfxItemIter aIter(m_rAttrSet);
         const SfxPoolItem* pItem(aIter.GetCurItem());
-        while (true)
+        while (pItem)
         {
             const sal_uInt16 nWhich(pItem->Which());
             if (CharFmt::IsItemIncluded(nWhich, pAutoStyle))
@@ -2145,7 +2143,8 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
             const AttrSpan_t aSpan(*pHint->GetStart(), *pHint->GetEnd());
             o_rSpanMap.insert(AttrSpanMap_t::value_type(aSpan, pHint));
 
-            if (aSpan.first != nLastEnd)
+            // < not != because there may be multiple CHARFMT at same range
+            if (nLastEnd < aSpan.first)
             {
                 // insert dummy span covering the gap
                 o_rSpanMap.insert(AttrSpanMap_t::value_type(
@@ -2341,7 +2340,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
             if( aNdSet.Count() )
             {
                 SwFmtChg aTmp1( pNd->GetFmtColl() );
-                pNd->SwModify::Modify( &aTmp1, &aTmp1 );
+                pNd->NotifyClients( &aTmp1, &aTmp1 );
             }
         }
     }
@@ -2632,7 +2631,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     }
     // <--
     case RES_TXTATR_INETFMT:
-        lcl_InitINetFmt(rNode, static_cast<SwTxtINetFmt*>(pHint));
+        static_cast<SwTxtINetFmt*>(pHint)->InitINetFmt(rNode);
         break;
     case RES_TXTATR_FIELD:
         {
@@ -2685,7 +2684,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                         {
                             SwFmtFld* pFmtFld = (SwFmtFld*)&((SwTxtFld*)pHint)
                                                                 ->GetFld();
-                            pFldType->Add( pFmtFld );          // ummelden
+                            pFmtFld->RegisterToFieldType( *pFldType );
                             pFmtFld->GetFld()->ChgTyp( pFldType );
                         }
                         pFldType->SetSeqRefNo( *(SwSetExpField*)pFld );
@@ -2766,7 +2765,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         break;
 
     case RES_TXTATR_CJK_RUBY:
-        lcl_InitRuby(rNode, static_cast<SwTxtRuby*>(pHint));
+        static_cast<SwTxtRuby*>(pHint)->InitRuby(rNode);
         break;
 
     case RES_TXTATR_META:
@@ -2799,7 +2798,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         if ( rNode.GetDepends() )
         {
             SwUpdateAttr aHint( nHtStart, nHtStart, nWhich );
-            rNode.Modify( 0, &aHint );
+            rNode.ModifyNotification( 0, &aHint );
         }
         return true;
     }
@@ -2881,7 +2880,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     if ( rNode.GetDepends() )
     {
         SwUpdateAttr aHint( nHtStart, nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd, nWhich );
-        rNode.Modify( 0, &aHint );
+        rNode.ModifyNotification( 0, &aHint );
     }
 
 #ifdef DBG_UTIL

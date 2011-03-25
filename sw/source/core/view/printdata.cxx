@@ -110,13 +110,13 @@ void SwRenderData::DeletePostItData()
     }
 }
 
-bool SwRenderData::NeedNewViewOptionAdjust( const SwWrtShell& rCompare ) const
+bool SwRenderData::NeedNewViewOptionAdjust( const ViewShell& rCompare ) const
 {
     return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
 }
 
 
-void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions )
+void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions )
 {
     if (m_pViewOptionAdjust)
     {

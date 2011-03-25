@@ -45,7 +45,8 @@ class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
-class SwWrtShell;
+class SwPrtOptions;
+class ViewShell;
 class SfxViewShell;
 
 // forward declarations
@@ -266,9 +267,9 @@ public:
     void DeletePostItData();
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
-    bool NeedNewViewOptionAdjust( const SwWrtShell& ) const;
-    void ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions );
-    void ViewOptionAdjust( SwPrintData const*const pPrtOptions );
+    bool NeedNewViewOptionAdjust( const ViewShell& ) const;
+    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions );
+    void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }

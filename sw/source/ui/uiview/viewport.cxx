@@ -75,7 +75,7 @@ static sal_uInt16 nPgNum = 0;
 sal_Bool SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-           pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
+           pWrtShell->GetViewOptions()->getBrowseMode() ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
 
@@ -196,7 +196,7 @@ aDocSz = rSz;
     //Wenn Text geloescht worden ist, kann es sein, dass die VisArea hinter
     //den sichtbaren Bereich verweist
     Rectangle aNewVisArea( aVisArea );
-    sal_Bool bModified = false;
+    bool bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
 
@@ -205,7 +205,7 @@ aDocSz = rSz;
         lTmp = aNewVisArea.Right() - lTmp;
         aNewVisArea.Right() -= lTmp;
         aNewVisArea.Left() -= lTmp;
-        bModified = sal_True;
+        bModified = true;
     }
 
     lTmp = aDocSz.Height() + lGreenOffset;
@@ -214,7 +214,7 @@ aDocSz = rSz;
         lTmp = aNewVisArea.Bottom() - lTmp;
         aNewVisArea.Bottom() -= lTmp;
         aNewVisArea.Top() -= lTmp;
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( bModified )
@@ -354,7 +354,7 @@ void SwView::SetVisArea( const Point &rPt, sal_Bool bUpdateScrollbar )
 
 void SwView::CheckVisArea()
 {
-    pHScrollbar->SetAuto( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+    pHScrollbar->SetAuto( pWrtShell->GetViewOptions()->getBrowseMode() &&
                               !GetViewFrame()->GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
@@ -713,7 +713,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
     if ( pScrollbar->GetType() == SCROLL_DRAG )
         pWrtShell->EnableSmooth( sal_False );
 
-    if(!pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+    if(!pWrtShell->GetViewOptions()->getBrowseMode() &&
         pScrollbar->GetType() == SCROLL_DRAG)
     {
         //Hier wieder auskommentieren wenn das mitscrollen nicht gewuenscht ist.
@@ -881,7 +881,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*/ )
     }
     //#i32913# in browse mode the visibility of the horizontal scrollbar
     // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)) )
+    if ( pHScrollbar->IsVisible(pWrtShell->GetViewOptions()->getBrowseMode()) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -1121,7 +1121,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = sal_True;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-    sal_Bool bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    sal_Bool bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
     sal_Bool bShowH = sal_False,
          bShowV = sal_False,
          bAuto  = sal_False,
@@ -1214,7 +1214,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
-             !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+             !pWrtShell->GetViewOptions()->getBrowseMode() )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, sal_True );
         pWrtShell->EndAction();
 
@@ -1274,7 +1274,7 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SwView::GetOptimalSizePixel() const
 {
     Size aPgSize;
-    if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( pWrtShell->GetViewOptions()->getBrowseMode() )
         aPgSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
     else
     {

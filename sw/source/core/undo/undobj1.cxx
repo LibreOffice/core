@@ -171,7 +171,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     // alle Uno-Objecte sollten sich jetzt abmelden
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrmFmt );
-        pFrmFmt->Modify( &aMsgHint, &aMsgHint );
+        pFrmFmt->ModifyNotification( &aMsgHint, &aMsgHint );
     }
 
     if ( RES_DRAWFRMFMT != pFrmFmt->Which() )
@@ -341,8 +341,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
-        aAnchor.SetPageNum(
-                pDoc->GetRootFrm()->GetCurrPage(& rContext.GetRepeatPaM()) );
+        aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
     else {
         ASSERT( sal_False, "was fuer ein Anker ist es denn nun?" );
@@ -503,6 +502,11 @@ SwRewriter SwUndoSetFlyFmt::GetRewriter() const
 SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
 {
     delete pItemSet;
+}
+
+void SwUndoSetFlyFmt::DeRegisterFromFormat( SwFmt& rFmt )
+{
+    rFmt.Remove(this);
 }
 
 void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
@@ -698,7 +702,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
         pItemSet->InvalidateItem( nWhich );
 }
 
-void SwUndoSetFlyFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* )
+void SwUndoSetFlyFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
     if( pOld )
     {

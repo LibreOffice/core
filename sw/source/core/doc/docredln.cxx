@@ -2771,8 +2771,8 @@ void SwRedlineTbl::Remove( sal_uInt16 nP, sal_uInt16 nL )
     _SwRedlineTbl::Remove( nP, nL );
 
     ViewShell* pSh;
-    if( pDoc && !pDoc->IsInDtor() && pDoc->GetRootFrm() &&
-        0 != ( pSh = pDoc->GetRootFrm()->GetCurrShell()) )
+    if( pDoc && !pDoc->IsInDtor() &&
+        0 != ( pSh = pDoc->GetCurrentViewShell()) ) //swmod 071108//swmod 071225
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
@@ -2785,8 +2785,8 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
     _SwRedlineTbl::DeleteAndDestroy( nP, nL );
 
     ViewShell* pSh;
-    if( pDoc && !pDoc->IsInDtor() && pDoc->GetRootFrm() &&
-        0 != ( pSh = pDoc->GetRootFrm()->GetCurrShell()) )
+    if( pDoc && !pDoc->IsInDtor() &&
+        0 != ( pSh = pDoc->GetCurrentViewShell() ) )    //swmod 071108//swmod 071225
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
@@ -3283,7 +3283,7 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
         {
             aHt.nStart = n == nSttNd ? nSttCnt : 0;
             aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
-            ((SwTxtNode*)pNd)->Modify( &aHt, &aHt );
+            ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
         }
 }
 

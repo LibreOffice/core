@@ -64,7 +64,7 @@
 #include <docary.hxx>       // SwRedlineTbl
 #include <docsh.hxx>
 #include <txatbase.hxx>
-
+#include <txtfrm.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -73,8 +73,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
-extern void repaintTextFrames( SwModify& rModify );
 
 /*************************************************************************
  *                     class SwLinguIter
@@ -1097,7 +1095,7 @@ uno::Reference< XSpellAlternatives >
                 SwCrsrMoveState aState;
                 aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), sal_False);
+                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), sal_False);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd;
@@ -1241,7 +1239,7 @@ bool SwEditShell::GetGrammarCorrection(
                 SwCrsrMoveState aState;
                 aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), sal_False);
+                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), sal_False);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd;
@@ -1966,7 +1964,7 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
             pWrong = pNode->GetWrong();
             if( pWrong )
                 pWrong->RemoveEntry( nStart, nEnd );
-            ::repaintTextFrames( *pNode );
+            SwTxtFrm::repaintTextFrames( *pNode );
         }
         ++aIdx;
         nStart = 0;

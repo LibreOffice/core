@@ -155,12 +155,16 @@ namespace
             ++ppMark)
         {
             ::sw::mark::IMark* const pBkmk = ppMark->get();
-            bool hasOther = pBkmk->IsExpanded();
+            ::sw::mark::CrossRefBookmark *const pCrossRefMark(
+                    dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
+            bool const hasOther = pBkmk->IsExpanded();
 
             const SwPosition& rStartPos = pBkmk->GetMarkStart();
             if(rStartPos.nNode == nOwnNode)
             {
-                const sal_uInt8 nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
+                // #i109272#: cross reference marks: need special handling!
+                sal_uInt8 const nType = (hasOther || pCrossRefMark)
+                    ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
                     new SwXBookmarkPortion_Impl(
                             SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
@@ -173,8 +177,10 @@ namespace
                 auto_ptr<SwPosition> pCrossRefEndPos;
                 const SwPosition* pEndPos = NULL;
                 if(hasOther)
+                {
                     pEndPos = &rEndPos;
-                else if(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk))
+                }
+                else if (pCrossRefMark)
                 {
                     // Crossrefbookmarks only remember the start position but have to span the whole paragraph
                     pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
@@ -755,7 +761,7 @@ lcl_ExportHints(
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> xField =
-                            CreateSwXTextField(*pDoc, pAttr->GetFld());
+                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
                         pPortion->SetTextField(xField);
                     }
                 break;
@@ -1219,7 +1225,7 @@ lcl_CreatePortions(
 /*-- 27.01.99 10:44:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXTextPortionEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

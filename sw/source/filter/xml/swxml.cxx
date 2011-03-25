@@ -925,18 +925,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         }
     }
 
-    sal_uInt32 nWarn = 0;
-    sal_uInt32 nWarn2 = 0;
     // read storage streams
+
+    // #i103539#: always read meta.xml for generator
+    sal_uInt32 const nWarn = ReadThroughComponent(
+        xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+        (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
+                : "com.sun.star.comp.Writer.XMLMetaImporter"),
+        aEmptyArgs, rName, sal_False );
+
+    sal_uInt32 nWarn2 = 0;
     if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
           bInsertMode) )
     {
-        nWarn = ReadThroughComponent(
-            xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
-                    : "com.sun.star.comp.Writer.XMLMetaImporter"),
-            aEmptyArgs, rName, sal_False );
-
         nWarn2 = ReadThroughComponent(
             xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"

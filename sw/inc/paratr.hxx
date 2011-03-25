@@ -69,6 +69,10 @@ public:
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwFmtDrop & operator= (const SwFmtDrop &);
+
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
 public:
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -94,10 +98,9 @@ public:
     inline sal_uInt16 GetDistance() const { return nDistance; }
     inline sal_uInt16 &GetDistance() { return nDistance; }
 
-    inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
-    inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)pRegisteredIn; }
+   inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
+    inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt *pNew );
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 

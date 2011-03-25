@@ -137,13 +137,14 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
 
 sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck )
 {
-    // wird ueberhaupt ein Bereich umspannt ??
-    // - ist kein Bereich, dann nicht returnen wenn am Anfang vom Absatz
-    // - Felder aussortieren, koennen keinen Bereich haben !!
-    if (
-         nMkNode.GetIndex() == nPtNode.GetIndex() && nMkCntnt == nPtCntnt &&
-         nPtCntnt && RES_TXTATR_FIELD != pAttr->Which()
-       )
+    // does this range actually contain something?
+    // empty range is allowed if at start of empty paragraph
+    // fields are special: never have range, so leave them
+    SwCntntNode *const pCntntNode(
+        SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode());
+    if ((nMkNode.GetIndex() == nPtNode.GetIndex()) && (nMkCntnt == nPtCntnt)
+        && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
+        && (RES_TXTATR_FIELD != pAttr->Which()))
     {
         return sal_False;
     }
@@ -430,7 +431,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 pFmt->SetFmtAttr(aAnchor);
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
-                if(pDoc->GetRootFrm()
+                if(pDoc->GetCurrentViewShell()  //swmod 071108//swmod 071225
                    && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
@@ -777,11 +778,11 @@ SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
 {
 }
 
-void  SwFltAnchorClient::Modify(SfxPoolItem *, SfxPoolItem * pNew)
+void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
 {
     if (pNew->Which() == RES_FMT_CHG)
     {
-        SwFmtChg * pFmtChg = dynamic_cast<SwFmtChg *> (pNew);
+        const SwFmtChg * pFmtChg = dynamic_cast<const SwFmtChg *> (pNew);
 
         if (pFmtChg != NULL)
         {
@@ -1605,7 +1606,7 @@ void SwFltOutDoc::EndTable()
     rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
 
-    if (GetDoc().GetRootFrm()){
+    if (GetDoc().GetCurrentViewShell()){    //swmod 071108//swmod 071225
         SwTableNode* pTableNode = GetDoc().IsIdxInTbl(
             pPaM->GetPoint()->nNode);
         pTableNode->DelFrms();

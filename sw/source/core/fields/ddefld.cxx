@@ -40,9 +40,7 @@
 #include <swtable.hxx>
 #include <swbaslnk.hxx>
 #include <swddetbl.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <hints.hxx>
 
 using rtl::OUString;
@@ -124,7 +122,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         int bCallModify = sal_False;
         rFldType.LockModify();
 
-        SwClientIter aIter( rFldType );
+        SwClientIter aIter( rFldType );     // TODO
         SwClient * pLast = aIter.GoStart();
         if( pLast )     // konnte zum Anfang gesprungen werden ??
             do {
@@ -139,7 +137,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                         else if( pSh )
                             pSh->StartAction();
                     }
-                    pLast->Modify( 0, &aUpdateDDE );
+                    pLast->ModifyNotification( 0, &aUpdateDDE );
                     bCallModify = sal_True;
                 }
             } while( 0 != ( pLast = aIter++ ));
@@ -186,7 +184,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     const SwNode* pNd = 0;
-    SwClientIter aIter( rFldType );
+    SwClientIter aIter( rFldType );     // TODO
     SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
@@ -213,7 +211,7 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwClientIter aIter( rFldType );
+    SwClientIter aIter( rFldType );         // TODO
     SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
@@ -319,7 +317,7 @@ void SwDDEFieldType::_RefCntChgd()
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
         pDoc->GetLinkManager().InsertDDELink( refLink );
-        if( pDoc->GetRootFrm() )
+        if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
             UpdateNow();
     }
     else
@@ -401,8 +399,8 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 
 SwDDEField::~SwDDEField()
 {
-    if( GetTyp()->IsLastDepend() )                      // der Letzte mach das
-        ((SwDDEFieldType*)GetTyp())->Disconnect();      // Licht aus
+    if( GetTyp()->IsLastDepend() )
+        ((SwDDEFieldType*)GetTyp())->Disconnect();
 }
 
 String SwDDEField::Expand() const
