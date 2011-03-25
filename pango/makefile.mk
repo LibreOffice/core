@@ -47,6 +47,8 @@ PANGOVERSION=1.28.3
 TARFILE_NAME=$(PRJNAME)-$(PANGOVERSION)
 TARFILE_MD5=22ad1c8d3fda7e73b0798035f3dd96bc
 
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
+
 PATCH_FILES=pango-1.28.3.patch
 
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
@@ -106,6 +108,8 @@ OUT2INC+=pango/pango-utils.h
 
 .ELIF "$(OS)"=="WNT"
 .ELSE
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------

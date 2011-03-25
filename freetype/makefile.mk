@@ -45,6 +45,8 @@ all:
 TARFILE_NAME=freetype-2.4.4
 TARFILE_MD5=9273efacffb683483e58a9e113efae9f
 
+.IF "$(OS)"=="WNT"
+
 CONFIGURE_DIR=
 .IF "$(OS)"=="WNT"
 CONFIGURE_ACTION=
@@ -58,6 +60,8 @@ CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

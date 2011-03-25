@@ -47,6 +47,8 @@ LIBRSVGVERSION=2.32.1
 TARFILE_NAME=$(PRJNAME)-$(LIBRSVGVERSION)
 TARFILE_MD5=d7a242ca43e33e1b63d3073f9d46a6a8
 
+.IF "$(OS)" == "MACOSX" || "$(OS)" == "WNT"
+
 PATCH_FILES=librsvg-2.32.1.patch
 
 .IF "$(LIBXML_LIBS)" == ""
@@ -87,6 +89,8 @@ OUT2INC+=librsvg-features.h
 OUT2INC+=rsvg-cairo.h
 OUT2INC+=rsvg.h
 .ELIF "$(OS)"=="WNT"
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------

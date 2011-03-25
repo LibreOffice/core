@@ -25,7 +25,6 @@
 #
 #*************************************************************************
 
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
 
 PRJ=.
 
@@ -48,6 +47,8 @@ LIBGSFVERSION=1.14.19
 
 TARFILE_NAME=$(PRJNAME)-$(LIBGSFVERSION)
 TARFILE_MD5=3a84ac2da37cae5bf7ce616228c6fbde
+
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES=libgsf-1.14.19.windows.patch
@@ -145,11 +146,12 @@ OUT2INC+=gsf$/gsf-input-http.h
 OUT2INC+=gsf$/gsf-outfile-zip.h
 OUT2INC+=gsf$/gsf.h
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-.ENDIF
 

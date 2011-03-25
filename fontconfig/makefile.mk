@@ -45,6 +45,8 @@ all:
 TARFILE_NAME=fontconfig-2.8.0
 TARFILE_MD5=77e15a92006ddc2adbb06f840d591c0e
 
+.IF "$(OS)"=="WNT"
+
 CONFIGURE_DIR=
 .IF "$(OS)"=="WNT"
 ADDITIONAL_FILES=\
@@ -65,6 +67,8 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 .ELSE
 CONFIGURE_ACTION=./configure --enable-shared=yes --enable-libxml2 --disable-docs --libdir=$(OUTDIR)/lib
 BUILD_ACTION=$(GNUMAKE)
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
