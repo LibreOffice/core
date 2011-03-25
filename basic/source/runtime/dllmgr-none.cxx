@@ -29,6 +29,10 @@
 #include "precompiled_basic.hxx"
 #include "sal/config.h"
 
+#if defined(WNT)
+#include <windows.h>
+#endif
+
 #include <algorithm>
 #include <cstddef>
 #include <list>
@@ -42,7 +46,6 @@
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "salhelper/simplereferenceobject.hxx"
-#include "tools/svwin.h"
 
 #include "dllmgr.hxx"
 

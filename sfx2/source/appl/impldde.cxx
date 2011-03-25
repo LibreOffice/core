@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #if defined(WNT)
-#include <tools/svwin.h>
+#include <windows.h>
 #endif
 
 #include "impldde.hxx"

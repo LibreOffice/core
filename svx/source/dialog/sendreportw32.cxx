@@ -33,9 +33,8 @@
 #define UNICODE
 #define _UNICODE
 
-#include <tools/svwin.h>
-
 #define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
 #include <systools/win32/uwinapi.h>
