@@ -104,7 +104,7 @@ struct CSS1PropertyEnum
 
 /*  */
 
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
 
 SV_DECL_PTRARR_DEL( CSS1Selectors, CSS1Selector*, 1, 1 )
 

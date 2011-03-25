@@ -39,8 +39,9 @@
 
 using std::ostream;
 
+namespace editeng { class SvxBorderLine; }
+
 class SvxFontItem;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvStream;
 class SwField;
@@ -534,7 +535,7 @@ public:
         }
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     // SetBorder() wird auch fuer Tabellen gebraucht, deshalb public
-    static SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC10*);
+    static editeng::SvxBorderLine* SetBorder(editeng::SvxBorderLine*, W1_BRC10*);
 };
 
 #define BRC_TOP ((sal_uInt16)0)

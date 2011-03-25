@@ -90,6 +90,8 @@ class SwList;
 
 #include <boost/scoped_ptr.hpp>
 
+namespace editeng { class SvxBorderLine; }
+
 class SvxForbiddenCharactersTable;
 class SwExtTextInput;
 class DateTime;
@@ -112,7 +114,6 @@ class SvUShorts;
 class SvUShortsSort;
 class SvxMacro;
 class SvxMacroTableDtor;
-class SvxBorderLine;
 class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCalc;
@@ -1868,7 +1869,7 @@ public:
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
     void SetTabLineStyle( const SwCursor& rCursor,
                           const Color* pColor, sal_Bool bSetLine,
-                          const SvxBorderLine* pBorderLine );
+                          const editeng::SvxBorderLine* pBorderLine );
     void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const;
     void SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew );
     sal_Bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;

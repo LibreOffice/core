@@ -75,6 +75,7 @@
 #include <numrule.hxx>
 
 
+using namespace ::editeng;
 using namespace ::com::sun::star;
 
 const sal_uInt16 PT_3   =  3 * 20;      //  3 pt

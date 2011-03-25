@@ -59,6 +59,7 @@
 #include <swerror.h>
 #include <statstr.hrc>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 /////////////////////////////////////////////////////////////// Ww1Sprm
@@ -207,7 +208,7 @@ STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
 SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc)
 {
     sal_uInt16 nCode;
-    SvxBorderStyle eStyle = SOLID;
+    ::editeng::SvxBorderStyle eStyle = ::editeng::SOLID;
     if(pBrc->dxpLine2WidthGet() == 0)
     {
         switch(pBrc->dxpLine1WidthGet())
@@ -221,11 +222,11 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
         case 5: nCode = DEF_LINE_WIDTH_4; break;
         case 6:
                 nCode = DEF_LINE_WIDTH_5;
-                eStyle = DOTTED;
+                eStyle = ::editeng::DOTTED;
                 break;
         case 7:
                 nCode = DEF_LINE_WIDTH_5;
-                eStyle = DASHED;
+                eStyle = ::editeng::DASHED;
                 break;
         }
         pLine->SetWidth( nCode );
@@ -235,7 +236,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         if ( pBrc->dxpLine1WidthGet() == 1 && pBrc->dxpLine2WidthGet() == 1 )
         {
-            pLine->SetStyle( DOUBLE );
+            pLine->SetStyle( ::editeng::DOUBLE );
             pLine->SetWidth( DEF_LINE_WIDTH_0 );
         }
         else

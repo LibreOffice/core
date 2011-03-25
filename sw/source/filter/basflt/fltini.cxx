@@ -547,7 +547,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                 sal_uInt16 nLine = BOX_LINE_LEFT;
                                 for( int i = 0; i < 2; ++i )
                                 {
-                                        const SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
+                                        const editeng::SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
                                         if( pLn )
                                         {
                                                 sal_uInt16 nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();

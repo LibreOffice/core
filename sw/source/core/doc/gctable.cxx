@@ -35,6 +35,7 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 
+using namespace ::editeng;
 
 inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, sal_Bool bTop )
 {

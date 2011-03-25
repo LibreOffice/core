@@ -68,6 +68,7 @@
 #include "fmtrowsplt.hxx"
 
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
@@ -374,13 +375,13 @@ bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
     bool bIsOdfDouble = false;
     switch ( pLine->GetStyle() )
     {
-        case DOUBLE:
-        case THINTHICK_SMALLGAP:
-        case THINTHICK_MEDIUMGAP:
-        case THINTHICK_LARGEGAP:
-        case THICKTHIN_SMALLGAP:
-        case THICKTHIN_MEDIUMGAP:
-        case THICKTHIN_LARGEGAP:
+        case ::editeng::DOUBLE:
+        case ::editeng::THINTHICK_SMALLGAP:
+        case ::editeng::THINTHICK_MEDIUMGAP:
+        case ::editeng::THINTHICK_LARGEGAP:
+        case ::editeng::THICKTHIN_SMALLGAP:
+        case ::editeng::THICKTHIN_MEDIUMGAP:
+        case ::editeng::THICKTHIN_LARGEGAP:
             bIsOdfDouble = true;
             break;
         default:
@@ -720,34 +721,34 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         bool bNoBorder = false;
                         switch ( pLine->GetStyle( ) )
                         {
-                            case SOLID:
+                            case ::editeng::SOLID:
                                 eStyle = XML_SOLID;
                                 break;
-                            case DOTTED:
+                            case ::editeng::DOTTED:
                                 eStyle = XML_DOTTED;
                                 break;
-                            case DASHED:
+                            case ::editeng::DASHED:
                                 eStyle = XML_DASHED;
                                 break;
-                            case DOUBLE:
-                            case THINTHICK_SMALLGAP:
-                            case THINTHICK_MEDIUMGAP:
-                            case THINTHICK_LARGEGAP:
-                            case THICKTHIN_SMALLGAP:
-                            case THICKTHIN_MEDIUMGAP:
-                            case THICKTHIN_LARGEGAP:
+                            case ::editeng::DOUBLE:
+                            case ::editeng::THINTHICK_SMALLGAP:
+                            case ::editeng::THINTHICK_MEDIUMGAP:
+                            case ::editeng::THINTHICK_LARGEGAP:
+                            case ::editeng::THICKTHIN_SMALLGAP:
+                            case ::editeng::THICKTHIN_MEDIUMGAP:
+                            case ::editeng::THICKTHIN_LARGEGAP:
                                 eStyle = XML_DOUBLE;
                                 break;
-                            case EMBOSSED:
+                            case ::editeng::EMBOSSED:
                                 eStyle = XML_RIDGE;
                                 break;
-                            case ENGRAVED:
+                            case ::editeng::ENGRAVED:
                                 eStyle = XML_GROOVE;
                                 break;
-                            case INSET:
+                            case ::editeng::INSET:
                                 eStyle = XML_INSET;
                                 break;
-                            case OUTSET:
+                            case ::editeng::OUTSET:
                                 eStyle = XML_OUTSET;
                                 break;
                             default:

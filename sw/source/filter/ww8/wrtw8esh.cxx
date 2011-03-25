@@ -102,6 +102,7 @@
 #include <ndtxt.hxx>
 #include "WW8FFData.hxx"
 
+using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
@@ -1682,13 +1683,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                     MSO_LineDashing eDashing = mso_lineSolid;
                     switch ( pLine->GetStyle( ) )
                     {
-                        case  DASHED:
+                        case  ::editeng::DASHED:
                             eDashing = mso_lineDashGEL;
                             break;
-                        case DOTTED:
+                        case ::editeng::DOTTED:
                             eDashing = mso_lineDotGEL;
                             break;
-                        case SOLID:
+                        case ::editeng::SOLID:
                         default:
                             break;
                     }

@@ -106,6 +106,7 @@
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+using namespace ::editeng;
 using namespace ::com::sun::star;
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())

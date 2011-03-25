@@ -97,6 +97,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/Any.h>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -1105,7 +1106,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
                     if(aBorderLine.GetOutWidth() == 0)
                     {
-                        aBorderLine.SetStyle( SOLID );
+                        aBorderLine.SetStyle( ::editeng::SOLID );
                         aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
                     }
                     //Distance nur setzen, wenn der Request vom Controller kommt

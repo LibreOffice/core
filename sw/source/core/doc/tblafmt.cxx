@@ -51,6 +51,8 @@
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
 
+using ::editeng::SvxBorderLine;
+
 // bis SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
 const sal_uInt16 AUTOFORMAT_ID_358      = 9601;

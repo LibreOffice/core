@@ -85,6 +85,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <unotools/configmgr.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 

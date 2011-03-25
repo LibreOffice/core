@@ -488,8 +488,8 @@ IMAGE_SETEVENT:
         nVBorderWidth = (long)nBorder;
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
-        SvxBorderLine aHBorderLine( NULL, nHBorderWidth );
-        SvxBorderLine aVBorderLine( NULL, nVBorderWidth );
+        ::editeng::SvxBorderLine aHBorderLine( NULL, nHBorderWidth );
+        ::editeng::SvxBorderLine aVBorderLine( NULL, nVBorderWidth );
 
         if( aAttrTab.pINetFmt )
         {

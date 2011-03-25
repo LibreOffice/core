@@ -364,7 +364,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
 //  aPen( PEN_SOLID ),
     nLineWidth(10),
-    eLineStyle( SOLID ),
+    eLineStyle( editeng::SOLID ),
     aWidth( 25, 100 ),
     nTopDist( 57 ),         //1mm
     nBottomDist( 57 )

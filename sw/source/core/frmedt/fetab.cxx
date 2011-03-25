@@ -837,7 +837,7 @@ void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
 }
 
 void SwFEShell::SetTabLineStyle( const Color* pColor, sal_Bool bSetLine,
-                                 const SvxBorderLine* pBorderLine )
+                                 const editeng::SvxBorderLine* pBorderLine )
 {
     SET_CURR_SHELL( this );
     StartAllAction();

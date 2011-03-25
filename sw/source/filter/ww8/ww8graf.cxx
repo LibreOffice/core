@@ -101,6 +101,7 @@
 
 #include <math.h>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
@@ -1478,7 +1479,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    SvxBorderStyle nIdx = SOLID;
+    ::editeng::SvxBorderStyle nIdx = ::editeng::SOLID;
 
     sal_Int32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
@@ -1499,21 +1500,21 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        nIdx = SOLID;
+        nIdx = ::editeng::SOLID;
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        nIdx = DOUBLE;
+        nIdx = ::editeng::DOUBLE;
     break;
     case mso_lineThickThin:
-        nIdx = THICKTHIN_SMALLGAP;
+        nIdx = ::editeng::THICKTHIN_SMALLGAP;
     break;
     case mso_lineThinThick:
-        nIdx = THINTHICK_SMALLGAP;
+        nIdx = ::editeng::THINTHICK_SMALLGAP;
     break;
     // We have no triple border, use double instead.
     case mso_lineTriple:
-        nIdx = DOUBLE;
+        nIdx = ::editeng::DOUBLE;
     break;
     // no line style is set
     case (MSO_LineStyle)USHRT_MAX:
@@ -1527,16 +1528,16 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     switch( eDashing )
     {
         case mso_lineDashGEL:
-            nIdx = DASHED;
+            nIdx = ::editeng::DASHED;
             break;
         case mso_lineDotGEL:
-            nIdx = DOTTED;
+            nIdx = ::editeng::DOTTED;
             break;
         default:
             break;
     }
 
-    if (NO_STYLE != nIdx)
+    if (::editeng::NO_STYLE != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );

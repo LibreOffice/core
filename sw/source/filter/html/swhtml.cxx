@@ -131,6 +131,7 @@
 #define TOOLS_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1
 #endif
 
+using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
@@ -5247,7 +5248,7 @@ void SwHTMLParser::InsertHorzRule()
             long nPHeight = (long)nSize;
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
             if ( !bNoShade )
-                aBorderLine.SetStyle( DOUBLE );
+                aBorderLine.SetStyle( ::editeng::DOUBLE );
             aBorderLine.SetWidth( nPHeight );
         }
         else if( bNoShade )
@@ -5256,7 +5257,7 @@ void SwHTMLParser::InsertHorzRule()
         }
         else
         {
-            aBorderLine.SetStyle( DOUBLE );
+            aBorderLine.SetStyle( ::editeng::DOUBLE );
             aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
         }
 

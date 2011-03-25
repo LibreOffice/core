@@ -325,37 +325,37 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
         return;
     }
 
-    SvxBorderLine aBorderLine( &aColor );
+    ::editeng::SvxBorderLine aBorderLine( &aColor );
 
     // Linien-Stil doppelt oder einfach?
     switch ( eStyle )
     {
         case CSS1_BS_SINGLE:
-            aBorderLine.SetStyle( SOLID );
+            aBorderLine.SetStyle( ::editeng::SOLID );
             break;
         case CSS1_BS_DOUBLE:
-            aBorderLine.SetStyle( DOUBLE );
+            aBorderLine.SetStyle( ::editeng::DOUBLE );
             break;
         case CSS1_BS_DOTTED:
-            aBorderLine.SetStyle( DOTTED );
+            aBorderLine.SetStyle( ::editeng::DOTTED );
             break;
         case CSS1_BS_DASHED:
-            aBorderLine.SetStyle( DASHED );
+            aBorderLine.SetStyle( ::editeng::DASHED );
             break;
         case CSS1_BS_GROOVE:
-            aBorderLine.SetStyle( ENGRAVED );
+            aBorderLine.SetStyle( ::editeng::ENGRAVED );
             break;
         case CSS1_BS_RIDGE:
-            aBorderLine.SetStyle( EMBOSSED );
+            aBorderLine.SetStyle( ::editeng::EMBOSSED );
             break;
         case CSS1_BS_INSET:
-            aBorderLine.SetStyle( INSET );
+            aBorderLine.SetStyle( ::editeng::INSET );
             break;
         case CSS1_BS_OUTSET:
-            aBorderLine.SetStyle( OUTSET );
+            aBorderLine.SetStyle( ::editeng::OUTSET );
             break;
         default:
-            aBorderLine.SetStyle( NO_STYLE );
+            aBorderLine.SetStyle( ::editeng::NO_STYLE );
             break;
     }
 

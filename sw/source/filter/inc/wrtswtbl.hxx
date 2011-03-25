@@ -41,7 +41,8 @@ class SwTableLines;
 class SwTable;
 class SwHTMLTableLayout;
 class SvxBrushItem;
-class SvxBorderLine;
+
+namespace editeng { class SvxBorderLine; }
 
 //---------------------------------------------------------------------------
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
@@ -287,7 +288,7 @@ protected:
                             sal_uInt16 nDepth,
                             sal_uInt16 nNumOfHeaderRows );
 
-    void MergeBorders( const SvxBorderLine* pBorderLine, sal_Bool bTable );
+    void MergeBorders( const editeng::SvxBorderLine* pBorderLine, sal_Bool bTable );
 
     sal_uInt16 MergeBoxBorders( const SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,

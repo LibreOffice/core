@@ -2245,7 +2245,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, sal_False, &pItem ))
         {
             const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
-            const SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
+            const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
             if( pBorderLine )
             {
                 sal_uInt16 nWidth = pBorderLine->GetOutWidth() +

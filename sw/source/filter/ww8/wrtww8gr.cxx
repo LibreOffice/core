@@ -587,7 +587,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                                 BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
             for( sal_uInt8 i = 0; i < 4; ++i )
             {
-                const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
                 WW8_BRC aBrc;
                 if (pLn)
                 {

@@ -46,6 +46,7 @@
 #include "fmtlsplt.hxx"
 #include <xmloff/xmluconv.hxx>
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
@@ -153,9 +154,9 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
 
 void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
-    SvxBorderStyle eStyle = NO_STYLE;
+    ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
     if ( nStyle != API_LINE_NONE )
-        eStyle = SvxBorderStyle( nStyle );
+        eStyle = ::editeng::SvxBorderStyle( nStyle );
     rLine.SetStyle( eStyle );
 }
 
@@ -201,7 +202,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
        if( bHasWidth && USHRT_MAX != nNamedWidth )
        {
            if ( bDouble )
-               rpLine->SetStyle( DOUBLE );
+               rpLine->SetStyle( ::editeng::DOUBLE );
            rpLine->SetWidth( aBorderWidths[nNamedWidth] );
        }
        else
@@ -232,7 +233,7 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( nWidth > 0 )
         rpLine->SetWidth( nWidth );
     else
-        rpLine->GuessLinesWidths( DOUBLE, nOutWidth, nInWidth, nDistance );
+        rpLine->GuessLinesWidths( ::editeng::DOUBLE, nOutWidth, nInWidth, nDistance );
 }
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =

@@ -145,10 +145,10 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             switch ( aFtnInfo.GetLineStyle( ) )
             {
                 default:
-                case NO_STYLE: rVal <<= sal_Int8( 0 ); break;
-                case SOLID: rVal <<= sal_Int8( 1 ); break;
-                case DOTTED: rVal <<= sal_Int8( 2 ); break;
-                case DASHED: rVal <<= sal_Int8( 3 ); break;
+                case ::editeng::NO_STYLE: rVal <<= sal_Int8( 0 ); break;
+                case ::editeng::SOLID: rVal <<= sal_Int8( 1 ); break;
+                case ::editeng::DOTTED: rVal <<= sal_Int8( 2 ); break;
+                case ::editeng::DASHED: rVal <<= sal_Int8( 3 ); break;
             }
             break;
         }
@@ -216,14 +216,14 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         }
         case MID_FTN_LINE_STYLE:
         {
-            SvxBorderStyle eStyle = NO_STYLE;
+            ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
             sal_Int8 nSet = 0;
             rVal >>= nSet;
             switch ( nSet )
             {
-                case 1: eStyle = SOLID; break;
-                case 2: eStyle = DOTTED; break;
-                case 3: eStyle = DASHED; break;
+                case 1: eStyle = ::editeng::SOLID; break;
+                case 2: eStyle = ::editeng::DOTTED; break;
+                case 3: eStyle = ::editeng::DASHED; break;
                 default: break;
             }
             aFtnInfo.SetLineStyle( eStyle );

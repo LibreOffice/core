@@ -3219,7 +3219,7 @@ void WW8TabDesc::AdjustNewBand()
         // we have to mimick this in the filter by picking the larger of the
         // sides and using that one on one side of the line (right)
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrmFmt()), RES_BOX));
-        const SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
+        const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
         int nCurrentRightLineWidth = 0;
         if(pLeftLine)
             nCurrentRightLineWidth = pLeftLine->GetScaledWidth();
@@ -3228,7 +3228,7 @@ void WW8TabDesc::AdjustNewBand()
         {
             SwTableBox* pBox2 = (*pTabBoxes)[i-1];
             SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrmFmt()), RES_BOX));
-            const SvxBorderLine *pRightLine = aOldBox.GetLine(BOX_LINE_RIGHT);
+            const ::editeng::SvxBorderLine *pRightLine = aOldBox.GetLine(BOX_LINE_RIGHT);
             int nOldBoxRightLineWidth = 0;
             if(pRightLine)
                 nOldBoxRightLineWidth = pRightLine->GetScaledWidth();

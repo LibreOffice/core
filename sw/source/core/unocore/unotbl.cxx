@@ -108,6 +108,7 @@
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+using ::editeng::SvxBorderLine;
 
 // from swtable.cxx
 extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
@@ -139,11 +140,11 @@ sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLi
 
     if ( rLine2.LineWidth > 0 )
     {
-        rSvxLine.SetStyle( SvxBorderStyle( rLine2.LineStyle ) );
+        rSvxLine.SetStyle( editeng::SvxBorderStyle( rLine2.LineStyle ) );
         rSvxLine.SetWidth( MM100_TO_TWIP_UNSIGNED( rLine2.LineWidth ) );
     }
     else
-        rSvxLine.GuessLinesWidths( SvxBorderStyle( rLine2.LineStyle ),
+        rSvxLine.GuessLinesWidths( editeng::SvxBorderStyle( rLine2.LineStyle ),
                                     MM100_TO_TWIP( rLine.OuterLineWidth ),
                                     MM100_TO_TWIP( rLine.InnerLineWidth ),
                                     MM100_TO_TWIP( rLine.LineDistance   ) );

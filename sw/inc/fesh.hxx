@@ -46,6 +46,7 @@
 #define INCLUDED_VECTOR
 #endif
 
+namespace editeng { class SvxBorderLine; }
 
 class SwFlyFrm;
 class SwTabCols;
@@ -55,7 +56,6 @@ class SwTableAutoFmt;
 class SwFrm;
 class SwFmtFrmSize;
 class SwFmtRowSplit;
-class SvxBorderLine;
 class SdrObject;
 class Color;
 class Outliner;
@@ -631,7 +631,7 @@ public:
 
     void SetTabBorders( const SfxItemSet& rSet );
     void GetTabBorders(       SfxItemSet& rSet) const;
-    void SetTabLineStyle(const Color* pColor, sal_Bool bSetLine = sal_False, const SvxBorderLine* pBorderLine = NULL);
+    void SetTabLineStyle(const Color* pColor, sal_Bool bSetLine = sal_False, const editeng::SvxBorderLine* pBorderLine = NULL);
 
     void SetTabBackground( const SvxBrushItem &rNew );
     void GetTabBackground( SvxBrushItem &rToFill ) const;

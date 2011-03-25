@@ -2400,9 +2400,9 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     sal_Int8 nStyle = API_COL_LINE_NONE;
     switch (rFmtCol.GetLineStyle())
     {
-        case SOLID: nStyle = API_COL_LINE_SOLID; break;
-        case DOTTED: nStyle = API_COL_LINE_DOTTED; break;
-        case DASHED: nStyle = API_COL_LINE_DASHED; break;
+        case editeng::SOLID: nStyle = API_COL_LINE_SOLID; break;
+        case editeng::DOTTED: nStyle = API_COL_LINE_DOTTED; break;
+        case editeng::DASHED: nStyle = API_COL_LINE_DASHED; break;
         default: break;
     }
     nSepLineStyle = nStyle;

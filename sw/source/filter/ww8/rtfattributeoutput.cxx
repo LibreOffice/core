@@ -140,6 +140,7 @@
 
 #include <osl/diagnose.h>
 
+using ::editeng::SvxBorderLine;
 using rtl::OString;
 using rtl::OStringBuffer;
 using rtl::OUString;
@@ -160,7 +161,7 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
         // single line
         switch ( pLine->GetStyle( ) )
         {
-            case SOLID:
+            case ::editeng::SOLID:
                 {
                     if( DEF_LINE_WIDTH_0 == pLine->GetWidth() )
                         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
@@ -168,46 +169,46 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
                         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
                 }
                 break;
-            case DOTTED:
+            case ::editeng::DOTTED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
                 break;
-            case DASHED:
+            case ::editeng::DASHED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
                 break;
-            case DOUBLE:
+            case ::editeng::DOUBLE:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
                 break;
-            case THINTHICK_SMALLGAP:
+            case ::editeng::THINTHICK_SMALLGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
                 break;
-            case THINTHICK_MEDIUMGAP:
+            case ::editeng::THINTHICK_MEDIUMGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
                 break;
-            case THINTHICK_LARGEGAP:
+            case ::editeng::THINTHICK_LARGEGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
                 break;
-            case THICKTHIN_SMALLGAP:
+            case ::editeng::THICKTHIN_SMALLGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
                 break;
-            case THICKTHIN_MEDIUMGAP:
+            case ::editeng::THICKTHIN_MEDIUMGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
                 break;
-            case THICKTHIN_LARGEGAP:
+            case ::editeng::THICKTHIN_LARGEGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
                 break;
-            case EMBOSSED:
+            case ::editeng::EMBOSSED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
                 break;
-            case ENGRAVED:
+            case ::editeng::ENGRAVED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
                 break;
-            case OUTSET:
+            case ::editeng::OUTSET:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
                 break;
-            case INSET:
+            case ::editeng::INSET:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
                 break;
-            case NO_STYLE:
+            case ::editeng::NO_STYLE:
             default:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
                 break;

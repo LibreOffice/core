@@ -2052,7 +2052,7 @@ void SwBorderAttrs::_IsLine()
 |*         sind identisch.
 |*
 |*************************************************************************/
-inline int CmpLines( const SvxBorderLine *pL1, const SvxBorderLine *pL2 )
+inline int CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
 {
     return ( ((pL1 && pL2) && (*pL1 == *pL2)) || (!pL1 && !pL2) );
 }

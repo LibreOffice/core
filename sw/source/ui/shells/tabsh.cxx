@@ -109,6 +109,7 @@
 #include "swabstdlg.hxx"
 #include <table.hrc>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
@@ -543,7 +544,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if(aBorderLine.GetOutWidth() == 0)
             {
-                aBorderLine.SetStyle( SOLID );
+                aBorderLine.SetStyle( ::editeng::SOLID );
                 aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
             }
 

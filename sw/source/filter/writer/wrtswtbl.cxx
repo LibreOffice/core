@@ -41,6 +41,7 @@
 #include <frmatr.hxx>
 #include <htmltbl.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 SV_IMPL_PTRARR( SwWriteTableCells, SwWriteTableCellPtr )

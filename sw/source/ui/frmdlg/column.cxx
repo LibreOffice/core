@@ -536,9 +536,9 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     // Fill the line styles listbox
     aLineTypeDLB.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
-    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
-    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
-    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::SOLID ), ::editeng::SOLID );
+    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DOTTED ), ::editeng::DOTTED );
+    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DASHED ), ::editeng::DASHED );
 
     long nLineWidth = MetricField::ConvertDoubleValue(
             aLineWidthEdit.GetValue( ),
@@ -741,7 +741,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         else if( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
             pColMgr->SetLineWidthAndColor(
-                    SvxBorderStyle( aLineTypeDLB.GetSelectEntryStyle( ) ),
+                    ::editeng::SvxBorderStyle( aLineTypeDLB.GetSelectEntryStyle( ) ),
                     nLineWidth,
                     aLineColorDLB.GetSelectEntryColor() );
             pColMgr->SetAdjust( SwColLineAdj(

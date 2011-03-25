@@ -101,6 +101,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
 
+using ::editeng::SvxBorderLine;
+
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -3564,34 +3566,34 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     sOut += ' ';
     switch ( pLine->GetStyle( ) )
     {
-        case SOLID:
+        case ::editeng::SOLID:
             sOut += sCSS1_PV_solid;
             break;
-        case DOTTED:
+        case ::editeng::DOTTED:
             sOut += sCSS1_PV_dotted;
             break;
-        case DASHED:
+        case ::editeng::DASHED:
             sOut += sCSS1_PV_dashed;
             break;
-        case DOUBLE:
-        case THINTHICK_SMALLGAP:
-        case THINTHICK_MEDIUMGAP:
-        case THINTHICK_LARGEGAP:
-        case THICKTHIN_SMALLGAP:
-        case THICKTHIN_MEDIUMGAP:
-        case THICKTHIN_LARGEGAP:
+        case ::editeng::DOUBLE:
+        case ::editeng::THINTHICK_SMALLGAP:
+        case ::editeng::THINTHICK_MEDIUMGAP:
+        case ::editeng::THINTHICK_LARGEGAP:
+        case ::editeng::THICKTHIN_SMALLGAP:
+        case ::editeng::THICKTHIN_MEDIUMGAP:
+        case ::editeng::THICKTHIN_LARGEGAP:
             sOut += sCSS1_PV_double;
             break;
-        case EMBOSSED:
+        case ::editeng::EMBOSSED:
             sOut += sCSS1_PV_ridge;
             break;
-        case ENGRAVED:
+        case ::editeng::ENGRAVED:
             sOut += sCSS1_PV_groove;
             break;
-        case INSET:
+        case ::editeng::INSET:
             sOut += sCSS1_PV_inset;
             break;
-        case OUTSET:
+        case ::editeng::OUTSET:
             sOut += sCSS1_PV_outset;
             break;
         default:

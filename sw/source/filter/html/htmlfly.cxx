@@ -1073,8 +1073,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         Size aTwipBorder( 0, 0 );
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
 
-        const SvxBorderLine *pColBorderLine = 0;
-        const SvxBorderLine *pBorderLine = pBoxItem->GetLeft();
+        const ::editeng::SvxBorderLine *pColBorderLine = 0;
+        const ::editeng::SvxBorderLine *pBorderLine = pBoxItem->GetLeft();
         if( pBorderLine )
         {
             pColBorderLine = pBorderLine;

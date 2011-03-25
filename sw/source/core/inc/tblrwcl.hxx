@@ -36,7 +36,8 @@
 #include <tblsel.hxx>
 #include <swtable.hxx>
 
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
+
 class SwDoc;
 class SwTableNode;
 class _FndLine;
@@ -154,12 +155,12 @@ struct _SwGCLineBorder
 
 class _SwGCBorder_BoxBrd
 {
-    const SvxBorderLine* pBrdLn;
+    const editeng::SvxBorderLine* pBrdLn;
     sal_Bool bAnyBorderFnd;
 public:
     _SwGCBorder_BoxBrd() : pBrdLn( 0 ), bAnyBorderFnd( sal_False ) {}
 
-    void SetBorder( const SvxBorderLine& rBorderLine )
+    void SetBorder( const editeng::SvxBorderLine& rBorderLine )
         { pBrdLn = &rBorderLine; bAnyBorderFnd = sal_False; }
 
     // checke, ob die linke Border dieselbe wie die gesetzte ist

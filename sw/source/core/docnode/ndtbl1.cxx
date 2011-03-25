@@ -60,6 +60,7 @@
 #include "switerator.hxx"
 #include <UndoTable.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 

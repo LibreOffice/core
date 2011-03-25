@@ -135,6 +135,7 @@
 #include <vcl/outdev.hxx>
 #include <i18npool/mslangid.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 using namespace nsSwDocInfoSubType;
@@ -4048,7 +4049,7 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                 // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
                 switch ( rLine.GetStyle( ) )
                 {
-                    case SOLID:
+                    case ::editeng::SOLID:
                         {
                             if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
                                 brcType = 5;
@@ -4056,43 +4057,43 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                                 brcType = 1;
                         }
                         break;
-                    case DOTTED:
+                    case ::editeng::DOTTED:
                         brcType = 6;
                         break;
-                    case DASHED:
+                    case ::editeng::DASHED:
                         brcType = 7;
                         break;
-                    case DOUBLE:
+                    case ::editeng::DOUBLE:
                         brcType = 3;
                         break;
-                    case THINTHICK_SMALLGAP:
+                    case ::editeng::THINTHICK_SMALLGAP:
                         brcType = 11;
                         break;
-                    case THINTHICK_MEDIUMGAP:
+                    case ::editeng::THINTHICK_MEDIUMGAP:
                         brcType = 14;
                         break;
-                    case THINTHICK_LARGEGAP:
+                    case ::editeng::THINTHICK_LARGEGAP:
                         brcType = 17;
                         break;
-                    case THICKTHIN_SMALLGAP:
+                    case ::editeng::THICKTHIN_SMALLGAP:
                         brcType = 12;
                         break;
-                    case THICKTHIN_MEDIUMGAP:
+                    case ::editeng::THICKTHIN_MEDIUMGAP:
                         brcType = 15;
                         break;
-                    case THICKTHIN_LARGEGAP:
+                    case ::editeng::THICKTHIN_LARGEGAP:
                         brcType = 18;
                         break;
-                    case EMBOSSED:
+                    case ::editeng::EMBOSSED:
                         brcType = 24;
                         break;
-                    case ENGRAVED:
+                    case ::editeng::ENGRAVED:
                         brcType = 25;
                         break;
-                    case OUTSET:
+                    case ::editeng::OUTSET:
                         brcType = 26;
                         break;
-                    case INSET:
+                    case ::editeng::INSET:
                         brcType = 27;
                         break;
                     default:
@@ -4118,9 +4119,9 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = ( nWidth + 7 ) / 15;
             if( nWidth > 5 )
                 nWidth = 5;
-            if ( DOTTED == rLine.GetStyle( ) )
+            if ( ::editeng::DOTTED == rLine.GetStyle( ) )
                 nWidth = 6;
-            else if ( DASHED == rLine.GetStyle( ) )
+            else if ( ::editeng::DASHED == rLine.GetStyle( ) )
                 nWidth = 7;
         }
 

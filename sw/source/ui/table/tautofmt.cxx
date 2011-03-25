@@ -920,7 +920,7 @@ void AutoFmtPreview::CalcCellArray( sal_Bool _bFitWidth )
 
 //------------------------------------------------------------------------
 
-inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLine* pBorder )
+inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
     rStyle.Set( pBorder, 0.05, 5 );
 }

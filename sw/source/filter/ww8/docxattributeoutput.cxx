@@ -141,6 +141,7 @@
 #include <stdio.h>
 #endif
 
+using ::editeng::SvxBorderLine;
 using rtl::OString;
 using rtl::OStringBuffer;
 using rtl::OUString;
@@ -1368,49 +1369,49 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     {
         switch ( pBorderLine->GetStyle( ) )
         {
-            case SOLID:
+            case ::editeng::SOLID:
                 pVal = ( sal_Char* )"single";
                 break;
-            case DOTTED:
+            case ::editeng::DOTTED:
                 pVal = ( sal_Char* )"dotted";
                 break;
-            case DASHED:
+            case ::editeng::DASHED:
                 pVal = ( sal_Char* )"dashed";
                 break;
-            case DOUBLE:
+            case ::editeng::DOUBLE:
                 pVal = ( sal_Char* )"double";
                 break;
-            case THINTHICK_SMALLGAP:
+            case ::editeng::THINTHICK_SMALLGAP:
                 pVal = ( sal_Char* )"thinThickSmallGap";
                 break;
-            case THINTHICK_MEDIUMGAP:
+            case ::editeng::THINTHICK_MEDIUMGAP:
                 pVal = ( sal_Char* )"thinThickMediumGap";
                 break;
-            case THINTHICK_LARGEGAP:
+            case ::editeng::THINTHICK_LARGEGAP:
                 pVal = ( sal_Char* )"thinThickLargeGap";
                 break;
-            case THICKTHIN_SMALLGAP:
+            case ::editeng::THICKTHIN_SMALLGAP:
                 pVal = ( sal_Char* )"thickThinSmallGap";
                 break;
-            case THICKTHIN_MEDIUMGAP:
+            case ::editeng::THICKTHIN_MEDIUMGAP:
                 pVal = ( sal_Char* )"thickThinMediumGap";
                 break;
-            case THICKTHIN_LARGEGAP:
+            case ::editeng::THICKTHIN_LARGEGAP:
                 pVal = ( sal_Char* )"thickThinLargeGap";
                 break;
-            case EMBOSSED:
+            case ::editeng::EMBOSSED:
                 pVal = ( sal_Char* )"threeDEmboss";
                 break;
-            case ENGRAVED:
+            case ::editeng::ENGRAVED:
                 pVal = ( sal_Char* )"threeDEngrave";
                 break;
-            case OUTSET:
+            case ::editeng::OUTSET:
                 pVal = ( sal_Char* )"outset";
                 break;
-            case INSET:
+            case ::editeng::INSET:
                 pVal = ( sal_Char* )"inset";
                 break;
-            case NO_STYLE:
+            case ::editeng::NO_STYLE:
             default:
                 break;
         }

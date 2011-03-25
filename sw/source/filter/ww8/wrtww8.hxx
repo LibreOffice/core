@@ -59,6 +59,8 @@ namespace msfilter
     class MSCodec_Std97;
 }
 
+namespace editeng { class SvxBorderLine; }
+
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
@@ -70,7 +72,6 @@ class MSWordExportBase;
 class SdrObject;
 class SfxItemSet;
 class SvStream;
-class SvxBorderLine;
 class SvxFontItem;
 class SvxBoxItem;
 class SwAttrSet;
@@ -958,7 +959,7 @@ private:
     static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, sal_uInt8 nSwLevel );
 
-    void Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
+    void Out_BorderLine(WW8Bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
 
     /// Output the numbering table.
@@ -1058,7 +1059,7 @@ public:
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * rBox );
     sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
-    WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
+    WW8_BRC TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
         sal_uInt16 nDist, bool bShadow);
 
     // #i77805# - new return value indicates, if an inherited outline numbering is suppressed

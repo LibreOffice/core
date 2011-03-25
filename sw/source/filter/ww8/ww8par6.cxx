@@ -1276,7 +1276,7 @@ sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
     sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
 {
-    SvxBorderStyle eStyle = SOLID;
+    ::editeng::SvxBorderStyle eStyle = ::editeng::SOLID;
     switch (nIdx)
     {
         // First the single lines
@@ -1287,69 +1287,69 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         case  9:
         case 20:
         case 22:
-            eStyle = SOLID;
+            eStyle = ::editeng::SOLID;
             break;
         case  2:
             {
-                eStyle = SOLID;
+                eStyle = ::editeng::SOLID;
                 nLineThickness *= 2;
             }
             break;
         case  6:
-            eStyle = DOTTED;
+            eStyle = ::editeng::DOTTED;
             break;
         case  7:
-            eStyle = DASHED;
+            eStyle = ::editeng::DASHED;
             break;
         // then the shading beams which we represent by a double line
         case 23:
-            eStyle = DOUBLE;
+            eStyle = ::editeng::DOUBLE;
             break;
         // then the double lines, for which we have good matches
         case  3:
         case 10: //Don't have tripple so use double
         case 21: //Don't have double wave: use double instead
-            eStyle = DOUBLE;
+            eStyle = ::editeng::DOUBLE;
             break;
         case 11:
-            eStyle = THINTHICK_SMALLGAP;
+            eStyle = ::editeng::THINTHICK_SMALLGAP;
             break;
         case 12:
         case 13: //Don't have thin thick thin, so use thick thin
-            eStyle = THICKTHIN_SMALLGAP;
+            eStyle = ::editeng::THICKTHIN_SMALLGAP;
             break;
         case 14:
-            eStyle = THINTHICK_MEDIUMGAP;
+            eStyle = ::editeng::THINTHICK_MEDIUMGAP;
             break;
         case 15:
         case 16: //Don't have thin thick thin, so use thick thin
-            eStyle = THICKTHIN_MEDIUMGAP;
+            eStyle = ::editeng::THICKTHIN_MEDIUMGAP;
             break;
         case 17:
-            eStyle = THINTHICK_LARGEGAP;
+            eStyle = ::editeng::THINTHICK_LARGEGAP;
             break;
         case 18:
         case 19: //Don't have thin thick thin, so use thick thin
-            eStyle = THICKTHIN_LARGEGAP;
+            eStyle = ::editeng::THICKTHIN_LARGEGAP;
             break;
         case 24:
-            eStyle = EMBOSSED;
+            eStyle = ::editeng::EMBOSSED;
             break;
         case 25:
-            eStyle = ENGRAVED;
+            eStyle = ::editeng::ENGRAVED;
             break;
         case 26:
-            eStyle = OUTSET;
+            eStyle = ::editeng::OUTSET;
             break;
         case 27:
-            eStyle = INSET;
+            eStyle = ::editeng::INSET;
             break;
         default:
-            eStyle = SOLID;
+            eStyle = ::editeng::NO_STYLE;
             break;
     }
 
-    SvxBorderLine aLine;
+    ::editeng::SvxBorderLine aLine;
     aLine.SetStyle( eStyle );
     aLine.SetWidth( nLineThickness );
 

@@ -60,6 +60,7 @@
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
