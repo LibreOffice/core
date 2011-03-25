@@ -118,6 +118,7 @@ my_components = \
     msfilter \
     mysql \
     odbc \
+    odfflatxml \
     offacc \
     oooimprovecore \
     oox \
