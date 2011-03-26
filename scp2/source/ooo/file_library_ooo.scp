@@ -330,9 +330,9 @@ File gid_File_Lib_Vbaobj
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(libvbaobj,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(vbaobj,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(vbaobj,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(vbaobj,.uno,.dll));
   #endif
 End
 
