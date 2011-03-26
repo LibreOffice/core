@@ -389,10 +389,11 @@ sal_Bool ImplSdPPTImport::Import()
                 Dictionary aDict;
                 if ( pSection->GetDictionary( aDict ) )
                 {
-                    sal_uInt32 nPropId = aDict.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS" )));
-                    if ( nPropId )
+                    Dictionary::const_iterator iter = aDict.find( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS" )));
+
+                    if ( iter != aDict.end() )
                     {
-                        if ( pSection->GetProperty( nPropId, aPropItem ) )
+                        if ( pSection->GetProperty( iter->second, aPropItem ) )
                         {
                             aPropItem.Seek( STREAM_SEEK_TO_BEGIN );
                             aPropItem >> nType;

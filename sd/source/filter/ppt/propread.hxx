@@ -29,6 +29,7 @@
 #ifndef _PROPREAD_HXX_
 #define _PROPREAD_HXX_
 
+#include <map>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <tools/solar.h>
@@ -110,6 +111,8 @@
 
 // ------------------------------------------------------------------------
 
+typedef std::map<String,sal_uInt32> Dictionary;
+
 struct PropEntry
 {
     sal_uInt32  mnId;
@@ -137,21 +140,6 @@ class PropItem : public SvMemoryStream
         PropItem&       operator=( PropItem& rPropItem );
 
     using SvStream::Read;
-};
-
-// ------------------------------------------------------------------------
-
-class Dictionary : protected List
-{
-    friend class Section;
-
-        void        AddProperty( sal_uInt32 nId, const String& rString );
-
-    public :
-                    Dictionary(){};
-                    ~Dictionary();
-        Dictionary& operator=( Dictionary& rDictionary );
-        sal_uInt32      GetProperty( const String& rPropName );
 };
 
 // ------------------------------------------------------------------------

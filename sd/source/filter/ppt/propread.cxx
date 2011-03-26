@@ -202,72 +202,6 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
 
 //  -----------------------------------------------------------------------
 
-struct Dict
-{
-    sal_uInt32  mnId;
-    String      aString;
-
-            Dict( sal_uInt32 nId, String rString ) { mnId = nId; aString = rString; };
-};
-
-//  -----------------------------------------------------------------------
-
-Dictionary::~Dictionary()
-{
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        delete (Dict*)pPtr;
-}
-
-//  -----------------------------------------------------------------------
-
-void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
-{
-    if ( rString.Len() )        // eindeutige namen bei properties
-    {
-        // pruefen, ob es die Propertybeschreibung in der Dictionary schon gibt
-        for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
-        {
-            if ( pDict->mnId == nId )
-            {
-                pDict->aString = rString;
-                return;
-            }
-        }
-        Insert( new Dict( nId, rString ), LIST_APPEND );
-    }
-}
-
-//  -----------------------------------------------------------------------
-
-sal_uInt32 Dictionary::GetProperty( const String& rString )
-{
-    for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
-    {
-        if ( pDict->aString == rString )
-            return pDict->mnId;
-    }
-    return 0;
-}
-
-//  -----------------------------------------------------------------------
-
-Dictionary& Dictionary::operator=( Dictionary& rDictionary )
-{
-    void* pPtr;
-
-    if ( this != &rDictionary )
-    {
-        for ( pPtr = First(); pPtr; pPtr = Next() )
-            delete (Dict*)pPtr;
-
-        for ( pPtr = rDictionary.First(); pPtr; pPtr = rDictionary.Next() )
-            Insert( new Dict( ((Dict*)pPtr)->mnId, ((Dict*)pPtr)->aString ), LIST_APPEND );
-    }
-    return *this;
-}
-
-//  -----------------------------------------------------------------------
-
 Section::Section( const Section& rSection )
     : mnTextEnc(rSection.mnTextEnc),
     maEntries(rSection.maEntries.clone())
@@ -343,7 +277,6 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
 {
     sal_Bool bRetValue = sal_False;
 
-    Dictionary aDict;
     boost::ptr_vector<PropEntry>::iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
@@ -387,12 +320,11 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                 }
                 if ( !aString.Len() )
                     break;
-                aDict.AddProperty( nId, aString );
+                rDict.insert( std::make_pair(aString,nId) );
             }
             bRetValue = sal_True;
         }
     }
-    rDict = aDict;
     return bRetValue;
 }
 
