@@ -113,7 +113,7 @@ public:
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void    TestData() const;
 #endif
     void    Reset( const ScPatternAttr* pPattern, sal_Bool bAlloc = sal_True );
