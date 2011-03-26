@@ -33,9 +33,7 @@
 #include <com/sun/star/reflection/XTypeDescriptionEnumeration.idl>
 #include <com/sun/star/reflection/TypeDescriptionSearchDepth.idl>
 #include <com/sun/star/reflection/NoSuchTypeNameException.idl>
-#ifndef __com_sun_star_reflection_InvalidTypeNameException_idl__
 #include <com/sun/star/reflection/InvalidTypeNameException.idl>
-#endif
 
 //=============================================================================
 

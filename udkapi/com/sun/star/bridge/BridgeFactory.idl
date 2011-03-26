@@ -28,10 +28,7 @@
 #define __com_sun_star_bridge_BridgeFactory_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-
-#ifndef __com_sun_star_bridge_XBridgeFactory_idl__
 #include <com/sun/star/bridge/XBridgeFactory.idl>
-#endif
 
 //=============================================================================
 
