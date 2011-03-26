@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_uno_NamingService_idl__
 #define __com_sun_star_uno_NamingService_idl__
 
-#ifndef __com_sun_star_uno_XNamingService_idl__
 #include <com/sun/star/uno/XNamingService.idl>
-#endif
 
  module com {  module sun {  module star {  module uno {
 

@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
 #define __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
 
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__
 #include <com/sun/star/reflection/XTypeDescription.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumeration_idl__
 #include <com/sun/star/container/XEnumeration.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 //=============================================================================
 

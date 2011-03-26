@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_container_XChild_idl__
 #define __com_sun_star_container_XChild_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
 
 
 //=============================================================================

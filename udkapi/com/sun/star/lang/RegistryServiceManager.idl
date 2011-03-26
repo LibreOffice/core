@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_lang_RegistryServiceManager_idl__
 #define __com_sun_star_lang_RegistryServiceManager_idl__
 
-#ifndef __com_sun_star_lang_ServiceManager_idl__
 #include <com/sun/star/lang/ServiceManager.idl>
-#endif
 
-#ifndef __com_sun_star_lang_MultiServiceFactory_idl__
 #include <com/sun/star/lang/MultiServiceFactory.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
 #include <com/sun/star/registry/XSimpleRegistry.idl>
-#endif
 
 
 //=============================================================================

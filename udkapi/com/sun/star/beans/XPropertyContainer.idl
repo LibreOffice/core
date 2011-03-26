@@ -27,33 +27,19 @@
 #ifndef __com_sun_star_beans_XPropertyContainer_idl__
 #define __com_sun_star_beans_XPropertyContainer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_reflection_XIdlClass_idl__
 #include <com/sun/star/reflection/XIdlClass.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyExistException_idl__
 #include <com/sun/star/beans/PropertyExistException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_IllegalTypeException_idl__
 #include <com/sun/star/beans/IllegalTypeException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_NotRemoveableException_idl__
 #include <com/sun/star/beans/NotRemoveableException.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

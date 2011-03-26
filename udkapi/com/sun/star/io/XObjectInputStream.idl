@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_io_XObjectInputStream_idl__
 #define __com_sun_star_io_XObjectInputStream_idl__
 
-#ifndef __com_sun_star_io_XDataInputStream_idl__
 #include <com/sun/star/io/XDataInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
 
 //=============================================================================

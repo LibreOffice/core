@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_io_ObjectInputStream_idl__
 #define __com_sun_star_io_ObjectInputStream_idl__
 
-#ifndef __com_sun_star_io_XObjectInputStream_idl__
 #include <com/sun/star/io/XObjectInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
-#endif
 
-#ifndef __com_sun_star_io_XConnectable_idl__
 #include <com/sun/star/io/XConnectable.idl>
-#endif
 
-#ifndef __com_sun_star_io_XMarkableStream_idl__
 #include <com/sun/star/io/XMarkableStream.idl>
-#endif
 
 
 //=============================================================================

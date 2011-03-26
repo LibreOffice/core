@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__
 #define __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__
 
-#ifndef __com_sun_star_reflection_XInterfaceMemberTypeDescription_idl__
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl>
-#endif
 
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__
 #include <com/sun/star/reflection/XTypeDescription.idl>
-#endif
 
 
 //=============================================================================

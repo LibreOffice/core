@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_container_XContainerApproveListener_idl
 #define __com_sun_star_container_XContainerApproveListener_idl
 
-#ifndef __com_sun_star_container_ContainerEvent_idl__
 #include <com/sun/star/container/ContainerEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_util_XVeto_idl__
 #include <com/sun/star/util/XVeto.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_reflection_ParamInfo_idl__
 #define __com_sun_star_reflection_ParamInfo_idl__
 
-#ifndef __com_sun_star_reflection_ParamMode_idl__
 #include <com/sun/star/reflection/ParamMode.idl>
-#endif
 
 //=============================================================================
 

@@ -26,9 +26,7 @@
  ************************************************************************/
 #ifndef __com_sun_star_security_Policy_idl__
 #define __com_sun_star_security_Policy_idl__
-#ifndef __com_sun_star_security_XPolicy_idl__
 #include <com/sun/star/security/XPolicy.idl>
-#endif
 
 
 module com {  module sun {  module star {  module security {

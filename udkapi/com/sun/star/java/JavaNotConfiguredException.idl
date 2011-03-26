@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_java_JavaNotConfiguredException_idl__
 #define __com_sun_star_java_JavaNotConfiguredException_idl__
 
-#ifndef __com_sun_star_java_JavaInitializationException_idl__
 #include <com/sun/star/java/JavaInitializationException.idl>
-#endif
 
 module com { module sun { module star { module java {
 

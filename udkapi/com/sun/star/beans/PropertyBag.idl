@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_beans_PropertyBag_idl__
 #define __com_sun_star_beans_PropertyBag_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertyContainer_idl__
 #include <com/sun/star/beans/XPropertyContainer.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertyAccess_idl__
 #include <com/sun/star/beans/XPropertyAccess.idl>
-#endif
 
 
 //=============================================================================

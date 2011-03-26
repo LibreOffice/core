@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
 #define __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_uno_TypeClass_idl__
 #include <com/sun/star/uno/TypeClass.idl>
-#endif
-#ifndef __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
 #include <com/sun/star/reflection/XTypeDescriptionEnumeration.idl>
-#endif
-#ifndef __com_sun_star_reflection_TypeDescriptionSearchDepth_idl__
 #include <com/sun/star/reflection/TypeDescriptionSearchDepth.idl>
-#endif
-#ifndef __com_sun_star_reflection_NoSuchTypeNameException_idl__
 #include <com/sun/star/reflection/NoSuchTypeNameException.idl>
-#endif
 #ifndef __com_sun_star_reflection_InvalidTypeNameException_idl__
 #include <com/sun/star/reflection/InvalidTypeNameException.idl>
 #endif

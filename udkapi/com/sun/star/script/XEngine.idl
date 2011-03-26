@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_script_XEngine_idl__
 #define __com_sun_star_script_XEngine_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_script_XLibraryAccess_idl__
 #include <com/sun/star/script/XLibraryAccess.idl>
-#endif
 
-#ifndef __com_sun_star_script_XEngineListener_idl__
 #include <com/sun/star/script/XEngineListener.idl>
-#endif
 
 
 //=============================================================================

@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_webtop_Logger_idl__
 #define __com_sun_star_webtop_Logger_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_util_logging_XLogger_idl__
 #include <XLogger.idl>
-#endif
-
-#ifndef __com_sun_star_util_logging_XLoggerRemote_idl__
 #include <XLoggerRemote.idl>
-#endif
 
 //=============================================================================
 
