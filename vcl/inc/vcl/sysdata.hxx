@@ -41,6 +41,9 @@ typedef struct CGLayer   *CGLayerRef;
 class NSView;
 #endif
 #endif
+#if defined( WNT ) || defined( OS2 )
+#include <windef.h>
+#endif
 
 // -----------------
 // - SystemEnvData -
