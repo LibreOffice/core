@@ -29,6 +29,8 @@
 #ifndef _PROPREAD_HXX_
 #define _PROPREAD_HXX_
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <tools/solar.h>
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
@@ -108,6 +110,8 @@
 
 // ------------------------------------------------------------------------
 
+class PropEntry;
+
 class PropItem : public SvMemoryStream
 {
         sal_uInt16      mnTextEnc;
@@ -140,9 +144,10 @@ class Dictionary : protected List
 
 // ------------------------------------------------------------------------
 
-class Section : private List
+class Section
 {
         sal_uInt16              mnTextEnc;
+        boost::ptr_vector<PropEntry> maEntries;
 
     protected:
 
@@ -152,10 +157,9 @@ class Section : private List
 
     public:
                                 Section( const sal_uInt8* pFMTID );
-                                Section( Section& rSection );
-                                ~Section();
+                                Section( const Section& rSection );
 
-        Section&                operator=( Section& rSection );
+        Section&                operator=( const Section& rSection );
         sal_Bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
         sal_Bool                GetDictionary( Dictionary& rDict );
         const sal_uInt8*        GetFMTID() const { return aFMTID; };

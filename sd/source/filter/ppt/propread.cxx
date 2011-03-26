@@ -284,14 +284,12 @@ Dictionary& Dictionary::operator=( Dictionary& rDictionary )
 
 //  -----------------------------------------------------------------------
 
-Section::Section( Section& rSection )
-: List()
+Section::Section( const Section& rSection )
+    : mnTextEnc(rSection.mnTextEnc),
+    maEntries(rSection.maEntries.clone())
 {
-    mnTextEnc = rSection.mnTextEnc;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = rSection.aFMTID[ i ];
-    for ( PropEntry* pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
-        Insert( new PropEntry( *pProp ), LIST_APPEND );
 }
 
 //  -----------------------------------------------------------------------
@@ -307,19 +305,20 @@ Section::Section( const sal_uInt8* pFMTID )
 
 sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
-    PropEntry* pProp;
     if ( nId )
     {
-        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+        boost::ptr_vector<PropEntry>::const_iterator iter;
+        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
         {
-            if ( pProp->mnId == nId )
+            if (iter->mnId == nId)
                 break;
         }
-        if ( pProp )
+
+        if (iter != maEntries.end())
         {
             rPropItem.Clear();
             rPropItem.SetTextEncoding( mnTextEnc );
-            rPropItem.Write( pProp->mpBuf, pProp->mnSize );
+            rPropItem.Write( iter->mpBuf,iter->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
             return sal_True;
         }
@@ -339,18 +338,19 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
         nId = 0;
 
     // keine doppelten PropId's zulassen, sortieren
-    for ( sal_uInt32 i = 0; i < Count(); i++ )
+    boost::ptr_vector<PropEntry>::iterator iter;
+    for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter )
     {
-        PropEntry* pPropEntry = (PropEntry*)GetObject( i );
-        if ( pPropEntry->mnId == nId )
-            delete (PropEntry*)Replace( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
-        else if ( pPropEntry->mnId > nId )
-            Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
+        if ( iter->mnId == nId )
+            maEntries.replace( iter, new PropEntry( nId, pBuf, nBufSize, mnTextEnc ));
+        else if ( iter->mnId > nId )
+            maEntries.insert( iter, new PropEntry( nId, pBuf, nBufSize, mnTextEnc ));
         else
             continue;
         return;
     }
-    Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), LIST_APPEND );
+
+    maEntries.push_back( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ) );
 }
 
 //  -----------------------------------------------------------------------
@@ -360,17 +360,17 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     sal_Bool bRetValue = sal_False;
 
     Dictionary aDict;
-    PropEntry* pProp;
-
-    for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+    boost::ptr_vector<PropEntry>::iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        if ( pProp->mnId == 0 )
+        if ( iter->mnId == 0 )
             break;
     }
-    if ( pProp )
+
+    if ( iter != maEntries.end() )
     {
         sal_uInt32 nDictCount, nId, nSize, nPos;
-        SvMemoryStream aStream( (sal_Int8*)pProp->mpBuf, pProp->mnSize, STREAM_READ );
+        SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, STREAM_READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
         aStream >> nDictCount;
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )
@@ -410,14 +410,6 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     }
     rDict = aDict;
     return bRetValue;
-}
-
-//  -----------------------------------------------------------------------
-
-Section::~Section()
-{
-    for ( PropEntry* pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
-        delete pProp;
 }
 
 //  -----------------------------------------------------------------------
@@ -603,18 +595,13 @@ void Section::Read( SvStorageStream *pStrm )
 
 //  -----------------------------------------------------------------------
 
-Section& Section::operator=( Section& rSection )
+Section& Section::operator=( const Section& rSection )
 {
-    PropEntry* pProp;
-
     if ( this != &rSection )
     {
         memcpy( (void*)aFMTID, (void*)rSection.aFMTID, 16 );
-        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
-            delete pProp;
-        Clear();
-        for ( pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
-            Insert( new PropEntry( *pProp ), LIST_APPEND );
+
+        maEntries = rSection.maEntries.clone();
     }
     return *this;
 }
