@@ -68,6 +68,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scfilt \
     scui \
     sfx \
+    sm \
+    smd \
     sot \
     spa \
     svl \
