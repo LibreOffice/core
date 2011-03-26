@@ -555,6 +555,300 @@ String RID_SVXSTR_GRDT9_DEF
     Text = "Axial light red/white";
 };
 
+/* do not translate */
+String RID_SVXSTR_GRDT10_DEF
+{
+    Text = "Diagonal 1l";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT11_DEF
+{
+    Text = "Diagonal 1r";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT12_DEF
+{
+    Text = "Diagonal 2l";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT13_DEF
+{
+    Text = "Diagonal 2r";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT14_DEF
+{
+    Text = "Diagonal 3l";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT15_DEF
+{
+    Text = "Diagonal 3r";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT16_DEF
+{
+    Text = "Diagonal 4l";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT17_DEF
+{
+    Text = "Diagonal 4r";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT18_DEF
+{
+    Text = "Diagonal Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT19_DEF
+{
+    Text = "Diagonal Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT20_DEF
+{
+    Text = "Diagonal Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT21_DEF
+{
+    Text = "Diagonal Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT22_DEF
+{
+    Text = "Diagonal Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT23_DEF
+{
+    Text = "Diagonal Violet";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT24_DEF
+{
+    Text = "From a Corner";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT25_DEF
+{
+    Text = "From a Corner, Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT26_DEF
+{
+    Text = "From a Corner, Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT27_DEF
+{
+    Text = "From a Corner, Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT28_DEF
+{
+    Text = "From a Corner, Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT29_DEF
+{
+    Text = "From a Corner, Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT30_DEF
+{
+    Text = "From a Corner, Violet";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT31_DEF
+{
+    Text = "From the Middle";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT32_DEF
+{
+    Text = "From the Middle, Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT33_DEF
+{
+    Text = "From the Middle, Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT34_DEF
+{
+    Text = "From the Middle, Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT35_DEF
+{
+    Text = "From the Middle, Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT36_DEF
+{
+    Text = "From the Middle, Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT37_DEF
+{
+    Text = "From the Middle, Violet";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT38_DEF
+{
+    Text = "Horizontal";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT39_DEF
+{
+    Text = "Horizontal Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT40_DEF
+{
+    Text = "Horizontal Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT41_DEF
+{
+    Text = "Horizontal Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT42_DEF
+{
+    Text = "Horizontal Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT43_DEF
+{
+    Text = "Horizontal Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT44_DEF
+{
+    Text = "Horizontal Violet";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT45_DEF
+{
+    Text = "Radial";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT46_DEF
+{
+    Text = "Radial Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT47_DEF
+{
+    Text = "Radial Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT48_DEF
+{
+    Text = "Radial Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT49_DEF
+{
+    Text = "Radial Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT50_DEF
+{
+    Text = "Radial Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT51_DEF
+{
+    Text = "Radial Violet";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT52_DEF
+{
+    Text = "Vertical";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT53_DEF
+{
+    Text = "Vertical Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT54_DEF
+{
+    Text = "Vertical Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT55_DEF
+{
+    Text = "Vertical Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT56_DEF
+{
+    Text = "Vertical Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT57_DEF
+{
+    Text = "Vertical Turquoise";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT58_DEF
+{
+    Text = "Vertical Violet";
+};
+
 String RID_SVXSTR_GRDT0
 {
     Text [ en-US ] = "Gradient";
@@ -594,6 +888,259 @@ String RID_SVXSTR_GRDT8
 String RID_SVXSTR_GRDT9
 {
     Text [ en-US ] = "Axial light red/white";
+};
+
+String RID_SVXSTR_GRDT10
+{
+    Text [ en-US ] = "Diagonal 1l";
+    Text [ x-comment ] = "l means left";
+};
+
+String RID_SVXSTR_GRDT11
+{
+    Text [ en-US ] = "Diagonal 1r";
+    Text [ x-comment ] = "r means right";
+};
+
+String RID_SVXSTR_GRDT12
+{
+    Text [ en-US ] = "Diagonal 2l";
+    Text [ x-comment ] = "l means left";
+};
+
+String RID_SVXSTR_GRDT13
+{
+    Text [ en-US ] = "Diagonal 2r";
+    Text [ x-comment ] = "r means right";
+};
+
+String RID_SVXSTR_GRDT14
+{
+    Text [ en-US ] = "Diagonal 3l";
+    Text [ x-comment ] = "l means left";
+};
+
+String RID_SVXSTR_GRDT15
+{
+    Text [ en-US ] = "Diagonal 3r";
+    Text [ x-comment ] = "r means right";
+};
+
+String RID_SVXSTR_GRDT16
+{
+    Text [ en-US ] = "Diagonal 4l";
+    Text [ x-comment ] = "l means left";
+};
+
+String RID_SVXSTR_GRDT17
+{
+    Text [ en-US ] = "Diagonal 4r";
+    Text [ x-comment ] = "r means right";
+};
+
+String RID_SVXSTR_GRDT18
+{
+    Text [ en-US ] = "Diagonal Blue";
+};
+
+String RID_SVXSTR_GRDT19
+{
+    Text [ en-US ] = "Diagonal Green";
+};
+
+String RID_SVXSTR_GRDT20
+{
+    Text [ en-US ] = "Diagonal Orange";
+};
+
+String RID_SVXSTR_GRDT21
+{
+    Text [ en-US ] = "Diagonal Red";
+};
+
+String RID_SVXSTR_GRDT22
+{
+    Text [ en-US ] = "Diagonal Turquoise";
+};
+
+String RID_SVXSTR_GRDT23
+{
+    Text [ en-US ] = "Diagonal Violet";
+};
+
+String RID_SVXSTR_GRDT24
+{
+    Text [ en-US ] = "From a Corner";
+};
+
+String RID_SVXSTR_GRDT25
+{
+    Text [ en-US ] = "From a Corner, Blue";
+};
+
+String RID_SVXSTR_GRDT26
+{
+    Text [ en-US ] = "From a Corner, Green";
+};
+
+String RID_SVXSTR_GRDT27
+{
+    Text [ en-US ] = "From a Corner, Orange";
+};
+
+String RID_SVXSTR_GRDT28
+{
+    Text [ en-US ] = "From a Corner, Red";
+};
+
+String RID_SVXSTR_GRDT29
+{
+    Text [ en-US ] = "From a Corner, Turquoise";
+};
+
+String RID_SVXSTR_GRDT30
+{
+    Text [ en-US ] = "From a Corner, Violet";
+};
+
+String RID_SVXSTR_GRDT31
+{
+    Text [ en-US ] = "From the Middle";
+};
+
+String RID_SVXSTR_GRDT32
+{
+    Text [ en-US ] = "From the Middle, Blue";
+};
+
+String RID_SVXSTR_GRDT33
+{
+    Text [ en-US ] = "From the Middle, Green";
+};
+
+String RID_SVXSTR_GRDT34
+{
+    Text [ en-US ] = "From the Middle, Orange";
+};
+
+String RID_SVXSTR_GRDT35
+{
+    Text [ en-US ] = "From the Middle, Red";
+};
+
+String RID_SVXSTR_GRDT36
+{
+    Text [ en-US ] = "From the Middle, Turquoise";
+};
+
+String RID_SVXSTR_GRDT37
+{
+    Text [ en-US ] = "From the Middle, Violet";
+};
+
+String RID_SVXSTR_GRDT38
+{
+    Text [ en-US ] = "Horizontal";
+};
+
+String RID_SVXSTR_GRDT39
+{
+    Text [ en-US ] = "Horizontal Blue";
+};
+
+String RID_SVXSTR_GRDT40
+{
+    Text [ en-US ] = "Horizontal Green";
+};
+
+String RID_SVXSTR_GRDT41
+{
+    Text [ en-US ] = "Horizontal Orange";
+};
+
+String RID_SVXSTR_GRDT42
+{
+    Text [ en-US ] = "Horizontal Red";
+};
+
+String RID_SVXSTR_GRDT43
+{
+    Text [ en-US ] = "Horizontal Turquoise";
+};
+
+String RID_SVXSTR_GRDT44
+{
+    Text [ en-US ] = "Horizontal Violet";
+};
+
+String RID_SVXSTR_GRDT45
+{
+    Text [ en-US ] = "Radial";
+};
+
+String RID_SVXSTR_GRDT46
+{
+    Text [ en-US ] = "Radial Blue";
+};
+
+String RID_SVXSTR_GRDT47
+{
+    Text [ en-US ] = "Radial Green";
+};
+
+String RID_SVXSTR_GRDT48
+{
+    Text [ en-US ] = "Radial Orange";
+};
+
+String RID_SVXSTR_GRDT49
+{
+    Text [ en-US ] = "Radial Red";
+};
+
+String RID_SVXSTR_GRDT50
+{
+    Text [ en-US ] = "Radial Turquoise";
+};
+
+String RID_SVXSTR_GRDT51
+{
+    Text [ en-US ] = "Radial Violet";
+};
+
+String RID_SVXSTR_GRDT52
+{
+    Text [ en-US ] = "Vertical";
+};
+
+String RID_SVXSTR_GRDT53
+{
+    Text [ en-US ] = "Vertical Blue";
+};
+
+String RID_SVXSTR_GRDT54
+{
+    Text [ en-US ] = "Vertical Green";
+};
+
+String RID_SVXSTR_GRDT55
+{
+    Text [ en-US ] = "Vertical Orange";
+};
+
+String RID_SVXSTR_GRDT56
+{
+    Text [ en-US ] = "Vertical Red";
+};
+
+String RID_SVXSTR_GRDT57
+{
+    Text [ en-US ] = "Vertical Turquoise";
+};
+
+String RID_SVXSTR_GRDT58
+{
+    Text [ en-US ] = "Vertical Violet";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -654,7 +1201,7 @@ String RID_SVXSTR_HATCH9_DEF
 /* do not translate */
 String RID_SVXSTR_HATCH10_DEF
 {
-    Text = "Hatch";
+    Text = "Hatching";
 };
 
 String RID_SVXSTR_HATCH0
@@ -974,6 +1521,12 @@ String RID_SVXSTR_DASH11_DEF
     Text = "Dash";
 };
 
+/* do not translate */
+String RID_SVXSTR_DASH12_DEF
+{
+    Text = "Line Style";
+};
+
 String RID_SVXSTR_DASH0
 {
     Text [ en-US ] = "Ultrafine dashed";
@@ -1021,6 +1574,11 @@ String RID_SVXSTR_DASH10
 String RID_SVXSTR_DASH11
 {
     Text [ en-US ] = "Dashed";
+};
+
+String RID_SVXSTR_DASH12
+{
+    Text [ en-US ] = "Line Style";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1089,6 +1647,12 @@ String RID_SVXSTR_LEND11_DEF
     Text = "Arrow";
 };
 
+/* do not translate */
+String RID_SVXSTR_LEND12_DEF
+{
+    Text = "Arrowhead";
+};
+
 String RID_SVXSTR_LEND0
 {
     Text [ en-US ] = "Arrow concave";
@@ -1136,6 +1700,11 @@ String RID_SVXSTR_LEND10
 String RID_SVXSTR_LEND11
 {
     Text [ en-US ] = "Arrow";
+};
+
+String RID_SVXSTR_LEND12
+{
+    Text [ en-US ] = "Arrowhead";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
