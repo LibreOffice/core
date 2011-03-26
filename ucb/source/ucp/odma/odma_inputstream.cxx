@@ -28,16 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#ifdef WNT
-#include <windows.h>
-#endif
-#include "odma_inputstream.hxx"
-#include "com/sun/star/io/IOException.hpp"
+##include "com/sun/star/io/IOException.hpp"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <cppuhelper/implbase1.hxx>
+ifdef WNT
+#include <windows.h>
+#endif
+#include "odma_inputstream.hxx"
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
 

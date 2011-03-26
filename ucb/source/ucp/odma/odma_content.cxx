@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#ifdef WNT
-#include <windows.h>
-#endif
 #include <osl/diagnose.h>
-#include "odma_contentprops.hxx"
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -56,7 +52,11 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#ifdef WNT
+#include <windows.h>
+#endif
 #include "odma_content.hxx"
+#include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
 #include "odma_resultset.hxx"
 #include "odma_inputstream.hxx"

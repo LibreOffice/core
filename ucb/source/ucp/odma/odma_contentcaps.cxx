@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#ifdef WNT
-#include <windows.h>
-#endif
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -41,6 +38,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#ifdef WNT
+#include <windows.h>
+#endif
 #include "odma_content.hxx"
 
 using namespace com::sun::star;
