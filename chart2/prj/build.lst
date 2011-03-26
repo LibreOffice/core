@@ -24,4 +24,5 @@ ch  chart2\source\controller\chartapiwrapper	nmake   -   all ch_source_controlle
 ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_inc NULL
 ch	chart2\source\controller\menus				nmake	-	all	ch_source_controller_menus ch_inc NULL
 ch	chart2\prj									get		-	all	ch_prj NULL
-ch	chart2\qa\unoapi                            nmake   -   all ch_qa_unoapi NULL
+# fd#35693 disabled because it hangs on exit
+#ch	chart2\qa\unoapi                            nmake   -   all ch_qa_unoapi NULL
