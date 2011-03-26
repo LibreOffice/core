@@ -10,5 +10,5 @@ ut	unotools\source\i18n					nmake	-	all	ut_i18n ut_inc NULL
 ut	unotools\source\property				nmake	-	all	ut_property ut_inc NULL
 ut	unotools\source\accessibility				nmake	-	all	ut_accessibility ut_inc NULL
 ut	unotools\util						nmake	-	all	ut_util ut_config ut_i18n ut_misc ut_procfact ut_streaming ut_ucbhelper ut_property ut_accessibility NULL
-
-ut	unotools\qa\complex\tempfile				nmake	-	all	ut_qa_complex ut_util NULL
+# fd#35693 disabled because it hangs on exit
+#ut	unotools\qa\complex\tempfile				nmake	-	all	ut_qa_complex ut_util NULL
