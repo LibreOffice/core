@@ -38,6 +38,14 @@ PKGCONFIG_MODULES=gtk+-2.0
 GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
+.IF "$(USE_GMAKE)" != "1"
+SC_COMPONENTS:=sc scd
+SM_COMPONENTS:=sm smd vbaobj
+.ELSE
+SC_COMPONENTS:= component/sc/util/sc component/sc/util/scd component/sc/util/vbaobj
+SM_COMPONENTS:= component/starmath/util/sm component/starmath/util/smd
+.END
+
 my_components = \
     abp \
     adabasui \
@@ -136,8 +144,7 @@ my_components = \
     rptxml \
     sax \
     sb \
-    sc \
-    scd \
+    $(SC_COMPONENTS)\
     scn \
     scriptframe \
     sd \
@@ -146,8 +153,7 @@ my_components = \
     sdd \
     simplecanvas \
     slideshow \
-    sm \
-    smd \
+    $(SM_COMPONENTS)\
     solver \
     spell \
     spl \
@@ -171,7 +177,6 @@ my_components = \
     updchk.uno \
     utl \
     uui \
-    vbaobj \
     vbaevents \
     vcl \
     vclcanvas \
