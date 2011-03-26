@@ -29,13 +29,14 @@
 #define _DEFLATER_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include "packagedllapi.hxx"
 
 extern "C"
 {
     typedef struct z_stream_s z_stream;
 }
 
-class Deflater
+class DLLPUBLIC_PACKAGE Deflater
 {
 protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;

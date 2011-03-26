@@ -5,3 +5,6 @@
 ..\dtd\*.dtd %_DEST%\bin%_EXT%\*.*
 ..\%__SRC%\misc\package2.component %_DEST%\xml%_EXT%\package2.component
 ..\%__SRC%\misc\xstor.component %_DEST%\xml%_EXT%\xstor.component
+..\inc\Inflater.hxx %_DEST%\inc%_EXT%\package\Inflater.hxx
+..\inc\Deflater.hxx %_DEST%\inc%_EXT%\package\Deflater.hxx
+..\inc\packagedllapi.hxx %_DEST%\inc%_EXT%\package\packagedllapi.hxx
