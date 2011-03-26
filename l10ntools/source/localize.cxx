@@ -65,7 +65,7 @@ const char *ExeTable[][5] = {
     { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "xhp", "helpex", " -e", "negative", "noiso" },
-       { "properties", "jpropex", " -e", "negative", "noiso" },
+// unused       { "properties", "jpropex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
