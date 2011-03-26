@@ -35,7 +35,6 @@
 #include <tools/solar.h>
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/datetime.hxx>
 
