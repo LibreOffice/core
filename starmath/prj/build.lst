@@ -6,5 +6,6 @@ sm	starmath\res							get		-	all	sm_res NULL
 sm	starmath\sdi							nmake	-	all	sm_sdi NULL
 sm	starmath\source							nmake	-	all	sm_sorce sm_sdi sm_inc NULL
 sm	starmath\util							nmake	-	all	sm_util sm_sorce NULL
-sm	starmath\qa\unoapi						nmake	-	all sm_qa_unoapi NULL
+# fd#35693 disabled because it hangs on exit
+#sm	starmath\qa\unoapi						nmake	-	all sm_qa_unoapi NULL
 sm	starmath\qa\cppunit						nmake	-	u sm_qa_cppunit sm_util NULL
