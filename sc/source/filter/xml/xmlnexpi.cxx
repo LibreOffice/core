@@ -87,7 +87,6 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 
             ScRangeData* pData = new ScRangeData(
                 mpDoc, p->sName, p->sContent, aPos, RT_NAME, p->eGrammar);
-            pData->SetIndex(SAL_MAX_UINT16);
             mrRangeName.insert(pData);
         }
     }
