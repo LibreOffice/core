@@ -56,9 +56,7 @@ RESLIB1LIST=\
 RESLIB1NAME=sc
 RESLIB1IMAGES=\
     $(PRJ)$/res					\
-    $(PRJ)$/res/imglst/apptbx	\
-    $(PRJ)$/res/imglst/dbgui	\
-    $(PRJ)$/res/imglst/navipi
+    $(PRJ)$/imglst
 
 RESLIB1SRSFILES=\
     $(RESLIB1LIST)
