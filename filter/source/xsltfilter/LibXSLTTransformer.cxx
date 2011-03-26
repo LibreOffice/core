@@ -39,9 +39,13 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xmlIO.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <libxml/xmlstring.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/variables.h>
+#include <libxslt/extensions.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -62,6 +66,7 @@
 #include <com/sun/star/io/XStreamListener.hpp>
 
 #include <LibXSLTTransformer.hxx>
+#include <OleHandler.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -93,6 +98,9 @@ namespace XSLT
 
     const sal_Int32 Reader::INPUT_BUFFER_SIZE = _INPUT_BUFFER_SIZE;
 
+    /**
+     * ParserInputBufferCallback forwards IO call-backs to libxml stream IO.
+     */
     struct ParserInputBufferCallback
     {
         static int
@@ -108,6 +116,9 @@ namespace XSLT
             return tmp->closeInput();
         }
     };
+    /**
+     * ParserOutputBufferCallback forwards IO call-backs to libxml stream IO.
+     */
     struct ParserOutputBufferCallback
     {
         static int
@@ -121,6 +132,99 @@ namespace XSLT
         {
             Reader * tmp = static_cast<Reader*> (context);
             return tmp->closeOutput();
+        }
+    };
+    /**
+     * ExtFuncOleCB forwards XPath extension function calls registers with libxslt to the OleHandler instance that actually
+     * provides the implementation for those functions.
+     *
+     * The OLE extension module currently supplies to functions
+     * insertByName: registers an OLE object to be later inserted into the output tree.
+     * getByName: reads a previously registered OLE object and returns a base64 encoded string representation.
+     */
+    struct ExtFuncOleCB
+    {
+        static void *
+        init(xsltTransformContextPtr, const xmlChar*)
+        {
+            return NULL;
+        }
+        static void
+        insertByName(xmlXPathParserContextPtr ctxt, int nargs)
+        {
+            xsltTransformContextPtr tctxt;
+            void *data;
+            if (nargs != 2) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "insertByName: requires exactly 2 arguments\n");
+                return;
+            }
+            tctxt = xsltXPathGetTransformContext(ctxt);
+            if (tctxt == NULL) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "xsltExtFunctionTest: failed to get the transformation context\n");
+                return;
+            }
+            // XXX: someone with better knowledge of libxslt might come up with a better
+            // idea to pass the OleHandler than by attaching it to tctxt->_private. See also
+            // below.
+            data = tctxt->_private;
+            if (data == NULL) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "xsltExtFunctionTest: failed to get module data\n");
+                return;
+            }
+            OleHandler * oh = static_cast<OleHandler*> (data);
+
+            xmlXPathObjectPtr value = valuePop(ctxt);
+            value = ensureStringValue(value, ctxt);
+            xmlXPathObjectPtr streamName = valuePop(ctxt);
+            streamName = ensureStringValue(streamName, ctxt);
+
+            oh->insertByName(::rtl::OUString::createFromAscii((sal_Char*) streamName->stringval), ::rtl::OString((sal_Char*) value->stringval));
+            valuePush(ctxt, xmlXPathNewCString(""));
+        }
+
+        static xmlXPathObjectPtr ensureStringValue(xmlXPathObjectPtr obj, const xmlXPathParserContextPtr ctxt)
+        {
+            if (obj->type != XPATH_STRING) {
+                valuePush(ctxt, obj);
+                xmlXPathStringFunction(ctxt, 1);
+                obj = valuePop(ctxt);
+            }
+            return obj;
+        }
+
+        static void getByName(xmlXPathParserContextPtr ctxt, int nargs)
+        {
+            xsltTransformContextPtr tctxt;
+            void *data;
+            if (nargs != 1) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "getByName: requires exactly 1 argument\n");
+                return;
+            }
+
+            tctxt = xsltXPathGetTransformContext(ctxt);
+            if (tctxt == NULL) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "xsltExtFunctionTest: failed to get the transformation context\n");
+                return;
+            }
+            // XXX: someone with better knowledge of libxslt might come up with a better
+            // idea to pass the OleHandler than by attaching it to tctxt->_private
+            data = tctxt->_private;
+            if (data == NULL) {
+                xsltGenericError(xsltGenericErrorContext,
+                    "xsltExtFunctionTest: failed to get module data\n");
+                return;
+            }
+            OleHandler * oh = static_cast<OleHandler*> (data);
+            xmlXPathObjectPtr streamName = valuePop(ctxt);
+            streamName = ensureStringValue(streamName, ctxt);
+            const OString content = oh->getByName(::rtl::OUString::createFromAscii((sal_Char*) streamName->stringval));
+            valuePush(ctxt, xmlXPathNewCString(content.getStr()));
+            xmlXPathFreeObject(streamName);
         }
     };
 
@@ -218,9 +322,12 @@ namespace XSLT
                 (const xmlChar *) m_transformer->getStyleSheetURL().getStr());
         xmlDocPtr result = NULL;
         xsltTransformContextPtr tcontext = NULL;
+        registerExtensionModule();
+        OleHandler* oh = new OleHandler(m_transformer->getServiceFactory());
         if (styleSheet)
             {
                 tcontext = xsltNewTransformContext(styleSheet, doc);
+                tcontext->_private = static_cast<void *> (oh);
                 xsltQuoteUserParams(tcontext, &params[0]);
                 result = xsltApplyStylesheetUser(styleSheet, doc, 0, 0, 0,
                         tcontext);
@@ -249,19 +356,33 @@ namespace XSLT
                 m_transformer->error(msg);
             }
         closeOutput();
+        delete(oh);
         xsltFreeStylesheet(styleSheet);
         xsltFreeTransformContext(tcontext);
         xmlFreeDoc(doc);
         xmlFreeDoc(result);
     }
-    ;
 
     void
     Reader::onTerminated()
     {
         m_terminated = true;
     }
-    ;
+    void
+    Reader::registerExtensionModule()
+    {
+        const xmlChar* oleModuleURI = (const xmlChar *) EXT_MODULE_OLE_URI;
+        xsltRegisterExtModule(oleModuleURI, &ExtFuncOleCB::init, NULL);
+        xsltRegisterExtModuleFunction(
+                                 (const xmlChar*) "insertByName",
+                                 oleModuleURI,
+                                 &ExtFuncOleCB::insertByName);
+        xsltRegisterExtModuleFunction(
+                                (const xmlChar*) "getByName",
+                                oleModuleURI,
+                                 &ExtFuncOleCB::getByName);
+
+    }
 
     Reader::~Reader()
     {

@@ -25,12 +25,8 @@
   for a copy of the LGPLv3 License.
 
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xalan="http://xml.apache.org/xalan" xmlns:oleextracter="MyOleExtracter" xmlns:ole="java:XSLTFilterOLEExtracter" xmlns:java="http://saxon.sf.net/java-type" exclude-result-prefixes="w wx aml o dt v xalan ole oleextracter java" extension-element-prefixes="oleextracter">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ole="http://libreoffice.org/2011/xslt/ole" exclude-result-prefixes="w wx aml o dt v">
     <xsl:include href="wordml2ooo_custom_draw.xsl"/>
-    <xsl:include href="wordml2ooo_path.xsl"/>
-    <xsl:param name="oleExtractor" as="java:com.sun.star.comp.xsltfilter.XSLTFilterOLEExtracter" select="ole:new()"/>
-    <xsl:param name="XMultiServiceFactory" as="java:com.sun.star.lang.XMultiServiceFactory" select="ole:init($oleExtractor,  'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>
-
     
     <xsl:key name="imagedata" match="w:binData" use="@w:name"/>
     <xsl:key name="shapetype" match="v:shapetype" use="concat('#', @id)"/>
@@ -581,7 +577,6 @@
                             </xsl:when>
                         </xsl:choose>
                         <xsl:if test="parent::w:pict/o:OLEObject">
-                            <xsl:variable name="style" select="concat(@style, ';')"/>
                             <xsl:variable name="width" select="substring-before( substring-after($style,'width:') ,';')"/>
                             <xsl:variable name="height" select="substring-before(substring-after($style,'height:'),';')"/>
                             <xsl:attribute name="draw:visible-area-left">0cm</xsl:attribute>
@@ -1642,43 +1637,16 @@
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:docOleData" mode="init">
-        <xsl:choose>
-            <xsl:when test="element-available('oleextracter:init')">
-                <oleextracter:init UNOURL="uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="ole:init($oleExtractor, 'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>                    
-            </xsl:otherwise>                
-        </xsl:choose>
         <xsl:apply-templates select="w:binData[@w:name='oledata.mso']" mode="oledata.mso"/>
     </xsl:template>
-    <xsl:template match="w:docOleData" mode="exit">
-        <oleextracter:exit/>
-    </xsl:template>
     <xsl:template match="w:binData" mode="oledata.mso">
-       <!--  <xsl:choose>
-            <xsl:when test="element-available('oleextracter:getByName')">
-                <xsl:variable name="tmp" select="oleextracter:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>
-            </xsl:when>
-            <xsl:otherwise>-->
-                <xsl:variable name="tmp" select="ole:insertByName($oleExtractor,'oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>                
-       <!--      </xsl:otherwise>                
-        </xsl:choose>      -->  
+           <xsl:variable name="tmp" select="ole:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>                
     </xsl:template>
     <xsl:template match="o:OLEObject " mode="output">
         <!-- depends on i43230,we can uncomment this code or find another way after i43230 got fixed -->
         <draw:object-ole>
             <xsl:element name="office:binary-data">
-            <!-- 
-                <xsl:choose>
-                    <xsl:when test="element-available('oleextracter:getByName')">
-                      <xsl:value-of select="translate(oleextracter:getByName(@ObjectID),'&#13;','')"/>
-                    </xsl:when>
-                    <xsl:otherwise> -->
-                       <xsl:value-of select="translate(ole:getByName($oleExtractor,@ObjectID),'&#13;','')"/>            
-                    <!-- 
-                    </xsl:otherwise>                
-                </xsl:choose> -->                         
+                <xsl:value-of select="translate(ole:getByName(@ObjectID),'&#13;','')"/>            
             </xsl:element>
         </draw:object-ole>
     </xsl:template>
@@ -2207,7 +2175,4 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xalan:component prefix="oleextracter" elements="init exit" functions="getByName insertByName">
-        <xalan:script lang="javaclass" src="xalan://com.sun.star.comp.xsltfilter.XSLTFilterOLEExtracter"/>
-    </xalan:component>
 </xsl:stylesheet>

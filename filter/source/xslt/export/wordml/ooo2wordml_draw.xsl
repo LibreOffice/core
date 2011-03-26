@@ -25,11 +25,9 @@
   for a copy of the LGPLv3 License.
 
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xalan="http://xml.apache.org/xalan" xmlns:oleextracter="MyOleExtracter" xmlns:ole="java:XSLTFilterOLEExtracter" xmlns:java="http://saxon.sf.net/java-type" exclude-result-prefixes="office table style text draw svg dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw xalan ole oleextracter java" extension-element-prefixes="oleextracter">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ole="http://libreoffice.org/2011/xslt/ole" exclude-result-prefixes="office table style text draw svg dc config xlink meta oooc dom ooo chart math dr3d form script ooow ole">
 	<xsl:include href="ooo2wordml_custom_draw.xsl"/>
-	<xsl:param name="oleExtractor" as="java:com.sun.star.comp.xsltfilter.XSLTFilterOLEExtracter" select="ole:new()"/>
-	<xsl:param name="XMultiServiceFactory" as="java:com.sun.star.lang.XMultiServiceFactory" select="ole:init($oleExtractor,  'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>
-
+	
 	<xsl:key name="stroke-dash-style" match="draw:stroke-dash" use="@draw:name"/>
 	<xsl:key name="fill-image" match="draw:fill-image" use="@draw:name"/>
 	<xsl:key name="draw-gradient" match="draw:gradient " use="@draw:name"/>
@@ -1738,135 +1736,24 @@
 			<xsl:when test="$arrow-size &gt; 0">Narrow</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-	<xsl:template name="ConvertMeasure">
-		<xsl:param name="TargetMeasure" select="'cm'"/>
-		<xsl:param name="TargetTruncate" select=" 'all' "/>
-		<xsl:param name="value"/>
-		<!-- When TargetTruncate ='all'  it returns the number whichsoever the return value is negative or positive
-			   When TargetTruncate ='nonNegative' it only returns nonNegative number, all negative number to be returned as 0
-			   When TargetTruncate ='positive" it only returns positive number, all nonPositive number to be returned as 1 -->
-		<xsl:variable name="return_value">
-			<xsl:choose>
-				<!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
-				<xsl:when test="string-length(translate(string($value),'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ','')) = 0">0</xsl:when>
-				<xsl:when test="string-length(translate(string($value),'- .0123456789','')) = 0">
-					<xsl:value-of select="$value"/>
-				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'cm'">
-					<xsl:call-template name="convert2cm">
-						<xsl:with-param name="value" select="$value"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'pt'">
-					<xsl:call-template name="convert2pt">
-						<xsl:with-param name="value" select="$value"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'twip'">
-					<xsl:call-template name="convert2twip">
-						<xsl:with-param name="value" select="$value"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'in'">
-					<xsl:call-template name="convert2in">
-						<xsl:with-param name="value" select="$value"/>
-					</xsl:call-template>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="$TargetTruncate = 'all' ">
-				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
-						<xsl:value-of select=" '0' "/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$return_value"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:when test="$TargetTruncate = 'nonNegative' ">
-				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
-						<xsl:value-of select=" '0' "/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<xsl:when test=" $return_value &lt; 0  ">
-								<xsl:value-of select=" '0' "/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="$return_value"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:when test="$TargetTruncate = 'positive' ">
-				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
-						<xsl:value-of select=" '1' "/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<xsl:when test=" $return_value &lt;= 0 ">
-								<xsl:value-of select=" '1' "/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="$return_value"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-	<xsl:template name="Add-With-Measure">
-		<xsl:param name="value1"/>
-		<xsl:param name="value2"/>
-		<xsl:param name="TargetMeasure" select="'in'"/>
-		<xsl:variable name="number-value1">
-			<xsl:call-template name="ConvertMeasure">
-				<xsl:with-param name="value" select="$value1"/>
-				<xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="number-value2">
-			<xsl:call-template name="ConvertMeasure">
-				<xsl:with-param name="value" select="$value2"/>
-				<xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:value-of select="$number-value1 + $number-value2"/>
-	</xsl:template>
+
 	<xsl:template name="export-oledata">
 		<xsl:if test="//draw:object-ole[1]">
-			<xsl:choose>
-				<xsl:when test="element-available('oleextracter:init')">
-					<oleextracter:init UNOURL="uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="ole:init($XMultiServiceFactory, 'uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager')"/>
-				</xsl:otherwise>
-			</xsl:choose>
 			<xsl:apply-templates select="//draw:object-ole" mode="oledata.mso"/>
 			<w:docOleData>
 				<w:binData w:name="oledata.mso">
 					<xsl:if test="function-available('ole:getByName')">
-						<xsl:value-of select="translate(ole:getByName($oleExtractor, 'oledata.mso'),'&#10;&#13;&#32;','')"/>
+						<xsl:value-of select="translate(ole:getByName('oledata.mso'),'&#10;&#13;&#32;','')"/>
 					</xsl:if>
 				</w:binData>
 			</w:docOleData>
-			<xsl:if test="function-available('ole:exit')">
-				<xsl:value-of select="ole:exit($oleExtractor)"/>
-			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="draw:object-ole" mode="oledata.mso">
 		<xsl:variable name="stream-name">
 			<xsl:apply-templates select="." mode="get-number"/>
 		</xsl:variable>
-		<xsl:variable name="tmp" select="ole:insertByName($oleExtractor, $stream-name, translate(office:binary-data/text(),'&#10;&#13;&#32;','' )  )"/>
+		<xsl:variable name="tmp" select="ole:insertByName($stream-name, translate(office:binary-data/text(),'&#10;&#13;&#32;','' )  )"/>
 	</xsl:template>
 	<xsl:template match="draw:object-ole" mode="output">
 		<xsl:param name="ShapeID"/>
@@ -1879,7 +1766,4 @@
 		<xsl:number from="/office:document" level="any" count="draw:object-ole" format="1"/>
 	</xsl:template>
 	<xsl:template match="draw:object-ole"/>
-	<xalan:component prefix="oleextracter" elements="init exit" functions="getByName insertByName">
-		<xalan:script lang="javaclass" src="xalan://com.sun.star.comp.xsltfilter.XSLTFilterOLEExtracter"/>
-	</xalan:component>
 </xsl:stylesheet>

@@ -40,6 +40,7 @@
 #include <libxml/tree.h>
 #include <libxml/xmlIO.h>
 #include <libxslt/transform.h>
+#include <libxml/xpathInternals.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -69,6 +70,8 @@ using namespace ::com::sun::star::lang;
 
 using ::std::list;
 using ::std::map;
+
+#define EXT_MODULE_OLE_URI "http://libreoffice.org/2011/xslt/ole"
 
 namespace XSLT
 {
@@ -156,6 +159,11 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters();
 
+        virtual SAL_CALL
+        Reference<XMultiServiceFactory> getServiceFactory() {
+            return m_rServiceFactory;
+        }
+
     };
 
     /*
@@ -192,6 +200,8 @@ namespace XSLT
         run();
         virtual void SAL_CALL
         onTerminated();
+        void SAL_CALL
+        registerExtensionModule();
     };
 
 }
