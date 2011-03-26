@@ -45,5 +45,6 @@ sd	sd\source\ui\framework\factories       	nmake	-	all sd_framework_factories sd
 sd	sd\source\ui\framework\tools           	nmake	-	all sd_framework_tools sd_inc NULL
 sd	sd\source\ui\annotations				nmake	-	all sd_uiannotations sd_inc NULL
 sd	sd\util									nmake	-	all	sd_util sd_app sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_filter_xml sd_html sd_ppt sd_accessibility sd_animations sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes sd_controller sd_table sd_slideshow sd_presenter sd_undo sd_helper sd_framework_configuration sd_framework_module sd_framework_tools sd_framework_factories sd_text sd_annotations sd_uiannotations NULL
-sd  sd\qa\unoapi 							nmake 	- 	all sd_qa_unoapi NULL
+# fd#35693 disabled because it hangs on exit
+#sd  sd\qa\unoapi 							nmake 	- 	all sd_qa_unoapi NULL
 sd	sd\qa\unit								nmake	-	all	sd_qa_cppunit sd_util NULL
