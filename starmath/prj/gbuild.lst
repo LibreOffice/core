@@ -1,0 +1,2 @@
+sm	starmath	: LIBXSLT:libxslt TRANSLATIONS:translations svx ure NULL
+sm	starmath\prj							nmake	-	all	sm_prj NULL
