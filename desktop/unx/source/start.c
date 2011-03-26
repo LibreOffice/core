@@ -878,6 +878,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int fd = 0;
     sal_Bool bSentArgs = sal_False;
+    const char* pUsePlugin;
     rtl_uString *pPipePath = NULL;
     Args *args;
 
@@ -897,6 +898,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     /* we can't load and render it anyway */
     args->bInhibitSplash = sal_True;
 #endif
+
+    pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+    if ( pUsePlugin && !strcmp(pUsePlugin, "svp") )
+        args->bInhibitSplash = sal_True;
 
     pPipePath = get_pipe_path( args->pAppPath );
 
