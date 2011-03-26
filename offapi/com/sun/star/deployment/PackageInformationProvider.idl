@@ -24,6 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_deployment_XPackageInformationProvider_idl__
+#define __com_sun_star_deployment_XPackageInformationProvider_idl__
 
 #include <com/sun/star/deployment/XPackageInformationProvider.idl>
 
@@ -37,4 +39,4 @@ module com { module sun { module star { module deployment {
 singleton PackageInformationProvider : XPackageInformationProvider;
 
 }; }; }; };
-
+#endif

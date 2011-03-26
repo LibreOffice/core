@@ -24,6 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_deployment_UpdateInformationEntry_idl__
+#define __com_sun_star_deployment_UpdateInformationEntry_idl__
 
 module com { module sun { module star { module xml { module dom {
 interface XElement;
@@ -49,4 +51,4 @@ struct UpdateInformationEntry
 };
 
 }; }; }; };
-
+#endif
