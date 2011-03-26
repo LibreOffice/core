@@ -66,7 +66,7 @@ fi
 # check for wget and md5sum
 wget=
 md5sum=
-curl=
+curl=`which curl`
 
 for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     eval "$i --version" > /dev/null 2>&1
@@ -76,19 +76,6 @@ for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/w
         break
     fi
 done
-
-if [ -z "$wget" ]; then
-    for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
-    # mac curl returns "2" on --version 
-    #    eval "$i --version" > /dev/null 2>&1
-    #    ret=$?
-    #    if [ $ret -eq 0 ]; then
-        if [ -x $i ]; then
-            curl=$i
-            break
-        fi
-    done
-fi
 
 if [ -z "$wget" -a -z "$curl" ]; then
     echo "ERROR: neither  wget nor curl found!"
