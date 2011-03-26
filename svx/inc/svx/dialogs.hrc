@@ -657,6 +657,24 @@
 #define RID_SVXSTR_LIBRE_PURPLE_ACCENT_DEF              (RID_SVX_START + 628)
 #define RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF              (RID_SVX_START + 629)
 
+// Tango palette colors
+#define RID_SVXSTR_TANGO_BUTTER                         (RID_SVX_START + 630)
+#define RID_SVXSTR_TANGO_ORANGE                         (RID_SVX_START + 631)
+#define RID_SVXSTR_TANGO_CHOCOLATE                      (RID_SVX_START + 632)
+#define RID_SVXSTR_TANGO_CHAMELEON                      (RID_SVX_START + 633)
+#define RID_SVXSTR_TANGO_SKY_BLUE                       (RID_SVX_START + 634)
+#define RID_SVXSTR_TANGO_PLUM                           (RID_SVX_START + 635)
+#define RID_SVXSTR_TANGO_SCARLET_RED                    (RID_SVX_START + 636)
+#define RID_SVXSTR_TANGO_ALUMINIUM                      (RID_SVX_START + 637)
+#define RID_SVXSTR_TANGO_BUTTER_DEF                     (RID_SVX_START + 638)
+#define RID_SVXSTR_TANGO_ORANGE_DEF                     (RID_SVX_START + 639)
+#define RID_SVXSTR_TANGO_CHOCOLATE_DEF                  (RID_SVX_START + 640)
+#define RID_SVXSTR_TANGO_CHAMELEON_DEF                  (RID_SVX_START + 641)
+#define RID_SVXSTR_TANGO_SKY_BLUE_DEF                   (RID_SVX_START + 642)
+#define RID_SVXSTR_TANGO_PLUM_DEF                       (RID_SVX_START + 643)
+#define RID_SVXSTR_TANGO_SCARLET_RED_DEF                (RID_SVX_START + 644)
+#define RID_SVXSTR_TANGO_ALUMINIUM_DEF                  (RID_SVX_START + 645)
+
 // Default-Gradient-Names
 #define RID_SVXSTR_GRDT0_DEF                 (RID_SVX_START + 2000)
 #define RID_SVXSTR_GRDT1_DEF                 (RID_SVX_START + 2001)

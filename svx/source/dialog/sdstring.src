@@ -1821,6 +1821,94 @@ String RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF
     Text = "Yellow Accent" ;
 };
 
+String RID_SVXSTR_TANGO_BUTTER
+{
+    Text [ en-US ] = "Tango: Butter" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_ORANGE
+{
+    Text [ en-US ] = "Tango: Orange" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_CHOCOLATE
+{
+    Text [ en-US ] = "Tango: Chocolate" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_CHAMELEON
+{
+    Text [ en-US ] = "Tango: Chameleon" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_SKY_BLUE
+{
+    Text [ en-US ] = "Tango: Sky Blue" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_PLUM
+{
+    Text [ en-US ] = "Tango: Plum" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_SCARLET_RED
+{
+    Text [ en-US ] = "Tango: Scarlet Red" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_ALUMINIUM
+{
+    Text [ en-US ] = "Tango: Aluminium" ;
+    Text [ x-comment ] = "Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines" ;
+};
+
+String RID_SVXSTR_TANGO_BUTTER_DEF
+{
+    Text = "Tango: Butter" ;
+};
+
+String RID_SVXSTR_TANGO_ORANGE_DEF
+{
+    Text = "Tango: Orange" ;
+};
+
+String RID_SVXSTR_TANGO_CHOCOLATE_DEF
+{
+    Text = "Tango: Chocolate" ;
+};
+
+String RID_SVXSTR_TANGO_CHAMELEON_DEF
+{
+    Text = "Tango: Chameleon" ;
+};
+
+String RID_SVXSTR_TANGO_SKY_BLUE_DEF
+{
+    Text = "Tango: Sky Blue" ;
+};
+
+String RID_SVXSTR_TANGO_PLUM_DEF
+{
+    Text = "Tango: Plum" ;
+};
+
+String RID_SVXSTR_TANGO_SCARLET_RED_DEF
+{
+    Text = "Tango: Scarlet Red" ;
+};
+
+String RID_SVXSTR_TANGO_ALUMINIUM_DEF
+{
+    Text = "Tango: Aluminium" ;
+};
+
 String RID_SVXSTR_GALLERYPROPS_GALTHEME
 {
     Text [ en-US ] = "Gallery Theme" ;
