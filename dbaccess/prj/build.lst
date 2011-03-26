@@ -26,7 +26,9 @@ ba	dbaccess\source\ui\uno					nmake	-	all	ba_uiuno ba_inc NULL
 ba	dbaccess\source\ui\imagelists			nmake	-	all	ba_uiimglst ba_inc NULL
 ba  dbaccess\util                           nmake   -   all ba_util ba_uiimglst ba_capi ba_cdaccess ba_cmisc ba_crecovery ba_shared ba_uibrowser ba_uiapp ba_uicontrol ba_uidlg ba_uimisc ba_uiquery ba_uitabledesign ba_uirelationdesign ba_uiuno ba_conntools ba_misctools ba_miscres ba_ext_adabasui NULL
 ba  dbaccess\win32\source\odbcconfig        nmake   -   w ba_odbcconfig ba_inc NULL
-ba dbaccess\qa\unoapi nmake - all ba_q_unoapi NULL
+
+# fd#35693 disabled because it hangs on exit
+#ba dbaccess\qa\unoapi nmake - all ba_q_unoapi NULL
 
 # complex tests doesn't work
 # ba dbaccess\qa\complex\dbaccess           nmake   -   all ba_qa_complex NULL
