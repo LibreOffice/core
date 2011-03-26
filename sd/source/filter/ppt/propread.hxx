@@ -110,7 +110,19 @@
 
 // ------------------------------------------------------------------------
 
-class PropEntry;
+struct PropEntry
+{
+    sal_uInt32  mnId;
+    sal_uInt32  mnSize;
+    sal_uInt16  mnTextEnc;
+    sal_uInt8*  mpBuf;
+
+    PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
+    PropEntry( const PropEntry& rProp );
+    ~PropEntry() { delete[] mpBuf; } ;
+
+    const PropEntry& operator=(const PropEntry& rPropEntry);
+};
 
 class PropItem : public SvMemoryStream
 {
@@ -168,7 +180,7 @@ class Section
 
 // ------------------------------------------------------------------------
 
-class PropRead : private List
+class PropRead
 {
         sal_Bool                mbStatus;
         SvStorageStreamRef      mpSvStream;
@@ -178,14 +190,14 @@ class PropRead : private List
         sal_uInt16              mnVersionLo;
         sal_uInt16              mnVersionHi;
         sal_uInt8               mApplicationCLSID[ 16 ];
+        boost::ptr_vector<Section> maSections;
 
         void                    AddSection( Section& rSection );
 
     public:
                                 PropRead( SvStorage& rSvStorage, const String& rName );
-                                ~PropRead();
 
-        PropRead&               operator=( PropRead& rPropRead );
+        PropRead&               operator=( const PropRead& rPropRead );
         const Section*          GetSection( const sal_uInt8* pFMTID );
         sal_Bool                IsValid() const { return mbStatus; };
         void                    Read();

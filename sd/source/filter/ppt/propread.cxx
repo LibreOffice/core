@@ -34,22 +34,6 @@
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 
-// ------------------------------------------------------------------------
-
-struct PropEntry
-{
-    sal_uInt32  mnId;
-    sal_uInt32  mnSize;
-    sal_uInt16  mnTextEnc;
-    sal_uInt8*  mpBuf;
-
-                        PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
-                        PropEntry( const PropEntry& rProp );
-                        ~PropEntry() { delete[] mpBuf; } ;
-
-    const PropEntry&    operator=(const PropEntry& rPropEntry);
-};
-
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
     mnId        ( nId ),
     mnSize      ( nBufSize ),
@@ -631,38 +615,28 @@ PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
 
 void PropRead::AddSection( Section& rSection )
 {
-    Insert( new Section( rSection ), LIST_APPEND );
+    maSections.push_back( new Section( rSection ) );
 }
 
 //  -----------------------------------------------------------------------
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
-    Section* pSection;
-
-    for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
+    boost::ptr_vector<Section>::iterator it;
+    for ( it = maSections.begin(); it != maSections.end(); ++it)
     {
-        if ( memcmp( pSection->GetFMTID(), pFMTID, 16 ) == 0 )
-            break;
+        if ( memcmp( it->GetFMTID(), pFMTID, 16 ) == 0 )
+            return &(*it);
     }
-    return pSection;
-}
-
-//  -----------------------------------------------------------------------
-
-PropRead::~PropRead()
-{
-    for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-        delete pSection;
+    return NULL;
 }
 
 //  -----------------------------------------------------------------------
 
 void PropRead::Read()
 {
-    for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-        delete pSection;
-    Clear();
+    maSections.clear();
+
     if ( mbStatus )
     {
         sal_uInt32  nSections;
@@ -696,10 +670,8 @@ void PropRead::Read()
 
 //  -----------------------------------------------------------------------
 
-PropRead& PropRead::operator=( PropRead& rPropRead )
+PropRead& PropRead::operator=( const PropRead& rPropRead )
 {
-    Section* pSection;
-
     if ( this != &rPropRead )
     {
         mbStatus = rPropRead.mbStatus;
@@ -711,11 +683,7 @@ PropRead& PropRead::operator=( PropRead& rPropRead )
         mnVersionHi = rPropRead.mnVersionHi;
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
-        for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-            delete pSection;
-        Clear();
-        for ( pSection = (Section*)rPropRead.First(); pSection; pSection = (Section*)rPropRead.Next() )
-            Insert( new Section( *pSection ), LIST_APPEND );
+        maSections = rPropRead.maSections.clone();
     }
     return *this;
 }
