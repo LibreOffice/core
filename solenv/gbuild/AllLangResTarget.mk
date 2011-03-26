@@ -140,7 +140,7 @@ $(call gb_SrsTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),SRS,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		cat $(foreach part,$(PARTS),$(if $(strip $(gb_WITH_LANG)),$(call gb_SrsPartMergeTarget_get_target,$(part)),$(call gb_SrsPartTarget_get_target,$(part)))) > $@)
+		cat $^ > $@)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,%) :
