@@ -252,6 +252,7 @@ SCHLIB=-lysch
 SMLIB=-lysm
 OFALIB=-lofa$(DLLPOSTFIX)
 PRXLIB=-llprx2$(DLLPOSTFIX)
+PACKAGE2LIB=-lpackage2
 PAPILIB=-lpap$(DLLPOSTFIX)
 SCLIB=-lsclib
 SDLIB=-lsdlib
