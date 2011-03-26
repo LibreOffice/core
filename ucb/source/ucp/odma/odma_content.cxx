@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <osl/diagnose.h>
 #include "odma_contentprops.hxx"
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>

@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

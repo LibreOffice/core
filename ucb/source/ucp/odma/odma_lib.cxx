@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 #include "odma_lib.hxx"

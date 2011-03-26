@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <ucbhelper/contentidentifier.hxx>
 #include "odma_provider.hxx"
 #include "odma_content.hxx"
