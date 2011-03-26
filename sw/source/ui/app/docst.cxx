@@ -663,7 +663,10 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
                                                     0, *(xTmp.get()), nFamily, bColumn,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
-        if(RET_OK == pDlg->Execute())
+        while (true)
+        {
+            short nButton = pDlg->Execute();
+            if(RET_OK == nButton || RET_APPLY_TEMPLATE == nButton)
         {
             GetWrtShell()->StartAllAction();
 
@@ -726,7 +729,8 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
             // Destroy dialog before EndAction - with page-templates the
             // ItemSet must be destroyed, so that the cursors get removed
             // from Headers/Footers. Otherwise "GPF" happen!!!
-            delete pDlg;
+            if(RET_OK == nButton)
+                delete pDlg;
 
             pDoc->SetModified();
             if( !bModified )    // Bug 57028
@@ -747,6 +751,9 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
             if( !bModified )
                 pDoc->ResetModified();
             delete pDlg;
+        }
+            if(RET_APPLY_TEMPLATE != nButton)
+                break;
         }
     }
     else

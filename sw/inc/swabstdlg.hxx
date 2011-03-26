@@ -323,6 +323,7 @@ public:
 #define RET_EDIT_RESULT_DOC     102
 #define RET_TARGET_CREATED      103
 #define RET_REMOVE_TARGET       104
+#define RET_APPLY_TEMPLATE      105
 
 class SwView;
 class SwMailMergeConfigItem;

@@ -45,6 +45,7 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_Bool        bNewStyle;
 
     DECL_LINK( NumOptionsHdl, PushButton* );
+    DECL_LINK( ApplyHdl, void* );
 
 public:
     SwTemplateDlg(  Window*             pParent,

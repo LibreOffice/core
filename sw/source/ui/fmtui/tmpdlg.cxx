@@ -71,6 +71,7 @@
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
+#include <swabstdlg.hxx>
 
 #include <cmdid.h>
 #include <helpid.h>
@@ -314,10 +315,23 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             OSL_ENSURE(!this, "wrong family");
 
     }
+    EnableApplyButton( true );
+    SetApplyHandler( LINK(this, SwTemplateDlg, ApplyHdl ) );
 }
 
 SwTemplateDlg::~SwTemplateDlg()
 {
+}
+
+IMPL_LINK( SwTemplateDlg, ApplyHdl, void*, pVoid )
+{
+    (void)pVoid; //unused
+    if ( OK_Impl() )
+    {
+        Ok();
+        EndDialog( RET_APPLY_TEMPLATE );
+    }
+    return 0;
 }
 
 short SwTemplateDlg::Ok()
