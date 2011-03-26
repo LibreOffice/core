@@ -49,6 +49,8 @@ TARFILE_MD5=22ad1c8d3fda7e73b0798035f3dd96bc
 
 .IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
 
+.IF "$(OS)" == "MACOSX"
+
 PATCH_FILES=pango-1.28.3.patch
 
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
@@ -62,17 +64,14 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  GLIB_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
                  GLIB_LIBS="-lgthread-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 -lintl"
 CONFIGURE_FLAGS=--with-included-modules=yes
-.IF "$(OS)" == "MACOSX"
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 CONFIGURE_ACTION+="--without-x"
-.ENDIF
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-
-.IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
+
 OUT2LIB+=pango/.libs/libpango-1.0.0.dylib
 OUT2LIB+=pango/.libs/libpangocairo-1.0.0.dylib
 
@@ -107,6 +106,50 @@ OUT2INC+=pango/pango-matrix.h
 OUT2INC+=pango/pango-utils.h
 
 .ELIF "$(OS)"=="WNT"
+
+PATCH_FILES=pango-1.28.3-win32.patch
+ADDITIONAL_FILES=config.h module.defs make.msc glib-mkenums.pl msvc_recommended_pragmas.h
+CONFIGURE_DIR=
+CONFIGURE_ACTION=
+BUILD_DIR=./pango
+BUILD_ACTION=nmake -f makefile.msc
+
+OUT2LIB+=pango/pango-1.0.lib
+OUT2LIB+=pango/pango-1.0s.lib
+OUT2LIB+=pango/pangocairo-1.0.lib
+OUT2LIB+=pango/pangocairo-1.0s.lib
+OUT2LIB+=pango/pangowin32-1.0.lib
+OUT2LIB+=pango/pangowin32-1.0s.lib
+
+OUT2BIN+=pango/libpango-1.0-0.dll
+OUT2BIN+=pango/libpangocairo-1.0-0.dll
+OUT2BIN+=pango/libpangowin32-1.0-0.dll
+OUT2BIN+=pango/querymodules.exe
+
+OUT2INC+=pango/pango.h
+OUT2INC+=pango/pango-attributes.h
+OUT2INC+=pango/pango-bidi-type.h
+OUT2INC+=pango/pango-break.h
+OUT2INC+=pango/pango-context.h
+OUT2INC+=pango/pango-coverage.h
+OUT2INC+=pango/pango-engine.h
+OUT2INC+=pango/pango-enum-types.h
+OUT2INC+=pango/pango-features.h
+OUT2INC+=pango/pango-font.h
+OUT2INC+=pango/pango-fontmap.h
+OUT2INC+=pango/pango-fontset.h
+OUT2INC+=pango/pango-glyph.h
+OUT2INC+=pango/pango-glyph-item.h
+OUT2INC+=pango/pango-gravity.h
+OUT2INC+=pango/pango-item.h
+OUT2INC+=pango/pango-layout.h
+OUT2INC+=pango/pango-matrix.h
+OUT2INC+=pango/pango-renderer.h
+OUT2INC+=pango/pango-script.h
+OUT2INC+=pango/pango-tabs.h
+OUT2INC+=pango/pango-types.h
+OUT2INC+=pango/pango-utils.h
+
 .ELSE
 .ENDIF
 
@@ -117,4 +160,3 @@ OUT2INC+=pango/pango-utils.h
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
