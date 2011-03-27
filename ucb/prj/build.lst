@@ -16,8 +16,6 @@ uc	ucb\source\ucp\tdoc			nmake	-	all	uc_tdoc uc_inc NULL
 uc	ucb\source\ucp\expand		nmake	-	all	uc_expand uc_inc NULL
 uc	ucb\source\ucp\ext		    nmake	-	all	uc_ext uc_inc NULL
 uc	ucb\source\ucp\odma			nmake	-	w	uc_odma uc_inc NULL
-# fd#35693 disabled because they hang on exit
 #uc      ucb\qa\complex\ucb              nmake   -       all     uc_complex_ucb uc_inc NULL
-#uc ucb\qa\unoapi nmake - all uc_qa_unoapi NULL
 # fails, please fix
 # uc      ucb\qa\complex\tdoc             nmake   -       all     uc_complex_tdoc uc_complex_tdoc_interfaces uc_inc NULL
