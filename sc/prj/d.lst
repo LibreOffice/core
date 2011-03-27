@@ -22,6 +22,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\misc\sc.csv %_DEST%\inc%_EXT%\sc.csv
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
+..\%__SRC%\lib\libvbaobjdf.uno.so %_DEST%\lib%_EXT%\vbaobj.uno.so
 ..\%__SRC%\lib\libvbaobjlx.uno.so %_DEST%\lib%_EXT%\vbaobj.uno.so
 ..\%__SRC%\lib\libvbaobjlx.uno.dylib %_DEST%\lib%_EXT%\vbaobj.uno.dylib
 ..\%__SRC%\lib\libvbaobjlx.uno.dll %_DEST%\lib%_EXT%\vbaobj.uno.dll
