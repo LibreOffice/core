@@ -214,14 +214,12 @@ void LwpOleObject::Read()
 
     cPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
-    sal_uInt16 nNonVersionedPersistentFlags = 0;
-    sal_uInt16 nNumberOfPages = 0;
     // qCMarker read
     LwpObjectID ID;
 
     if (LwpFileHeader::m_nFileRevision >= 0x0004)
     {
-        nNonVersionedPersistentFlags = m_pObjStrm->QuickReaduInt16();
+        m_pObjStrm->QuickReaduInt16();
 
         OUString sFormat = m_pObjStrm->QuickReadStringPtr();
 
@@ -246,7 +244,7 @@ void LwpOleObject::Read()
 
     if (m_pObjStrm->CheckExtra())
     {
-        nNumberOfPages = m_pObjStrm->QuickReaduInt16();
+        m_pObjStrm->QuickReaduInt16();
         m_pObjStrm->SkipExtra();
     }
 

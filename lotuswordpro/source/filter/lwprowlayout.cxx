@@ -125,10 +125,9 @@ void LwpRowLayout::RegisterStyle()
     m_StyleName = pXFStyleManager->AddStyle(pRowStyle)->GetStyleName();
 
     LwpTableLayout* pTableLayout = GetParentTableLayout();
-    LwpTable * pTable = NULL;
     if (pTableLayout)
     {
-        pTable = pTableLayout->GetTable();
+        pTableLayout->GetTable();
     }
     // register cells' style
     LwpObjectID *pCellID= GetChildHead();
