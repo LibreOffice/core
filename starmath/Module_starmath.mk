@@ -23,9 +23,10 @@
 $(eval $(call gb_Module_Module,sm))
 
 $(eval $(call gb_Module_add_targets,sm,\
-        AllLangResTarget_sm \
-	Library_sm \
-	Library_smd \
-        Package_uiconfig \
+    AllLangResTarget_sm \
+    Library_sm \
+    Library_smd \
+    Package_uiconfig \
+    JunitTest_starmath_unoapi \
 ))
 
