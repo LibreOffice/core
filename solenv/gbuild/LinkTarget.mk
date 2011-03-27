@@ -26,7 +26,32 @@
 #*************************************************************************
 
 
-# CObject class
+# Overview of dependencies and tasks of LinkTarget
+#
+# target                      task                         depends on
+# LinkTarget                  linking                      CObject CxxObject GenCxxObject ObjCxxObject
+#                                                          LinkTarget/headers
+# LinkTarget/dep              joined dep file              CObject/dep CxxObject/dep GenCxxObject/dep ObjCxxObject/dep
+#                                                          | LinkTarget/headers
+# LinkTarget/headers          all headers available        LinkTarget/external_headers PCH
+#                              including own generated     own generated headers
+# PCH                         precompiled headers (win)    LinkTarget/external_headers
+# LinkTarget/external_headers all external headers avail.  header files of linked libs
+#
+# CObject                     plain c compile              | LinkTarget/headers
+# CxxObject                   c++ compile                  | LinkTarget/headers
+# GenCxxObject                C++ compile from             | LinkTarget/headers
+#                              generated source
+# ObjCxxObject                objective c++ compile        | LinkTarget/headers
+#
+# CObject/dep                 dependencies                 these targets generate empty dep files 
+# CxxObject/dep               dependencies                 that are populated upon compile
+# GenCxxObject/dep            dependencies
+# ObjCxxObject/dep            dependencies
+
+# LinkTarget/headers means gb_LinkTarget_get_headers_target etc.
+# dependencies prefixed with | are build-order only dependencies
+
 
 gb_CObject_REPOS := $(gb_REPOS)
 
