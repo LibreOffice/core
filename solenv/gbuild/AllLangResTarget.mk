@@ -25,6 +25,22 @@
 #
 #*************************************************************************
 
+
+# Overview of dependencies and tasks of SrsTarget
+#
+# target                task                depends on
+# SrsTarget             joining the parts   SrsPartTarget
+# SrsPartTarget         preprocessing       SrsPartMergeTarget (with l10n)
+#                                           source file (without l10n)
+# SrsPartMergeTarget    merging/transex     source file (only needed with l10n)
+
+# Overview of dependencies and tasks of AllLangResTarget
+#
+# target                task                depends on
+# AllLangResTarget      nothing             ResTarget for all active langs
+# ResTarget             running rsc         SrsTarget, resources
+
+
 # SrsPartMergeTarget class
 
 gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
