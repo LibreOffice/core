@@ -317,14 +317,13 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
 
     OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
     sal_Int32 nLength = Descriptor.getLength();
-    sal_Int32 location = nLength;
     OUString sURL;
     const PropertyValue * pValue = Descriptor.getConstArray();
     uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
-            location=i;
+            pValue[i].Value >>= sTypeName;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
@@ -350,9 +349,10 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
 
     Sequence< ::sal_Int8 > aData;
     sal_Int32 nLen = SAL_N_ELEMENTS( header );
-    if ( ( nLen == xInputStream->readBytes(  aData, nLen ) ) )
-        if ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 )
-            sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_LotusWordPro_Document" ) );
+    if ( !( ( nLen == xInputStream->readBytes( aData, nLen ) )
+                && ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 ) ) )
+        sTypeName = ::rtl::OUString();
+
     return sTypeName;
 }
 
