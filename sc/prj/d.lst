@@ -24,8 +24,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
 ..\%__SRC%\lib\libvbaobjdf.uno.so %_DEST%\lib%_EXT%\vbaobj.uno.so
 ..\%__SRC%\lib\libvbaobjlx.uno.so %_DEST%\lib%_EXT%\vbaobj.uno.so
-..\%__SRC%\lib\libvbaobjlx.uno.dylib %_DEST%\lib%_EXT%\vbaobj.uno.dylib
-..\%__SRC%\lib\libvbaobjlx.uno.dll %_DEST%\lib%_EXT%\vbaobj.uno.dll
+..\%__SRC%\lib\libvbaobjmxi.uno.dylib %_DEST%\lib%_EXT%\vbaobj.uno.dylib
+..\%__SRC%\lib\libvbaobjmi.uno.dll %_DEST%\lib%_EXT%\vbaobj.uno.dll
 ..\%__SRC%\lib\vba*.* %_DEST%\lib%_EXT%\vba*.*
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
