@@ -4,8 +4,5 @@ lg	linguistic\prj							get		-	all	lg_prj NULL
 lg	linguistic\inc							nmake	-	all	lg_inc NULL
 lg	linguistic\source						nmake	-	all	lg_src lg_inc NULL
 
-# fd#35693 disabled because it hangs on exit
-#lg linguistic\qa\unoapi nmake - all lg_qa_unoapi NULL
-
 # could be we need a Japanese office version
 # lg linguistic\qa\complex\linguistic nmake - all lg_qa_complex NULL
