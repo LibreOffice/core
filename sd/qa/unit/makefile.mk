@@ -101,6 +101,8 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : makefile.mk $(MISC)/$(TARGET)/servic
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
+.IF "$(OS)" != "DRAGONFLY"
+
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
@@ -111,3 +113,14 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
         -env:URE_INTERNAL_LIB_DIR="$(my_file)$(SOLARSHAREDBIN)" \
         -env:OOO_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)" \
         -env:BRAND_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)"
+
+.ELSE
+
+test .PHONY: $(SHL1TARGETN)
+    @echo ----------------------------------------------------------
+    @echo - WARNING!!, test disabled on your platform
+    @echo - Please test manually, and enable if it works
+    @echo ----------------------------------------------------------
+
+.ENDIF
+
