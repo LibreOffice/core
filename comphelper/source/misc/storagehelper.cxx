@@ -439,7 +439,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             if ( !xFactory.is() )
                 throw uno::RuntimeException();
 
-            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.NSSInitializer" ) ) ), uno::UNO_QUERY_THROW );
             uno::Reference< xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
 
             ::rtl::OString aUTF8Password( ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
