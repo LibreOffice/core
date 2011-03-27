@@ -42,6 +42,7 @@
 
 #else
 
+#include <windows.h>
 #include <ddeml.h>
 #include "ddewrap.hxx"
 
