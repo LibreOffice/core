@@ -2,11 +2,15 @@
 *~
 .*.sw[op]
 
+.gitattributes
+
 # the build directories
 /*/unxlng??
 /*/unxlng??.pro
 /*/wntmsc???
 /*/wntmsc???.pro
+/*/unxmac??
+/*/unxmac??.pro
 
 /external/*/*.dll
 /external/*/*.txt
