@@ -30,14 +30,6 @@ gb_Helper_NULLFILE := /dev/null
 
 gb_Helper_MISC := $(WORKDIR)/Misc
 
-ifeq ($(JAVACOMPILER),)
-JAVACOMPILER := javac
-endif
-
-ifeq ($(JAVAINTERPRETER),)
-JAVAINTERPRETER := java
-endif
-
 # general propose phony target
 gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 
