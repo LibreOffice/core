@@ -253,9 +253,12 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 
     // this method must be called only once, no need for additional lock
     rtl::OString sCertDir;
+
+    (void) xMSF;
+#ifdef XMLSEC_CRYPTO_NSS
     if ( xMSF.is() )
         sCertDir = getMozillaCurrentProfile( xMSF );
-
+#endif
     xmlsec_trace( "Using profile: %s", sCertDir.getStr() );
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
@@ -289,6 +292,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
     }
     out_nss_init = true;
 
+#ifdef XMLSEC_CRYPTO_NSS
 #if defined SYSTEM_MOZILLA
     if (!SECMOD_HasRootCerts())
     {
@@ -351,6 +355,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
         }
 #if SYSTEM_MOZILLA
     }
+#endif
 #endif
 
     return return_value;
