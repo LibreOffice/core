@@ -129,3 +129,9 @@ forms.OGridControlModel::com::sun::star::view::XSelectionSupplier
 
 ### i111333 ###
 forms.OImageControlControl::com::sun::star::awt::XControl
+
+### fd#35728 ###
+forms.OGridControlModel::com::sun::star::form::component::GridControl
+forms.OGridControlModel::com::sun::star::beans::XMultiPropertySet
+forms.OGridControlModel::com::sun::star::beans::XPropertySet
+forms.OGridControlModel::com::sun::star::beans::XFastPropertySet
