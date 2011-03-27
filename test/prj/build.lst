@@ -1,4 +1,4 @@
-te test : BOOST:boost cppu cppuhelper CPPUNIT:cppunit javaunohelper offuh ridljar sal solenv stlport unoil NULL
+te test : BOOST:boost cppu cppuhelper CPPUNIT:cppunit javaunohelper offuh ridljar sal solenv stlport unoil qadevOOo NULL
 te test\inc nmake - all inc NULL
 te test\source\cpp nmake - all source_cpp inc NULL
 te test\source\cpp\unoexceptionprotector nmake - all source_cpp_unoexceptionprotector inc NULL

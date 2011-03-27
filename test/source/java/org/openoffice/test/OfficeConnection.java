@@ -46,6 +46,21 @@ import static org.junit.Assert.*;
     Details about the OOo instance are tunneled in via
     org.openoffice.test.arg.... system properties.
 */
+final class ShutdownKiller implements java.lang.Runnable {
+    private java.lang.Thread m_watchedThread;
+    ShutdownKiller(java.lang.Thread watchedThread) {
+        m_watchedThread = watchedThread;
+    }
+    public void run() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            return;
+        };
+        m_watchedThread.interrupt();
+    }
+}
+
 public final class OfficeConnection {
     /** Start up an OOo instance.
     */
@@ -81,6 +96,7 @@ public final class OfficeConnection {
                 "\"soffice\" argument \"" + sofficeArg +
                 " starts with neither \"path:\" nor \"connect:\"");
         }
+        Thread.sleep(2000);
         XUnoUrlResolver resolver = UnoUrlResolver.create(
             Bootstrap.createInitialComponentContext(null));
         for (;;) {
@@ -125,7 +141,14 @@ public final class OfficeConnection {
         }
         int code = 0;
         if (process != null) {
-            code = process.waitFor();
+            Thread watcher = new Thread(new ShutdownKiller(Thread.currentThread()));
+            watcher.run();
+            try {
+                code = process.waitFor();
+            } catch (InterruptedException e) {
+                assertTrue(false);
+            };
+            watcher.interrupt();
         }
         boolean outTerminated = outForward == null || outForward.terminated();
         boolean errTerminated = errForward == null || errForward.terminated();
