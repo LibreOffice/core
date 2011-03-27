@@ -125,13 +125,13 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notBefore, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = explTime.tm_usec / 1000 ;
-        dateTime.Seconds = explTime.tm_sec ;
-        dateTime.Minutes = explTime.tm_min ;
-        dateTime.Hours = explTime.tm_hour ;
-        dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month+1 ;
-        dateTime.Year = explTime.tm_year ;
+        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
+        dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
+        dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
+        dateTime.Day = static_cast< sal_Int16 >( explTime.tm_mday  );
+        dateTime.Month = static_cast< sal_Int16 >( explTime.tm_month+1  );
+        dateTime.Year = static_cast< sal_Int16 >( explTime.tm_year  );
 
         return dateTime ;
     } else {
@@ -154,13 +154,13 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notAfter, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = explTime.tm_usec / 1000 ;
-        dateTime.Seconds = explTime.tm_sec ;
-        dateTime.Minutes = explTime.tm_min ;
-        dateTime.Hours = explTime.tm_hour ;
-        dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month+1 ;
-        dateTime.Year = explTime.tm_year ;
+        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
+        dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
+        dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
+        dateTime.Day = static_cast< sal_Int16 >( explTime.tm_mday  );
+        dateTime.Month = static_cast< sal_Int16 >( explTime.tm_month+1  );
+        dateTime.Year = static_cast< sal_Int16 >( explTime.tm_year  );
 
         return dateTime ;
     } else {

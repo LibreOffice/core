@@ -218,7 +218,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
             rtl_random_getBytes( aRandomPool, m_aLastBlock.getArray() + nOldLastBlockLen, nPaddingSize - 1 );
             rtl_random_destroyPool ( aRandomPool );
         }
-        m_aLastBlock[m_aLastBlock.getLength() - 1] = nPaddingSize;
+        m_aLastBlock[m_aLastBlock.getLength() - 1] = static_cast< sal_Int8 >( nPaddingSize );
     }
 
     // finally should the last block be smaller than two standard blocks
