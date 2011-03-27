@@ -1,2 +1,5 @@
 ### i86626 ###
 ucb.UniversalContentBroker::com::sun::star::ucb::XCommandProcessor
+
+### fd#35727 ###
+ucb.UniversalContentBroker::com::sun::star::ucb::XContentProviderManager
