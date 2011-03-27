@@ -44,8 +44,11 @@ class ONSSInitializer : public cppu::WeakImplHelper3
     ::com::sun::star::lang::XServiceInfo
 >
 {
-private:
+protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+
+    ONSSInitializer()
+    {}
 
 public:
     ONSSInitializer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF );

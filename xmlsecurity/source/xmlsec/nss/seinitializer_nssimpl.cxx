@@ -74,7 +74,6 @@ namespace cssu = css::uno;
 namespace cssl = css::lang;
 namespace cssxc = css::xml::crypto;
 
-using namespace xmlsecurity;
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -86,8 +85,8 @@ using ::rtl::OString;
 
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF )
-    : ONSSInitialize( rxMSF )
 {
+    mxMSF = rxMSF;
 }
 
 SEInitializer_NssImpl::~SEInitializer_NssImpl()
