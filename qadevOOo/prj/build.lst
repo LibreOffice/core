@@ -2,5 +2,3 @@ qa  qadevOOo    : javaunohelper jurt ridljar unoil NULL
 qa  qadevOOo                                             usr1    -   all qa_mkout NULL
 qa  qadevOOo			                         nmake   -   all qa_runner_ant_build NULL
 qa  qadevOOo\runner			                 nmake   -   all qa_make_package qa_runner_ant_build NULL
-# fd#35693 disabled because it hangs on exit
-#qa qadevOOo\qa\unoapi nmake - all qa_qa_unoapi qa_make_package NULL
