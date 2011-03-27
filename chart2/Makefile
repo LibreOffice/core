@@ -1,6 +1,7 @@
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -21,28 +22,17 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJ = ../..
-PRJNAME = chart2
-TARGET = qa_unoapi
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = org/openoffice/chart2/qa/unoapi
-JAVATESTFILES = Test.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+# vim: set noet sw=4 ts=4:
