@@ -42,12 +42,8 @@ $(eval $(call gb_JunitTest_add_jars,svx_unoapi,\
     $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,svx_unoapi,\
-    svx/qa/unoapi/Test \
-))
-
 $(eval $(call gb_JunitTest_add_classes,svx_unoapi,\
-    org.openoffice.svx.qa.unoapi.Test \
+    org.openoffice.test.UnoApiTest \
 ))
 
 # vim: set noet sw=4 ts=4:

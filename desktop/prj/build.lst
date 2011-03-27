@@ -22,8 +22,8 @@ dt	desktop\win32\source\QuickStart\so	nmake	-	w	dt_win32_quickstart_so dt_win32_
 
 dt	desktop\os2\source\applauncher			nmake	-	p	dt_applauncher dt_inc NULL
 dt	desktop\unx\source\officeloader		nmake	-	u	dt_officeloader_unx dt_inc NULL
-dt     desktop\unx\source                      nmake   -       u       dt_uwrapper     dt_inc NULL
-dt	desktop\source\pagein					nmake	-	u	dt_pagein dt_inc NULL
+dt     desktop\unx\source                      nmake   -       u       dt_uwrapper dt_pagein dt_inc NULL
+dt	desktop\source\pagein					nmake	-	all	dt_pagein dt_inc NULL
 dt	desktop\source\pkgchk\unopkg			nmake	-	all	dt_unopkg dt_dp_misc dt_app dt_inc dt_guiloader.w NULL
 dt     desktop\unx\splash                      nmake   -       u       dt_usplash      dt_pagein.u dt_inc NULL
 dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_executable dt_dp_registry_help dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_unopkg dt_inc dt_dp_misc NULL
