@@ -451,7 +451,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             aEncryptionData[0].Value <<= aDigest;
         }
         catch ( uno::Exception& )
-        {}
+        {
+            OSL_ENSURE( false, "Can not create SHA256 digest!" );
+        }
 
         // MS_1252 encoding was used for SO60 document format password encoding,
         // this encoding supports only a minor subset of nonascii characters,
