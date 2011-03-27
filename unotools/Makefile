@@ -25,33 +25,14 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJ = ../../..
-PRJNAME = unotools
-TARGET = qa_complex_tempfile
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/tempfile
-JAVATESTFILES = \
-    TempFileUnitTest.java
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-JAVAFILES = $(JAVATESTFILES) \
-    TempFileTest.java \
-    Test01.java \
-    Test02.java \
-    TestHelper.java
-
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+# vim: set noet sw=4 ts=4:
