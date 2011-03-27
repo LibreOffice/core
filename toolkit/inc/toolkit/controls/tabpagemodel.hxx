@@ -40,55 +40,6 @@
 #include <list>
 #include <cppuhelper/implbase2.hxx>
 
-//  ----------------------------------------------------
-//  class TabPageModel
-//  ----------------------------------------------------
-//typedef ::cppu::ImplHelper2< ::com::sun::star::awt::tab::XTabPageModel,
-//                              ::com::sun::star::lang::XInitialization
-//                              > TabPageAccess_BASE;
-//
-//class TabPageModel : public TabPageAccess_BASE
-//{
-//
-//private:
-//  bool                                    m_bEnabled;
-//  ::rtl::OUString                         m_sTitle;
-//  ::rtl::OUString                         m_sImageURL;
-//  ::rtl::OUString                         m_sTooltip;
-//  sal_Int16                               m_nTabPageId;
-//
-//public:
-//  TabPageModel();
-//  explicit TabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCompContext);
-//  ~TabPageModel();
-//
-//  // XInitialization
-//  virtual void SAL_CALL initialize (const com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rArguments)
-//                          throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-//
-//  ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-//  void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-//  void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-//
-//    // ::com::sun::star::lang::XTypeProvider
-//  //::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >    SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-//  //::com::sun::star::uno::Sequence< sal_Int8 >                       SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-//
-//  // ::com::sun::star::awt::tab::XTabPageModel
-//  virtual ::sal_Int16 SAL_CALL getTabPageID() throw (::com::sun::star::uno::RuntimeException);
-//    virtual ::sal_Bool SAL_CALL getEnabled() throw (::com::sun::star::uno::RuntimeException);
-//    virtual void SAL_CALL setEnabled( ::sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException);
-//    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
-//    virtual void SAL_CALL setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException);
-//    virtual ::rtl::OUString SAL_CALL getImageURL() throw (::com::sun::star::uno::RuntimeException);
-//    virtual void SAL_CALL setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException);
-//    virtual ::rtl::OUString SAL_CALL getTooltip() throw (::com::sun::star::uno::RuntimeException);
-//    virtual void SAL_CALL setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
-//};
-//  ----------------------------------------------------
-//  class UnoControlTabPageModel
-//  ----------------------------------------------------
-
 class UnoControlTabPageModel :  public ControlModelContainerBase
                                 //public TabPageModel
 {
