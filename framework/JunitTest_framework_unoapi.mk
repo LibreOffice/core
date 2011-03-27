@@ -43,7 +43,7 @@ $(eval $(call gb_JunitTest_add_jars,framework_unoapi,\
 ))
 
 $(eval $(call gb_JunitTest_add_classes,framework_unoapi,\
-    org.openoffice.test.UnoApiTester \
+    org.openoffice.test.UnoApiTest \
 ))
 
 # vim: set noet sw=4 ts=4:
