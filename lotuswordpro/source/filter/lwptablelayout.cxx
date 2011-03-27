@@ -160,7 +160,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 /**
  * @short   Register super table layout style
  */
-void LwpSuperTableLayout::RegisterStyle()
+void LwpSuperTableLayout::RegisterNewStyle()
 {
     // if this layout is style of real table entry
     LwpTableLayout* pTableLayout = GetTableLayout();
@@ -758,7 +758,7 @@ void LwpTableLayout::RegisterStyle()
     RegisterRows();
 
     // Parse table
-    Parse();
+    ParseTable();
 
 
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
@@ -773,7 +773,7 @@ void LwpTableLayout::RegisterStyle()
  * @short   read table layout
  * @param   none
  */
-void LwpTableLayout::Parse()
+void LwpTableLayout::ParseTable()
 {
     // get super table layout
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();

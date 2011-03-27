@@ -74,6 +74,8 @@ public:
     XFDrawGroup(){}
 
 public:
+    using XFDrawObject::Add;
+
     /**
      * @descr   Add a drawing object to the group.
      */

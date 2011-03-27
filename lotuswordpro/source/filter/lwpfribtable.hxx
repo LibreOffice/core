@@ -66,7 +66,7 @@ public:
     ~LwpFribTable(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpSuperTableLayout* GetSuperTable();
-    void RegisterStyle();
+    void RegisterNewStyle();
     void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
 private:

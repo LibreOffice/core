@@ -85,6 +85,8 @@ public:
     virtual ~XFFrame();
 
 public:
+    using XFContentContainer::Add;
+
     /**
      * @descr   override the add function to adjust z-index.
      */

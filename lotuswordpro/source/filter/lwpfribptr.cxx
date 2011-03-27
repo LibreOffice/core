@@ -546,19 +546,19 @@ void LwpFribPtr::RegisterStyle()
                 case FRIB_TAG_TABLE:
                 {
                     LwpFribTable* tableFrib = static_cast<LwpFribTable*>(pFrib);
-                    tableFrib->RegisterStyle();
+                    tableFrib->RegisterNewStyle();
                 }
                     break;
         case FRIB_TAG_FOOTNOTE:
         {
             LwpFribFootnote* pFribFootnote = static_cast<LwpFribFootnote*>(pFrib);
-            pFribFootnote->RegisterStyle();
+            pFribFootnote->RegisterNewStyle();
         }
             break;
         case FRIB_TAG_NOTE:
         {
             LwpFribNote* pNoteFrib = static_cast<LwpFribNote*>(pFrib);
-            pNoteFrib->RegisterStyle();
+            pNoteFrib->RegisterNewStyle();
             break;
         }
         case FRIB_TAG_PAGENUMBER:

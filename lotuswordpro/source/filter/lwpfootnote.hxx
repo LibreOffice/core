@@ -108,7 +108,7 @@ public:
     LwpFribFootnote(LwpPara* pPara );
     ~LwpFribFootnote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-    void RegisterStyle();
+    void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
     LwpFootnote* GetFootnote();
 

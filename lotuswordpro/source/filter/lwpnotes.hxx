@@ -77,7 +77,7 @@ public:
     LwpFribNote(LwpPara* pPara );
     ~LwpFribNote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-    void RegisterStyle();
+    void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
 private:
     LwpObjectID m_Layout;

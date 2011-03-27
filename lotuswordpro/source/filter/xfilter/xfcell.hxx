@@ -83,6 +83,8 @@ public:
     virtual ~XFCell();
 
 public:
+    using XFContentContainer::Add;
+
     /**
      * @descr   Add content for table cell.
      */

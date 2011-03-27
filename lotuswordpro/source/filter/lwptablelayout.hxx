@@ -109,7 +109,7 @@ protected:
     void TraverseTable();
     void RegisterColumns();
     void RegisterRows();
-    void Parse();
+    void ParseTable();
     void PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_uInt16 nColID);
 
     sal_uInt16 m_nRows;
@@ -163,7 +163,7 @@ public:
     LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_SUPERTABLE_LAYOUT;}
-    void RegisterStyle();
+    void RegisterNewStyle();
     // for table style
     // add by , 06/03/2005
     void ApplyPatternFill(XFTableStyle* pTableStyle);
@@ -203,6 +203,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_COLUMN_LAYOUT;}
     sal_uInt32 GetColumnID(){return ccolid;}
     double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);}
+    using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
     sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
