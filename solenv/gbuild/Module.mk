@@ -26,6 +26,21 @@
 #*************************************************************************
 
 
+# Overview of dependencies and tasks of Module
+#
+# target                      task                         depends on
+# Module                      build the product            all product targets
+#                              excluding tests             recursive Modules
+# Module/check                run unit tests               all unit tests
+#                                                          recursive Module/checks
+# Module/subsequentcheck      run system tests             all system tests
+#                                                          recursive Module/subsequentchecks
+# all (global)                build the product            top-level Module
+# check (global)              run unit tests               top-level Module/check
+# subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
+# allandcheck (global)        default goal                 all check
+
+
 # Module class
 
 gb_Module_ALLMODULES :=
