@@ -122,7 +122,7 @@ namespace cppu
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
-    }
+    };
 
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
