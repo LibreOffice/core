@@ -36,10 +36,9 @@ TARGET=mdds
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=mdds_0.5.1
-TARFILE_MD5=5d991377b0ee1ae396c82963bc0084c1
-#http://code.google.com/p/multidimalgorithm/issues/detail?id=7
-PATCH_FILES=mdds7.unusedset.patch
+TARFILE_NAME=mdds_0.5.2
+TARFILE_MD5=7a0dcb3fe1e8c7229ab4fb868b7325e6
+PATCH_FILES=
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
