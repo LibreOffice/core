@@ -31,6 +31,7 @@
 
 #if defined(WNT)
 #include <windows.h>
+#undef GetObject
 #endif
 
 #include <algorithm>

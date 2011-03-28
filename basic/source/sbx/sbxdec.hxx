@@ -35,6 +35,9 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 
+#include <prewin.h>
+#include <postwin.h>
+
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
