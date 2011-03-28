@@ -32,14 +32,6 @@
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 
-// AB-Uno-Test
-//#define unotest
-#ifdef unotest
-#include <usr/uno.hxx>
-#include <basic/sbuno.hxx>
-#include <sbunoobj.hxx>
-#endif
-
 #include "sbintern.hxx"
 
 #include <basic/ttstrhlp.hxx>
@@ -89,20 +81,6 @@ MyBasic::MyBasic() : StarBASIC()
     SbxVariable* p = new SbxCollection( CUniString("MyColl") );
     p->SetName( CUniString("Objects") );
     Insert( p );
-
-    // AB-Uno-Test
-#ifdef unotest
-    // Get Uno-Service-Manager and Reflection Service
-    createAndSetDefaultServiceManager();        // done later
-
-    // Get Uno-Test-Object
-    UsrAny aObjAny = getIntrospectionTestObject();
-
-    // Box object into SbUnoObject
-    String aName( "UnoObject" );
-    SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
-    Insert( (SbxObject*)xSbUnoObj );
-#endif
 
     pTestObject = NULL;
 }
