@@ -87,7 +87,7 @@ void BiffInputRecordBuffer::enableDecoder( bool bEnable )
 
 bool BiffInputRecordBuffer::startRecord( sal_Int64 nHeaderPos )
 {
-    mbValidHeader = (0 <= nHeaderPos) && (nHeaderPos + 4 <= mrInStrm.getLength());
+    mbValidHeader = (0 <= nHeaderPos) && (nHeaderPos + 4 <= mrInStrm.size());
     if( mbValidHeader )
     {
         mnHeaderPos = nHeaderPos;
@@ -95,7 +95,7 @@ bool BiffInputRecordBuffer::startRecord( sal_Int64 nHeaderPos )
         mrInStrm >> mnRecId >> mnRecSize;
         mnBodyPos = mrInStrm.tell();
         mnNextHeaderPos = mnBodyPos + mnRecSize;
-        mbValidHeader = !mrInStrm.isEof() && (mnNextHeaderPos <= mrInStrm.getLength());
+        mbValidHeader = !mrInStrm.isEof() && (mnNextHeaderPos <= mrInStrm.size());
     }
     if( !mbValidHeader )
     {
@@ -116,7 +116,7 @@ bool BiffInputRecordBuffer::startNextRecord()
 sal_uInt16 BiffInputRecordBuffer::getNextRecId()
 {
     sal_uInt16 nRecId = BIFF_ID_UNKNOWN;
-    if( mbValidHeader && (mnNextHeaderPos + 4 <= mrInStrm.getLength()) )
+    if( mbValidHeader && (mnNextHeaderPos + 4 <= mrInStrm.size()) )
     {
         mrInStrm.seek( mnNextHeaderPos );
         mrInStrm >> nRecId;
@@ -169,6 +169,7 @@ void BiffInputRecordBuffer::updateDecoded()
 // ============================================================================
 
 BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup ) :
+    BinaryStreamBase( true ),
     maRecBuffer( rInStream ),
     mnRecHandle( -1 ),
     mnRecId( BIFF_ID_UNKNOWN ),
@@ -257,21 +258,16 @@ sal_uInt16 BiffInputStream::getNextRecId()
 
 // BinaryStreamBase interface (seeking) ---------------------------------------
 
-bool BiffInputStream::isSeekable() const
+sal_Int64 BiffInputStream::size() const
 {
-    return true;
+    if( !mbHasComplRec )
+        const_cast< BiffInputStream* >( this )->calcRecordLength();
+    return mnComplRecSize;
 }
 
 sal_Int64 BiffInputStream::tell() const
 {
     return mbEof ? -1 : (mnCurrRecSize - maRecBuffer.getRecLeft());
-}
-
-sal_Int64 BiffInputStream::getLength() const
-{
-    if( !mbHasComplRec )
-        const_cast< BiffInputStream* >( this )->calcRecordLength();
-    return mnComplRecSize;
 }
 
 void BiffInputStream::seek( sal_Int64 nRecPos )
@@ -285,35 +281,35 @@ void BiffInputStream::seek( sal_Int64 nRecPos )
     }
 }
 
+void BiffInputStream::close()
+{
+}
+
 sal_Int64 BiffInputStream::tellBase() const
 {
     return maRecBuffer.getBaseStream().tell();
 }
 
-sal_Int64 BiffInputStream::getBaseLength() const
+sal_Int64 BiffInputStream::sizeBase() const
 {
-    return maRecBuffer.getBaseStream().getLength();
+    return maRecBuffer.getBaseStream().size();
 }
 
 // BinaryInputStream interface (stream read access) ---------------------------
 
-sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nRet = 0;
     if( !mbEof )
     {
         orData.realloc( ::std::max< sal_Int32 >( nBytes, 0 ) );
         if( nBytes > 0 )
-        {
-            nRet = readMemory( orData.getArray(), nBytes );
-            if( nRet < nBytes )
-                orData.realloc( nRet );
-        }
+            nRet = readMemory( orData.getArray(), nBytes, nAtomSize );
     }
     return nRet;
 }
 
-sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nRet = 0;
     if( !mbEof && opMem && (nBytes > 0) )
@@ -323,7 +319,7 @@ sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes )
 
         while( !mbEof && (nBytesLeft > 0) )
         {
-            sal_uInt16 nReadSize = getMaxRawReadSize( nBytesLeft );
+            sal_uInt16 nReadSize = getMaxRawReadSize( nBytesLeft, nAtomSize );
             // check nReadSize, stream may already be located at end of a raw record
             if( nReadSize > 0 )
             {
@@ -340,12 +336,12 @@ sal_Int32 BiffInputStream::readMemory( void* opMem, sal_Int32 nBytes )
     return nRet;
 }
 
-void BiffInputStream::skip( sal_Int32 nBytes )
+void BiffInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nBytesLeft = nBytes;
     while( !mbEof && (nBytesLeft > 0) )
     {
-        sal_uInt16 nSkipSize = getMaxRawReadSize( nBytesLeft );
+        sal_uInt16 nSkipSize = getMaxRawReadSize( nBytesLeft, nAtomSize );
         // check nSkipSize, stream may already be located at end of a raw record
         if( nSkipSize > 0 )
         {
@@ -383,28 +379,22 @@ OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16BitChar
     OUStringBuffer aBuffer;
     aBuffer.ensureCapacity( nChars );
 
-    /*  This function has to react on CONTINUE records to read the repeated
-        flags field, so readUnicodeArray() cannot be used here. */
-    sal_uInt16 nCharsLeft = nChars;
+    /*  This function has to react on CONTINUE records which repeat the flags
+        field in their first byte and may change the 8bit/16bit character mode,
+        thus a plain call to readCompressedUnicodeArray() cannot be used here. */
+    sal_Int32 nCharsLeft = nChars;
     while( !mbEof && (nCharsLeft > 0) )
     {
-        sal_uInt16 nPortionCount = 0;
-        if( b16BitChars )
-        {
-            nPortionCount = ::std::min< sal_uInt16 >( nCharsLeft, maRecBuffer.getRecLeft() / 2 );
-            OSL_ENSURE( (nPortionCount <= nCharsLeft) || ((maRecBuffer.getRecLeft() & 1) == 0),
-                "BiffInputStream::readUniStringChars - missing a byte" );
-        }
-        else
-        {
-            nPortionCount = getMaxRawReadSize( nCharsLeft );
-        }
+        /*  Read the character array from the remaining part of the current raw
+            record. First, calculate the maximum number of characters that can
+            be read without triggering to start a following CONTINUE record. */
+        sal_Int32 nRawChars = b16BitChars ? (getMaxRawReadSize( nCharsLeft * 2, 2 ) / 2) : getMaxRawReadSize( nCharsLeft, 1 );
+        aBuffer.append( readCompressedUnicodeArray( nRawChars, !b16BitChars, bAllowNulChars ) );
 
-        // read the character array
-        appendUnicodeArray( aBuffer, nPortionCount, b16BitChars, bAllowNulChars );
-
-        // prepare for next CONTINUE record
-        nCharsLeft = nCharsLeft - nPortionCount;
+        /*  Prepare for next CONTINUE record. Calling jumpToNextStringContinue()
+            reads the leading byte in the following CONTINUE record and updates
+            the b16BitChars flag. */
+        nCharsLeft -= nRawChars;
         if( nCharsLeft > 0 )
             jumpToNextStringContinue( b16BitChars );
     }
@@ -429,25 +419,15 @@ OUString BiffInputStream::readUniString( bool bAllowNulChars )
 
 void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16BitChars )
 {
-    sal_uInt16 nCharsLeft = nChars;
+    sal_Int32 nCharsLeft = nChars;
     while( !mbEof && (nCharsLeft > 0) )
     {
-        sal_uInt16 nPortionCount;
-        if( b16BitChars )
-        {
-            nPortionCount = ::std::min< sal_uInt16 >( nCharsLeft, maRecBuffer.getRecLeft() / 2 );
-            OSL_ENSURE( (nPortionCount <= nCharsLeft) || ((maRecBuffer.getRecLeft() & 1) == 0),
-                "BiffInputStream::skipUniStringChars - missing a byte" );
-            skip( 2 * nPortionCount );
-        }
-        else
-        {
-            nPortionCount = getMaxRawReadSize( nCharsLeft );
-            skip( nPortionCount );
-        }
+        // skip the character array
+        sal_Int32 nSkipSize = b16BitChars ? getMaxRawReadSize( 2 * nCharsLeft, 2 ) : getMaxRawReadSize( nCharsLeft, 1 );
+        skip( nSkipSize );
 
         // prepare for next CONTINUE record
-        nCharsLeft = nCharsLeft - nPortionCount;
+        nCharsLeft -= (b16BitChars ? (nSkipSize / 2) : nSkipSize);
         if( nCharsLeft > 0 )
             jumpToNextStringContinue( b16BitChars );
     }
@@ -468,13 +448,6 @@ void BiffInputStream::skipUniString()
 }
 
 // private --------------------------------------------------------------------
-
-void BiffInputStream::readAtom( void* opMem, sal_uInt8 nSize )
-{
-    // byte swapping is done in calling BinaryInputStream::readValue() template function
-    if( ensureRawReadSize( nSize ) )
-        maRecBuffer.read( opMem, nSize );
-}
 
 void BiffInputStream::setupRecord()
 {
@@ -529,7 +502,7 @@ bool BiffInputStream::jumpToNextContinue()
 
 bool BiffInputStream::jumpToNextStringContinue( bool& rb16BitChars )
 {
-    OSL_ENSURE( maRecBuffer.getRecLeft() == 0, "BiffInputStream::jumpToNextStringContinue - unexpected garbage" );
+    OSL_ENSURE( maRecBuffer.getRecLeft() == 0, "BiffInputStream::jumpToNextStringContinue - alignment error" );
 
     if( mbCont && (getRemaining() > 0) )
     {
@@ -561,31 +534,17 @@ void BiffInputStream::calcRecordLength()
     seek( nCurrPos );                       // restore position, seek() resets old mbValid state
 }
 
-bool BiffInputStream::ensureRawReadSize( sal_uInt16 nBytes )
+sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_Int32 nBytes, size_t nAtomSize ) const
 {
-    if( !mbEof && (nBytes > 0) )
+    sal_uInt16 nMaxSize = getLimitedValue< sal_uInt16, sal_Int32 >( nBytes, 0, maRecBuffer.getRecLeft() );
+    if( (0 < nMaxSize) && (nMaxSize < nBytes) && (nAtomSize > 1) )
     {
-        while( !mbEof && (maRecBuffer.getRecLeft() == 0) ) jumpToNextContinue();
-        mbEof = mbEof || (nBytes > maRecBuffer.getRecLeft());
-        OSL_ENSURE( !mbEof, "BiffInputStream::ensureRawReadSize - record overread" );
+        // check that remaining data in record buffer is a multiple of the passed atom size
+        sal_uInt16 nPadding = static_cast< sal_uInt16 >( nMaxSize % nAtomSize );
+        OSL_ENSURE( nPadding == 0, "BiffInputStream::getMaxRawReadSize - alignment error" );
+        nMaxSize = nMaxSize - nPadding;
     }
-    return !mbEof;
-}
-
-sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_Int32 nBytes ) const
-{
-    return getLimitedValue< sal_uInt16, sal_Int32 >( nBytes, 0, maRecBuffer.getRecLeft() );
-}
-
-void BiffInputStream::appendUnicodeArray( OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars )
-{
-    orBuffer.ensureCapacity( orBuffer.getLength() + nChars );
-    sal_uInt16 nChar;
-    for( sal_uInt16 nCharIdx = 0; !mbEof && (nCharIdx < nChars); ++nCharIdx )
-    {
-        if( b16BitChars ) readValue( nChar ); else nChar = readuInt8();
-        orBuffer.append( static_cast< sal_Unicode >( (!bAllowNulChars && (nChar == 0)) ? '?' : nChar ) );
-    }
+    return nMaxSize;
 }
 
 void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize )

@@ -25,14 +25,16 @@
  *
  ************************************************************************/
 
-#ifndef _PROCESSINGINSTRUCTION_HXX
-#define _PROCESSINGINSTRUCTION_HXX
+#ifndef DOM_PROCESSINGINSTRUCTION_HXX
+#define DOM_PROCESSINGINSTRUCTION_HXX
+
+#include <libxml/tree.h>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XProcessingInstruction.hpp>
-#include "node.hxx"
-#include <libxml/tree.h>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -40,17 +42,23 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CProcessingInstruction : public cppu::ImplInheritanceHelper1< CNode, XProcessingInstruction >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XProcessingInstruction >
+        CProcessingInstruction_Base;
+
+    class CProcessingInstruction
+        : public CProcessingInstruction_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
 
     protected:
-        CProcessingInstruction(const xmlNodePtr aNodePtr);
+        CProcessingInstruction(
+                CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         /**
         The content of this processing instruction.
@@ -73,6 +81,9 @@ namespace DOM
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
             throw (RuntimeException);
+        virtual void SAL_CALL setNodeValue(OUString const& rNodeValue)
+            throw (RuntimeException, DOMException);
+
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (RuntimeException, DOMException)
@@ -180,11 +191,6 @@ namespace DOM
         throw (RuntimeException, DOMException)
     {
         return CNode::replaceChild(newChild, oldChild);
-    }
-    virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-        throw (RuntimeException, DOMException)
-    {
-        return CNode::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException, DOMException)

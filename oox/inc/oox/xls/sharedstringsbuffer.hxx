@@ -49,15 +49,12 @@ public:
     /** Final processing after import of all strings. */
     void                finalizeImport();
 
-    /** Converts the specified string table entry. */
-    void                convertString(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-                            sal_Int32 nStringId,
-                            sal_Int32 nXfId ) const;
+    /** Returns the specified string. */
+    RichStringRef       getString( sal_Int32 nStringId ) const;
 
 private:
-    typedef RefVector< RichString > StringVec;
-    StringVec           maStrings;
+    typedef RefVector< RichString > StringVector;
+    StringVector        maStrings;
 };
 
 // ============================================================================

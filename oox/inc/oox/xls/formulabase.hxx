@@ -28,6 +28,7 @@
 #ifndef OOX_XLS_FORMULABASE_HXX
 #define OOX_XLS_FORMULABASE_HXX
 
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -40,7 +41,6 @@
 namespace com { namespace sun { namespace star {
     namespace sheet { class XFormulaOpCodeMapper; }
     namespace sheet { class XFormulaParser; }
-    namespace sheet { class XFormulaTokens; }
 } } }
 
 namespace oox { template< typename Type > class Matrix; }
@@ -216,7 +216,20 @@ const sal_uInt16 BIFF_FUNC_CEILING              = 288;      /// Function identif
 const sal_uInt16 BIFF_FUNC_HYPERLINK            = 359;      /// Function identifier of the HYPERLINK function.
 const sal_uInt16 BIFF_FUNC_WEEKNUM              = 465;      /// Function identifier of the WEEKNUM function.
 
-// reference helpers ==========================================================
+// Formula type ===============================================================
+
+/** Enumerates all possible types of a formula. */
+enum FormulaType
+{
+    FORMULATYPE_CELL,           /// Simple cell formula, or reference to a shared formula name.
+    FORMULATYPE_ARRAY,          /// Array (matrix) formula.
+    FORMULATYPE_SHAREDFORMULA,  /// Shared formula definition.
+    FORMULATYPE_CONDFORMAT,     /// Condition of a conditional format rule.
+    FORMULATYPE_VALIDATION,     /// Condition of a data validation.
+    FORMULATYPE_DEFINEDNAME     /// Definition of a defined name.
+};
+
+// Reference helpers ==========================================================
 
 /** A 2D formula cell reference struct with relative flags. */
 struct BinSingleRef2d
@@ -250,10 +263,14 @@ struct BinComplexRef2d
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
 
-// token vector, sequence =====================================================
+// Token vector, token sequence ===============================================
 
 typedef ::com::sun::star::sheet::FormulaToken       ApiToken;
 typedef ::com::sun::star::uno::Sequence< ApiToken > ApiTokenSequence;
+
+/** Contains the base address and type of a special token representing an array
+    formula or a shared formula (sal_False), or a table operation (sal_True). */
+typedef ::com::sun::star::beans::Pair< ::com::sun::star::table::CellAddress, sal_Bool > ApiSpecialTokenInfo;
 
 /** A vector of formula tokens with additional convenience functions. */
 class ApiTokenVector : public ::std::vector< ApiToken >
@@ -270,7 +287,7 @@ public:
     inline void         append( sal_Int32 nOpCode, const Type& rData ) { append( nOpCode ) <<= rData; }
 };
 
-// token sequence iterator ====================================================
+// Token sequence iterator ====================================================
 
 /** Token sequence iterator that is able to skip space tokens. */
 class ApiTokenIterator
@@ -297,7 +314,7 @@ private:
     const bool          mbSkipSpaces;       /// true = Skip whitespace tokens.
 };
 
-// list of API op-codes =======================================================
+// List of API op-codes =======================================================
 
 /** Contains all API op-codes needed to build formulas with tokens. */
 struct ApiOpCodes
@@ -456,23 +473,23 @@ struct FunctionParamInfo
     bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
 };
 
-// function data ==============================================================
+// Function data ==============================================================
 
 /** This enumeration contains constants for all known external libraries
     containing supported sheet functions. */
 enum FunctionLibraryType
 {
-    FUNCLIB_EUROTOOL,           /// EuroTool add-in with EUROCONVERT function.
-    FUNCLIB_UNKNOWN             /// Unknown library.
+    FUNCLIB_UNKNOWN = 0,        /// Unknown library (must be zero).
+    FUNCLIB_EUROTOOL            /// EuroTool add-in with EUROCONVERT function.
 };
 
 // ----------------------------------------------------------------------------
 
 /** Represents information for a spreadsheet function.
 
-    The member mpParamInfos points to an array of type information structures
+    The member mpParamInfos points to a C-array of type information structures
     for all parameters of the function. The last initialized structure
-    describing a regular parameter (member meValid == EXC_PARAMVALID_ALWAYS) in
+    describing a regular parameter (member meValid == FUNC_PARAM_REGULAR) in
     this array is used repeatedly for all following parameters supported by a
     function.
  */
@@ -490,7 +507,7 @@ struct FunctionInfo
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
     const FunctionParamInfo* mpParamInfos;  /// Information about all parameters.
-    bool                mbParamPairs;       /// true = optional parameters are expected to appear in pairs.
+    bool                mbParamPairs;       /// True = optional parameters are expected to appear in pairs.
     bool                mbVolatile;         /// True = volatile function.
     bool                mbExternal;         /// True = external function in Calc.
     bool                mbMacroFunc;        /// True = macro sheet function or command.
@@ -499,7 +516,7 @@ struct FunctionInfo
 
 typedef RefVector< FunctionInfo > FunctionInfoVector;
 
-// function info parameter class iterator =====================================
+// Function info parameter class iterator =====================================
 
 /** Iterator working on the mpParamInfos member of the FunctionInfo struct.
 
@@ -525,7 +542,7 @@ private:
     bool                mbParamPairs;
 };
 
-// base function provider =====================================================
+// Base function provider =====================================================
 
 struct FunctionProviderImpl;
 
@@ -566,7 +583,7 @@ private:
     FunctionProviderImplRef mxFuncImpl;     /// Shared implementation between all copies of the provider.
 };
 
-// op-code and function provider ==============================================
+// Op-code and function provider ==============================================
 
 struct OpCodeProviderImpl;
 
@@ -577,7 +594,7 @@ class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelpe
 {
 public:
     explicit            OpCodeProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             FilterType eFilter, BiffType eBiff, bool bImportFilter );
     virtual             ~OpCodeProvider();
 
@@ -604,7 +621,7 @@ class ApiParserWrapper : public OpCodeProvider
 {
 public:
     explicit            ApiParserWrapper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             const OpCodeProvider& rOpCodeProv );
 
     /** Returns read/write access to the formula parser property set. */
@@ -621,74 +638,7 @@ private:
     PropertySet         maParserProps;
 };
 
-// formula contexts ===========================================================
-
-class FormulaContext
-{
-public:
-    inline void         setBaseAddress( const ::com::sun::star::table::CellAddress& rBaseAddress )
-                            { maBaseAddress = rBaseAddress; }
-
-    inline const ::com::sun::star::table::CellAddress& getBaseAddress() const { return maBaseAddress; }
-    inline bool         isRelativeAsOffset() const { return mbRelativeAsOffset; }
-    inline bool         is2dRefsAs3dRefs() const { return mb2dRefsAs3dRefs; }
-    inline bool         isNulCharsAllowed() const { return mbAllowNulChars; }
-
-    virtual void        setTokens( const ApiTokenSequence& rTokens ) = 0;
-    virtual void        setSharedFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
-
-protected:
-    explicit            FormulaContext(
-                            bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs,
-                            bool bAllowNulChars = false );
-    virtual             ~FormulaContext();
-
-private:
-    ::com::sun::star::table::CellAddress maBaseAddress;
-    bool                mbRelativeAsOffset;
-    bool                mb2dRefsAs3dRefs;
-    bool                mbAllowNulChars;
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores the converted formula token sequence in a class member. */
-class TokensFormulaContext : public FormulaContext
-{
-public:
-    explicit            TokensFormulaContext(
-                            bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs,
-                            bool bAllowNulChars = false );
-
-    inline const ApiTokenSequence& getTokens() const { return maTokens; }
-
-    virtual void        setTokens( const ApiTokenSequence& rTokens );
-
-private:
-    ApiTokenSequence    maTokens;
-};
-
-// ----------------------------------------------------------------------------
-
-/** Uses the com.sun.star.sheet.XFormulaTokens interface to set a token sequence. */
-class SimpleFormulaContext : public FormulaContext
-{
-public:
-    explicit            SimpleFormulaContext(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens >& rxTokens,
-                            bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs,
-                            bool bAllowNulChars = false );
-
-    virtual void        setTokens( const ApiTokenSequence& rTokens );
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens > mxTokens;
-};
-
-// formula parser/printer base class for filters ==============================
+// Formula parser/printer base class for filters ==============================
 
 /** Base class for import formula parsers and export formula compilers. */
 class FormulaProcessorBase : public OpCodeProvider, protected ApiOpCodes, public WorkbookHelper
@@ -894,6 +844,24 @@ public:
      */
     bool                extractString(
                             ::rtl::OUString& orString,
+                            const ApiTokenSequence& rTokens ) const;
+
+    /** Tries to extract information about a special token used for array
+        formulas, shared formulas, or table operations.
+
+        @param orTokenInfo  (output parameter) The extracted information about
+            the token. Contains the base address and the token type (sal_False
+            for array or shared formulas, sal_True for table operations).
+
+        @param rTokens  The token sequence to be parsed. If it contains exactly
+            one OPCODE_BAD token with special token information, this
+            information will be extracted.
+
+        @return  True = token sequence is valid, output parameter orTokenInfo
+            contains the token information extracted from the token sequence.
+     */
+    bool                extractSpecialTokenInfo(
+                            ApiSpecialTokenInfo& orTokenInfo,
                             const ApiTokenSequence& rTokens ) const;
 
     /** Converts a single string with separators in the passed formula token

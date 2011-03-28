@@ -25,20 +25,22 @@
  *
  ************************************************************************/
 
-#include "cdatasection.hxx"
+#include <cdatasection.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 namespace DOM
 {
-    CCDATASection::CCDATASection(const xmlNodePtr aNodePtr)
+    CCDATASection::CCDATASection(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CCDATASection_Base(rDocument, rMutex,
+                NodeType_CDATA_SECTION_NODE, pNode)
     {
-        m_aNodeType = NodeType_CDATA_SECTION_NODE;
-        init_text(aNodePtr);
     }
 
-    void SAL_CALL CCDATASection::saxify(
-            const Reference< XDocumentHandler >& i_xHandler) {
+    void CCDATASection::saxify(const Reference< XDocumentHandler >& i_xHandler)
+    {
         if (!i_xHandler.is()) throw RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
         if (xExtended.is()) {

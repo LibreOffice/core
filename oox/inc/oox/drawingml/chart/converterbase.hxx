@@ -34,7 +34,6 @@
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
-    namespace lang { class XMultiServiceFactory; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }
@@ -138,9 +137,10 @@ public:
         OOXML layout model. Returns true, if returned rectangle is valid. */
     bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect ) const;
 
-    /** Tries to set the position from the contained OOXML layout model.
-        Returns true, if a manual position could be calculated. */
+    /** Tries to set the position and size from the contained OOXML layout model.
+        Returns true, if a manual position and size could be calculated. */
     bool                convertFromModel( PropertySet& rPropSet );
+
     /** Tries to set the position from the contained OOXML layout model.
         Returns true, if a manual position could be calculated. */
     bool                convertFromModel(

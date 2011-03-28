@@ -36,7 +36,6 @@
 
 namespace oox {
     class GraphicHelper;
-    class ModelObjectHelper;
     class PropertyMap;
     class PropertySet;
 }
@@ -44,38 +43,7 @@ namespace oox {
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
-
-enum FillPropertyId
-{
-    FillStyleId,
-    FillColorId,
-    FillTransparenceId,
-    FillGradientId,
-    FillBitmapUrlId,
-    FillBitmapModeId,
-    FillBitmapSizeXId,
-    FillBitmapSizeYId,
-    FillBitmapOffsetXId,
-    FillBitmapOffsetYId,
-    FillBitmapRectanglePointId,
-    FillId_END
-};
-
-struct FillPropertyIds
-{
-    const sal_Int32*    mpnPropertyIds;
-    bool                mbNamedFillGradient;
-    bool                mbNamedFillBitmap;
-
-    explicit            FillPropertyIds(
-                            const sal_Int32* pnPropertyIds,
-                            bool bNamedFillGradient,
-                            bool bNamedFillBitmap );
-
-    inline bool         has( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
-    inline sal_Int32    operator[]( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
-};
+class ShapePropertyMap;
 
 // ============================================================================
 
@@ -147,8 +115,6 @@ struct FillProperties
     PatternFillProperties maPatternProps;       /// Properties for pattern fills.
     BlipFillProperties  maBlipProps;            /// Properties for bitmap fills.
 
-    static FillPropertyIds DEFAULT_IDS;         /// Default fill property identifiers for shape fill.
-
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const FillProperties& rSourceProps );
 
@@ -158,19 +124,8 @@ struct FillProperties
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjHelper,
+                            ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
-                            const FillPropertyIds& rPropIds = DEFAULT_IDS,
-                            sal_Int32 nShapeRotation = 0,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
-
-    /** Writes the properties to the passed property set. */
-    void                pushToPropSet(
-                            PropertySet& rPropSet,
-                            ModelObjectHelper& rModelObjHelper,
-                            const GraphicHelper& rGraphicHelper,
-                            const FillPropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nShapeRotation = 0,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
@@ -187,12 +142,6 @@ struct GraphicProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const GraphicHelper& rGraphicHelper,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
-
-    /** Writes the properties to the passed property set. */
-    void                pushToPropSet(
-                            PropertySet& rPropSet,
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };

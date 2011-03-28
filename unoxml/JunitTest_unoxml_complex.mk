@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,43 +14,39 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=../..
+$(eval $(call gb_JunitTest_JunitTest,unoxml_complex))
 
-PRJNAME=unoxml
-TARGET=eventsimpl
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_set_defs,unoxml_complex,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/unoxml/qa/complex/unoxml/testdocuments \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_jars,unoxml_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_JunitTest_add_sourcefiles,unoxml_complex,\
+    unoxml/qa/complex/unoxml/DOMTest \
+    unoxml/qa/complex/unoxml/TestDocument \
+))
 
-.IF "$(SYSTEM_LIBXML)" == "YES"
-CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
-.ENDIF
+$(eval $(call gb_JunitTest_add_classes,unoxml_complex,\
+    complex.unoxml.DOMTest \
+))
 
-# --- Files --------------------------------------------------------
-
-SLOFILES =\
-    $(SLO)$/event.obj \
-    $(SLO)$/eventdispatcher.obj \
-    $(SLO)$/mutationevent.obj \
-    $(SLO)$/uievent.obj \
-    $(SLO)$/mouseevent.obj \
-    $(SLO)$/testlistener.obj            
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
+# vim: set noet sw=4 ts=4:
