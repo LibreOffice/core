@@ -110,14 +110,17 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #include <unistd.h>
 #endif
 
+#include <basic/sbobjmod.hxx>
+
+#include <basic/sbobjmod.hxx>
+
 #ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
 #include <io.h>
+#undef GetObject
+#undef GradientSyle_RECT
 #endif
-
-
-#include <basic/sbobjmod.hxx>
-
-#include <basic/sbobjmod.hxx>
 
 static void FilterWhiteSpace( String& rStr )
 {

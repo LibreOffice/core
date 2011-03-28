@@ -39,6 +39,10 @@
 #include <basic/ttstrhlp.hxx>
 #include <basic/process.hxx>
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 Process::Process()
 : m_nArgumentCount( 0 )
 , m_pArgumentList( NULL )
