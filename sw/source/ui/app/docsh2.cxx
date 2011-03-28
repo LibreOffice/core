@@ -835,7 +835,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         const SfxFilter* pFlt = aIter.First();
                         while( pFlt )
                         {
-                            if( pFlt && pFlt->IsAllowedAsTemplate() )
+                            // --> OD #i117339#
+//                            if( pFlt && pFlt->IsAllowedAsTemplate() )
+                            if( pFlt && pFlt->IsAllowedAsTemplate() &&
+                                ( pFlt->GetUserData().EqualsAscii("CXML") ||
+                                  pFlt->GetUserData().EqualsAscii("CXMLV") ) )
                             {
                                 const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
                                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
@@ -1772,10 +1776,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     INetURLObject aURLObj( rURL );
     String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    SwRead pRead = 0;
-    SwReader* pReader = 0;
-    SwPaM* pPam = 0;
-
     // Filter bestimmen:
 //  const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
@@ -1791,10 +1791,41 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
         SfxFilterMatcher aWebMatcher( sWebFactory );
         aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     }
-    if( aMed.IsStorage() )
+    // --> OD #i117339# - trigger import only for own formats
+//    if( aMed.IsStorage() )
+    bool bImport( false );
+    {
+        if ( aMed.IsStorage() )
+        {
+            // As <SfxMedium.GetFilter().IsOwnFormat() resp. IsOwnTemplateFormat()
+            // does not work correct (e.g., MS Word 2007 XML Template),
+            // use workaround provided by MAV.
+            uno::Reference< embed::XStorage > xStorage = aMed.GetStorage();
+            if ( xStorage.is() )
+            {
+                // use <try-catch> on retrieving <MediaType> in order to check,
+                // if the storage is one of our own ones.
+                try
+                {
+                    uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
+                    const ::rtl::OUString aMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+                    xProps->getPropertyValue( aMediaTypePropName );
+                    bImport = true;
+                }
+                catch( const uno::Exception& )
+                {
+                    bImport = false;
+                }
+            }
+        }
+    }
+    if ( bImport )
+    // <--
     {
         DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
-        pRead =  ReadXML;
+        SwRead pRead =  ReadXML;
+        SwReader* pReader = 0;
+        SwPaM* pPam = 0;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
@@ -1804,19 +1835,10 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
             pReader = new SwReader( aMed, rURL, *pPam );
         }
         else
+        {
             pReader = new SwReader( aMed, rURL, *pWrtShell->GetCrsr() );
-    }
-    else if( pFlt )
-    {
-//      if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
-//          pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
-//          pRead = ReadSwg;
-        pReader = new SwReader( aMed, rURL, pDoc );
-    }
+        }
 
-    ASSERT( pRead, "no reader found" );
-    if( pRead )
-    {
         pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );
         pRead->GetReaderOpt().SetFrmFmts( rOpt.IsFrmFmts() );
         pRead->GetReaderOpt().SetPageDescs( rOpt.IsPageDescs() );
@@ -1834,9 +1856,10 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
             nErr = pReader->Read( *pRead );
             pWrtShell->EndAllAction();
         }
+        delete pPam;
+        delete pReader;
     }
-    delete pPam;
-    delete pReader;
+
     return nErr;
 }
 

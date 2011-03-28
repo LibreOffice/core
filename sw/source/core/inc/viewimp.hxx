@@ -59,6 +59,11 @@ class SwPrintData;
 class SwPagePreviewLayout;
 struct PrevwPage;
 class SwTxtFrm;
+// --> OD #i76669#
+namespace sdr { namespace contact {
+        class ViewObjectContactRedirector;
+} }
+// <--
 
 class SwViewImp
 {
@@ -215,11 +220,13 @@ public:
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
     // OD 25.06.2003 #108784# - correct type of 1st parameter
+    // OD #i76669# - added parameter <pRedirector>
     void   PaintLayer( const SdrLayerID _nLayerID,
                        SwPrintData const*const pPrintData,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor = 0,
-                       const bool _bIsPageRightToLeft = false ) const;
+                       const bool _bIsPageRightToLeft = false,
+                       sdr::contact::ViewObjectContactRedirector* pRedirector = 0 ) const;
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.

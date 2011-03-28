@@ -870,11 +870,10 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             UpdateObjInSortedList();
         }
         // <--
+        // --> OD #i87645# - reset flags for the layout process (only if something has been invalidated)
+        ResetLayoutProcessBools();
+        // <--
     }
-
-    // --> OD 2005-07-18 #i51474# - reset flags for the layout process
-    ResetLayoutProcessBools();
-    // <--
 }
 
 void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
