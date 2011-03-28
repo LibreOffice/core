@@ -1098,16 +1098,21 @@ namespace svt
         ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
-            aNewItem.reset();
+            aNewItem = ::boost::optional< size_t >();
 
-        if ( aOldItem != aNewItem )
+        bool const bChanged(
+                ( !aOldItem && aNewItem )
+                || ( aOldItem && !aNewItem )
+                || ( aOldItem && aNewItem && aOldItem != aNewItem ) )
+            ;
+        if ( bChanged )
         {
-            if ( !!aOldItem )
+            if ( aOldItem )
                 m_pImpl->InvalidateItem( *aOldItem );
 
             m_pImpl->m_aHoveredItem = aNewItem;
 
-            if ( !!aNewItem )
+            if ( aNewItem )
                 m_pImpl->InvalidateItem( *aNewItem );
         }
     }
