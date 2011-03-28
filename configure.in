@@ -6774,7 +6774,11 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
                 if test -f $ANT_HOME/lib/ant/ant.jar; then
                     ANT_LIB="$ANT_HOME/lib/ant"
                 else
-                    AC_MSG_ERROR([Ant libraries not found!])
+                   if test -f /usr/share/lib/ant/ant.jar; then
+                       ANT_LIB=/usr/share/lib/ant
+                   else
+                       AC_MSG_ERROR([Ant libraries not found!])
+                   fi
                 fi  
              fi
           fi
@@ -6861,7 +6865,11 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
-            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           if test -e /usr/share/lib/java/junit.jar; then
+              OOO_JUNIT_JAR=/usr/share/lib/java/junit.jar
+           else
+              OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           fi
         fi
     else
         OOO_JUNIT_JAR=$with_junit
