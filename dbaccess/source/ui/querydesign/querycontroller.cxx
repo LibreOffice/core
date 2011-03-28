@@ -671,7 +671,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     }
                 }
             }
-            catch(const SQLException& e)
+            catch(const SQLException&)
             {
                 aError = ::cppu::getCaughtException();
             }
@@ -725,7 +725,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     {
                         xCloseFrame->close( sal_True );
                     }
-                    catch( const Exception& )
+                    catch(const Exception&)
                     {
                         OSL_FAIL( "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
                     }
@@ -733,7 +733,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 else
                     Execute(ID_BROWSER_QUERY_EXECUTE,Sequence< PropertyValue >());
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
             }
             break;
@@ -1050,7 +1050,7 @@ void OQueryController::impl_initialize()
 
         setModified(sal_False);
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         DBG_UNHANDLED_EXCEPTION();
         // we caught an exception so we switch to text only mode
@@ -1101,7 +1101,7 @@ void OQueryController::setQueryComposer()
                 m_xComposer = xFactory->createQueryComposer();
                 getContainer()->setStatement(m_sStatement);
             }
-            catch (Exception&)
+            catch(const Exception&)
             {
                 m_xComposer = NULL;
             }
@@ -1560,13 +1560,13 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         bSuccess = true;
 
     }
-    catch( const SQLException& )
+    catch(const SQLException&)
     {
         if ( !bNew )
             m_sName = sOriginalName;
         aInfo = SQLExceptionInfo( ::cppu::getCaughtException() );
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         if ( !bNew )
             m_sName = sOriginalName;
@@ -1611,7 +1611,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             m_xComposer->setQuery(sTranslatedStmt);
             sTranslatedStmt = m_xComposer->getComposedQuery();
         }
-        catch(SQLException& e)
+        catch(const SQLException& e)
         {
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
