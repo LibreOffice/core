@@ -5454,7 +5454,12 @@ fi
 dnl We also need to check for --with-gnu-cp
 
 if test -z "$with_gnu_cp"; then
-   AC_PATH_PROGS(GNUCP, gnucp cp)
+   # check the place where the good stuff is hidden on Solaris...
+   if test -x /usr/gnu/bin/cp; then
+      GNUCP=/usr/gnu/bin/cp
+   else
+      AC_PATH_PROGS(GNUCP, gnucp cp)
+   fi
    if test -z $GNUCP; then
       AC_MSG_ERROR([Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it])
    fi
