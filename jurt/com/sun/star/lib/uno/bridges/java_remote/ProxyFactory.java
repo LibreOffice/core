@@ -113,9 +113,8 @@ final class ProxyFactory {
             throws Throwable
         {
             if (method.equals(METHOD_EQUALS) || method.equals(METHOD_IS_SAME)) {
-                return new Boolean(
-                    args[0] != null
-                    && oid.equals(UnoRuntime.generateOid(args[0])));
+                return Boolean.valueOf(args[0] != null
+                        && oid.equals(UnoRuntime.generateOid(args[0])));
             } else if (method.equals(METHOD_HASH_CODE)) {
                 return new Integer(oid.hashCode());
             } else if (method.equals(METHOD_TO_STRING)) {

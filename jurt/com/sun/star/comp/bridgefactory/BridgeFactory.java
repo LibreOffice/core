@@ -108,7 +108,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
         com.sun.star.uno.RuntimeException
     {
         boolean hasName = sName.length() != 0;
-        Object context = hasName ? (Object) sName : (Object) new UniqueToken();
+        Object context = hasName ? sName : new UniqueToken();
             // UnoRuntime.getBridgeByName internally uses context.toString() to
             // distinguish bridges, so the result of
             // new UniqueToken().toString() might clash with an explicit
@@ -128,7 +128,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             }
         }
 
-        XBridge xBridge = null;
+        XBridge xBridge;
 
         try {
             IBridge iBridge = UnoRuntime.getBridgeByName("java", context, "remote", context, hasName ? new Object[]{sProtocol, aConnection, anInstanceProvider, sName} : new Object[]{sProtocol, aConnection, anInstanceProvider});

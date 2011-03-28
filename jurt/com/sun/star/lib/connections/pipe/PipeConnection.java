@@ -82,7 +82,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         _bFirstRead = true;
 
         // get pipe name from pipe descriptor
-        String aPipeName = null;
+        String aPipeName  ;
         StringTokenizer aTokenizer = new StringTokenizer( description, "," );
         if ( aTokenizer.hasMoreTokens() )
         {
