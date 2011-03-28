@@ -112,7 +112,7 @@ gb_ENABLE_PCH := $(false)
 endif
 
 # for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables,$(MAKECMDGOALS)),)
+ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
@@ -291,5 +291,56 @@ endif
 
 export gb_AWK
 export gb_XSLTPROC
+
+define gb_HelpMessage
+NAME
+       gbuild - GNU make based build system for LibreOffice
+
+SYNOPSIS
+       make [ -f makefile ] [ options ] [ variable=value ... ] [ targets ] ...
+
+IMPORTANT OPTIONS
+       -r Eliminate use of the built-in implicit rules. Improves performance, please use always.
+       -s Silent operation; do not print the commands as they are executed.
+
+       -n Print the commands that would be executed, but do not execute them.
+       -k Continue as much as possible after an error.
+
+       -j Specifies the number of jobs (commands) to run simultaneously.
+       -l Specifies that no new jobs (commands) should be started if there are others jobs running and the load average is at least load.
+
+       -t Touch files (mark them up to date without really changing them) instead of running their commands.
+       -W Pretend that the target file has just been modified.
+       -o Do not remake the file file even if it is older than its dependencies, and do not remake anything on account of changes in file.
+
+       -p Print the data base (rules and variable values) that results from reading the makefiles.
+       --debug=b debug make run, see GNU make man page for details
+       (descriptions from GNU make man page)
+
+AVAILABLE TARGETS
+       allandcheck     build product and run unit tests (default goal)
+       all             build product
+       check           run unit tests
+       subsequentcheck run system tests (requires full installation)
+       clean           remove all generated files
+
+INTERACTIVE VARIABLES:
+       DEBUG           If not empty, build with OSL_DEBUG_LEVEL=2 and symbols.
+       debug
+       ENABLE_SYMBOLS  If not empty, build with debug symbols. Automatically enabled by DEBUG/debug.
+       enable_symbols
+       ENABLE_PCH      If not empty, use precompiled headers (Windows only).
+       CFLAGS          Add as compiler flags for plain c compilation.
+       CXXFLAGSX       Add as compiler flags for c++ compilation.
+       gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
+       gb_COLOR        Use ASCII color output.
+       gb_TITLES       Show progress in terminal title.
+
+endef
+
+.PHONY: help
+help :
+	$(info $(gb_HelpMessage))
+	@true
 
 # vim: set noet sw=4:
