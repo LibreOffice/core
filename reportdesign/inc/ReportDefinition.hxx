@@ -74,7 +74,7 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::comphelper::WeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
+    typedef ::comphelper::PartialWeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
                                                     ,   ::com::sun::star::document::XEventBroadcaster
                                                     ,   ::com::sun::star::lang::XServiceInfo
                                                     ,   ::com::sun::star::frame::XModule
