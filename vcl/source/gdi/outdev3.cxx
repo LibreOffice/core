@@ -3548,12 +3548,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     {
         long    nCurX = nStartX;
         long    nCurY = nStartY;
-        long    nDiffX = 2;
         long    nDiffY = nHeight-1;
         long    nCount = nWidth;
-        long    nOffY = -1;
-        long    nFreq;
-        long    i;
         long    nPixWidth;
         long    nPixHeight;
         sal_Bool    bDrawPixAsRect;
@@ -3593,8 +3589,11 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         }
         else
         {
+            long nDiffX = 2;
+            long nOffY = -1;
+            long i;
             nCurY += nDiffY;
-            nFreq = nCount / (nDiffX+nDiffY);
+            long nFreq = nCount / (nDiffX+nDiffY);
             while ( nFreq-- )
             {
                 for( i = nDiffY; i; --i )
@@ -4851,7 +4850,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         // auf mehr als Zwei Zeilen gebrochen wird...
                         if ( xHyph.is() )
                         {
-                            sal_Unicode cAlternateReplChar = 0;
                             i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                 //          sal_uInt16 nWordStart = nBreakPos;
                 //          sal_uInt16 nBreakPos_OLD = nBreakPos;
@@ -4922,6 +4920,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             }
 
                                             DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Falsche Annahme!" );
+
+                                            sal_Unicode cAlternateReplChar = 0;
 
                                             if ( nTxtEnd > nTxtStart )
                                                 cAlternateReplChar = aAlt.GetChar( nAltStart );
