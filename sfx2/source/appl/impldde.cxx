@@ -30,7 +30,8 @@
 #include "precompiled_sfx2.hxx"
 
 #if defined(WNT)
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 #include "impldde.hxx"
