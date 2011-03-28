@@ -70,6 +70,7 @@ enum StackVarEnum
     svExternalSingleRef,
     svExternalDoubleRef,
     svExternalName,
+    svSubroutine,                       // A token with a subroutine token array.
     svError,                            // error token
     svMissing = 0x70,                   // 0 or ""
     svSep,                              // separator, ocSep, ocOpen, ocClose
@@ -89,6 +90,7 @@ class FormulaToken;
 typedef SimpleIntrusiveReference< class FormulaToken > FormulaTokenRef;
 typedef SimpleIntrusiveReference< const class FormulaToken > FormulaConstTokenRef;
 
+class FormulaTokenArray;
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
@@ -361,6 +363,23 @@ public:
     virtual short*              GetJump() const;
     virtual sal_Bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new FormulaJumpToken(*this); }
+};
+
+
+class FORMULA_DLLPUBLIC FormulaSubroutineToken : public FormulaToken
+{
+public:
+    /** Takes ownership of pArray and deletes it upon destruction! */
+                                FormulaSubroutineToken( const FormulaTokenArray* pArray ) :
+                                    FormulaToken( svSubroutine, ocCall ), mpArray( pArray) {}
+                                FormulaSubroutineToken( const FormulaSubroutineToken& r );
+    virtual                     ~FormulaSubroutineToken();
+    virtual FormulaToken*       Clone() const { return new FormulaSubroutineToken(*this); }
+    virtual sal_Bool            operator==( const FormulaToken& rToken ) const;
+    const FormulaTokenArray*    GetTokenArray() const;
+
+private:
+    const FormulaTokenArray*    mpArray;
 };
 
 
