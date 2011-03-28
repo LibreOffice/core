@@ -39,7 +39,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <prewin.h>
 #include <windows.h>
+#include <postwin.h>
 #include <math.h>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
