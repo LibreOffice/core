@@ -2184,12 +2184,13 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
         {
             if( !m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
             {
-                Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
                 DBTreeListUserData* pEntryData = new DBTreeListUserData;
                 pEntryData->eType = _eEntryType;
-                if ( _eEntryType == etQuery && xChild.is() )
+                if ( _eEntryType == etQuery )
                 {
-                    pEntryData->eType = etQueryContainer;
+                    Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
+                    if ( xChild.is() )
+                        pEntryData->eType = etQueryContainer;
                 }
                 implAppendEntry( _pParent, *pIter, pEntryData, pEntryData->eType );
             }
