@@ -314,11 +314,10 @@ uno::Any CollectionBase::getAnyItemOrThis( const uno::Any& rIndex ) throw (uno::
 {
     if( !rIndex.hasValue() )
         return uno::Any( uno::Reference< XCollectionBase >( this ) );
-    if( rIndex.has< sal_Int32 >() )
-        return getItemByIndex( rIndex.get< sal_Int32 >() );
     if( rIndex.has< ::rtl::OUString >() )
         return getItemByName( rIndex.get< ::rtl::OUString >() );
-    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid item index." ) ), 0 );
+    // extractIntFromAny() throws if no index can be extracted
+    return getItemByIndex( extractIntFromAny( rIndex ) );
 }
 
 // protected ------------------------------------------------------------------
