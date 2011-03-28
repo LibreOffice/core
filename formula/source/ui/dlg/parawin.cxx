@@ -107,7 +107,6 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 
     if ( nArgs > 4 )
         nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
-        //@ nArg += (sal_uInt16)aSlider.GetThumbPos();
 
     if ( (nArgs > 0) && (nArg<nArgs) )
     {
@@ -177,7 +176,6 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
             SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
     }
     if(nArg<nArgs) SetArgVal(i,aParaArray[nArg]);
-    //@ aArgInput[i].SetArgVal( *(pArgArr[nOffset+i]) );
 
 }
 
@@ -411,7 +409,6 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     }
     else
     {
-        //aSlider.SetEndScrollHdl( LINK( this, ScFormulaDlg, ScrollHdl ) );
         aSlider.SetPageSize( 4 );
         aSlider.SetVisibleSize( 4 );
         aSlider.SetLineSize( 1 );

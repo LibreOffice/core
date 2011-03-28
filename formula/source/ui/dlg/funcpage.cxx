@@ -58,7 +58,6 @@ FormulaListBox::FormulaListBox( Window* pParent, const ResId& rResId ):
 void FormulaListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyEvent aKEvt=rKEvt;
-    //ListBox::KeyInput(rKEvt);
 
     if(aKEvt.GetCharCode()==' ')
         DoubleClick();
@@ -95,7 +94,6 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
-    //
     aFtCategory     ( this, ModuleRes( FT_CATEGORY ) ),
     aLbCategory     ( this, ModuleRes( LB_CATEGORY ) ),
     aFtFunction     ( this, ModuleRes( FT_FUNCTION ) ),

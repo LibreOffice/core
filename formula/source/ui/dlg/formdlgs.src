@@ -51,18 +51,6 @@ TabPage RID_FORMULATAB_FUNCTION
             < "Last Used" ; Default ; > ;
             < "All" ; Default ; > ;
         };
-        //  < "Database" ; Default ; > ;
-        //  < "Date&Time" ; Default ; > ;
-        //  < "Financial" ; Default ; > ;
-        //  < "Information" ; Default ; > ;
-        //  < "Logical" ; Default ; > ;
-        //  < "Mathematical" ; Default ; > ;
-        //  < "Array" ; Default ; > ;
-        //  < "Statistical" ; Default ; > ;
-        //  < "Spreadsheet" ; Default ; > ;
-        //  < "Text" ; Default ; > ;
-        //  < "Add-in" ; Default ; > ;
-        //};
     };
     ListBox LB_FUNCTION
     {
@@ -302,7 +290,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
 };
 ModelessDialog RID_FORMULADLG_FORMULA
 {
-    // OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 321 , 228 ) ;

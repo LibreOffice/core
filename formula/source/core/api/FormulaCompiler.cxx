@@ -123,11 +123,6 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocNominal:
         case ocPercentSign:
             return NUMBERFORMAT_PERCENT;
-//      case ocSum:
-//      case ocSumSQ:
-//      case ocProduct:
-//      case ocAverage:
-//          return -1;
         default:
             return NUMBERFORMAT_NUMBER;
     }
@@ -480,7 +475,6 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             }
             else
             {
-                //DBG_ASSERT( isCore(), "FormulaCompiler::OpCodeMap::createSequenceOfAvailableMappings: AddIn mapping from collection only implemented for core languages");
                 _rCompiler.fillAddInToken(aVec,isEnglish());
             }
         }
@@ -838,7 +832,7 @@ sal_Bool FormulaCompiler::GetToken()
         return sal_False;
     }
     if ( bAutoCorrect && !pStack )
-    {   // #61426# don't merge stacked subroutine code into entered formula
+    {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
         aCorrectedSymbol.Erase();
     }
@@ -1123,7 +1117,7 @@ void FormulaCompiler::Factor()
                 SetError(errPairExpected);
             short nJumpCount = 0;
             PutCode( pFacToken );
-            // #36253# during AutoCorrect (since pArr->GetCodeError() is
+            // during AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
             // nJump[0]*2+2, which is 3*2+2 on ocIf.
@@ -1901,7 +1895,7 @@ void FormulaCompiler::LocalizeString( String& /*rName*/ )
 void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, sal_Bool bTemp )
 {
     if ( bAutoCorrect && !pStack )
-    {   // #61426# don't merge stacked subroutine code into entered formula
+        {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
         aCorrectedSymbol.Erase();
     }

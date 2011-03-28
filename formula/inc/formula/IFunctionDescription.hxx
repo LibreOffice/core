@@ -46,7 +46,6 @@ namespace formula
     class FormEditData;
     class FormulaTokenArray;
 
-    // ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     class SAL_NO_VTABLE IFunctionManager
     {
     public:
@@ -106,10 +105,6 @@ namespace formula
     {
     public:
         virtual bool isFunction() const = 0;
-        /*
-        OpCode eOp = pToken->GetOpCode();
-        if(!(pToken->IsFunction()|| ocArcTan2<=eOp))
-        */
         virtual sal_uInt32 getArgumentCount() const = 0;
     };
 

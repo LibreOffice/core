@@ -100,7 +100,6 @@ void StructListBox::LoseFocus()
 
 StructPage::StructPage(Window* pParent):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_STRUCT)),
-    //
     aFtStruct       ( this, ModuleRes( FT_STRUCT ) ),
     aTlbStruct      ( this, ModuleRes( TLB_STRUCT ) ),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),

@@ -86,7 +86,6 @@ bool FormulaToken::Is3DRef() const
 
 bool FormulaToken::IsFunction() const
 {
-//    OpCode eOp = GetOpCode();
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
            (GetByte() != 0                                                  // x parameters
@@ -105,7 +104,6 @@ bool FormulaToken::IsFunction() const
 
 sal_uInt8 FormulaToken::GetParamCount() const
 {
-    // OpCode eOp = GetOpCode();
     if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
             eOp != ocIf && eOp != ocChose && eOp != ocPercentSign )
         return 0;       // parameters and specials
@@ -336,7 +334,6 @@ bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSeque
     }
     return bError;
 }
-//////////////////////////////////////////////////////////////////////////
 FormulaToken* FormulaTokenArray::GetNextReference()
 {
     while( nIndex < nLen )
@@ -593,7 +590,6 @@ bool FormulaTokenArray::HasNameOrColRowName() const
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 FormulaTokenArray::FormulaTokenArray()
 {
@@ -733,7 +729,6 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
         pCode = new FormulaToken*[ MAXCODE ];
     if( nLen < MAXCODE-1 )
     {
-        // fprintf (stderr, "Add : %d\n", t->GetOpCode());
         pCode[ nLen++ ] = t;
         if( t->GetOpCode() == ocPush
             && ( t->GetType() == svSingleRef || t->GetType() == svDoubleRef ) )
@@ -1116,7 +1111,6 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
                     bAdd = false;
             }
-            //fprintf( stderr, "ocAddress %d arg %d%s\n", (int)i, (int)pCtx[ pOcas[ i ] ].mnCurArg, (bAdd ? "" : " omitted"));
         }
         switch ( pCur->GetOpCode() )
         {
@@ -1141,7 +1135,6 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 if (nOcas && pOcas[ nOcas-1 ] == nFn && pCtx[ nFn ].mnCurArg == nOmitAddressArg)
                 {
                     bAdd = false;
-                    //fprintf( stderr, "ocAddress %d sep %d omitted\n", (int)nOcas-1, nOmitAddressArg);
                 }
                 break;
             case ocMissing:

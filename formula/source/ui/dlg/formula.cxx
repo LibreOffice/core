@@ -188,7 +188,6 @@ namespace formula
         FixedInfo       aFtFuncDesc;
 
         FixedText       aFtEditName;
-        //FixedInfo     aFtEditDesc;
 
         FixedText       aFtResult;
         ValWnd          aWndResult;
@@ -234,12 +233,9 @@ namespace formula
         rtl::OString    aActivWinId;
         sal_Bool            bIsShutDown;
 
-
-
         Font            aFntBold;
         Font            aFntLight;
         sal_uInt16          nEdFocus;
-    //    Selection       theCurSel;
         sal_Bool            bEditFlag;
         const IFunctionDescription* pFuncDesc;
         xub_StrLen      nArgs;
@@ -272,14 +268,12 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aFtHeadLine     ( pParent, ModuleRes( FT_HEADLINE ) ),
     aFtFuncName     ( pParent, ModuleRes( FT_FUNCNAME ) ),
     aFtFuncDesc     ( pParent, ModuleRes( FT_FUNCDESC ) ),
-    //
     aFtEditName     ( pParent, ModuleRes( FT_EDITNAME ) ),
     aFtResult       ( pParent, ModuleRes( FT_RESULT ) ),
     aWndResult      ( pParent, ModuleRes( WND_RESULT ) ),
 
     aFtFormula      ( pParent, ModuleRes( FT_FORMULA ) ),
     aMEFormula      ( pParent, ModuleRes( ED_FORMULA ) ),
-    //
     aBtnMatrix      ( pParent, ModuleRes( BTN_MATRIX ) ),
     aBtnHelp        ( pParent, ModuleRes( BTN_HELP ) ),
     aBtnCancel      ( pParent, ModuleRes( BTN_CANCEL ) ),
@@ -290,17 +284,14 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aRefBtn         ( pParent, ModuleRes( RB_REF),&aEdRef,_pDlg ),
     aFtFormResult   ( pParent, ModuleRes( FT_FORMULA_RESULT)),
     aWndFormResult  ( pParent, ModuleRes( WND_FORMULA_RESULT)),
-    //
     pTheRefEdit     (NULL),
     pMEdit          (NULL),
     bUserMatrixFlag (sal_False),
-    //
     aTitle1         ( ModuleRes( STR_TITLE1 ) ),        // local resource
     aTitle2         ( ModuleRes( STR_TITLE2 ) ),        // local resource
     aTxtEnd         ( ModuleRes( STR_END ) ),           // local resource
     aTxtOk          ( aBtnEnd.GetText() ),
     m_aFormulaHelper(_pFunctionMgr),
-    //
     bIsShutDown     (sal_False),
     nEdFocus        (0),
     pFuncDesc       (NULL),
@@ -917,7 +908,6 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
             pParaWin->SetActiveLine(nActiv);
         }
 
-        //pParaWin->SetEdFocus( nEdFocus );
         UpdateValues();
     }
     else
@@ -1015,7 +1005,6 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
     }
     else if ( pBtn == &aBtnForward )
     {
-        //@pMEdit->GrabFocus();         // In order to show the selection too
         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
 
         if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
@@ -1025,7 +1014,6 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
             DblClkHdl(pFuncPage);      //new
             aBtnForward.Enable(sal_False); //new
         }
-        //@EditNextFunc( sal_True );
     }
     else if ( pBtn == &aBtnBackward )
     {
@@ -1090,7 +1078,6 @@ void FormulaDlg_Impl::UpdateFunctionDesc()
 
             if ( !m_aArguments.empty() )        // still arguments there?
                 aSig = pDesc->getFormula( m_aArguments );           // for input line
-            //@ m_pHelper->setCurrentFormula( aSig );
         }
     }
     else
@@ -1098,7 +1085,6 @@ void FormulaDlg_Impl::UpdateFunctionDesc()
         aFtFuncName.SetText( String() );
         aFtFuncDesc.SetText( String() );
 
-        //ResizeArgArr( NULL );
         m_pHelper->setCurrentFormula( String() );
     }
 }
@@ -1190,8 +1176,6 @@ void FormulaDlg_Impl::EditThisFunc(xub_StrLen nFStart)
 
     sal_Bool bFound;
 
-    //@bFound = m_pHelper->getNextFunction( aFormula, sal_False, nNextFStart, &nNextFEnd, &pFuncDesc );
-
     bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nNextFStart, &nNextFEnd);
     if ( bFound )
     {
@@ -1229,13 +1213,11 @@ void FormulaDlg_Impl::EditNextFunc( sal_Bool bForward, xub_StrLen nFStart )
     if ( bForward )
     {
         nNextFStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-        //@bFound = m_pHelper->getNextFunction( aFormula, sal_False, nNextFStart, &nNextFEnd, &pFuncDesc );
         bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nNextFStart, &nNextFEnd);
     }
     else
     {
         nNextFStart = nFStart;
-        //@bFound = m_pHelper->getNextFunction( aFormula, sal_True, nNextFStart, &nNextFEnd, &pFuncDesc );
         bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_True, nNextFStart, &nNextFEnd);
     }
 
@@ -1263,7 +1245,6 @@ void FormulaDlg_Impl::EditFuncParas(xub_StrLen nEditPos)
 
         sal_Int32 nArgPos=m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
         m_aFormulaHelper.GetArgStrings(m_aArguments,aFormula, nFStart, nArgs );
-//      m_aArguments = ScFormulaUtil::GetArgStrings( aFormula, nFStart, nArgs );
 
         sal_uInt16 nActiv=pParaWin->GetSliderPos();
         sal_Bool    bFlag=sal_False;
@@ -1547,7 +1528,6 @@ void FormulaDlg_Impl::UpdateSelection()
 
     aRefBtn.Show( pButton != NULL );
 
-    //m_pHelper->RefInputStart( &aEdRef, pButton ? &aRefBtn : NULL );
     ::std::pair<RefButton*,RefEdit*> aPair;
     aPair.first = pButton ? &aRefBtn : NULL;
     aPair.second = &aEdRef;
@@ -1613,15 +1593,11 @@ void FormulaDlg_Impl::Update()
     else
         aTabCtrl.SetCurPageId(TP_STRUCT);
     aBtnMatrix.Check(pData->GetMatrixFlag());
-    /*aTimer.SetTimeout(200);
-    aTimer.SetTimeoutHdl(LINK( this, FormulaDlg_Impl, UpdateFocusHdl));
-    aTimer.Start();*/
 }
 void FormulaDlg_Impl::Update(const String& _sExp)
 {
     CalcStruct(_sExp);
     FillDialog();
-    //aBtnForward.Enable(sal_True); //@New
     FuncSelHdl(NULL);
 }
 void FormulaDlg_Impl::SetMeText(const String& _sText)
@@ -2129,7 +2105,6 @@ IMPL_LINK( FormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void FormEditData::SaveValues()
 {
