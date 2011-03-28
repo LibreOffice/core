@@ -68,7 +68,6 @@ gb_CFLAGS := \
 	-Wendif-labels \
 	-Wextra \
 	-Wshadow \
-	-Woverloaded-virtual \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
@@ -81,6 +80,7 @@ gb_CXXFLAGS := \
 	-Wextra \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
+	-Woverloaded-virtual \
 	-Wshadow \
 	-fPIC \
 	-fmessage-length=0 \
