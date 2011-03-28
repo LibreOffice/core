@@ -169,7 +169,7 @@ public class UCB
         // Fill info for the properties wanted.
         aArg.Properties = new Property[] {new Property()};
 
-        aArg.Properties[0].Name = "Title";
+        aArg.Properties[0].Name = PropertyNames.PROPERTY_TITLE;
         aArg.Properties[0].Handle = -1;
 
         XDynamicResultSet xSet;

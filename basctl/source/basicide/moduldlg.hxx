@@ -229,9 +229,9 @@ protected:
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aPasswordButton;
-    PushButton          aExportButton;
     PushButton          aNewLibButton;
     PushButton          aInsertLibButton;
+    PushButton          aExportButton;
     PushButton          aDelButton;
 
     ScriptDocument      m_aCurDocument;

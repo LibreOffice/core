@@ -37,13 +37,13 @@
 
 class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
 {
+    FixedLine           maCountFL;
     FixedText           maCountLbl;
     NumericField        maCountEdit;
-    FixedLine           maCountFL;
+    FixedLine           maDirFL;
     ImageRadioButton    maHorzBox;
     ImageRadioButton    maVertBox;
     CheckBox            maPropCB;
-    FixedLine           maDirFL;
     OKButton            maOKBtn;
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;

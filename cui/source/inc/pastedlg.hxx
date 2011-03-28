@@ -54,10 +54,10 @@ class SvPasteObjectDialog : public ModalDialog
     FixedText aFtObjectSource;
     RadioButton aRbPaste;
     RadioButton aRbPasteLink;
-    ListBox aLbInsertList;
     CheckBox aCbDisplayAsIcon;
     PushButton aPbChangeIcon;
     FixedLine aFlChoice;
+    ListBox aLbInsertList;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;

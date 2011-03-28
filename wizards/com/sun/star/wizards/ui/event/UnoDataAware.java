@@ -184,12 +184,12 @@ public class UnoDataAware extends DataAware
 
     public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
     {
-        return attachTextControl(data, prop, unoControl, listener, "Date", field, new Integer(0));
+        return attachTextControl(data, prop, unoControl, listener, "Date", field, 0);
     }
 
     public static UnoDataAware attachTimeControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
     {
-        return attachTextControl(data, prop, unoControl, listener, "Time", field, new Integer(0));
+        return attachTextControl(data, prop, unoControl, listener, "Time", field, 0);
     }
 
     public static UnoDataAware attachNumericControl(Object data, String prop, Object unoControl, Listener listener, boolean field)

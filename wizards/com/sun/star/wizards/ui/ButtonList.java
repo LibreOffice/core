@@ -199,7 +199,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         Integer.valueOf(cols * (m_aButtonSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
-            Helper.setUnoPropertyValue(getModel(lblCounter), "Align", new Short((short) 1));
+            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, new Short((short) 1));
             Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
             Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
 
@@ -238,7 +238,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         XButton aButton = dialog.insertImageButton(sButtonName, this,
                 new String[]
                 {
-                    /* "Border", */
+                    /* PropertyNames.PROPERTY_BORDER, */
                     /* "BackgroundColor", */
                     PropertyNames.PROPERTY_HEIGHT,
                     PropertyNames.PROPERTY_HELPURL,
@@ -735,7 +735,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private void setBorder(Object control, Short border)
     {
-        Helper.setUnoPropertyValue(getModel(control), "Border", border);
+        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
     //XWindowPeer peer = ((XControl)UnoRuntime.queryInterface(XControl.class,control)).getPeer();
     //peer.invalidate(InvalidateStyle.CHILDREN);
     }

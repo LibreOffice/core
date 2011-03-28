@@ -732,39 +732,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
 };
 
-// ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_EXAMPLE
+{
+    Text [ en-US ] = "Example" ;
+};
+String STR_PAGE_STYLE
+{
+    Text [ en-US ] = "Page Style" ;
+};
 

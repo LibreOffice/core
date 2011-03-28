@@ -49,6 +49,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
+#include "paragrph.hrc"
 #include <cuires.hrc>
 
 static sal_uInt16 pRanges[] =
@@ -123,6 +124,8 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aAttrSet                ( *rInAttrs.GetPool() )
 {
     FreeResource();
+
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
 
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );

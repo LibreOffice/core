@@ -369,10 +369,10 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
     maPreview       ( this, CUI_RES( CTL_PREVIEW ) ),
-    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) ),
     maBtnOK         ( this, CUI_RES( BTN_OK ) ),
     maBtnCancel     ( this, CUI_RES( BTN_CANCEL ) ),
-    maBtnHelp       ( this, CUI_RES( BTN_HELP ) )
+    maBtnHelp       ( this, CUI_RES( BTN_HELP ) ),
+    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) )
 {
     const Size  aPreviewSize( maPreview.GetOutputSizePixel() );
     Size        aGrfSize( maSizePixel );
@@ -468,6 +468,12 @@ GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraph
     maCbxEdges.SetToggleHdl( GetModifyHdl() );
 
     maMtrWidth.GrabFocus();
+
+    maFtWidth.SetAccessibleRelationMemberOf(&maFlParameter);
+    maMtrWidth.SetAccessibleRelationMemberOf(&maFlParameter);
+    maFtHeight.SetAccessibleRelationMemberOf(&maFlParameter);
+    maMtrHeight.SetAccessibleRelationMemberOf(&maFlParameter);
+    maCbxEdges.SetAccessibleRelationMemberOf(&maFlParameter);
 }
 
 // -----------------------------------------------------------------------------

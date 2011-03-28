@@ -92,3 +92,9 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Size = MAP_APPFONT ( 185 , 18 ) ;
     };
 };
+
+String RID_STR_TLB_MACROS
+{
+    Text [ en-US ] = "Objects Tree";
+};
+

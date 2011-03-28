@@ -106,9 +106,10 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_TABULATOR ), rAttr ),
 
-    aTabBox         ( this, CUI_RES( ED_TABPOS ) ),
     aTabLabel       ( this, CUI_RES( FL_TABPOS ) ),
+    aTabBox         ( this, CUI_RES( ED_TABPOS ) ),
     aTabLabelVert   ( this, CUI_RES( FL_TABPOS_VERT ) ),
+    aTabTypeLabel   ( this, CUI_RES( FL_TABTYPE ) ),
     aLeftTab        ( this, CUI_RES( BTN_TABTYPE_LEFT ) ),
     aRightTab       ( this, CUI_RES( BTN_TABTYPE_RIGHT ) ),
     aCenterTab      ( this, CUI_RES( BTN_TABTYPE_CENTER ) ),
@@ -119,14 +120,13 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     pDezWin         ( new TabWin_Impl( this, CUI_RES( WIN_TABDECIMAL ), (sal_uInt16)(RULER_TAB_DECIMAL|WB_HORZ) ) ),
     aDezCharLabel   ( this, CUI_RES( FT_TABTYPE_DECCHAR ) ),
     aDezChar        ( this, CUI_RES( ED_TABTYPE_DECCHAR ) ),
-    aTabTypeLabel   ( this, CUI_RES( FL_TABTYPE ) ),
+    aFillLabel      ( this, CUI_RES( FL_FILLCHAR ) ),
     aNoFillChar     ( this, CUI_RES( BTN_FILLCHAR_NO ) ),
     aFillPoints     ( this, CUI_RES( BTN_FILLCHAR_POINTS ) ),
     aFillDashLine   ( this, CUI_RES( BTN_FILLCHAR_DASHLINE ) ),
     aFillSolidLine  ( this, CUI_RES( BTN_FILLCHAR_UNDERSCORE ) ),
     aFillSpecial    ( this, CUI_RES( BTN_FILLCHAR_OTHER ) ),
     aFillChar       ( this, CUI_RES( ED_FILLCHAR_OTHER ) ),
-    aFillLabel      ( this, CUI_RES( FL_FILLCHAR ) ),
     aNewBtn         ( this, CUI_RES( BTN_NEW ) ),
     aDelAllBtn      ( this, CUI_RES( BTN_DELALL ) ),
     aDelBtn         ( this, CUI_RES( BTN_DEL ) ),
@@ -145,6 +145,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
         aRightTab .SetText(String(CUI_RES(   ST_RIGHTTAB_ASIAN )));
     }
 
+    aFillChar.SetAccessibleName(String(CUI_RES(   ST_FILLCHAR_OTHER )));
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
@@ -181,6 +182,22 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
 
     aTabBox.SetDoubleClickHdl( LINK( this, SvxTabulatorTabPage, SelectHdl_Impl ) );
     aTabBox.SetModifyHdl( LINK( this, SvxTabulatorTabPage, ModifyHdl_Impl ) );
+
+    aLeftTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+    aRightTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+    aCenterTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+    aDezTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+    aDezCharLabel.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+    aDezChar.SetAccessibleRelationMemberOf( &aTabTypeLabel );
+
+    aNoFillChar.SetAccessibleRelationMemberOf( &aFillLabel );
+    aFillPoints.SetAccessibleRelationMemberOf( &aFillLabel );
+    aFillDashLine.SetAccessibleRelationMemberOf( &aFillLabel );
+    aFillSolidLine.SetAccessibleRelationMemberOf( &aFillLabel );
+    aFillSpecial.SetAccessibleRelationMemberOf( &aFillLabel );
+    aFillChar.SetAccessibleRelationMemberOf( &aFillLabel );
+
+    aFillChar.SetAccessibleRelationLabeledBy(&aFillSpecial);
 
     // das Default-Dezimalzeichen vom System holen
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );

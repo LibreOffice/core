@@ -93,7 +93,7 @@ public class DatabaseControl extends Control
             xPropColumn.setPropertyValue("Hidden", new Boolean(bHidden));
             xPropColumn.setPropertyValue("DataField", sFieldName);
             xPropColumn.setPropertyValue(PropertyNames.PROPERTY_LABEL, _columntitle);
-            xPropColumn.setPropertyValue(PropertyNames.PROPERTY_WIDTH, new Integer(0));  // Width of column is adjusted to Columname
+            xPropColumn.setPropertyValue(PropertyNames.PROPERTY_WIDTH, 0);  // Width of column is adjusted to Columname
 
             XPropertySetInfo xPSI = xPropColumn.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )

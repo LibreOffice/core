@@ -915,7 +915,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     HRESULT ret= S_OK;
     try
     {
-        Sequence<INT16>     outIndex;
+        Sequence<sal_Int16>     outIndex;
         Sequence<Any>   outParams;
         Any                 returnValue;
 
@@ -931,7 +931,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         // try to write back out parameter
         if (outIndex.getLength() > 0)
         {
-            const INT16* pOutIndex = outIndex.getConstArray();
+            const sal_Int16* pOutIndex = outIndex.getConstArray();
             const Any* pOutParams = outParams.getConstArray();
 
             for (sal_Int32 i = 0; i < outIndex.getLength(); i++)

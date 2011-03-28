@@ -1607,6 +1607,11 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     aAutoCapsCB     (this, CUI_RES(CB_AUTOCAPS   )),
     eLang(eLastDialogLanguage)
 {
+    aNewAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_NEWABBREV) ) );
+    aDelAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_DELABBREV) ) );
+    aNewDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_NEWDOUBLECAPS) ) );
+    aDelDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_DELDOUBLECAPS) ) );
+
     FreeResource();
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
@@ -1627,6 +1632,10 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     aAbbrevED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
     aDoubleCapsED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
 
+    aNewAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
+    aDelAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
+    aNewDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
+    aDelDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
 }
 
 /*-----------------14.10.96 15.58-------------------
@@ -2058,6 +2067,13 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     sStandard(CUI_RES(ST_STANDARD))
 {
+    aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
+    aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
+    aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
+    aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
+    aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
+    aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
+
     FreeResource();
 
     sal_Bool bShowSWOptions = sal_False;
@@ -2099,6 +2115,16 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
     aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
 
+    aSglStartQuotePB.SetAccessibleRelationLabeledBy( &aSglStartQuoteFT );
+    aSglEndQuotePB.SetAccessibleRelationLabeledBy( &aSglEndQuoteFT );
+    aSglStartQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
+    aSglEndQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
+    aStartQuotePB.SetAccessibleRelationLabeledBy( &aStartQuoteFT );
+    aEndQuotePB.SetAccessibleRelationLabeledBy( &aEndQuoteFT );
+    aStartQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
+    aEndQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
+    aSglStandardPB.SetAccessibleRelationMemberOf(&aSingleFL);
+    aDblStandardPB.SetAccessibleRelationMemberOf(&aDoubleFL);
 }
 /*-----------------03.07.97 13:17-------------------
 
@@ -2431,6 +2457,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
     aPBEntries.SetClickHdl(LINK(this, OfaAutoCompleteTabPage, DeleteHdl));
     aCBActiv.SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
     aCBCollect.SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
+    aLBEntries.SetAccessibleRelationLabeledBy(&aLBEntries);
 }
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()

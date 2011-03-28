@@ -245,7 +245,10 @@ sal_Int32 AccessibleGridControlTableBase::implGetChildIndex(
 
 void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >& rSeq )
 {
-    rSeq = comphelper::containerToSequence(m_aTable.GetSelectedRows());
+    sal_Int32 const selectionCount( m_aTable.GetSelectedRowCount() );
+    rSeq.realloc( selectionCount );
+    for ( sal_Int32 i=0; i<selectionCount; ++i )
+        rSeq[i] = m_aTable.GetSelectedRowIndex(i);
 }
 
 void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )

@@ -1040,10 +1040,10 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             m_xColumnUpdate->updateNull();
         else
         {
-            // als Value koennen nur double, string oder void auftreten
             try
             {
-                if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE )
+                double f = 0.0;
+                if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE || (aControlValue >>= f)) // #i110323
                 {
                     DBTypeConversion::setValue( m_xColumnUpdate, m_aNullDate, getDouble( aControlValue ), m_nKeyType );
                 }
