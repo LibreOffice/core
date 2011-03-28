@@ -99,7 +99,9 @@ check :
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
 
-subsequentcheck : all 
+# removing the dependency on all for now until we can make a full build with gbuild
+#subsequentcheck : all 
+subsequentcheck : 
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
 	$(call gb_Output_announce_title,all subsequent tests checked.)
 	$(call gb_Output_announce_bell)
