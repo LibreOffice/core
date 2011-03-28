@@ -53,60 +53,18 @@ while (@ARGV) {
         }
         if (!$n) {
             print STDERR "unknown argument \"$arg\"\n";
-            print STDERR "usage: $0 [-kn] [-P<n>] [-- <args>]\n";
-            print STDERR " -k     continue with other dmake invocations upon\n";
-            print STDERR "        failure\n";
+            print STDERR "usage: $0 [-kn] [-P<n>]\n";
+            print STDERR " -k     continue upon failure\n";
             print STDERR " -n     write directories that would be processed\n";
-            print STDERR "        to standard output\n";
-            print STDERR " -P<n>  number of parallel dmake invocations\n";
-            print STDERR " <args> are passed to dmake invocations\n";
+            print STDERR "        to standard output (defunct) \n";
+            print STDERR " -P<n>  number of parallel invocations\n";
             exit(1);
         }
     }
 }
 
-my @testpaths = ();
 my $module;
 my $gbuildpath = "$ENV{'SOLARSRC'}/GNUmakefile.mk";
-foreach $prjdir (`find -L $ENV{'SOLARSRC'} -mindepth 2 -maxdepth 2 -type d -name prj`) {
-    chomp($prjdir);
-    my $buildlst = "$prjdir/build.lst";
-    my %deps = ();
-    open(BUILDLST, $buildlst) or next;
-    while (<BUILDLST>) {
-        next unless
-            /^\s*\w+\s+(\S+)\s+nmake\s+-\s+all\s+(\S+)(\s+(:?\S+\s+)*)NULL\s*$/;
-        my ($dir, $id, $ids) = ($1, $2, $3);
-        $dir =~ s|\\|/|g;
-        $dir =~ s|^[^/]+||;
-        my $makefile = $prjdir . '/../' . $dir . '/makefile.mk';
-        open(MAKEFILE, $makefile) or die("cannot open $makefile");
-        while (<MAKEFILE>) {
-            if (/\bOOO_SUBSEQUENT_TESTS\b/) {
-                push(@testpaths, `readlink -f $prjdir/../$dir`);
-                $deps{$id} = $ids;
-                last;
-            }
-        }
-        close(MAKEFILE);
-    }
-    close(BUILDLST);
-    my $id1;
-    foreach $id1 (keys(%deps)) {
-        my ($id2, $ids);
-        while (($id2, $ids) = each(%deps)) {
-            $ids !~ /\s\Q$id1\E\s/ or die("$module: $id2 depends on $id1");
-        }
-    }
-}
-
-if ($dry_run) {
-    foreach $path (@testpaths) {
-        print "$path\n";
-    }
-    print "$gbuildpath\n";
-    exit(0);
-}
 
 my @failedpaths = ();
 my @gbuildargs = ("-j$max_running", "-s");
@@ -117,53 +75,6 @@ push(@gbuildargs, "--file=$gbuildpath");
 push(@gbuildargs, "subsequentcheck");
 if (system($ENV{'GNUMAKE'}, @gbuildargs) != 0) {
 	push(@failedpaths,$gbuildpath);
-	@testpaths = () unless $keep_going;
 }
 
-my $cmd = 'dmake';
-foreach (@ARGV) {
-    s/'/'\''/g;
-    $cmd .= " '" . $_ . "'";
-}
-$cmd .= ' 2>&1 |';
-
-my %pids = ();
-my $running = 0;
-my $counter = 0;
-while (@testpaths || $running > 0) {
-    while (@testpaths && $running < $max_running) {
-        my $testpath = shift(@testpaths);
-        chomp($testpath);
-        ++$counter;
-        print("$counter: make $testpath\n");
-        my $pid = fork();
-        defined($pid) or die("$counter: $!");
-        if ($pid == 0) {
-            chdir($testpath) or die("$counter: $!");
-            $ENV{'OOO_SUBSEQUENT_TESTS'} = 'TRUE';
-            open(OUTPUT, $cmd) or die("$counter: $!");
-            while (<OUTPUT>) {
-                s/\r?\n$//;
-                print("$counter: $_\n");
-            }
-            close(OUTPUT);
-            exit($? == 0 ? 0 : 1);
-        }
-        $pids{$pid} = $testpath;
-        ++$running;
-    }
-    my $pid = wait();
-    $pid != -1 or die($!);
-    my $testpath = delete($pids{$pid});
-    defined($testpath) or die("unmatched PID $pid");
-    if ($? != 0) {
-        push(@failedpaths, $testpath);
-        @testpaths = () unless $keep_going;
-    }
-    --$running;
-}
-my $failedpath;
-foreach $failedpath (@failedpaths) {
-    print STDERR "failed in $failedpath\n";
-}
 exit(scalar(@failedpaths) == 0 ? 0 : 1);
