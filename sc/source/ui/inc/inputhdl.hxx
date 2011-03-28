@@ -211,7 +211,7 @@ public:
     EditView*       GetTopView()        { return pTopView; }
 
     sal_Bool            DataChanging( sal_Unicode cTyped = 0, sal_Bool bFromCommand = sal_False );
-    void            DataChanged( sal_Bool bFromTopNotify = sal_False );
+    void            DataChanged( sal_Bool bFromTopNotify = sal_False, sal_Bool bSetModified = sal_True );
 
     sal_Bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 

@@ -165,7 +165,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
                     }
-                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0), false);
+                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
                     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 

@@ -175,7 +175,8 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
     bRefresh( sal_False ), // Wang Xu Ming - DataPilot migration
-    mnCacheId( -1) // Wang Xu Ming - DataPilot migration
+    mnCacheId( -1 ), // Wang Xu Ming - DataPilot migration
+    mbCreatingTableData( false )
 {
 }
 
@@ -197,7 +198,8 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
     bRefresh( r.bRefresh ), // Wang Xu Ming - DataPilot migration
-     mnCacheId ( r.mnCacheId ) // Wang Xu Ming - DataPilot migration
+    mnCacheId ( r.mnCacheId ), // Wang Xu Ming - DataPilot migration
+    mbCreatingTableData( false )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -272,7 +274,7 @@ void ScDPObject::SetOutRange(const ScRange& rRange)
         pOutput->SetPosition( rRange.aStart );
 }
 
-void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
+void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc, bool bFromRefUpdate)
 {
     if ( pSheetDesc && rDesc == *pSheetDesc )
         return;             // nothing to do
@@ -280,7 +282,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     DELETEZ( pImpDesc );
     DELETEZ( pServDesc );
 
-    delete pImpDesc;
+    delete pSheetDesc;
     pSheetDesc = new ScSheetSourceDesc(rDesc);
 
     //  make valid QueryParam
@@ -292,6 +294,8 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     pSheetDesc->aQueryParam.bHasHeader = sal_True;
 
     InvalidateSource();     // new source must be created
+    if (!bFromRefUpdate)
+        SetCacheId( -1 );   // #i116504# don't use the same cache ID for a different range (except reference update)
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
@@ -306,6 +310,7 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     pImpDesc = new ScImportSourceDesc(rDesc);
 
     InvalidateSource();     // new source must be created
+    SetCacheId( -1 );
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
@@ -416,8 +421,12 @@ void ScDPObject::CreateOutput()
 
 ScDPTableData* ScDPObject::GetTableData()
 {
-    if (!mpTableData)
+    if (!mpTableData && !mbCreatingTableData)
     {
+        // #i117239# While filling the cache, mpTableData is still null.
+        // Prevent nested calls from GetPivotData and similar functions.
+        mbCreatingTableData = true;
+
         shared_ptr<ScDPTableData> pData;
         if ( pImpDesc )
         {
@@ -453,6 +462,8 @@ ScDPTableData* ScDPObject::GetTableData()
         // End Comments
 
         mpTableData = pData;                        // after SetCacheId
+
+        mbCreatingTableData = false;
     }
 
     return mpTableData.get();
@@ -482,16 +493,19 @@ void ScDPObject::CreateObjects()
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
 
-            ScDPSource* pSource = new ScDPSource( pData );
-            xSource = pSource;
-
-            if ( pSaveData && bRefresh )
+            if ( pData )    // nested GetTableData calls may return NULL
             {
-                pSaveData->Refresh( xSource );
-                bRefresh = sal_False;
+                ScDPSource* pSource = new ScDPSource( pData );
+                xSource = pSource;
+
+                if ( pSaveData && bRefresh )
+                {
+                    pSaveData->Refresh( xSource );
+                    bRefresh = sal_False;
+                }
             }
         }
-        if (pSaveData  )
+        if ( xSource.is() && pSaveData )
             pSaveData->WriteToSource( xSource );
     }
     else if (bSettingsChanged)
@@ -739,7 +753,7 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 if (aNewDesc.aQueryParam.GetEntry(i).bDoQuery)
                     aNewDesc.aQueryParam.GetEntry(i).nField += nDiffX;
 
-            SetSheetDesc( aNewDesc );       // allocates new pSheetDesc
+            SetSheetDesc( aNewDesc, true );     // allocates new pSheetDesc
         }
     }
 }
@@ -767,7 +781,7 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
 {
     r.SetOutRange( aOutRange );
     if ( pSheetDesc )
-        r.SetSheetDesc( *pSheetDesc );
+        r.SetSheetDesc( *pSheetDesc, true );
 }
 
 void ScDPObject::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
@@ -1043,6 +1057,11 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
 sal_Bool ScDPObject::GetPivotData( ScDPGetPivotDataField& rTarget,
                                const std::vector< ScDPGetPivotDataField >& rFilters )
 {
+    // #i117239# Exit with an error if called from creating the cache for this object
+    // (don't create an empty pOutput object)
+    if (mbCreatingTableData)
+        return sal_False;
+
     CreateOutput();             // create xSource and pOutput if not already done
 
     return pOutput->GetPivotData( rTarget, rFilters );

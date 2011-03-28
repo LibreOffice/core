@@ -99,7 +99,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
     maFlAreas( this, ScResId( FL_OUTPUT ) ),
     maFtInArea( this, ScResId( FT_INAREA) ),
-    maEdInPos( this, ScResId( ED_INAREA) ),
+    maEdInPos( this, this, ScResId( ED_INAREA) ),
     maRbInPos( this, ScResId( RB_INAREA ), &maEdInPos, this ),
     maLbOutPos( this, ScResId( LB_OUTAREA ) ),
     maFtOutArea( this, ScResId( FT_OUTAREA ) ),

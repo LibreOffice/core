@@ -561,6 +561,9 @@ sal_Bool ScToken::Is3DRef() const
             if ( GetSingleRef().IsFlag3D() )
                 return sal_True;
             break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            return sal_True;
         default:
         {
             // added to avoid warnings
@@ -920,6 +923,14 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefTok
     maTabName(r.maTabName),
     maDoubleRef(r.maDoubleRef)
 {
+}
+
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalSingleRefToken& r ) :
+    ScToken( svExternalDoubleRef, ocExternalRef),
+    mnFileId( r.GetIndex()),
+    maTabName( r.GetString())
+{
+    maDoubleRef.Ref1 = maDoubleRef.Ref2 = r.GetSingleRef();
 }
 
 ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
@@ -1823,6 +1834,20 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
                 }
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScSingleRefData& rRef2 = static_cast<ScToken*>(pCode[j])->GetSingleRef2();
+                rRef2.CalcAbsIfRel( rOldPos );
+                rRef2.CalcRelFromAbs( rNewPos );
+            }
+            //! fallthru
+            case svExternalSingleRef:
+            {
+                ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+                rRef1.CalcAbsIfRel( rOldPos );
+                rRef1.CalcRelFromAbs( rNewPos );
             }
             break;
             default:

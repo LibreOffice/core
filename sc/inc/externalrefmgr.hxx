@@ -257,8 +257,6 @@ public:
     void getAllTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const String& rStartTabName, const String& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
-    bool hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const;
-    size_t getCacheTableCount(sal_uInt16 nFileId) const;
 
     /**
      * Set all tables of a document as referenced, used only during
@@ -508,8 +506,6 @@ public:
      */
     void getAllCachedNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
-    bool hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const;
-    size_t getCacheTableCount(sal_uInt16 nFileId) const;
     sal_uInt16 getExternalFileCount() const;
 
     /**
@@ -644,6 +640,11 @@ public:
      *                     document being exported.
      */
     void resetSrcFileData(const String& rBaseFileUrl);
+
+    /**
+     * Replace the original URL wirh the real URL that was generated from the relative URL.
+     */
+    void updateAbsAfterLoad();
 
     /**
      * Stop tracking a specific formula cell.

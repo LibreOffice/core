@@ -618,7 +618,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     {
                         TimeInterval aTimeInterval;
                         aScale.TimeIncrement.MajorTimeInterval >>= aTimeInterval;
-                        aTimeInterval.Number = static_cast<double>(fValue);
+                        aTimeInterval.Number = static_cast<sal_Int32>(fValue);
                         aScale.TimeIncrement.MajorTimeInterval = uno::makeAny( aTimeInterval );
                         bSetScale = true;
                     }

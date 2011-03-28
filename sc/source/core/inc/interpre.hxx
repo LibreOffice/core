@@ -696,6 +696,7 @@ double GetGamma(double x);
 double GetLogGamma(double x);
 double GetBeta(double fAlpha, double fBeta);
 double GetLogBeta(double fAlpha, double fBeta);
+double GetBinomDistPMF(double x, double n, double p); //probability mass function
 void ScLogGamma();
 void ScGamma();
 void ScPhi();

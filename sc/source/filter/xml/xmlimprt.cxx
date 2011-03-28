@@ -73,6 +73,7 @@
 #include "rangeutl.hxx"
 #include "postit.hxx"
 #include "formulaparserpool.hxx"
+#include "externalrefmgr.hxx"
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -2857,9 +2858,19 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
+        {
             pDoc->CompileXML();
 
-        if (pDoc && GetModel().is())
+            // After CompileXML, links must be completely changed to the new URLs.
+            // Otherwise, hasExternalFile for API wouldn't work (#i116940#),
+            // and typing a new formula would create a second link with the same "real" file name.
+            if (pDoc->HasExternalRefManager())
+                pDoc->GetExternalRefManager()->updateAbsAfterLoad();
+        }
+
+        // If the stream contains cells outside of the current limits, the styles can't be re-created,
+        // so stream copying is disabled then.
+        if (pDoc && GetModel().is() && !pDoc->HasRangeOverflow())
         {
             // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
             // in UpdateRowHeights can already clear the flags again)

@@ -713,7 +713,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
             }
         }
         rExplicitIncrement.MajorTimeInterval.Number = nNumer;
-        nMainIncrementCount = nDayCount/(nNumer*nDaysPerInterval);
+        nMainIncrementCount = static_cast<long>(nDayCount/(nNumer*nDaysPerInterval));
     }
 
     //choose minor time interval:
