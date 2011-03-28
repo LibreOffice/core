@@ -43,6 +43,7 @@
 #include <unotools/pathoptions.hxx>
 
 #ifndef ODMA_LIB_HXX
+#include <windows.h>
 #include <odma_lib.hxx>
 #endif
 

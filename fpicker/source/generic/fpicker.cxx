@@ -34,14 +34,17 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 
-#ifdef WNT
-#include <odma_lib.hxx>
-#endif
-
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
 
 #include "vcl/svapp.hxx"
+
+#ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#undef GradientStyle_RECT
+#include <odma_lib.hxx>
+#endif
 
 namespace css = com::sun::star;
 
