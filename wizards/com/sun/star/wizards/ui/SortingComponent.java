@@ -61,10 +61,10 @@ public class SortingComponent
 
         public void itemStateChanged(ItemEvent EventObject)
         {
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(false));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
             int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
             enableNextSortListBox(ikey);
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(true));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -97,21 +97,21 @@ public class SortingComponent
             for (int i = 0; i < 4; i++)
             {
                 bDoEnable = (i < 2);
-                CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lblSort" + new Integer(i + 1).toString(), new String[]
+                CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lblSort" + Integer.toString(i + 1), new String[]
                         {
-                            PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                            PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
+                                Boolean.valueOf(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
                         });
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex);
-                xSortListBox[i] = CurUnoDialog.insertListBox("lstSort" + new Integer(i + 1).toString(), SOSORTLST[i], null, new ItemListenerImpl(), new String[]
+                xSortListBox[i] = CurUnoDialog.insertListBox("lstSort" + Integer.toString(i + 1), SOSORTLST[i], null, new ItemListenerImpl(), new String[]
                         {
                             "Dropdown", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(true), new Boolean(bDoEnable), 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
+                            true, bDoEnable, 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
                         }); //new Short((short) (17+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
@@ -120,7 +120,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), 10, HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), new String("ASC"), IOptButtonWidth
+                            bDoEnable, 10, HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), PropertyNames.ASC, IOptButtonWidth
                         }); //, new Short((short) (18+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
@@ -129,7 +129,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), 10, HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), new String("DESC"), IOptButtonWidth
+                            bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), "DESC", IOptButtonWidth
                         }); //, new Short((short) (19+i*4))
                 iCurPosY = iCurPosY + 36;
                 FirstHelpIndex += 3;
@@ -165,10 +165,7 @@ public class SortingComponent
         int FieldCount = _FieldNames.length;
         String[] ViewFieldNames = new String[FieldCount + 1];
         ViewFieldNames[0] = sNoSorting;
-        for (int i = 0; i < FieldCount; i++)
-        {
-            ViewFieldNames[i + 1] = _FieldNames[i];
-        }
+        System.arraycopy(_FieldNames, 0, ViewFieldNames, 1, FieldCount);
         short[] SelList = null;
         for (int i = 0; i < 4; i++)
         {
@@ -186,8 +183,8 @@ public class SortingComponent
                             (short) 0
                         };
             }
-            CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 1).toString(), "StringItemList", ViewFieldNames);
-            CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 1).toString(), "SelectedItems", SelList);
+            CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 1), PropertyNames.STRING_ITEM_LIST, ViewFieldNames);
+            CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 1), PropertyNames.SELECTED_ITEMS, SelList);
             toggleSortListBox(i, (i <= _SortFieldNames.length));
         }
     }
@@ -211,7 +208,7 @@ public class SortingComponent
      */
     public void setReadOnly(int _index, boolean _breadonly)
     {
-        CurUnoDialog.setControlProperty("lstSort" + new Integer(_index + 1).toString(), "ReadOnly", new Boolean(_breadonly));
+        CurUnoDialog.setControlProperty("lstSort" + Integer.toString(_index + 1), PropertyNames.READ_ONLY, Boolean.valueOf(_breadonly));
     }
 
     /**
@@ -261,12 +258,12 @@ public class SortingComponent
             ArrayList<String> SortDescriptions = new ArrayList<String>();
             for (int i = 0; i <= MaxSortIndex; i++)
             {
-                if (!((Boolean) CurUnoDialog.getControlProperty("lstSort" + (i + 1), "ReadOnly")))
+                if (!((Boolean) CurUnoDialog.getControlProperty("lstSort" + (i + 1), PropertyNames.READ_ONLY)))
                 {
                     CurFieldName = xSortListBox[i].getSelectedItem();
                     SortDescriptions.add(CurFieldName);
-                    iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + new Integer(i + 1).toString(), PropertyNames.PROPERTY_STATE)).shortValue();
-                    SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? "ASC" :"DESC" });
+                    iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + Integer.toString(i + 1), PropertyNames.PROPERTY_STATE)).shortValue();
+                    SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? PropertyNames.ASC :"DESC" });
                 }
             }
             // When searching for a duplicate entry we can neglect wether the entries are to be sorted ascending or descending
@@ -303,7 +300,7 @@ public class SortingComponent
                 toggleSortListBox(i, (false));
                 if (i < MaxSortIndex)
                 {
-                    CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 2).toString(), "SelectedItems", new short[]
+                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 2), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                                 0
                             });
@@ -319,22 +316,22 @@ public class SortingComponent
     private void moveupSortItems(int CurIndex, boolean bDoEnable)
     {
         short iNextItemPos;
-        if ((bDoEnable == false) && (MAXSORTCRITERIAINDEX > CurIndex))
+        if ((!bDoEnable) && (MAXSORTCRITERIAINDEX > CurIndex))
         {
             for (int i = CurIndex; i < MAXSORTCRITERIAINDEX; i++)
             {
                 iNextItemPos = xSortListBox[i + 1].getSelectedItemPos();
                 if (iNextItemPos != 0)
                 {
-                    CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 1).toString(), "SelectedItems", new short[]
+                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 1), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                                 iNextItemPos
                             });
-                    CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 2).toString(), "SelectedItems", new short[]
+                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 2), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                             });
                     toggleSortListBox(i, true);
-                    CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 2).toString(), "SelectedItems", new short[]
+                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 2), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                                 0
                             });
@@ -357,13 +354,13 @@ public class SortingComponent
         {
             if (CurIndex < xSortListBox.length)
             {
-                CurUnoDialog.setControlProperty("lblSort" + new Integer(CurIndex + 1).toString(), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-                CurUnoDialog.setControlProperty("lstSort" + new Integer(CurIndex + 1).toString(), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-                CurUnoDialog.setControlProperty("optAscend" + new Integer(CurIndex + 1).toString(), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-                CurUnoDialog.setControlProperty("optDescend" + new Integer(CurIndex + 1).toString(), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-                if (bDoEnable == false)
+                CurUnoDialog.setControlProperty("lblSort" + Integer.toString(CurIndex + 1), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+                CurUnoDialog.setControlProperty("lstSort" + Integer.toString(CurIndex + 1), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+                CurUnoDialog.setControlProperty("optAscend" + Integer.toString(CurIndex + 1), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+                CurUnoDialog.setControlProperty("optDescend" + Integer.toString(CurIndex + 1), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+                if (!bDoEnable)
                 {
-                    CurUnoDialog.setControlProperty("lstSort" + new Integer(CurIndex + 1).toString(), "SelectedItems", new short[]
+                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(CurIndex + 1), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                                 0
                             });

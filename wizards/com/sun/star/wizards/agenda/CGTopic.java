@@ -30,6 +30,7 @@ package com.sun.star.wizards.agenda;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.Indexable;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * CGTopic means: Configuration Group Topic.
@@ -74,7 +75,7 @@ public class CGTopic extends ConfigGroup implements Indexable {
      */
     public void setDataToRow(Object row) {
         PropertyValue[] pv = (PropertyValue[])row;
-        pv[0].Value = "" + cp_Index + ".";
+        pv[0].Value = PropertyNames.EMPTY_STRING + cp_Index + ".";
         pv[1].Value = cp_Topic;
         pv[2].Value = cp_Responsible;
         pv[3].Value = cp_Time;

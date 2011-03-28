@@ -73,7 +73,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", 97, 35, UIConsts.INTEGERS[8], new Short((short) 82), "", 185
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", 97, 35, UIConsts.INTEGERS[8], new Short((short) 82), PropertyNames.EMPTY_STRING, 185
                 });
         CurUnoDialog.insertLabel("lblProceed",
                 new String[]
@@ -128,7 +128,7 @@ public class Finalizer
 
     public boolean getOpenForEditing()
     {
-        return optModifyForm.getState() ? true : false;
+        return optModifyForm.getState();
     }
 
     public boolean finish()

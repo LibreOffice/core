@@ -81,8 +81,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XColumnsSupplier xKeyColumnSupplier;
     private XPropertySet xKey;
     private boolean bIDFieldisInserted = false;
-    private String IDFieldName = "";
-    private String sColumnAlreadyExistsMessage = "";
+    private String IDFieldName = PropertyNames.EMPTY_STRING;
+    private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
 //    private WizardDialog oUnoDialog;
     private XWindow xWindow;
 
@@ -156,16 +156,16 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            XKeysSupplier xKeySupplier = (XKeysSupplier) UnoRuntime.queryInterface(XKeysSupplier.class, xPropTableDataDescriptor);
+            XKeysSupplier xKeySupplier = UnoRuntime.queryInterface(XKeysSupplier.class, xPropTableDataDescriptor);
             xIndexAccessKeys = xKeySupplier.getKeys();
-            XDataDescriptorFactory xKeyFac = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, xIndexAccessKeys);
-            xKeyDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
-            xKeyAppend = (XAppend) UnoRuntime.queryInterface(XAppend.class, xKeyFac);
+            XDataDescriptorFactory xKeyFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class, xIndexAccessKeys);
+            xKeyDrop = UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
+            xKeyAppend = UnoRuntime.queryInterface(XAppend.class, xKeyFac);
             xKey = xKeyFac.createDataDescriptor();
             xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
-            xKeyColumnSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
-            XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, xKeyColumnSupplier.getColumns());
-            xKeyColAppend = (XAppend) UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
+            xKeyColumnSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
+            XDataDescriptorFactory xKeyColFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class, xKeyColumnSupplier.getColumns());
+            xKeyColAppend = UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
             removePrimaryKeys();
             for (int i = 0; i < _fieldnames.length; i++)
             {
@@ -190,7 +190,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                         if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement"))
                         {
                             xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
-                            xColPropertySet.setPropertyValue("IsAutoIncrement", new Boolean(_bAutoincrementation));
+                            xColPropertySet.setPropertyValue("IsAutoIncrement", Boolean.valueOf(_bAutoincrementation));
                         }
                     }
                 }
@@ -222,7 +222,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            String sColumnName = (String) AnyConverter.toString(_xToBeAppendedPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME));
+            String sColumnName = AnyConverter.toString(_xToBeAppendedPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME));
             if (_xColumns.hasByName(sColumnName))
             {
                 String sMessage = JavaTools.replaceSubString(sColumnAlreadyExistsMessage, sColumnName, "%FIELDNAME");
@@ -251,7 +251,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         boolean breturn = true;
         try
         {
-            XAppend xAppendColumns = (XAppend) UnoRuntime.queryInterface(XAppend.class, xNameAccessColumns);
+            XAppend xAppendColumns = UnoRuntime.queryInterface(XAppend.class, xNameAccessColumns);
             for (int i = 0; i < columncontainer.size(); i++)
             {
                 XPropertySet xColPropertySet = getByIndex(i);
@@ -269,7 +269,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 assignTableProperty(PropertyNames.PROPERTY_NAME, _tablename);
                 assignTableProperty("CatalogName", _catalogname);
                 assignTableProperty("SchemaName", _schemaname);
-                xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, getTableNamesAsNameAccess());
+                xTableContainer = UnoRuntime.queryInterface(XContainer.class, getTableNamesAsNameAccess());
                 xTableContainer.addContainerListener(this);
                 if (keycolumncontainer.size() > 0)
                 {
@@ -319,7 +319,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            xPropTableDataDescriptor.setPropertyValue(PropertyNames.PROPERTY_NAME, "");
+            xPropTableDataDescriptor.setPropertyValue(PropertyNames.PROPERTY_NAME, PropertyNames.EMPTY_STRING);
             if ((xKeyDrop != null) && (xIndexAccessKeys != null))
             {
                 int icount = xIndexAccessKeys.getCount();
@@ -331,7 +331,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     }
                 }
             }
-            XDrop xColumnDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
+            XDrop xColumnDrop = UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
             for (int i = xNameAccessColumns.getElementNames().length - 1; i >= 0; i--)
             {
                 xColumnDrop.dropByIndex(i);
@@ -374,7 +374,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         if (_svalue != null)
         {
-            if (!_svalue.equals(""))
+            if (!_svalue.equals(PropertyNames.EMPTY_STRING))
             {
                 try
                 {
@@ -604,7 +604,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             if (hasByName(_snewname))
             {
                 Object oColumn = getByName(_snewname);
-                XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oColumn);
+                XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, oColumn);
                 Property[] aColProperties = xPropertySet.getPropertySetInfo().getProperties();
                 for (int i = 0; i < aColProperties.length; i++)
                 {
@@ -664,7 +664,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         {
             if (!hasByName(_columnname))
             {
-                if (_columnname.equals(""))
+                if (_columnname.equals(PropertyNames.EMPTY_STRING))
                 {
                     return false;
                 }
@@ -694,7 +694,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 try
                 {
                     XPropertySet xColPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
-                    IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, "");
+                    IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, PropertyNames.EMPTY_STRING);
                     xColPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, IDFieldName);
 
                     int nDataType = oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER);
@@ -777,7 +777,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            XPropertySet xTablePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, arg0.Element);
+            XPropertySet xTablePropertySet = UnoRuntime.queryInterface(XPropertySet.class, arg0.Element);
             String stablename = AnyConverter.toString(xTablePropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME));
             String sschemaname = AnyConverter.toString(xPropTableDataDescriptor.getPropertyValue("SchemaName"));
             String scatalogname = AnyConverter.toString(xPropTableDataDescriptor.getPropertyValue("CatalogName"));

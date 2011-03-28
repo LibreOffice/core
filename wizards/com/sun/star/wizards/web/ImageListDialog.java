@@ -165,7 +165,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, "", resources[RES_HELP], "CommandButton3", iButtonsX, 71, new Short((short) com.sun.star.awt.PushButtonType.HELP_value), new Short((short) 9), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, PropertyNames.EMPTY_STRING, resources[RES_HELP], "CommandButton3", iButtonsX, 71, new Short((short) com.sun.star.awt.PushButtonType.HELP_value), new Short((short) 9), INTEGER_50
                 });
 
         if (showOtherButton)
@@ -208,7 +208,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         lblTitle = insertLabel("lblTitle",
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -275,9 +275,9 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
 
         public String render(Object counter)
         {
-            String s = JavaTools.replaceSubString(template, "" + ((Counter) counter).start, START);
-            s = JavaTools.replaceSubString(s, "" + ((Counter) counter).end, END);
-            s = JavaTools.replaceSubString(s, "" + ((Counter) counter).max, TOTAL);
+            String s = JavaTools.replaceSubString(template, PropertyNames.EMPTY_STRING + ((Counter) counter).start, START);
+            s = JavaTools.replaceSubString(s, PropertyNames.EMPTY_STRING + ((Counter) counter).end, END);
+            s = JavaTools.replaceSubString(s, PropertyNames.EMPTY_STRING + ((Counter) counter).max, TOTAL);
             return s;
         }
     }

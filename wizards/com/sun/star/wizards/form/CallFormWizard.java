@@ -29,6 +29,7 @@ package com.sun.star.wizards.form;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
@@ -81,7 +82,7 @@ public class CallFormWizard
         {
             try
             {
-                if (sEvent.compareTo("start") == 0)
+                if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
                     FormWizard CurFormWizard = new FormWizard( m_serviceFactory, m_wizardContext );
                     CurFormWizard.startFormWizard();
@@ -159,7 +160,7 @@ public class CallFormWizard
 
             try
             {
-                byteReturn = new String("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {

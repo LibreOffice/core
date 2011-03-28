@@ -26,8 +26,6 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
-import com.sun.star.awt.XScrollBar;
-import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -130,11 +128,11 @@ public abstract class ControlScroller
                 new AdjustmentListenerImpl(),
                 new String[]
                 {
-                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Short((short) 0), new Boolean(true), new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
+                    new Short((short) 0), Boolean.TRUE, new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
         scrollfields = new Vector();
         int ypos = iStartPosY + SORELFIRSTPOSY;
@@ -158,7 +156,7 @@ public abstract class ControlScroller
 
     protected void setScrollBarOrientationHorizontal()
     {
-        Helper.setUnoPropertyValue(xScrollBar, "Orientation", new Integer(ScrollBarOrientation.HORIZONTAL));
+        Helper.setUnoPropertyValue(xScrollBar, PropertyNames.ORIENTATION, new Integer(ScrollBarOrientation.HORIZONTAL));
     }
 
     /**
@@ -173,7 +171,7 @@ public abstract class ControlScroller
             ntotfieldcount = _ntotfieldcount;
             setCurFieldCount();
             nscrollvalue = 0;
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), new String("ScrollValue"), new Integer(nscrollvalue));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", new Integer(nscrollvalue));
             if (ntotfieldcount > nblockincrement)
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
@@ -245,7 +243,7 @@ public abstract class ControlScroller
     {
         if (_nscrollvalue >= 0)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), new String("ScrollValue"), new Integer(_nscrollvalue));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", new Integer(_nscrollvalue));
             scrollControls();
         }
     }
@@ -301,7 +299,7 @@ public abstract class ControlScroller
     protected void toggleComponent(boolean _bdoenable)
     {
         boolean bdoenable = _bdoenable && (ntotfieldcount > nblockincrement);
-        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
+        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoenable));
     }
 
     protected void toggleControls(boolean _bdoenable)
@@ -312,7 +310,7 @@ public abstract class ControlScroller
             for (int m = 0; m < curproperties.length; m++)
             {
                 PropertyValue curproperty = curproperties[m];
-                CurUnoDialog.setControlProperty(curproperty.Name, PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
+                CurUnoDialog.setControlProperty(curproperty.Name, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
             }
         }
 
@@ -326,7 +324,7 @@ public abstract class ControlScroller
     protected void setLineIncrementation(int _nlineincrement)
     {
         this.nlineincrement = _nlineincrement;
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), new String("LineIncrement"), new Integer(nlineincrement));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "LineIncrement", new Integer(nlineincrement));
 
     }
 
@@ -343,7 +341,7 @@ public abstract class ControlScroller
                     PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "ScrollValueMax"
                 }, new Object[]
                 {
-                    new Boolean(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)
+                        Boolean.valueOf(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)
                 });
     }
 
@@ -397,12 +395,10 @@ public abstract class ControlScroller
     {
         if (guiRow + nscrollvalue < scrollfields.size())
         {
-            PropertyValue pv = fieldInfo(
+            return fieldInfo(
                     ((PropertyValue[]) scrollfields.elementAt(guiRow + nscrollvalue))[column],
                     ((PropertyValue[]) scrollfields.elementAt(guiRow))[column]);
             //System.out.println("getting field info for : " + guiRow + "/" + column  + ":" + pv.Value + "(" + pv.Name + ")" );
-
-            return pv;
         }
         else
         {
@@ -453,7 +449,7 @@ public abstract class ControlScroller
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
-        if (propertyname != "")
+        if (!propertyname.equals(PropertyNames.EMPTY_STRING))
         {
             CurUnoDialog.setControlProperty(controlname, propertyname, newvalue);
         }
@@ -463,7 +459,7 @@ public abstract class ControlScroller
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
-        if (propertyname != "")
+        if (!propertyname.equals(PropertyNames.EMPTY_STRING))
         {
             return CurUnoDialog.getControlProperty(controlname, propertyname);
         }

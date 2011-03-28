@@ -29,17 +29,18 @@ package com.sun.star.wizards.db;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class CommandName
 {
 
     protected CommandMetaData oCommandMetaData;
-    protected String CatalogName = "";
-    protected String SchemaName = "";
-    protected String TableName = "";
-    protected String DisplayName = "";
-    protected String ComposedName = "";
-    protected String AliasName = "";
+    protected String CatalogName = PropertyNames.EMPTY_STRING;
+    protected String SchemaName = PropertyNames.EMPTY_STRING;
+    protected String TableName = PropertyNames.EMPTY_STRING;
+    protected String DisplayName = PropertyNames.EMPTY_STRING;
+    protected String ComposedName = PropertyNames.EMPTY_STRING;
+    protected String AliasName = PropertyNames.EMPTY_STRING;
     protected boolean bCatalogAtStart;
     protected String sCatalogSep;
     protected String sIdentifierQuote;
@@ -59,21 +60,21 @@ public class CommandName
             oCommandMetaData = _CommandMetaData;
             if ((_CatalogName != null) && (oCommandMetaData.xDBMetaData.supportsCatalogsInTableDefinitions()))
             {
-                if (!_CatalogName.equals(""))
+                if (!_CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {
                     CatalogName = _CatalogName;
                 }
             }
             if ((_SchemaName != null) && (oCommandMetaData.xDBMetaData.supportsSchemasInTableDefinitions()))
             {
-                if (!_SchemaName.equals(""))
+                if (!_SchemaName.equals(PropertyNames.EMPTY_STRING))
                 {
                     SchemaName = _SchemaName;
                 }
             }
             if (_TableName != null)
             {
-                if (!_TableName.equals(""))
+                if (!_TableName.equals(PropertyNames.EMPTY_STRING))
                 {
                     TableName = _TableName;
                 }
@@ -94,12 +95,12 @@ public class CommandName
             {
                 this.DisplayName = _DisplayName;
                 int iIndex;
-                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true)
+                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
                 { // ...dann Catalog mit in TableName
                     iIndex = _DisplayName.indexOf(sCatalogSep);
                     if (iIndex >= 0)
                     {
-                        if (bCatalogAtStart == true)
+                        if (bCatalogAtStart)
                         {
                             CatalogName = _DisplayName.substring(0, iIndex);
                             _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
@@ -111,13 +112,13 @@ public class CommandName
                         }
                     }
                 }
-                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true)
+                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
                 {
                     String[] NameList;
                     NameList = new String[0];
                     NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
                     SchemaName = NameList[0];
-                    TableName = NameList[1]; // TODO Was ist mit diesem Fall: CatalogSep = "." und CatalogName = ""
+                    TableName = NameList[1]; // TODO Was ist mit diesem Fall: CatalogSep = "." und CatalogName = PropertyNames.EMPTY_STRING
                 }
                 else
                 {
@@ -138,9 +139,9 @@ public class CommandName
         {
             if (CatalogName != null)
             {
-                if (!CatalogName.equals(""))
+                if (!CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {
-                    if (bCatalogAtStart == true)
+                    if (bCatalogAtStart)
                     {
                         ComposedName = quoteName(CatalogName) + sCatalogSep;
                     }
@@ -148,12 +149,12 @@ public class CommandName
             }
             if (SchemaName != null)
             {
-                if (!SchemaName.equals(""))
+                if (!SchemaName.equals(PropertyNames.EMPTY_STRING))
                 {
                     ComposedName += quoteName(SchemaName) + ".";
                 }
             }
-            if (ComposedName.equals(""))
+            if (ComposedName.equals(PropertyNames.EMPTY_STRING))
             {
                 ComposedName = quoteName(TableName);
             }
@@ -161,9 +162,9 @@ public class CommandName
             {
                 ComposedName += quoteName(TableName);
             }
-            if ((bCatalogAtStart == false) && (CatalogName != null))
+            if ((!bCatalogAtStart) && (CatalogName != null))
             {
-                if (!CatalogName.equals(""))
+                if (!CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {
                     ComposedName += sCatalogSep + quoteName(CatalogName);
                 }
@@ -203,7 +204,7 @@ public class CommandName
     {
         if (sName == null)
         {
-            sName = "";
+            sName = PropertyNames.EMPTY_STRING;
         }
         return new StringBuilder(_sIdentifierQuote).append(sName).append(_sIdentifierQuote).toString();
     }

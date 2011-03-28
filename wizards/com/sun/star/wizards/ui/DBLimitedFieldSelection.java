@@ -30,6 +30,7 @@ import com.sun.star.awt.XListBox;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author Administrator
@@ -90,7 +91,7 @@ public abstract class DBLimitedFieldSelection
     protected void moveupSelectedItems(int CurIndex, boolean bDoEnable)
     {
         // short iNextItemPos;
-        if ((bDoEnable == false) && (MAXSELINDEX > CurIndex))
+        if ((!bDoEnable) && (MAXSELINDEX > CurIndex))
         {
             for (int i = CurIndex; i < MAXSELINDEX; i++)
             {
@@ -112,17 +113,14 @@ public abstract class DBLimitedFieldSelection
         int FieldCount = _FieldNames.length;
         String[] ViewFieldNames = new String[FieldCount + 1];
         ViewFieldNames[0] = sNoField;
-        for (int i = 0; i < FieldCount; i++)
-        {
-            ViewFieldNames[i + 1] = _FieldNames[i];
-        }
+        System.arraycopy(_FieldNames, 0, ViewFieldNames, 1, FieldCount);
         return ViewFieldNames;
     }
 
     protected void initializeListBox(XListBox xListBox, String[] _AllFieldNames, String[] _SelFieldNames, int curindex)
     {
         short[] SelList = null;
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "StringItemList", _AllFieldNames);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.STRING_ITEM_LIST, _AllFieldNames);
         if (_SelFieldNames != null)
         {
             if (curindex < _SelFieldNames.length)
@@ -136,22 +134,22 @@ public abstract class DBLimitedFieldSelection
                 {
                     SelList = new short[] { (short) (0) };
                 }
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
                 return;
             }
         }
         SelList = new short[] { (short) (0) };
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
 
     }
 
     protected void initializeListBox(XListBox xListBox, String[] _AllFieldNames, String _SelFieldName)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "StringItemList", _AllFieldNames);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.STRING_ITEM_LIST, _AllFieldNames);
         short[] SelList = null;
         int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldName);
         SelList = new short[] { (short) (index) };
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
     }
 }
 

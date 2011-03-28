@@ -191,7 +191,7 @@ public class UIControlArranger
         {
             if (listItem == null)
             {
-                return "";
+                return PropertyNames.EMPTY_STRING;
             }
             return HelpTexts[((Integer) listItem).intValue()];
 
@@ -201,7 +201,7 @@ public class UIControlArranger
     public void enableSubFormImageList(boolean _bdoEnable)
     {
         m_aArrangeList[1].m_aButtonList.setenabled(_bdoEnable);
-        CurUnoDialog.setControlProperty("lnLabelPlacment_2", PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoEnable));
+        CurUnoDialog.setControlProperty("lnLabelPlacment_2", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoEnable));
     }
 
     public short getAlignValue()
@@ -235,9 +235,9 @@ public class UIControlArranger
 
     private void enableAlignControlGroup(boolean _bEnableAlignControlGroup)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(flnLabelPlacement), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignRight), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(flnLabelPlacement), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignRight), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnableAlignControlGroup));
     }
 
 //    private class ArrangeImageList implements XItemListener

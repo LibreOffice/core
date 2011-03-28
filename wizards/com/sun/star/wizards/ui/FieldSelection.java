@@ -210,7 +210,7 @@ public class FieldSelection
             SelListBoxPosX = new Integer(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
 
             IStep = new Integer(_iStep);
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 ShiftButtonCount = 4;
             }
@@ -254,7 +254,7 @@ public class FieldSelection
                         Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 btnmoveall = CurUnoDialog.insertButton("cmdMoveAll" + sIncSuffix, SOCMDMOVEALL, new ActionListenerImpl(),
                         new String[]
@@ -276,7 +276,7 @@ public class FieldSelection
                         Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 btnremoveall = CurUnoDialog.insertButton("cmdRemoveAll" + sIncSuffix, SOCMDREMOVEALL, new ActionListenerImpl(),
                         new String[]
@@ -317,7 +317,7 @@ public class FieldSelection
             Object btnmoveup = CurUnoDialog.insertButton("cmdMoveUp" + sIncSuffix, SOCMDMOVEUP, new ActionListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -327,7 +327,7 @@ public class FieldSelection
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -336,8 +336,8 @@ public class FieldSelection
 
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnremoveselected, AccessTextRemoveSelected);
-            CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
-            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelectedFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, PropertyNames.EMPTY_STRING, "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelectedFieldsListBox, JavaTools.replaceSubString(slblSelFields, PropertyNames.EMPTY_STRING, "~"));
             if (btnmoveall != null)
             {
                 CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveall, AccessTextMoveAll);
@@ -402,7 +402,7 @@ public class FieldSelection
             String NeighborItem = NewItemList[iSelIndex + iNeighbor];
             NewItemList[iSelIndex + iNeighbor] = CurItem;
             NewItemList[iSelIndex] = NeighborItem;
-            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", NewItemList);
+            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, NewItemList);
             xSelectedFieldsListBox.selectItem(CurItem, true);
             if (xFieldSelection != null)
             {
@@ -427,7 +427,7 @@ public class FieldSelection
             CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, BDoEnable);
             CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, BDoEnable);
 
-            if (BDoEnable.booleanValue() == true)
+            if (BDoEnable.booleanValue())
             {
                 toggleListboxButtons((short) - 1, (short) - 1);
             }
@@ -466,11 +466,11 @@ public class FieldSelection
                 bmoveUpenabled = ((iSelIndices[0] > 0) && (iSelIndices.length == 1));
                 bmoveDownenabled = (((iSelIndices[SelListBoxSelLength - 1]) < (short) (SelectCount - 1)) && (iSelIndices.length == 1));
             }
-            CurUnoDialog.setControlProperty("cmdRemoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(SelectCount >= 1));
-            CurUnoDialog.setControlProperty("cmdRemoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bSelectSelected));
+            CurUnoDialog.setControlProperty("cmdRemoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(SelectCount >= 1));
+            CurUnoDialog.setControlProperty("cmdRemoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bSelectSelected));
             toggleMoveButtons((FieldCount >= 1), bIsFieldSelected);
-            CurUnoDialog.setControlProperty("cmdMoveUp" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bmoveUpenabled));
-            CurUnoDialog.setControlProperty("cmdMoveDown" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bmoveDownenabled));
+            CurUnoDialog.setControlProperty("cmdMoveUp" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bmoveUpenabled));
+            CurUnoDialog.setControlProperty("cmdMoveDown" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bmoveDownenabled));
         }
         catch (Exception exception)
         {
@@ -482,8 +482,8 @@ public class FieldSelection
     {
         boolean btoggleMoveAll = (((xFieldsListBox.getItemCount() + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveAll));
         boolean btoggleMoveSelected = (((xFieldsListBox.getSelectedItems().length + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveSelected));
-        CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(btoggleMoveAll));
-        CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(btoggleMoveSelected));
+        CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(btoggleMoveAll));
+        CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(btoggleMoveSelected));
     }
 
     public void setMultipleMode(boolean _bisMultiple)
@@ -497,10 +497,10 @@ public class FieldSelection
         try
         {
             toggleListboxControls(Boolean.FALSE);
-            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", new String[]
+            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, new String[]
                     {
                     });
-            CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", new String[]
+            CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, new String[]
                     {
                     });
         }
@@ -670,14 +670,14 @@ public class FieldSelection
 
     public String[] getSelectedFieldNames()
     {
-        return (String[]) CurUnoDialog.getControlProperty("lstSelFields" + sIncSuffix, "StringItemList");
+        return (String[]) CurUnoDialog.getControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST);
     }
 
     public void setSelectedFieldNames(String[] _sfieldnames)
     {
-        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, _sfieldnames);
         String[] sleftboxfieldnames = JavaTools.removefromList(xFieldsListBox.getItems(), _sfieldnames);
-        CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", sleftboxfieldnames);
+        CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, sleftboxfieldnames);
     }
 
     public void setModified(boolean _bModified)
@@ -692,6 +692,6 @@ public class FieldSelection
 
     public void changeSelectedFieldNames(String[] _sfieldnames)
     {
-        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, _sfieldnames);
     }
 }

@@ -135,7 +135,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 new Object[]
                 {
                     Integer.valueOf(imageTextHeight),
-                    "",
+                    PropertyNames.EMPTY_STRING,
                     "(1)",
                     Integer.valueOf(nXPos),
                     Integer.valueOf(nYPos),
@@ -190,7 +190,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             lblCounter = dialog.insertLabel(m_aControlName + "_lblCounter", pNames1, new Object[]
                     {
                         Integer.valueOf(LINE_HEIGHT),
-                        "",
+                        PropertyNames.EMPTY_STRING,
                         Integer.valueOf(pos.Width + btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)),
                         step,
@@ -219,7 +219,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             for (int c = 0; c < cols; c++)
             {
                 XButton aButton = createButton(dialog, r, c);
-                XControl aControl = (XControl)UnoRuntime.queryInterface(XControl.class, aButton);
+                XControl aControl = UnoRuntime.queryInterface(XControl.class, aButton);
                 m_aButtons[r * cols + c] = aControl;
             }
         }
@@ -269,7 +269,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                     m_aButtonWidth
                 });
 
-        XWindow win = (XWindow) UnoRuntime.queryInterface(XWindow.class, aButton);
+        XWindow win = UnoRuntime.queryInterface(XWindow.class, aButton);
         win.setEnable(true);
         win.setVisible(true);
         return aButton;
@@ -277,14 +277,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private int getButtonPosX(int _col)
     {
-        final int nXPos = pos.Width + _col * (m_aButtonSize.Width + gap.Width) + gap.Width;
-        return nXPos;
+        return pos.Width + _col * (m_aButtonSize.Width + gap.Width) + gap.Width;
     }
 
     private int getButtonPosY(int _row)
     {
-        final int nYPos = pos.Height + _row * (m_aButtonSize.Height + gap.Height) + gap.Height;
-        return nYPos;
+        return pos.Height + _row * (m_aButtonSize.Height + gap.Height) + gap.Height;
     }
 
     private void refreshImages()
@@ -308,7 +306,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             {
                 if (oResources.length == 1)
                 {
-                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, (String) oResources[0]);
+                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, oResources[0]);
                 }
                 else if (oResources.length == 2)
                 {
@@ -350,7 +348,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private transient java.util.ArrayList<XItemListener> m_aItemListenerList;
     private void setVisible(Object control, boolean visible)
     {
-        final XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, control);
+        final XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, control);
         xWindow.setVisible(visible);
     }
 
@@ -675,7 +673,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private void refreshImageText()
     {
         Object item = m_nCurrentSelection >= 0 ? getListModel().getElementAt(m_nCurrentSelection) : null;
-        final String sText = " " + renderer.render(item);
+        final String sText = PropertyNames.SPACE + renderer.render(item);
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
@@ -719,8 +717,8 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private void enableButtons()
     {
-        enable(btnNext, new Boolean(pageStart + rows * cols < listModel.getSize()));
-        enable(btnBack, new Boolean(pageStart > 0));
+        enable(btnNext, Boolean.valueOf(pageStart + rows * cols < listModel.getSize()));
+        enable(btnBack, Boolean.valueOf(pageStart > 0));
     }
 
     private void enable(Object control, Boolean enable)
@@ -730,7 +728,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private Object getModel(Object control)
     {
-        return ((XControl) UnoRuntime.queryInterface(XControl.class, control)).getModel();
+        return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
     private void setBorder(Object control, Short border)
@@ -770,7 +768,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         // @Override
         public String render(Object counter)
         {
-            return "" + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
+            return PropertyNames.EMPTY_STRING + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
         }
     }
 
@@ -891,9 +889,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
 
         // check which Button is pressed.
-        String sControlName = aHelper.getPropertyValueAsString(PropertyNames.PROPERTY_NAME, "");
+        String sControlName = aHelper.getPropertyValueAsString(PropertyNames.PROPERTY_NAME, PropertyNames.EMPTY_STRING);
         final String sButton = sControlName.substring(7 + m_aControlName.length());
-        int nButton = new Integer(sButton).intValue();
+        int nButton = Integer.parseInt(sButton);
 
         // int image = getImageFromEvent(event);
         int index = getIndexFor(nButton);

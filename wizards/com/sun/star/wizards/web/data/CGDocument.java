@@ -72,20 +72,20 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     public static final int PAGE_TYPE_UNKNOWN = 0;
     public static final int PAGE_TYPE_PAGE = 1;
     public static final int PAGE_TYPE_SLIDE = 2;
-    public String cp_Title = "";
-    public String cp_Description = "";
+    public String cp_Title = PropertyNames.EMPTY_STRING;
+    public String cp_Description = PropertyNames.EMPTY_STRING;
     public String cp_URL;
-    public String cp_Author = "";
+    public String cp_Author = PropertyNames.EMPTY_STRING;
     public String cp_Exporter;
     /**
      * the destination filename to which this
      * document will be exported to.
      */
-    public String localFilename = "";
-    public String urlFilename = "";
-    public String title = "";
-    public String description = "";
-    public String author = "";
+    public String localFilename = PropertyNames.EMPTY_STRING;
+    public String urlFilename = PropertyNames.EMPTY_STRING;
+    public String title = PropertyNames.EMPTY_STRING;
+    public String description = PropertyNames.EMPTY_STRING;
+    public String author = PropertyNames.EMPTY_STRING;
     public DateTime createDate;
     public DateTime updateDate;
     public int sizeBytes = -1;
@@ -124,7 +124,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         cp_URL = getSettings().getFileAccess(xmsf).getURL(url);
         if (task == null)
         {
-            task = new Task("", "", 5);
+            task = new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, 5);
         }
         validate(xmsf, task);
     }
@@ -159,7 +159,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
         task.advance(true); //2
 
-        String path = getSettings().getFileAccess(xmsf).getPath(cp_URL, "");
+        String path = getSettings().getFileAccess(xmsf).getPath(cp_URL, PropertyNames.EMPTY_STRING);
         localFilename = FileAccess.getFilename(path, File.separator);
 
         /* if the type is a star office convertable document
@@ -177,8 +177,8 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
             props[0] = Properties.createProperty("Hidden", Boolean.TRUE);
             props[1] = Properties.createProperty("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
             props[2] = Properties.createProperty("UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
-            XComponent component = ((XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop)).loadComponentFromURL(cp_URL, "_default", 0, props);
-            xProps = ((XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component)).getDocumentProperties();
+            XComponent component = UnoRuntime.queryInterface(XComponentLoader.class, desktop).loadComponentFromURL(cp_URL, "_default", 0, props);
+            xProps = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component).getDocumentProperties();
         }
 
         task.advance(true); //4
@@ -202,23 +202,23 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
         valid = true;
 
-        if (cp_Title.equals(""))
+        if (cp_Title.equals(PropertyNames.EMPTY_STRING))
         {
             cp_Title = title;
         }
-        if (cp_Title.equals(""))
+        if (cp_Title.equals(PropertyNames.EMPTY_STRING))
         {
             cp_Title = localFilename;
         }
-        if (cp_Description.equals(""))
+        if (cp_Description.equals(PropertyNames.EMPTY_STRING))
         {
             cp_Description = description;
         }
-        if (cp_Author.equals(""))
+        if (cp_Author.equals(PropertyNames.EMPTY_STRING))
         {
             cp_Author = author;
         }
-        if (cp_Exporter == null || cp_Exporter.equals(""))
+        if (cp_Exporter == null || cp_Exporter.equals(PropertyNames.EMPTY_STRING))
         {
             cp_Exporter = (String) getSettings().cp_Exporters.getKey(
                     getSettings().getExporters(appType)[0]);
@@ -237,19 +237,19 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         }
 
         String media = (mediaDesc == null)
-                ? "" : (String) Properties.getPropertyValue(mediaDescriptor, PropertyNames.PROPERTY_NAME);
+                ? PropertyNames.EMPTY_STRING : (String) Properties.getPropertyValue(mediaDescriptor, PropertyNames.PROPERTY_NAME);
         appType = getDocType(media);
 
         //System.out.println(appType);
 
         isSOOpenable =
-                (appType == TypeDetection.WRITER_DOC || appType == TypeDetection.CALC_DOC || appType == TypeDetection.IMPRESS_DOC || appType == TypeDetection.DRAW_DOC) || appType == TypeDetection.HTML_DOC;
+                (appType.equals(TypeDetection.WRITER_DOC) || appType.equals(TypeDetection.CALC_DOC) || appType.equals(TypeDetection.IMPRESS_DOC) || appType.equals(TypeDetection.DRAW_DOC)) || appType.equals(TypeDetection.HTML_DOC);
 
 //        String[] parts = media.split("_");    // line removed because of compatibility to JDK13
         String[] parts = JavaTools.ArrayoutofString(media, "_");
 
 
-        isSODocument = parts.length < 2 ? false : isSOOpenable && (parts[1].startsWith("Star"));
+        isSODocument = parts.length >= 2 && isSOOpenable && (parts[1].startsWith("Star"));
 
     }
 
@@ -260,7 +260,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
      */
     private String getDocType(String media)
     {
-        if (media.equals(""))
+        if (media.equals(PropertyNames.EMPTY_STRING))
         {
             return TypeDetection.NO_TYPE;
         }
@@ -317,16 +317,16 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
                 },
                 new String[]
                 {
-                    d.cp_DisplayTitle ? cp_Title : "",
-                    d.cp_DisplayDescription ? cp_Description : "",
-                    d.cp_DisplayAuthor ? cp_Author : "",
-                    d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "",
-                    d.cp_DisplayFilename ? localFilename : "",
-                    d.cp_DisplayCreateDate ? createDate() : "",
-                    d.cp_DisplayUpdateDate ? updateDate() : "",
-                    d.cp_DisplayPages && (pages > -1) ? "" + pages() : "", //TODO when do i calculate pages?
-                    d.cp_DisplaySize ? sizeKB() : "",//TODO when do i calculate size?
-                    d.cp_DisplayFormatIcon ? getIcon(exp) : "",
+                    d.cp_DisplayTitle ? cp_Title : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayDescription ? cp_Description : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayAuthor ? cp_Author : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayFileFormat ? getTargetTypeName(exp) : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayFilename ? localFilename : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayCreateDate ? createDate() : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayUpdateDate ? updateDate() : PropertyNames.EMPTY_STRING,
+                    d.cp_DisplayPages && (pages > -1) ? PropertyNames.EMPTY_STRING + pages() : PropertyNames.EMPTY_STRING, //TODO when do i calculate pages?
+                    d.cp_DisplaySize ? sizeKB() : PropertyNames.EMPTY_STRING,//TODO when do i calculate size?
+                    d.cp_DisplayFormatIcon ? getIcon(exp) : PropertyNames.EMPTY_STRING,
                     dirName, urlFilename
                 });
     }
@@ -335,7 +335,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     {
         if (this.updateDate == null)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         return getSettings().formatter.formatCreated(this.updateDate);
     }
@@ -344,7 +344,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     {
         if (this.createDate == null)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         return getSettings().formatter.formatCreated(this.createDate);
     }
@@ -353,7 +353,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     {
         if (sizeBytes == -1)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         else
         {
@@ -363,8 +363,8 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
     private String pages()
     {
-        return pages == -1 ? ""
-                : JavaTools.replaceSubString(pagesTemplate(), "" + pages, "%NUMBER");
+        return pages == -1 ? PropertyNames.EMPTY_STRING
+                : JavaTools.replaceSubString(pagesTemplate(), PropertyNames.EMPTY_STRING + pages, "%NUMBER");
     }
 
     private String pagesTemplate()
@@ -373,26 +373,26 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         switch (pagesType)
         {
             case PAGE_TYPE_UNKNOWN:
-                return "";
+                return PropertyNames.EMPTY_STRING;
             case PAGE_TYPE_PAGE:
                 return getSettings().resources[CGSettings.RESOURCE_PAGES_TEMPLATE];
             case PAGE_TYPE_SLIDE:
                 return getSettings().resources[CGSettings.RESOURCE_SLIDES_TEMPLATE];
             default:
-                return "";
+                return PropertyNames.EMPTY_STRING;
         }
     }
 
     private String getTargetTypeName(CGExporter exp)
     {
-        return (exp.targetTypeName.equals(""))
+        return (exp.targetTypeName.equals(PropertyNames.EMPTY_STRING))
                 ? (String) Properties.getPropertyValue(mediaDescriptor, "UIName")
                 : exp.targetTypeName;
     }
 
     private String getIcon(CGExporter exporter)
     {
-        return exporter.cp_Icon.equals("") ? getIcon(this.appType) : exporter.cp_Icon;
+        return exporter.cp_Icon.equals(PropertyNames.EMPTY_STRING) ? getIcon(this.appType) : exporter.cp_Icon;
     }
 
     private String getIcon(String appType)

@@ -111,7 +111,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        16, new Boolean(true), new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
+                        16, Boolean.TRUE, new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
                     });
 
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,

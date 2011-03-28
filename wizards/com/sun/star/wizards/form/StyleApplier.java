@@ -122,7 +122,7 @@ public class StyleApplier
             lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -177,7 +177,7 @@ public class StyleApplier
 
     /*  public void initialize(short _iStyleindex){
     if (_iStyleindex < lstStyles.getItemCount()){
-    Helper.setUnoPropertyValue(UnoDialog.getModel(lstStyles), "SelectedItems", new short[]{_iStyleindex});
+    Helper.setUnoPropertyValue(UnoDialog.getModel(lstStyles), PropertyNames.SELECTED_ITEMS, new short[]{_iStyleindex});
     applyStyle(true, false);
     }
     }
@@ -187,7 +187,7 @@ public class StyleApplier
         try
         {
             Object oRootNode = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Office.FormWizard/FormWizard/Styles", false);
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
+            XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
             StyleNodeNames = xNameAccess.getElementNames();
             StyleNames = new String[StyleNodeNames.length];
             FileNames = new String[StyleNodeNames.length];
@@ -208,7 +208,7 @@ public class StyleApplier
     {
         try
         {
-            short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(lstStyles), "SelectedItems"));
+            short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(lstStyles), PropertyNames.SELECTED_ITEMS));
             if (SelFields != null)
             {
                 return SelFields[0];
@@ -331,7 +331,7 @@ public class StyleApplier
         int index = JavaTools.FieldInList(_sDataList, _sHeader);
         if (index > -1)
         {
-            String sPropName = "";
+            String sPropName = PropertyNames.EMPTY_STRING;
             int iStyleColor;
             while (((sPropName.indexOf("}") < 0) && (index < _sDataList.length - 1)))
             {
@@ -345,8 +345,8 @@ public class StyleApplier
                         sPropValue = sPropValue.trim();
                         if (sPropValue.indexOf("#") > 0)
                         {
-                            sPropValue = JavaTools.replaceSubString(sPropValue, "", ";");
-                            sPropValue = JavaTools.replaceSubString(sPropValue, "", " ");
+                            sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SEMI_COLON);
+                            sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SPACE);
                             return Integer.decode(sPropValue).intValue();
                         }
                     }
@@ -367,7 +367,7 @@ public class StyleApplier
         try
         {
             // TODO: check different languages in header layouts
-            aStylePaths = FileAccess.getOfficePaths(getMSF(), "Config", "", "");
+            aStylePaths = FileAccess.getOfficePaths(getMSF(), "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
             FileAccess.combinePaths(getMSF(), aStylePaths, "/wizard/form/styles");
 
             String[][] LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aStylePaths, ".css");
@@ -384,10 +384,10 @@ public class StyleApplier
     private String getStylePath()
         {
 // TODO: umstellen auf mehrere Pfade
-            String StylesPath = "";
+            String StylesPath = PropertyNames.EMPTY_STRING;
             try
             {
-                StylesPath = FileAccess.getOfficePath(xMSF, "Config", "", "");
+                StylesPath = FileAccess.getOfficePath(xMSF, "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
                 StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
             }
             catch (NoValidPathException e)
