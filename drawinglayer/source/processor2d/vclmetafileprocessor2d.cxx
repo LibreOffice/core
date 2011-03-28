@@ -866,7 +866,7 @@ namespace drawinglayer
                             // I have now moved describePDFControl to toolkit, thus i can implement the PDF
                             // form control support now as follows
                             ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-                            ::toolkitform::describePDFControl(rXControl, pPDFControl);
+                            ::toolkitform::describePDFControl( rXControl, pPDFControl, *mpPDFExtOutDevData );
 
                             if(pPDFControl.get())
                             {

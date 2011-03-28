@@ -348,7 +348,7 @@
                     <value >swform</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Form Design</value>
+                    <value>Base: Database Form</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterFormWindowState</value>

@@ -417,6 +417,10 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         aBtnExec            ( this, BMP_RESID( BTN_EXEC ) ),
         aGrpQ               ( this, BMP_RESID( GRP_Q ) ),
 
+        aFt1                ( this, BMP_RESID ( FT_1 ) ),
+        aFt2                ( this, BMP_RESID ( FT_2 ) ),
+        aFt3                ( this, BMP_RESID ( FT_3 ) ),
+
         aCbx1               ( this, BMP_RESID( CBX_1 ) ),
         pQSet1              ( new MaskSet( this, BMP_RESID( QCOL_1 ) ) ),
         aSp1                ( this, BMP_RESID( SP_1 ) ),
@@ -440,9 +444,6 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         pData               ( new MaskData( this, *pBindinx ) ),
         aCbxTrans           ( this, BMP_RESID( CBX_TRANS ) ),
         aLbColorTrans       ( this, BMP_RESID ( LB_TRANS ) ),
-        aFt1                ( this, BMP_RESID ( FT_1 ) ),
-        aFt2                ( this, BMP_RESID ( FT_2 ) ),
-        aFt3                ( this, BMP_RESID ( FT_3 ) ),
         pColTab             ( NULL ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
@@ -508,6 +509,42 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     pQSet2->Show();
     pQSet3->Show();
     pQSet4->Show();
+
+    aCbx1.SetAccessibleRelationMemberOf( &aGrpQ );
+    pQSet1->SetAccessibleRelationMemberOf( &aGrpQ );
+    aSp1.SetAccessibleRelationMemberOf( &aGrpQ );
+    aLbColor1.SetAccessibleRelationMemberOf( &aGrpQ );
+    aCbx1.SetAccessibleRelationLabeledBy( &aFt1 );
+    pQSet1->SetAccessibleRelationLabeledBy( &aFt1 );
+    aSp1.SetAccessibleRelationLabeledBy( &aFt2 );
+    aLbColor1.SetAccessibleRelationLabeledBy( &aFt3 );
+    aCbx2.SetAccessibleRelationMemberOf( &aGrpQ );
+    pQSet2->SetAccessibleRelationMemberOf( &aGrpQ );
+    aSp2.SetAccessibleRelationMemberOf( &aGrpQ );
+    aLbColor2.SetAccessibleRelationMemberOf( &aGrpQ );
+    aCbx2.SetAccessibleRelationLabeledBy( &aFt1 );
+    pQSet2->SetAccessibleRelationLabeledBy( &aFt1 );
+    aSp2.SetAccessibleRelationLabeledBy( &aFt2 );
+    aLbColor2.SetAccessibleRelationLabeledBy( &aFt3 );
+    aCbx3.SetAccessibleRelationMemberOf( &aGrpQ );
+    pQSet3->SetAccessibleRelationMemberOf( &aGrpQ );
+    aSp3.SetAccessibleRelationMemberOf( &aGrpQ );
+    aLbColor3.SetAccessibleRelationMemberOf( &aGrpQ );
+    aCbx3.SetAccessibleRelationLabeledBy( &aFt1 );
+    pQSet3->SetAccessibleRelationLabeledBy( &aFt1 );
+    aSp3.SetAccessibleRelationLabeledBy( &aFt2 );
+    aLbColor3.SetAccessibleRelationLabeledBy( &aFt3 );
+    aCbx4.SetAccessibleRelationMemberOf( &aGrpQ );
+    pQSet4->SetAccessibleRelationMemberOf( &aGrpQ );
+    aSp4.SetAccessibleRelationMemberOf( &aGrpQ );
+    aLbColor4.SetAccessibleRelationMemberOf( &aGrpQ );
+    aCbx4.SetAccessibleRelationLabeledBy( &aFt1 );
+    pQSet4->SetAccessibleRelationLabeledBy( &aFt1 );
+    aSp4.SetAccessibleRelationLabeledBy( &aFt2 );
+    aLbColor4.SetAccessibleRelationLabeledBy( &aFt3 );
+    aLbColorTrans.SetAccessibleRelationLabeledBy( &aCbxTrans );
+    aLbColorTrans.SetAccessibleRelationMemberOf( &aGrpQ );
+    aCbxTrans.SetAccessibleRelationMemberOf( &aGrpQ );
 }
 
 //-------------------------------------------------------------------------

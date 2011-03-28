@@ -3113,6 +3113,12 @@ namespace xmloff { namespace token {
         TOKEN( "outside-minimum",       XML_OUTSIDE_MINIMUM ),
         TOKEN( "outside-maximum",       XML_OUTSIDE_MAXIMUM ),
 
+        TOKEN( "legend-expansion",      XML_LEGEND_EXPANSION),
+        TOKEN( "legend-expansion-aspect-ratio", XML_LEGEND_EXPANSION_ASPECT_RATIO),
+        TOKEN( "balanced",              XML_BALANCED),
+        TOKEN( "high",                  XML_HIGH),
+        TOKEN( "wide",                  XML_WIDE),
+
         TOKEN( "axis-type",             XML_AXIS_TYPE ), //#i25706#
         TOKEN( "date-scale",            XML_DATE_SCALE ),
         TOKEN( "base-time-unit",        XML_BASE_TIME_UNIT ),
@@ -3123,6 +3129,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "min-value", XML_MIN_VALUE ),
         TOKEN( "max-value", XML_MAX_VALUE ),
+
+        TOKEN( "margin", XML_MARGIN),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

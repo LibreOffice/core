@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
@@ -156,7 +157,7 @@ sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
         }
         catch ( uno::Exception& )
         {
-            DBG_ERRORFILE( "FwkTabPage::CallMethod(): exception of XDialogEventHandler::callHandlerMethod()" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return bRet;
