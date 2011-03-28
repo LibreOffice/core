@@ -31,8 +31,9 @@ mkdir: %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco
 ..\%__SRC%\inc\cr-style.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\cr-style.h
 ..\%__SRC%\inc\libcroco.h %_DEST%\inc%_EXT%\external\libcroco-0.6\libcroco\libcroco.h
 
-..\%__SRC%\bin\libcroco-0.6-3.dll %_DEST%\bin%_EXT%\libcroco-0.6-3.dll
 ..\%__SRC%\lib\libcroco-0.6.3.0.1.dylib %_DEST%\lib%_EXT%\libcroco-0.6.3.0.1.dylib
 symlink: %_DEST%\lib%_EXT%\libcroco-0.6.3.0.1.dylib %_DEST%\lib%_EXT%\libcroco-0.6.3.dylib
 symlink: %_DEST%\lib%_EXT%\libcroco-0.6.3.dylib %_DEST%\lib%_EXT%\libcroco-0.6.dylib
 
+..\%__SRC%\lib\ilibcroco-0.6-3_t1.lib %_DEST%\lib%_EXT%\libcroco-0.6-3.lib
+..\%__SRC%\bin\libcroco-0.6-3.dll %_DEST%\bin%_EXT%\libcroco-0.6-3.dll

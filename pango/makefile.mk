@@ -52,7 +52,6 @@ TARFILE_MD5=22ad1c8d3fda7e73b0798035f3dd96bc
 .IF "$(OS)" == "MACOSX"
 
 PATCH_FILES=pango-1.28.3.patch
-ADDITIONAL_FILES=pango/glib-mkenums
 
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
 CONFIGURE_DIR=
@@ -112,15 +111,12 @@ PATCH_FILES=pango-1.28.3-win32.patch
 ADDITIONAL_FILES=config.h module.defs make.msc glib-mkenums.pl msvc_recommended_pragmas.h
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
-BUILD_DIR=./pango
+BUILD_DIR=./pango																																																																																																																										
 BUILD_ACTION=nmake -f makefile.msc
 
 OUT2LIB+=pango/pango-1.0.lib
-OUT2LIB+=pango/pango-1.0s.lib
 OUT2LIB+=pango/pangocairo-1.0.lib
-OUT2LIB+=pango/pangocairo-1.0s.lib
 OUT2LIB+=pango/pangowin32-1.0.lib
-OUT2LIB+=pango/pangowin32-1.0s.lib
 
 OUT2BIN+=pango/libpango-1.0-0.dll
 OUT2BIN+=pango/libpangocairo-1.0-0.dll
@@ -128,6 +124,7 @@ OUT2BIN+=pango/libpangowin32-1.0-0.dll
 OUT2BIN+=pango/querymodules.exe
 
 OUT2INC+=pango/pango.h
+OUT2INC+=pango/pangocairo.h
 OUT2INC+=pango/pango-attributes.h
 OUT2INC+=pango/pango-bidi-type.h
 OUT2INC+=pango/pango-break.h
@@ -143,6 +140,7 @@ OUT2INC+=pango/pango-glyph.h
 OUT2INC+=pango/pango-glyph-item.h
 OUT2INC+=pango/pango-gravity.h
 OUT2INC+=pango/pango-item.h
+OUT2INC+=pango/pango-language.h
 OUT2INC+=pango/pango-layout.h
 OUT2INC+=pango/pango-matrix.h
 OUT2INC+=pango/pango-renderer.h
