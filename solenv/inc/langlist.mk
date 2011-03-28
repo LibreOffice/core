@@ -104,7 +104,6 @@ nb \
 nl \
 nn \
 nr \
-ns \
 nso \
 ny \
 om \
