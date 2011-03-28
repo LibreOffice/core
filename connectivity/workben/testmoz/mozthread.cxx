@@ -328,10 +328,10 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
 
 int autoTest(Reference<XResultSet> &xRes)
 {
-    sal_Int32 nRows = 0;
     printColumns(xRes);
     if(xRes.is())
     {
+        sal_Int32 nRows = 0;
         while( xRes.is() && xRes->next())
         {
             nRows++;

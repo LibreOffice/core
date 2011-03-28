@@ -2767,7 +2767,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                     SvXMLElementExport* pSeries = NULL;
                     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                         xSource->getDataSequences());
-                    sal_Int32 nMainSequenceIndex = -1;
                     sal_Int32 nSeriesLength = 0;
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     sal_Bool bHasMeanValueLine = false;
@@ -2782,6 +2781,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         Reference< chart2::data::XDataSequence > xValuesSeq;
                         Reference< chart2::data::XDataSequence > xLabelSeq;
                         sal_Int32 nSeqIdx=0;
+                        sal_Int32 nMainSequenceIndex = -1;
                         for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
                         {
                             OUString aRole;
@@ -3360,9 +3360,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
         ::std::list< SchXMLDataPointStruct > aDataPointList;
 
-        sal_Int32 nLastIndex = -1;
-        sal_Int32 nCurrIndex = 0;
-
         // collect elements
         if( bVaryColorsByPoint && xColorScheme.is() )
         {
@@ -3431,6 +3428,10 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         }
         else
         {
+
+          sal_Int32 nLastIndex = -1;
+          sal_Int32 nCurrIndex = 0;
+
             for( nElement = 0; nElement < nSize; ++nElement )
             {
                 aPropertyStates.clear();
