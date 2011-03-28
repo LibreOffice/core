@@ -68,7 +68,7 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper5 <
+    typedef ::cppu::PartialWeakComponentImplHelper5 <
         cssa::XAccessible,
         cssa::XAccessibleContext,
         cssa::XAccessibleComponent,
@@ -112,6 +112,14 @@ public:
 
     void UpdateStateSet (void);
 
+    //----- XComponent ---------------------------------------------------
+
+    virtual void SAL_CALL dispose()throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const cssu::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const cssu::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //----- XAccessible -------------------------------------------------------
 
@@ -199,9 +207,6 @@ public:
     virtual void SAL_CALL removeEventListener (
             const cssu::Reference<cssa::XAccessibleEventListener>& rxListener)
         throw (cssu::RuntimeException);
-
-    using PresenterAccessibleObjectInterfaceBase::addEventListener;
-    using PresenterAccessibleObjectInterfaceBase::removeEventListener;
 
     //----- XWindowListener ---------------------------------------------------
 
