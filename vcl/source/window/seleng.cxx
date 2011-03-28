@@ -200,11 +200,7 @@ void SelectionEngine::CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 )
 sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
     nFlags &= (~SELENG_CMDEVT);
-    if ( !pFunctionSet || !pWin )
-        return sal_False;
-    const bool bRightClickCursorPositioning =
-            rMEvt.IsRight() && rMEvt.GetClicks() == 1 && !IsInSelection();
-    if ( (rMEvt.GetClicks() > 1 || rMEvt.IsRight()) && !bRightClickCursorPositioning )
+    if ( !pFunctionSet || !pWin || rMEvt.GetClicks() > 1 || rMEvt.IsRight() )
         return sal_False;
 
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
