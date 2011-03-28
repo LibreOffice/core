@@ -33,6 +33,11 @@
 // includes
 //------------------------------------------------------------------------
 
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#endif
+
 #include <WindowsAccessBridgeAdapter.h>
 
 #include <prewin.h>
