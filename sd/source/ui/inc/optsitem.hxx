@@ -146,11 +146,11 @@ class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
 {
 private:
 
-    sal_Bool    bRuler              : 1;    // Layout/Display/Ruler
-    sal_Bool    bMoveOutline        : 1;    // Layout/Display/Contur
-    sal_Bool    bDragStripes        : 1;    // Layout/Display/Guide
-    sal_Bool    bHandlesBezier      : 1;    // Layout/Display/Bezier
-    sal_Bool    bHelplines          : 1;    // Layout/Display/Helpline
+    sal_Bool    bRuler; // Layout/Display/Ruler
+    sal_Bool    bMoveOutline;   // Layout/Display/Contur
+    sal_Bool    bDragStripes;   // Layout/Display/Guide
+    sal_Bool    bHandlesBezier; // Layout/Display/Bezier
+    sal_Bool    bHelplines; // Layout/Display/Helpline
     sal_uInt16  nMetric;                    // Layout/Other/MeasureUnit
     sal_uInt16  nDefTab;                    // Layout/Other/TabStop
 
