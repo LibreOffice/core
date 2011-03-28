@@ -40,6 +40,7 @@
 #include "registry_win.hxx"
 #include <osl/thread.h>
 #include <sal/macros.h>
+#include <windows.h>
 
 
 String ReadRegistry( String aKey, String aValueName )
