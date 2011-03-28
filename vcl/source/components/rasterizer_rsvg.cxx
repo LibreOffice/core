@@ -49,7 +49,7 @@
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.so"
 #elif defined WNT
     #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0-0.dll"
-    #define VCL_RSVG_CAIRO_LIBNAME      "libcairo-2.dll"
+    #define VCL_RSVG_CAIRO_LIBNAME      "cairo.dll"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2-2.dll"
 #else
     #define VCL_RSVG_GOBJECT_LIBNAME    "nogobjectlib"
