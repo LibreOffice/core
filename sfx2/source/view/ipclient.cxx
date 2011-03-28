@@ -197,9 +197,6 @@ throw (::com::sun::star::uno::RuntimeException)
             xDocument = m_pClient->GetViewShell()->GetObjectShell()->GetModel();
         SfxObjectShell::SetCurrentComponent( xDocument );
     }
-    else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
-    {
-    }
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
