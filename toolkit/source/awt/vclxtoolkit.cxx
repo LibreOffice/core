@@ -34,6 +34,10 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <stdio.h>
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#endif
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>

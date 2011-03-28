@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+#include <svsys.h>
 #include "tools/debug.hxx"
 #include "i18npool/mslangid.hxx"
 #include "vcl/svapp.hxx"

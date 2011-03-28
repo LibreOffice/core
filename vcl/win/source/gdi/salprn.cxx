@@ -32,7 +32,7 @@
 #define WINVER 0x0500
 
 #include <string.h>
-#include <windows.h>
+#include <svsys.h>
 
 #ifdef __MINGW32__
 #include <excpt.h>

@@ -53,9 +53,7 @@
 #include <deque>
 
 // Platform
-#ifdef WNT
-#include <windows.h>
-#endif
+#include <svsys.h>
 
 #include <vcl/salgdi.hxx>
 

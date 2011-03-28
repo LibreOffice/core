@@ -31,9 +31,7 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 
-#ifdef WNT
-#include <windows.h>
-#elif defined ( QUARTZ )
+#if defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"

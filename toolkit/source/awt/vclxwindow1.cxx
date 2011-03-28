@@ -37,7 +37,8 @@
 #include <vcl/window.hxx>
 
 #ifdef WNT
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

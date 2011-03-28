@@ -47,7 +47,7 @@
 
 #include <stdio.h>
 
-#include <windows.h>
+#include <svsys.h>
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif

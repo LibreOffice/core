@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <windows.h>
+#include <svsys.h>
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>

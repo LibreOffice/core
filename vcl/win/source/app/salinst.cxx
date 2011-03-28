@@ -31,7 +31,7 @@
 
 #include <string.h>
 #ifdef WNT
-#include <windows.h>
+#include <svsys.h>
 #include <process.h>
 #endif
 #ifdef __MINGW32__

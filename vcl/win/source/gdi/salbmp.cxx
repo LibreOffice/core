@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <windows.h>
+#include <svsys.h>
 #include <wincomp.hxx>
 #include <vcl/salbtype.hxx>
 #include <salgdi.h>

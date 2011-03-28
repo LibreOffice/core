@@ -30,6 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifdef WNT
+#include <svsys.h>
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
 #endif
