@@ -33,6 +33,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svditer.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotext.hxx>
@@ -71,7 +72,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
-
+#include <switerator.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -309,13 +310,13 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
         return;
     }
 
-    if ( !pRegisteredIn )
+    if ( !GetRegisteredIn() )
     {
         ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
         return;
     }
 
-    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
+    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
     if ( !pIDDMA )
     {
         ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
@@ -408,7 +409,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
 {
     sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
 
-    std::vector< SwAnchoredObject* > aObjs;
+    std::list< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -438,7 +439,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 {
     sal_uInt32 nMaxOrdNum( 0L );
 
-    std::vector< SwAnchoredObject* > aObjs;
+    std::list< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -545,88 +546,6 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 
 /*************************************************************************
 |*
-|*  SwFlyDrawContact::CreateNewRef()
-|*
-|*  Ersterstellung      MA 14. Dec. 94
-|*  Letzte Aenderung    MA 24. Apr. 95
-|*
-|*************************************************************************/
-
-SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
-{
-    SwVirtFlyDrawObj *pDrawObj = new SwVirtFlyDrawObj( *GetMaster(), pFly );
-    pDrawObj->SetModel( GetMaster()->GetModel() );
-    pDrawObj->SetUserCall( this );
-
-    //Der Reader erzeugt die Master und setzt diese, um die Z-Order zu
-    //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
-    //die Master aus der Liste entfernt und fuehren von da an ein
-    //Schattendasein.
-    SdrPage* pPg( 0L );
-    if ( 0 != ( pPg = GetMaster()->GetPage() ) )
-    {
-        const sal_uInt32 nOrdNum = GetMaster()->GetOrdNum();
-        pPg->ReplaceObject( pDrawObj, nOrdNum );
-    }
-    // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
-    // into drawing page with correct order number
-    else
-    {
-        GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
-                        InsertObject( pDrawObj, _GetOrdNumForNewRef( pFly ) );
-    }
-    // <--
-    // --> OD 2004-12-13 #i38889# - assure, that new <SwVirtFlyDrawObj> instance
-    // is in a visible layer.
-    MoveObjToVisibleLayer( pDrawObj );
-    // <--
-    return pDrawObj;
-}
-
-/** method to determine new order number for new instance of <SwVirtFlyDrawObj>
-
-    OD 2004-08-16 #i27030#
-    Used in method <CreateNewRef(..)>
-
-    @author OD
-*/
-sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
-{
-    sal_uInt32 nOrdNum( 0L );
-
-    // search for another Writer fly frame registered at same frame format
-    SwClientIter aIter( *GetFmt() );
-    const SwFlyFrm* pFlyFrm( 0L );
-    for ( pFlyFrm = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
-          pFlyFrm;
-          pFlyFrm = (SwFlyFrm*)aIter.Next() )
-    {
-        if ( pFlyFrm != _pFlyFrm )
-        {
-            break;
-        }
-    }
-
-    if ( pFlyFrm )
-    {
-        // another Writer fly frame found. Take its order number
-        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetOrdNum();
-    }
-    else
-    {
-        // no other Writer fly frame found. Take order number of 'master' object
-        // --> OD 2004-11-11 #i35748# - use method <GetOrdNumDirect()> instead
-        // of method <GetOrdNum()> to avoid a recalculation of the order number,
-        // which isn't intended.
-        nOrdNum = GetMaster()->GetOrdNumDirect();
-        // <--
-    }
-
-    return nOrdNum;
-}
-
-/*************************************************************************
-|*
 |*  SwFlyDrawContact::Modify()
 |*
 |*  Ersterstellung      OK 08.11.94 10:21
@@ -634,7 +553,7 @@ sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
 |*
 |*************************************************************************/
 
-void SwFlyDrawContact::Modify( SfxPoolItem *, SfxPoolItem * )
+void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
 }
 
@@ -716,17 +635,10 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 
     @author
 */
-void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     const SwFrmFmt* pFmt = GetFmt();
-
-    SwClientIter aIter( *(const_cast<SwFrmFmt*>(pFmt)) );
-    for( SwFlyFrm* pFlyFrm = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
-         pFlyFrm;
-         pFlyFrm = (SwFlyFrm*)aIter.Next() )
-    {
-        _roAnchoredObjs.push_back( pFlyFrm );
-    }
+    SwFlyFrm::GetAnchoredObjects( _roAnchoredObjs, *pFmt );
 }
 
 /*************************************************************************
@@ -769,7 +681,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
     // <--
 {
-    // clear vector containing 'virtual' drawing objects.
+    // clear list containing 'virtual' drawing objects.
     maDrawVirtObjs.clear();
 
     // --> OD 2004-09-22 #i33909# - assure, that drawing object is inserted
@@ -815,6 +727,45 @@ SwDrawContact::~SwDrawContact()
     {
         SdrObject* pObject = const_cast< SdrObject* >( maAnchoredDrawObj.GetDrawObj() );
         SdrObject::Free( pObject );
+    }
+}
+
+void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
+{
+    for( sal_Int32 n=0; n<pDoc->GetSpzFrmFmts()->Count(); n++ )
+    {
+        SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
+        if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
+        {
+            std::list<SdrTextObj*> aTextObjs;
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrmFmt>::FirstElement(*pFly);
+            if( pContact )
+            {
+                SdrObject* pSdrO = pContact->GetMaster();
+                if ( pSdrO )
+                {
+                    if ( pSdrO->IsA( TYPE(SdrObjGroup) ) )
+                    {
+                        SdrObjListIter aListIter( *pSdrO, IM_DEEPNOGROUPS );
+                        //iterate inside of a grouped object
+                        while( aListIter.IsMore() )
+                        {
+                            SdrObject* pSdrOElement = aListIter.Next();
+                            if( pSdrOElement && pSdrOElement->IsA( TYPE(SdrTextObj) ) &&
+                                static_cast<SdrTextObj*>( pSdrOElement)->HasText() )
+                            {
+                                rTextObjects.push_back((SdrTextObj*) pSdrOElement);
+                            }
+                        }
+                    }
+                    else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
+                            static_cast<SdrTextObj*>( pSdrO )->HasText() )
+                    {
+                        rTextObjects.push_back((SdrTextObj*) pSdrO);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1207,9 +1158,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     // OD 2004-06-01 #i26791# - no event handling, if existing <ViewShell>
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
-    if ( pDoc->GetRootFrm() &&
-         pDoc->GetRootFrm()->GetCurrShell() &&
-         pDoc->GetRootFrm()->GetCurrShell()->IsInConstructor() )
+    if ( pDoc->GetCurrentViewShell() &&
+         pDoc->GetCurrentViewShell()->IsInConstructor() )
     {
         return;
     }
@@ -1225,7 +1175,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 
     //Action aufsetzen, aber nicht wenn gerade irgendwo eine Action laeuft.
     ViewShell *pSh = 0, *pOrg;
-    if ( pDoc->GetRootFrm() && pDoc->GetRootFrm()->IsCallbackActionEnabled() )
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
         pDoc->GetEditShell( &pOrg );
         pSh = pOrg;
@@ -1239,13 +1190,13 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             } while ( pSh && pSh != pOrg );
 
         if ( pSh )
-            pDoc->GetRootFrm()->StartAllAction();
+            pTmpRoot->StartAllAction();
     }
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
     _Changed( rObj, eType, &rOldBoundRect );    //Achtung, ggf. Suizid!
 
     if ( pSh )
-        pDoc->GetRootFrm()->EndAllAction();
+        pTmpRoot->EndAllAction();
 }
 
 // --> OD 2006-01-18 #129959#
@@ -1405,7 +1356,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if(::CheckControlLayer(maAnchoredDrawObj.DrawObj()))
                 {
-                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
+                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
                     const SdrLayerID aCurrentLayer(maAnchoredDrawObj.DrawObj()->GetLayer());
                     const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
                     const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
@@ -1621,7 +1572,7 @@ namespace
 |*
 |*************************************************************************/
 
-void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     // OD 10.10.2003 #112299#
     ASSERT( !mbDisconnectInProgress,
@@ -1834,7 +1785,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         // drawing page, move the 'master' drawing object into the corresponding
         // invisible layer.
         {
-            //((SwFrmFmt*)pRegisteredIn)->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            //((SwFrmFmt*)GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
             //                            RemoveObject( GetMaster()->GetOrdNum() );
             // OD 21.08.2003 #i18447# - in order to consider group object correct
             // use new method <SwDrawContact::MoveObjToInvisibleLayer(..)>
@@ -1855,7 +1806,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
         GetMaster()->SetUserCall( 0 );
         if ( GetMaster()->IsInserted() )
         {
-            ((SwFrmFmt*)pRegisteredIn)->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            ((SwFrmFmt*)GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                         RemoveObject( GetMaster()->GetOrdNum() );
         }
     }
@@ -1947,13 +1898,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     }
     // <--
 
-    SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)pRegisteredIn;
+    SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)GetRegisteredIn();
 
-    SwRootFrm* pRoot = pDrawFrmFmt->getIDocumentLayoutAccess()->GetRootFrm();
-    if ( !pRoot )
-    {
+    if( !pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         return;
-    }
 
     // OD 16.05.2003 #108784# - remove 'virtual' drawing objects from writer
     // layout and from drawing page, and remove 'master' drawing object from
@@ -1970,6 +1918,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         case FLY_AT_PAGE:
                 {
                 sal_uInt16 nPgNum = pAnch->GetPageNum();
+                ViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
+                if( !pShell )
+                    break;
+                SwRootFrm* pRoot = pShell->GetLayout();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
                 for ( sal_uInt16 i = 1; i < nPgNum && pPage; ++i )
@@ -2008,8 +1960,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     {
                         SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
                         SwCntntNode* pCNd = pDrawFrmFmt->GetDoc()->GetNodes().GoNext( &aIdx );
-                        SwClientIter aIter( *pCNd );
-                        if ( aIter.First( TYPE(SwFrm) ) )
+                        if ( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
                             pModify = pCNd;
                         else
                         {
@@ -2041,11 +1992,9 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         pModify = pAnch->GetCntntAnchor()->nNode.GetNode().GetCntntNode();
                     }
                 }
-                SwClientIter aIter( *pModify );
+                SwIterator<SwFrm,SwModify> aIter( *pModify );
                 SwFrm* pAnchorFrmOfMaster = 0;
-                for( SwFrm *pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                     pFrm;
-                     pFrm = (SwFrm*)aIter.Next() )
+                for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                 {
                     // append drawing object, if
                     // (1) proposed anchor frame isn't a follow and
@@ -2215,7 +2164,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
 
     @author
 */
-void SwDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     _roAnchoredObjs.push_back( const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj) );
 

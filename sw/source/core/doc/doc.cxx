@@ -112,11 +112,14 @@
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
+#include <viewopt.hxx>
 #include <docfld.hxx>           // _SetGetExpFld
 #include <docufld.hxx>          // SwPostItField
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
+#include <attrhint.hxx>
+
 #include <wdocsh.hxx>           // SwWebDocShell
 #include <prtopt.hxx>           // SwPrintOptions
 
@@ -126,6 +129,8 @@
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
+
+#include "switerator.hxx"
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -203,7 +208,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         // <--
          // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE: return mbBrowseMode;
+        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
         case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
         case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
@@ -327,8 +332,8 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         // <--
          // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE:
-            mbBrowseMode = value;
+        case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
+            mbLastBrowseMode = value;
             break;
         case HTML_MODE:
             mbHTMLMode = value;
@@ -371,7 +376,7 @@ const i18n::ForbiddenCharacters*
 }
 
 void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                   /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
+                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
     if( !xForbiddenCharsTable.isValid() )
     {
@@ -388,12 +393,14 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
             pDrawModel->ReformatAllTextObjects();
     }
 
-    if( pLayout && !mbInReading )
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    if( pTmpRoot && !mbInReading )
     {
-        pLayout->StartAllAction();
-        pLayout->InvalidateAllCntnt();
-        pLayout->EndAllAction();
-    }
+        pTmpRoot->StartAllAction();
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
+        pTmpRoot->EndAllAction();
+    }//swmod 080310
     SetModified();
 }
 
@@ -457,12 +464,14 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
                 pDrawModel->ReformatAllTextObjects();
         }
 
-        if( pLayout && !mbInReading )
+        SwRootFrm* pTmpRoot = GetCurrentLayout();
+        if( pTmpRoot && !mbInReading )
         {
-            pLayout->StartAllAction();
-            pLayout->InvalidateAllCntnt();
-            pLayout->EndAllAction();
-        }
+            pTmpRoot->StartAllAction();
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
+            pTmpRoot->EndAllAction();
+        }//swmod 080310
         SetModified();
     }
 }
@@ -1089,9 +1098,8 @@ sal_uInt16 _PostItFld::GetPageNo(
     //Bereichs ermittelt werden.
     rVirtPgNo = 0;
     sal_uInt16 nPos = GetCntnt();
-    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
-            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
+    for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
     {
         if( pFrm->GetOfst() > nPos ||
             (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
@@ -1121,13 +1129,11 @@ bool lcl_GetPostIts(
     if( pFldType->GetDepends() )
     {
         // Modify-Object gefunden, trage alle Felder ins Array ein
-        SwClientIter aIter( *pFldType );
-        SwClient* pLast;
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
         const SwTxtFld* pTxtFld;
-
-        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
+        for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
         {
-            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
+            if( 0 != ( pTxtFld = pFld->GetTxtFld() ) &&
                 pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
                 bHasPostIts = true;
@@ -1218,15 +1224,12 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 
 
 void SwDoc::CalculatePagesForPrinting(
+    const SwRootFrm& rLayout,
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
     bool bIsPDFExport,
     sal_Int32 nDocPageCount )
 {
-    DBG_ASSERT( pLayout, "no layout present" );
-    if (!pLayout)
-        return;
-
     const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
     const bool bPrintSelection = nContent == 2;
 
@@ -1243,7 +1246,7 @@ void SwDoc::CalculatePagesForPrinting(
     aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
     aMulti.Select( aPages );
 
-    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
+    const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     const SwFrm     *pEndPage = pStPage;
 
     sal_uInt16 nFirstPageNo = 0;
@@ -1442,7 +1445,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 {
                     // get the correct number of current pages for the post-it document
                     rData.m_pPostItShell->CalcLayout();
-                    const sal_Int32 nPages = rData.m_pPostItDoc->GetPageCount();
+                    const sal_Int32 nPages = rData.m_pPostItShell->GetPageCount();
                     aPostItLastStartPageNum[ nPhyPageNum ] = nPages;
                 }
             }
@@ -1450,7 +1453,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         // format post-it doc to get correct number of pages
         rData.m_pPostItShell->CalcLayout();
-        const sal_Int32 nPostItDocPageCount = rData.m_pPostItDoc->GetPageCount();
+        const sal_Int32 nPostItDocPageCount = rData.m_pPostItShell->GetPageCount();
 
         if (nPostItMode == POSTITS_ONLY || nPostItMode == POSTITS_ENDDOC)
         {
@@ -1569,6 +1572,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
 
 void SwDoc::CalculatePagePairsForProspectPrinting(
+    const SwRootFrm& rLayout,
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
@@ -1597,11 +1601,10 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
-    DBG_ASSERT( pLayout, "no layout present" );
-    if (!pLayout || aRange.size() <= 0)
+    if ( aRange.size() <= 0)
         return;
 
-    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
+    const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     sal_Int32 i = 0;
     for ( i = 1; pStPage && i < nDocPageCount; ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
@@ -1611,7 +1614,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // currently for prospect printing all pages are valid to be printed
     // thus we add them all to the respective map and set for later use
     sal_Int32 nPageNum = 0;
-    const SwPageFrm *pPageFrm = (SwPageFrm*)pLayout->Lower();
+    const SwPageFrm *pPageFrm  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     while( pPageFrm && nPageNum < nDocPageCount )
     {
         DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
@@ -1714,38 +1717,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
-
-sal_uInt16 SwDoc::GetPageCount() const
-{
-    return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
-}
-
-const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
-{
-    Size aSize;
-    if ( GetRootFrm() && nPageNum )
-    {
-        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
-                                 (GetRootFrm()->Lower());
-
-        while ( --nPageNum && pPage->GetNext() )
-        {
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        }
-
-        // switch to next page for an empty page, if empty pages are not skipped
-        // in order to get a sensible page size for an empty page - e.g. for printing.
-        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
-        {
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        }
-
-        aSize = pPage->Frm().SSize();
-    }
-    return aSize;
-}
-
-
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
@@ -1775,10 +1746,8 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         // #i93174#: notes contain paragraphs that are not nodes
         {
             SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
-            SwClientIter aIter(*pPostits);
-            SwFmtFld const * pFmtFld =
-                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
-            while (pFmtFld)
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
+            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
             {
                 if (pFmtFld->IsFldInDoc())
                 {
@@ -1786,11 +1755,10 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
                         static_cast<SwPostItField const*>(pFmtFld->GetFld()));
                     rStat.nAllPara += pField->GetNumberOfParagraphs();
                 }
-                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
             }
         }
 
-        rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+        rStat.nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;    //swmod 080218
         rStat.bModified = sal_False;
         SetDocStat( rStat );
 
@@ -2096,46 +2064,35 @@ sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 
 void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
 {
-    ASSERT( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
+    std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
+    ASSERT( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
-        SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
-        while ( pPage )
-        {
-            if ( bSmartTags )
-                pPage->InvalidateSmartTags();
-
-            pPage->InvalidateSpelling();
-            pPage = (SwPageFrm*)pPage->GetNext();
-        }
-        GetRootFrm()->SetNeedGrammarCheck( true );
-
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));//swmod 080305
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::SetNeedGrammarCheck), true) );
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
-
         GetNodes().ForEach( lcl_SpellAndGrammarAgain, &bOnlyWrong );
     }
 
-    GetRootFrm()->SetIdleFlags();
+    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080307
 }
 
 void SwDoc::InvalidateAutoCompleteFlag()
 {
-    if( GetRootFrm() )
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    if( pTmpRoot )
     {
-        SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
-        while ( pPage )
-        {
-            pPage->InvalidateAutoCompleteWords();
-            pPage = (SwPageFrm*)pPage->GetNext();
-        }
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));//swmod 080305
         for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
         {
             SwTxtNode* pTxtNode = GetNodes()[ nNd ]->GetTxtNode();
             if ( pTxtNode ) pTxtNode->SetAutoCompleteWordDirty( true );
         }
-        GetRootFrm()->SetIdleFlags();
-    }
+
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080228
+    }   //swmod 080219
 }
 
 const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
@@ -2241,9 +2198,8 @@ bool SwDoc::RemoveInvisibleContent()
 
     {
         SwTxtNode* pTxtNd;
-        SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
-        for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-                pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+        SwIterator<SwFmtFld,SwFieldType> aIter( *GetSysFldType( RES_HIDDENPARAFLD )  );
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
             if( pFmtFld->GetTxtFld() &&
                 0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
@@ -2486,14 +2442,11 @@ sal_Bool SwDoc::ConvertFieldsToText()
         if ( RES_POSTITFLD == pCurType->Which() )
             continue;
 
-        SwClientIter aIter( *(SwFieldType*)pCurType );
-        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
         ::std::vector<const SwFmtFld*> aFieldFmts;
-        while (pCurFldFmt)
-        {
+        for( SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next() )
             aFieldFmts.push_back(pCurFldFmt);
-            pCurFldFmt = (SwFmtFld*)aIter.Next();
-        }
+
         ::std::vector<const SwFmtFld*>::iterator aBegin = aFieldFmts.begin();
         ::std::vector<const SwFmtFld*>::iterator aEnd = aFieldFmts.end();
         while(aBegin != aEnd)
@@ -2785,21 +2738,8 @@ void SwDoc::ChkCondColls()
      for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); n++)
      {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
-
         if (RES_CONDTXTFMTCOLL == pColl->Which())
-        {
-            SwClientIter aIter(*pColl);
-
-            SwClient * pClient = aIter.First(TYPE(SwTxtNode));
-            while (pClient)
-            {
-                SwTxtNode * pTxtNode = static_cast<SwTxtNode *>(pClient);
-
-                pTxtNode->ChkCondColl();
-
-                pClient = aIter.Next();
-            }
-        }
+            pColl->CallSwClientNotify( SwAttrHint(RES_CONDTXTFMTCOLL) );
      }
 }
 

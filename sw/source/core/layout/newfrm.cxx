@@ -290,9 +290,67 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+static SwRectFnCollection aVerticalLeftToRight = {
+    /* fnRectGet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+    &SwRect::TopLeft,
+    &SwRect::SwappedSize,
+    /* fnRectSet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
 
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::AddHeight,
+    &SwRect::AddWidth,
+
+    &SwRect::SetPosY,
+    &SwRect::SetPosX,
+
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin,
+    &SwFrm::SetTopBottomMargins,
+    &SwFrm::SetLeftRightMargins,
+    &SwFrm::GetPrtLeft,
+    &SwFrm::GetPrtRight,
+    &SwFrm::GetPrtTop,
+    &SwFrm::GetPrtBottom,
+    &SwRect::GetLeftDistance,
+    &SwRect::GetRightDistance,
+    &SwRect::GetTopDistance,
+    &SwRect::GetBottomDistance,
+    &SwFrm::SetMaxRight,
+    &SwRect::OverStepRight,
+
+    &SwRect::SetUpperLeftCorner,
+    &SwFrm::MakeRightPos,
+    &FirstMinusSecond,
+    &FirstMinusSecond,
+    &SwIncrement,
+    &SwIncrement,
+    &SwRect::SetTopAndHeight,
+    &SwRect::SetLeftAndWidth
+};
+//End of SCMS
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
+//End of SCMS
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
@@ -424,7 +482,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 
 SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
-        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ) ),
+        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ), 0 ),
     // --> PAGES01
     maPagesArea(),
     mnViewWidth( -1 ),
@@ -446,7 +504,11 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
     bCheckSuperfluous = bBrowseWidthValid = sal_False;
+    setRootFrm( this );
+}
 
+void SwRootFrm::Init( SwFrmFmt* pFmt )
+{
     InitCurrShells( this );
 
     IDocumentTimerAccess *pTimerAccess = pFmt->getIDocumentTimerAccess();
@@ -454,14 +516,17 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
+    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
     bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
-
     if ( pMd )
     {
-        pDrawPage = pMd->GetPage( 0 );
+        // Disable "multiple layout"
+        pDrawPage = pMd->GetPage(0); //pMd->AllocPage( FALSE );
+        //pMd->InsertPage( pDrawPage );
+        // end of disabling
+
         pDrawPage->SetSize( Frm().SSize() );
     }
 
@@ -551,8 +616,9 @@ SwRootFrm::~SwRootFrm()
     pTurbo = 0;
     if(pBlink)
         pBlink->FrmDelete( this );
-    ((SwFrmFmt*)pRegisteredIn)->GetDoc()->DelFrmFmt( (SwFrmFmt*)pRegisteredIn );
+    static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
     delete pDestroy;
+    pDestroy = 0;
 
     //Referenzen entfernen.
     for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
@@ -585,5 +651,38 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 }
 
 
+void SwRootFrm::AllCheckPageDescs() const
+{
+    CheckPageDescs( (SwPageFrm*)this->Lower() );
+}
+//swmod 080226
+void SwRootFrm::AllInvalidateAutoCompleteWords() const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        pPage->InvalidateAutoCompleteWords();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }
+}//swmod 080305
+void SwRootFrm::AllAddPaintRect() const
+{
+    GetCurrShell()->AddPaintRect( this->Frm() );
+}//swmod 080305
+void SwRootFrm::AllRemoveFtns()
+{
+    RemoveFtns();
+}
+void SwRootFrm::AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        if ( bSmartTags )
+            pPage->InvalidateSmartTags();
 
+        pPage->InvalidateSpelling();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }   //swmod 080218
+}
 

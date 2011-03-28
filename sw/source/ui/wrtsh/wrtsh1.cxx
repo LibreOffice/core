@@ -98,6 +98,7 @@
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
+#include <sfx2/bindings.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -1307,6 +1308,9 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     // <--
                     aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                    // #i93908# clear suffix for bullet lists
+                    aFmt.SetPrefix(::rtl::OUString());
+                    aFmt.SetSuffix(::rtl::OUString());
                 }
                 aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFmt);
             }
@@ -1370,6 +1374,9 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 }
                 aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
             }
 
             // --> OD 2009-08-26 #i95907#
@@ -1894,4 +1901,12 @@ String SwWrtShell::GetSelDescr() const
 
     return aResult;
 }
+
+void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
+{
+    SwFEShell::ApplyViewOptions( rOpt );
+    //#i115062# invalidate meta character slot
+    GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
+}
+
 

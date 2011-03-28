@@ -219,7 +219,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                 pFmt, pFmt->GetDoc()->GetSpzFrmFmts()->Count() );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->GetFrm( 0, 0, sal_False ) )
+        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
             pFmt->MakeFrms();
     }
 }
@@ -416,7 +416,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -444,7 +444,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -846,13 +846,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if( nOldAttrCnt != nNewAttrCnt )
     {
         SwUpdateAttr aHint( 0, 0, 0 );
-        SwClientIter aIter( *pNode );
-        SwClient* pGTO = aIter.First(TYPE( SwCrsrShell ));
-        while( pGTO )
-        {
-            pGTO->Modify( 0, &aHint );
-            pGTO = aIter.Next();
-        }
+        pNode->ModifyBroadcast( 0, &aHint, TYPE( SwCrsrShell ) );
     }
 
     if (!GetIDocumentUndoRedo().DoesUndo() &&
@@ -1923,7 +1917,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetCurrentLayout() )) )
                 {
                     // geschutze Cellen/Flys ueberspringen, ausgeblendete
                     //ebenfalls
@@ -2153,7 +2147,7 @@ sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
     if( pNode )
     {
-        SwCntntFrm* pCntFrm = pNode->GetFrm();
+        SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout() );
         if( pCntFrm && !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();
@@ -2521,8 +2515,6 @@ SetRedlineMode( eOld );
             rPam.GetMark()->nNode = aPtNd;
             rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                 nPtCnt );
-            if( bJoinTxt )
-                rPam.Move( fnMoveBackward );
 
             if( pUndoRpl )
             {
@@ -2648,8 +2640,15 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
                 return sal_False;
             }
         }
-            // text::Bookmarks usw. verschieben
-        CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        // move bookmarks, redlines etc.
+        if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
+        {
+            CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, sal_True );
+        }
+        else
+        {
+            CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        }
 
             // was ist mit Fly's ??
         {

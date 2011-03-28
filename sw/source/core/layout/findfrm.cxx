@@ -47,8 +47,8 @@
 #include "ftnfrm.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
-// OD 09.01.2004 #i11859#
 #include <txtfrm.hxx>   // SwTxtFrm
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
@@ -468,22 +468,6 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 |*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
-SwRootFrm* SwFrm::FindRootFrm()
-{
-    // MIB: A layout frame is always registerd at a SwFrmFmt and a content
-    // frame alyways at a SwCntntNode. For any other case we won't find
-    // a root frame.
-    // Casting the GetDep() result instead of the frame itself (that has
-    // been done before) makes it save to use that method in constructors
-    // and destructors.
-    ASSERT( GetDep(), "frame is not registered any longer" );
-    ASSERT( IsLayoutFrm() || IsCntntFrm(), "invalid frame type" );
-    SwDoc *pDoc = IsLayoutFrm()
-                        ? static_cast < SwFrmFmt * >( GetDep() )->GetDoc()
-                        : static_cast < SwCntntNode * >( GetDep() )->GetDoc();
-    return pDoc->GetRootFrm();
-}
-
 SwPageFrm* SwFrm::FindPageFrm()
 {
     SwFrm *pRet = this;
@@ -1460,6 +1444,9 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
             {
                 bVertical = pAsk->IsVertical() ? 1 : 0;
                 bReverse  = pAsk->IsReverse()  ? 1 : 0;
+
+                bVertLR  = pAsk->IsVertLR() ? 1 : 0;
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if ( !pAsk->bInvalidVert )
                     bInvalidVert = sal_False;
             }
@@ -1699,13 +1686,10 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                                        GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
                                        GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
 
-        SwClientIter aIter( const_cast<SwFrmFmt&>( *rMasterBox.GetFrmFmt()) );
+        SwIterator<SwCellFrm,SwFmt> aIter( *rMasterBox.GetFrmFmt() );
 
-        for ( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+        for ( SwCellFrm* pMasterCell = aIter.First(); pMasterCell; pMasterCell = aIter.Next() )
         {
-            ASSERT( ((SwFrm*)pLast)->IsCellFrm(), "Non-row frame registered in table line" )
-            const SwCellFrm* pMasterCell = static_cast<const SwCellFrm*>(pLast);
-
             if ( pMasterCell->GetTabBox() == &rMasterBox )
             {
                 const SwTabFrm* pMasterTable = static_cast<const SwTabFrm*>(pMasterCell->GetUpper()->GetUpper());

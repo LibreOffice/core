@@ -91,6 +91,8 @@
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
+#include "access.hrc"
+
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
@@ -152,11 +154,11 @@ class SwNewGlosNameDlg : public ModalDialog
     NoSpaceEdit     aNewShort;
     OKButton        aOk;
     CancelButton    aCancel;
-    FixedLine       aFL;
     FixedText       aONFT;
     Edit            aOldName;
     FixedText       aOSFT;
     Edit            aOldShort;
+    FixedLine       aFL;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -181,11 +183,12 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     aNewShort(this,SW_RES( ED_NS    )),
     aOk     (this, SW_RES( BT_OKNEW)),
     aCancel (this, SW_RES( BT_CANCEL)),
-    aFL    (this, SW_RES( FL_NN    )),
     aONFT   (this, SW_RES( FT_ON    )),
     aOldName(this, SW_RES( ED_ON    )),
     aOSFT   (this, SW_RES( FT_OS    )),
-    aOldShort(this,SW_RES( ED_OS    ))
+    aOldShort(this,SW_RES( ED_OS    )),
+    aFL    (this, SW_RES( FL_NN    ))
+
 {
     FreeResource();
     aOldName.SetText( rOldName );
@@ -298,6 +301,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
+    aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
+    aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();
 }

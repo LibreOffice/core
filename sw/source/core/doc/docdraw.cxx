@@ -65,21 +65,15 @@
 #include <dflyobj.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/fhgtitem.hxx>
-
-// OD 26.06.2003 #108784#
 #include <svx/svdpagv.hxx>
-// OD 2004-04-01 #i26791#
 #include <dcontact.hxx>
 #include <txtfrm.hxx>
 #include <frmfmt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
-// --> OD 2006-03-14 #i62875#
 #include <svx/svditer.hxx>
-// <--
-// --> OD 2006-11-01 #130889#
 #include <vector>
-// <--
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -140,11 +134,12 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             {
                 case FRMDIR_VERT_TOP_LEFT:
                 {
-                    // vertical from left-to-right - not supported yet
+                    // vertical from left-to-right - Badaa: supported now!
                     bVert = true;
                     bR2L = true;
-                    ASSERT( false,
-                            "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //ASSERT( false, "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                    //End
                 }
                 break;
                 case FRMDIR_VERT_TOP_RIGHT:
@@ -173,10 +168,18 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
         // use geometry of drawing object
         const SwRect aObjRect = _rSdrObj.GetSnapRect();
+
         if ( bVert )
         {
-            nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
-            nVertRelPos = aAnchorPos.X() - aObjRect.Right();
+            if ( bR2L ) {
+                  //FRMDIR_VERT_TOP_LEFT
+                  nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
+                  nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
+            } else {
+                //FRMDIR_VERT_TOP_RIGHT
+                nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
+                nVertRelPos = aAnchorPos.X() - aObjRect.Right();
+            }
         }
         else if ( bR2L )
         {
@@ -188,6 +191,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
             nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
         }
+        //End of SCMS
     }
 
     _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
@@ -553,28 +557,29 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     // #i11176#
     // This also needs to work when no layout exists. Thus, for
     // FlyFrames an alternative method is used now in that case.
-    SwClientIter aIter( (SwFmt&)*pFmt );
-
     if( RES_FLYFRMFMT == pFmt->Which() )
     {
-        if( pFmt->getIDocumentLayoutAccess()->GetRootFrm() )
+        if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )   //swmod 071107//swmod 071225
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE( SwFlyFrm) ) )
-                nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum();
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
+            if( pFly )
+                nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }
         else
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE(SwFlyDrawContact) ) )
-                nOrdNum = ((SwFlyDrawContact*)aIter())->GetMaster()->GetOrdNum();
+            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+            if( pContact )
+                nOrdNum = pContact->GetMaster()->GetOrdNum();
         }
     }
     else if( RES_DRAWFRMFMT == pFmt->Which() )
     {
         // Schauen, ob es ein SdrObject dafuer gibt
-        if( aIter.First( TYPE(SwDrawContact) ) )
-            nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+            if( pContact )
+                nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
         ASSERT( !this, "was ist das fuer ein Format?" );
@@ -659,7 +664,8 @@ void SwDoc::InitDrawModel()
         nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    pDrawModel->InsertPage( pDrawModel->AllocPage( sal_False ) );
+    SdrPage* pMasterPage = pDrawModel->AllocPage( sal_False );
+    pDrawModel->InsertPage( pMasterPage );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
@@ -684,10 +690,24 @@ void SwDoc::InitDrawModel()
         pDrawModel->SetRefDevice( pRefDev );
 
     pDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
-    if ( pLayout )
+    if ( pCurrentView )
     {
-        pLayout->SetDrawPage( pDrawModel->GetPage( 0 ) );
-        pLayout->GetDrawPage()->SetSize( pLayout->Frm().SSize() );
+        ViewShell* pViewSh = pCurrentView;
+        do
+        {
+            SwRootFrm* pRoot =  pViewSh->GetLayout();
+            if( pRoot && !pRoot->GetDrawPage() )
+            {
+                // Disable "multiple layout" for the moment:
+                // use pMasterPage instead of a new created SdrPage
+                // pDrawModel->AllocPage( FALSE );
+                // pDrawModel->InsertPage( pDrawPage );
+                SdrPage* pDrawPage = pMasterPage;
+                pRoot->SetDrawPage( pDrawPage );
+                pDrawPage->SetSize( pRoot->Frm().SSize() );
+            }
+            pViewSh = (ViewShell*)pViewSh->GetNext();
+        }while( pViewSh != pCurrentView );
     }
 }
 
@@ -853,14 +873,14 @@ SdrModel* SwDoc::_MakeDrawModel()
 {
     ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( pLayout && pLayout->GetCurrShell() )
+    if ( pCurrentView )
     {
-        ViewShell* pTmp = pLayout->GetCurrShell();
+        ViewShell* pTmp = pCurrentView;
         do
         {
             pTmp->MakeDrawView();
             pTmp = (ViewShell*) pTmp->GetNext();
-        } while ( pTmp != pLayout->GetCurrShell() );
+        } while ( pTmp != pCurrentView );
 
         //Broadcast, damit die FormShell mit der DrawView verbunden werden kann
         if( GetDocShell() )
@@ -868,7 +888,7 @@ SdrModel* SwDoc::_MakeDrawModel()
             SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
             GetDocShell()->Broadcast( aHnt );
         }
-    }
+    }   //swmod 071029//swmod 071225
     return pDrawModel;
 }
 

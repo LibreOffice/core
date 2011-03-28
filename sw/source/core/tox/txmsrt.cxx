@@ -181,7 +181,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
             {
                 // dann die "Anker" (Body) Position holen.
                 Point aPt;
-                const SwCntntFrm* pFrm = pNd->GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 if( pFrm )
                 {
                     SwPosition aPos( *pNd );

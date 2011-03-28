@@ -27,6 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,sw_complex))
 
+$(eval $(call gb_JunitTest_set_defs,sw_complex,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sw/qa/complex/writer/testdocuments \
+))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/checkColor/CheckChangeColor \
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
@@ -52,6 +57,18 @@ $(eval $(call gb_JunitTest_add_jars,sw_complex,\
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.accessibility.AccessibleRelationSet \
     complex.checkColor.CheckChangeColor \
+    complex.writer.CheckCrossReferences \
+    complex.writer.CheckFlies \
+    complex.writer.CheckIndexedPropertyValues \
+    complex.writer.CheckNamedPropertyValues \
+    complex.writer.TextPortionEnumerationTest \
 ))
+
+# CheckBookmarks currently fails on windows because the hashes are different
+ifneq ($(OS),WNT)
+$(eval $(call gb_JunitTest_add_classes,sw_complex,\
+    complex.writer.CheckBookmarks \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

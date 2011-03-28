@@ -279,7 +279,8 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    aHdl.AddHdl( new SwSdrHdl( aPos, pAnch->IsVertical() ||
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    aHdl.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
                                      pAnch->IsRightToLeft() ) );
 }
 
@@ -446,7 +447,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
     // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
-    std::vector<SwAnchoredObject*> aAnchoredObjs;
+    std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
         ASSERT( pContact,
@@ -829,9 +830,10 @@ const SwFrm* SwDrawView::CalcAnchor()
         aMyRect = pObj->GetSnapRect();
     }
 
-    const sal_Bool bTopRight = pAnch && ( pAnch->IsVertical() ||
-                                          pAnch->IsRightToLeft() );
-
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const sal_Bool bTopRight = pAnch && ( ( pAnch->IsVertical() &&
+                                            !pAnch->IsVertLR() ) ||
+                                             pAnch->IsRightToLeft() );
     const Point aMyPt = bTopRight ? aMyRect.TopRight() : aMyRect.TopLeft();
 
     Point aPt;
@@ -1084,8 +1086,9 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    if ( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->StartAllAction();
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    if ( pTmpRoot )
+        pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
@@ -1106,19 +1109,7 @@ void SwDrawView::DeleteMarked()
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
-    if( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->EndAllAction();
+    if( pTmpRoot )
+        pTmpRoot->EndAllAction();   //swmod 080218
 }
-
-/********
-JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
-            wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkedObjectList() const
-{
-    FlushComeBackTimer();
-    return FmFormView::GetMarkedObjectList();
-}
-*************/
-
-
 

@@ -76,12 +76,12 @@ IMPL_LINK_INLINE_END( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
 SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 
     SvxStandardDialog( pParent, SW_RES(DLG_COL_WIDTH) ),
+    aWidthFL(this,     SW_RES(FL_WIDTH)),
 
     aColFT(this,        SW_RES(FT_COL)),
     aColEdit(this,      SW_RES(ED_COL)),
     aWidthFT(this,      SW_RES(FT_WIDTH)),
     aWidthEdit(this,    SW_RES(ED_WIDTH)),
-    aWidthFL(this,     SW_RES(FL_WIDTH)),
     aOKBtn(this,        SW_RES(BT_OK)),
     aCancelBtn(this,    SW_RES(BT_CANCEL)),
     aHelpBtn(this,      SW_RES(BT_HELP)),

@@ -30,6 +30,8 @@
 #include "frmui.hrc"
 #include "cmdid.h"
 #include "helpid.h"
+#include "access.hrc"
+
  // #define TP_COLUMN 256
 TabPage TP_COLUMN
 {
@@ -416,4 +418,14 @@ ModalDialog DLG_COLUMN
     Text [ en-US ] = "Columns";
 };
 
+//IAccessibility2 Impplementaton 2009-----
+String STR_ACCESS_PAGESETUP_SPACING
+{
+    Text [ en-US ] = "Spacing between %1 and %2";
+};
 
+String STR_ACCESS_COLUMN_WIDTH
+{
+    Text [ en-US ] = "Column %1 Width";
+};
+//-----IAccessibility2 Impplementaton 2009

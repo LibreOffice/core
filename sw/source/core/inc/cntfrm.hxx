@@ -53,7 +53,7 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     // <--
     virtual void MakeAll();
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool& );
@@ -64,11 +64,11 @@ protected:
 
     sal_Bool MakePrtArea( const SwBorderAttrs & );
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 
-    SwCntntFrm( SwCntntNode * const );
+    SwCntntFrm( SwCntntNode * const, SwFrm* );
 
 public:
     virtual ~SwCntntFrm();
@@ -108,6 +108,9 @@ public:
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;
+    static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
+    void RegisterToNode( SwCntntNode& );
+    static void DelFrms( const SwCntntNode& );
 };
 
 inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const

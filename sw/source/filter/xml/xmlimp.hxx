@@ -25,13 +25,17 @@
  *
  ************************************************************************/
 
-#ifndef _XMLIMP_HXX
-#define _XMLIMP_HXX
+#ifndef SW_XMLIMP_HXX
+#define SW_XMLIMP_HXX
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <sot/storage.hxx>
+
 #include <xmloff/xmlictxt.hxx>
-#include "xmlitmap.hxx"
 #include <xmloff/xmlimp.hxx>
+
+#include "xmlitmap.hxx"
 
 class SwDoc;
 class SwPaM;
@@ -182,6 +186,7 @@ public:
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
+    inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
                 const ::rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
@@ -210,6 +215,11 @@ public:
 
     // initialize XForms
     virtual void initXForms();
+
+    // get the document properties, but only if they actually need importing
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties>
+            GetDocumentProperties() const;
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
@@ -218,6 +228,11 @@ inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
 }
 
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
+{
+    return *pTableItemMapper;
+}
+
+inline       SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper()
 {
     return *pTableItemMapper;
 }

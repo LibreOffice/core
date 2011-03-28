@@ -46,6 +46,7 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
+    FixedLine       aNumFL;
     FixedText       aNumTypeFT;
     SwNumberingTypeListBox   aNumViewBox;
     FixedText       aOffsetLbl;
@@ -59,25 +60,24 @@ class SwEndNoteOptionPage : public SfxTabPage
     FixedText       aPosFT;
     RadioButton     aPosPageBox;
     RadioButton     aPosChapterBox;
-    FixedLine       aNumFL;
 
+    FixedLine        aTemplFL;
     FixedText       aParaTemplLbl;
     ListBox         aParaTemplBox;
     FixedText       aPageTemplLbl;
     ListBox         aPageTemplBox;
-    FixedLine        aTemplFL;
 
+    FixedLine        aCharTemplFL;
     FixedText       aFtnCharAnchorTemplLbl;
     ListBox         aFtnCharAnchorTemplBox;
     FixedText       aFtnCharTextTemplLbl;
     ListBox         aFtnCharTextTemplBox;
-    FixedLine        aCharTemplFL;
 
+    FixedLine aContFL;
     FixedText aContLbl;
     Edit aContEdit;
     FixedText aContFromLbl;
     Edit aContFromEdit;
-    FixedLine aContFL;
 
     String aNumDoc;
     String aNumPage;

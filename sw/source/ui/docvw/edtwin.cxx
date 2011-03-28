@@ -1208,8 +1208,8 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
             {
                 // --> FME 2005-04-26 #i47138#
                 // Check if object is anchored as character and move direction
-                sal_Bool bDummy;
-                const bool bVertAnchor = rSh.IsFrmVertical( sal_True, bDummy );
+                sal_Bool bDummy1, bDummy2;
+                const bool bVertAnchor = rSh.IsFrmVertical( sal_True, bDummy1, bDummy2 );
                 const bool bHoriMove = !bVertAnchor == !( nDir % 2 );
                 const bool bMoveAllowed =
                     !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
@@ -1365,11 +1365,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if( ( bVertText && ( !bTblCrsr || bVertTable ) ) ||
                 ( bTblCrsr && bVertTable ) )
             {
+                // Attempt to integrate cursor travelling for mongolian layout does not work.
+                // Thus, back to previous mapping of cursor keys to direction keys.
                 if( KEY_UP == nKey ) nKey = KEY_LEFT;
                 else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
                 else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
                 else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
             }
+
             if ( rSh.IsInRightToLeftText() )
             {
                 if( KEY_LEFT == nKey ) nKey = KEY_RIGHT;
@@ -1978,6 +1981,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_TAB | KEY_SHIFT:
                 {
 #ifdef SW_CRSR_TIMER
+                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
                     sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
 #endif
                     if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT) {
@@ -3907,7 +3911,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&
                     !bInsFrm &&
-                    !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                    !rSh.GetViewOptions()->getBrowseMode() &&
                     rSh.GetViewOptions()->IsShadowCursor() &&
                     !(rMEvt.GetModifier() + rMEvt.GetButtons()) &&
                     !rSh.HasSelection() && !GetConnectMetaFile() )

@@ -41,6 +41,7 @@
 #include <fmtline.hxx>
 #include <lineinfo.hxx>
 #include <charfmt.hxx>
+#include "rootfrm.hxx"
 #include <pagefrm.hxx>
 #include <viewsh.hxx>   // ViewShell
 #include <viewimp.hxx>  // SwViewImp
@@ -320,7 +321,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
 
         SWAP_IF_NOT_SWAPPED( this )
         SwRect rOldRect( rRect );
@@ -448,6 +449,10 @@ SwRect SwTxtFrm::Paint()
         //      d.h. als linken Rand den berechneten PaintOfst!
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
+            pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+
         if( pRepaint->GetOfst() )
             pRepaint->Left( pRepaint->GetOfst() );
 
@@ -474,7 +479,7 @@ SwRect SwTxtFrm::Paint()
 
 sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = sal_False;
@@ -597,7 +602,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     ResetRepaint();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );

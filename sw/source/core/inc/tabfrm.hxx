@@ -102,7 +102,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
@@ -110,10 +110,12 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 protected:
     virtual void MakeAll();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
         //Aendert nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+
 public:
-    SwTabFrm( SwTable & );  //Immer nach dem erzeugen _und_ pasten das
+    SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
     SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
     ~SwTabFrm();
@@ -127,7 +129,6 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;

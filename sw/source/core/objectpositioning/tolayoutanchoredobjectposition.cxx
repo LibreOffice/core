@@ -31,15 +31,16 @@
 #include <anchoredobject.hxx>
 #include <frame.hxx>
 #include <pagefrm.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
+#include "viewsh.hxx"
+#include "viewopt.hxx"
+#include "rootfrm.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 
@@ -120,7 +121,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if( bVert )
         {
             ASSERT( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
-            aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( bVertL2R )
+                   aRelPos.X() = nRelPosY;
+            else
+                   aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
             maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
         }
         else
@@ -131,8 +136,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
+        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
-             rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+             pSh && pSh->GetViewOptions()->getBrowseMode() )
         {
             const long nAnchorBottom = GetAnchorFrm().Frm().Bottom();
             const long nBottom = GetAnchorFrm().Frm().Top() +
@@ -204,8 +210,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // determine absolute 'horizontal' position, depending on layout-direction
         // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
-        if ( bVert )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        // --> OD 2009-09-04 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
+
             aRelPos.Y() = nRelPosX;
             maOffsetToFrmAnchorPos.Y() = nOffset;
         }

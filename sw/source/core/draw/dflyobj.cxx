@@ -54,6 +54,7 @@
 #include "ndnotxt.hxx"
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
+#include "rootfrm.hxx"
 
 
 using namespace ::com::sun::star;
@@ -474,7 +475,7 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
-    ViewShell* pShell = pFlyFrm->GetShell();
+    ViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
     // This avcoids evtl. problems with renderers which do processing stuff,
@@ -679,8 +680,19 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrm()->GetAnchorFrm()->IsVertical() )
         {
-            lXDiff -= rVert.GetPos();
-            lYDiff += rHori.GetPos();
+            //lXDiff -= rVert.GetPos();
+            //lYDiff += rHori.GetPos();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( GetFlyFrm()->GetAnchorFrm()->IsVertLR() )
+            {
+                lXDiff += rVert.GetPos();
+                lXDiff = -lXDiff;
+            }
+            else
+            {
+                lXDiff -= rVert.GetPos();
+                lYDiff += rHori.GetPos();
+            }
         }
         else
         {
@@ -791,7 +803,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
-    const Point aNewPos( bVertX || bRTL ?
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const bool bVertL2RX = pTmpFrm->IsVertLR();
+    const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          aOutRect.Right() + 1 :
                          aOutRect.Left(),
                          aOutRect.Top() );
@@ -830,9 +844,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFrm *pRel = GetFlyFrm()->IsFlyLayFrm() ?
                                 GetFlyFrm()->GetAnchorFrm() :
                                 GetFlyFrm()->GetAnchorFrm()->GetUpper();
-            const ViewShell *pSh = GetFlyFrm()->GetShell();
+            const ViewShell *pSh = GetFlyFrm()->getRootFrm()->GetCurrShell();
             if ( pSh && pRel->IsBodyFrm() &&
-                 pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                 pSh->GetViewOptions()->getBrowseMode() &&
                  pSh->VisArea().HasArea() )
             {
                 nRelWidth  = pSh->GetBrowseWidth();
@@ -856,10 +870,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     }
 
     //Position kann auch veraendert sein!
-    const Point aOldPos( bVertX || bRTL ?
+    const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
-
     if ( aNewPos != aOldPos )
     {
         //Kann sich durch das ChgSize veraendert haben!
@@ -867,7 +880,12 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         {
             if( aOutRect.TopRight() != aNewPos )
             {
-                SwTwips nDeltaX = aNewPos.X() - aOutRect.Right();
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                SwTwips nDeltaX;
+                if ( bVertL2RX )
+                    nDeltaX = aNewPos.X() - aOutRect.Left();
+                else
+                    nDeltaX = aNewPos.X() - aOutRect.Right();
                 SwTwips nDeltaY = aNewPos.Y() - aOutRect.Top();
                 MoveRect( aOutRect, Size( nDeltaX, nDeltaY ) );
             }

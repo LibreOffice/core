@@ -374,6 +374,8 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     aShowExampleCB.SetClickHdl(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
 
     aShowExampleCB.Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
+
+    aExampleContainerWIN.SetAccessibleName(aShowExampleCB.GetText());
     SetViewAlign( WINDOWALIGN_LEFT );
     // SetViewWindow does not work if the dialog is visible!
 
@@ -807,6 +809,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 {
     FreeResource();
 
+    aHeaderTree.SetAccessibleRelationMemberOf(&aStylesFL);
+    aLeftPB.SetAccessibleRelationMemberOf(&aStylesFL);
+    aRightPB.SetAccessibleRelationMemberOf(&aStylesFL);
+
     aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
     aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
 
@@ -985,6 +991,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aTOXMarksCB(        this, SW_RES(CB_TOXMARKS         )),
 
+    aIdxOptionsFL(      this, SW_RES(FL_IDXOPTIONS       )),
     aCollectSameCB(     this, SW_RES(CB_COLLECTSAME      )),
     aUseFFCB(           this, SW_RES(CB_USEFF           )),
     aUseDashCB(         this, SW_RES(CB_USE_DASH            )),
@@ -993,7 +1000,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aKeyAsEntryCB(      this, SW_RES(CB_KEYASENTRY      )),
     aFromFileCB(        this, SW_RES(CB_FROMFILE            )),
     aAutoMarkPB(        this, SW_RES(MB_AUTOMARK            )),
-    aIdxOptionsFL(      this, SW_RES(FL_IDXOPTIONS       )),
 
     aFromNames(         SW_RES(RES_SRCTYPES              )),
     aFromObjCLB(        this, SW_RES(CLB_FROMOBJ            )),
@@ -1017,6 +1023,11 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     bFirstCall(sal_True)
 {
     aBracketLB.InsertEntry(String(SW_RES(ST_NO_BRACKET)), 0);
+
+    aAddStylesPB.SetAccessibleRelationMemberOf(&aCreateFromFL);
+    aAddStylesPB.SetAccessibleRelationLabeledBy(&aAddStylesCB);
+    aAddStylesPB.SetAccessibleName(aAddStylesCB.GetText());
+
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
@@ -2053,6 +2064,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
     aLevelFT(this,              SW_RES(FT_LEVEL              )),
     aLevelLB(this,              SW_RES(LB_LEVEL             )),
+    aEntryFL(this,              SW_RES(FL_ENTRY              )),
 
     aTokenFT(this,              SW_RES(FT_TOKEN              )),
     aTokenWIN(this,             SW_RES(WIN_TOKEN             )),
@@ -2086,14 +2098,14 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aTabPosFT(this,             SW_RES(FT_TABPOS                )),
     aTabPosMF(this,             SW_RES(MF_TABPOS                )),
     aAutoRightCB(this,          SW_RES(CB_AUTORIGHT         )),
-    aEntryFL(this,              SW_RES(FL_ENTRY              )),
+    aFormatFL(this,             SW_RES(FL_FORMAT             )),
+
 
     aRelToStyleCB(this,         SW_RES(CB_RELTOSTYLE         )),
     aMainEntryStyleFT(this,     SW_RES(FT_MAIN_ENTRY_STYLE)),
     aMainEntryStyleLB(this,     SW_RES(LB_MAIN_ENTRY_STYLE)),
     aAlphaDelimCB(this,         SW_RES(CB_ALPHADELIM            )),
     aCommaSeparatedCB(this,     SW_RES(CB_COMMASEPARATED        )),
-    aFormatFL(this,             SW_RES(FL_FORMAT             )),
 
     aSortDocPosRB(this,         SW_RES(RB_DOCPOS                )),
     aSortContentRB(this,        SW_RES(RB_SORTCONTENT       )),
@@ -2124,6 +2136,16 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
+    aEditStylePB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aHyperLinkPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aPageNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTabPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aEntryPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aEntryNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aAllLevelsPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTokenWIN.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTokenWIN.SetAccessibleRelationLabeledBy(&aTokenFT);
+
     Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
     aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
     aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
@@ -3912,17 +3934,18 @@ void SwTokenWindow::GetFocus()
  * --------------------------------------------------*/
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet ) :
     SfxTabPage(pParent, SW_RES(TP_TOX_STYLES), rAttrSet),
+    aFormatFL(this,     SW_RES(FL_FORMAT  )),
     aLevelFT2(this,     SW_RES(FT_LEVEL  )),
     aLevelLB(this,      SW_RES(LB_LEVEL  )),
+    aAssignBT(this,     SW_RES(BT_ASSIGN  )),
     aTemplateFT(this,   SW_RES(FT_TEMPLATE)),
     aParaLayLB(this,    SW_RES(LB_PARALAY )),
     aStdBT(this,        SW_RES(BT_STD    )),
-    aAssignBT(this,     SW_RES(BT_ASSIGN  )),
     aEditStyleBT(this,  SW_RES(BT_EDIT_STYLE    )),
-    aFormatFL(this,     SW_RES(FL_FORMAT  )),
     m_pCurrentForm(0)
 {
     FreeResource();
+
     SetExchangeSupport( sal_True );
 
     aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -3933,6 +3956,11 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     aParaLayLB.SetSelectHdl    (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
     aLevelLB.SetSelectHdl      (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
     aParaLayLB.SetDoubleClickHdl(LINK(  this, SwTOXStylesTabPage, DoubleClickHdl));
+
+    aStdBT.SetAccessibleRelationMemberOf(&aFormatFL);
+    aAssignBT.SetAccessibleRelationMemberOf(&aFormatFL);
+    aEditStyleBT.SetAccessibleRelationMemberOf(&aFormatFL);
+
 }
 /* -----------------25.03.99 15:17-------------------
  *

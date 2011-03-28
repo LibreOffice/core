@@ -73,6 +73,7 @@
 #include <poolfmt.hrc>      // fuer InitFldTypes
 
 #include <SwUndoField.hxx>
+#include "switerator.hxx"
 
 using namespace ::com::sun::star::uno;
 
@@ -360,10 +361,10 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
             if( !pNewHt )
             {
                 SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-                (*pFldTypes)[i]->Modify( 0, &aUpdateDDE );
+                (*pFldTypes)[i]->ModifyNotification( 0, &aUpdateDDE );
             }
             else
-                (*pFldTypes)[i]->Modify( 0, pNewHt );
+                (*pFldTypes)[i]->ModifyNotification( 0, pNewHt );
             break;
         }
         case RES_GETEXPFLD:
@@ -374,7 +375,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
             if( !pNewHt )
                 break;
         default:
-            (*pFldTypes)[i]->Modify( 0, pNewHt );
+            (*pFldTypes)[i]->ModifyNotification ( 0, pNewHt );
         }
     }
 
@@ -426,7 +427,7 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
     SwFieldType* pFldType;
     for( sal_uInt16 i = 0; i < pFldTypes->Count(); ++i )
         if( RES_GETREFFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
-            pFldType->Modify( 0, pHt );
+            pFldType->ModifyNotification( 0, pHt );
 }
 
 void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
@@ -444,9 +445,9 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
                 pUpdtFld = (SwTableFmlUpdate*)pHt;
 
-            SwClientIter aIter( *pFldType );
-            for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-                    pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+            {
                 if( pFmtFld->GetTxtFld() )
                 {
                     SwTblField* pFld = (SwTblField*)pFmtFld->GetFld();
@@ -497,6 +498,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         // setze bei allen das Value-Flag zurueck
                         pFld->ChgValid( sal_False );
                 }
+            }
 
             break;
         }
@@ -525,16 +527,13 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
     if( pFldType )
     {
-        SwClient* pLast;
-        SwClientIter aIter( *pFldType );
-        // dann rechne mal schoen
-        // JP 27.03.97: Beim Berechnen am Ende anfangen - weil neue
-        //              Felder immer am Anfang der Modifykette eingefuegt
-        //              werden. Beim Import haben wir damit eine bessere/
-        //              schnellere Berechnung bei "Kettenformeln"
-        if( 0 != ( pLast = aIter.GoEnd() ))
-            do {
-                SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+        for( SwFmtFld* pFmtFld = aIter.Last(); pFmtFld; pFmtFld = aIter.Previous() )
+        {
+                // start calculation at the end
+                // new fields are inserted at the beginning of the modify chain
+                // that gives faster calculation on import
+                // mba: do we really need this "optimization"? Is it still valid?
                 SwTblField* pFld;
                 if( !pFmtFld->GetTxtFld() || (nsSwExtendedSubType::SUB_CMD &
                     (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))
@@ -567,7 +566,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         // steht im Sonderbereich, wird teuer !!
                         Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
-                        pFrm = rTxtNd.GetFrm( &aPt );
+                        pFrm = rTxtNd.getLayoutFrm( GetCurrentLayout(), &aPt );
                         if( pFrm )
                         {
                             SwPosition aPos( *pTblNd );
@@ -603,8 +602,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     }
                     pCalc->SetCalcError( CALC_NOERR );
                 }
-                pFmtFld->Modify( 0, pHt );
-            } while( 0 != ( pLast = aIter-- ));
+                pFmtFld->ModifyNotification( 0, pHt );
+        }
     }
 
     // dann berechene noch die Formeln an den Boxen
@@ -639,7 +638,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = GetNodes().GoNext( &aCNdIdx );
 
-                        if( pCNd && 0 != (pFrm = pCNd->GetFrm( &aPt )) )
+                        if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetCurrentLayout(), &aPt )) )
                         {
                             SwPosition aPos( *pCNd );
                             if( GetBodyTxtNode( *this, aPos, *pFrm ) )
@@ -702,10 +701,10 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
         case RES_CHAPTERFLD:
         case RES_GETEXPFLD:
         case RES_REFPAGEGETFLD:
-            pFldType->Modify( 0, pMsgHnt );
+            pFldType->ModifyNotification( 0, pMsgHnt );
             break;
         case RES_DOCSTATFLD:
-            pFldType->Modify( 0, 0 );
+            pFldType->ModifyNotification( 0, 0 );
             break;
         }
     SetNewFldLst(true);
@@ -1544,7 +1543,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
         } // switch
 
-        pFmtFld->Modify( 0, 0 );        // Formatierung anstossen
+        pFmtFld->ModifyNotification( 0, 0 );        // Formatierung anstossen
 
         if( pUpdtFld == pTxtFld )       // sollte nur dieses geupdatet werden
         {
@@ -1687,9 +1686,8 @@ const SwDBData& SwDoc::GetDBDesc()
                     case RES_DBNUMSETFLD:
                     case RES_DBSETNUMBERFLD:
                     {
-                        SwClientIter aIter( rFldType );
-                        SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-                        while(pFld)
+                        SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
                         {
                             if(pFld->IsFldInDoc())
                             {
@@ -1701,7 +1699,6 @@ const SwDBData& SwDoc::GetDBDesc()
                                     aDBData = (static_cast < SwDBNameInfField* > (pFld->GetFld()))->GetRealDBData();
                                 break;
                             }
-                            pFld = (SwFmtFld*)aIter.Next();
                         }
                     }
                     break;
@@ -1957,7 +1954,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                     SwDBFieldType* pTyp = (SwDBFieldType*)InsertFldType(
                             SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData));
 
-                    pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
+                    pFmtFld->RegisterToFieldType( *pTyp );
                     pFld->ChgTyp(pTyp);
 
                     ((SwDBField*)pFld)->ClearInitialized();
@@ -2102,10 +2099,8 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
     for( ; nStt < 5; ++nStt )
     {
         SwFieldType* pFldType = GetSysFldType( aTypes[ nStt ] );
-        SwClientIter aDocInfIter( *pFldType );
-
-        for( SwFmtFld* pFld = (SwFmtFld*)aDocInfIter.First( TYPE( SwFmtFld ));
-                pFld; pFld = (SwFmtFld*)aDocInfIter.Next() )
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         {
             if( pFld && pFld->GetTxtFld() )
             {
@@ -2173,7 +2168,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 
                 // Formatierung anstossen
                 if( bChgd )
-                    pFld->Modify( 0, 0 );
+                    pFld->ModifyNotification( 0, 0 );
             }
         }
     }
@@ -2437,7 +2432,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
                     pFormel = 0;
                     // Formatierung anstossen
-                    ((SwFmtFld*)pFmtFld)->Modify( 0, 0 );
+                    ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
 
@@ -2457,7 +2452,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     // Feld Evaluieren
                     ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);
                     // Formatierung anstossen
-                    ((SwFmtFld*)pFmtFld)->Modify( 0, 0 );
+                    ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
 
@@ -2534,7 +2529,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 
     // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, sal_False );
+    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
 
     _SetGetExpFld* pNew = NULL;
     sal_Bool bIsInBody = sal_False;
@@ -2600,7 +2595,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
             // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, sal_False );
+            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
             if( !pFrm )
                 break;
 
@@ -2761,7 +2756,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                     if (bUpdateFlds)
                         UpdateTblFlds( &aTblUpdate );
                     else
-                        pNewFld->GetTyp()->Modify(0, &aTblUpdate);
+                        pNewFld->GetTyp()->ModifyNotification(0, &aTblUpdate);
 
                     if (! bUpdateFlds)
                         bTblSelBreak = sal_True;
@@ -2772,7 +2767,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
         case RES_MACROFLD:
             if( bUpdateFlds && pDstTxtFld->GetpTxtNode() )
                 (pDstTxtFld->GetpTxtNode())->
-                    Modify( 0, pDstFmtFld );
+                    ModifyNotification( 0, pDstFmtFld );
             break;
 
         case RES_DBNAMEFLD:
@@ -2799,7 +2794,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             // kein break;
 
         default:
-            pDstFmtFld->Modify( 0, pMsgHnt );
+            pDstFmtFld->ModifyNotification( 0, pMsgHnt );
         }
 
         // Die Felder die wir berechnen koennen werden hier expli.

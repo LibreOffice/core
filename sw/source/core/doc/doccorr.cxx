@@ -43,8 +43,6 @@
 #include <swundo.hxx>
 #include <hints.hxx>
 
-/*  */
-
 /*
  * MACROS um ueber alle CrsrShells zu iterieren
  */
@@ -192,7 +190,7 @@ void PaMCorrAbs( const SwPaM& rRange,
             {
                 // the UNO cursor has left its section. We need to notify it!
                 SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-                pUnoCursor->Modify( &aHint, NULL );
+                pUnoCursor->ModifyNotification( &aHint, NULL );
             }
         }
     }
@@ -212,10 +210,22 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     {   // fix redlines
         SwRedlineTbl& rTbl = *pRedlineTbl;
-        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
+        for (sal_uInt16 n = 0; n < rTbl.Count(); )
         {
             // is on position ??
-            lcl_PaMCorrAbs(*rTbl[ n ], *aPam.Start(), *aPam.End(), aNewPos);
+            SwRedline *const pRedline( rTbl[ n ] );
+            bool const bChanged =
+                lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
+            // clean up empty redlines: docredln.cxx asserts these as invalid
+            if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
+                         && (pRedline->GetContentIdx() == NULL))
+            {
+                rTbl.DeleteAndDestroy(n);
+            }
+            else
+            {
+                ++n;
+            }
         }
     }
 
@@ -334,9 +344,9 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {
     // Layout und OLE-Shells sollten vorhanden sein!
-    if( pLayout && pLayout->GetCurrShell() )
+    if( pCurrentView )
     {
-        ViewShell *pSh = pLayout->GetCurrShell(), *pVSh = pSh;
+        ViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
@@ -348,7 +358,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
         } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
     }
     else if( ppSh )
-        *ppSh = 0;
+        *ppSh = 0;  //swmod 071029//swmod 071225
 
     return 0;
 }

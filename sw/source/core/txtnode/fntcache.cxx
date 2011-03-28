@@ -417,7 +417,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& r
 
         const IDocumentSettingAccess& rIDSA = *pSh->getIDocumentSettingAccess();
         const bool bBrowse = ( pSh->GetWin() &&
-                               rIDSA.get(IDocumentSettingAccess::BROWSE_MODE) &&
+                               pSh->GetViewOptions()->getBrowseMode() &&
                               !pSh->GetViewOptions()->IsPrtFormat() );
 
         if ( !bBrowse && rIDSA.get(IDocumentSettingAccess::ADD_EXT_LEADING) )
@@ -459,7 +459,7 @@ void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
     OutputDevice* pPrt = &rSh.GetRefDev();
 
     if( !rSh.GetWin() ||
-        !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
+        !rSh.GetViewOptions()->getBrowseMode() ||
          rSh.GetViewOptions()->IsPrtFormat() )
     {
         // After CreatePrtFont pPrtFont is the font which is actually used
@@ -832,13 +832,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
     OutputDevice* pWin = rInf.GetShell()->GetWin();
-    const IDocumentSettingAccess* pIDSA = rInf.GetShell()->getIDocumentSettingAccess();
 
     // true if pOut is the printer and the printer has been used for formatting
     const sal_Bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
                       OUTDEV_PRINTER == rRefDev.GetOutDevType();
     const sal_Bool bBrowse = ( pWin &&
-                           pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                           rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
                           !rInf.GetBullet() &&
                            ( rInf.GetSpace() || !rInf.GetKern() ) &&
@@ -876,7 +875,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     const sal_Bool bNoAdjust = bPrt ||
             (  pWin &&
-               pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) &&
+               rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
               !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
 
     if ( OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() )

@@ -58,7 +58,7 @@ namespace msfilter
     class MSCodec_Std97;
 }
 
-class SwAttrIter;
+class WW8SwAttrIter;
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
@@ -472,7 +472,7 @@ public:
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;
-    void* pKeyMap;
+    boost::shared_ptr<NfKeywordTable> pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
     WW8OleMaps* pOleMap;
@@ -554,6 +554,7 @@ public:
     sal_uInt8 bSubstituteBullets : 1; // true: SubstituteBullet() gets called
 
     bool mbExportModeRTF;
+    bool mbOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
 
     SwDoc *pDoc;
     SwPaM *pCurPam, *pOrigPam;
@@ -751,10 +752,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
+    virtual xub_StrLen GetNextPos( WW8SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
+    virtual void UpdatePosition( WW8SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
 
     /// Output SwTxtNode
     void OutputTextNode( const SwTxtNode& );
@@ -815,6 +816,8 @@ protected:
 
     bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
             IMarkVector& rArr );
+
+    const NfKeywordTable & GetNfKeywordTable();
 
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );

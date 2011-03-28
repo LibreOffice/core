@@ -80,6 +80,8 @@
 #include <utlui.hrc>
 #endif
 
+#include "access.hrc"
+
 #include <unomid.h>
 
 
@@ -807,7 +809,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                     &aContentToolBox, SW_RES(NF_PAGE ));
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     pEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
-    pEdit->SetModifyHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    pEdit->SetAccessibleName(pEdit->GetQuickHelpText());
+    pEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    pEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
 
     bPageCtrlsVisible = sal_True;
 
@@ -933,6 +937,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     UsePage(0);
     aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
+
+    aContentTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
+    aGlobalTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
+    aDocListBox.SetAccessibleName(aStatusArr[3]);
 }
 
 /*------------------------------------------------------------------------

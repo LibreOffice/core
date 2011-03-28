@@ -53,6 +53,8 @@
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 
+#include "access.hrc"
+
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -825,6 +827,7 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     aSpaceFT(this,          SW_RES(FT_SPACE)),
     aSpaceED(this,          SW_RES(ED_SPACE)),
 
+    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
     aUpBtn(this,            SW_RES(COL_BTN_UP)),
     aFT1(this,              SW_RES(COL_FT_1)),
     aMF1(this,              SW_RES(COL_MF_1)),
@@ -839,7 +842,6 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     aFT6(this,              SW_RES(COL_FT_6)),
     aMF6(this,              SW_RES(COL_MF_6)),
     aDownBtn(this,          SW_RES(COL_BTN_DOWN)),
-    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
 
     nTableWidth(0),
     nMinWidth( MINLAY ),
@@ -851,6 +853,9 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
 {
     FreeResource();
     SetExchangeSupport();
+
+    aDownBtn.SetAccessibleRelationMemberOf(&aColFL);
+    aUpBtn.SetAccessibleRelationMemberOf(&aColFL);
 
     pFieldArr[0] = &aMF1;
     pFieldArr[1] = &aMF2;
@@ -986,8 +991,16 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
         String sEntry('~');
-        sEntry += String::CreateFromInt32( aValueTbl[i] + 1 );
+        String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
+        sEntry += sIndex;
         pTextArr[i]->SetText( sEntry );
+//IAccessibility2 Impplementaton 2009-----
+        //added by menghu for SODC_5143,12/12/2006
+        String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
+        sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
+        pFieldArr[i]->SetAccessibleName( sColumnWidth );
+        //end of SODC_5143
+//-----IAccessibility2 Impplementaton 2009
     }
 
     aDownBtn.Enable(aValueTbl[0] > 0);
@@ -1098,12 +1111,18 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
     if(!bModifyTable && !bProp )
     {
-//      Tabellenbreite bleibt, Differenz wird mit der/den
-//      naechsten Zellen ausgeglichen
+//      the table width is constant, the difference is balanced with the other columns
+        sal_uInt16 nLoopCount = 0;
         while( nDiff )
         {
             if( ++nAktPos == nNoOfVisibleCols)
+            {
                 nAktPos = 0;
+                ++nLoopCount;
+                //#i101353# in small tables it might not be possible to balance column width
+                if( nLoopCount > 1 )
+                    break;
+            }
             if( nDiff < 0 )
             {
                 SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
@@ -1457,6 +1476,13 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     bHtmlMode(sal_False)
 {
     FreeResource();
+
+    aPgBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aColBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPgBrkBeforeRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPgBrkAfterRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPageCollLB.SetAccessibleRelationLabeledBy(&aPageCollCB);
+    aPageCollLB.SetAccessibleName(aPageCollCB.GetText());
 
     aPgBrkCB.SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
     aPgBrkBeforeRB.SetClickHdl(

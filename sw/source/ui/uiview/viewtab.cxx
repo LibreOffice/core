@@ -276,9 +276,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     const sal_uInt16 nFrmType   = rSh.IsObjSelected() ?
                                     FRMTYPE_DRAWOBJ :
                                         rSh.GetFrmType(0,sal_True);
-    const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
-    const sal_Bool bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
-
+    const sal_Bool bFrmSelection = rSh.IsFrmSelected();
+    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
     const sal_uInt16 nSlot      = rReq.GetSlot();
     const sal_uInt16 nDescId    = rSh.GetCurPageDesc();
@@ -313,8 +312,14 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
 
-            sal_Bool bRTL;
-            sal_Bool bVerticalFrame = (bFrmSelection && rSh.IsFrmVertical(sal_True, bRTL))|| (!bFrmSelection && bVerticalWriting);
+            sal_Bool bVerticalFrame(sal_False);
+            {
+                sal_Bool bRTL;
+                sal_Bool bVertL2R;
+                bVerticalFrame = ( bFrmSelection &&
+                                   rSh.IsFrmVertical(sal_True, bRTL, bVertL2R) ) ||
+                                 ( !bFrmSelection && bVerticalWriting);
+            }
             long nDeltaX = bVerticalFrame ?
                 rRect.Right() - rPageRect.Right() + aLongLR.GetRight() :
                 rPageRect.Left() + aLongLR.GetLeft() - rRect.Left();
@@ -452,7 +457,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                         RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
             //which of the orientation attributes is to be put depends on the frame's environment
             sal_Bool bRTL;
-            if((bFrmSelection && rSh.IsFrmVertical(sal_True, bRTL))|| (!bFrmSelection && bVerticalWriting))
+            sal_Bool bVertL2R;
+            if ( ( bFrmSelection &&
+                   rSh.IsFrmVertical(sal_True, bRTL, bVertL2R ) ) ||
+                 ( !bFrmSelection && bVerticalWriting ) )
             {
                 SwFmtHoriOrient aHoriOrient(pFmt->GetHoriOrient());
                 aHoriOrient.SetHoriOrient(text::HoriOrientation::NONE);
@@ -914,8 +922,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 : rSh.GetFrmType( pPt, sal_True );
 
     const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
-
-    const sal_Bool bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/Begrenzer
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
@@ -1274,8 +1281,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
-            sal_Bool bFrameRTL;
-            sal_Bool bFrameHasVerticalColumns =  rSh.IsFrmVertical(sal_False, bFrameRTL) && bFrmSelection;
+            sal_Bool bFrameHasVerticalColumns(sal_False);
+            {
+                sal_Bool bFrameRTL;
+                sal_Bool bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(sal_False, bFrameRTL, bFrameVertL2R) &&
+                                           bFrmSelection;
+            }
             sal_Bool bHasTable = ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
                     !(nFrmType & FRMTYPE_COLSECT ) ) );
@@ -1498,8 +1510,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_ROWS :
         case SID_RULER_ROWS_VERTICAL:
         {
-            sal_Bool bFrameRTL;
-            sal_Bool bFrameHasVerticalColumns =  rSh.IsFrmVertical(sal_False, bFrameRTL) && bFrmSelection;
+            sal_Bool bFrameHasVerticalColumns(sal_False);
+            {
+                sal_Bool bFrameRTL;
+                sal_Bool bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(sal_False, bFrameRTL, bFrameVertL2R) &&
+                                           bFrmSelection;
+            }
 
             if( ( (SID_RULER_ROWS == nWhich) &&
                     ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ) ||

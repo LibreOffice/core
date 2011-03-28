@@ -115,7 +115,7 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     else
     {
         const SwCntntNode *pCntNd = rNode.GetCntntNode();
-        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->GetFrm( &rPt, 0, sal_False ) : 0;
+        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False ) : 0;
         const SwPageFrm *pPg = pCFrm ? pCFrm->FindPageFrm() : 0;
 
         rAnchor.SetPageNum( pPg ? pPg->GetPhyPageNum() : 1 );
@@ -178,9 +178,9 @@ sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             SwCrsrMoveState aState( MV_SETONLYTEXT );
             SwPosition aPos( rDoc.GetNodes() );
             aTmpPnt.X() -= 1;                   //nicht im Fly landen!!
-            rDoc.GetRootFrm()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
+            rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );    //swmod 071108//swmod 071225
             pNewAnch = ::FindAnchor(
-                aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False ),
+                aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, sal_False ),
                 aTmpPnt )->FindFlyFrm();
 
             if( pNewAnch && &rFrm != pNewAnch && !pNewAnch->IsProtected() )
@@ -297,7 +297,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
             return 0;
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        return pO->ISA(SwVirtFlyDrawObj) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
+        return ( pO && pO->ISA(SwVirtFlyDrawObj) ) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
     }
     return 0;
 }
@@ -361,7 +361,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         // OD 01.07.2003 #108784# - determine text frame by left-top-corner
         // of object
         //pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False );
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aTmpPos, 0, sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, sal_False );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
     const SwFlyFrm *pFly = pTmp->FindFlyFrm();
@@ -492,7 +492,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm(0,&aPos,sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
     }
     const SwFrm *pNewAnch;
     if( pTxtFrm )
@@ -943,8 +943,8 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
-        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
-        const SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
+        GetLayout()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
+        const SwFrm* pFrm = aPam.GetCntntNode()->getLayoutFrm( GetLayout(), 0, 0, sal_False );
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
@@ -1012,7 +1012,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
 
     SwFrmFmt* pFmt;
     long nNewPage;
-    SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
+    SwRootFrm* pTmpRootFrm = GetLayout();//swmod 080317
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     sal_Bool bTmpAssert = sal_False;
     for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
@@ -1780,7 +1780,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
         Point aPt( rPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        SwFrm* pFrm = pNd->GetFrm( &rPt )->FindFlyFrm();
+        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, sal_False )->FindFlyFrm();
         pRet = pFrm ? ((SwLayoutFrm*)pFrm)->GetFmt() : 0;
     }
     return pRet;
@@ -1899,6 +1899,8 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
         for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+            if( !pObj )
+                continue;
             ObjCntType eTmp = GetObjCntType( *pObj );
             if( !i )
             {

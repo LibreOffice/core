@@ -419,23 +419,23 @@ SvXMLImportContext *SwXMLImport::CreateContext(
         pContext = CreateMetaContext(rLocalName);
     }
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
+              IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
+    {
+        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName,
+                                                   xAttrList );
+    }
+    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
             mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
                 "com.sun.star.xml.dom.SAXDocumentBuilder")),
                 uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            GetModel(), UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> const xDocProps(
+            GetDocumentProperties());
         // flat OpenDocument file format
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                        xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
-    }
-    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
-              IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
-    {
-        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName,
-                                                   xAttrList );
+                        xAttrList, xDocProps, xDocBuilder);
     }
     // <--
     else

@@ -160,6 +160,9 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
     SW_DLLPRIVATE SwPageDesc(const String&, SwFrmFmt*, SwDoc *pDc );
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
+
 public:
     const String &GetName() const { return aDescName; }
           void    SetName( const String& rNewName ) { aDescName = rNewName; }
@@ -213,7 +216,6 @@ public:
 
     void SetRegisterFmtColl( const SwTxtFmtColl* rFmt );
     const SwTxtFmtColl* GetRegisterFmtColl() const;
-    virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
     void RegisterChange();
 
     // erfragen und setzen der PoolFormat-Id

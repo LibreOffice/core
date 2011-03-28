@@ -327,14 +327,15 @@ protected:
     */
     SW_DLLPRIVATE void UpdateMarkedListLevel();
 
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     TYPEINFO();
     SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
     virtual ~SwCrsrShell();
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     // IShellCursorSupplier
     virtual SwPaM & CreateNewShellCursor();

@@ -66,10 +66,10 @@ using lang::IndexOutOfBoundsException;
 // SwAccessiblePreview
 //
 
-SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap* pInitMap ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::DOCUMENT,
-                         pInitMap->GetShell()->getIDocumentLayoutAccess()->GetRootFrm() ),
-    mxParent( pInitMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
+SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
+    SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT,
+                         _pMap->GetShell()->GetLayout() ),//swmod 071107//swmod 071225
+    mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     mpChildWin( 0 )
 {
 }

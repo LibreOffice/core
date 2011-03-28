@@ -893,7 +893,7 @@ sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
     ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
     SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
-                                    GetCntntNode()->GetFrm( 0,
+                                    GetCntntNode()->getLayoutFrm( this, 0,
                                                     pActualCrsr->GetPoint(),
                                                     sal_False );
     return pActFrm->FindPageFrm()->GetPhyPageNum();
@@ -1878,8 +1878,8 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
     const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
 
-    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->GetFrm( &aPtPt, 0, sal_False ) : 0;
-    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->GetFrm( &aMkPt, 0, sal_False ) : 0;
+    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, sal_False ) : 0;
+    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, sal_False ) : 0;
 
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
@@ -2015,7 +2015,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                *pEndPos   = rCrsr.GetPoint() == pStartPos ?
                             rCrsr.GetMark() : rCrsr.GetPoint();
 
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = GetCurrShell();
 
 // --> FME 2004-06-08 #i12836# enhanced pdf
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
@@ -2023,10 +2023,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                            Frm() );
 // <--
     if( !pStartPos->nNode.GetNode().IsCntntNode() ||
-        !pStartPos->nNode.GetNode().GetCntntNode()->GetFrm() ||
+        !pStartPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
           ( !pEndPos->nNode.GetNode().IsCntntNode() ||
-            !pEndPos->nNode.GetNode().GetCntntNode()->GetFrm() ) ) )
+            !pEndPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ) ) )
     {
         /* For SelectAll we will need something like this later on...
         const SwFrm* pPageFrm = GetLower();
@@ -2047,10 +2047,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
     //jedenfall.
     SwCntntFrm const* pStartFrm = pStartPos->nNode.GetNode().
-        GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
+        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetSttPos(), pStartPos );
 
     SwCntntFrm const* pEndFrm   = pEndPos->nNode.GetNode().
-        GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
+        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetEndPos(), pEndPos );
 
     ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
 
@@ -2564,7 +2564,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             //At least the endframe...
             bVert = pEndFrm->IsVertical();
             bRev = pEndFrm->IsReverse();
-            fnRect = bVert ? ( bRev ? fnRectVL2R : fnRectVert ) :
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
                              ( bRev ? fnRectB2T : fnRectHori );
             nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
             if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )

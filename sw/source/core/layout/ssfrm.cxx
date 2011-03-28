@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <ftnfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -53,10 +53,9 @@
 #include <fmtclds.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
-
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <hints.hxx>
+#include <switerator.hxx>
 
     // No inline cause we need the function pointers
 long SwFrm::GetTopMargin() const
@@ -216,7 +215,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 
 const sal_uInt16 nMinVertCellHeight = 1135;
 
-/*-----------------11.9.2001 11:11------------------
+/*-----------------------------------
  * SwFrm::CheckDirChange(..)
  * checks the layout direction and
  * invalidates the lower frames rekursivly, if necessary.
@@ -230,7 +229,9 @@ void SwFrm::CheckDirChange()
     SetInvalidVert( sal_True );
     SetInvalidR2L( sal_True );
     sal_Bool bChg = bOldR2L != IsRightToLeft();
-    if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    sal_Bool bOldVertL2R = IsVertLR();
+    if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
     {
         InvalidateAll();
         if( IsLayoutFrm() )
@@ -315,7 +316,7 @@ void SwFrm::CheckDirChange()
     }
 }
 
-/*-----------------13.9.2002 11:11------------------
+/*-----------------------------------
  * SwFrm::GetFrmAnchorPos(..)
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
@@ -324,7 +325,8 @@ void SwFrm::CheckDirChange()
 Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
-    if ( IsVertical() || IsRightToLeft() )
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
 
     if ( IsTxtFrm() )
@@ -360,11 +362,7 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 |*
 |*  SwFrm::~SwFrm()
 |*
-|*  Ersterstellung      MA 02. Mar. 94
-|*  Letzte Aenderung    MA 25. Jun. 95
-|*
 |*************************************************************************/
-
 
 SwFrm::~SwFrm()
 {
@@ -372,7 +370,7 @@ SwFrm::~SwFrm()
     // by the destructors of the derived classes.
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
             ViewShell *pVSh = pRootFrm->GetCurrShell();
@@ -430,8 +428,6 @@ SwFrmFmt * SwLayoutFrm::GetFmt()
 /*************************************************************************
 |*
 |*    SwLayoutFrm::SetFrmFmt()
-|*    Ersterstellung    MA 22. Apr. 93
-|*    Letzte Aenderung  MA 02. Nov. 94
 |*
 |*************************************************************************/
 
@@ -443,15 +439,15 @@ void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
         SwFmtChg aOldFmt( GetFmt() );
         pNew->Add( this );
         SwFmtChg aNewFmt( pNew );
-        Modify( &aOldFmt, &aNewFmt );
+        ModifyNotification( &aOldFmt, &aNewFmt );
     }
 }
 
 /*************************************************************************
 |*                  SwCntntFrm::SwCntntFrm()
 |*************************************************************************/
-SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
-    SwFrm( pCntnt ),
+SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
+    SwFrm( pCntnt, pSib ),
     SwFlowFrm( (SwFrm&)*this )
 {
 }
@@ -462,11 +458,11 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
 SwCntntFrm::~SwCntntFrm()
 {
     SwCntntNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, pRegisteredIn )) &&
+    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Bei der Root abmelden wenn ich dort noch im Turbo stehe.
-        SwRootFrm *pRoot = FindRootFrm();
+        SwRootFrm *pRoot = getRootFrm();
         if( pRoot && pRoot->GetTurbo() == this )
         {
             pRoot->DisallowTurbo();
@@ -492,19 +488,76 @@ SwCntntFrm::~SwCntntFrm()
                 pTxtFtn = rFtnIdxs[ nPos ];
                 if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
                     break;
-                pTxtFtn->DelFrms();
+                pTxtFtn->DelFrms( this );
                 ++nPos;
             }
         }
     }
 }
 
+void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
+{
+    rNode.Add( this );
+}
+
+void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
+{
+    SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
+    for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+        // <--
+        if( pFrm->HasFollow() )
+            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+            pFrm->_SetIsFollow( sal_False );
+        }
+        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
+                                //Andernfalls kann es sein, dass ein Follow
+                                //vor seinem Master zerstoert wird, der Master
+                                //greift dann ueber den ungueltigen
+                                //Follow-Pointer auf fremdes Memory zu.
+                                //Die Kette darf hier zerknauscht werden, weil
+                                //sowieso alle zerstoert werden.
+        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
+            !pFrm->GetIndPrev() )
+        {
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            ASSERT( pFtn, "You promised a FtnFrm?" );
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
+            {
+                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+            }
+        }
+        pFrm->Cut();
+        delete pFrm;
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwLayoutFrm::~SwLayoutFrm
-|*
-|*  Ersterstellung      AK 28-Feb-1991
-|*  Letzte Aenderung    MA 11. Jan. 95
 |*
 |*************************************************************************/
 
@@ -597,9 +650,6 @@ SwLayoutFrm::~SwLayoutFrm()
 |*
 |*  SwFrm::PaintArea()
 |*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
-|*
 |*  The paintarea is the area, in which the content of a frame is allowed
 |*  to be displayed. This region could be larger than the printarea (Prt())
 |*  of the upper, it includes e.g. often the margin of the page.
@@ -612,7 +662,8 @@ const SwRect SwFrm::PaintArea() const
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
     const sal_Bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrm* pTmp = this;
@@ -700,9 +751,6 @@ const SwRect SwFrm::PaintArea() const
 |*
 |*  SwFrm::UnionFrm()
 |*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
-|*
 |*  The unionframe is the framearea (Frm()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.
 |*
@@ -711,7 +759,8 @@ const SwRect SwFrm::PaintArea() const
 const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 {
     sal_Bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();
     long nPrtLeft = (Prt().*fnRect->fnGetLeft)();

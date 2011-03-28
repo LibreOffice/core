@@ -31,6 +31,7 @@
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
+#include <svl/brdcst.hxx>
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -54,12 +55,10 @@ class SvxBrushItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
+class SwFmt;
 class SwPrintData;
-
-// --> OD 2004-07-06 #i28701#
 class SwSortedObjs;
 class SwAnchoredObject;
-// <--
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -198,8 +197,8 @@ struct SwRectFnCollection
 };
 
 typedef SwRectFnCollection* SwRectFn;
+/*
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
-
 #define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
                             sal_Bool bRev = pFrm->IsReverse(); \
                             SwRectFn fnRect = bVert ? \
@@ -221,6 +220,36 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
                             sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
                             SwRectFn fnRect = bVert == bNeighb ? \
                                 fnRectHori : fnRectVert;
+*/
+
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
+#define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
+                            sal_Bool bRev = pFrm->IsReverse(); \
+                            sal_Bool bVertL2R = pFrm->IsVertLR(); \
+                            SwRectFn fnRect = bVert ? \
+                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRev ? fnRectB2T : fnRectHori );
+#define SWRECTFNX( pFrm )   sal_Bool bVertX = pFrm->IsVertical(); \
+                            sal_Bool bRevX = pFrm->IsReverse(); \
+                            sal_Bool bVertL2RX = pFrm->IsVertLR(); \
+                            SwRectFn fnRectX = bVertX ? \
+                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRevX ? fnRectB2T : fnRectHori );
+#define SWREFRESHFN( pFrm ) { if( bVert != pFrm->IsVertical() || \
+                                  bRev  != pFrm->IsReverse() ) \
+                                bVert = pFrm->IsVertical(); \
+                                bRev = pFrm->IsReverse(); \
+                                bVertL2R = pFrm->IsVertLR(); \
+                                fnRect = bVert ? \
+                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                    ( bRev ? fnRectB2T : fnRectHori ); }
+#define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
+                sal_Bool bVertL2R = pFrm->IsVertLR(); \
+                            sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
+                            SwRectFn fnRect = bVert == bNeighb ? \
+                                fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
+//End of SCMS
 #define POS_DIFF( aFrm1, aFrm2 ) \
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
@@ -240,7 +269,7 @@ enum MakePageType
 //typedef SdrObject* SdrObjectPtr;
 //SV_DECL_PTRARR(SwDrawObjs,SdrObjectPtr,1,1);
 
-class SwFrm: public SwClient
+class SwFrm: public SwClient, public SfxBroadcaster
 {
     //Der verkappte Frm
     friend class SwFlowFrm;
@@ -274,6 +303,7 @@ class SwFrm: public SwClient
     const  sal_uInt32 mnFrmId;
     // <--
 
+    SwRootFrm   *mpRoot;
     SwLayoutFrm *pUpper;
     SwFrm       *pNext;
     SwFrm       *pPrev;
@@ -344,7 +374,7 @@ class SwFrm: public SwClient
     SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
 
 
-    void _UpdateAttrFrm( SfxPoolItem*, SfxPoolItem*, sal_uInt8 & );
+    void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrm* _GetIndNext();
     void SetDirFlags( sal_Bool bVert );
 
@@ -371,6 +401,9 @@ protected:
     sal_uInt16 bInvalidVert:    1;
     sal_uInt16 bDerivedVert:    1;
     sal_uInt16 bVertical:       1;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    sal_uInt16 bVertLR:         1;
+    //End of SCMS
     sal_uInt16 nType:         4;  //Who am I?
 
     sal_Bool bValidPos:         1;
@@ -400,6 +433,9 @@ protected:
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
 
+    // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
+    void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
+
     SwPageFrm *InsertPage( SwPageFrm *pSibling, sal_Bool bFtn );
     void PrepareMake();
     void OptPrepareMake();
@@ -419,10 +455,10 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
 
-    SwModify        *GetDep()       { return pRegisteredIn; }
-    const SwModify  *GetDep() const { return pRegisteredIn; }
+    SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
+    const SwModify  *GetDep() const { return GetRegisteredIn(); }
 
-    SwFrm( SwModify* );
+    SwFrm( SwModify*, SwFrm* );
 
     void CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse );
 
@@ -457,6 +493,7 @@ protected:
 
         //Schatten und Umrandung painten
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
@@ -562,8 +599,14 @@ public:
     inline sal_Bool IsReverse() const { return bReverse; }
     inline void SetReverse( sal_Bool bNew ){ bReverse = bNew ? 1 : 0; }
     inline sal_Bool IsVertical() const;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    inline sal_Bool IsVertLR() const;
+    //End of SCMS
     inline sal_Bool GetVerticalFlag() const;
     inline void SetVertical( sal_Bool bNew ){ bVertical = bNew ? 1 : 0; }
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    inline void SetbVertLR( sal_Bool bNew ) { bVertLR = bNew ? 1 : 0; }
+    //End of SCMS
     inline void SetDerivedVert( sal_Bool bNew ){ bDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( sal_Bool bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline sal_Bool IsRightToLeft() const;
@@ -571,6 +614,7 @@ public:
     inline void SetRightToLeft( sal_Bool bNew ){ bRightToLeft = bNew ? 1 : 0; }
     inline void SetDerivedR2L( sal_Bool bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( sal_Bool bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
+
     void CheckDirChange();
     // returns upper left frame position for LTR and
     // upper right frame position for Asian / RTL frames
@@ -599,7 +643,6 @@ public:
     //Fussnote einzufuegen (nicht z.B. in wiederholten TabellenHeadlines).
     sal_Bool IsFtnAllowed() const;
 
-    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
     virtual void  CheckDirection( sal_Bool bVert );
@@ -611,10 +654,6 @@ public:
     inline sal_Bool HasFixSize() const { return bFixSize; }
     inline void SetFixSize( sal_Bool bNew ) { bFixSize = bNew; }
 
-    //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
-    //gehoert. Impl in frmsh.hxx
-    ViewShell *GetShell() const;
-
     //Prueft alle Seiten ab der Uebergebenen und korrigiert ggf.
     static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True );
 
@@ -622,7 +661,7 @@ public:
     SwFrm               *GetNext()  { return pNext; }
     SwFrm               *GetPrev()  { return pPrev; }
     SwLayoutFrm         *GetUpper() { return pUpper; }
-    SwRootFrm           *FindRootFrm();
+    SwRootFrm           *getRootFrm(){ return mpRoot; }
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
     SwFtnBossFrm        *FindFtnBossFrm( sal_Bool bFootnotes = sal_False );
@@ -635,6 +674,7 @@ public:
     const SwFrm         *GetNext()  const { return pNext; }
     const SwFrm         *GetPrev()  const { return pPrev; }
     const SwLayoutFrm   *GetUpper() const { return pUpper; }
+    const SwRootFrm     *getRootFrm()   const { return mpRoot; }
     inline SwTabFrm     *FindTabFrm();
     inline SwFtnFrm     *FindFtnFrm();
     inline SwFlyFrm     *FindFlyFrm();
@@ -645,7 +685,6 @@ public:
     // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
-    inline const SwRootFrm *FindRootFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( sal_Bool bFtn = sal_False ) const;
     inline const SwFrm     *FindColFrm() const;
     inline const SwFrm     *FindFooterOrHeader() const;
@@ -911,6 +950,8 @@ public:
     bool IsInCoveredCell() const;
 
     // FME 2007-08-30 #i81146# new loop control
+    bool KnowsFormat( const SwFmt& rFmt ) const;
+    void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 };
 
@@ -950,6 +991,12 @@ sal_Bool SwFrm::IsVertical() const
         ((SwFrm*)this)->SetDirFlags( sal_True );
     return bVertical != 0;
 }
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+inline sal_Bool SwFrm::IsVertLR() const
+{
+    return bVertLR != 0;
+}
+//End of SCMS
 sal_Bool SwFrm::GetVerticalFlag() const
 {
     return bVertical != 0;
@@ -1074,10 +1121,6 @@ inline Point SwFrm::GetRelPos() const
 inline const SwPageFrm *SwFrm::FindPageFrm() const
 {
     return ((SwFrm*)this)->FindPageFrm();
-}
-inline const SwRootFrm *SwFrm::FindRootFrm() const
-{
-    return ((SwFrm*)this)->FindRootFrm();
 }
 inline const SwFrm *SwFrm::FindColFrm() const
 {

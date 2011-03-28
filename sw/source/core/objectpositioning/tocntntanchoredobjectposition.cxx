@@ -36,6 +36,9 @@
 // --> OD 2004-10-15 #i26945#
 #include <tabfrm.hxx>
 // <--
+#include "rootfrm.hxx"
+#include "viewopt.hxx"
+#include "viewsh.hxx"
 #include <frmfmt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtsrnd.hxx>
@@ -159,10 +162,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
     // declare and set <bBrowse> to true, if document is in browser mode and
     // object is anchored at the body, but not at frame belonging to a table.
-    const bool bBrowse = GetAnchorFrm().IsInDocBody() &&
-                         !GetAnchorFrm().IsInTab()
-                            ? rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
-                            : false;
+    bool bBrowse = GetAnchorFrm().IsInDocBody() && !GetAnchorFrm().IsInTab();
+    if( bBrowse )
+    {
+        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
+        if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
+            bBrowse = false;
+    }
 
     // determine left/right and its upper/lower spacing.
     const SvxLRSpaceItem &rLR = rFrmFmt.GetLRSpace();
@@ -268,9 +274,20 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
-            SwTwips nObjHeight = (aObjBoundRect.*fnRect->fnGetHeight)();
-            SwTwips nUpperSpace = bVert ? rLR.GetRight() : rUL.GetUpper();
-            SwTwips nLowerSpace = bVert ? rLR.GetLeft() : rUL.GetLower();
+            const SwTwips nObjHeight = (aObjBoundRect.*fnRect->fnGetHeight)();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            const SwTwips nUpperSpace = bVert
+                                        ? ( bVertL2R
+                                            ? rLR.GetLeft()
+                                            : rLR.GetRight() )
+                                        : rUL.GetUpper();
+            // --> OD 2009-08-31 #monglianlayout#
+            const SwTwips nLowerSpace = bVert
+                                        ? ( bVertL2R
+                                            ? rLR.GetLeft()
+                                            : rLR.GetRight() )
+                                        : rUL.GetLower();
+            // <--
             switch ( aVert.GetVertOrient() )
             {
                 case text::VertOrientation::CHAR_BOTTOM:
@@ -279,8 +296,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     {
                         // bottom (to character anchored)
                         nRelPosY += nAlignAreaHeight + nUpperSpace;
-                        if ( bVert )
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        if ( bVert && !bVertL2R )
+                        {
                             nRelPosY += nObjHeight;
+                        }
                         break;
                     }
                 }
@@ -402,7 +422,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     aEnvOfObj.GetVertEnvironmentLayoutFrm(
                                             *(pOrientFrm->GetUpper()) );
                 const bool bCheckBottom = !DoesObjFollowsTextFlow();
-                nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                               rVertEnvironLayFrm, nRelPosY,
                                               DoesObjFollowsTextFlow(),
                                               bCheckBottom );
@@ -584,7 +604,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 // anchored object would fit into environment layout frame, if
                 // anchored object has to follow the text flow.
                 const bool bCheckBottom = !DoesObjFollowsTextFlow();
-                nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                               rVertEnvironLayFrm, nRelPosY,
                                               DoesObjFollowsTextFlow(),
                                               bCheckBottom );
@@ -625,7 +645,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // anchored object would fit into environment layout
                         // frame, if anchored object has to follow the text flow.
                         const bool bCheckBottom = !DoesObjFollowsTextFlow();
-                        nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                        nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                                          rVertEnvironLayFrm,
                                                          nTmpRelPosY,
                                                          DoesObjFollowsTextFlow(),
@@ -714,7 +734,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                             // align at 'page areas', but stay inside given environment
                             const SwFrm& rVertEnvironLayFrm =
                                 aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
-                            nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                            nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                                           rVertEnvironLayFrm,
                                                           nRelPosY,
                                                           DoesObjFollowsTextFlow() );
@@ -735,9 +755,19 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
         if( bVert )
         {
-            GetAnchoredObj().SetObjLeft( nTopOfAnch -
-                                         ( aRelPos.X() - nRelDiff ) -
-                                         aObjBoundRect.Width() );
+            // --> OD 2009-08-31 #monglianlayout#
+            if ( !bVertL2R )
+            {
+                GetAnchoredObj().SetObjLeft( nTopOfAnch -
+                                             ( aRelPos.X() - nRelDiff ) -
+                                             aObjBoundRect.Width() );
+            }
+            else
+            {
+                GetAnchoredObj().SetObjLeft( nTopOfAnch +
+                                             ( aRelPos.X() - nRelDiff ) );
+            }
+            // <--
         }
         else
         {
@@ -828,7 +858,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         nTmpRelPosY = aRelPos.Y() + nDist;
                     const SwLayoutFrm& rVertEnvironLayFrm =
                         aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm );
-                    nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                    nTmpRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                                      rVertEnvironLayFrm,
                                                      nTmpRelPosY,
                                                      DoesObjFollowsTextFlow(),
@@ -836,9 +866,18 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     if ( bVert )
                     {
                         aRelPos.X() = nTmpRelPosY;
-                        GetAnchoredObj().SetObjLeft( nTopOfAnch -
-                                                     aRelPos.X() -
-                                                     aObjBoundRect.Width() );
+                        // --> OD 2009-08-31 #mongolianlayout#
+                        if ( !bVertL2R )
+                        {
+                            GetAnchoredObj().SetObjLeft( nTopOfAnch -
+                                                         aRelPos.X() -
+                                                         aObjBoundRect.Width() );
+                        }
+                        else
+                        {
+                            GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
+                        }
+                        // <--
                     }
                     else
                     {
@@ -918,9 +957,21 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                             SWREFRESHFN( pUpperOfOrientFrm )
                             bMoveable = rAnchorTxtFrm.IsMoveable( (SwLayoutFrm*)pUpperOfOrientFrm );
                             if( bVertX )
-                                GetAnchoredObj().SetObjLeft( nTopOfAnch -
-                                                             aRelPos.X() -
-                                                             aObjBoundRect.Width() );
+                            {
+                                // --> OD 2009-08-31 #mongolianlayout#
+                                if ( !bVertL2R )
+                                {
+                                    GetAnchoredObj().SetObjLeft( nTopOfAnch -
+                                                                 aRelPos.X() -
+                                                                 aObjBoundRect.Width() );
+                                }
+                                else
+                                {
+                                    GetAnchoredObj().SetObjLeft( nTopOfAnch +
+                                                                 aRelPos.X() );
+                                }
+                                // <--
+                            }
                             else
                                 GetAnchoredObj().SetObjTop( nTopOfAnch +
                                                             aRelPos.Y() );
@@ -972,8 +1023,19 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         // frame, the horizontal position is oriented at.
         const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
         if( bVert )
-            GetAnchoredObj().SetObjLeft( nTopOfAnch -
-                                         aRelPos.X() - aObjBoundRect.Width() );
+        {
+            // --> OD 2009-08-31 #mongolianlayout#
+            if ( !bVertL2R )
+            {
+                GetAnchoredObj().SetObjLeft( nTopOfAnch -
+                                             aRelPos.X() - aObjBoundRect.Width() );
+            }
+            else
+            {
+                GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
+            }
+            // <--
+        }
         else
             GetAnchoredObj().SetObjTop( nTopOfAnch + aRelPos.Y() );
 
@@ -1023,8 +1085,17 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
     if( bVert )
     {
-        GetAnchoredObj().SetObjLeft( nTopOfAnch -
-                                     aRelPos.X() - aObjBoundRect.Width() );
+        // --> OD 2009-08-31 #mongolianlayout#
+        if ( !bVertL2R )
+        {
+            GetAnchoredObj().SetObjLeft( nTopOfAnch -
+                                         aRelPos.X() - aObjBoundRect.Width() );
+        }
+        else
+        {
+            GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
+        }
+        // <--
         GetAnchoredObj().SetObjTop( rAnchorTxtFrm.Frm().Top() +
                                     aRelPos.Y() );
     }

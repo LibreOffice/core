@@ -95,7 +95,7 @@ sal_Bool SwCrsrShell::GoStartSentence()
 
 sal_Bool SwCrsrShell::SelectWord( const Point* pPt )
 {
-    return pCurCrsr->SelectWord( pPt );
+    return pCurCrsr->SelectWord( this, pPt );
 }
 
 sal_Bool SwCrsrShell::ExpandToSentenceBorders()

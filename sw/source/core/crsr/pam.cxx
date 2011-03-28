@@ -640,7 +640,7 @@ sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     if( 0 != ( pNd = pPos->nNode.GetNode().GetCntntNode() ) &&
-        0 != ( pCFrm = pNd->GetFrm( pLayPos, pPos, sal_False )) &&
+        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, sal_False )) &&
         0 != ( pPg = pCFrm->FindPageFrm() ))
         return pPg->GetPhyPageNum();
     return 0;
@@ -683,7 +683,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     const SwCntntFrm *pFrm;
 
     if( 0 != ( pNd = GetPoint()->nNode.GetNode().GetCntntNode() ))
-        pFrm = pNd->GetFrm( &aTmpPt, GetPoint(), sal_False );
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), sal_False );
     else
         pFrm = 0;
 
@@ -711,7 +711,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     if( !bRet && HasMark() && GetPoint()->nNode != GetMark()->nNode )
     {
         if( 0 != ( pNd = GetMark()->nNode.GetNode().GetCntntNode() ))
-            pFrm = pNd->GetFrm( &aTmpPt, GetMark(), sal_False );
+            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), sal_False );
         else
             pFrm = 0;
 
@@ -868,7 +868,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
             {
                 if(
                     (
-                        0 == ( pFrm = pNd->GetFrm()) ||
+                        0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout() ) ) ||
                         ( !bInReadOnly && pFrm->IsProtected() ) ||
                         (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow())
                     ) ||
@@ -905,7 +905,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
                     {
                         // nur in der AutoTextSection koennen Node stehen, die
                         // nicht angezeigt werden !!
-                        if( 0 == ( pFrm = pNd->GetFrm()) ||
+                        if( 0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout() ) ) ||
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
@@ -1236,7 +1236,7 @@ void SwPaM::InvalidatePaM()
         SwInsTxt aHint( Start()->nContent.GetIndex(),
                         End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1 );
         SwModify *_pModify=(SwModify*)_pTxtNd;
-        _pModify->Modify( 0, &aHint);
+        _pModify->ModifyNotification( 0, &aHint);
     }
 }
 

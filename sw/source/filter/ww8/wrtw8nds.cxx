@@ -107,6 +107,7 @@
 
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+
 #include <cstdio>
 
 using namespace ::com::sun::star;
@@ -178,7 +179,7 @@ MSWordAttrIter::~MSWordAttrIter()
 // Mit OutAttr() werden die Attribute an der angegebenen SwPos
 // ausgegeben.
 
-class SwAttrIter : public MSWordAttrIter
+class WW8SwAttrIter : public MSWordAttrIter
 {
 private:
     const SwTxtNode& rNd;
@@ -209,10 +210,10 @@ private:
     void IterToCurrent();
 
     //No copying
-    SwAttrIter(const SwAttrIter&);
-    SwAttrIter& operator=(const SwAttrIter&);
+    WW8SwAttrIter(const WW8SwAttrIter&);
+    WW8SwAttrIter& operator=(const WW8SwAttrIter&);
 public:
-    SwAttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
+    WW8SwAttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
 
     bool IsTxtAttr( xub_StrLen nSwPos );
     bool IsRedlineAtEnd( xub_StrLen nPos ) const;
@@ -248,7 +249,7 @@ public:
     }
 };
 
-void SwAttrIter::IterToCurrent()
+void WW8SwAttrIter::IterToCurrent()
 {
     ASSERT(maCharRuns.begin() != maCharRuns.end(), "Impossible");
     mnScript = maCharRunIter->mnScript;
@@ -256,7 +257,7 @@ void SwAttrIter::IterToCurrent()
     mbCharIsRTL = maCharRunIter->mbRTL;
 }
 
-SwAttrIter::SwAttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
+WW8SwAttrIter::WW8SwAttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     MSWordAttrIter(rWr),
     rNd(rTxtNd),
     maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.HackIsWW8OrHigher())),
@@ -323,7 +324,7 @@ xub_StrLen lcl_getMinPos( xub_StrLen pos1, xub_StrLen pos2 )
     return min;
 }
 
-xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
+xub_StrLen WW8SwAttrIter::SearchNext( xub_StrLen nStartPos )
 {
     xub_StrLen nPos;
     xub_StrLen nMinPos = STRING_MAXLEN;
@@ -456,7 +457,7 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-void SwAttrIter::OutAttr( xub_StrLen nSwPos )
+void WW8SwAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
 
@@ -500,9 +501,7 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
                         : nSwPos == *pHt->GetStart() )
             {
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
-                if (nWhich == nFontId)
-                    pFont = &(item_cast<SvxFontItem>(pHt->GetAttr()));
-                else if( nWhich == RES_TXTATR_AUTOFMT )
+                if (nWhich == RES_TXTATR_AUTOFMT)
                 {
                     const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
                     const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
@@ -575,14 +574,14 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
          characters.
         */
         if ( !m_rExport.HackIsWW8OrHigher() )
-            aFont.GetCharSet() = GetCharSet();
+            aFont.SetCharSet( GetCharSet() );
 
         if ( rParentFont != aFont )
             m_rExport.AttrOutput().OutputItem( aFont );
     }
 }
 
-void SwAttrIter::OutFlys(xub_StrLen nSwPos)
+void WW8SwAttrIter::OutFlys(xub_StrLen nSwPos)
 {
     /*
      #i2916#
@@ -604,7 +603,7 @@ void SwAttrIter::OutFlys(xub_StrLen nSwPos)
     }
 }
 
-bool SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
+bool WW8SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
 {
     // search for attrs with CH_TXTATR
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
@@ -620,7 +619,7 @@ bool SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
     return false;
 }
 
-bool SwAttrIter::IsDropCap( int nSwPos )
+bool WW8SwAttrIter::IsDropCap( int nSwPos )
 {
     // see if the current position falls on a DropCap
     int nDropChars = mrSwFmtDrop.GetChars();
@@ -639,7 +638,7 @@ bool SwAttrIter::IsDropCap( int nSwPos )
     return false;
 }
 
-bool SwAttrIter::RequiresImplicitBookmark()
+bool WW8SwAttrIter::RequiresImplicitBookmark()
 {
     SwImplBookmarksIter bkmkIterEnd = m_rExport.maImplicitBookmarks.end();
     for ( SwImplBookmarksIter aIter = m_rExport.maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
@@ -658,7 +657,7 @@ bool SwAttrIter::RequiresImplicitBookmark()
 // Attribut-Anfangposition fragen kann.
 // Es koennen nur Attribute mit Ende abgefragt werden.
 // Es wird mit bDeep gesucht
-const SfxPoolItem* SwAttrIter::HasTextItem( sal_uInt16 nWhich ) const
+const SfxPoolItem* WW8SwAttrIter::HasTextItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
@@ -691,7 +690,7 @@ void WW8Export::GetCurrentItems(WW8Bytes& rItems) const
         rItems.Insert((*pO)[nI], rItems.Count());
 }
 
-const SfxPoolItem& SwAttrIter::GetItem(sal_uInt16 nWhich) const
+const SfxPoolItem& WW8SwAttrIter::GetItem(sal_uInt16 nWhich) const
 {
     const SfxPoolItem* pRet = HasTextItem(nWhich);
     return pRet ? *pRet : rNd.SwCntntNode::GetAttr(nWhich);
@@ -1072,7 +1071,7 @@ String BookmarkToWriter(const String &rBookmark)
         INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_ASCII_US);
 }
 
-void SwAttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
+void WW8SwAttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 {
     if ( m_rExport.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ) )
         m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
@@ -1172,7 +1171,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
         FieldVanish( sTxt, eType );
 }
 
-int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
+int WW8SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
 {
     int nRet = 0;
     if ( const SwpHints* pTxtAttrs = rNd.GetpSwpHints() )
@@ -1233,7 +1232,7 @@ int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
     return nRet;
 }
 
-bool SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
+bool WW8SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
 {
     bool bRet = false;
     // search next Redline
@@ -1255,7 +1254,7 @@ bool SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
     return bRet;
 }
 
-const SwRedlineData* SwAttrIter::GetRedline( xub_StrLen nPos )
+const SwRedlineData* WW8SwAttrIter::GetRedline( xub_StrLen nPos )
 {
     if( pCurRedline )
     {
@@ -1450,7 +1449,7 @@ Convert characters that need to be converted, the basic replacements and the
 ridicously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
-String SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
+String WW8SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     xub_StrLen nLen) const
 {
     String aSnippet(rStr, nAktPos, nLen);
@@ -1646,26 +1645,27 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );
 }
 
-xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
+xub_StrLen MSWordExportBase::GetNextPos( WW8SwAttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
 {
     // Get the bookmarks for the normal run
     xub_StrLen nNextPos = aAttrIter->WhereNext();
-
-    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
-
     xub_StrLen nNextBookmark = nNextPos;
-    NearestBookmark( nNextPos, nAktPos, false );
 
+    if( nNextBookmark > nAktPos )//no need to search for bookmarks otherwise
+    {
+        GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
+        NearestBookmark( nNextBookmark, nAktPos, false );
+    }
     return std::min( nNextPos, nNextBookmark );
 }
 
-void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( WW8SwAttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
 {
     xub_StrLen nNextPos;
 
-    // go to next attribute if no bookmark is found of if the bookmark is behind the next attribute position
+    // go to next attribute if no bookmark is found and if the next attribute position if at the current position
     bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
-    if( !bNextBookmark || nNextPos < aAttrIter->WhereNext() )
+    if( !bNextBookmark && nAktPos >= aAttrIter->WhereNext() )
         aAttrIter->NextPos();
 }
 
@@ -1797,7 +1797,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     // have to remember it in nStyle
     sal_uInt16 nStyle = nStyleBeforeFly;
 
-    SwAttrIter aAttrIter( *this, rNode );
+    WW8SwAttrIter aAttrIter( *this, rNode );
     rtl_TextEncoding eChrSet = aAttrIter.GetCharSet();
 
     if ( bStartTOX )
@@ -1840,7 +1840,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     String aStr( rNode.GetTxt() );
 
     xub_StrLen nAktPos = 0;
-    xub_StrLen nEnd = aStr.Len();
+    xub_StrLen const nEnd = aStr.Len();
     bool bRedlineAtEnd = false;
     int nOpenAttrWithRange = 0;
 
@@ -1932,6 +1932,15 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if ( aAttrIter.IsDropCap( nNextAttr ) )
             AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFmtDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
+        if (0 != nEnd)
+        {
+            // Output the character attributes
+            // #i51277# do this before writing flys at end of paragraph
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( pRedlineData );
+        }
+
         // At the end of line, output the attributes until the CR.
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
@@ -1957,10 +1966,15 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // Output the character attributes
-        AttrOutput().StartRunProperties();
-        aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
-        AttrOutput().EndRunProperties( pRedlineData );
+        if (0 == nEnd)
+        {
+            // Output the character attributes
+            // do it after WriteCR for an empty paragraph (otherwise
+            // WW8_WrFkp::Append throws SPRMs away...)
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( pRedlineData );
+        }
 
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
@@ -2025,8 +2039,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if (pTextNodeInfoInner->isFirstInTable())
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
-            const SwTableFmt * pTabFmt =
-                dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+
+            const SwTableFmt * pTabFmt = pTable->GetTableFmt();
             if (pTabFmt != NULL)
             {
                 if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
@@ -2240,7 +2254,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 // this has to be overruled.
                 const SwFmtPageDesc& rPageDescAtParaStyle =
                     ItemGet<SwFmtPageDesc>( rNode, RES_PAGEDESC );
-                if( rPageDescAtParaStyle.GetRegisteredIn() )
+                if( rPageDescAtParaStyle.KnowsPageDesc() )
                     pTmpSet->ClearItem( RES_BREAK );
             }
         }
@@ -2837,8 +2851,12 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
     switch ( rNode.GetNodeType() )
     {
         case ND_TEXTNODE:
-            OutputTextNode( *rNode.GetTxtNode() );
-            break;
+        {
+            const SwTxtNode& rTextNode = *rNode.GetTxtNode();
+            if( !mbOutOutlineOnly || rTextNode.IsOutline() )
+                OutputTextNode( rTextNode );
+        }
+        break;
         case ND_GRFNODE:
             OutputGrfNode( *rNode.GetGrfNode() );
             break;

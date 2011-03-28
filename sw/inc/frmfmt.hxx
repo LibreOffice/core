@@ -27,15 +27,10 @@
 #ifndef _FRMFMT_HXX
 #define _FRMFMT_HXX
 
-// --> OD 2004-08-06 #i28749#
 #include <com/sun/star/text/PositionLayoutDir.hpp>
-// <--
-
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
-
 #include <format.hxx>
-
 #include "swdllapi.h"
 
 class SwFlyFrm;
@@ -71,6 +66,8 @@ protected:
                 pDrvdFrm, nFmtWhich )
     {}
 
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
+
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
@@ -81,8 +78,6 @@ public:
     virtual void MakeFrms();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
-
-    virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
 
     // returnt das IMapObject, das an dem Format (Fly), in der ImageMap
     // an der Point Position definiert ist.
@@ -146,6 +141,7 @@ public:
             { m_wXObject = xObject; }
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
+    void RegisterToFormat( SwFmt& rFmt );
 };
 
 //Das FlyFrame-Format ------------------------------

@@ -793,7 +793,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         {
             //Das Teil konnte nicht geladen werden (wahrsch. Kaputt).
             Rectangle aArea;
-            SwFrm *pFrm = pOLENd->GetFrm();
+            SwFrm *pFrm = pOLENd->getLayoutFrm(0);
             if ( pFrm )
             {
                 Size aSz( pFrm->Frm().SSize() );

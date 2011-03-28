@@ -111,15 +111,23 @@ void SwAnnotationWin::UpdateData()
 {
     if ( Engine()->IsModified() )
     {
-        SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
-        SwPosition aPosition( pTxtFld->GetTxtNode() );
-        aPosition.nContent = *pTxtFld->GetStart();
-        SwField* pOldField = mpFld->Copy();
+        IDocumentUndoRedo & rUndoRedo(
+            DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
+        ::std::auto_ptr<SwField> pOldField;
+        if (rUndoRedo.DoesUndo())
+        {
+            pOldField.reset(mpFld->Copy());
+        }
         mpFld->SetPar2(Engine()->GetEditEngine().GetText());
         mpFld->SetTextObject(Engine()->CreateParaObject());
-        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
-        delete pOldField;
+        if (rUndoRedo.DoesUndo())
+        {
+            SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
+            SwPosition aPosition( pTxtFld->GetTxtNode() );
+            aPosition.nContent = *pTxtFld->GetStart();
+            rUndoRedo.AppendUndo(
+                new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+        }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
         // #i98686# if we have several views, all notes should update their text
@@ -242,15 +250,23 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
     Engine()->SetModifyHdl( Link() );
-    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
-    SwPosition aPosition( pTxtFld->GetTxtNode() );
-    aPosition.nContent = *pTxtFld->GetStart();
-    SwField* pOldField = mpFld->Copy();
+    IDocumentUndoRedo & rUndoRedo(
+        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
+    ::std::auto_ptr<SwField> pOldField;
+    if (rUndoRedo.DoesUndo())
+    {
+        pOldField.reset(mpFld->Copy());
+    }
     mpFld->SetPar2(Engine()->GetEditEngine().GetText());
     mpFld->SetTextObject(Engine()->CreateParaObject());
-    DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-        new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
-    delete pOldField;
+    if (rUndoRedo.DoesUndo())
+    {
+        SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
+        SwPosition aPosition( pTxtFld->GetTxtNode() );
+        aPosition.nContent = *pTxtFld->GetStart();
+        rUndoRedo.AppendUndo(
+            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+    }
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();

@@ -80,7 +80,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     //              them havent't a loaded Graphic. - #86501#
     rGrfNd.LockModify();
 
-    SwClientIter aIter( rGrfNd );
+    SwClientIter aIter( rGrfNd );   // TODO
     for( int n = 0; n < 2; ++n )
     {
         SwClient * pLast = aIter.GoStart();
@@ -88,7 +88,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         {
             do {
                 if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
-                    pLast->Modify( &rItem, &rItem );
+                    pLast->ModifyNotification( &rItem, &rItem );
             } while( 0 != ( pLast = aIter++ ));
         }
     }
@@ -218,7 +218,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         if ( (!pSh || !pSh->ActionPend()) && (!pESh || !pESh->ActionPend()) )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-            pCntntNode->Modify( &aMsgHint, &aMsgHint );
+            pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
             bUpdate = sal_False;
         }
     }
@@ -283,7 +283,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         }
         else
         {
-            pCntntNode->Modify( &aMsgHint, &aMsgHint );
+            pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
 
@@ -409,30 +409,9 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
     }
 #endif
 
-    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//    TestBalloonInputStream* pTBIS = 0;
-//    if(!m_xInputStreamToLoadFrom.is()) {
-//        if ( !pCntntNode->IsGrfNode() ||
-//             static_cast<SwGrfNode*>(pCntntNode)->GetGrfObj().GetType()
-//                    != GRAPHIC_DEFAULT )
-//        {
-//            pTBIS = new TestBalloonInputStream();
-//            m_xInputStreamToLoadFrom = pTBIS;
-//        }
-//    }
-    // <--
-
     if( GetObj() )
     {
-        // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//        GetObj()->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
-        // <--
         String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
-
-//!! ??? what have we here to do ????
-//!!        if( bNativFormat )
-//!!            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
-
         uno::Any aValue;
         GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
 
@@ -460,18 +439,6 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
         bRes = Update();
 
     bSwapIn = sal_False;
-
-    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//    if ( pTBIS && pTBIS->isTouched() )
-//    {
-//        // --> OD 2005-04-11 #i46300# - determine correct URL for the graphic
-//        String sGrfNm;
-//        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
-//        (m_pReReadThread = new ReReadThread(
-//                this, sGrfNm, bWaitForData, bNativFormat))->create();
-//        // <--
-//    }
-    // <--
     return bRes;
 }
 

@@ -564,7 +564,7 @@ public:
     sal_Bool HasOtherCnt() const; // gibt es Rahmen, Fussnoten, ...
 
     /* Anwenden der ViewOptions mit Start-/EndAction */
-    inline void ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void ApplyViewOptions( const SwViewOption &rOpt );
 
     // Text innerhalb der Selektion erfragen
     // Returnwert liefert sal_False, wenn der selektierte Bereich
@@ -939,13 +939,6 @@ private:
     SwEditShell(const SwEditShell &);
     const SwEditShell &operator=(const SwEditShell &);
 };
-
-inline void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
-{
-    SwCrsrShell::StartAction();
-    ViewShell::ApplyViewOptions( rOpt );
-    SwEditShell::EndAction();
-}
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 {   return ((SwEditShell*)this)->GetLinkManager();  }

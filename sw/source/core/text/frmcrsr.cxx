@@ -34,6 +34,7 @@
 #include "frmtool.hxx"
 #include "viewopt.hxx"
 #include "paratr.hxx"
+#include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "colfrm.hxx"
 #include "txttypes.hxx"
@@ -131,7 +132,7 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
              !pFly->GetNextLink() && !pFly->GetPrevLink() ) ||
              ( !pFly && pFrm->IsInTab() ) )
         {
-            ViewShell* pVsh = pFrm->GetShell();
+            ViewShell* pVsh = pFrm->getRootFrm()->GetCurrShell();
             if( pVsh )
             {
                 if( pVsh->GetNext() != pVsh ||
@@ -145,7 +146,7 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
                 pFrm->SetPara( 0 );
                 pFrm->GetFormatted();
                 if( pFrm->Frm().HasArea() )
-                    pFrm->GetShell()->InvalidateWindows( pFrm->Frm() );
+                    pFrm->getRootFrm()->GetCurrShell()->InvalidateWindows( pFrm->Frm() );
                 return sal_True;
             }
         }
@@ -224,8 +225,9 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     const SwTwips nFrmMaxY = (pFrm->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is an absolute value
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
-                    Max( nFrmMaxY, nUpperMaxY ) :
+                    ( bVertL2R ? Min( nFrmMaxY, nUpperMaxY ) : Max( nFrmMaxY, nUpperMaxY ) ) :
                     Min( nFrmMaxY, nUpperMaxY );
 
     sal_Bool bRet = sal_False;
@@ -242,8 +244,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         {
             if( nFirstOffset > 0 )
                 aPnt1.Y() += nFirstOffset;
-
-            if ( aPnt1.X() < nMaxY )
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( aPnt1.X() < nMaxY && !bVertL2R )
                 aPnt1.X() = nMaxY;
             aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
             aPnt2.Y() = aPnt1.Y();
@@ -396,8 +398,9 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is in absolute value
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
-                    Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) :
+                    ( bVertL2R ? Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
                     Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
 
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
@@ -406,8 +409,9 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         Point aPnt2;
         if ( bVert )
         {
-            if ( aPnt1.X() < nMaxY )
+            if ( aPnt1.X() < nMaxY && !bVertL2R )
                 aPnt1.X() = nMaxY;
+
             aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
             aPnt2.Y() = aPnt1.Y();
             if( aPnt2.X() < nMaxY )
@@ -923,7 +927,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
         xub_StrLen nOffs = GetOfst();
         if( pTmpPrev )
         {
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             sal_Bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTxtFrm *pPrevPrev = pTmpPrev;
             // Hier werden geschuetzte Frames und Frame ohne Inhalt ausgelassen
@@ -1276,7 +1280,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( 0 != ( pTmpFollow = GetFollow() ) )
             {   // geschuetzte Follows auslassen
                 const SwCntntFrm* pTmp = pTmpFollow;
-                ViewShell *pSh = GetShell();
+                ViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->IsCursorInProtectedArea() )
                 {
                     while( pTmpFollow && pTmpFollow->IsProtected() )
@@ -1436,7 +1440,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pColl = &pColl->GetNextTxtFmtColl();
     SwAttrSet aSet( ((SwDoc*)GetTxtNode()->GetDoc())->GetAttrPool(), aTxtFmtCollSetRange );
     const SwAttrSet* pSet = &pColl->GetAttrSet();
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( GetTxtNode()->HasSwAttrSet() )
     {
         aSet.Put( *GetTxtNode()->GetpSwAttrSet() );
@@ -1451,8 +1455,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();
-    if ( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
-            ( pSh->GetViewOptions()->IsPrtFormat() ) )
+    if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
     pFnt->SetFntChg( sal_True );

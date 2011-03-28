@@ -34,6 +34,11 @@
 class SwTxtNode;    // fuer SwTxtFld
 class SwCharFmt;
 
+namespace sw {
+    class MetaFieldManager;
+}
+
+
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
@@ -45,9 +50,9 @@ public:
     SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtCharFmt( );
 
-    // werden vom SwFmtCharFmt hierher weitergeleitet
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    // werden vom SwFmtCharFmt hierher weitergeleitet (no derivation from SwClient!)
+    void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
+    bool GetInfo( SfxPoolItem& rInfo ) const;
 
     // get and set TxtNode pointer
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
@@ -61,7 +66,7 @@ public:
 
 class SwTxtAttrNesting : public SwTxtAttrEnd
 {
-public:
+protected:
     SwTxtAttrNesting( SfxPoolItem & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
     virtual ~SwTxtAttrNesting();
@@ -70,16 +75,20 @@ public:
 class SwTxtMeta : public SwTxtAttrNesting
 {
 private:
-    SwTxtNode * m_pTxtNode;
-
-public:
     SwTxtMeta( SwFmtMeta & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+
+public:
+    static SwTxtMeta * CreateTxtMeta(
+        ::sw::MetaFieldManager & i_rTargetDocManager,
+        SwTxtNode *const i_pTargetTxtNode,
+        SwFmtMeta & i_rAttr,
+        xub_StrLen const i_nStart, xub_StrLen const i_nEnd,
+        bool const i_bIsCopy);
+
     virtual ~SwTxtMeta();
 
     void ChgTxtNode(SwTxtNode * const pNode);
-    SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
-
 };
 
 
@@ -88,14 +97,16 @@ public:
 class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode* m_pTxtNode;
-
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 public:
     SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO();
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+
+    SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 
     /// get and set TxtNode pointer
            const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }

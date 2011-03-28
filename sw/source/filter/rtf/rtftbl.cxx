@@ -783,9 +783,9 @@ void SwRTFParser::ReadTable( int nToken )
         {
             SwTableBox* pBox = pNewLine->GetTabBoxes()[0];
             pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
-            pBoxFmt->Remove( pBox );
+            pBox->ForgetFrmFmt();
             delete pBoxFmt;
-            aBoxFmts[0]->Add( pBox );
+            pBox->RegisterToFormat( *aBoxFmts[0] );
             SwTxtNode* pTNd = pDoc->GetNodes()[ pBox->GetSttIdx()+1 ]
                                             ->GetTxtNode();
             ASSERT( pTNd, "wo ist der Textnode dieser Box?" );

@@ -33,6 +33,7 @@
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "swtypes.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
@@ -179,9 +180,9 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
 
             //determine space left in new upper frame
             nSpace = (aRect.*fnRectX->fnGetHeight)();
-
+            const ViewShell *pSh = pNewUpper->getRootFrm()->GetCurrShell();
             if ( IsInFtn() ||
-                 pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
+                 (pSh && pSh->GetViewOptions()->getBrowseMode()) ||
                  pNewUpper->IsCellFrm() ||
                  ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
                    ( pNewUpper->IsColBodyFrm() &&
@@ -577,7 +578,13 @@ void SwFrm::MakePos()
                 if( bReverse )
                     aFrm.Pos().X() += pPrv->Frm().Width();
                 else
-                    aFrm.Pos().X() -= aFrm.Width();
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                {
+                    if ( bVertL2R )
+                           aFrm.Pos().X() += pPrv->Frm().Width();
+                    else
+                           aFrm.Pos().X() -= aFrm.Width();
+                  }
             }
             else
                 aFrm.Pos().Y() += pPrv->Frm().Height();
@@ -645,13 +652,15 @@ void SwFrm::MakePos()
                         aFrm.Pos().X() += GetUpper()->Prt().Width()
                                           - aFrm.Width();
                 }
-                else if( bVert && FRM_NOTE_VERT & nMyType && !bReverse )
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !bReverse )
                     aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
             }
         }
         else
             aFrm.Pos().X() = aFrm.Pos().Y() = 0;
-        if( IsBodyFrm() && bVert && !bReverse && GetUpper() )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsBodyFrm() && bVert && !bVertL2R && !bReverse && GetUpper() )
             aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
         bValidPos = sal_True;
     }
@@ -732,8 +741,8 @@ void SwPageFrm::MakeAll()
                     pAttrs = pAccess->Get();
                 }
                 //Bei der BrowseView gelten feste Einstellungen.
-                ViewShell *pSh = GetShell();
-                if ( pSh && GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                ViewShell *pSh = getRootFrm()->GetCurrShell();
+                if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 {
                     const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
@@ -873,7 +882,8 @@ void SwLayoutFrm::MakeAll()
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
     sal_Bool bVert = IsVertical();
-    SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : fnRectVert;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
 
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
@@ -986,11 +996,11 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             const long nRight = ((SwBorderAttrs&)rAttrs).CalcRight( this );
             (this->*fnRect->fnSetXMargins)( nLeft, nRight );
 
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             SwTwips nWidthArea;
             if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
                 GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
-                pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
                 //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"

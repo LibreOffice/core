@@ -482,9 +482,17 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         if ( IsVertical() )
         {
             ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
-            nRstHeight = Frm().Left() + Frm().Width() -
-                         ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
-        }
+
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( IsVertLR() )
+                    nRstHeight = GetUpper()->Frm().Left()
+                               + GetUpper()->Prt().Left()
+                               + GetUpper()->Prt().Width()
+                               - Frm().Left();
+            else
+                nRstHeight = Frm().Left() + Frm().Width() -
+                            ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
+         }
         else
             nRstHeight = GetUpper()->Frm().Top()
                        + GetUpper()->Prt().Top()
@@ -681,7 +689,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
     {
-        ViewShell* pViewShell( pFoll->GetShell() );
+        ViewShell* pViewShell( pFoll->getRootFrm()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
@@ -708,7 +716,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     // Durch das Paste wird ein Modify() an mich verschickt.
     // Damit meine Daten nicht verschwinden, locke ich mich.
     SwTxtFrmLocker aLock( this );
-    SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm());
+    SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm( this ));
     pNew->bIsFollow = sal_True;
 
     pNew->SetFollow( GetFollow() );
@@ -721,7 +729,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
     {
-        ViewShell* pViewShell( pNew->GetShell() );
+        ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
@@ -1137,7 +1145,9 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // If the frame grows (or shirks) the repaint rectangle cannot simply
     // be rotated back after formatting, because we use the upper left point
     // of the frame for rotation. This point changes when growing/shrinking.
-    if ( IsVertical() && nChg )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertical() && !IsVertLR() && nChg )
     {
         SwRect &rRepaint = *(pPara->GetRepaint());
         rRepaint.Left( rRepaint.Left() - nChg );
@@ -1297,7 +1307,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         }
         SwTwips nRght = Max( nOldWidth, pNew->Width() +
                              pNew->GetHangingMargin() );
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
         const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
         if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
             nRght += ( Max( nOldAscent, pNew->GetAscent() ) );

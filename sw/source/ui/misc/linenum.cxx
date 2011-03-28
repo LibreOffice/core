@@ -105,6 +105,7 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_LINENUMBERING), rSet),
     aNumberingOnCB      ( this, SW_RES( CB_NUMBERING_ON )),
+    aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
     aCharStyleFT        ( this, SW_RES( FT_CHAR_STYLE )),
     aCharStyleLB        ( this, SW_RES( LB_CHAR_STYLE )),
     aFormatFT           ( this, SW_RES( FT_FORMAT )),
@@ -116,19 +117,29 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aNumIntervalFT      ( this, SW_RES( FT_NUM_INVERVAL )),
     aNumIntervalNF      ( this, SW_RES( NF_NUM_INVERVAL )),
     aNumRowsFT          ( this, SW_RES( FT_NUM_ROWS )),
-    aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
+    aDivisorFL          ( this, SW_RES( FL_DIVISOR )),
     aDivisorFT          ( this, SW_RES( FT_DIVISOR )),
     aDivisorED          ( this, SW_RES( ED_DIVISOR )),
     aDivIntervalFT      ( this, SW_RES( FT_DIV_INTERVAL )),
     aDivIntervalNF      ( this, SW_RES( NF_DIV_INTERVAL )),
     aDivRowsFT          ( this, SW_RES( FT_DIV_ROWS )),
-    aDivisorFL          ( this, SW_RES( FL_DIVISOR )),
+    aCountFL            ( this, SW_RES( FL_COUNT )),
     aCountEmptyLinesCB  ( this, SW_RES( CB_COUNT_EMPTYLINES )),
     aCountFrameLinesCB  ( this, SW_RES( CB_COUNT_FRAMELINES )),
-    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE )),
-    aCountFL            ( this, SW_RES( FL_COUNT ))
+    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE ))
 
 {
+    String sIntervalName = aDivIntervalFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += aDivRowsFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii(")");
+    aDivIntervalNF.SetAccessibleName(sIntervalName);
+    sIntervalName = aNumIntervalFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += aNumRowsFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii(")");
+    aNumIntervalNF.SetAccessibleName(sIntervalName);
+
     FreeResource();
     SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
     pSh = pDlg->GetWrtShell();
