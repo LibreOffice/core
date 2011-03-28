@@ -164,9 +164,59 @@ sub load_data($$$$)
     }
 }
 
-sub print_summary_in_stat($$$$$$$)
+sub get_branch_name($)
 {
-    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix) = @_;
+    my ($top_dir) = @_;
+
+    my $branch;
+    my $cmd = "cd $top_dir && git branch";
+
+    print STDERR "Analyzing git branch: ";
+
+    open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
+
+    while (my $line = <GIT>) {
+        chomp $line;
+
+        if ( $line =~ m/^\*\s*(\S+)/ ) {
+            $branch = "$1";
+        }
+    }
+
+    close GIT;
+
+    die "Error: did not detect git branch name\n" unless defined ($branch);
+
+    print STDERR "$branch\n";
+
+    return $branch;
+}
+
+sub open_log_file($$$)
+{
+    my ($log_prefix, $log_suffix, $top_dir) = @_;
+
+    my $branch_name = get_branch_name($top_dir);
+    my $logfilename = "$log_prefix-$branch_name-$log_suffix.log";
+
+    if (-f $logfilename) {
+        print "WARNING: The log file already exists: $logfilename\n";
+        print "Do you want to ovewrite it? (Y/n)?\n";
+        my $answer = <STDIN>;
+        chomp $answer;
+        $answer = "y" unless ($answer);
+        die "Please, rename the file or choose another log suffix\n" if ( lc($answer) ne "y" );
+    }
+    
+    my $log;
+    open($log, '>', $logfilename) || die "Can't open \"$logfilename\" for writing: $!\n";
+    
+    return $log;
+}
+
+sub print_summary_in_stat($$$$$$$$)
+{
+    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
 
     return if ( $summary eq "" );
     
@@ -183,7 +233,7 @@ sub print_summary_in_stat($$$$$$$)
 
     # print piece title if not done yet
     if (defined ${$ppiece_title}) {
-        print "${$ppiece_title}\n";
+        printf $log "${$ppiece_title}\n";
         ${$ppiece_title} = undef;
     }
 
@@ -198,12 +248,12 @@ sub print_summary_in_stat($$$$$$$)
         $authors = " [" . join (", ", keys %{$pauthors}) . "]";
     }
 
-    print $prefix . $summary . $bugs . $authors . "\n";
+    printf $log $prefix . $summary . $bugs . $authors . "\n";
 }
 
-sub print_weekly_stat($$)
+sub print_stat($$$)
 {
-    my ($pdata, $pprint_filters) = @_;
+    my ($pdata, $pprint_filters, $log) = @_;
 
     foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this peice has any entries at all
@@ -216,7 +266,7 @@ sub print_weekly_stat($$)
             foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ");
+                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
@@ -236,7 +286,7 @@ sub print_weekly_stat($$)
                     $flags{$flag} = 1;
                 }
             }
-            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ");
+            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
         }
     }
 }
@@ -248,12 +298,15 @@ sub usage()
 {
     print "This script generates LO git commit summary\n\n" .
           
-          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] topdir [git_log_param...]\n\n" .
+          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-suffix=<string> topdir [git_log_param...]\n\n" .
 
           "Options:\n" .
           "     --help          print this help\n" .
           "     --no-pieces     read changes just from the main repository, ignore other cloned repos\n" .
           "     --piece=<piece> summarize just chnages from the given piece\n" .
+          "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
+          "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
+          "                     is detected autoamtically\n" .
           "     --bugs          print just bug fixes\n" .
           "      topdir         directory with the libreoffice/bootstrap clone; the piece repos\n" .
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
@@ -272,6 +325,9 @@ sub usage()
 
 my $piece;
 my $top_dir;
+my $log_prefix = "commit-log";
+my $log_suffix;
+my $log;
 my @git_args;
 my %data;
 my %print_filters = ();
@@ -284,8 +340,11 @@ foreach my $arg (@ARGV) {
         $piece = "bootstrap";
     } elsif ($arg =~ m/--piece=(.*)/) {
 	$piece = $1;
+    } elsif ($arg =~ m/--log-suffix=(.*)/) {
+	$log_suffix = "$1";
     } elsif ($arg eq '--bugs') {
         $print_filters{'bug'} = 1;
+        $log_prefix = "bugfixes"
     } else {
         if (! defined $top_dir) {
             $top_dir=$arg;
@@ -299,5 +358,10 @@ foreach my $arg (@ARGV) {
 (-d "$top_dir") || die "Error: not a directory: $top_dir\n";
 (-f "$top_dir/.git/config") || die "Error: can't find $top_dir/.git/config\n";
 
+(defined $log_suffix) || die "Error: define log suffix using --log-suffix=<string>\n";
+
 load_data(\%data, $top_dir,$piece, \@git_args);
-print_weekly_stat(\%data, \%print_filters);
+
+$log = open_log_file($log_prefix, $log_suffix, $top_dir);
+print_stat(\%data, \%print_filters, $log);
+close $log;
