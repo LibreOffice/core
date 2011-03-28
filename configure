@@ -750,7 +750,11 @@ SYSTEM_GRAPHITE
 ENABLE_GRAPHITE
 GRAPHITE_LIBS
 GRAPHITE_CFLAGS
+ICU_MICRO
+ICU_MINOR
+ICU_MAJOR
 SYSTEM_ICU
+ICUCONFIG
 SYSTEM_GENCMN
 SYSTEM_GENCCODE
 SYSTEM_GENBRK
@@ -893,6 +897,7 @@ CRYPT_LINK
 PAM_LINK
 NEW_SHADOW_API
 PAM
+VALGRIND_CFLAGS
 LFS_CFLAGS
 WORDS_BIGENDIAN
 SIZEOF_LONG
@@ -8792,6 +8797,44 @@ if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; th
 fi
 
 
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+         VALGRIND_CFLAGS=""
+   prev_cppflags=$CPPFLAGS
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/include/valgrind"
+      ac_fn_c_check_header_mongrel "$LINENO" "valgrind.h" "ac_cv_header_valgrind_h" "$ac_includes_default"
+if test "x$ac_cv_header_valgrind_h" = x""yes; then :
+  VALGRIND_CFLAGS=$CPPFLAGS
+else
+  unset ac_cv_header_valgrind_h
+fi
+
+
+   fi
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/local/include/valgrind"
+      ac_fn_c_check_header_mongrel "$LINENO" "valgrind.h" "ac_cv_header_valgrind_h" "$ac_includes_default"
+if test "x$ac_cv_header_valgrind_h" = x""yes; then :
+  VALGRIND_CFLAGS=$CPPFLAGS
+fi
+
+
+   fi
+   if test -n "$VALGRIND_CFLAGS"; then
+      CPPFLAGS=$VALGRIND_CFLAGS
+      ac_fn_c_check_header_mongrel "$LINENO" "memcheck.h" "ac_cv_header_memcheck_h" "$ac_includes_default"
+if test "x$ac_cv_header_memcheck_h" = x""yes; then :
+
+else
+  VALGRIND_CFLAGS=""
+fi
+
+
+   fi
+   CPPFLAGS=$prev_cppflags
+fi
+
+
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
     ac_fn_c_check_header_mongrel "$LINENO" "cups/cups.h" "ac_cv_header_cups_cups_h" "$ac_includes_default"
 if test "x$ac_cv_header_cups_cups_h" = x""yes; then :
@@ -11785,11 +11828,11 @@ $as_echo_n "checking whether we are using the MinGW32 cross C++ compiler... " >&
 $as_echo "yes" >&6; }
       fi
       if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
-         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
+         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/)); fi
       else
          if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/`", so it can be a program name with args.
-set dummy ${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/`; ac_word=$2
+  # Extract the first word of "${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`", so it can be a program name with args.
+set dummy ${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_MINGWSTRIP+set}" = set; then :
@@ -11805,7 +11848,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_MINGWSTRIP="${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"
+    ac_cv_prog_MINGWSTRIP="${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -11828,8 +11871,8 @@ fi
 fi
 if test -z "$ac_cv_prog_MINGWSTRIP"; then
   ac_ct_MINGWSTRIP=$MINGWSTRIP
-  # Extract the first word of "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`", so it can be a program name with args.
-set dummy `echo $WITH_MINGWIN | $SED -e s/g++/strip/`; ac_word=$2
+  # Extract the first word of "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`", so it can be a program name with args.
+set dummy `echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_ac_ct_MINGWSTRIP+set}" = set; then :
@@ -11845,7 +11888,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_ac_ct_MINGWSTRIP="`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"
+    ac_cv_prog_ac_ct_MINGWSTRIP="`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -16106,6 +16149,12 @@ else
   as_fn_error $? "icu headers not found." "$LINENO" 5
 fi
 rm -f conftest.err conftest.i conftest.$ac_ext
+   ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
    # Extract the first word of "genbrk", so it can be a program name with args.
 set dummy genbrk; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -16238,42 +16287,60 @@ fi
    if test -z "$SYSTEM_GENCMN"; then
       as_fn_error $? "\\"gencmn\\" not found in \$PATH, install the icu development tool \\"gencmn\"\" "$LINENO" 5
    fi
+
+   # Extract the first word of "icu-config", so it can be a program name with args.
+set dummy icu-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_ICUCONFIG+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $ICUCONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ICUCONFIG="$ICUCONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ICUCONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ICUCONFIG=$ac_cv_path_ICUCONFIG
+if test -n "$ICUCONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ICUCONFIG" >&5
+$as_echo "$ICUCONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
    { $as_echo "$as_me:${as_lineno-$LINENO}: checking ICU version" >&5
 $as_echo_n "checking ICU version... " >&6; }
-      if test "$cross_compiling" = yes; then :
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "cannot run test program while cross compiling
-See \`config.log' for more details" "$LINENO" 5 ; }
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+   ICU_VERSION=`$ICUCONFIG --version`
+   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
 
-#include <unicode/uversion.h>
-
-int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 4)
-        return 1;
-      else
-        return 0;
-}
-
-_ACEOF
-if ac_fn_cxx_try_run "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+   if test "$ICU_MAJOR" -ge "4"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
 $as_echo "OK" >&6; }
-else
-  as_fn_error $? "not suitable, only >= 4.0 supported currently" "$LINENO" 5
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-      ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+   else
+      as_fn_error $? "not suitable, only >= 4.0 supported currently" "$LINENO" 5
+   fi
 
 else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
@@ -16281,6 +16348,9 @@ $as_echo "internal" >&6; }
     SYSTEM_ICU=NO
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
+
+
+
 
 
 

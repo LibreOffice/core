@@ -30,7 +30,7 @@ COM := GCC
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
-gb_CC := cc
+gb_CC := gcc
 gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
@@ -122,7 +122,7 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 
 gb_LinkTarget_LDFLAGS := \
     -Wl,--sysroot=$(SYSBASE) \
-    -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+    -Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
     $(subst -L../lib , ,$(SOLARLIB)) \
@@ -153,6 +153,12 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
 
 # CObject class
 

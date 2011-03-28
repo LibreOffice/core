@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR , $gb_REPOS,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -967,7 +967,7 @@ $XINC                 = PathFormat('@XINC@'); # X11 includes
 
 # Mac OS X/Darwin only variables.
 if ( $platform =~ m/darwin/ )
-{  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
+{  $FRAMEWORKSHOME       = $ds."Developer".$ds."SDKs".$ds."MacOSX10.4u.sdk".$ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
       $GUIBASE  = "aqua";
    } else {
@@ -1496,6 +1496,14 @@ else
 
 #
 print "done\n";
+$gb_REPOS = $SRC_ROOT;
+my $BUILD_TYPE = "@BUILD_TYPE@";
+
+if ('@WITH_LANG@' ne "")
+{
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
+}
 
 #
 # F. Setting the different aliases.
@@ -1604,6 +1612,7 @@ ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
+ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@",  "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
@@ -1831,7 +1840,7 @@ ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
+ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
@@ -1855,6 +1864,9 @@ if ($SYSTEM_PYTHON eq "NO") {
 ToFile( "HOME",              "@HOME@",             "e" );
 }
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
+ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
+ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );
@@ -1962,6 +1974,8 @@ if ($platform !~ m/cygwin|os2/) {
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
+ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
@@ -2053,7 +2067,6 @@ if ($platform =~ m/os2/)
   ToFile( "SWITCHAR",   "-",	"e");
 }
 ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
-ToFile( "DBGSV_INIT", "$SOLARENV/bin/dbgsv.ini", "e");
 #
 # Writing unset variables you might not need to file.
 # 

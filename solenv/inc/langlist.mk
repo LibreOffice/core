@@ -25,7 +25,6 @@
 #
 #*************************************************************************
 
-
 completelangiso=af \
 ar \
 as \
@@ -60,6 +59,7 @@ eu \
 fa \
 fi \
 fr \
+fur \
 ga \
 gd \
 gl \
@@ -69,10 +69,12 @@ he \
 hi \
 hi-IN \
 hr \
+ht \
 hu \
 is \
 it \
 ja \
+jbo \
 kid \
 ky \
 ka \
@@ -104,6 +106,7 @@ nn \
 nr \
 ns \
 nso \
+ny \
 om \
 oms \
 oc \
@@ -131,7 +134,7 @@ sq \
 sk \
 sl \
 sh \
-son \
+so \
 sr \
 ss \
 st \

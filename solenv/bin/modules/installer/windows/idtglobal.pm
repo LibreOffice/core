@@ -49,11 +49,14 @@ sub shorten_feature_gid
     my ($stringref) = @_;
 
     $$stringref =~ s/gid_Module_/gm_/;
+    $$stringref =~ s/_Extension_/_ex_/;
     $$stringref =~ s/_Root_/_r_/;
     $$stringref =~ s/_Prg_/_p_/;
     $$stringref =~ s/_Optional_/_o_/;
+    $$stringref =~ s/_Tools_/_tl_/;
     $$stringref =~ s/_Wrt_Flt_/_w_f_/;
     $$stringref =~ s/_Javafilter_/_jf_/;
+    $$stringref =~ s/_Productivity_/_pr_/;
 }
 
 ############################################
@@ -90,10 +93,8 @@ sub get_next_free_number
     }
     until (!($alreadyexists));
 
-    if (( $counter > 9 ) && ( length($name) > 6 ))
-    {
-        $dontsave = 1;
-    }
+    if (( $counter > 9 ) && ( length($name) > 6 )) { $dontsave = 1; }
+    if (( $counter > 99 ) && ( length($name) > 5 )) { $dontsave = 1; }
 
     if (!($dontsave))
     {
@@ -192,6 +193,14 @@ sub make_eight_three_conform
                 $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
+
+                if ( $number > 99 )
+                {
+                    $name = substr($name, 0, 4);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
+                    $name = $name . "\~";
+                    $number = get_next_free_number($name, $shortnamesref);
+                }
             }
 
             $name = $name . "$number";
@@ -224,6 +233,14 @@ sub make_eight_three_conform
                 $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
+
+                if ( $number > 99 )
+                {
+                    $name = substr($name, 0, 4);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
+                    $name = $name . "\~";
+                    $number = get_next_free_number($name, $shortnamesref);
+                }
             }
 
             $name = $name . "$number";

@@ -1967,6 +1967,30 @@ fi
 AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
+dnl Check if valgrind.h is available 
+dnl ===================================================================
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+   dnl Test $prefix (currently only testing for /usr and /usr/local)
+   dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
+   VALGRIND_CFLAGS=""
+   prev_cppflags=$CPPFLAGS
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/include/valgrind"
+      AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [unset ac_cv_header_valgrind_h])
+   fi
+   if test -z "$VALGRIND_CFLAGS"; then
+      CPPFLAGS="-I/usr/local/include/valgrind"
+      AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [])
+   fi
+   if test -n "$VALGRIND_CFLAGS"; then
+      CPPFLAGS=$VALGRIND_CFLAGS
+      AC_CHECK_HEADER([memcheck.h], [], [VALGRIND_CFLAGS=""])
+   fi
+   CPPFLAGS=$prev_cppflags
+fi
+AC_SUBST([VALGRIND_CFLAGS])
+
+dnl ===================================================================
 dnl Check if cups/cups.h is available 
 dnl ===================================================================
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
@@ -3479,9 +3503,9 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          AC_MSG_RESULT(yes)
       fi
       if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
-         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
+         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/)); fi
       else
-         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/`, false)
+         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`, false)
       fi
       if test "$MINGWSTRIP" = "false"; then
          AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
@@ -4678,6 +4702,7 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    AC_LANG_PUSH([C++])
    AC_MSG_CHECKING([for unicode/rbbi.h])
    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
+   AC_LANG_POP([C++])
    AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENBRK"; then
       AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
@@ -4690,18 +4715,20 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
-   AC_MSG_CHECKING([ICU version])
-      AC_TRY_RUN([
-#include <unicode/uversion.h>
 
-int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 4)
-        return 1;
-      else
-        return 0;
-}
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])])
-      AC_LANG_POP([C++])
+   AC_PATH_PROG( ICUCONFIG, icu-config)
+   AC_MSG_CHECKING([ICU version])
+   ICU_VERSION=`$ICUCONFIG --version`
+   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+
+   if test "$ICU_MAJOR" -ge "4"; then
+      AC_MSG_RESULT([OK])
+   else
+      AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
+   fi
+
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -4711,6 +4738,9 @@ AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
+AC_SUBST(ICU_MAJOR)
+AC_SUBST(ICU_MINOR)
+AC_SUBST(ICU_MICRO)
 
 dnl ===================================================================
 dnl Graphite

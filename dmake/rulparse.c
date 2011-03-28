@@ -75,72 +75,72 @@ Parse_rule_def( state )/*
    */
 int *state;
 {
-   TKSTR    input;      /* input string struct for token search   */
-   CELLPTR  targets;    /* list of targets if any         */
-   CELLPTR  prereq;     /* list of prereq if any          */
-   CELLPTR  prereqtail; /* tail of prerequisite list          */
-   CELLPTR  cp;     /* temporary cell pointer for list making */
-   char     *result;    /* temporary storage for result       */
-   char     *tok;       /* temporary pointer for tokens       */
-   char         *set_dir;       /* value of setdir attribute              */
-   char     *brk;       /* break char list for Get_token      */
-   char         *firstrcp;      /* first recipe line, from ; in rule line */
-   t_attr       attr;           /* sum of attribute flags for current tgts*/
-   t_attr   at;     /* temp place to keep an attribute code   */
-   int      op;     /* rule operator              */
-   int      special;    /* indicate special targets in rule   */
-   int      augmeta;    /* indicate .<suffix> like target     */
-   int      percent;    /* indicate percent rule target       */
-   int      percent_prq;    /* indicate mixed %-rule prereq possible  */
+  TKSTR     input;      /* input string struct for token search   */
+  CELLPTR   targets;    /* list of targets if any         */
+  CELLPTR   prereq;     /* list of prereq if any          */
+  CELLPTR   prereqtail; /* tail of prerequisite list          */
+  CELLPTR   cp;     /* temporary cell pointer for list making */
+  char  *result;    /* temporary storage for result       */
+  char      *tok;       /* temporary pointer for tokens       */
+  char         *set_dir;       /* value of setdir attribute              */
+  char      *brk;       /* break char list for Get_token      */
+  char         *firstrcp;      /* first recipe line, from ; in rule line */
+  t_attr       attr;           /* sum of attribute flags for current tgts*/
+  t_attr    at;     /* temp place to keep an attribute code   */
+  int       op;     /* rule operator              */
+  int       special;    /* indicate special targets in rule   */
+  int       augmeta;    /* indicate .<suffix> like target     */
+  int       percent;    /* indicate percent rule target       */
+  int       percent_prq;    /* indicate mixed %-rule prereq possible  */
 
-   DB_ENTER( "Parse_rule_def" );
+  DB_ENTER( "Parse_rule_def" );
 
-   op         = 0;
-   attr       = 0;
-   special    = 0;
-   augmeta    = 0;
-   percent    = 0;
-   set_dir    = NIL( char );
-   targets    = NIL(CELL);
-   prereq     = NIL(CELL);
-   prereqtail = NIL(CELL);
-   percent_prq = 0;
+  op          = 0;
+  attr       = 0;
+  special    = 0;
+  augmeta    = 0;
+  percent    = 0;
+  set_dir    = NIL( char );
+  targets    = NIL(CELL);
+  prereq     = NIL(CELL);
+  prereqtail = NIL(CELL);
+  percent_prq = 0;
 
-   /* Check to see if the line is of the form:
-    *    targets : prerequisites; first recipe line
-    * If so remember the first_recipe part of the line. */
+  /* Check to see if the line is of the form:
+   *    targets : prerequisites; first recipe line
+   * If so remember the first_recipe part of the line. */
 
-   firstrcp = strchr( Buffer, ';' );
-   if( firstrcp != NIL( char ) ) {
-      *firstrcp++ = 0;
-      firstrcp = DmStrSpn( firstrcp, " \t" );
-   }
+  firstrcp = strchr( Buffer, ';' );
+  if( firstrcp != NIL( char ) ) {
+    *firstrcp++ = 0;
+    firstrcp = DmStrSpn( firstrcp, " \t" );
+  }
 
-   result = Expand( Buffer );
-   /* Remove CONTINUATION_CHAR, keep the <nl> */
-   for( brk=strchr(result,CONTINUATION_CHAR); brk != NIL(char); brk=strchr(brk,CONTINUATION_CHAR) )
-      if( brk[1] == '\n' )
-     *brk = ' ';
-      else
-         brk++;
+  result = Expand( Buffer );
+  /* Remove CONTINUATION_CHAR, keep the <nl> */
+  for( brk=strchr(result,CONTINUATION_CHAR); brk != NIL(char); brk=strchr(brk,CONTINUATION_CHAR) )
+    if( brk[1] == '\n' )
+      *brk = ' ';
+    else
+      brk++;
 
-   DB_PRINT( "par", ("Scanning: [%s]", result) );
+  DB_PRINT( "par", ("Scanning: [%s]", result) );
 
-   SET_TOKEN( &input, result );
-   brk = ":-^!|";
-   Def_targets = TRUE;
+  SET_TOKEN( &input, result );
+  brk = ":-^!|";
+  Def_targets = TRUE;
 
-   /* Scan the input rule line collecting targets, the operator, and any
-    * prerequisites.  Stop when we run out of targets and prerequisites. */
+  /* Scan the input rule line collecting targets, the operator, and any
+   * prerequisites.  Stop when we run out of targets and prerequisites. */
 
-   while( *(tok = Get_token( &input, brk, TRUE )) != '\0' )
+  while( *(tok = Get_token( &input, brk, TRUE )) != '\0' )
+    if( !op ) {
+      /* we are scanning targets and attributes
+       * check to see if token is an operator.  */
+
+      op = Rule_op( tok );
+
       if( !op ) {
-     /* we are scanning targets and attributes
-      * check to see if token is an operator.  */
-
-     op = Rule_op( tok );
-
-     if( !op ) {
         /* Define a new cell, or get pointer to pre-existing cell.  */
         /* Do we need cells for attributes? If not move the definition
          * to the target part.  */
@@ -151,209 +151,209 @@ int *state;
         DB_PRINT( "par", ("tg_cell [%s]", tok) );
 
         if( (at = _is_attribute(tok)) != 0 ) {
-           /* Ignore .SILENT when -vr is active. */
-           if( (Verbose & V_FORCEECHO) && (at == A_SILENT) )
-          at = 0;
+          /* Ignore .SILENT when -vr is active. */
+          if( (Verbose & V_FORCEECHO) && (at == A_SILENT) )
+            at = 0;
 
-           /* Logically OR the attributes specified into one main
-            * ATTRIBUTE mask. */
+          /* Logically OR the attributes specified into one main
+           * ATTRIBUTE mask. */
 
-           if( at == A_SETDIR ) {
-              if( set_dir != NIL( char ) )
-                 Warning( "Multiple .SETDIR attribute ignored" );
-              else
-                 set_dir = DmStrDup( tok );
-           }
+          if( at == A_SETDIR ) {
+            if( set_dir != NIL( char ) )
+              Warning( "Multiple .SETDIR attribute ignored" );
+            else
+              set_dir = DmStrDup( tok );
+          }
 
-           attr |= at;
+          attr |= at;
         }
         else {
-           /* Not an attribute, this must be a target. */
-           int tmp;
+          /* Not an attribute, this must be a target. */
+          int tmp;
 
-           tmp = _is_special( tok );
+          tmp = _is_special( tok );
 
-           if( _is_percent( tok ) ) {
-          /* First %-target checks if there were non-%-targets before. */
-          if( !percent && targets != NIL(CELL) )
-             Fatal( "A %%-target must not be mixed with non-%%-targets, offending target [%s]", tok );
+          if( _is_percent( tok ) ) {
+            /* First %-target checks if there were non-%-targets before. */
+            if( !percent && targets != NIL(CELL) )
+              Fatal( "A %%-target must not be mixed with non-%%-targets, offending target [%s]", tok );
 
-          percent++;
-          cp->ce_flag |= F_PERCENT;
-           } else {
-          if( percent )
-             Fatal( "A non-%%-target must not be mixed with %%-targets, offending target [%s]", tok );
-           }
+            percent++;
+            cp->ce_flag |= F_PERCENT;
+          } else {
+            if( percent )
+              Fatal( "A non-%%-target must not be mixed with %%-targets, offending target [%s]", tok );
+          }
 
-           if( _is_magic( tok ) ) {
-          /* Check that AUGMAKE targets are not mixed with other
-           * targets. The return value of _is_magic() is discarded and
-           * calculated again in _do_targets() if this rule definition
-           * really is a .<suffix> like target.
-           * If we would allow only one target per line we could easily
-           * store the result for later, but for multiple .<suffix>
-           * targets this creates too much overhead.
-           * These targets should be rare (obsolete?) anyway. */
-          if( !augmeta && targets != NIL(CELL) )
-             Fatal( "An AUGMAKE meta target must not be mixed with non AUGMAKE meta targets, offending target [%s]", tok );
+          if( _is_magic( tok ) ) {
+            /* Check that AUGMAKE targets are not mixed with other
+             * targets. The return value of _is_magic() is discarded and
+             * calculated again in _do_targets() if this rule definition
+             * really is a .<suffix> like target.
+             * If we would allow only one target per line we could easily
+             * store the result for later, but for multiple .<suffix>
+             * targets this creates too much overhead.
+             * These targets should be rare (obsolete?) anyway. */
+            if( !augmeta && targets != NIL(CELL) )
+              Fatal( "An AUGMAKE meta target must not be mixed with non AUGMAKE meta targets, offending target [%s]", tok );
 
-          augmeta++;
-          cp->ce_flag |= F_MAGIC; /* do_magic will also add F_PERCENT later. */
-           } else {
-          if( augmeta )
-             Fatal( "A non AUGMAKE meta target must not be mixed with AUGMAKE meta targets, offending target [%s]", tok );
-           }
+            augmeta++;
+            cp->ce_flag |= F_MAGIC; /* do_magic will also add F_PERCENT later. */
+          } else {
+            if( augmeta )
+              Fatal( "A non AUGMAKE meta target must not be mixed with AUGMAKE meta targets, offending target [%s]", tok );
+          }
 
-           if( special )
-              Fatal( "Special target must appear alone, found [%s]", tok );
-           else if( !(cp->ce_flag & F_MARK) ) {
-          /* Targets are kept in this list in lexically sorted order.
-           * This allows for easy equality comparison of target
-           * sets.*/
-          CELLPTR prev,cur;
-          for(prev=NIL(CELL),cur=targets;cur;prev=cur,cur=cur->ce_link)
-             if(strcmp(cur->CE_NAME,cp->CE_NAME) > 0)
-            break;
+          if( special )
+            Fatal( "Special target must appear alone, found [%s]", tok );
+          else if( !(cp->ce_flag & F_MARK) ) {
+            /* Targets are kept in this list in lexically sorted order.
+             * This allows for easy equality comparison of target
+             * sets.*/
+            CELLPTR prev,cur;
+            for(prev=NIL(CELL),cur=targets;cur;prev=cur,cur=cur->ce_link)
+              if(strcmp(cur->CE_NAME,cp->CE_NAME) > 0)
+                break;
 
-          cp->ce_link = cur;
+            cp->ce_link = cur;
 
-          if (!prev)
-             targets = cp;
+            if (!prev)
+              targets = cp;
+            else
+              prev->ce_link = cp;
+
+            cp->ce_flag |= F_MARK | F_EXPLICIT;
+            special = tmp;
+          }
           else
-             prev->ce_link = cp;
-
-          cp->ce_flag |= F_MARK | F_EXPLICIT;
-          special = tmp;
-           }
-           else
-              Warning( "Duplicate target [%s]", cp->CE_NAME );
+            Warning( "Duplicate target [%s]", cp->CE_NAME );
         }
-     }
-     else {
+      }
+      else {
         /* found an operator so empty out break list and clear mark
          * bits on target list, setting them all to F_VISITED*/
 
         brk  = "";
         for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) {
-           cp->ce_flag ^= F_MARK;
-           cp->ce_flag |= F_VISITED;
+          cp->ce_flag ^= F_MARK;
+          cp->ce_flag |= F_VISITED;
         }
 
         Def_targets = FALSE;
-     }
       }
-      else {
-         /* Scanning prerequisites so build the prerequisite list.  We use
-          * F_MARK flag to make certain we have only a single copy of the
-          * prerequisite in the list */
+    }
+    else {
+      /* Scanning prerequisites so build the prerequisite list.  We use
+       * F_MARK flag to make certain we have only a single copy of the
+       * prerequisite in the list */
 
-     cp = Def_cell( tok );
+      cp = Def_cell( tok );
 
-     /* %-prerequisits require eiter a %-target or this might be a rule of
-      * the "ATTRIBUTE_LIST : targets" form. */
-     if( _is_percent( tok ) ) {
+      /* %-prerequisits require eiter a %-target or this might be a rule of
+       * the "ATTRIBUTE_LIST : targets" form. */
+      if( _is_percent( tok ) ) {
         if( percent || ((targets == NIL(CELL)) && attr) )
-           percent_prq = 1;
+          percent_prq = 1;
         else
-           Fatal( "Syntax error in %% rule, missing %% target");
-     }
+          Fatal( "Syntax error in %% rule, missing %% target");
+      }
 
-     if( cp->ce_flag & F_VISITED ) {
+      if( cp->ce_flag & F_VISITED ) {
         if( cp->ce_attr & A_COMPOSITE )
-           continue;
+          continue;
         else
-           Fatal( "Detected circular dependency in graph at [%s]",
-              cp->CE_NAME );
-     }
-         else if( !(cp->ce_flag & F_MARK) ) {
+          Fatal( "Detected circular dependency in graph at [%s]",
+                 cp->CE_NAME );
+      }
+      else if( !(cp->ce_flag & F_MARK) ) {
         DB_PRINT( "par", ("pq_cell [%s]", tok) );
         cp->ce_flag |= F_MARK;
 
         if( prereqtail == NIL(CELL) )   /* keep prereq's in order */
-           prereq = cp;
+          prereq = cp;
         else
-           prereqtail->ce_link = cp;
+          prereqtail->ce_link = cp;
 
         prereqtail = cp;
         cp->ce_link = NIL(CELL);
-     }
-     else if( !(cp->ce_attr & A_LIBRARY) && (Verbose & V_WARNALL))
-        Warning("Duplicate entry [%s] in prerequisite list",cp->CE_NAME);
       }
+      else if( !(cp->ce_attr & A_LIBRARY) && (Verbose & V_WARNALL))
+        Warning("Duplicate entry [%s] in prerequisite list",cp->CE_NAME);
+    }
 
-   /* Check to see if we have a percent rule that has only global
-    * prerequisites, i.e. they are of the form: "%.a : foo".
-    * If so then set the flag so that later on, we don't issue
-    * an error if such targets supply an empty set of rules. */
+  /* Check to see if we have a percent rule that has only global
+   * prerequisites, i.e. they are of the form: "%.a : foo".
+   * If so then set the flag so that later on, we don't issue
+   * an error if such targets supply an empty set of rules. */
 
-   if( percent && !percent_prq && (prereq != NIL(CELL)) )
-      _sv_globprq_only = 1;
+  if( percent && !percent_prq && (prereq != NIL(CELL)) )
+    _sv_globprq_only = 1;
 
-   /* It's ok to have targets with attributes, and no prerequisites, but it's
-    * not ok to have no targets and no attributes, or no operator */
+  /* It's ok to have targets with attributes, and no prerequisites, but it's
+   * not ok to have no targets and no attributes, or no operator */
 
-   if( !op ) {
-      CLEAR_TOKEN( &input );
-      DB_PRINT( "par", ("Not a rule [%s]", Buffer) );
-      DB_RETURN( 0 );
-   }
+  CLEAR_TOKEN( &input ); FREE(result); result = NIL(char);
+  if( !op ) {
+    DB_PRINT( "par", ("Not a rule [%s]", Buffer) );
+    DB_RETURN( 0 );
+  }
 
-   /* More than one percent target didn't work with prior versions. */
-   if( (percent > 1) && !(op & R_OP_OR) )
-      Warning( "Prior to dmake 4.5 only one\n"
-      "%%-target per target-definition worked reliably. Check your makefiles.\n" );
+  /* More than one percent target didn't work with prior versions. */
+  if( (percent > 1) && !(op & R_OP_OR) )
+    Warning( "Prior to dmake 4.5 only one\n"
+             "%%-target per target-definition worked reliably. Check your makefiles.\n" );
 
-   if( !attr && targets == NIL(CELL) ) {
-      Fatal( "Missing targets or attributes in rule" );
-      if( set_dir != NIL( char )) FREE( set_dir );
-      DB_RETURN( 0 );
-   }
+  if( !attr && targets == NIL(CELL) ) {
+    Fatal( "Missing targets or attributes in rule" );
+    if( set_dir != NIL( char )) FREE( set_dir );
+    DB_RETURN( 0 );
+  }
 
-   /* We have established we have a legal rules line, so we must process it.
-    * In doing so we must handle any special targets.  Special targets must
-    * appear alone possibly accompanied by attributes.
-    * NOTE:  special != 0  ==> targets != NIL(CELL) */
+  /* We have established we have a legal rules line, so we must process it.
+   * In doing so we must handle any special targets.  Special targets must
+   * appear alone possibly accompanied by attributes.
+   * NOTE:  special != 0  ==> targets != NIL(CELL) */
 
-   if( prereqtail != NIL(CELL) ) prereqtail->ce_link = NIL(CELL);
+  if( prereqtail != NIL(CELL) ) prereqtail->ce_link = NIL(CELL);
 
-   /* Clear out MARK bits used in duplicate checking.  I originally wanted
-    * to do this as the lists get processed but that got too error prone
-    * so I bit the bullit and added these two loops. */
+  /* Clear out MARK bits used in duplicate checking.  I originally wanted
+   * to do this as the lists get processed but that got too error prone
+   * so I bit the bullit and added these two loops. */
 
-   for( cp=prereq;  cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_MARK;
-   for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_VISITED;
+  for( cp=prereq;  cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_MARK;
+  for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_VISITED;
 
-   /* Check to see if the previous recipe was bound, if not the call
-    * Bind_rules_to_targets() to bind the recipe (_sv_rules) to the
-    * target(s) (_sv_targets). */
-   /* was:  if( _sv_rules != NIL(STRING) ) Bind_rules_to_targets( F_DEFAULT );*/
-   /* Only Add_recipe_to_list() sets _sv_rules and Bind_rules_to_targets()
-    * clears the (static) variables again.  Bind_rules_to_targets() is
-    * (should be) called after State is leaving RULE_SCAN in Parse().
-    * Abort if there are unbound recipes. FIXME: Remove this paragraph
-    * if this never occurs.  */
-   if( _sv_rules != NIL(STRING) )
-      Fatal( "Internal Error: _sv_rules not empty." );
+  /* Check to see if the previous recipe was bound, if not the call
+   * Bind_rules_to_targets() to bind the recipe (_sv_rules) to the
+   * target(s) (_sv_targets). */
+  /* was:  if( _sv_rules != NIL(STRING) ) Bind_rules_to_targets( F_DEFAULT );*/
+  /* Only Add_recipe_to_list() sets _sv_rules and Bind_rules_to_targets()
+   * clears the (static) variables again.  Bind_rules_to_targets() is
+   * (should be) called after State is leaving RULE_SCAN in Parse().
+   * Abort if there are unbound recipes. FIXME: Remove this paragraph
+   * if this never occurs.  */
+  if( _sv_rules != NIL(STRING) )
+    Fatal( "Internal Error: _sv_rules not empty." );
 
-   /* Add the first recipe line to the list */
-   if( firstrcp != NIL( char ) )
-      Add_recipe_to_list( firstrcp, TRUE, FALSE );
+  /* Add the first recipe line to the list */
+  if( firstrcp != NIL( char ) )
+    Add_recipe_to_list( firstrcp, TRUE, FALSE );
 
-   /* Save these prior to calling _do_targets, since _build_graph needs the
-    * _sv_setdir value for matching edges. */
-   _sv_op     = op;
-   _sv_setdir = set_dir;
+  /* Save these prior to calling _do_targets, since _build_graph needs the
+   * _sv_setdir value for matching edges. */
+  _sv_op     = op;
+  _sv_setdir = set_dir;
 
-   if( special )
-      /* _do_special() can alter *state */
-      _do_special( special, op, attr, set_dir, targets, prereq, state );
-   else
-      *state = _do_targets( op, attr, set_dir, targets, prereq );
+  if( special )
+    /* _do_special() can alter *state */
+    _do_special( special, op, attr, set_dir, targets, prereq, state );
+  else
+    *state = _do_targets( op, attr, set_dir, targets, prereq );
 
-   if( (*state != RULE_SCAN) && (_sv_rules != NIL(STRING)) )
-      Fatal( "Unexpected recipe found." );
+  if( (*state != RULE_SCAN) && (_sv_rules != NIL(STRING)) )
+    Fatal( "Unexpected recipe found." );
 
-   DB_RETURN( 1 );
+  DB_RETURN( 1 );
 }
 
 
@@ -576,238 +576,237 @@ CELLPTR target;
 CELLPTR prereq;
 int     *state;
 {
-   HASHPTR  hp;     /* pointer to macro def cell        */
-   CELLPTR  cp;     /* temporary pointer into cells list    */
-   CELLPTR  dp;     /* pointer to directory dir cell    */
-   LINKPTR  lp;     /* pointer at prerequisite list     */
-   char     *dir;       /* current dir to prepend       */
-   char     *path;      /* resulting path to try to read    */
-   char     *name;      /* File name for processing a .INCLUDE  */
-   char     *tmp;       /* temporary string pointer     */
-   FILE     *fil;       /* File descriptor returned by Openfile */
+  HASHPTR   hp;     /* pointer to macro def cell        */
+  CELLPTR   cp;     /* temporary pointer into cells list    */
+  CELLPTR   dp;     /* pointer to directory dir cell    */
+  LINKPTR   lp;     /* pointer at prerequisite list     */
+  char      *dir;       /* current dir to prepend       */
+  char      *path;      /* resulting path to try to read    */
+  char  *name;      /* File name for processing a .INCLUDE  */
+  char      *tmp;       /* temporary string pointer     */
+  FILE  *fil;       /* File descriptor returned by Openfile */
 
-   DB_ENTER( "_do_special" );
+  DB_ENTER( "_do_special" );
 
-   target->ce_flag = F_SPECIAL; /* mark the target as special */
+  target->ce_flag = F_SPECIAL;  /* mark the target as special */
 
-   switch( special ) {
-      case ST_EXPORT:
-     for( ; prereq != NIL(CELL); prereq = prereq->ce_link ) {
-        DB_PRINT( "par", ("Exporting [%s]", prereq->CE_NAME) );
-        hp = GET_MACRO( prereq->CE_NAME );
+  switch( special ) {
+  case ST_EXPORT:
+    for( ; prereq != NIL(CELL); prereq = prereq->ce_link ) {
+      DB_PRINT( "par", ("Exporting [%s]", prereq->CE_NAME) );
+      hp = GET_MACRO( prereq->CE_NAME );
 
-        if( hp != NIL(HASH) ) {
-           char *tmpstr = hp->ht_value;
+      if( hp != NIL(HASH) ) {
+        char *tmpstr = hp->ht_value;
 
-           if( tmpstr == NIL(char) ) tmpstr = "";
+        if( tmpstr == NIL(char) ) tmpstr = "";
 
-           if( Write_env_string( prereq->CE_NAME, tmpstr ) != 0 )
+        if( Write_env_string( prereq->CE_NAME, tmpstr ) != 0 )
           Warning( "Could not export %s", prereq->CE_NAME );
-        }
-     }
-     break;
+      }
+    }
+    break;
 
-      /* Simply cause the parser to fail on the next input read */
-      case ST_EXIT:
-         Skip_to_eof = TRUE;
-         break;
+    /* Simply cause the parser to fail on the next input read */
+  case ST_EXIT:
+    Skip_to_eof = TRUE;
+    break;
 
-      case ST_IMPORT:
-     for( ; prereq != NIL(CELL); prereq = prereq->ce_link ) {
-        char *tmpstr;
+  case ST_IMPORT:
+    for( ; prereq != NIL(CELL); prereq = prereq->ce_link ) {
+      char *tmpstr;
 
-        DB_PRINT( "par", ("Importing [%s]", prereq->CE_NAME) );
+      DB_PRINT( "par", ("Importing [%s]", prereq->CE_NAME) );
 
-        if( strcmp(prereq->CE_NAME, ".EVERYTHING") == 0 ) {
-           t_attr sattr = Glob_attr;
-           Glob_attr |= A_SILENT;
+      if( strcmp(prereq->CE_NAME, ".EVERYTHING") == 0 ) {
+        t_attr sattr = Glob_attr;
+        Glob_attr |= A_SILENT;
 
-           ReadEnvironment();
+        ReadEnvironment();
 
-           Glob_attr = sattr;
-        }
-        else {
-           tmpstr = Read_env_string( prereq->CE_NAME );
+        Glob_attr = sattr;
+      }
+      else {
+        tmpstr = Read_env_string( prereq->CE_NAME );
 
-           if( tmpstr != NIL(char) )
+        if( tmpstr != NIL(char) )
           Def_macro(prereq->CE_NAME, tmpstr, M_EXPANDED|M_LITERAL);
-           else
+        else
           if( !((Glob_attr | attr) & A_IGNORE) )
-             Fatal("Imported macro `%s' not found",prereq->CE_NAME);
-        }
-     }
+            Fatal("Imported macro `%s' not found",prereq->CE_NAME);
+      }
+    }
 
-     attr &= ~A_IGNORE;
-     break;
+    attr &= ~A_IGNORE;
+    break;
 
-      case ST_INCLUDE:
-      {
-     int pushed     = FALSE;
-     int first      = (attr & A_FIRST);
-     int ignore     = (((Glob_attr | attr) & A_IGNORE) != 0);
-     int found      = FALSE;
-         int noinf      = (attr & A_NOINFER);
-     LINKPTR prqlnk = NIL(LINK);
-     LINKPTR prqlst = NIL(LINK);
+  case ST_INCLUDE:
+    {
+      int pushed     = FALSE;
+      int first      = (attr & A_FIRST);
+      int ignore     = (((Glob_attr | attr) & A_IGNORE) != 0);
+      int found      = FALSE;
+      int noinf      = (attr & A_NOINFER);
+      LINKPTR prqlnk = NIL(LINK);
+      LINKPTR prqlst = NIL(LINK);
 
-     if( prereq == NIL(CELL) )  Fatal( "No .INCLUDE file(s) specified" );
+      if( prereq == NIL(CELL) )  Fatal( "No .INCLUDE file(s) specified" );
 
-     dp = Def_cell( ".INCLUDEDIRS" );
+      dp = Def_cell( ".INCLUDEDIRS" );
 
-     if( (attr & A_SETDIR) && *(dir = strchr(set_dir, '=')+1) )
+      if( (attr & A_SETDIR) && *(dir = strchr(set_dir, '=')+1) )
         pushed = Push_dir( dir, ".INCLUDE", ignore );
 
-     for( cp=prereq; cp != NIL(CELL); cp = cp->ce_link ) {
+      for( cp=prereq; cp != NIL(CELL); cp = cp->ce_link ) {
         LINKPTR ltmp;
         TALLOC(ltmp, 1, LINK);
         ltmp->cl_prq = cp;
 
         if( prqlnk == NIL(LINK) )
-           prqlst = ltmp;
+          prqlst = ltmp;
         else
-           prqlnk->cl_next = ltmp;
+          prqlnk->cl_next = ltmp;
 
         prqlnk = ltmp;
-     }
+      }
 
-     for( ; prqlst != NIL(LINK); FREE(prqlst), prqlst=prqlnk ) {
+      for( ; prqlst != NIL(LINK); FREE(prqlst), prqlst=prqlnk ) {
         prqlnk = prqlst->cl_next;
         cp     = prqlst->cl_prq;
         name   = cp->CE_NAME;
 
         /* Leave this here, it ensures that prqlst gets propely free'd */
         if ( first && found )
-           continue;
+          continue;
 
         if( *name == '<' ) {
-           /* We have a file name enclosed in <....>
-            * so get rid of the <> arround the file name */
+          /* We have a file name enclosed in <....>
+           * so get rid of the <> arround the file name */
 
-           name++;
-           if( (tmp = strrchr( name, '>' )) != NIL( char ) )
-          *tmp = 0;
+          name++;
+          if( (tmp = strrchr( name, '>' )) != NIL( char ) )
+            *tmp = 0;
 
-           if( If_root_path( name ) )
-              fil = Openfile( name, FALSE, FALSE );
-           else
-          fil = NIL(FILE);
+          if( If_root_path( name ) )
+            fil = Openfile( name, FALSE, FALSE );
+          else
+            fil = NIL(FILE);
         }
         else
-           fil = Openfile( name, FALSE, FALSE );
+          fil = Openfile( name, FALSE, FALSE );
 
         if( fil == NIL(FILE) && !If_root_path( name ) ) { /*if true ==> not found in current dir*/
 
-           /* Now we must scan the list of prerequisites for .INCLUDEDIRS
-            * looking for the file in each of the specified directories.
-        * if we don't find it then we issue an error.  The error
-        * message is suppressed if the .IGNORE attribute of attr is
-        * set.  If a file is found we call Parse on the file to
-        * perform the parse and then continue on from where we left
-        * off.  */
+          /* Now we must scan the list of prerequisites for .INCLUDEDIRS
+           * looking for the file in each of the specified directories.
+           * if we don't find it then we issue an error.  The error
+           * message is suppressed if the .IGNORE attribute of attr is
+           * set.  If a file is found we call Parse on the file to
+           * perform the parse and then continue on from where we left
+           * off.  */
 
-           for(lp=dp->CE_PRQ; lp && fil == NIL(FILE); lp=lp->cl_next) {
-          dir  = lp->cl_prq->CE_NAME;
-          if( strchr(dir, '$') ) dir = Expand(dir);
-          path = Build_path( dir, name );
+          for(lp=dp->CE_PRQ; lp && fil == NIL(FILE); lp=lp->cl_next) {
+            dir  = lp->cl_prq->CE_NAME;
+            if( strchr(dir, '$') ) dir = Expand(dir);
+            path = Build_path( dir, name );
 
-          DB_PRINT( "par", ("Trying to include [%s]", path) );
+            DB_PRINT( "par", ("Trying to include [%s]", path) );
 
-          fil = Openfile( path, FALSE, FALSE );
-          if( dir != lp->cl_prq->CE_NAME ) FREE(dir);
-           }
+            fil = Openfile( path, FALSE, FALSE );
+            if( dir != lp->cl_prq->CE_NAME ) FREE(dir);
+          }
         }
 
         if (!noinf && fil == NIL(FILE)) {
-           t_attr glob = Glob_attr;
-           t_attr cattr = prqlst->cl_prq->ce_attr;
+          t_attr glob = Glob_attr;
+          t_attr cattr = prqlst->cl_prq->ce_attr;
 
-           prqlst->cl_next = NIL(LINK);
-           Glob_attr |= (attr&A_IGNORE);
-           prqlst->cl_prq->ce_attr &= ~A_FRINGE;
+          prqlst->cl_next = NIL(LINK);
+          Glob_attr |= (attr&A_IGNORE);
+          prqlst->cl_prq->ce_attr &= ~A_FRINGE;
 
-           if( Verbose & V_FILE_IO )
-          printf( "%s:  Inferring include file [%s].\n",
-              Pname, name );
-           fil = TryFiles(prqlst);
+          if( Verbose & V_FILE_IO )
+            printf( "%s:  Inferring include file [%s].\n",
+                    Pname, name );
+          fil = TryFiles(prqlst);
 
-           Glob_attr = glob;
-           prqlst->cl_prq->ce_attr |= (cattr & A_FRINGE);
+          Glob_attr = glob;
+          prqlst->cl_prq->ce_attr |= (cattr & A_FRINGE);
         }
 
         if( fil != NIL(FILE) ) {
-           if( Verbose & V_FILE_IO )
-          printf( "%s:  Parsing include file [%s].\n",
-              Pname, name );
-           Parse( fil );
-           found = TRUE;
+          if( Verbose & V_FILE_IO )
+            printf( "%s:  Parsing include file [%s].\n",
+                    Pname, name );
+          Parse( fil );
+          found = TRUE;
         }
         else if( !(ignore || first) )
-           Fatal( "Include file %s, not found", name );
+          Fatal( "Include file %s, not found", name );
         else if( Verbose & V_FILE_IO )
-           printf( "%s:  Include file [%s] was not found.\n",
-              Pname, name );
-     }
+          printf( "%s:  Include file [%s] was not found.\n",
+                  Pname, name );
+      }
 
-     if ( !ignore && first && !found )
+      if ( !ignore && first && !found )
         Fatal( "No include file was found" );
 
-     if( pushed ) Pop_dir(FALSE);
-     attr &= ~(A_IGNORE|A_SETDIR|A_FIRST|A_NOINFER);
-      }
-      break;
+      if( pushed ) Pop_dir(FALSE);
+      attr &= ~(A_IGNORE|A_SETDIR|A_FIRST|A_NOINFER);
+    }
+    break;
 
-      case ST_SOURCE:
-           if( prereq != NIL(CELL) )
-        _do_targets( op & (R_OP_CL | R_OP_MI | R_OP_UP), attr, set_dir,
-             target, prereq );
-     else {
-        /* The old semantics of .SOURCE were that an empty list of
-         * prerequisites clears the .SOURCE list.  So we must implement
-         * that here as a clearout prerequisite operation.  Since this is
-         * a standard operation with the :- opcode we can simply call the
-         * proper routine with the target cell and it should do the trick
-         */
+  case ST_SOURCE:
+    if( prereq != NIL(CELL) )
+      _do_targets( op & (R_OP_CL | R_OP_MI | R_OP_UP), attr, set_dir,
+                   target, prereq );
+    else {
+      /* The old semantics of .SOURCE were that an empty list of
+       * prerequisites clears the .SOURCE list.  So we must implement
+       * that here as a clearout prerequisite operation.  Since this is
+       * a standard operation with the :- opcode we can simply call the
+       * proper routine with the target cell and it should do the trick
+       */
 
-        if( op == R_OP_CL || (op & R_OP_MI) )
-           Clear_prerequisites( target );
-     }
+      if( op == R_OP_CL || (op & R_OP_MI) )
+        Clear_prerequisites( target );
+    }
 
-     op &= ~(R_OP_MI | R_OP_UP);
-     break;
+    op &= ~(R_OP_MI | R_OP_UP);
+    break;
 
-      case ST_KEEP:
-     if( Keep_state != NIL(char) ) break;
-     Def_macro( ".KEEP_STATE", "_state.mk", M_EXPANDED );
-     break;
+  case ST_KEEP:
+    if( Keep_state != NIL(char) ) break;
+    Def_macro( ".KEEP_STATE", "_state.mk", M_EXPANDED );
+    break;
 
-      case ST_REST:
-         /* The rest of the special targets can all take recipes, as such they
-      * must be able to affect the state of the parser. */
+  case ST_REST:
+    /* The rest of the special targets can all take recipes, as such they
+     * must be able to affect the state of the parser. */
 
-     {
-        int s_targ = Target;
+    {
+      int s_targ = Target;
 
-        Target     = TRUE;
-        _sp_target = TRUE;
-        *state     = _do_targets( op, attr, set_dir, target, prereq );
-        Target     = s_targ;
+      Target     = TRUE;
+      _sp_target = TRUE;
+      *state     = _do_targets( op, attr, set_dir, target, prereq );
+      Target     = s_targ;
 
-        target->ce_flag |= F_TARGET;
+      target->ce_flag |= F_TARGET;
 
-        attr    = A_DEFAULT;
-        op      = R_OP_CL;
-     }
-     break;
+      attr    = A_DEFAULT;
+      op      = R_OP_CL;
+    }
+    break;
 
-      default:break;
-   }
+  default:break;
+  }
 
-   if( op   != R_OP_CL   ) Warning( "Modifier(s) for operator ignored" );
-   if( attr != A_DEFAULT ) Warning( "Extra attributes ignored" );
+  if( op   != R_OP_CL   ) Warning( "Modifier(s) for operator ignored" );
+  if( attr != A_DEFAULT ) Warning( "Extra attributes ignored" );
 
-   DB_VOID_RETURN;
+  DB_VOID_RETURN;
 }
-
 
 
 static int

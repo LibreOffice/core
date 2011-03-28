@@ -30,6 +30,10 @@
 
 gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER) $(JAVAIFLAGS)
 
+# in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+DBGSV_ERROR_OUT := shell
+export DBGSV_ERROR_OUT
+
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
 $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,%))
     $(call gb_Helper_abbreviate_dirs,\
@@ -39,8 +43,10 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
 $(call gb_JunitTest_get_target,%) :
     $(call gb_Output_announce,$*,$(true),JUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
+        rm -rf $(call gb_JunitTest_get_userdir,$*) && \
         mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-        $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
+        $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false) && \
+        rm -rf $(call gb_JunitTest_get_userdir,$*))
     $(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
