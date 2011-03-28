@@ -148,7 +148,7 @@ const Rectangle& SdrVirtObj::GetLastBoundRect() const
     return aOutRect;
 }
 
-void SdrVirtObj::RecalcBoundRect(bool bForced)
+void SdrVirtObj::RecalcBoundRect(bool /*bForced*/)
 {
     aOutRect=rRefObj.GetCurrentBoundRect();
     aOutRect+=aAnchor;
