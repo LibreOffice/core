@@ -566,11 +566,11 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
         }
     }
-    catch(NoSuchElementException)
+    catch(const NoSuchElementException&)
     {
         throw IllegalArgumentException();
     }
-    catch(WrappedTargetException &e)
+    catch(const WrappedTargetException&)
     {
         throw;
     }
@@ -678,7 +678,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
         if ( xUnoTunnel.is() )
             pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
     }
-    catch(Exception)
+    catch(const Exception&)
     {
     }
     return pContent;
