@@ -146,7 +146,7 @@ private:
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
