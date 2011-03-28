@@ -230,7 +230,7 @@ namespace
 
                 _xReportControlFormat->setFontDescriptor(aFontDescriptor);
             }
-            catch(beans::UnknownPropertyException&)
+            catch(const beans::UnknownPropertyException&)
             {
             }
         }
@@ -362,7 +362,7 @@ void OReportController::disposing()
         ::comphelper::disposeComponent( m_xRowSetMediator );
         ::comphelper::disposeComponent( m_xFormatter );
     }
-    catch(uno::Exception&)
+    catch(const uno::Exception&)
     {
         OSL_FAIL("Exception caught while disposing row sets.");
     }
@@ -384,7 +384,7 @@ void OReportController::disposing()
             m_pReportControllerObserver->Clear();
             m_pReportControllerObserver->release();
         }
-        catch ( const uno::Exception& )
+        catch(const uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -405,7 +405,7 @@ void OReportController::disposing()
         m_xFrameLoader.clear();
         m_xReportEngine.clear();
     }
-    catch(uno::Exception&)
+    catch(const uno::Exception&)
     {
     }
     if ( getDesignView() )
@@ -826,7 +826,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                         const uno::Reference< report::XReportControlModel> xControlModel(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                         aReturn.bEnabled = !xControlModel.is();
                     }
-                    catch(beans::UnknownPropertyException&)
+                    catch(const beans::UnknownPropertyException&)
                     {
                     }
                 else
@@ -2106,7 +2106,7 @@ void OReportController::impl_onModifyChanged()
             m_xReportDefinition->setModified( impl_isModified() );
         DBSubComponentController::impl_onModifyChanged();
     }
-    catch(uno::Exception)
+    catch(const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2509,7 +2509,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             }
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2827,7 +2827,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
             }
         }
     }
-    catch ( const IllegalArgumentException& e )
+    catch(const IllegalArgumentException&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2919,7 +2919,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                 Reference<XFrame> xFrame = getXFrame();
                 xModel = m_xReportEngine->createDocumentAlive(xFrame);
             }
-            catch( const sdbc::SQLException& /*e*/ )
+            catch(const sdbc::SQLException&)
             {   // SQLExceptions and derived exceptions must not be translated
                 aInfo = ::cppu::getCaughtException();
             }
@@ -3000,7 +3000,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition.get(), xRowSetProp, aPropertyMediation );
         m_xRowSet = xRowSet;
     }
-    catch( const uno::Exception& )
+    catch(const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3035,7 +3035,7 @@ void OReportController::insertGraphic()
             createControl(aArgs,xSection,::rtl::OUString(),OBJ_DLG_IMAGECONTROL);
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3405,7 +3405,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         // definition is bound to - which is not supported for the parameters case, since we
                         // can retrieve parameters from the RowSet only.
                     }
-                    catch( const Exception& )
+                    catch(const Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -3609,7 +3609,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
         }
     }
-    catch( const Exception& )
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3895,7 +3895,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
             xGroups->removeByIndex( nPos );
         }
     }
-    catch( const Exception& )
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -4113,7 +4113,7 @@ void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty
                     else if ( !comphelper::compare(aTemp,aTemp2) )
                         break;
                 }
-                catch(beans::UnknownPropertyException&)
+                catch(const beans::UnknownPropertyException&)
                 {
                     _rState.bEnabled = sal_False;
                 }
@@ -4157,7 +4157,7 @@ sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const un
                     ;
             }
         }
-        catch(uno::Exception&)
+        catch(const uno::Exception&)
         {
         }
     }
@@ -4249,7 +4249,7 @@ void OReportController::openZoomDialog()
                 impl_zoom_nothrow();
             }
         }
-        catch(uno::Exception&)
+        catch(const uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -4305,15 +4305,13 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
                     aResult = xTransfer->getPreferredVisualRepresentation( _nAspect );
                 }
             }
-            catch( uno::Exception & ex )
+            catch(const uno::Exception&)
             {
-                (void)ex;
             }
             m_xReportEngine->setMaxRows(nOldMaxRows);
         }
-        catch( uno::Exception & ex )
+        catch(const uno::Exception&)
         {
-            (void)ex;
         }
         m_bInGeneratePreview = false;
     }
