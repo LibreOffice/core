@@ -221,12 +221,11 @@ public class UndoManager
         events.replaceByName( "OnViewCreated", scriptDescriptor );
 
         // The below doesn't work: event notification is broken in m96, see http://www.openoffice.org/issues/show_bug.cgi?id=116313
-/*        m_callbackCalled = false;
+        m_callbackCalled = false;
         m_currentDocument.getCurrentView().dispatch( ".uno:NewWindow" );
         assertTrue( "triggering an event did not work as expected - basic script not called", m_callbackCalled );
         // same as above: The script didn't close the context, but the OOo framework should have
         assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
- */
 
         // .............................................................................................................
         // scenario 4: let the script enter an Undo context, but not close it, as usual.

@@ -51,6 +51,8 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/sfx2/DocumentInfo \
     sfx2/qa/complex/sfx2/StandaloneDocumentInfo \
     sfx2/qa/complex/sfx2/UndoManager \
+    sfx2/qa/complex/sfx2/JUnitBasedTest \
+    sfx2/qa/complex/sfx2/DocumentEvents \
     sfx2/qa/complex/sfx2/standalonedocinfo/StandaloneDocumentInfoTest \
     sfx2/qa/complex/sfx2/standalonedocinfo/TestHelper \
     sfx2/qa/complex/sfx2/standalonedocinfo/Test01 \
@@ -69,6 +71,7 @@ $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
     complex.sfx2.DocumentProperties \
     complex.sfx2.DocumentMetadataAccess \
     complex.sfx2.UndoManager \
+    complex.sfx2.DocumentEvents \
 ))
 # #i115674# fails currently: misses some OnUnfocus event
 #	complex.sfx2.GlobalEventBroadcaster \
