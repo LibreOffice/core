@@ -305,6 +305,8 @@ namespace svt { namespace table
         virtual bool                isRowSelected( RowPos i_row ) const;
 
 
+        long                        appFontWidthToPixel( long const i_appFontUnits ) const;
+
         TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
         const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
         ScrollBar* getHorzScrollbar();
@@ -384,26 +386,45 @@ namespace svt { namespace table
         */
         void        impl_ni_updateCachedTableMetrics();
 
-        /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
+        /** does a relayout of the table control
 
-            The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            Column widths, and consequently the availability of the vertical and horizontal scrollbar, are updated
+            with a call to this method.
 
             @param i_assumeInflexibleColumnsUpToIncluding
                 the index of a column up to which all columns should be considered as inflexible, or
                 <code>COL_INVALID</code>.
         */
-        void        impl_ni_updateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
+        void        impl_ni_relayout( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
 
-        /** updates the scrollbars of the control
+        /** calculates the new width of our columns, taking into account their min and max widths, and their relative
+            flexibility.
 
-            The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            @param i_assumeInflexibleColumnsUpToIncluding
+                the index of a column up to which all columns should be considered as inflexible, or
+                <code>COL_INVALID</code>.
 
-            This includes both the existence of the scrollbars, and their
-            state.
+            @param i_assumeVerticalScrollbar
+                controls whether or not we should assume the presence of a vertical scrollbar. If <true/>, and
+                if the model has a VerticalScrollbarVisibility != ScrollbarShowNever, the method will leave
+                space for a vertical scrollbar.
+
+            @return
+                the overall width of the grid, which is available for columns
         */
-        void        impl_ni_updateScrollbars();
+        long        impl_ni_calculateColumnWidths(
+                        ColPos const i_assumeInflexibleColumnsUpToIncluding,
+                        bool const i_assumeVerticalScrollbar,
+                        ::std::vector< long >& o_newColWidthsPixel
+                    ) const;
+
+        /** positions all child windows, e.g. the both scrollbars, the corner window, and the data window
+        */
+        void        impl_ni_positionChildWindows(
+                        Rectangle const & i_dataCellPlayground,
+                        bool const i_verticalScrollbar,
+                        bool const i_horizontalScrollbar
+                    );
 
         /** scrolls the view by the given number of rows
 
