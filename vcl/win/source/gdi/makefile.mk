@@ -58,7 +58,8 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salnativewidgets-luna.obj
 
 
-EXCEPTIONSFILES=	$(SLO)$/salprn.obj
+EXCEPTIONSFILES=	$(SLO)$/salprn.obj \
+					$(SLO)$/salgdi2.obj
 
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 CFLAGS+=-DENABLE_GRAPHITE

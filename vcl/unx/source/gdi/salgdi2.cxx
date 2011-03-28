@@ -44,6 +44,7 @@
 #include "vcl/salbtype.hxx"
 #include "vcl/printergfx.hxx"
 #include "vcl/bmpacc.hxx"
+#include "vcl/outdata.hxx"
 
 #undef SALGDI2_TESTTRANS
 
@@ -627,7 +628,22 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     {
         // set foreground/background values for 1Bit bitmaps
         XGetGCValues( pXDisp, aGC, nValues, &aOldVal );
-        aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
+
+        aNewVal.foreground = rColMap.GetWhitePixel();
+        aNewVal.background = rColMap.GetBlackPixel();
+
+        //fdo#33455 handle 1 bit depth pngs with palette entries
+        //to set fore/back colors
+        if (const BitmapBuffer* pBitmapBuffer = const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(true))
+        {
+            const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
+            if (rPalette.GetEntryCount() == 2)
+            {
+                aNewVal.foreground = rColMap.GetPixel(ImplColorToSal(rPalette[0]));
+                aNewVal.background = rColMap.GetPixel(ImplColorToSal(rPalette[1]));
+            }
+        }
+
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
