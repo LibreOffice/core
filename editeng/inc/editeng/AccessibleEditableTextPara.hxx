@@ -55,7 +55,7 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::PartialWeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
