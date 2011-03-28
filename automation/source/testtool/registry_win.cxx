@@ -36,6 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
+#include <windows.h>
 #include "registry_win.hxx"
 #include <osl/thread.h>
 #include <sal/macros.h>
