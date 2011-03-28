@@ -86,6 +86,10 @@ public:
     UnxFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
     virtual ~UnxFilePicker();
 
+    // XComponent
+
+    using cppu::WeakComponentImplHelperBase::disposing;
+
     // XFilePickerNotifier
 
     virtual void SAL_CALL       addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener ) throw( ::com::sun::star::uno::RuntimeException );
