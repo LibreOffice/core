@@ -926,11 +926,14 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
         sal_uIntPtr nTell = rStream.Tell() % PAGE_SIZE;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
         sal_uIntPtr nRemainSize = nBufferSize - nTell;
-        char* pEmptyData = new char[nRemainSize];
-        memset(pEmptyData,0x00,nRemainSize);
-        rStream.Write((sal_uInt8*)pEmptyData,nRemainSize);
-        rStream.Seek(nTell);
-        delete [] pEmptyData;
+        if ( nRemainSize <= nBufferSize )
+        {
+            char* pEmptyData = new char[nRemainSize];
+            memset(pEmptyData,0x00,nRemainSize);
+            rStream.Write((sal_uInt8*)pEmptyData,nRemainSize);
+            rStream.Seek(nTell);
+            delete [] pEmptyData;
+        }
     }
     return rStream;
 }

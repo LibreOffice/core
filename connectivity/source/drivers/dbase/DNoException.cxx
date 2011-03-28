@@ -242,7 +242,7 @@ void ODbaseTable::AllocBuffer()
     }
 
     // Falls noch kein Puffer vorhanden: allozieren:
-    if (m_pBuffer == NULL && nSize)
+    if (m_pBuffer == NULL && nSize > 0)
     {
         m_nBufferSize = nSize;
         m_pBuffer       = new sal_uInt8[m_nBufferSize+1];
@@ -504,11 +504,14 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
         sal_uIntPtr nTell = rStream.Tell() % 512;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
         sal_uIntPtr nSize = nBufferSize - nTell;
-        char* pEmptyData = new char[nSize];
-        memset(pEmptyData,0x00,nSize);
-        rStream.Write((sal_uInt8*)pEmptyData,nSize);
-        rStream.Seek(nTell);
-        delete [] pEmptyData;
+        if ( nSize <= nBufferSize )
+        {
+            char* pEmptyData = new char[nSize];
+            memset(pEmptyData,0x00,nSize);
+            rStream.Write((sal_uInt8*)pEmptyData,nSize);
+            rStream.Seek(nTell);
+            delete [] pEmptyData;
+        }
     }
     return rStream;
 }

@@ -159,7 +159,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         }
         ++nRowCount;
     }
-    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding));
+    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding) && !m_pFileStream->IsEof());
 
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
@@ -494,7 +494,8 @@ String OFlatTable::getEntry()
             // name and extension have to coincide
             if ( m_pConnection->matchesExtension( sExt ) )
             {
-                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                if ( sExt.getLength() )
+                    sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
                 if ( sName == m_Name )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
