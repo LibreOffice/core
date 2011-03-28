@@ -30,6 +30,8 @@
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
+#include <prewin.h>
+#include <postwin.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
