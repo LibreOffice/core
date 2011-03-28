@@ -61,6 +61,7 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <rtl/string.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -343,7 +344,9 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (pWorkWindow->IsMinimized())
         return;
 
-    pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+    ::rtl::OUString sOldWindowState = ::rtl::OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
+    if ( sOldWindowState != sWindowState )
+        pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
 
     aSolarLock.clear();
     // <- SOLAR SAFE ------------------------

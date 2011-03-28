@@ -98,6 +98,8 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pTopFrames( new SfxFrameArr_Impl ),
         pInitLinkList(0),
         pMatcher( 0 ),
+        pBasicResMgr( 0 ),
+        pSvtResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
         pPool(0),

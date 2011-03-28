@@ -27,19 +27,6 @@
 
 #include <sfx2/sfx.hrc>
 
-String STR_STYLE_FILTER_USED
-{
-    Text [ en-US ] = "Applied Styles" ;
-};
-String STR_STYLE_FILTER_USERDEF
-{
-    Text [ en-US ] = "Custom Styles" ;
-};
-String STR_STYLE_FILTER_ALL
-{
-    Text [ en-US ] = "All Styles" ;
-};
-
 String STR_ACCTITLE_PRODUCTIVITYTOOLS
 {
     Text [ en-US ] = "%PRODUCTNAME";
