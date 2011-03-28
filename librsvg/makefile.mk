@@ -49,6 +49,8 @@ TARFILE_MD5=d7a242ca43e33e1b63d3073f9d46a6a8
 
 .IF "$(OS)" == "MACOSX" || "$(OS)" == "WNT"
 
+.IF "$(OS)" == "MACOSX"
+
 PATCH_FILES=librsvg-2.32.1.patch
 
 .IF "$(LIBXML_LIBS)" == ""
@@ -70,17 +72,13 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  LIBCROCO_LIBS=-lcroco-0.6
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external$/pango-1.0 -I$(SOLARINCDIR)$/cairo" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)"
-.IF "$(OS)" == "MACOSX"
+
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
-.ENDIF
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-
-
-.IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=.libs$/librsvg-2.2.dylib
 
@@ -88,7 +86,20 @@ OUT2INC+=librsvg-enum-types.h
 OUT2INC+=librsvg-features.h
 OUT2INC+=rsvg-cairo.h
 OUT2INC+=rsvg.h
+
 .ELIF "$(OS)"=="WNT"
+
+PATCH_FILES=librsvg-2.32.1-win32.patch
+ADDITIONAL_FILES=config.h makefile.mk
+
+BUILD_DIR=.
+BUILD_ACTION=dmake
+
+OUT2INC+=librsvg-enum-types.h
+OUT2INC+=librsvg-features.h
+OUT2INC+=rsvg-cairo.h
+OUT2INC+=rsvg.h
+
 .ENDIF
 
 .ENDIF
@@ -98,4 +109,3 @@ OUT2INC+=rsvg.h
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-

@@ -10,3 +10,5 @@ mkdir: %_DEST%\inc%_EXT%\external\librsvg-2.0\librsvg
 ..\%__SRC%\lib\librsvg-2.2.dylib %_DEST%\lib%_EXT%\librsvg-2.2.dylib
 symlink: %_DEST%\lib%_EXT%\librsvg-2.2.dylib %_DEST%\lib%_EXT%\librsvg-2.dylib
 
+..\%__SRC%\lib\ilibrsvg-2-2.lib %_DEST%\lib%_EXT%\librsvg-2-2.lib
+..\%__SRC%\bin\librsvg-2-2.dll %_DEST%\bin%_EXT%\librsvg-2-2.dll
