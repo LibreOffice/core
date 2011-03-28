@@ -143,7 +143,7 @@ using namespace rtl;
 
 struct SystemParentData;
 
-class VCL_DLLPUBLIC SalFrame : public vcl::DeletionNotifier
+class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
 {
     // the VCL window corresponding to this frame
     Window*                 m_pWindow;

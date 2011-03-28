@@ -152,6 +152,7 @@ struct DebugData
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintTestTool;
+    DbgPrintLine            pDbgAbort;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
     PointerList*            pProfList;
@@ -163,9 +164,10 @@ struct DebugData
 
     DebugData()
         :bInit( sal_False )
-        ,pDbgPrintMsgBox( sal_False )
+        ,pDbgPrintMsgBox( NULL )
         ,pDbgPrintWindow( NULL )
         ,pDbgPrintTestTool( NULL )
+        ,pDbgAbort( NULL )
         ,pProfList( NULL )
         ,pXtorList( NULL )
         ,pDbgTestSolarMutex( NULL )
@@ -420,7 +422,7 @@ namespace
     {
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
-            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "abort"
         };
         lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
     }
@@ -471,25 +473,29 @@ namespace
         if ( nValueLen )
             *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? sal_True : sal_False;
     }
-    void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
+    void lcl_matchOutputChannel( sal_Char const * i_buffer, sal_uIntPtr* o_value )
     {
+        if ( i_buffer == NULL )
+            return;
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
-            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "abort"
         };
+        for ( sal_uIntPtr name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+        {
+            if ( strcmp( i_buffer, names[ name ] ) == 0 )
+            {
+                *o_value = name;
+                return;
+            }
+        }
+    }
+    void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
+    {
         sal_Char aBuf[20];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
-        {
-            for ( sal_uIntPtr name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
-            {
-                if ( strcmp( aBuf, names[ name ] ) == 0 )
-                {
-                    *_out_pnValue = name;
-                    return;
-                }
-            }
-        }
+            lcl_matchOutputChannel( aBuf, _out_pnValue );
     }
     void lcl_tryReadConfigFlag( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnAllFlags, sal_uIntPtr _nCheckFlag )
     {
@@ -810,6 +816,13 @@ static DebugData* GetDebugData()
             }
 
             FileClose( pIniFile );
+        }
+        else
+        {
+            lcl_matchOutputChannel( getenv( "DBGSV_TRACE_OUT" ), &aDebugData.aDbgData.nTraceOut );
+            lcl_matchOutputChannel( getenv( "DBGSV_WARNING_OUT" ), &aDebugData.aDbgData.nWarningOut );
+            lcl_matchOutputChannel( getenv( "DBGSV_ERROR_OUT" ), &aDebugData.aDbgData.nErrorOut );
+
         }
 
         getcwd( aCurPath, sizeof( aCurPath ) );
@@ -1197,6 +1210,10 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
             case DBG_FUNC_SETPRINTTESTTOOL:
                 pDebugData->pDbgPrintTestTool = (DbgPrintLine)(long)pParam;
+                break;
+
+            case DBG_FUNC_SET_ABORT:
+                pDebugData->pDbgAbort = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SAVEDATA:
@@ -1706,10 +1723,11 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
             nOut = DBG_OUT_DEBUGGER;
     }
 
-    if ( nOut == DBG_OUT_COREDUMP )
+    if ( nOut == DBG_OUT_ABORT )
     {
-        if ( !ImplCoreDump() )
-            nOut = DBG_OUT_DEBUGGER;
+        if ( pData->pDbgAbort != NULL )
+            pData->pDbgAbort( aBufOut );
+        abort();
     }
 
     if ( nOut == DBG_OUT_DEBUGGER )

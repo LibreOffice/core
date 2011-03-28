@@ -104,7 +104,7 @@ protected:
     UnoControlModelHolderList::iterator         ImplFindElement( const ::rtl::OUString& rName );
 
 public:
-                        ControlModelContainerBase();
+                        ControlModelContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
                         ~ControlModelContainerBase();
 
@@ -232,8 +232,11 @@ protected:
     void        ImplUpdateResourceResolver();
     void        ImplStartListingForResourceEvents();
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > Impl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
-public:
+
     ControlContainerBase();
+
+public:
+    ControlContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ~ControlContainerBase();
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )

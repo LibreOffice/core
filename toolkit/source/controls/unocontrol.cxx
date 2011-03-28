@@ -52,6 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -90,17 +91,6 @@ static const LanguageDependentProp aLanguageDependentProp[] =
     { "StringItemList", 14 },
     { 0, 0                 }
 };
-
-WorkWindow* lcl_GetDefaultWindow()
-{
-    static WorkWindow* pW = NULL;
-    if ( !pW )
-    {
-        pW = new WorkWindow( NULL, 0 );
-        pW->EnableChildTransparentMode();
-    }
-    return pW;
-}
 
 static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
 {
@@ -164,7 +154,26 @@ struct UnoControl_Data
 //  ----------------------------------------------------
 DBG_NAME( UnoControl )
 UnoControl::UnoControl()
-    : maDisposeListeners( *this )
+    :maContext( ::comphelper::getProcessServiceFactory() )
+    ,maDisposeListeners( *this )
+    ,maWindowListeners( *this )
+    ,maFocusListeners( *this )
+    ,maKeyListeners( *this )
+    ,maMouseListeners( *this )
+    ,maMouseMotionListeners( *this )
+    ,maPaintListeners( *this )
+    ,maModeChangeListeners( GetMutex() )
+    ,mpData( new UnoControl_Data )
+{
+    DBG_CTOR( UnoControl, NULL );
+    OSL_ENSURE( false, "UnoControl::UnoControl: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+}
+
+UnoControl::UnoControl( const Reference< XMultiServiceFactory >& i_factory )
+    : maContext( i_factory )
+    , maDisposeListeners( *this )
     , maWindowListeners( *this )
     , maFocusListeners( *this )
     , maKeyListeners( *this )
@@ -218,14 +227,15 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
         Reference< XControl > xMe;
         OWeakAggObject::queryInterface( ::getCppuType( &xMe ) ) >>= xMe;
 
-        WorkWindow* pWW;
+        Window* pParentWindow( NULL );
         {
             osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-            pWW = lcl_GetDefaultWindow();
+            pParentWindow = dynamic_cast< Window* >( Application::GetDefaultDevice() );
+            ENSURE_OR_THROW( pParentWindow != NULL, "could obtain a default parent window!" );
         }
         try
         {
-            xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
+            xMe->createPeer( NULL, pParentWindow->GetComponentInterface( sal_True ) );
         }
         catch( const Exception& )
         {

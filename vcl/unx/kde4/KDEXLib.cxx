@@ -102,7 +102,7 @@ void KDEXLib::Init()
     //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 1;
-    USHORT nIdx;
+    int nIdx;
     vos::OExtCommandLine aCommandLine;
     int nParams = aCommandLine.getCommandArgCount();
     rtl::OString aDisplay;

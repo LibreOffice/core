@@ -43,6 +43,7 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -864,6 +865,12 @@ namespace cppcanvas
                 rParms.mrParms.maFontLetterForm.is_initialized() ?
                 *rParms.mrParms.maFontLetterForm :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
+            aFontRequest.FontDescription.FontDescription.Proportion =
+                rParms.mrParms.maFontProportion.is_initialized() ?
+                *rParms.mrParms.maFontProportion :
+                (rFont.GetPitch() == PITCH_FIXED)
+                    ? rendering::PanoseProportion::MONO_SPACED
+                    : rendering::PanoseProportion::ANYTHING;
 
             LanguageType aLang = rFont.GetLanguage();
             aFontRequest.Locale = MsLangId::convertLanguageToLocale(aLang, false);
@@ -3007,7 +3014,8 @@ namespace cppcanvas
             if( rParams.maFontName.is_initialized() ||
                 rParams.maFontWeight.is_initialized() ||
                 rParams.maFontLetterForm.is_initialized() ||
-                rParams.maFontUnderline.is_initialized() )
+                rParams.maFontUnderline.is_initialized()  ||
+                rParams.maFontProportion.is_initialized() )
             {
                 ::cppcanvas::internal::OutDevState& rState = getState( aStateStack );
 

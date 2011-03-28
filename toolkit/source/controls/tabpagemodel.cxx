@@ -143,7 +143,8 @@ using namespace ::com::sun::star::util;
 //  ----------------------------------------------------
 //  class UnoControlTabPageModel
 //  ----------------------------------------------------
-UnoControlTabPageModel::UnoControlTabPageModel(Reference< XComponentContext >const & i_xCompContext) : m_xCompContext(i_xCompContext)
+UnoControlTabPageModel::UnoControlTabPageModel( Reference< XMultiServiceFactory > const & i_factory )
+    :ControlModelContainerBase( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_TITLE );
@@ -209,7 +210,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         ::rtl::OUString sURL;
         if ( !( rArguments[ 1 ] >>= sURL ))
             throw lang::IllegalArgumentException();
-        Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create(m_xCompContext,sURL);
+        Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create( maContext.getUNOContext(),sURL);
         if ( xDialogModel.is() )
         {
             Sequence< ::rtl::OUString> aNames = xDialogModel->getElementNames();
@@ -246,16 +247,6 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         m_nTabPageId = -1;
 }
 //===== Service ===============================================================
-Reference< XInterface > SAL_CALL UnoControlTabPageModel_CreateInstance( const Reference< XMultiServiceFactory >&  xServiceFactory)
-{
-    Reference < ::com::sun::star::beans::XPropertySet > xPropertySet (xServiceFactory, UNO_QUERY);
-    Any any = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii("DefaultContext"));
-    Reference < XComponentContext > xCompCtx;
-    any >>= xCompCtx;
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlTabPageModel>(xCompCtx) );
-    //return Reference < XInterface > ( (::cppu::OWeakObject* ) new UnoControlTabPageModel(xCompCtx));
-}
-
 ::rtl::OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.awt.tab.UnoControlTabPageModel");
@@ -272,8 +263,9 @@ Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames
 // = class UnoControlTabPage
 // ============================================================================
 
-UnoControlTabPage::UnoControlTabPage() :
-    m_bWindowListener(false)
+UnoControlTabPage::UnoControlTabPage( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoControlTabPage_Base( i_factory )
+    ,m_bWindowListener(false)
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
