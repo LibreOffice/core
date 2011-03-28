@@ -96,11 +96,15 @@ DBG_NAME(OUserAdminDlg)
     OUserAdminDlg::~OUserAdminDlg()
     {
         if ( m_bOwnConnection )
+        {
             try
             {
                 ::comphelper::disposeComponent(m_xConnection);
             }
-            catch(Exception){}
+            catch(const Exception&)
+            {
+            }
+        }
 
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
@@ -119,12 +123,12 @@ DBG_NAME(OUserAdminDlg)
                 throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
             }
         }
-        catch(const SQLException& e)
+        catch(const SQLException&)
         {
             ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
             return RET_CANCEL;
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
