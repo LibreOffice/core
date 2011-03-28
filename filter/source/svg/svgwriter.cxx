@@ -489,7 +489,7 @@ NMSP_RTL::OUString  SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly
     for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
         const Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
-        sal_uInt16          n = 1, nSize = rPoly.GetSize();
+        sal_uInt16          nSize = rPoly.GetSize();
 
         if( nSize > 1 )
         {
@@ -498,6 +498,7 @@ NMSP_RTL::OUString  SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly
             aPathData += aComma;
             aPathData += GetValueString( aPolyPoint.Y() );
             sal_Char nCurrentMode = 0;
+            sal_uInt16 n = 1;
 
             while( n < nSize )
             {
@@ -1072,7 +1073,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                      const NMSP_RTL::OUString* pStyle,
                                      Color aTextColor )
 {
-    long nLen = rText.Len(), i;
+    long nLen = rText.Len();
 
     if( nLen )
     {
@@ -1102,7 +1103,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             {
                 const double fFactor = (double) nWidth / aNormSize.Width();
 
-                for( i = 0; i < ( nLen - 1 ); i++ )
+                for(long i = 0; i < ( nLen - 1 ); i++ )
                     pDX[ i ] = FRound( pDX[ i ] * fFactor );
             }
         }
