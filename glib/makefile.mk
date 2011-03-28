@@ -72,6 +72,9 @@ OUT2LIB+=gmodule/.libs/libgmodule-2.0.0.dylib
 OUT2LIB+=gobject/.libs/libgobject-2.0.0.dylib
 OUT2LIB+=gthread/.libs/libgthread-2.0.0.dylib
 
+OUT2BIN+=gobject$/glib-mkenums
+OUT2BIN+=gobject$/.libs$/glib-genmarshal
+
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
 OUT2INC+=glib/glibconfig.h

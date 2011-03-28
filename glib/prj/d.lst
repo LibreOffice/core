@@ -10,6 +10,8 @@ symlink: %_DEST%\lib%_EXT%\libglib-2.0.0.dylib %_DEST%\lib%_EXT%\libglib-2.0.dyl
 ..\%__SRC%\lib\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib
 symlink: %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2.0.dylib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
+..\%__SRC%\bin\glib-mkenums %_DEST%\bin%_EXT%\glib-mkenums
+..\%__SRC%\bin\glib-genmarshal %_DEST%\bin%_EXT%\glib-genmarshal
 ..\%__SRC%\lib\gio-2.0.lib %_DEST%\lib%_EXT%\gio-2.0.lib
 ..\%__SRC%\lib\gmodule-2.0.lib %_DEST%\lib%_EXT%\gmodule-2.0.lib
 ..\%__SRC%\lib\gthread-2.0.lib %_DEST%\lib%_EXT%\gthread-2.0.lib
