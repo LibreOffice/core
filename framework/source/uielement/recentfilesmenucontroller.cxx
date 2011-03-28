@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+2/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +59,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 #ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#undef GradientStyle_RECT
 #include <odma_lib.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>
