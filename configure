@@ -11618,16 +11618,14 @@ echo "$as_me: error: gij does not know its java.home - use --with-jdk-home" >&2;
         if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-
-         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
+         if test "$JAVACOMPILER" != `readlink -f "$JAVACOMPILER" 2>/dev/null`; then
           # try to recover first by looking whether we have a alternatives
           # system as in Debian or newer SuSEs where following /usr/bin/javac
           # over /etc/alternatives/javac leads to the right bindir where we
           # just need to strip a bit away to get a valid JAVA_HOME
-            JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
-         elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
-            # maybe only one level of symlink (e.g. on Mac)
-            JAVA_HOME=$(readlink $JAVACOMPILER)
+          # maybe only one level of symlink (e.g. on Mac)
+          # Solaris 11 is even worse, because target is relative, so use -f
+            JAVA_HOME=`readlink -f $JAVACOMPILER`
          else
           # else warn
           { echo "$as_me:$LINENO: WARNING: JAVA_HOME is set to /usr - this is very likely to be incorrect" >&5
@@ -26038,7 +26036,11 @@ fi
 
 
 if test -z "$with_gnu_cp"; then
-   for ac_prog in gnucp cp
+   # check the place where the good stuff is hidden on Solaris...
+   if test -x /usr/gnu/bin/cp; then
+      GNUCP=/usr/gnu/bin/cp
+   else
+      for ac_prog in gnucp cp
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -26082,6 +26084,7 @@ fi
   test -n "$GNUCP" && break
 done
 
+   fi
    if test -z $GNUCP; then
       { { echo "$as_me:$LINENO: error: Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it" >&5
 echo "$as_me: error: Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it" >&2;}
@@ -30361,9 +30364,13 @@ echo $ECHO_N "checking Ant lib directory... $ECHO_C" >&6
                 if test -f $ANT_HOME/lib/ant/ant.jar; then
                     ANT_LIB="$ANT_HOME/lib/ant"
                 else
-                    { { echo "$as_me:$LINENO: error: Ant libraries not found!" >&5
+                   if test -f /usr/share/lib/ant/ant.jar; then
+                       ANT_LIB=/usr/share/lib/ant
+                   else
+                       { { echo "$as_me:$LINENO: error: Ant libraries not found!" >&5
 echo "$as_me: error: Ant libraries not found!" >&2;}
    { (exit 1); exit 1; }; }
+                   fi
                 fi
              fi
           fi
@@ -30465,7 +30472,11 @@ echo $ECHO_N "checking for JUnit 4... $ECHO_C" >&6
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
-            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           if test -e /usr/share/lib/java/junit.jar; then
+              OOO_JUNIT_JAR=/usr/share/lib/java/junit.jar
+           else
+              OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           fi
         fi
     else
         OOO_JUNIT_JAR=$with_junit
