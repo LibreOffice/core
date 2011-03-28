@@ -415,10 +415,14 @@ double SAL_CALL Player::getRate()
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
      throw( uno::RuntimeException )
 {
-    if( bSet && !isPlaybackLoop() )
-        g_atomic_int_inc( &mnLooping );
-    else if( !bSet && isPlaybackLoop() )
-        g_atomic_int_dec_and_test( &mnLooping );
+    if (bSet)
+    {
+        g_atomic_int_compare_and_exchange(&mnLooping, 0, 1);
+    }
+    else
+    {
+        g_atomic_int_compare_and_exchange(&mnLooping, 1, 0);
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -810,16 +814,12 @@ void Player::implHandleNewPadFunc( GstElement* pElement,
 // ------------------------------------------------------------------------------
 gboolean Player::idle()
 {
-    // test if main loop should quit and set flag mnQuit to 1
-    bool bQuit = g_atomic_int_compare_and_exchange( &mnQuit, 1, 1 );
+    // test if main loop should quit by comparing with 1
+    // and set flag mnQuit to 0 so we call g_main_loop_quit exactly once
+    bool const bQuit = g_atomic_int_compare_and_exchange( &mnQuit, 1, 0 );
 
     if( bQuit )
     {
-        // set mnQuit back to 0 to avoid mutiple g_main_loop_quit calls
-        // in case Player::idle() is called again later;
-        // the flag should have been set only once within Ctor called from
-        // the application thread
-        g_atomic_int_dec_and_test( &mnQuit );
         g_main_loop_quit( mpLoop );
     }
 
