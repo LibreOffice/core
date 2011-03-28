@@ -103,8 +103,6 @@ public:
                         SfxFilterContainer( const String& rName );
                         ~SfxFilterContainer();
 
-//                      SfxFilterContainerFlags GetFlags() const;
-//  void                SetFlags( SfxFilterContainerFlags eFlags );
 
     const String        GetName() const;
 

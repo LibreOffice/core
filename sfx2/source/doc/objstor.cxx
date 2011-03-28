@@ -2821,7 +2821,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     // all values present in both itemsets will be overwritten by the new parameters
     if( pParams )
         pMergedParams->Put( *pParams );
-    //DELETEZ( pParams );
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )

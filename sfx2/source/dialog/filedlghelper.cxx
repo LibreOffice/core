@@ -2754,8 +2754,6 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
 
 ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              const String& rFact,

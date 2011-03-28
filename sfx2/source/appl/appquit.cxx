@@ -153,13 +153,6 @@ void SfxApplication::Deinitialize()
 
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
-/* This leak is intended !
-   Otherwise the TestTool cant use .uno:QuitApp ...
-   because every destructed ItemSet work's on an already
-   released pool pointer .-)
-
-    NoChaos::ReleaseItemPool();
-*/
     pAppData_Impl->pPool = NULL;
 }
 

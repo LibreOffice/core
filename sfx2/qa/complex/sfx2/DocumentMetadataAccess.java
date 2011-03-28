@@ -127,10 +127,6 @@ public class DocumentMetadataAccess
     XRepositorySupplier xRS;
     XDocumentMetadataAccess xDMA;
 
-//    public String[] getTestMethodNames ()
-//    {
-//        return new String[] { "check", "checkRDFa" };
-//    }
     /**
      * The test parameters
      */
@@ -522,11 +518,6 @@ public class DocumentMetadataAccess
             PropertyValue file = new PropertyValue();
             file.Name = "URL";
             file.Value = tempDir + "TESTDMA.odt";
-            /*
-            PropertyValue baseURL = new PropertyValue();
-            baseURL.Name = "DocumentBaseURL";
-            baseURL.Value = tempDir + "TMP.odt";
-            */
             PropertyValue mimetype = new PropertyValue();
             mimetype.Name = "MediaType";
             mimetype.Value = "application/vnd.oasis.opendocument.text";
@@ -960,39 +951,14 @@ public class DocumentMetadataAccess
         return blank != null;
     }
 
-/*
-    static class Statement implements XStatement
-    {
-        XResource m_Subject;
-        XResource m_Predicate;
-        XNode m_Object;
-        XURI m_Graph;
-
-        Statement(XResource i_Subject, XResource i_Predicate, XNode i_Object,
-            XURI i_Graph)
-        {
-            m_Subject = i_Subject;
-            m_Predicate = i_Predicate;
-            m_Object = i_Object;
-            m_Graph = i_Graph;
-        }
-
-        public XResource getSubject() { return m_Subject; }
-        public XResource getPredicate() { return m_Predicate; }
-        public XNode getObject() { return m_Object; }
-        public XURI getGraph() { return m_Graph; }
-    }
-*/
 
     static Statement[] toSeq(XEnumeration i_Enum) throws Exception
     {
         java.util.Collection c = new java.util.Vector();
         while (i_Enum.hasMoreElements()) {
             Statement s = (Statement) i_Enum.nextElement();
-//System.out.println("toSeq: " + s.getSubject().getStringValue() + " " + s.getPredicate().getStringValue() + " " + s.getObject().getStringValue() + ".");
             c.add(s);
         }
-//        return (Statement[]) c.toArray();
         // java sucks
         Object[] arr = c.toArray();
         Statement[] ret = new Statement[arr.length];
@@ -1009,7 +975,6 @@ public class DocumentMetadataAccess
             XNode[] s = (XNode[]) i_Enum.nextElement();
             c.add(s);
         }
-//        return (XNode[][]) c.toArray();
         Object[] arr = c.toArray();
         XNode[][] ret = new XNode[arr.length][];
         for (int i = 0; i < arr.length; ++i) {

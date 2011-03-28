@@ -178,7 +178,6 @@ public:
 };
 
 //------------------------------------------------------------------
-//------------------------------------------------------------------
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \

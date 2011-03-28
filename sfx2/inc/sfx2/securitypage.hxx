@@ -34,7 +34,6 @@
 #include <memory>
 
 
-//////////////////////////////////////////////////////////////////////
 
 struct SfxSecurityPage_Impl;
 
@@ -53,7 +52,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
-//////////////////////////////////////////////////////////////////////
 
 #endif // #ifndef _SECURITYPAGE_HXX_
 

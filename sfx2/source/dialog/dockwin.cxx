@@ -1212,8 +1212,6 @@ void SfxDockingWindow::Initialize_Impl()
         // remember floating size for calculating alignment and tracking rectangle
         SetFloatingSize( pFloatWin->GetSizePixel() );
 
-        // some versions of VCL didn't call resize in the current situation
-        //Resize();
     }
 
     // allow calling of docking handlers

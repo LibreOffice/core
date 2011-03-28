@@ -109,7 +109,6 @@ public:
     SfxVirtualMenu* GetPopupMenu( sal_uInt16 nId ) const;
     String          GetItemText( sal_uInt16 nId ) const;
 
-    //void            InvalidateKeyCodes();
 
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
@@ -138,7 +137,6 @@ inline sal_uInt16 SfxVirtualMenu::GetItemCount() const
 }
 //--------------------------------------------------------------------
 
-//
 
 inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
 {

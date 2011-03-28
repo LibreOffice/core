@@ -45,9 +45,7 @@ SfxResId::SfxResId( sal_uInt16 nId ) :
 }
 
 //============================================================================
-//
 // SfxSimpleResId Implementation.
-//
 //============================================================================
 
 SfxSimpleResId::SfxSimpleResId(sal_uInt16 nID):

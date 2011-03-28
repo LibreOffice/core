@@ -278,10 +278,6 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
 
                 if ( xDisp.is() )
                 {
-                    //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
-                    //aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-                    //aArs[0].Value <<= ::rtl::OUString( pDoc->GetMedium()->GetName() );
-                    //xDisp->dispatch( aURL, aArgs );
 
                     css::beans::PropertyValue aEventParam;
                     aEventParam.Value <<= aTrigger;
@@ -346,7 +342,6 @@ void SAL_CALL SfxEvents_Impl::disposing( const EVENTOBJECT& /*Source*/ ) throw( 
 }
 
 //--------------------------------------------------------------------------------------------------------
-//
 //--------------------------------------------------------------------------------------------------------
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
                                 REFERENCE< XEVENTBROADCASTER > xBroadcaster )
@@ -478,10 +473,6 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                     OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if (aBasMgrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
                         aLibrary = pDoc->GetTitle();
-/*
-                    else if ( aBasMgrName.getLength() )
-                        aLibrary = aBasMgrName;
- */
                     else
                         aLibrary = SFX_APP()->GetName();
 

@@ -499,7 +499,6 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
             SfxStyleFamily eOldFamily = pHisSheet->GetFamily();
 
             SfxStyleSheetBase* pExist = pMyPool->Find(aOldName, eOldFamily);
-            // sal_uInt16 nOldHelpId = pExist->GetHelpId(???);
             sal_Bool bUsedOrUserDefined;
             if( pExist )
             {

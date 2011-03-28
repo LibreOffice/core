@@ -57,7 +57,6 @@ using ::rtl::OUString;
 
 SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
 
-////////////////////////////////////////////////////////////
 
 
 /*
@@ -116,7 +115,6 @@ PopupMenu* SfxThesSubMenuControl::GetPopup() const
 }
 
 
-////////////////////////////////////////////////////////////
 
 OUString SfxThesSubMenuHelper::GetText(
     const String &rLookUpString,
@@ -234,7 +232,6 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     return aRes;
 }
 
-////////////////////////////////////////////////////////////
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

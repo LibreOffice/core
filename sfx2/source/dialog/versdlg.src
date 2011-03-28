@@ -33,7 +33,6 @@ ModalDialog DLG_VERSIONS
     Size = MAP_APPFONT ( 340 , 184 ) ;
     SvLook = TRUE ;
     Moveable = TRUE ;
-//! Closeable = TRUE ;
     FixedLine GB_NEWVERSIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

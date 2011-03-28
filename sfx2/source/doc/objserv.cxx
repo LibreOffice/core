@@ -1466,7 +1466,6 @@ void SfxObjectShell::SignScriptingContent()
     ImplSign( sal_True );
 }
 
-// static
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;

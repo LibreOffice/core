@@ -324,16 +324,6 @@ ToolBox RID_HELPBAR
         {
             Identifier = SID_HELP_ANNOTATE ;
         };
-        /*
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_DOWNLOAD ;
-        };
-*/
     };
 };
 
@@ -417,7 +407,6 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
 
 WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
 {
-    //HelpId = HID_WARNING_SECURITY_NO_HYPERLINKS;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
@@ -435,7 +424,6 @@ String RID_DESKTOP
 
 QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 {
-//    HelpId = HID_XMLSEC_QUERY_LOSINGSIGNATURE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
@@ -443,7 +431,6 @@ QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 
 QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 {
-//    HelpId = HID_XMLSEC_QUERY_SAVEBEFORESIGN;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
     Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
@@ -451,7 +438,6 @@ QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 
 InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 {
-//    HelpId = HID_XMLSEC_INFO_WRONGDOCFORMAT;
     Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
 };
 

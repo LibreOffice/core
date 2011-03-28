@@ -37,7 +37,6 @@
 
 
 class SfxViewShell;
-//class SfxProgress;
 struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------

@@ -844,13 +844,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         delete pURLList;
     }
 
-    if ( !rReq.IsSynchronCall() )
-    {
-        // now check wether a stream is already there
-        // if not: download it in a thread and restart the call
-        // return;
-    }
-
     sal_Bool bHyperlinkUsed = sal_False;
 
     if ( SID_OPENURL == nSID )

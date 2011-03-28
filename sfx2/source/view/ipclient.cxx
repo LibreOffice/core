@@ -199,19 +199,6 @@ throw (::com::sun::star::uno::RuntimeException)
     }
     else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
     {
-/*
-        uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
-        uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
-        if ( nHandle )
-        {
-            // currently needs SFX code
-            SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-            SfxWorkWindow *pWorkWin = pFrame->GetFrame().GetWorkWindow_Impl();
-            pWorkWin->UpdateObjectBars_Impl();
-        }
-*/
     }
 }
 

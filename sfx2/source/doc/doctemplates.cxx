@@ -2012,7 +2012,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     INetURLObject   aSourceObj( rSourceURL );
     if ( rTemplateName.equals( aTitle ) )
     {
-        /////////////////////////////////////////////////////
         // addTemplate will sometimes be called just to add an entry in the
         // hierarchy; the target URL and the source URL will be the same in
         // this scenario
@@ -2031,7 +2030,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
             return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
     }
 
-    /////////////////////////////////////////////////////
     // copy the template into the new group (targeturl)
 
     INetURLObject aTmpURL( aSourceObj );

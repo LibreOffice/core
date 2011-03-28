@@ -158,7 +158,6 @@ DockingWindow DLG_STYLE_DESIGNER
     Sizeable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-     // HideWhenDeactivate = TRUE;
     Border = TRUE ;
     Moveable = TRUE ;
     ToolBox TB_ACTION

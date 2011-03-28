@@ -979,7 +979,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( bControllersUnBound )
             BindControllers();
 
-        //InvalidateKeyCodes();
         pBindings->GetDispatcher_Impl()->Flush();
         for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
         {
@@ -1179,7 +1178,6 @@ void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const String& rText )
 
 //--------------------------------------------------------------------
 
-//
 
 void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
 {

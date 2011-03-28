@@ -54,7 +54,6 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////
 
 
 namespace
@@ -103,7 +102,6 @@ namespace
     }
 }
 
-//////////////////////////////////////////////////////////////////////
 
 static short lcl_GetPassword(
     Window *pParent,
@@ -143,7 +141,6 @@ static bool lcl_IsPasswordCorrect( const String &rPassword )
     return bRes;
 }
 
-//////////////////////////////////////////////////////////////////////
 
 struct SfxSecurityPage_Impl
 {
@@ -483,7 +480,6 @@ IMPL_LINK( SfxSecurityPage_Impl, ChangeProtectionPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
 
 SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemSet )
 {
@@ -522,6 +518,5 @@ void SfxSecurityPage::Reset( const SfxItemSet & rItemSet )
         m_pImpl->Reset_Impl( rItemSet );
 }
 
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

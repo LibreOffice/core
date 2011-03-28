@@ -131,14 +131,6 @@ public:
 
 //--------------------------------------------------------------------
 
-// checks wheather this function is in the stack of active SfxObjectInterface
-
-//inline sal_Bool SfxStateCache::IsCallable( SfxDispatcher &rDispat )
-//{
-//  return GetSlotServer(rDispat) != 0;
-//}
-//--------------------------------------------------------------------
-
 // clears Cached-Item
 
 inline void SfxStateCache::ClearCache()

@@ -42,8 +42,6 @@ class Menu;
 
 namespace css = ::com::sun::star;
 
-////////////////////////////////////////////////////////////
-
 class SfxThesSubMenuControl : public SfxMenuControl
 {
     PopupMenu*          pMenu;
@@ -62,7 +60,6 @@ public:
     SFX_DECL_MENU_CONTROL();
 };
 
-////////////////////////////////////////////////////////////
 
 class SfxThesSubMenuHelper
 {
@@ -93,7 +90,6 @@ public:
     String  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
-////////////////////////////////////////////////////////////
 
 
 #endif

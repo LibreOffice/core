@@ -196,7 +196,6 @@ public:
     sal_Bool                    IsInModalMode() const;
     void                    Resize(sal_Bool bForce=sal_False);
 
-    //void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible );
     void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus=sal_True);
     void                        ToggleChildWindow(sal_uInt16);
     sal_Bool                        HasChildWindow(sal_uInt16);

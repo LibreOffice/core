@@ -415,7 +415,6 @@ public:
         return comp_CompatWriterDocProps::_getSupportedServiceNames();
     }
 };
-////////////////////////////////////////////////////////////////////////////
 
 bool operator== (const css::util::DateTime &i_rLeft,
                  const css::util::DateTime &i_rRight)
@@ -800,7 +799,6 @@ SfxDocumentMetaData::setMetaTextAndNotify(const char* i_name,
 SfxDocumentMetaData::getMetaAttr(const char* i_name, const char* i_attr) const
 //        throw (css::uno::RuntimeException)
 {
-//    checkInit();
     ::rtl::OUString name = ::rtl::OUString::createFromAscii(i_name);
     DBG_ASSERT(m_meta.find(name) != m_meta.end(),
         "SfxDocumentMetaData::getMetaAttr: not found");
@@ -1392,7 +1390,6 @@ void SAL_CALL SfxDocumentMetaData::init(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 
 SfxDocumentMetaData::SfxDocumentMetaData(
         css::uno::Reference< css::uno::XComponentContext > const & context)

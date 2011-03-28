@@ -1551,7 +1551,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
             if (xContent.is())
             {
                 bSuccess = sal_True;
-//                break;
             }
         }
         catch(const RuntimeException&)

@@ -90,7 +90,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
 
-// #110897#
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -881,13 +880,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             }
                             bEnabled = !pPrinter || !pPrinter->IsPrinting();
                         }
-                        if ( !bEnabled )
-                        {
-                            // will now be handled by requeing the request
-                            /*      rSet.DisableItem( SID_PRINTDOC );
-                                    rSet.DisableItem( SID_PRINTDOCDIRECT );
-                                    rSet.DisableItem( SID_SETUPPRINTER ); */
-                        }
                         break;
                     }
 
@@ -909,21 +901,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                                     !pImp->m_bPlugInsActive) );
                         break;
                     }
-                    /*
-                    // SelectionText
-                    case SID_SELECTION_TEXT:
-                    {
-                    rSet.Put( SfxStringItem( SID_SELECTION_TEXT, GetSelectionText() ) );
-                    break;
-                    }
-
-                    // SelectionTextExt
-                    case SID_SELECTION_TEXT_EXT:
-                    {
-                    rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(sal_True) ) );
-                    break;
-                    }
-                    */
                 case SID_STYLE_FAMILY :
                     {
                         rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
@@ -1004,10 +981,6 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
             pFrame->GetDispatcher()->Update_Impl( sal_True );
     pFrame->GetBindings().HidePopups(sal_False);
 
-    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
-    // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
-    // if ( xParentFrame.is() )
-    //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
 }
 
 //--------------------------------------------------------------------
@@ -1256,7 +1229,6 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
     DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
-    //if ( rBorder != GetBorderPixel())
     {
         GetViewFrame()->SetBorderPixelImpl( this, rBorder );
 
@@ -1347,8 +1319,6 @@ SfxViewShell::SfxViewShell
 {
     DBG_CTOR(SfxViewShell, 0);
 
-    //pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
-
     if ( pViewFrame->GetParentViewFrame() )
     {
         pImp->m_bPlugInsActive = pViewFrame->GetParentViewFrame()
@@ -1388,7 +1358,6 @@ SfxViewShell::~SfxViewShell()
         pImp->m_pController.clear();
     }
 
-    //DELETEZ( pImp->pPrinterCommandQueue );
     DELETEZ( pImp );
     DELETEZ( pIPClientList );
 }
@@ -2143,8 +2112,6 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
     sal_Bool bModified = sal_False;
 
     // create container from menu
-        // #110897#
-    // aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
         ::comphelper::getProcessServiceFactory(), &rIn, &rMenuIdentifier );
 
@@ -2275,7 +2242,6 @@ sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
 {
     pImp->aPrintOpts = rOpts;
-//      GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
 sal_Bool SfxViewShell::Escape()

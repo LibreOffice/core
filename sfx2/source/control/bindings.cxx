@@ -1420,9 +1420,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     else
         pRealSlot = pMsgSvr->GetSlot();
 
-    //
     // Note: pCache can be NULL!
-    //
 
     pFnc = pRealSlot->GetStateFnc();
 
@@ -1462,7 +1460,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         // Does the slot have to be updated at all?
         bool bInsert = pSiblingCache && pSiblingCache->IsControllerDirty();
 
-        // Bugfix #26161#: It is not enough to ask for the same shell!!
+        // It is not enough to ask for the same shell!!
         bool bSameMethod = pSiblingCache && pFnc == pSiblingFnc;
 
         // If the slot is a non-dirty master slot, then maybe one of his slaves

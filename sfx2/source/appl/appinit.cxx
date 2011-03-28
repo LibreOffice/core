@@ -267,7 +267,6 @@ bool SfxApplication::Initialize_Impl()
     // diverse Pointer
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
 
-    /////////////////////////////////////////////////////////////////
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);

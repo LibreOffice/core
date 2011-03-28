@@ -98,7 +98,6 @@ bool isValidNCName(::rtl::OUString const & i_rIdref)
         reinterpret_cast<const unsigned char*>(id.getStr()), 0));
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 static const char s_content [] = "content.xml";
 static const char s_styles  [] = "styles.xml";
@@ -108,7 +107,6 @@ static const char s_manifest[] = "manifest.rdf";
 static const char s_rdfxml  [] = "application/rdf+xml";
 static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
-////////////////////////////////////////////////////////////////////////////
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
@@ -128,7 +126,6 @@ static bool isReservedFile(::rtl::OUString const & i_rPath)
         || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_settings));
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 uno::Reference<rdf::XURI> createBaseURI(
     uno::Reference<uno::XComponentContext> const & i_xContext,
@@ -206,7 +203,6 @@ uno::Reference<rdf::XURI> createBaseURI(
     return rdf::URI::create(i_xContext, xBaseURI->getUriReference());
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 struct DocumentMetadataAccess_Impl
 {
@@ -293,7 +289,6 @@ splitXmlId(::rtl::OUString const & i_XmlId,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 static uno::Reference<rdf::XURI>
 getURIForStream(struct DocumentMetadataAccess_Impl& i_rImpl,
@@ -440,7 +435,6 @@ isPartOfType(struct DocumentMetadataAccess_Impl & i_rImpl,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 static ucb::InteractiveAugmentedIOException
 mkException( ::rtl::OUString const & i_rMessage,
@@ -800,7 +794,6 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 
 DocumentMetadataAccess::DocumentMetadataAccess(
         uno::Reference< uno::XComponentContext > const & i_xContext,

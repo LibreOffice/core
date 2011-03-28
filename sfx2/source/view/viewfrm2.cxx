@@ -192,9 +192,6 @@ String SfxViewFrame::UpdateTitle()
     if ( !pObjSh )
         return String();
 
-//    if  ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-//        // No UpdateTitle with Embedded-ObjectShell
-//        return String();
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
     String aURL;
@@ -260,11 +257,6 @@ String SfxViewFrame::UpdateTitle()
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
-    /* AS_TITLE
-    Window* pWindow = GetFrame()->GetTopWindow_Impl();
-    if ( pWindow && pWindow->GetText() != aTitle )
-        pWindow->SetText( aTitle );
-    */
     return aTitle;
 }
 

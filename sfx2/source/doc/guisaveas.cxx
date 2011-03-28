@@ -1765,7 +1765,6 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     return aDlg.Execute() == RET_OK;
 }
 
-// static
 void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
                                             ,const ::rtl::OUString& _sFilterName
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
@@ -1776,7 +1775,6 @@ void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
         _rArgsSequence = aModelData.GetMediaDescr().getAsConstPropertyValueList();
 }
 
-// static
 Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
     Window* pWin = 0;

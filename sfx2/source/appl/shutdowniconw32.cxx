@@ -41,9 +41,7 @@
 #undef WINVER
 #define WINVER 0x0400
 #define USE_APP_SHORTCUTS
-//
 // the systray icon is only available on windows
-//
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -739,7 +737,6 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
                                 IMAGE_ICON, cx, cy,
                                 LR_DEFAULTCOLOR | LR_SHARED );
 
-    // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
 
     HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
 

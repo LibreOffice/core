@@ -601,7 +601,6 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
 }
 
 //-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 class StyleTreeArr_Impl;
 
@@ -1782,7 +1781,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
     {
         DELETEZ(pTreeBox);
         aFmtLb.Show();
-        //                              aFilterLb.Enable();
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );

@@ -450,8 +450,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     return;
             }
 
-            // Evaluate Parameter
-            // sal_Bool bReload = sal_True;
             if ( rReq.IsAPI() )
             {
                 // Control through API if r/w or r/o
@@ -564,8 +562,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pSh->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
                     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), sal_True ) );
                     rReq.Done( sal_True );
-                    // if( nOpenMode == SFX_STREAM_READONLY )
-                    //    pMed->Close();
                     return;
                 }
             }
@@ -694,8 +690,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( xOldObj->IsDocShared() )
                     pNewSet->Put( SfxStringItem( SID_FILE_NAME, xOldObj->GetSharedFileURL() ) );
 
-                //pNewMedium = new SfxMedium( aURL, nMode, pMedium->IsDirect(), bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
-                //pNewSet = pNewMedium->GetItemSet();
                 if ( pURLItem )
                     pNewSet->Put( SfxStringItem( SID_REFERER, pMedium->GetName() ) );
                 else
@@ -703,8 +697,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 xOldObj->CancelTransfers();
 
-                // Real Reload
-                //pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
 
                 if ( pSilentItem && pSilentItem->GetValue() )
                     pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
@@ -795,12 +787,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                 aSet.Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
                             GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                         }
-                    }
-                    else
-                    {
-                        // an error handling should be done here?!
-                        // if ( !pSilentItem || !pSilentItem->GetValue() )
-                        //    ErrorHandler::HandleError( nLoadError );
                     }
                 }
                 else
@@ -1395,7 +1381,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     // via API from another thread (Java).
                     // According to MBA this call is not necessary anymore,
                     // because each document has its own SfxBindings.
-                    //
                     //GetDispatcher()->GetBindings()->InvalidateAll(sal_True);
                 }
 
@@ -1970,7 +1955,7 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
         if ( pViewFrame )
             xActive = pViewFrame->GetFrame().GetFrameInterface();
 
-        if ( xFrame.is() )      // PB: #74432# xFrame can be NULL
+        if ( xFrame.is() )      // xFrame can be NULL
             xFrame->setActiveFrame( xActive );
     }
 }

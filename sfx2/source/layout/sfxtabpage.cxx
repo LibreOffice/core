@@ -55,7 +55,6 @@ SfxTabPage::SfxTabPage (::Window *parent, char const* xml_file, char const* id, 
 
 void SfxTabPage::FreeResource ()
 {
-    //::Window::FreeResource ();
 }
 
 Size SfxTabPage::GetOptimalSize (WindowSizeType) const

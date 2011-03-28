@@ -991,7 +991,6 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
 //--------------------------------------------------------------------
 // Close-Handler: The Configuration of the ChildWindows is saved.
-//
 
 void SfxWorkWindow::Close_Impl()
 {

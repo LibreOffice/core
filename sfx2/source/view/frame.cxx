@@ -625,7 +625,6 @@ SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::
 
 int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
-//   return rItem.ISA( SfxUsrAnyItem ) && ((SfxUsrAnyItem&)rItem).aValue == aValue;
     return sal_False;
 }
 

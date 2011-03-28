@@ -388,7 +388,6 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
     String aWinData( aTmp );
     rInfo.aWinState = ByteString( String(aWinOpt.GetWindowState()), RTL_TEXTENCODING_UTF8 );
 
-    //ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if ( aWinData.Len() )
     {

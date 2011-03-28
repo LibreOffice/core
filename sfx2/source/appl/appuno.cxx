@@ -2170,7 +2170,6 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
 
         //=============================================================================
         //  Add new macro line to handle new service.
-        //
         //  !!! ATTENTION !!!
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================

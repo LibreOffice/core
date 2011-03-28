@@ -83,11 +83,6 @@ sal_Bool SfxControllerItem::IsBound() const
     return pNext != this;
 }
 
-//--------------------------------------------------------------------
-// returns the associated function-id or 0 if none
-
-// sal_uInt16 SfxControllerItem::GetId() const;
-
 //====================================================================
 // registeres with the id at the bindings
 

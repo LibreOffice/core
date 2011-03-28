@@ -527,7 +527,6 @@ TabPage TP_CUSTOMPROPERTIES
         Size = MAP_APPFONT ( 248 , 141 ) ;
         Border = TRUE;
         DialogControl = TRUE;
-        //OutputSize = TRUE ;
         Window WIN_PROPERTIES
         {
             OutputSize = TRUE ;

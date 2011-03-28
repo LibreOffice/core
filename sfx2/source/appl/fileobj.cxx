@@ -351,7 +351,6 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             if( !pDownLoadData->aGrf.GetContext() )
             {
                 xMed->SetDataAvailableLink( Link() );
-//              xMed->SetDoneLink( Link() );
                 delete pDownLoadData, pDownLoadData = 0;
                 bDataReady = sal_True;
                 bWaitForData = sal_False;

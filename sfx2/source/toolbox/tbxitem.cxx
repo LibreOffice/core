@@ -299,7 +299,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     // sub toolbar while we get disposed. Therefore we have to dispose
     // it now! Not doing so would result in a crash. The sub toolbar
     // gets destroyed asynchronously and would access a non-existing
-    // parent toolbar! See #126569#
+    // parent toolbar!
     if ( pImpl->mxUIElement.is() )
     {
         Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
@@ -1855,16 +1855,6 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, Execute
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-/*
-}
-    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
-    {
-        throw exFilters;
-    }
-    catch (const Exception& )
-    {
-    }
-*/
     delete pExecuteInfo;
     return 0;
 }

@@ -129,28 +129,6 @@ public:
 //is apparently used only in SfxPickList/SfxFrameLoader
 DECL_OBJHINT( SfxStringHint, String );
 
-/*
-typedef SfxPoolItem* (*SfxItemCreateFunc)();
-class SfxItemFactory_Impl;
-class SfxItemFactoryList
-{
-    List aList;
-public:
-    ~SfxItemFactoryList();
-
-    SfxItemFactory_Impl* GetFactory_Impl( const SvGlobalName& rName ) const;
-    SfxItemFactory_Impl* GetFactory_Impl( TypeId ) const;
-    const SvGlobalName* GetGlobalName( const SfxPoolItem* pItem ) const;
-    SfxPoolItem* Create(
-        const SvGlobalName& rName, sal_uInt16 nId, SvStream* pStrm = 0) const;
-    void         RegisterItemFactory(
-        const SvGlobalName& rName, SfxItemCreateFunc );
-};
-
-#define REGISTER_ITEM( ItemClass, aGlobName )                                 \
-RegisterItemFactory( aGlobName, ( SfxItemCreateFunc) ItemClass::StaticType() );
-*/
-
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
 SV_DECL_REF(SfxObjectShell)

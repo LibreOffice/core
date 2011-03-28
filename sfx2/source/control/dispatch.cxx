@@ -2404,7 +2404,6 @@ sal_Bool SfxDispatcher::_FillState
         DBG_ASSERT(bFlushed, "Dispatcher not flushed after retrieving slot servers!");
         if ( !bFlushed )
             return sal_False;
-        // Flush();
 
         // Determine the object and call the Message of this object
         SfxShell *pSh = GetShell(rSvr.GetShellLevel());

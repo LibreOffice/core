@@ -214,8 +214,6 @@ private:
     HelpButton*         pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
-//  const SfxItemSet*   pOptions;
-//  SfxItemSet*         pOutSet;
 
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
 };

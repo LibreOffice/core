@@ -49,8 +49,6 @@ const ItemConnFlags ITEMCONN_NONE               = 0x0000;
 
 /** Connection is inactive - virtual functions will not be called. */
 const ItemConnFlags ITEMCONN_INACTIVE           = 0x0001;
-/** Clone item in FillItemSet() from old item set. */
-//const ItemConnFlags ITEMCONN_CLONE_ITEM         = 0x0002;
 
 /** Enable control(s), if the item is known. */
 const ItemConnFlags ITEMCONN_ENABLE_KNOWN       = 0x0010;

@@ -230,7 +230,6 @@ public:
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
     SAL_DLLPRIVATE void SetVisible_Impl( sal_Bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
-    //SfxWorkWindow*        GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();
 

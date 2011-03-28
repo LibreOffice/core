@@ -434,8 +434,6 @@ void SfxStateCache::SetState_Impl
         return;
 
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
-//  DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
-//              "setting state of non dirty controller" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState, "invalid SfxItemState" );
     DBG_PROFSTART(SfxStateCacheSetState);
 

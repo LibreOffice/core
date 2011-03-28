@@ -829,7 +829,6 @@ String X(const String &rRet)
 #endif
 
 //--------------------------------------------------------------------
-//--------------------------------------------------------------------
 String SfxObjectShell::GetTitle
 (
     sal_uInt16  nMaxLength      /*  0 (default)

@@ -510,8 +510,6 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
 
     if( !nFormat )
     {
-// what is the new interface?
-//              nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                 "StatusInfo from SvxInternalLink" )));

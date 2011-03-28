@@ -155,7 +155,6 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
-        //EnableInput( sal_True, sal_True );
         pView->SetModalMode( sal_False );
         return sal_True;
     }

@@ -171,7 +171,6 @@ sal_Bool _FileListEntry::DeleteObjectShell()
                 {
                 }
 
-//              aDocShell->SfxObjectShell::DoSaveCompleted();
             }
         }
         else
@@ -673,7 +672,6 @@ sal_Bool SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
                               sal_True,
                               nIdx);
         pCaller->Update();
-        // pCaller->EditEntry( pEntry );
         pCaller->Expand( pParent );
         bModified = sal_True;
         return sal_True;

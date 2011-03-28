@@ -533,8 +533,6 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     // or the other way around?
     if ( (aTempPrtName != aDocPrtName) || (pDocPrinter->IsDefPrinter() != pNewPrinter->IsDefPrinter()) )
     {
-        // Get the new printer
-        // pNewPrinter->SetOrigJobSetup( pNewPrinter->GetJobSetup() );
         nChangedFlags |= SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP;
         pDocPrinter = pNewPrinter;
     }
@@ -553,8 +551,6 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         JobSetup aOldJobSetup = pDocPrinter->GetJobSetup();
         if ( aNewJobSetup != aOldJobSetup )
         {
-            // JobSetup has chaged => App must be formatted again)
-            // pDocPrinter->SetOrigJobSetup( aNewJobSetup );
             nChangedFlags |= SFX_PRINTER_JOBSETUP;
         }
 
@@ -639,9 +635,7 @@ Printer* SfxViewShell::GetActivePrinter() const
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
-    // sal_uInt16                  nCopies=1;
     sal_uInt16                  nDialogRet = RET_CANCEL;
-    // sal_Bool                    bCollate=sal_False;
     SfxPrinter*             pPrinter = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
