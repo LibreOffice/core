@@ -661,12 +661,12 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_ANIMPATH:
                 {
                     uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );
-                    SdrPathObj* pObj = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : NULL;
+                    SdrPathObj* pObj2 = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : NULL;
 
-                    if( pObj == NULL )
+                    if( pObj2 == NULL )
                         throw lang::IllegalArgumentException();
 
-                    EffectMigration::SetAnimationPath( mpShape, pObj );
+                    EffectMigration::SetAnimationPath( mpShape, pObj2 );
                     break;
                 }
                 case WID_IMAGEMAP:
