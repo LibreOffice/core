@@ -25,49 +25,14 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJ=..$/..$/..
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJNAME=sal
-TARGET=qa_osl_mutex
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Socket by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/osl_Mutex.obj
-
-SHL1TARGET= osl_Mutex
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS += $(WS2_32LIB)
-.ENDIF
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-SHL1RPATH = NONE
-
-# auto generated Target:Socket
-# END ------------------------------------------------------------------
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
-
-.END
+# vim: set noet sw=4 ts=4:

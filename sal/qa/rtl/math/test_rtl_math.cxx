@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
-
 #include "rtl/math.h"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
@@ -41,9 +38,7 @@
 
 #include <stdlib.h>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <sal/cppunit.h>
 
 namespace {
 
