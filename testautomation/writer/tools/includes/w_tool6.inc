@@ -294,7 +294,7 @@ sub ZeilenHoeheTesten ( Wert as Double )
     FormatRowHeight
     Kontext "ZellenHoehe"
     zWert = ZahlAusSpinnfield ( Hoehe.GetText )
-    if (LiberalMeasurement (Wert, zWert) <> TRUE) then QAErrorlog "#i94556# - Die ZeilenhÃ¶he ist nicht "+ Wert + " sondern "+ zWert + "."
+    if (LiberalMeasurement (Wert, zWert) <> TRUE) then QAErrorlog "Die Zeilenhöhe ist nicht "+ Wert + " sondern "+ zWert + "."
     ZellenHoehe.OK
 end sub
 

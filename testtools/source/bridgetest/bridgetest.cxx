@@ -110,7 +110,7 @@ bool checkEmpty(rtl::OUString const & string, char const * message) {
 }
 
 //==================================================================================================
-class TestBridgeImpl : protected osl::DebugBase<TestBridgeImpl>,
+class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
                        public WeakImplHelper2< XMain, XServiceInfo >
 {
     Reference< XComponentContext > m_xContext;

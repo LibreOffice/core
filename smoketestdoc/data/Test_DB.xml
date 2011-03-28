@@ -35,59 +35,53 @@ const cMessageDatabaseDelete = &quot;Delete record from Database&quot;
 const cMessageDatabaseSeek = &quot;Read other record from Database&quot;
 const cMessageDatabaseClose = &quot;Close Database&quot;
 
-Sub TestDB (FilterType as Integer)
+Sub TestDB
 
-Dim oDBConnection as Object, oDataSource as Object, oDBContext as Object
-Dim sDBName as String, sTable as String, sCurrentMessage as String
-Dim nRowCount as Integer, nCurrentAction as Integer
-Dim bResult as Boolean
-Const sTestString = &quot;Automatical Test&quot;
-
+    Dim oDBConnection as Object, oDataSource as Object, oDBContext as Object
+    Dim sDBName as String, sTable as String, sCurrentMessage as String
+    Dim nRowCount as Integer
+    Dim bResult as Boolean
+    Const sTestString = &quot;Automatical Test&quot;
 
     On Local Error GoTo DBERROR
 
-    nCurrentAction = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+    gCurrentTestCase = cLogfileFailed
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
 
-    nCurrentAction = cDBService
+    gCurrentTestCase = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
 
     oDBContext = CreateUnoService(cUnoDatabaseContext)
     sDBName=oDBContext.ElementNames(0) &apos;Names of Databases
 
-    nCurrentAction = cDBOpen
+    gCurrentTestCase = cDBOpen
     sCurrentMessage = cMessageDatabaseOpen
 
     oDataSource = oDBContext.GetByName(sDBName)
     sTable=oDataSource.Tables.ElementNames(0)
     oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
 
-    LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, FileChannel)
-    LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, MainFileChannel)
-    SetStatus (FilterType, cDBOpen, not IsNull (oDBConnection))
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseOpen, not IsNull (oDBConnection) )
     if (IsNull(oDBConnection)) then
-           Close #FileChannel%
+       Close #LocalTestLog%
+        LocalTestLog = 0
         Exit Sub
     End If
 
     &apos; Database is open now
 
-    nCurrentAction = cDBService
+    gCurrentTestCase = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoRowSet
     oRowSet = createUnoService(cUnoRowSet)
 
     if (IsNull(oRowSet)) then
-        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, FileChannel)
-        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, MainFileChannel)
-        SetStatus (FilterType, cDBService, not IsNull (oRowSet))
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, not IsNull (oRowSet) )
         Exit Sub
     else
-        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService, FileChannel)
-        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService, MainFileChannel)
-        SetStatus (FilterType, cDBService, not IsNull (oRowSet))
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseService, TRUE )
     End If
 
-    nCurrentAction = cDBInsert
+    gCurrentTestCase = cDBInsert
     sCurrentMessage = cMessageDatabaseInsert
 
     oRowSet.ActiveConnection = oDBConnection
@@ -105,14 +99,12 @@ Const sTestString = &quot;Automatical Test&quot;
     oRowSet.moveToCurrentRow()
 
     bResult = (oRowSet.getString(5) = sTestString)
-    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, FileChannel)
-    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, MainFileChannel)
-    SetStatus (FilterType, cDBInsert, bResult)
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseInsert, bResult )
 
     &apos;delete only if insert passed
 
     if (bResult) Then
-        nCurrentAction = cDBDelete
+        gCurrentTestCase = cDBDelete
         sCurrentMessage = cMessageDatabaseDelete
         oRowSet.deleteRow()
         bResult = (nRowCount - oRowSet.RowCount = 0)
@@ -120,41 +112,35 @@ Const sTestString = &quot;Automatical Test&quot;
             oRowSet.next()
             bResult = (nRowCount - oRowSet.RowCount = 1)
         End If
-        LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, FileChannel)
-        LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, MainFileChannel)
-        SetStatus (FilterType, cDBDelete, bResult)
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseDelete, bResult )
     End If
 
     &apos; read other record
 
-    nCurrentAction = cDBSeek
+    gCurrentTestCase = cDBSeek
     sCurrentMessage = cMessageDatabaseSeek
     oRowSet.first()
     bResult = not (oRowSet.getString(5) = sTestString)
-    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, FileChannel)
-    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, MainFileChannel)
-    SetStatus (FilterType, cDBSeek, bResult)
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseSeek, bResult )
 
-    nCurrentAction = cDBClose
+    gCurrentTestCase = cDBClose
     sCurrentMessage = cMessageDatabaseClose
     oDBConnection.Dispose()
-    LogState (True, &quot;Database &quot;+ cMessageDatabaseClose, FileChannel)
-    LogState (True, &quot;Database &quot;+ cMessageDatabaseClose, MainFileChannel)
-    SetStatus (FilterType, cDBClose, True)
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseClose, True )
 
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DBERROR:
-    If  (nCurrentAction = cLogfileFailed) then
-        SetStatus (FilterType, cDBOpen, False)
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
-        LogState (False, &quot;Database &quot;+ sCurrentMessage, FileChannel)
-        LogState (False, &quot;Database &quot;+ sCurrentMessage, MainFileChannel)
-        SetStatus (FilterType, nCurrentAction, False)
-        Close #FileChannel%
+        LogTestResult( &quot;Database &quot;+ sCurrentMessage, FALSE )
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub

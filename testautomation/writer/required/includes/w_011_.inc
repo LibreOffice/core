@@ -333,7 +333,7 @@ testcase tZOEditPoints
     try
         Points.Click
     catch
-        Warnlog "#i56594#Shortcut selecting objects doesn't work"
+        Warnlog "Shortcut selecting objects doesn't work"
         Printlog "Close active document"
         Call hCloseDocument
         goto endsub
@@ -372,7 +372,7 @@ testcase tZOLine
         Linie.Click
         printlog "In Toolbox click 'Line'"
     catch
-        Warnlog "#i56594#Shortcut selecting objects doesn't work"
+        Warnlog "Shortcut selecting objects doesn't work"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -425,7 +425,7 @@ testcase tZOArea
         printlog "In toolbox click 'Area'"
         Flaeche.Click
     catch
-        Warnlog "#i56594#Shortcut selecting objects doesn't work"
+        Warnlog "Shortcut selecting objects doesn't work"
         Call hCloseDocument
         goto endsub
     endcatch

@@ -225,7 +225,7 @@ testcase tFormatCharacter3
     Kontext
     active.SetPage TabHyperlinkZeichen
     kontext "TabHyperlinkZeichen"
-    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "##i105855##Wrong URL : " + URLName.GetText
+    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i105855#Wrong URL : " + URLName.GetText
     SetClipboard UrlName.Gettext
     if NameText.GetText <> "A hyperlink with testtool" then Warnlog "#i105855#Wrong Linkname : " + NameText.GetText
     if TargetFrame.GetSelIndex <> 2 then Warnlog "#i105855#Wrong Target selected : " + TargetFrame.GetSelText
