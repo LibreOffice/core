@@ -56,7 +56,7 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 // Define a shortcut for the somewhot longish base class name.
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::PartialWeakComponentImplHelper4<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
