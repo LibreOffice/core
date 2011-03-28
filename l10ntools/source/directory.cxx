@@ -187,21 +187,18 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     struct stat     statbuf2;
     struct dirent   *dirp;
     DIR             *dir;
-    //int             ret;
-    //char            *ptr;
 
     if( sFullpath.getLength() < 1 ) return;
 
     rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 , sFullpath.getLength() ).getStr();
-    //printf("%s\n",sFullpathext.getStr());
-    const char*    path         = sFullpathext.getStr();
 
     // stat
-    if( stat( path  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , path ); return; }// error }
+    if( stat( sFullpathext.getStr()  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , sFullpathext.getStr() ); return; }// error }
 
     if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }// error }   return; // not dir
 
-    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; } // error } return; // error
+    if( (dir = opendir( sFullpathext.getStr() ) ) == NULL  ) {printf("readerror 2 in %s \n",sFullpathext.getStr()); return; } // error } return; // error
+
     dirholder aHolder(dir);
 
     sFullpathext += rtl::OString( "/" );
@@ -209,7 +206,7 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     const rtl::OString sDot ( "." ) ;
     const rtl::OString sDDot( ".." );
 
-    if ( chdir( path ) == -1 ) { printf("chdir error in %s \n",path); return; } // error
+    if ( chdir( sFullpathext.getStr() ) == -1 ) { printf("chdir error in %s \n",sFullpathext.getStr()); return; } // error
 
     while(  ( dirp = readdir( dir ) ) != NULL )
     {
