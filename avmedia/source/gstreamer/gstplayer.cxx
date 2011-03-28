@@ -66,6 +66,92 @@ struct GstBusSource : public GSource
     {}
 };
 
+
+// -----------------------------------------------------------------------
+extern "C"
+{
+
+static gpointer
+lcl_implThreadFunc( gpointer pData )
+{
+    return( pData ? static_cast< Player* >( pData )->run() : NULL );
+}
+
+static gboolean
+lcl_implBusCheck( GSource* pSource )
+{
+    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
+
+    return( pBusSource &&
+           GST_IS_BUS( pBusSource->mpBus ) &&
+           gst_bus_have_pending( GST_BUS_CAST( pBusSource->mpBus ) ) );
+}
+
+
+static gboolean
+lcl_implBusPrepare( GSource* pSource, gint* pTimeout )
+{
+    if (pTimeout)
+    {
+        *pTimeout = 0;
+    }
+
+    return lcl_implBusCheck(pSource);
+}
+
+static gboolean
+lcl_implBusDispatch( GSource* pSource,
+                     GSourceFunc /*aCallback*/,
+                     gpointer pData )
+{
+    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
+    gboolean bRet = false;
+
+    if( pData && pBusSource && GST_IS_BUS( pBusSource->mpBus ) )
+    {
+        GstMessage* pMsg = gst_bus_pop( pBusSource->mpBus );
+
+        if( pMsg )
+        {
+            bRet = static_cast< Player* >( pData )->busCallback(
+                        pBusSource->mpBus, pMsg );
+            gst_message_unref( pMsg );
+        }
+    }
+
+    return( bRet );
+}
+
+static void
+lcl_implBusFinalize( GSource* pSource )
+{
+    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
+
+    if( pBusSource && pBusSource->mpBus )
+    {
+        gst_object_unref( pBusSource->mpBus );
+        pBusSource->mpBus = NULL;
+    }
+}
+
+static gboolean
+lcl_implIdleFunc( gpointer pData )
+{
+    return( pData ? static_cast< Player* >( pData )->idle() : true );
+}
+
+static GstBusSyncReply
+lcl_implHandleCreateWindowFunc( GstBus* pBus, GstMessage* pMsg, gpointer pData )
+{
+    return (pData)
+        ? static_cast< Player* >( pData )->handleCreateWindow( pBus, pMsg )
+        : GST_BUS_PASS;
+}
+
+} // extern "C"
+
+
+
 // ---------------
 // - Player -
 // ---------------
@@ -102,7 +188,7 @@ Player::Player( GString* pURI ) :
         OSL_TRACE( ">>> --------------------------------" );
         OSL_TRACE( ">>> Creating Player object with URL: %s", pURI->str );
 
-        mpThread = g_thread_create( Player::implThreadFunc, this, true, NULL );
+        mpThread = g_thread_create( &lcl_implThreadFunc, this, true, NULL );
     }
 }
 
@@ -573,62 +659,6 @@ bool Player::implInitPlayer()
 }
 
 // ------------------------------------------------------------------------------
-gboolean Player::implBusPrepare( GSource* pSource,
-                                 gint* pTimeout )
-{
-    if( pTimeout )
-    {
-        *pTimeout = 0;
-    }
-
-    return( implBusCheck( pSource ) );
-}
-
-// ------------------------------------------------------------------------------
-gboolean Player::implBusCheck( GSource* pSource )
-{
-    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
-
-    return( pBusSource &&
-           GST_IS_BUS( pBusSource->mpBus ) &&
-           gst_bus_have_pending( GST_BUS_CAST( pBusSource->mpBus ) ) );
-}
-
-// ------------------------------------------------------------------------------
-gboolean Player::implBusDispatch( GSource* pSource,
-                                  GSourceFunc /*aCallback*/,
-                                  gpointer pData )
-{
-    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
-    gboolean bRet = false;
-
-    if( pData && pBusSource && GST_IS_BUS( pBusSource->mpBus ) )
-    {
-        GstMessage* pMsg = gst_bus_pop( pBusSource->mpBus );
-
-        if( pMsg )
-        {
-            bRet = static_cast< Player* >( pData )->busCallback( pBusSource->mpBus, pMsg );
-            gst_message_unref( pMsg );
-        }
-    }
-
-    return( bRet );
-}
-
-// ------------------------------------------------------------------------------
-void Player::implBusFinalize( GSource* pSource )
-{
-    GstBusSource* pBusSource = static_cast< GstBusSource* >( pSource );
-
-    if( pBusSource && pBusSource->mpBus )
-    {
-        gst_object_unref( pBusSource->mpBus );
-        pBusSource->mpBus = NULL;
-    }
-}
-
-// ------------------------------------------------------------------------------
 gboolean Player::busCallback( GstBus* /*pBus*/,
                               GstMessage* pMsg )
 {
@@ -671,26 +701,6 @@ gboolean Player::busCallback( GstBus* /*pBus*/,
     }
 
     return( true );
-}
-
-// ------------------------------------------------------------------------------
-gboolean Player::implIdleFunc( gpointer pData )
-{
-    return( pData ? static_cast< Player* >( pData )->idle() : true );
-}
-
-// ------------------------------------------------------------------------------
-gpointer Player::implThreadFunc( gpointer pData )
-{
-    return( pData ? static_cast< Player* >( pData )->run() : NULL );
-}
-
-// ------------------------------------------------------------------------------
-GstBusSyncReply Player::implHandleCreateWindowFunc( GstBus* pBus,
-                                                    GstMessage* pMsg,
-                                                    gpointer pData )
-{
-    return( pData ? static_cast< Player* >( pData )->handleCreateWindow( pBus, pMsg ) : GST_BUS_PASS );
 }
 
 // ------------------------------------------------------------------------------
@@ -824,10 +834,10 @@ gpointer Player::run()
 {
     static GSourceFuncs aSourceFuncs =
     {
-        Player::implBusPrepare,
-        Player::implBusCheck,
-        Player::implBusDispatch,
-        Player::implBusFinalize,
+        &lcl_implBusPrepare,
+        &lcl_implBusCheck,
+        &lcl_implBusDispatch,
+        &lcl_implBusFinalize,
         NULL,
         NULL
     };
@@ -842,7 +852,7 @@ gpointer Player::run()
 
         // add idle callback
         GSource* pIdleSource = g_idle_source_new();
-        g_source_set_callback( pIdleSource, Player::implIdleFunc, this, NULL );
+        g_source_set_callback( pIdleSource, &lcl_implIdleFunc, this, NULL );
         g_source_attach( pIdleSource, mpContext );
 
         // add bus callback
@@ -853,7 +863,7 @@ gpointer Player::run()
 
         // add bus sync handler to intercept video window creation for setting our own window
         gst_bus_set_sync_handler( static_cast< GstBusSource* >( pBusSource )->mpBus,
-                                  Player::implHandleCreateWindowFunc, this );
+                                  &lcl_implHandleCreateWindowFunc, this );
 
         // watch for all elements (and pads) that will be added to the playbin,
         // in order to retrieve properties like video width and height

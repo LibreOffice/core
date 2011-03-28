@@ -31,6 +31,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 
+#include <string>
+
+
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace gst {
