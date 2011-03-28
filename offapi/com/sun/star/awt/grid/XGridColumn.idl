@@ -27,12 +27,11 @@
 #ifndef __com_sun_star_awt_grid_XGridColumn_idl__
 #define __com_sun_star_awt_grid_XGridColumn_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/style/HorizontalAlignment.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
-
+#include <com/sun/star/util/XCloneable.idl>
 
 //=============================================================================
 
@@ -41,46 +40,100 @@ module com {  module sun {  module star {  module awt {  module grid {
 //=============================================================================
 
 /** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 interface XGridColumn
 {
-    /** Specifies the an idendifier of the colomn.**/
+    /** implements life time control for the component
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows cloning the complete grid column
+    */
+    interface ::com::sun::star::util::XCloneable;
+
+    /** specifies an identifier of the column
+
+        <p>This identifier will not be evaluated by the grid control, or its model. It is merely for clients
+        to identify particular columns.</p>
+    */
     [attribute] any Identifier;
 
-    /** Specifies the default column witdth. **/
+    /** specifies the current width of the column.
+    */
     [attribute] long ColumnWidth;
 
-    /** Specifies the preferred column witdth. **/
-    [attribute] long PreferredWidth;
-
-    /** Specifies the min column witdth. **/
+    /** specifies the minimal width the column can have.
+    */
     [attribute] long MinWidth;
 
-    /** Specifies the max column witdth. **/
+    /** specifies the maximal width the column can have.
+    */
     [attribute] long MaxWidth;
 
-    /** Specifies whether column has fixed size or not. **/
+    /** controls whether or not the column's width is fixed or not.
+
+        <p>If this is <TRUE/>, the user can interactively change the column's width. Also, the column is subject to
+        auto-resizing, if its <member>Flexibility</member> attribute is greater <code>0</code>.</p>
+    */
     [attribute] boolean Resizeable;
 
-    /** Specifies the horizontal alignment of the content in the control.
+    /** specifies the flexibility of the column when it is automatically resized due to the grid control as a whole
+        being resized.
 
-        <pre>
-            LEFT
-            CENTER
-            RIGHT
-        </pre>
+        <p>Specify <code>0</code> here if you do not want the column to be resized automatically.</p>
+
+        <p>If a column has a flexibility greater than 0, it is set in relationship to the flexibility of all
+        other such columns, and the respective widths of the columns are changed in the same relationship.</p>
+
+        <p>Note that a column's flexibility is ignored if its <member>Resizeable</member> attribute is
+        <FALSE/>.</p>
+
+        <p>A column's flexibility cannot be negative, attempts to set a negative value will raise an exception.</p>
+    */
+    [attribute] long Flexibility
+    {
+        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /** Specifies the horizontal alignment of the content in the control.
      */
     [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 
     /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
 
+    /** is the help text associated with the column.
+
+        <p>A grid control will usually display a column's help text as tooltip.</p>
+    */
+    [attribute] string HelpText;
+
+    /** denotes the index of the column within the grid column model it belongs to
+
+        <p>If the column is not yet part of a column model, <code>Index</code> is -1.</p>
+    */
+    [attribute, readonly] long Index;
+
+    /** denotes the index of the data column which should be used to fetch this grid column's data
+
+        <p>A grid control has a column model and a data model, both containing a possibly different number of columns.
+        The <code>DataColumnIndex</code> attribute defines the index of the column within the data model, which should
+        be used to retrieve actual data.</p>
+
+        <p>Using this, you can do runtime changes to the column model, i.e. insertion and removal of columns, without
+        necessarily needing to adjust the data model, too.</p>
+
+        <p>If <code>DataColumnIndex</code> is negative, the it will be ignored, then the column's index within its
+        column model, as determined by the <member>Index</member> attribute, will be used.</p>
+    */
+    [attribute] long DataColumnIndex;
+
     /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
         @param Listener
             the listener to add.
     */
-    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
+    void addGridColumnListener( [in] XGridColumnListener  listener);
 
     //-------------------------------------------------------------------------
 
@@ -88,20 +141,7 @@ interface XGridColumn
         @param Listener
             the listener to remove.
     */
-    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
-
-    /**Updates changed column widths, when column widths are being resized.
-        @param name
-            can be PrefWidth or ColWidth, depending on which was changed
-        @param width
-            the new column width
-    */
-    void updateColumn( [in] string name, [in] long width);
-    /**Sets column index
-        @param index
-            index, which is the index of the column in the column array of the column model
-    */
-    void setIndex( [in] long index );
+    void removeGridColumnListener( [in] XGridColumnListener listener);
 };
 
 //=============================================================================

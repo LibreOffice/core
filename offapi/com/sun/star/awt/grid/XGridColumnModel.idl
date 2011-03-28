@@ -28,10 +28,13 @@
 #define __com_sun_star_awt_grid_XGridColumnModel_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XCloneable.idl>
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
-
-#include <com/sun/star/awt/grid/XGridColumnListener.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 //=============================================================================
 
@@ -44,41 +47,68 @@ module com {  module sun {  module star {  module awt { module grid {
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 */
 interface XGridColumnModel
 {
-    ///** Specifies whether column selection is allowed
-    //*/
-    //[attribute] boolean ColumnSelectionAllowed;
-
-    /**Specifies the height of column header.
+    /** implements life time control for the component
     */
-    [attribute] long ColumnHeaderHeight;
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows to register listeners to be notified when columns are inserted or removed
+    */
+    interface ::com::sun::star::container::XContainer;
+
+    /** allows cloning the complete column model
+    */
+    interface ::com::sun::star::util::XCloneable;
 
     /** Returns the number of columns.
+
         @returns
                 the number of columns.
     */
     long getColumnCount();
 
+    /** creates a new column for use with the column model.
+
+        <p>The newly created column is not yet inserted into the column container, you need to call <member>addColumn</member>
+        after you initialized the column object.</p>
+    */
+    XGridColumn
+        createColumn();
+
     /** Adds a column to the model.
+
+        <p>You should use the <member>createColumn</member> member to create a new column. This gives
+        implementations of the <code>XGridColumnModel</code> interface the possibility to provide own column
+        implementations which extend the basic <type>GridColumn</type> type.</p>
+
+        <p>As soon as the column has been inserted into the model, the model takes ownership of it. This means when the
+        column is removed, or when the column model is disposed, the grid column is disposed as well.</p>
+
         @param column
             the column to add to the model.
-
         @returns
-                the index of new created column.
+            the index of new created column.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given column is not a valid element for the column container, or if it is <NULL/>.
     */
-    long addColumn( [in] XGridColumn column );
+    long addColumn( [in] XGridColumn column )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
 
-    /*
-    long getSelectedCount();
+    /** removes a column from the model
 
-    sequence<XGridColumn> getSelectedColumns();
+        <p>The column object will be disposed upon removal.</p>
 
-    sequence<long> getSelectedIndex();
-
+        @param ColumnIndex
+            denotes the index of the column to remove
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>ColumnIndex</code> does not denote a valid column index.
     */
+    void removeColumn( [in] long ColumnIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Returns all columns of the model.
         @returns
@@ -92,24 +122,20 @@ interface XGridColumnModel
         @returns
                  the requested column.
     */
-    XGridColumn getColumn( [in] long index);
+    XGridColumn getColumn( [in] long index)
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** Sets default columns to the column model.
+    /** Fills the model with the given number of default columns
+
+        <p>Existing columns will be removed before adding new columns. Listeners at the column model will
+        be notified one <member scope="com::sun::star::container">XContainerListener::elementRemoved</member> event
+        for each removed column, and one <member scope="com::sun::star::container">XContainerListener::elementInserted</member>
+        event for each insertion.</p>
+
         @param elements
             the number of default columns that should be set.
     */
     void setDefaultColumns([in] long elements);
-
-    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to
-        the column model have the same settings.
-        @param column
-            the column, which is already created
-    */
-    XGridColumn copyColumn( [in] XGridColumn column );
-
-    /*
-    long getTotalColumnWidth();
-    */
 };
 
 //=============================================================================

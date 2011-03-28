@@ -43,7 +43,7 @@ ENABLE_EXCEPTIONS := TRUE
 CDEFS += -DDLL_VERSION=$(EMQ)"$(DLLPOSTFIX)$(EMQ)"
 
 APP1TARGET= $(TARGET)
-APP1OBJS=   $(OBJ)$/regmerge.obj 
+APP1OBJS=   $(OBJ)$/regmerge.obj $(OBJ)/fileurl.obj $(OBJ)/options.obj
 APP1RPATH=  UREBIN
 
 APP1STDLIBS=\
@@ -51,7 +51,7 @@ APP1STDLIBS=\
             $(REGLIB)
 
 APP2TARGET= regview
-APP2OBJS=   $(OBJ)$/regview.obj
+APP2OBJS=   $(OBJ)$/regview.obj $(OBJ)/fileurl.obj
 APP2RPATH=  UREBIN
 
 APP2STDLIBS=\
@@ -59,7 +59,7 @@ APP2STDLIBS=\
             $(REGLIB)
 
 APP3TARGET= regcompare
-APP3OBJS=   $(OBJ)$/regcompare.obj
+APP3OBJS=   $(OBJ)$/regcompare.obj $(OBJ)/fileurl.obj $(OBJ)/options.obj
 APP3RPATH=  SDK
 
 APP3STDLIBS=\
@@ -68,13 +68,21 @@ APP3STDLIBS=\
             $(REGLIB)
 
 APP4TARGET= checksingleton
-APP4OBJS=   $(OBJ)$/checksingleton.obj
+APP4OBJS=   $(OBJ)$/checksingleton.obj $(OBJ)/fileurl.obj $(OBJ)/options.obj
 
 APP4STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
 
-OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS)
+APP5TARGET= rdbedit
+APP5OBJS=   $(OBJ)$/rdbedit.obj
+
+APP5STDLIBS=\
+            $(SALLIB) \
+            $(SALHELPERLIB) \
+            $(REGLIB)
+
+OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS)
 
 .INCLUDE :  target.mk

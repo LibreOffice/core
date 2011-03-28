@@ -444,7 +444,6 @@ static OUString s_user = OUSTR("user");
 static OUString s_permission = OUSTR("permission");
 static OUString s_openBrace = OUSTR("{");
 static OUString s_closingBrace = OUSTR("}");
-static OUString s_semi = OUSTR(";");
 
 static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
 static OUString s_socketPermission = OUSTR("com.sun.star.connection.SocketPermission");

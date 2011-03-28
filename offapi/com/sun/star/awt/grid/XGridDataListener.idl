@@ -47,25 +47,26 @@ module com {  module sun {  module star {  module awt { module grid {
     <p>Usually you must not implement this interface yourself, but you must notify it correctly if
     you implement the <type>XGridDataModel</type> yourself</p>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 interface XGridDataListener: com::sun::star::lang::XEventListener
 {
 
-    /**
-        Invoked after a row was added to the data model.
+    /** is called when one or more rows of data have been inserted into a grid control's data model.
     */
-    void rowAdded( [in] GridDataEvent Event );
+    void rowsInserted( [in] GridDataEvent Event );
 
-    /**
-        Invoked after a row was added to the data model.
+    /** is called when one or more rows of data have been removed from a grid control's data model.
     */
-    void rowRemoved( [in] GridDataEvent Event );
+    void rowsRemoved( [in] GridDataEvent Event );
 
-    /**
-        Invoked after a row was added to the data model.
+    /** is called when existing data in a grid control's data model has been modified.
     */
     void dataChanged( [in] GridDataEvent Event );
+
+    /** is called when the title of one or more rows changed.
+    */
+    void rowHeadingChanged( [in] GridDataEvent Event );
 };
 
 //=============================================================================
