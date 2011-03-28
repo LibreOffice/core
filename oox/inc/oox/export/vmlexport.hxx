@@ -78,6 +78,9 @@ protected:
     /// added attribute is preserved.
     void                AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& sValue );
 
+    using EscherEx::StartShape;
+    using EscherEx::EndShape;
+
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
