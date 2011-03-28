@@ -28,21 +28,34 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    comphelper \
-    editeng \
-    framework \
-    padmin \
-    sfx2 \
-    sot \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    unoxml \
-    xmloff \
-    vbahelper \
+	comphelper \
+	editeng \
+	framework \
+	padmin \
+	sfx2 \
+	sot \
+	svl \
+	svtools \
+	svx \
+	sw \
+	toolkit \
+	tools \
+	unoxml \
+	xmloff \
+	vbahelper \
+))
+
+# these have only migrated subsequentcheck for now
+$(eval $(call gb_Module_add_moduledirs,ooo,\
+	chart2 \
+	configmgr \
+	dbaccess \
+	forms \
+	linguistic \
+	qadevOOo \
+	sal \
+	ucb \
+	unotools \
 ))
 
 # vim: set noet ts=4 sw=4:
