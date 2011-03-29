@@ -1241,7 +1241,6 @@ namespace svt { namespace table
         }
 
         // show or hide the scrollbars as needed
-        bool const hadVerticalScrollbar = ( m_pVScroll != NULL );
         impl_ni_positionChildWindows( aDataCellPlayground, bNeedVerticalScrollbar, bNeedHorizontalScrollbar );
 
         // the initial call to impl_ni_calculateColumnWidths assumed that we need a vertical scrollbar. If, by now,
@@ -1306,7 +1305,7 @@ namespace svt { namespace table
         long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // create or destroy the vertical scrollbar, as needed
-        bool verticalVisibilityChanged = lcl_updateScrollbar(
+        lcl_updateScrollbar(
             m_rAntiImpl,
             m_pVScroll,
             i_verticalScrollbar,
