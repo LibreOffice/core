@@ -46,6 +46,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 #include <tools/bigint.hxx>
 
@@ -226,6 +227,7 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
             case META_BMPEX_ACTION:
             case META_BMPEXSCALE_ACTION:
             case META_BMPEXSCALEPART_ACTION:
+            case META_RENDERGRAPHIC_ACTION:
                 nNumberOfBitmaps++;
             break;
         }
@@ -1807,8 +1809,11 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_BMP_ACTION:
             {
-                const MetaBmpAction* pA = (const MetaBmpAction*) pMA;
-                WriteOpcode_BitsRect( pA->GetPoint(),pA->GetBitmap().GetSizePixel(), pA->GetBitmap() );
+                const MetaBmpAction*    pA = (const MetaBmpAction*) pMA;
+                const Bitmap            aBmp( pA->GetBitmap() );
+                VirtualDevice           aVirDev;
+
+                WriteOpcode_BitsRect( pA->GetPoint(), aVirDev.PixelToLogic( aBmp.GetSizePixel(), aSrcMapMode ), aBmp );
             }
             break;
 
@@ -1833,8 +1838,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaBmpExAction*  pA = (const MetaBmpExAction*) pMA;
                 const Bitmap            aBmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                VirtualDevice           aVirDev;
 
-                WriteOpcode_BitsRect( pA->GetPoint(), aBmp.GetSizePixel(), aBmp );
+                WriteOpcode_BitsRect( pA->GetPoint(), aVirDev.PixelToLogic( aBmp.GetSizePixel(), aSrcMapMode ), aBmp );
             }
             break;
 
@@ -2148,6 +2154,18 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     aTmpMtf.Move( nMoveX, nMoveY );
 
                 WriteOpcodes( aTmpMtf );
+            }
+            break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                VirtualDevice                           aVirDev;
+                const Bitmap                            aBmp( Graphic( aRasterizer.Rasterize(
+                                                            aVirDev.LogicToPixel( pA->GetSize() ) ) ).GetBitmap() );
+
+                WriteOpcode_BitsRect( pA->GetPoint(), pA->GetSize(), aBmp );
             }
             break;
         }

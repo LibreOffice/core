@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: svgfontexport.hxx,v $
+ * $Revision: 1.2.110.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,23 +41,28 @@
 
 class SVGFontExport
 {
-    typedef ::std::hash_map< ::rtl::OUString, ::std::set< sal_Unicode >, ::comphelper::UStringHash > GlyphMap;
-    typedef ::std::vector< ObjectRepresentation > ObjectVector;
+    typedef ::std::vector< ObjectRepresentation >                               ObjectVector;
+    typedef ::std::set< ::rtl::OUString, ::std::greater< ::rtl::OUString > >    GlyphSet;
+    typedef ::std::map< FontItalic, GlyphSet >                                  FontItalicMap;
+    typedef ::std::map< FontWeight, FontItalicMap >                             FontWeightMap;
+    typedef ::std::map< ::rtl::OUString, FontWeightMap >                        FontNameMap;
+    typedef FontNameMap                                                         GlyphTree;
 
 private:
 
-    SvXMLExport&        mrExport;
-    GlyphMap            maGlyphs;
+    SVGExport&          mrExport;
+    GlyphTree           maGlyphTree;
     ObjectVector        maObjects;
-    sal_uInt32          mnCurFontId;
+    sal_Int32           mnCurFontId;
 
+    GlyphSet&           implGetGlyphSet( const Font& rFont );
     void                implCollectGlyphs();
-    void                implEmbedFont( const ::rtl::OUString& rFontName, const ::std::set< sal_Unicode >& rGlyphs );
-    void                implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs );
+    void                implEmbedFont( const Font& rFont );
+    void                implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rCellStr );
 
 public:
 
-                        SVGFontExport( SvXMLExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects );
+                        SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects );
                         ~SVGFontExport();
 
     void                EmbedFonts();

@@ -47,6 +47,7 @@
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 #include "strings.hrc"
 
 #include <math.h>
@@ -789,7 +790,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = ( (const MetaBmpAction*) pMA )->GetPoint();
-                Size aSize = aBitmap.GetSizePixel();
+                Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
@@ -825,8 +826,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Bitmap aMask( aBitmapEx.GetMask() );
-                Point aPoint = ( (const MetaBmpExAction*) pMA)->GetPoint();
-                Size aSize = ( aBitmap.GetSizePixel() );
+                Point aPoint( ( (const MetaBmpExAction*) pMA )->GetPoint() );
+                Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
@@ -1339,6 +1340,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             case META_BMPSCALEPART_ACTION :
                                             case META_BMPEXSCALE_ACTION :
                                             case META_BMPEXSCALEPART_ACTION :
+                                            case META_RENDERGRAPHIC_ACTION :
                                             {
                                                 nBitmapCount++;
                                                 nBitmapAction = nCurAction;
@@ -1395,6 +1397,23 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                     }
                 }
+            }
+            break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( rVDev.LogicToPixel( pA->GetSize() ) ) );
+                Bitmap                                  aBmp( aBmpEx.GetBitmap() );
+
+                if ( mbGrayScale )
+                    aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
+
+                Bitmap  aMask( aBmpEx.GetMask() );
+                Size    aSize( pA->GetSize() );
+
+                ImplBmp( &aBmp, &aMask, pA->GetPoint(), aSize.Width(), aSize.Height() );
             }
             break;
         }

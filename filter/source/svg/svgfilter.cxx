@@ -29,13 +29,16 @@
 #include "precompiled_filter.hxx"
 
 #include <cstdio>
-
 #include "svgfilter.hxx"
+#include <vos/mutex.hxx>
+
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
-#include <vos/mutex.hxx>
+
+#define SVG_FILTER_SERVICE_NAME         "com.sun.star.comp.Draw.SVGFilter"
+#define SVG_FILTER_IMPLEMENTATION_NAME  SVG_FILTER_SERVICE_NAME
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -82,7 +85,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
 #ifdef SOLAR_JAVA
     if( mxDstDoc.is() )
-        bRet = implImport( rDescriptor );
+        bRet = sal_False;//implImport( rDescriptor );
     else
 #endif
     if( mxSrcDoc.is() )
@@ -115,18 +118,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        Sequence< PropertyValue > aNewDescritor( rDescriptor );
+        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
 
         if( nCurrentPageNumber > 0 )
         {
             const sal_uInt32    nOldLength = rDescriptor.getLength();
 
-            aNewDescritor.realloc( nOldLength + 1 );
-            aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            aNewDescriptor.realloc( nOldLength + 1 );
+            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
+            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
         }
 
-        bRet = implExport( aNewDescritor );
+        bRet = implExport( aNewDescriptor );
     }
     else
         bRet = sal_False;
@@ -173,17 +176,15 @@ void SAL_CALL SVGFilter::initialize( const ::com::sun::star::uno::Sequence< ::co
 OUString SVGFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.SVGFilter" ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_FILTER_IMPLEMENTATION_NAME ) );
 }
 
 // -----------------------------------------------------------------------------
 
-#define SERVICE_NAME "com.sun.star.document.SVGFilter"
-
-sal_Bool SAL_CALL SVGFilter_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SVGFilter_supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
+    return( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SVG_FILTER_SERVICE_NAME ) ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -192,11 +193,9 @@ Sequence< OUString > SAL_CALL SVGFilter_getSupportedServiceNames(  ) throw (Runt
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_FILTER_SERVICE_NAME ) );
     return aRet;
 }
-
-#undef SERVICE_NAME
 
 // -----------------------------------------------------------------------------
 
