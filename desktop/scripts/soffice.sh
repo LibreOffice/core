@@ -73,7 +73,7 @@ if [ -e $sd_prog/ooenv ] ; then
 fi
 
 if [ "$VALGRIND" != "" ]; then
-    VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --error-exitcode=101"
+    VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --trace-children-skip=*/java --error-exitcode=101"
     export VALGRINDCHECK
     G_SLICE=always-malloc
     export G_SLICE
