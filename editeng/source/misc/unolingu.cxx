@@ -35,7 +35,6 @@
 #include <list>
 #include <memory>
 #include <editeng/unolingu.hxx>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -151,7 +150,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
         Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
         if (aValues.getLength())
         {
-            DBG_ASSERT( aValues.getLength() == 1, "unexpected length of sequence" );
+            OSL_ENSURE( aValues.getLength() == 1, "unexpected length of sequence" );
             Sequence< OUString > aSvcImplNames;
             if (aValues.getConstArray()[0] >>= aSvcImplNames)
                 aRes = aSvcImplNames;
@@ -232,10 +231,10 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 
         RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - updating..." );
 
-        DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
+        OSL_ENSURE( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
 
         uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing");
+        OSL_ENSURE( xLngSvcMgr.is(), "service manager missing");
         if (!xLngSvcMgr.is())
             return;
 
@@ -379,7 +378,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                     ++pNewValue;
                     ++aIt;
                 }
-                DBG_ASSERT( pNewValue - aNewValues.getArray() == nVals,
+                OSL_ENSURE( pNewValue - aNewValues.getArray() == nVals,
                         "possible mismatch of sequence size and property number" );
 
                 {
@@ -395,7 +394,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                 }
             }
         }
-        DBG_ASSERT( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
+        OSL_ENSURE( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
         Any aAny;
 
         // for the time being (developer builds until OOo 3.0)
@@ -449,7 +448,7 @@ sal_Bool SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
         aCfg.GetOptions( aLinguOpt );
         nNeedUpdating = (nCurrentDataFilesChangedCheckValue == aLinguOpt.nDataFilesChangedCheckValue) ? 0 : 1;
     }
-    DBG_ASSERT( nNeedUpdating != -1,
+    OSL_ENSURE( nNeedUpdating != -1,
             "need for linguistic configuration update should have been already checked." );
 
     return nNeedUpdating == 1;
@@ -591,7 +590,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 {
     GetThes_Impl();
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
-    DBG_ASSERT( xThes.is(), "Thesaurus missing" );
+    OSL_ENSURE( xThes.is(), "Thesaurus missing" );
     if (xThes.is())
         aRes = xThes->queryMeanings( rTerm, rLocale, rProperties );
     return aRes;
@@ -879,7 +878,7 @@ LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
         xDesktop->removeEventListener( this );
         xDesktop = NULL;    //! release reference to desktop
     }
-    DBG_ASSERT(!xDesktop.is(), "reference to desktop should be realeased");
+    OSL_ENSURE(!xDesktop.is(), "reference to desktop should be realeased");
 }
 
 void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
@@ -1147,11 +1146,11 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     }
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );
-    DBG_ASSERT( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
+    OSL_ENSURE( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
             "wrong dictionary type");
-    DBG_ASSERT( xDic.is() && SvxLocaleToLanguage( xDic->getLocale() ) == LANGUAGE_NONE,
+    OSL_ENSURE( xDic.is() && SvxLocaleToLanguage( xDic->getLocale() ) == LANGUAGE_NONE,
             "wrong dictionary language");
-    DBG_ASSERT( !xStor.is() || (xStor->hasLocation() && !xStor->isReadonly()),
+    OSL_ENSURE( !xStor.is() || (xStor->hasLocation() && !xStor->isReadonly()),
             "dictionary not editable" );
 #endif
 
@@ -1272,7 +1271,7 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
             case DIC_ERR_READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
             default:
                 nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
-                DBG_ASSERT(0, "unexpected case");
+                OSL_FAIL("unexpected case");
         }
         nRes = InfoBox( pParent, EE_RESSTR( nRid ) ).Execute();
     }
