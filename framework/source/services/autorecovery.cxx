@@ -840,7 +840,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     WriteGuard aWriteLock(m_aLock);
 
     // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
-    // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+    // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
     // was set.
     if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
        return;
@@ -1530,7 +1530,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
         implts_stopTimer();
 
         // The timer must be ignored if AutoSave/Recovery was disabled for this
-        // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+        // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
         // was set. But normaly the timer was disabled if recovery was disabled ...
         // But so we are more "safe" .-)
         // SAFE -> ----------------------------------

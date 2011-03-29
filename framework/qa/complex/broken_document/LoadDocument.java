@@ -62,7 +62,7 @@ public class LoadDocument {
 //    }
 
     /**
-     * Start Office with "-headless" parameter, then
+     * Start Office with "--headless" parameter, then
      * load the broken document "dbf.dbf.emf", that brings a message box up in
      * the ui, see if the headless mode of SOffice changes.
      */
