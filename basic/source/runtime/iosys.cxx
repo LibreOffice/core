@@ -40,8 +40,6 @@
 
 #include "runtime.hxx"
 
-#ifdef _USE_UNO
-
 #include <sal/alloca.h>
 
 #include <ctype.h>
@@ -71,8 +69,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::bridge;
-
-#endif /* _USE_UNO */
 
 #include "iosys.hxx"
 #include "sbintern.hxx"

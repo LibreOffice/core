@@ -58,7 +58,6 @@
 #include "runtime.hxx"
 #include "sbintern.hxx"
 
-#ifdef _USE_UNO
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 #include <comphelper/regpathhelper.hxx>
@@ -82,8 +81,6 @@ using namespace com::sun::star::beans;
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
-
-#endif /* _USE_UNO */
 
 IMPL_GEN_RES_STR;
 

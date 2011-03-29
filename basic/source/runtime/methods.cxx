@@ -58,7 +58,6 @@
 #endif
 #include "errobject.hxx"
 
-#ifdef _USE_UNO
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -80,8 +79,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::script;
-
-#endif /* _USE_UNO */
 
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>

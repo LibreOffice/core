@@ -33,10 +33,6 @@
 
 #include "sb.hxx"
 
-// Define activates class UCBStream in iosys.cxx
-#define _USE_UNO
-
-#ifdef _USE_UNO
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/file.hxx>
@@ -64,8 +60,6 @@ public:
 };
 
 }
-
-#endif /* _USE_UNO */
 
 class SbiInstance;                  // aktiver StarBASIC-Prozess
 class SbiRuntime;                   // aktive StarBASIC-Prozedur-Instanz
@@ -143,9 +137,7 @@ public:
     String sFullNameToBeChecked;
     WildCard* pWildCard;
 
-#ifdef _USE_UNO
     Sequence< ::rtl::OUString > aDirSeq;
-#endif /* _USE_UNO */
 
     SbiRTLData();
     ~SbiRTLData();
