@@ -37,6 +37,8 @@
 #include <tools/solar.h>
 #include <tools/urlobj.hxx>
 
+#include <windows.h>
+
 
 #define U2S(STRING)     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 

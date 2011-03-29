@@ -102,7 +102,10 @@
 #endif
 
 #ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
 #include <objbase.h>
+#undef GradientStyle_RECT
 #endif
 
 

@@ -32,6 +32,8 @@
 #include <time.h>
 #ifndef WNT
 #include <unistd.h>
+#else
+#include <windows.h>
 #endif
 #include <sal/types.h>
 #include <osl/file.hxx>
