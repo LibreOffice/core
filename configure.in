@@ -6800,7 +6800,7 @@ case "$_os" in
 	    AC_MSG_RESULT([yes])
 		;;
    *)
-   SYSTEM_PANGO=YES
+   SYSTEM_LIBGSF=YES
    AC_MSG_RESULT([no])
    ;;
 esac
