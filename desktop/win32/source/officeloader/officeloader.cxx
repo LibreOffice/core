@@ -356,7 +356,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         BOOL    bHeadlessMode( FALSE );
 
         {
-            // Check command line arguments for "-headless" parameter. We only
+            // Check command line arguments for "--headless" parameter. We only
             // set the environment variable "ATTACHED_PARENT_PROCESSID" for the headless
             // mode as self-destruction of the soffice.bin process can lead to
             // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
@@ -370,8 +370,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 for ( n = 1; n < argc; n++ )
                 {
-                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) )
+                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) ||
+                         0 == _tcsnicmp( argv[n], _T("--headless"), 9 ) )
+                    {
                         bHeadlessMode = TRUE;
+                    }
                 }
             }
         }
