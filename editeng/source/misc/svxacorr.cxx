@@ -147,12 +147,6 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-#if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCharType;
-        sal_Int32 nChType;
-        nCharType = rCC.getCharacterType( rTxt, nStt );
-        nChType = rCC.getType( rTxt, nStt );
-#endif
         short nScript = rCC.getScript( rTxt, nStt );
         switch( nScript )
         {
@@ -182,12 +176,6 @@ sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-#if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCharType;
-        sal_Int32 nChType;
-        nCharType = rCC.getCharacterType( rTxt, nStt );
-        nChType = rCC.getType( rTxt, nStt );
-#endif
         if( ::com::sun::star::i18n::UnicodeType::PRIVATE_USE ==
                 rCC.getType( rTxt, nStt ))
             return sal_True;
