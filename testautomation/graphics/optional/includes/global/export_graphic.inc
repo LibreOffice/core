@@ -330,6 +330,31 @@ testcase tTIFF
 
 endcase 'tTIFF
 '------------------------------------------------------------------------------
+testcase tSVG
+    'warnlog( "#i115138# - Test document freezes draw" )
+    'goto endsub
+
+    dim x as integer
+    dim i as integer
+
+    const sFilter = "SVG - Scalable Vector Graphics (.svg)"
+    const sExt = ".svg"
+
+    printlog "Open the document"
+    hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
+
+    printlog "Save it"
+    if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
+        printlog( "Close file and re-insert graphics into new document" )
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+    else
+        warnlog( "No export options dialog was displayed" )
+    endif
+
+    call hCloseDocument
+
+endcase 'tSVG
+'------------------------------------------------------------------------------
 testcase tXPM
     warnlog( "#i115138# - Test document freezes draw" )
     goto endsub
