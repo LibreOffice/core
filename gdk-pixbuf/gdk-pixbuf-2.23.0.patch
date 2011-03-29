@@ -1,0 +1,24 @@
+--- misc/gdk-pixbuf-2.23.0/configure	2010-12-23 15:18:11.000000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/configure	2011-02-28 18:49:26.000000000 +0100
+@@ -16839,7 +16839,7 @@
+ 
+ 
+ 
+-
++if 0; then
+ 
+ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+ 	if test -n "$ac_tool_prefix"; then
+@@ -17158,7 +17158,11 @@
+ 
+ 
+   rm -f conf.glibtest
+-
++else
++  GLIB_MKENUMS=glib-mkenums
++  GLIB_GENMARSHAL=glib-genmarshal
++  GOBJECT_QUERY=gobject-query
++fi
+ 
+ # See if it's safe to turn G_DISABLE_DEPRECATED on.
+ GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`

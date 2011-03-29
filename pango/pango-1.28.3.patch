@@ -1,0 +1,37 @@
+--- misc/pango-1.28.3/configure	2010-09-29 13:02:33.000000000 +0200
++++ misc/build/pango-1.28.3/configure	2011-03-01 17:56:26.000000000 +0100
+@@ -18596,16 +18596,16 @@
+   fi
+ 
+   if $have_atsui; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
++#    if test -n "$PKG_CONFIG" && \
++#    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
++#  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
++#  ac_status=$?
++#  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++#  test $ac_status = 0; }; then
+   have_cairo_atsui=true
+-else
+-  :
+-fi
++#else
++#  :
++#fi
+   fi
+   if $have_cairo_atsui; then
+ 
+@@ -18859,7 +18859,7 @@
+ 
+ # Setup GLIB_MKENUMS to use glib-mkenums even if GLib is uninstalled.
+ GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ # Add in gthread-2.0 to CFLAGS but not to LIBS so we get any
