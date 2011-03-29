@@ -35,27 +35,19 @@
 
 namespace writerfilter
 {
-struct eqstr
-{
-    bool operator()(const char* s1, const char* s2) const
+    typedef boost::unordered_map<string, TagLogger::Pointer_t> TagLoggerHashMap_t;
+    static TagLoggerHashMap_t * tagLoggers = NULL;
+
+        TagLogger::TagLogger(const char* name)
+        : pWriter( NULL ), pName( name )
     {
-        return strcmp(s1, s2) == 0;
     }
-};
 
-typedef boost::unordered_map<const char *, TagLogger::Pointer_t> TagLoggerHashMap_t;
-static TagLoggerHashMap_t * tagLoggers = NULL;
-
-    TagLogger::TagLogger(const char* name)
-    : pWriter( NULL ), pName( name )
-{
-}
-
-TagLogger::~TagLogger()
-{
+    TagLogger::~TagLogger()
+    {
         pWriter = NULL;
         pName = NULL;
-}
+    }
 
     void TagLogger::setFileName( const string & filename )
     {
@@ -96,13 +88,14 @@ TagLogger::~TagLogger()
 
         TagLoggerHashMap_t::iterator aIt = tagLoggers->end();
 
+        string sName = name;
         if (! tagLoggers->empty())
-            aIt = tagLoggers->find(name);
+            aIt = tagLoggers->find(sName);
 
         if (aIt == tagLoggers->end())
         {
             TagLogger::Pointer_t pTagLogger(new TagLogger(name));
-            pair<const char *, TagLogger::Pointer_t> entry(name, pTagLogger);
+            pair<string, TagLogger::Pointer_t> entry(sName, pTagLogger);
             aIt = tagLoggers->insert(entry).first;
         }
 
