@@ -117,7 +117,6 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
     HINSTANCE hInstance;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     oslModule ret = 0;
-    oslFileError    nError;
 
     RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %s", pModuleName );
 
