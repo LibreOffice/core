@@ -260,7 +260,7 @@ void SAL_CALL OOXMLFastContextHandler::endUnknownElement
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement("contexthandler.unknown-element");
+    debug_logger->endElement();
     mpParserState->getXPathLogger().endElement();
 #endif
 }
@@ -1482,7 +1482,7 @@ void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
     mpValue = pValue;
 
 #ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement("contexthandler.setValue");
+    debug_logger->endElement();
 #endif
 }
 
