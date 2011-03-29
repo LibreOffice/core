@@ -34,8 +34,8 @@ extern "C"
 {
     #include "stdio.h"
     #include "jpeg.h"
-    #include "jpeglib.h"
-    #include "jerror.h"
+    #include "jpeg/jpeglib.h"
+    #include "jpeg/jerror.h"
 }
 
 #define _JPEGPRIVATE

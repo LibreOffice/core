@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "setjmp.h"
-#include "jpeglib.h"
-#include "jerror.h"
+#include "jpeg/jpeglib.h"
+#include "jpeg/jerror.h"
 #include "jpeg.h"
 #include "rtl/alloc.h"
 #include "osl/diagnose.h"
