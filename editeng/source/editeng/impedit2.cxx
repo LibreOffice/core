@@ -1798,18 +1798,6 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
                     rTypes[nIdx].nStartPos = nEnd;
             }
         }
-
-#if OSL_DEBUG_LEVEL > 1
-        sal_uInt16 nDebugStt = 0;
-        sal_uInt16 nDebugEnd = 0;
-        short nDebugType = 0;
-        for ( size_t n = 0; n < rTypes.size(); ++n )
-        {
-            nDebugStt  = rTypes[n].nStartPos;
-            nDebugEnd  = rTypes[n].nEndPos;
-            nDebugType = rTypes[n].nScriptType;
-        }
-#endif
     }
 }
 
