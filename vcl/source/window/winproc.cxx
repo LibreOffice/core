@@ -1799,7 +1799,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 pSVData->maWinData.mpFocusWin = NULL;
 
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
-                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
 
                 // Deaktivate rufen
                 Window* pOldFocusWindow = pFocusWin;
@@ -1906,7 +1906,7 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
-        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
     if( bCallDirect )
         pWindow->ImplAsyncFocusHdl( NULL );
 }

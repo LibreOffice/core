@@ -216,7 +216,7 @@ void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
 
 // -----------------------------------------------------------------------
 
-bool Cursor::ImplHide()
+bool Cursor::ImplHide( bool i_bStopTimer )
 {
     bool bWasCurVisible = false;
     if ( mpData && mpData->mpWindow )
@@ -225,6 +225,13 @@ bool Cursor::ImplHide()
         if ( mpData->mbCurVisible )
             ImplRestore();
     }
+
+    if( mpData && i_bStopTimer )
+    {
+        mpData->maTimer.Stop();
+        mpData->mpWindow = NULL;
+    }
+
     return bWasCurVisible;
 }
 
@@ -328,13 +335,7 @@ void Cursor::Hide()
     if ( mbVisible )
     {
         mbVisible = sal_False;
-        ImplHide();
-
-        if( mpData )
-        {
-            mpData->maTimer.Stop();
-            mpData->mpWindow = NULL;
-        }
+        ImplHide( true );
     }
 }
 
