@@ -1494,10 +1494,6 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // other filters for automatic
          CheckItem( nActFamily, sal_True );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-#if OSL_DEBUG_LEVEL > 1
-         SfxFilterTupel *pT;
-         pT = pStyleItem->GetFilterList()[ nActFilter ];
-#endif
          if (  0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
             && nAppFilter != pItem->GetValue())
          {
