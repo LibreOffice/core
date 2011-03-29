@@ -149,10 +149,6 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
         rNodeName += OUString::valueOf( (sal_Unicode)'/' );
         rNodeName += aCfgLocaleStr;
         Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
-#if OSL_DEBUG_LEVEL > 1
-        const Any *pValue;
-        pValue = aValues.getConstArray();
-#endif
         if (aValues.getLength())
         {
             DBG_ASSERT( aValues.getLength() == 1, "unexpected length of sequence" );
