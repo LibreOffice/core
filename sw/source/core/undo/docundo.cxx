@@ -47,6 +47,7 @@
 #include <undo.hrc>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
+#include <limits>
 
 #include <limits>
 
