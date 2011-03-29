@@ -463,6 +463,7 @@ SDLIB=sdlib.lib
 SDLLIB=sdl.lib
 SWLIB=swlib.lib
 PRXLIB=ilprx2.lib
+PACKAGE2LIB=package2.lib
 ISWLIB=_sw.lib
 ISCLIB=sci.lib
 ISDLIB=sdi.lib
