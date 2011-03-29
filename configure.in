@@ -3021,14 +3021,18 @@ _ACEOF
     if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-         if test "$JAVACOMPILER" != `readlink -f "$JAVACOMPILER" 2>/dev/null`; then
+         javac_link_f=`readlink -f "$JAVACOMPILER" 2>/dev/null`
+         if test $? == 0 && test "$JAVACOMPILER" != "$javac_link_f"; then
           # try to recover first by looking whether we have a alternatives 
           # system as in Debian or newer SuSEs where following /usr/bin/javac
           # over /etc/alternatives/javac leads to the right bindir where we
           # just need to strip a bit away to get a valid JAVA_HOME
-          # maybe only one level of symlink (e.g. on Mac)
           # Solaris 11 is even worse, because target is relative, so use -f
-            JAVA_HOME=`readlink -f $JAVACOMPILER`
+            JAVA_HOME="$javac_link_f"
+         elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
+          # Darwin readlink(1) is so primitive it doesn't even support -f
+          # maybe only one level of symlink (e.g. on Mac)
+            JAVA_HOME=`readlink $JAVACOMPILER`
          else
           # else warn
           AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
