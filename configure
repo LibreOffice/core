@@ -591,6 +591,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
+<<<<<<< local
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 BUILD_TYPE
@@ -1015,6 +1016,9 @@ PACKAGE_TARNAME
 PACKAGE_NAME
 PATH_SEPARATOR
 SHELL'
+=======
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS VALGRIND_CFLAGS PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_SHARED_LIBSTDCPP MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM RPM PKGFORMAT GPERF BUILD_STAX MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_MDDS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN ICUCONFIG SYSTEM_ICU ICU_MAJOR ICU_MINOR ICU_MICRO GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB MYTHES_CFLAGS MYTHES_LIBS SYSTEM_MYTHES SYSTEM_LPSOLVE SYSTEM_LIBTEXTCAT SYSTEM_LIBTEXTCAT_DATA HAVE_GETOPT HAVE_READDIR_R SYSTEM_LIBC PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK GSTREAMER_CFLAGS GSTREAMER_LIBS ENABLE_GSTREAMER CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK SYSTEM_LIBRSVG SYSTEM_GDKPIXBUF SYSTEM_GLIB SYSTEM_GETTEXT SYSTEM_LIBCROCO SYSTEM_PANGO SYSTEM_LIBGSF SYSTEM_LIBPNG SYSTEM_LIBJPEG ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE nodep LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+>>>>>>> other
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
@@ -23115,6 +23119,213 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking whether to build own version of librsvg" >&5
+echo $ECHO_N "checking whether to build own version of librsvg... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBRSVG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_LIBRSVG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_LIBRSVG=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of gdk-pixbuf" >&5
+echo $ECHO_N "checking whether to build own version of gdk-pixbuf... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GDKPIXBUF=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_GDKPIXBUF=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_GDKPIXBUF=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of glib" >&5
+echo $ECHO_N "checking whether to build own version of glib... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GLIB=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_GLIB=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_GLIB=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of gettext" >&5
+echo $ECHO_N "checking whether to build own version of gettext... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GETTEXT=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_GETTEXT=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_GETTEXT=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of libcroco" >&5
+echo $ECHO_N "checking whether to build own version of libcroco... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBCROCO=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_LIBCROCO=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_LIBCROCO=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of pango" >&5
+echo $ECHO_N "checking whether to build own version of pango... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_PANGO=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_PANGO=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_PANGO=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of libgsf" >&5
+echo $ECHO_N "checking whether to build own version of libgsf... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBGSF=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+   *)
+   SYSTEM_LIBGSF=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+echo "$as_me:$LINENO: checking whether to build own version of libpng" >&5
+echo $ECHO_N "checking whether to build own version of libpng... $ECHO_C" >&6
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBPNG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_LIBPNG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_LIBPNG=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+
+
+
+echo "$as_me:$LINENO: checking whether to build own version of libjpeg" >&5
+echo $ECHO_N "checking whether to build own version of libjpeg... $ECHO_C" >&6
+
+if test "$SYSTEM_JPEG" == "YES"; then
+SYSTEM_LIBJPEG=YES
+else
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBJPEG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		;;
+	Darwin*)
+	    SYSTEM_LIBJPEG=NO
+	    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	    ;;
+   *)
+   SYSTEM_LIBJPEG=YES
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ;;
+esac
+fi
+
+if test "$SYSTEM_LIBJPEG" == "YES"; then
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+else
+   echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+fi
+
+
+
 
 if test "$SOLAR_JAVA" != ""; then
 ANT_HOME=; export ANT_HOME
@@ -24379,10 +24590,21 @@ $debug ||
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {
+<<<<<<< local
   tmp=./conf$$-$RANDOM
   (umask 077 && mkdir "$tmp")
 } || as_fn_error $? "cannot create a temporary directory in ." "$LINENO" 5
+=======
+  tmp=./confstat$$-$RANDOM
+  (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in ." >&2
+   { (exit 1); exit 1; }
+}
+>>>>>>> other
 
+<<<<<<< local
 # Set up the scripts for CONFIG_FILES section.
 # No need to generate them if there are no CONFIG_FILES.
 # This happens for instance with `./config.status config.h'.
@@ -24404,9 +24626,16 @@ else
 fi
 
 echo 'BEGIN {' >"$tmp/subs1.awk" &&
+=======
+>>>>>>> other
 _ACEOF
 
+<<<<<<< local
+=======
+cat >>$CONFIG_STATUS <<_ACEOF
+>>>>>>> other
 
+<<<<<<< local
 {
   echo "cat >conf$$subs.awk <<_ACEOF" &&
   echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/' &&
@@ -24418,7 +24647,13 @@ ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   . ./conf$$subs.sh ||
     as_fn_error $? "could not make $CONFIG_STATUS" "$LINENO" 5
+=======
+#
+# CONFIG_FILES section.
+#
+>>>>>>> other
 
+<<<<<<< local
   ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X`
   if test $ac_delim_n = $ac_delim_num; then
     break
@@ -24429,7 +24664,439 @@ for ac_last_try in false false false false false :; do
   fi
 done
 rm -f conf$$subs.sh
+=======
+# No need to generate the scripts if there are no CONFIG_FILES.
+# This happens for instance when ./config.status config.h
+if test -n "\$CONFIG_FILES"; then
+  # Protect against being on the right side of a sed subst in config.status.
+  sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
+   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF
+s,@SHELL@,$SHELL,;t t
+s,@PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
+s,@PACKAGE_NAME@,$PACKAGE_NAME,;t t
+s,@PACKAGE_TARNAME@,$PACKAGE_TARNAME,;t t
+s,@PACKAGE_VERSION@,$PACKAGE_VERSION,;t t
+s,@PACKAGE_STRING@,$PACKAGE_STRING,;t t
+s,@PACKAGE_BUGREPORT@,$PACKAGE_BUGREPORT,;t t
+s,@exec_prefix@,$exec_prefix,;t t
+s,@prefix@,$prefix,;t t
+s,@program_transform_name@,$program_transform_name,;t t
+s,@bindir@,$bindir,;t t
+s,@sbindir@,$sbindir,;t t
+s,@libexecdir@,$libexecdir,;t t
+s,@datadir@,$datadir,;t t
+s,@sysconfdir@,$sysconfdir,;t t
+s,@sharedstatedir@,$sharedstatedir,;t t
+s,@localstatedir@,$localstatedir,;t t
+s,@libdir@,$libdir,;t t
+s,@includedir@,$includedir,;t t
+s,@oldincludedir@,$oldincludedir,;t t
+s,@infodir@,$infodir,;t t
+s,@mandir@,$mandir,;t t
+s,@build_alias@,$build_alias,;t t
+s,@host_alias@,$host_alias,;t t
+s,@target_alias@,$target_alias,;t t
+s,@DEFS@,$DEFS,;t t
+s,@ECHO_C@,$ECHO_C,;t t
+s,@ECHO_N@,$ECHO_N,;t t
+s,@ECHO_T@,$ECHO_T,;t t
+s,@LIBS@,$LIBS,;t t
+s,@EGREP@,$EGREP,;t t
+s,@AWK@,$AWK,;t t
+s,@SED@,$SED,;t t
+s,@LOCAL_SOLENV@,$LOCAL_SOLENV,;t t
+s,@_solenv@,$_solenv,;t t
+s,@UPD@,$UPD,;t t
+s,@SOURCEVERSION@,$SOURCEVERSION,;t t
+s,@build@,$build,;t t
+s,@build_cpu@,$build_cpu,;t t
+s,@build_vendor@,$build_vendor,;t t
+s,@build_os@,$build_os,;t t
+s,@host@,$host,;t t
+s,@host_cpu@,$host_cpu,;t t
+s,@host_vendor@,$host_vendor,;t t
+s,@host_os@,$host_os,;t t
+s,@target@,$target,;t t
+s,@target_cpu@,$target_cpu,;t t
+s,@target_vendor@,$target_vendor,;t t
+s,@target_os@,$target_os,;t t
+s,@GNUTAR@,$GNUTAR,;t t
+s,@OSVERSION@,$OSVERSION,;t t
+s,@PTHREAD_CFLAGS@,$PTHREAD_CFLAGS,;t t
+s,@PTHREAD_LIBS@,$PTHREAD_LIBS,;t t
+s,@ENABLE_CRASHDUMP@,$ENABLE_CRASHDUMP,;t t
+s,@VC_STANDARD@,$VC_STANDARD,;t t
+s,@ENABLE_WERROR@,$ENABLE_WERROR,;t t
+s,@ENABLE_DEBUG@,$ENABLE_DEBUG,;t t
+s,@PRODUCT@,$PRODUCT,;t t
+s,@PROFULLSWITCH@,$PROFULLSWITCH,;t t
+s,@PROEXT@,$PROEXT,;t t
+s,@ENABLE_SYMBOLS@,$ENABLE_SYMBOLS,;t t
+s,@DISABLE_STRIP@,$DISABLE_STRIP,;t t
+s,@ENABLE_CUPS@,$ENABLE_CUPS,;t t
+s,@ENABLE_FONTCONFIG@,$ENABLE_FONTCONFIG,;t t
+s,@TARFILE_LOCATION@,$TARFILE_LOCATION,;t t
+s,@DO_FETCH_TARBALLS@,$DO_FETCH_TARBALLS,;t t
+s,@WITH_BINFILTER@,$WITH_BINFILTER,;t t
+s,@ENABLE_DIRECTX@,$ENABLE_DIRECTX,;t t
+s,@DISABLE_ACTIVEX@,$DISABLE_ACTIVEX,;t t
+s,@DISABLE_ATL@,$DISABLE_ATL,;t t
+s,@ENABLE_RPATH@,$ENABLE_RPATH,;t t
+s,@WITH_MYSPELL_DICTS@,$WITH_MYSPELL_DICTS,;t t
+s,@SYSTEM_DICTS@,$SYSTEM_DICTS,;t t
+s,@DICT_SYSTEM_DIR@,$DICT_SYSTEM_DIR,;t t
+s,@HYPH_SYSTEM_DIR@,$HYPH_SYSTEM_DIR,;t t
+s,@THES_SYSTEM_DIR@,$THES_SYSTEM_DIR,;t t
+s,@WITH_MINGWIN@,$WITH_MINGWIN,;t t
+s,@SHELLPATH@,$SHELLPATH,;t t
+s,@GCC_HOME@,$GCC_HOME,;t t
+s,@CC@,$CC,;t t
+s,@CFLAGS@,$CFLAGS,;t t
+s,@LDFLAGS@,$LDFLAGS,;t t
+s,@CPPFLAGS@,$CPPFLAGS,;t t
+s,@ac_ct_CC@,$ac_ct_CC,;t t
+s,@EXEEXT@,$EXEEXT,;t t
+s,@OBJEXT@,$OBJEXT,;t t
+s,@COMPATH@,$COMPATH,;t t
+s,@GCCVER@,$GCCVER,;t t
+s,@HAVE_LD_BSYMBOLIC_FUNCTIONS@,$HAVE_LD_BSYMBOLIC_FUNCTIONS,;t t
+s,@ENABLE_PCH@,$ENABLE_PCH,;t t
+s,@GNUMAKE@,$GNUMAKE,;t t
+s,@_cc@,$_cc,;t t
+s,@HAVE_LD_HASH_STYLE@,$HAVE_LD_HASH_STYLE,;t t
+s,@PERL@,$PERL,;t t
+s,@MSPDB_PATH@,$MSPDB_PATH,;t t
+s,@COMEX@,$COMEX,;t t
+s,@USE_MINGW@,$USE_MINGW,;t t
+s,@MIDL_PATH@,$MIDL_PATH,;t t
+s,@CSC_PATH@,$CSC_PATH,;t t
+s,@FRAME_HOME@,$FRAME_HOME,;t t
+s,@CPP@,$CPP,;t t
+s,@CXX@,$CXX,;t t
+s,@CXXFLAGS@,$CXXFLAGS,;t t
+s,@ac_ct_CXX@,$ac_ct_CXX,;t t
+s,@CXXCPP@,$CXXCPP,;t t
+s,@SIZEOF_LONG@,$SIZEOF_LONG,;t t
+s,@WORDS_BIGENDIAN@,$WORDS_BIGENDIAN,;t t
+s,@LFS_CFLAGS@,$LFS_CFLAGS,;t t
+s,@VALGRIND_CFLAGS@,$VALGRIND_CFLAGS,;t t
+s,@PAM@,$PAM,;t t
+s,@NEW_SHADOW_API@,$NEW_SHADOW_API,;t t
+s,@PAM_LINK@,$PAM_LINK,;t t
+s,@CRYPT_LINK@,$CRYPT_LINK,;t t
+s,@GXX_INCLUDE_PATH@,$GXX_INCLUDE_PATH,;t t
+s,@MINGW_LIB_INCLUDE_PATH@,$MINGW_LIB_INCLUDE_PATH,;t t
+s,@MINGW_BACKWARD_INCLUDE_PATH@,$MINGW_BACKWARD_INCLUDE_PATH,;t t
+s,@MINGW_CLIB_DIR@,$MINGW_CLIB_DIR,;t t
+s,@MINGW_SHARED_GCCLIB@,$MINGW_SHARED_GCCLIB,;t t
+s,@MINGW_GCCLIB_EH@,$MINGW_GCCLIB_EH,;t t
+s,@MINGW_SHARED_GXXLIB@,$MINGW_SHARED_GXXLIB,;t t
+s,@MINGW_SHARED_LIBSTDCPP@,$MINGW_SHARED_LIBSTDCPP,;t t
+s,@MINGW_GCCDLL@,$MINGW_GCCDLL,;t t
+s,@MINGW_GXXDLL@,$MINGW_GXXDLL,;t t
+s,@EXCEPTIONS@,$EXCEPTIONS,;t t
+s,@STLPORT4@,$STLPORT4,;t t
+s,@STLPORT_VER@,$STLPORT_VER,;t t
+s,@USE_SYSTEM_STL@,$USE_SYSTEM_STL,;t t
+s,@USE_CCACHE@,$USE_CCACHE,;t t
+s,@CCACHE@,$CCACHE,;t t
+s,@HAVE_GCC_VISIBILITY_FEATURE@,$HAVE_GCC_VISIBILITY_FEATURE,;t t
+s,@ALLOC@,$ALLOC,;t t
+s,@BUILD_VER_STRING@,$BUILD_VER_STRING,;t t
+s,@SOLAR_JAVA@,$SOLAR_JAVA,;t t
+s,@JAVAINTERPRETER@,$JAVAINTERPRETER,;t t
+s,@JAVACOMPILER@,$JAVACOMPILER,;t t
+s,@JAVACISGCJ@,$JAVACISGCJ,;t t
+s,@JAVADOC@,$JAVADOC,;t t
+s,@AWTLIB@,$AWTLIB,;t t
+s,@JAVAAOTCOMPILER@,$JAVAAOTCOMPILER,;t t
+s,@JAVA_HOME@,$JAVA_HOME,;t t
+s,@JDK@,$JDK,;t t
+s,@JAVAFLAGS@,$JAVAFLAGS,;t t
+s,@JAVAIFLAGS@,$JAVAIFLAGS,;t t
+s,@DMAKE@,$DMAKE,;t t
+s,@BUILD_DMAKE@,$BUILD_DMAKE,;t t
+s,@EPM@,$EPM,;t t
+s,@DPKG@,$DPKG,;t t
+s,@PKGMK@,$PKGMK,;t t
+s,@BUILD_EPM@,$BUILD_EPM,;t t
+s,@RPM@,$RPM,;t t
+s,@PKGFORMAT@,$PKGFORMAT,;t t
+s,@GPERF@,$GPERF,;t t
+s,@BUILD_STAX@,$BUILD_STAX,;t t
+s,@MINGWCXX@,$MINGWCXX,;t t
+s,@ac_ct_MINGWCXX@,$ac_ct_MINGWCXX,;t t
+s,@MINGWSTRIP@,$MINGWSTRIP,;t t
+s,@ac_ct_MINGWSTRIP@,$ac_ct_MINGWSTRIP,;t t
+s,@BUILD_UNOWINREG@,$BUILD_UNOWINREG,;t t
+s,@SYSTEM_STDLIBS@,$SYSTEM_STDLIBS,;t t
+s,@SYSTEM_ZLIB@,$SYSTEM_ZLIB,;t t
+s,@SYSTEM_JPEG@,$SYSTEM_JPEG,;t t
+s,@SYSTEM_EXPAT@,$SYSTEM_EXPAT,;t t
+s,@PKG_CONFIG@,$PKG_CONFIG,;t t
+s,@LIBWPD_CFLAGS@,$LIBWPD_CFLAGS,;t t
+s,@LIBWPD_LIBS@,$LIBWPD_LIBS,;t t
+s,@SYSTEM_LIBWPD@,$SYSTEM_LIBWPD,;t t
+s,@CPPUNIT_CFLAGS@,$CPPUNIT_CFLAGS,;t t
+s,@CPPUNIT_LIBS@,$CPPUNIT_LIBS,;t t
+s,@SYSTEM_CPPUNIT@,$SYSTEM_CPPUNIT,;t t
+s,@FREETYPE_CFLAGS@,$FREETYPE_CFLAGS,;t t
+s,@FREETYPE_LIBS@,$FREETYPE_LIBS,;t t
+s,@USE_FT_EMBOLDEN@,$USE_FT_EMBOLDEN,;t t
+s,@LIBXSLT_CFLAGS@,$LIBXSLT_CFLAGS,;t t
+s,@LIBXSLT_LIBS@,$LIBXSLT_LIBS,;t t
+s,@XSLTPROC@,$XSLTPROC,;t t
+s,@SYSTEM_LIBXSLT@,$SYSTEM_LIBXSLT,;t t
+s,@LIBXML_CFLAGS@,$LIBXML_CFLAGS,;t t
+s,@LIBXML_LIBS@,$LIBXML_LIBS,;t t
+s,@SYSTEM_LIBXML@,$SYSTEM_LIBXML,;t t
+s,@PYTHON@,$PYTHON,;t t
+s,@PYTHON_VERSION@,$PYTHON_VERSION,;t t
+s,@PYTHON_PREFIX@,$PYTHON_PREFIX,;t t
+s,@PYTHON_EXEC_PREFIX@,$PYTHON_EXEC_PREFIX,;t t
+s,@PYTHON_PLATFORM@,$PYTHON_PLATFORM,;t t
+s,@pythondir@,$pythondir,;t t
+s,@pkgpythondir@,$pkgpythondir,;t t
+s,@pyexecdir@,$pyexecdir,;t t
+s,@pkgpyexecdir@,$pkgpyexecdir,;t t
+s,@BZIP2@,$BZIP2,;t t
+s,@SYSTEM_PYTHON@,$SYSTEM_PYTHON,;t t
+s,@PYTHON_CFLAGS@,$PYTHON_CFLAGS,;t t
+s,@PYTHON_LIBS@,$PYTHON_LIBS,;t t
+s,@HOME@,$HOME,;t t
+s,@SYSTEM_DB@,$SYSTEM_DB,;t t
+s,@DB_VERSION@,$DB_VERSION,;t t
+s,@DB_INCLUDES@,$DB_INCLUDES,;t t
+s,@DB_JAR@,$DB_JAR,;t t
+s,@SYSTEM_LUCENE@,$SYSTEM_LUCENE,;t t
+s,@LUCENE_CORE_JAR@,$LUCENE_CORE_JAR,;t t
+s,@LUCENE_ANALYZERS_JAR@,$LUCENE_ANALYZERS_JAR,;t t
+s,@ENABLE_MYSQLC@,$ENABLE_MYSQLC,;t t
+s,@MYSQLCONFIG@,$MYSQLCONFIG,;t t
+s,@SYSTEM_MYSQL@,$SYSTEM_MYSQL,;t t
+s,@MYSQL_INC@,$MYSQL_INC,;t t
+s,@MYSQL_LIB@,$MYSQL_LIB,;t t
+s,@MYSQL_DEFINES@,$MYSQL_DEFINES,;t t
+s,@LIBMYSQL_PATH@,$LIBMYSQL_PATH,;t t
+s,@SYSTEM_MYSQL_CPPCONN@,$SYSTEM_MYSQL_CPPCONN,;t t
+s,@SYSTEM_HSQLDB@,$SYSTEM_HSQLDB,;t t
+s,@HSQLDB_JAR@,$HSQLDB_JAR,;t t
+s,@SYSTEM_BSH@,$SYSTEM_BSH,;t t
+s,@BSH_JAR@,$BSH_JAR,;t t
+s,@SERIALIZER_JAR@,$SERIALIZER_JAR,;t t
+s,@SYSTEM_SAXON@,$SYSTEM_SAXON,;t t
+s,@SAXON_JAR@,$SAXON_JAR,;t t
+s,@CURLCONFIG@,$CURLCONFIG,;t t
+s,@SYSTEM_CURL@,$SYSTEM_CURL,;t t
+s,@CURL_CFLAGS@,$CURL_CFLAGS,;t t
+s,@CURL_LIBS@,$CURL_LIBS,;t t
+s,@SYSTEM_MDDS@,$SYSTEM_MDDS,;t t
+s,@SYSTEM_BOOST@,$SYSTEM_BOOST,;t t
+s,@SYSTEM_VIGRA@,$SYSTEM_VIGRA,;t t
+s,@SYSTEM_ODBC_HEADERS@,$SYSTEM_ODBC_HEADERS,;t t
+s,@WITH_MOZILLA@,$WITH_MOZILLA,;t t
+s,@WITH_LDAP@,$WITH_LDAP,;t t
+s,@WITH_OPENLDAP@,$WITH_OPENLDAP,;t t
+s,@MOZ_NSS_CFLAGS@,$MOZ_NSS_CFLAGS,;t t
+s,@MOZ_NSS_LIBS@,$MOZ_NSS_LIBS,;t t
+s,@NSS_LIB@,$NSS_LIB,;t t
+s,@MOZ_NSPR_CFLAGS@,$MOZ_NSPR_CFLAGS,;t t
+s,@MOZ_NSPR_LIBS@,$MOZ_NSPR_LIBS,;t t
+s,@NSPR_LIB@,$NSPR_LIB,;t t
+s,@MOZILLAXPCOM_CFLAGS@,$MOZILLAXPCOM_CFLAGS,;t t
+s,@MOZILLAXPCOM_LIBS@,$MOZILLAXPCOM_LIBS,;t t
+s,@MOZILLA_VERSION@,$MOZILLA_VERSION,;t t
+s,@MOZILLA_TOOLKIT@,$MOZILLA_TOOLKIT,;t t
+s,@MOZGTK2_CFLAGS@,$MOZGTK2_CFLAGS,;t t
+s,@MOZGTK2_LIBS@,$MOZGTK2_LIBS,;t t
+s,@MOZLIBREQ_CFLAGS@,$MOZLIBREQ_CFLAGS,;t t
+s,@MOZLIBREQ_LIBS@,$MOZLIBREQ_LIBS,;t t
+s,@BUILD_MOZAB@,$BUILD_MOZAB,;t t
+s,@ENABLE_NSS_MODULE@,$ENABLE_NSS_MODULE,;t t
+s,@MOZILLABUILD@,$MOZILLABUILD,;t t
+s,@SYSTEM_MOZILLA@,$SYSTEM_MOZILLA,;t t
+s,@MOZ_FLAVOUR@,$MOZ_FLAVOUR,;t t
+s,@MOZ_INC@,$MOZ_INC,;t t
+s,@MOZ_LIB@,$MOZ_LIB,;t t
+s,@MOZ_LIB_XPCOM@,$MOZ_LIB_XPCOM,;t t
+s,@MOZ_LDAP_CFLAGS@,$MOZ_LDAP_CFLAGS,;t t
+s,@SYSTEM_SANE_HEADER@,$SYSTEM_SANE_HEADER,;t t
+s,@SYSTEM_GENBRK@,$SYSTEM_GENBRK,;t t
+s,@SYSTEM_GENCCODE@,$SYSTEM_GENCCODE,;t t
+s,@SYSTEM_GENCMN@,$SYSTEM_GENCMN,;t t
+s,@ICUCONFIG@,$ICUCONFIG,;t t
+s,@SYSTEM_ICU@,$SYSTEM_ICU,;t t
+s,@ICU_MAJOR@,$ICU_MAJOR,;t t
+s,@ICU_MINOR@,$ICU_MINOR,;t t
+s,@ICU_MICRO@,$ICU_MICRO,;t t
+s,@GRAPHITE_CFLAGS@,$GRAPHITE_CFLAGS,;t t
+s,@GRAPHITE_LIBS@,$GRAPHITE_LIBS,;t t
+s,@ENABLE_GRAPHITE@,$ENABLE_GRAPHITE,;t t
+s,@SYSTEM_GRAPHITE@,$SYSTEM_GRAPHITE,;t t
+s,@X_CFLAGS@,$X_CFLAGS,;t t
+s,@X_PRE_LIBS@,$X_PRE_LIBS,;t t
+s,@X_LIBS@,$X_LIBS,;t t
+s,@X_EXTRA_LIBS@,$X_EXTRA_LIBS,;t t
+s,@XINC@,$XINC,;t t
+s,@XLIB@,$XLIB,;t t
+s,@XAU_LIBS@,$XAU_LIBS,;t t
+s,@DISABLE_XAW@,$DISABLE_XAW,;t t
+s,@SYSTEM_XRENDER_HEADERS@,$SYSTEM_XRENDER_HEADERS,;t t
+s,@XRENDER_LINK@,$XRENDER_LINK,;t t
+s,@XRANDR_CFLAGS@,$XRANDR_CFLAGS,;t t
+s,@XRANDR_LIBS@,$XRANDR_LIBS,;t t
+s,@XRANDR_DLOPEN@,$XRANDR_DLOPEN,;t t
+s,@ENABLE_RANDR@,$ENABLE_RANDR,;t t
+s,@DISABLE_NEON@,$DISABLE_NEON,;t t
+s,@NEON_CFLAGS@,$NEON_CFLAGS,;t t
+s,@NEON_LIBS@,$NEON_LIBS,;t t
+s,@SYSTEM_NEON@,$SYSTEM_NEON,;t t
+s,@NEON_VERSION@,$NEON_VERSION,;t t
+s,@OPENSSL_CFLAGS@,$OPENSSL_CFLAGS,;t t
+s,@OPENSSL_LIBS@,$OPENSSL_LIBS,;t t
+s,@SYSTEM_OPENSSL@,$SYSTEM_OPENSSL,;t t
+s,@ENABLE_AGG@,$ENABLE_AGG,;t t
+s,@AGG_CFLAGS@,$AGG_CFLAGS,;t t
+s,@AGG_LIBS@,$AGG_LIBS,;t t
+s,@SYSTEM_AGG@,$SYSTEM_AGG,;t t
+s,@AGG_VERSION@,$AGG_VERSION,;t t
+s,@REDLAND_CFLAGS@,$REDLAND_CFLAGS,;t t
+s,@REDLAND_LIBS@,$REDLAND_LIBS,;t t
+s,@SYSTEM_REDLAND@,$SYSTEM_REDLAND,;t t
+s,@HUNSPELL_CFLAGS@,$HUNSPELL_CFLAGS,;t t
+s,@HUNSPELL_LIBS@,$HUNSPELL_LIBS,;t t
+s,@SYSTEM_HUNSPELL@,$SYSTEM_HUNSPELL,;t t
+s,@SYSTEM_HYPH@,$SYSTEM_HYPH,;t t
+s,@HYPHEN_LIB@,$HYPHEN_LIB,;t t
+s,@MYTHES_CFLAGS@,$MYTHES_CFLAGS,;t t
+s,@MYTHES_LIBS@,$MYTHES_LIBS,;t t
+s,@SYSTEM_MYTHES@,$SYSTEM_MYTHES,;t t
+s,@SYSTEM_LPSOLVE@,$SYSTEM_LPSOLVE,;t t
+s,@SYSTEM_LIBTEXTCAT@,$SYSTEM_LIBTEXTCAT,;t t
+s,@SYSTEM_LIBTEXTCAT_DATA@,$SYSTEM_LIBTEXTCAT_DATA,;t t
+s,@HAVE_GETOPT@,$HAVE_GETOPT,;t t
+s,@HAVE_READDIR_R@,$HAVE_READDIR_R,;t t
+s,@SYSTEM_LIBC@,$SYSTEM_LIBC,;t t
+s,@PSDK_HOME@,$PSDK_HOME,;t t
+s,@WINDOWS_VISTA_PSDK@,$WINDOWS_VISTA_PSDK,;t t
+s,@DIRECTXSDK_HOME@,$DIRECTXSDK_HOME,;t t
+s,@DIRECTXSDK_LIB@,$DIRECTXSDK_LIB,;t t
+s,@NSIS_PATH@,$NSIS_PATH,;t t
+s,@BISON@,$BISON,;t t
+s,@FLEX@,$FLEX,;t t
+s,@PATCH@,$PATCH,;t t
+s,@GNUCP@,$GNUCP,;t t
+s,@GNUPATCH@,$GNUPATCH,;t t
+s,@CYGWIN_PATH@,$CYGWIN_PATH,;t t
+s,@ML_EXE@,$ML_EXE,;t t
+s,@ASM_HOME@,$ASM_HOME,;t t
+s,@ZIP@,$ZIP,;t t
+s,@UNZIP@,$UNZIP,;t t
+s,@ZIP_HOME@,$ZIP_HOME,;t t
+s,@ENABLE_GTK@,$ENABLE_GTK,;t t
+s,@ENABLE_KDE@,$ENABLE_KDE,;t t
+s,@ENABLE_KDE4@,$ENABLE_KDE4,;t t
+s,@GCONF_CFLAGS@,$GCONF_CFLAGS,;t t
+s,@GCONF_LIBS@,$GCONF_LIBS,;t t
+s,@ENABLE_GCONF@,$ENABLE_GCONF,;t t
+s,@GNOMEVFS_CFLAGS@,$GNOMEVFS_CFLAGS,;t t
+s,@GNOMEVFS_LIBS@,$GNOMEVFS_LIBS,;t t
+s,@ENABLE_GNOMEVFS@,$ENABLE_GNOMEVFS,;t t
+s,@GTK_CFLAGS@,$GTK_CFLAGS,;t t
+s,@GTK_LIBS@,$GTK_LIBS,;t t
+s,@DBUS_CFLAGS@,$DBUS_CFLAGS,;t t
+s,@DBUS_LIBS@,$DBUS_LIBS,;t t
+s,@GIO_CFLAGS@,$GIO_CFLAGS,;t t
+s,@GIO_LIBS@,$GIO_LIBS,;t t
+s,@ENABLE_GIO@,$ENABLE_GIO,;t t
+s,@ENABLE_DBUS@,$ENABLE_DBUS,;t t
+s,@ENABLE_SYSTRAY_GTK@,$ENABLE_SYSTRAY_GTK,;t t
+s,@GSTREAMER_CFLAGS@,$GSTREAMER_CFLAGS,;t t
+s,@GSTREAMER_LIBS@,$GSTREAMER_LIBS,;t t
+s,@ENABLE_GSTREAMER@,$ENABLE_GSTREAMER,;t t
+s,@CAIRO_CFLAGS@,$CAIRO_CFLAGS,;t t
+s,@CAIRO_LIBS@,$CAIRO_LIBS,;t t
+s,@ENABLE_CAIRO@,$ENABLE_CAIRO,;t t
+s,@BUILD_PIXMAN@,$BUILD_PIXMAN,;t t
+s,@SYSTEM_CAIRO@,$SYSTEM_CAIRO,;t t
+s,@ENABLE_OPENGL@,$ENABLE_OPENGL,;t t
+s,@ENABLE_PRESENTER_EXTRA_UI@,$ENABLE_PRESENTER_EXTRA_UI,;t t
+s,@ENABLE_MINIMIZER@,$ENABLE_MINIMIZER,;t t
+s,@ENABLE_PRESENTER_SCREEN@,$ENABLE_PRESENTER_SCREEN,;t t
+s,@POPPLER_CFLAGS@,$POPPLER_CFLAGS,;t t
+s,@POPPLER_LIBS@,$POPPLER_LIBS,;t t
+s,@ENABLE_PDFIMPORT@,$ENABLE_PDFIMPORT,;t t
+s,@SYSTEM_POPPLER@,$SYSTEM_POPPLER,;t t
+s,@ENABLE_MEDIAWIKI@,$ENABLE_MEDIAWIKI,;t t
+s,@SYSTEM_SERVLETAPI@,$SYSTEM_SERVLETAPI,;t t
+s,@SERVLETAPI_JAR@,$SERVLETAPI_JAR,;t t
+s,@ENABLE_REPORTBUILDER@,$ENABLE_REPORTBUILDER,;t t
+s,@SYSTEM_JFREEREPORT@,$SYSTEM_JFREEREPORT,;t t
+s,@SAC_JAR@,$SAC_JAR,;t t
+s,@LIBXML_JAR@,$LIBXML_JAR,;t t
+s,@FLUTE_JAR@,$FLUTE_JAR,;t t
+s,@JFREEREPORT_JAR@,$JFREEREPORT_JAR,;t t
+s,@LIBBASE_JAR@,$LIBBASE_JAR,;t t
+s,@LIBLAYOUT_JAR@,$LIBLAYOUT_JAR,;t t
+s,@LIBLOADER_JAR@,$LIBLOADER_JAR,;t t
+s,@LIBFORMULA_JAR@,$LIBFORMULA_JAR,;t t
+s,@LIBREPOSITORY_JAR@,$LIBREPOSITORY_JAR,;t t
+s,@LIBFONTS_JAR@,$LIBFONTS_JAR,;t t
+s,@LIBSERIALIZER_JAR@,$LIBSERIALIZER_JAR,;t t
+s,@SYSTEM_APACHE_COMMONS@,$SYSTEM_APACHE_COMMONS,;t t
+s,@COMMONS_CODEC_JAR@,$COMMONS_CODEC_JAR,;t t
+s,@COMMONS_LANG_JAR@,$COMMONS_LANG_JAR,;t t
+s,@COMMONS_HTTPCLIENT_JAR@,$COMMONS_HTTPCLIENT_JAR,;t t
+s,@COMMONS_LOGGING_JAR@,$COMMONS_LOGGING_JAR,;t t
+s,@MOC@,$MOC,;t t
+s,@KDE_CFLAGS@,$KDE_CFLAGS,;t t
+s,@KDE_LIBS@,$KDE_LIBS,;t t
+s,@MOC4@,$MOC4,;t t
+s,@KDE4_CFLAGS@,$KDE4_CFLAGS,;t t
+s,@KDE4_LIBS@,$KDE4_LIBS,;t t
+s,@ENABLE_LOCKDOWN@,$ENABLE_LOCKDOWN,;t t
+s,@GOBJECT_CFLAGS@,$GOBJECT_CFLAGS,;t t
+s,@GOBJECT_LIBS@,$GOBJECT_LIBS,;t t
+s,@ENABLE_EVOAB2@,$ENABLE_EVOAB2,;t t
+s,@ENABLE_KAB@,$ENABLE_KAB,;t t
+s,@WITH_FONTS@,$WITH_FONTS,;t t
+s,@WITHOUT_PPDS@,$WITHOUT_PPDS,;t t
+s,@WITHOUT_AFMS@,$WITHOUT_AFMS,;t t
+s,@SCPDEFS@,$SCPDEFS,;t t
+s,@USE_XINERAMA@,$USE_XINERAMA,;t t
+s,@XINERAMA_LINK@,$XINERAMA_LINK,;t t
+s,@SYSTEM_LIBRSVG@,$SYSTEM_LIBRSVG,;t t
+s,@SYSTEM_GDKPIXBUF@,$SYSTEM_GDKPIXBUF,;t t
+s,@SYSTEM_GLIB@,$SYSTEM_GLIB,;t t
+s,@SYSTEM_GETTEXT@,$SYSTEM_GETTEXT,;t t
+s,@SYSTEM_LIBCROCO@,$SYSTEM_LIBCROCO,;t t
+s,@SYSTEM_PANGO@,$SYSTEM_PANGO,;t t
+s,@SYSTEM_LIBGSF@,$SYSTEM_LIBGSF,;t t
+s,@SYSTEM_LIBPNG@,$SYSTEM_LIBPNG,;t t
+s,@SYSTEM_LIBJPEG@,$SYSTEM_LIBJPEG,;t t
+s,@ANT@,$ANT,;t t
+s,@ANT_HOME@,$ANT_HOME,;t t
+s,@ANT_LIB@,$ANT_LIB,;t t
+s,@OOO_JUNIT_JAR@,$OOO_JUNIT_JAR,;t t
+s,@WITH_LANG@,$WITH_LANG,;t t
+s,@WITH_POOR_HELP_LOCALIZATIONS@,$WITH_POOR_HELP_LOCALIZATIONS,;t t
+s,@WITH_DICT@,$WITH_DICT,;t t
+s,@INTRO_BITMAPS@,$INTRO_BITMAPS,;t t
+s,@ABOUT_BITMAPS@,$ABOUT_BITMAPS,;t t
+s,@OOO_VENDOR@,$OOO_VENDOR,;t t
+s,@UNIXWRAPPERNAME@,$UNIXWRAPPERNAME,;t t
+s,@ENABLE_STATIC_GTK@,$ENABLE_STATIC_GTK,;t t
+s,@ENABLE_LAYOUT@,$ENABLE_LAYOUT,;t t
+s,@VERBOSE@,$VERBOSE,;t t
+s,@nodep@,$nodep,;t t
+s,@LOCAL_SOLVER@,$LOCAL_SOLVER,;t t
+s,@BUILD_TYPE@,$BUILD_TYPE,;t t
+s,@LIBOBJS@,$LIBOBJS,;t t
+s,@LTLIBOBJS@,$LTLIBOBJS,;t t
+CEOF
+>>>>>>> other
 
+<<<<<<< local
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 cat >>"\$tmp/subs1.awk" <<\\_ACAWK &&
 _ACEOF
@@ -24513,8 +25180,11 @@ else
   cat
 fi < "$tmp/subs1.awk" > "$tmp/subs.awk" \
   || as_fn_error $? "could not setup config files machinery" "$LINENO" 5
+=======
+>>>>>>> other
 _ACEOF
 
+<<<<<<< local
 # VPATH may cause trouble with some makes, so we remove sole $(srcdir),
 # ${srcdir} and @srcdir@ entries from VPATH if srcdir is ".", strip leading and
 # trailing colons and then remove the whole line if VPATH becomes empty
@@ -24539,6 +25209,45 @@ s/^[^=]*=[	 ]*$//
 fi
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+=======
+  cat >>$CONFIG_STATUS <<\_ACEOF
+  # Split the substitutions into bite-sized pieces for seds with
+  # small command number limits, like on Digital OSF/1 and HP-UX.
+  ac_max_sed_lines=48
+  ac_sed_frag=1 # Number of current file.
+  ac_beg=1 # First line for current file.
+  ac_end=$ac_max_sed_lines # Line after last line for current file.
+  ac_more_lines=:
+  ac_sed_cmds=
+  while $ac_more_lines; do
+    if test $ac_beg -gt 1; then
+      sed "1,${ac_beg}d; ${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
+    else
+      sed "${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
+    fi
+    if test ! -s $tmp/subs.frag; then
+      ac_more_lines=false
+    else
+      # The purpose of the label and of the branching condition is to
+      # speed up the sed processing (if there are no `@' at all, there
+      # is no need to browse any of the substitutions).
+      # These are the two extra sed commands mentioned above.
+      (echo ':t
+  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
+      if test -z "$ac_sed_cmds"; then
+	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
+      else
+	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
+      fi
+      ac_sed_frag=`expr $ac_sed_frag + 1`
+      ac_beg=$ac_end
+      ac_end=`expr $ac_end + $ac_max_sed_lines`
+    fi
+  done
+  if test -z "$ac_sed_cmds"; then
+    ac_sed_cmds=cat
+  fi
+>>>>>>> other
 fi # test -n "$CONFIG_FILES"
 
 
