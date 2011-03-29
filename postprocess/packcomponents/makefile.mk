@@ -172,7 +172,6 @@ my_components = \
     uui \
     vbaevents \
     vbaobj \
-    vcl \
     vclcanvas \
     wpft \
     writerfilter \
@@ -183,6 +182,16 @@ my_components = \
     xsltdlg \
     xsltfilter \
     xstor
+
+.IF "$(OS)" == "MACOSX"
+my_components += component/vcl/vcl.macosx
+.ELSE
+.IF "$(OS)" == "WNT"
+my_components += component/vcl/vcl.windows
+.ELSE
+my_components += component/vcl/vcl.unx
+.ENDIF
+.ENDIF
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
