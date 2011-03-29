@@ -37,6 +37,7 @@ gb_CXX := cl
 gb_LINK := link
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
+gb_RC := rc
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -66,6 +67,13 @@ gb_COMPILERDEFS := \
     -DM1500 \
 
 gb_CPUDEFS := -DINTEL -D_X86_=1
+
+gb_RCDEFS := \
+     -DWINVER=0x0400 \
+     -DWIN32 \
+
+gb_RCFLAGS := \
+     -V
 
 gb_CFLAGS := \
     -Gd \
@@ -180,7 +188,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
-    
+
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
@@ -285,11 +293,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(3) \
         -f - \
     | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-         -v OBJECTFILE=$(1) \
-         -v OUTDIR=$(OUTDIR)/ \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
-         -v REPODIR=$(REPODIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_CxxObject_get_dep_target,$(2)))
  endef
 else
@@ -394,7 +402,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
-
 # LinkTarget class
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
@@ -417,7 +424,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(PCHOBJS))) && \
+        $(PCHOBJS) $(NATIVERES))) && \
     $(gb_LINK) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
@@ -443,8 +450,11 @@ gb_Library_PLAINEXT := .lib
 gb_Library_PLAINLIBS_NONE += \
     advapi32 \
     gdi32 \
+    gdiplus \
     gnu_getopt \
+    imm32\
     kernel32 \
+    msimg32 \
     msvcrt \
     mpr \
     oldnames \
@@ -455,6 +465,7 @@ gb_Library_PLAINLIBS_NONE += \
     user32 \
     uuid \
     uwinapi \
+    winspool \
     z \
 
 gb_Library_LAYER := \
@@ -523,6 +534,26 @@ $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+
+endef
+
+define gb_Library_add_default_nativeres
+$(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
+$(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
+$(call gb_WinResTarget_set_defs,$(1)/$(2),\
+        $$(DEFS) \
+        -DADDITIONAL_VERINFO1 \
+        -DADDITIONAL_VERINFO2 \
+        -DADDITIONAL_VERINFO3 \
+)
+$(call gb_Library_add_nativeres,$(1),$(2))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
+
+endef
+
+define gb_Library_add_nativeres
+$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
 
 endef
 
@@ -679,6 +710,45 @@ else
 gb_SrsPartTarget__command_dep =
 endif
 
+# WinResTarget class
+
+gb_WinResTarget_POSTFIX :=.res
+
+define gb_WinResTarget__command
+$(call gb_Output_announce,$(2),$(true),RES,3)
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) && \
+    $(gb_RC) \
+        $(DEFS) $(FLAGS) \
+        -I$(dir $(3)) \
+        $(INCLUDE) \
+        -Fo$(1) \
+        $(RCFILE) )
+endef
+
+$(eval $(call gb_Helper_make_dep_targets,\
+    WinResTarget \
+))
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_WinResTarget__command_dep
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(INCLUDE) \
+        $(DEFS) \
+        $(2) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(call gb_WinResTarget_get_target,$(1)) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+    > $(call gb_WinResTarget_get_dep_target,$(1)))
+endef
+else
+gb_WinResTarget__command_dep =
+endif
 
 # ComponentTarget
 

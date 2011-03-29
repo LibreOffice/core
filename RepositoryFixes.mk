@@ -133,9 +133,14 @@ endif
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
+    gdiplus \
+    graphite_dll \
     gnu_getopt \
     icuuc \
+    icule \
+    imm32\
     kernel32 \
+    msimg32 \
     msvcrt \
     mpr \
     oldnames \
@@ -147,6 +152,7 @@ gb_Library_NOILIBFILENAMES:=\
     user32 \
     uuid \
     uwinapi \
+    winspool \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))

@@ -221,6 +221,7 @@ $(eval $(call gb_Deliver_init))
 include $(foreach class, \
     ComponentTarget \
     AllLangResTarget \
+    WinResTarget \
     LinkTarget \
     Library \
     StaticLibrary \
