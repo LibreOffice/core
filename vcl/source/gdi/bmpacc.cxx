@@ -27,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <vcl/salbtype.hxx>
-#include <vcl/impbmp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
+
+#include <impbmp.hxx>
+
 #include <string.h>
 
 // --------------------

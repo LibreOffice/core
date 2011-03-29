@@ -28,20 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/salframe.hxx>
-#include <vcl/salvd.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/outdev.h>
 #include <vcl/virdev.hxx>
+
+#include <salinst.hxx>
+#include <salgdi.hxx>
+#include <salframe.hxx>
+#include <salvd.hxx>
+#include <outdev.h>
+#include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;
 

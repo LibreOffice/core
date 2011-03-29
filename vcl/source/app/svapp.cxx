@@ -28,52 +28,58 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "svsys.h"
-#include "vcl/salinst.hxx"
-#include "vcl/salframe.hxx"
-#include "vcl/salsys.hxx"
+//#include "svsys.h"
+
+#include "comphelper/processfactory.hxx"
+
+#include "osl/module.h"
+#include "osl/file.hxx"
+#include "osl/thread.h"
+
+#include "rtl/tencinfo.h"
+#include "rtl/instance.hxx"
+
 #include "vos/process.hxx"
 #include "vos/mutex.hxx"
+
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
+
 #include "i18npool/mslangid.hxx"
-#include "vcl/svdata.hxx"
+
+#include "unotools/syslocaleoptions.hxx"
+
 #include "vcl/settings.hxx"
-#include "vcl/accmgr.hxx"
 #include "vcl/keycod.hxx"
 #include "vcl/event.hxx"
 #include "vcl/vclevent.hxx"
 #include "vcl/virdev.hxx"
-#include "vcl/window.h"
 #include "vcl/wrkwin.hxx"
-#include "vcl/idlemgr.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/cvtgrf.hxx"
 #include "vcl/unowrap.hxx"
-#include "vcl/xconnection.hxx"
-#include "vcl/svids.hrc"
 #include "vcl/timer.hxx"
-
 #include "vcl/unohelp.hxx"
+#include "vcl/lazydelete.hxx"
+
+#include "salinst.hxx"
+#include "salframe.hxx"
+#include "salsys.hxx"
+#include "svdata.hxx"
+#include "salimestatus.hxx"
+#include "xconnection.hxx"
+#include "window.h"
+#include "accmgr.hxx"
+#include "idlemgr.hxx"
+#include "svids.hrc"
 
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/uno/XNamingService.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "comphelper/processfactory.hxx"
-
-#include "osl/module.h"
-#include "osl/file.hxx"
-
-#include "osl/thread.h"
-#include "rtl/tencinfo.h"
-#include "rtl/instance.hxx"
-#include "vcl/salimestatus.hxx"
 
 #include <utility>
-#include <vcl/lazydelete.hxx>
-#include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 

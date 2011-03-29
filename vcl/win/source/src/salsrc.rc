@@ -29,7 +29,7 @@
 #include <windows.h>
 
 #ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
+#include <win/salids.hrc>
 #endif
 
 SAL_RESID_POINTER_NULL				CURSOR		NULLPTR.CUR

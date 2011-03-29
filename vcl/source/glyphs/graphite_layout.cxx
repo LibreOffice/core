@@ -57,10 +57,10 @@
 #endif
 
 #ifdef UNX
-#include <vcl/graphite_adaptors.hxx>
+#include <graphite_adaptors.hxx>
 #endif
 
-#include <vcl/salgdi.hxx>
+#include <salgdi.hxx>
 
 #include <unicode/uchar.h>
 #include <unicode/ubidi.h>
@@ -75,8 +75,8 @@
 #include <graphite/SegmentPainter.h>
 #include <postextstl.h>
 
-#include <vcl/graphite_layout.hxx>
-#include <vcl/graphite_features.hxx>
+#include <graphite_layout.hxx>
+#include <graphite_features.hxx>
 #include "graphite_textsrc.hxx"
 
 
@@ -102,7 +102,7 @@ FILE * grLog()
 #endif
 
 #ifdef GRCACHE
-#include <vcl/graphite_cache.hxx>
+#include <graphite_cache.hxx>
 #endif
 
 

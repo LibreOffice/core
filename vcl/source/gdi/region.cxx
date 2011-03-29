@@ -29,19 +29,16 @@
 #include "precompiled_vcl.hxx"
 
 #include <limits.h>
+
 #include <tools/vcompat.hxx>
-#include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#ifndef _REGION_H
-#include <vcl/region.h>
-#endif
-#ifndef _REGION_HXX
+
 #include <vcl/region.hxx>
-#endif
-#ifndef _REGBAND_HXX
 #include <vcl/regband.hxx>
-#endif
+#include <vcl/salbtype.hxx>
+
+#include <region.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

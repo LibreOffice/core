@@ -28,20 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salgdi.h"
-#include "salframe.h"
+#include <boost/bind.hpp>
 
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
+
 #include "basegfx/range/b2drectangle.hxx"
 #include "basegfx/range/b2irange.hxx"
 #include "basegfx/vector/b2ivector.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
-#include <boost/bind.hpp>
 
 #include "vcl/svapp.hxx"
-#include "saldata.hxx"
+
+#include "aqua/salgdi.h"
+#include "aqua/salframe.h"
+#include "aqua/saldata.hxx"
 
 // ----------------------------------------------------------------------
 
@@ -269,7 +271,7 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtA
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::UpdateWindow( NSRect& rRect )
+void AquaSalGraphics::UpdateWindow( NSRect& )
 {
     if( !mpFrame )
         return;

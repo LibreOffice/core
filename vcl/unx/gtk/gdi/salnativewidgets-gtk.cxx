@@ -28,22 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "plugins/gtk/gtkframe.hxx"
-#include "plugins/gtk/gtkdata.hxx"
-#include "plugins/gtk/gtkinst.hxx"
-#include "plugins/gtk/gtkgdi.hxx"
+#include "vcl/svapp.hxx"
 
-#include "pspgraphics.h"
+#include "unx/gtk/gtkframe.hxx"
+#include "unx/gtk/gtkdata.hxx"
+#include "unx/gtk/gtkinst.hxx"
+#include "unx/gtk/gtkgdi.hxx"
+
+#include "unx/pspgraphics.h"
+#include "unx/saldata.hxx"
+#include "unx/saldisp.hxx"
 
 #include <cstdio>
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <hash_map>
-
-#include "saldata.hxx"
-#include "saldisp.hxx"
-#include "vcl/svapp.hxx"
 
 typedef struct _cairo_font_options cairo_font_options_t;
 

@@ -28,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "aquavcltypes.h"
+#include "aqua/aquavcltypes.h"
+
 #include "aqua11yutil.h"
 
 using namespace ::com::sun::star::awt;

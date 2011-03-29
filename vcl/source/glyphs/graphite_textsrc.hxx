@@ -43,17 +43,9 @@
 #include <tools/svwin.h>
 #endif
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-
-#ifndef _SV_SALLAYOUT_HXX
-#include <vcl/sallayout.hxx>
-#endif
+#include <salgdi.hxx>
+#include <sallayout.hxx>
 
 // Module
 #include "vcl/dllapi.h"

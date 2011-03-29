@@ -35,10 +35,13 @@
 #include "vcl/metaact.hxx"
 #include "vcl/bmpacc.hxx"
 #include "vcl/graph.hxx"
-#include "vcl/svdata.hxx"
 #include "vcl/rendergraphicrasterizer.hxx"
+
+#include "svdata.hxx"
+
 #include "unotools/streamwrap.hxx"
 #include "unotools/processfactory.hxx"
+
 #include "comphelper/processfactory.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"

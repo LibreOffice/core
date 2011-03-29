@@ -27,13 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#ifndef _RTL_ALLOC_H
+
 #include <rtl/alloc.h>
-#endif
+
 #include <vcl/jobset.hxx>
-#include <vcl/jobset.h>
+
+#include <jobset.h>
 
 // =======================================================================
 

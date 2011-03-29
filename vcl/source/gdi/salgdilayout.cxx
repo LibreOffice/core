@@ -29,30 +29,31 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salgdi.hxx>
-#include <vcl/salframe.hxx>
-#include <vcl/salvd.hxx>
-#include <vcl/salprn.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/svapp.hxx>
 #include <vcl/region.hxx>
-#include <vcl/region.h>
 #include <vcl/virdev.hxx>
-#include <vcl/window.h>
 #include <vcl/window.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/outdata.hxx>
 #include <vcl/print.hxx>
-#include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
-#include <vcl/sallayout.hxx>
+
+#include <window.h>
+#include <region.h>
+#include <outdev.h>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
+#include <salframe.hxx>
+#include <salvd.hxx>
+#include <salprn.hxx>
+#include <svdata.hxx>
+#include <outdata.hxx>
+
+
 #include "basegfx/polygon/b2dpolygon.hxx"
 
 // ----------------------------------------------------------------------------

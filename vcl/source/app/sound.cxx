@@ -27,22 +27,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
-#include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+
+#include <unotools/localfilehelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/salinst.hxx>
+
+#include <salframe.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 void Sound::Beep( SoundType eType, Window* pWindow )
 {

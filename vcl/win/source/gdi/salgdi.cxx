@@ -30,17 +30,22 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#include <rtl/strbuf.hxx>
+
 #include <tools/svwin.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salgdi.h>
 #include <tools/debug.hxx>
-#include <salframe.h>
 #include <tools/poly.hxx>
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <rtl/strbuf.hxx>
-#include <vcl/region.h>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salgdi.h>
+#include <win/salframe.h>
+
+#include <region.h>
 
 using namespace rtl;
 

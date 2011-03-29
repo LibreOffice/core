@@ -31,31 +31,29 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <list>
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/salptype.hxx>
-#include <vcl/salprn.hxx>
-
-#include <vcl/unohelp.hxx>
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <vcl/svdata.hxx>
+
+#include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/jobset.h>
-#include <vcl/outdev.h>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/print.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
-#include <vcl/svids.hrc>
+
+#include <salinst.hxx>
+#include <salgdi.hxx>
+#include <salptype.hxx>
+#include <salprn.hxx>
+#include <svdata.hxx>
+#include <svids.hrc>
+#include <jobset.h>
+#include <outdev.h>
+#include <print.h>
 
 #include <comphelper/processfactory.hxx>
 

@@ -254,7 +254,7 @@ void SAL_CALL AquaClipboard::removeClipboardListener(const Reference< XClipboard
 }
 
 
-void AquaClipboard::applicationDidBecomeActive(NSNotification* aNotification)
+void AquaClipboard::applicationDidBecomeActive(NSNotification*)
 {
   ClearableMutexGuard aGuard(m_aMutex);
 
@@ -378,7 +378,7 @@ OUString SAL_CALL AquaClipboard::getImplementationName() throw( RuntimeException
 }
 
 
-sal_Bool SAL_CALL AquaClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL AquaClipboard::supportsService( const OUString& /*ServiceName*/ ) throw( RuntimeException )
 {
     return sal_False;
 }

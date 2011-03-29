@@ -29,14 +29,10 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/debug.hxx>
+#include <tools/poly.hxx>
+#include <tools/rc.h>
 
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
-#include <vcl/svdata.hxx>
-#ifndef _SV_IAMGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/decoview.hxx>
@@ -44,20 +40,14 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <tools/poly.hxx>
 #include <vcl/button.hxx>
-#include <vcl/window.h>
-#include <vcl/controldata.hxx>
-#ifndef _SV_NATIVEWIDGET_HXX
 #include <vcl/salnativewidgets.hxx>
-#endif
 #include <vcl/edit.hxx>
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-
-
+#include <svids.hrc>
+#include <svdata.hxx>
+#include <window.h>
+#include <controldata.hxx>
 
 // =======================================================================
 

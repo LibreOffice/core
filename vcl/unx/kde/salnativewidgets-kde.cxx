@@ -31,23 +31,16 @@
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
 #include <shell/kde_headers.h>
 
-#include <salunx.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
+#include <unx/salunx.h>
+#include <unx/saldata.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
+#include <unx/pspgraphics.h>
+#include <unx/kde/kdedata.hxx>
 
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.h>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <salframe.h>
-#endif
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <plugins/kde/kdedata.hxx>
-#include <iostream>
 
-#include <pspgraphics.h>
 
 using namespace ::rtl;
 

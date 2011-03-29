@@ -30,8 +30,8 @@
 
 #define ENABLE_ICU_LAYOUT
 #include <gcach_ftyp.hxx>
-#include <vcl/sallayout.hxx>
-#include <vcl/salgdi.hxx>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
 
 #include <vcl/svapp.hxx>
 

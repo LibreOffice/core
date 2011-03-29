@@ -27,11 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/svdata.hxx>
-#include <tools/rcid.h>
-#include <vcl/dockwin.hxx>
 
+#include <tools/rcid.h>
+
+#include <vcl/dockwin.hxx>
 #include <vcl/taskpanelist.hxx>
+
+#include <svdata.hxx>
+
 #include <functional>
 #include <algorithm>
 

@@ -27,26 +27,26 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
-
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/toolbox.h>
 #include <vcl/mnemonic.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/brdwin.hxx>
-
 #include <vcl/unohelp.hxx>
+#include <vcl/ImageListProvider.hxx>
+
+#include <svdata.hxx>
+#include <brdwin.hxx>
+#include <toolbox.h>
+
 #include <unotools/confignode.hxx>
 
-#include <vcl/ImageListProvider.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace vcl;

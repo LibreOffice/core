@@ -28,7 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "aqua11yfocustracker.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/window.hxx"
+#include "vcl/toolbox.hxx"
+#include "vcl/menu.hxx"
+
+#include "aqua/aqua11yfocustracker.hxx"
+
 #include "documentfocuslistener.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -36,11 +42,6 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/toolbox.hxx"
-#include "vcl/menu.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

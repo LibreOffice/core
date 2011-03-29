@@ -34,28 +34,20 @@
 #define WINVER 0x0500
 #endif
 
-#define VCL_NEED_BASETSD
-#include "tools/presys.h"
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#include <winuser.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include "tools/postsys.h"
+#include "svsys.h"
+#include "rtl/ustrbuf.hxx"
 
-#include "tools/string.hxx"
-#include "salsys.h"
-#include "salframe.h"
-#include "salinst.h"
-#include "saldata.hxx"
 #include "tools/debug.hxx"
-#include "vcl/svdata.hxx"
+#include "tools/string.hxx"
+
 #include "vcl/window.hxx"
 
-#include "rtl/ustrbuf.hxx"
+#include "win/salsys.h"
+#include "win/salframe.h"
+#include "win/salinst.h"
+#include "win/saldata.hxx"
+
+#include "svdata.hxx"
 
 #include <hash_map>
 

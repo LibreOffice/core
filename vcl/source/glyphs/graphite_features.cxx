@@ -40,7 +40,7 @@
 #include <svsys.h>
 #endif
 
-#include <vcl/graphite_features.hxx>
+#include <graphite_features.hxx>
 
 using namespace grutils;
 // These mustn't conflict with font name lists which use ; and ,

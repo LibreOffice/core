@@ -33,42 +33,53 @@
 #include <algorithm>
 
 #include <tools/urlobj.hxx>
+
 #include <pdfwriter_impl.hxx>
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <osl/thread.h>
+#include <osl/file.h>
+
+#include <rtl/crc.h>
+#include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
+
 #include <i18npool/mslangid.hxx>
+
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
-#include <vcl/outdev.h>
-#include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/fontsubset.hxx>
-#include <vcl/textlayout.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <svsys.h>
-#include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/thread.h>
-#include <osl/file.h>
-#include <rtl/crc.h>
-#include <rtl/digest.h>
+#include <vcl/lineinfo.hxx>
+#include "vcl/cvtgrf.hxx"
+#include "vcl/strhelper.hxx"
+
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <sallayout.hxx>
+#include <textlayout.hxx>
+#include <salgdi.hxx>
+
+#include <icc/sRGB-IEC61966-2.1.hxx>
+
 #include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
+
 #include "cppuhelper/implbase1.hxx"
-#include <icc/sRGB-IEC61966-2.1.hxx>
-#include <vcl/lineinfo.hxx>
-#include "vcl/strhelper.hxx"
 
 using namespace vcl;
 using namespace rtl;

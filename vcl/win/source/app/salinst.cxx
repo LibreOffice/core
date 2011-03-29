@@ -36,23 +36,28 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
+
 #include <osl/file.hxx>
+
 #include <vos/mutex.hxx>
-#include <tools/debug.hxx>
-#include <wincomp.hxx>
-#include <salids.hrc>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salframe.h>
-#include <salobj.h>
-#include <vcl/salsys.hxx>
-#include <saltimer.h>
-#include <vcl/apptypes.hxx>
-#include <salbmp.h>
-#include <vcl/salimestatus.hxx>
-#include <vcl/timer.hxx>
-#include <wincomp.hxx>  // CS_DROPSHADOW
+
 #include <tools/solarmutex.hxx>
+#include <tools/debug.hxx>
+
+#include <vcl/timer.hxx>
+#include <vcl/apptypes.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/salids.hrc>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salframe.h>
+#include <win/salobj.h>
+#include <win/saltimer.h>
+#include <win/salbmp.h>
+
+#include <salimestatus.hxx>
+#include <salsys.hxx>
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))

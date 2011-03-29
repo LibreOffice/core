@@ -25,12 +25,13 @@
  *
  ************************************************************************/
 
-#include "aqua11ylistener.hxx"
-#include "aqua11yfactory.h"
-#include "aqua11yfocustracker.hxx"
+#include "aqua/salinst.h"
+#include "aqua/aqua11ylistener.hxx"
+#include "aqua/aqua11yfactory.h"
+#include "aqua/aqua11yfocustracker.hxx"
+#include "aqua/aqua11ywrapper.h"
+
 #include "aqua11ytextwrapper.h"
-#include "aqua11ywrapper.h"
-#include "salinst.h"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -74,7 +75,7 @@ AquaA11yEventListener::~AquaA11yEventListener()
 //------------------------------------------------------------------------------
 
 void SAL_CALL
-AquaA11yEventListener::disposing( const EventObject& Source ) throw( RuntimeException )
+AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
 {
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
 }

@@ -27,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <limits.h>
+
 #include <vcl/bmpacc.hxx>
-#include <vcl/impoct.hxx>
 #include <vcl/octree.hxx>
+
+#include <impoct.hxx>
 
 // ---------
 // - pMask -

@@ -25,9 +25,8 @@
  *
  ************************************************************************/
 #define _SV_MENU_SRC
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
+
+#include <svids.hrc>
 
 String SV_RESID_STRING_NOSELECTIONPOSSIBLE
 {

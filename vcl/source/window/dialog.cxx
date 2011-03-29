@@ -29,14 +29,14 @@
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
+
+#include <svdata.hxx>
+#include <window.h>
+#include <brdwin.hxx>
+
 #include <vcl/svapp.hxx>
-#include <vcl/window.h>
 #include <vcl/event.hxx>
-#include <vcl/brdwin.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>

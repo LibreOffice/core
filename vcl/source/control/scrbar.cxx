@@ -33,7 +33,8 @@
 #include "vcl/decoview.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/svdata.hxx"
+
+#include "svdata.hxx"
 
 #include "rtl/string.hxx"
 #include "tools/rc.h"

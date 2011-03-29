@@ -44,13 +44,14 @@
 #include "KDEXLib.hxx"
 #include "KDESalGraphics.hxx"
 
-#include <vcl/settings.hxx>
-#include <vcl/font.hxx>
 #include <tools/color.hxx>
 
-#include <vcl/svdata.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/font.hxx>
 
-#include <pspgraphics.h>
+#include <svdata.hxx>
+
+#include <unx/pspgraphics.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

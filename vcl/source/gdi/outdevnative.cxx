@@ -30,9 +30,10 @@
 
 #include "vcl/outdev.hxx"
 #include "vcl/window.hxx"
-#include "vcl/salgdi.hxx"
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/pdfextoutdevdata.hxx"
+
+#include "salgdi.hxx"
 
 // -----------------------------------------------------------------------
 

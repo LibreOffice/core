@@ -28,21 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
-
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
-#include <vcl/brdwin.hxx>
-#include <vcl/window.h>
 #include <vcl/wrkwin.hxx>
+// declare system types in sysdata.hxx
+#include <svsys.h>
 #include <vcl/sysdata.hxx>
+
+#include <svdata.hxx>
+#include <salframe.hxx>
+#include <brdwin.hxx>
+#include <window.h>
 
 // =======================================================================
 

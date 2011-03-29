@@ -27,10 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include "tools/debug.hxx"
 
+#include "tools/debug.hxx"
 #include "tools/rc.h"
-#include "vcl/svdata.hxx"
+
 #include "vcl/svapp.hxx"
 #include "vcl/help.hxx"
 #include "vcl/event.hxx"
@@ -39,11 +39,12 @@
 #include "vcl/tabpage.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/controllayout.hxx"
-#include "vcl/controldata.hxx"
 #include "vcl/sound.hxx"
 #include "vcl/lstbox.hxx"
 
-#include "vcl/window.h"
+#include "controldata.hxx"
+#include "svdata.hxx"
+#include "window.h"
 
 #include <hash_map>
 #include <vector>

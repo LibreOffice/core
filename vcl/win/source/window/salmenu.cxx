@@ -27,16 +27,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/svwin.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <vcl/salgdi.hxx>
-#include <salmenu.h>
+
 #include <vcl/menu.hxx>
 #include <vcl/sysdata.hxx>
-#include <salframe.h>
-#include <vcl/impbmp.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salframe.h>
+#include <win/salmenu.h>
+
+#include <impbmp.hxx>
+#include <salgdi.hxx>
 
 // uncomment the following line to have ownerdrawn menues, ie, with bitmaps
 // however, this is incompatible with OLE inplace editing

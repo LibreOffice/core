@@ -28,15 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "unotools/localedatawrapper.hxx"
+#include "unotools/transliterationwrapper.hxx"
+
+#include "i18npool/mslangid.hxx"
+
+#include "rtl/ustrbuf.hxx"
+
 #include "vcl/i18nhelp.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/i18n/TransliterationModules.hpp"
-#include "unotools/localedatawrapper.hxx"
-#include "unotools/transliterationwrapper.hxx"
-#include "i18npool/mslangid.hxx"
-
-#include "rtl/ustrbuf.hxx"
 
 using namespace ::com::sun::star;
 

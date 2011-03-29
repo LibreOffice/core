@@ -28,12 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
-#include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
@@ -42,17 +37,22 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/wall2.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
+
+#include <wall2.hxx>
+#include <salgdi.hxx>
+#include <window.h>
+#include <svdata.hxx>
+#include <outdev.h>
+
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <math.h>
-#include <vcl/window.h>
-#include <vcl/svdata.hxx>
 
 // ========================================================================
 

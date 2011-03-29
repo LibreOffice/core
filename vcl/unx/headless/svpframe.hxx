@@ -27,9 +27,9 @@
 
 #ifndef _SVP_SVPFRAME_HXX
 
-#include <vcl/salframe.hxx>
 #include <vcl/sysdata.hxx>
 
+#include <salframe.hxx>
 #include "svpelement.hxx"
 
 #include <list>

@@ -29,9 +29,12 @@
 #define _SVP_SVPPRN_HXX
 
 #include "vcl/jobdata.hxx"
-#include "vcl/printergfx.hxx"
-#include "vcl/printerjob.hxx"
-#include "vcl/salprn.hxx"
+
+#include "printergfx.hxx"
+#include "printerjob.hxx"
+#include "salprn.hxx"
+
+#include "vclpluginapi.h"
 
 class PspGraphics;
 
@@ -101,7 +104,7 @@ public:
 class Timer;
 
 namespace vcl_sal {
-class VCL_DLLPUBLIC PrinterUpdate
+class VCLPLUG_SVP_PUBLIC PrinterUpdate
 {
     static Timer*           pPrinterUpdateTimer;
     static int              nActiveJobs;

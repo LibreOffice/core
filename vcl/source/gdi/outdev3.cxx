@@ -30,49 +30,57 @@
 
 #include "i18npool/mslangid.hxx"
 
-#include "svsys.h"
-#include "vcl/salgdi.hxx"
-#include "vcl/sallayout.hxx"
 #include "rtl/tencinfo.h"
+#include "rtl/logfile.hxx"
+
 #include "tools/debug.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/metric.hxx"
-#include "vcl/impfont.hxx"
-#include "vcl/metaact.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/outdata.hxx"
-#include "vcl/outfont.hxx"
+#include "tools/poly.hxx"
+
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
-#include "tools/poly.hxx"
-#include "vcl/outdev.h"
+
+#include "vcl/metric.hxx"
+#include "vcl/metaact.hxx"
+#include "vcl/gdimtf.hxx"
 #include "vcl/virdev.hxx"
 #include "vcl/print.hxx"
 #include "vcl/event.hxx"
-#include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/bmpacc.hxx"
-#include "unotools/fontcvt.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/edit.hxx"
-#include "unotools/fontcfg.hxx"
+// declare system types in sysdata.hxx
+#include <svsys.h>
 #include "vcl/sysdata.hxx"
-#include "vcl/textlayout.hxx"
-#include "vcl/svids.hrc"
+#include "vcl/unohelp.hxx"
+#include "vcl/controllayout.hxx"
+
+#include "salgdi.hxx"
+#include "sallayout.hxx"
+#include "svdata.hxx"
+#include "impfont.hxx"
+#include "outdata.hxx"
+#include "outfont.hxx"
+#include "outdev.h"
+#include "textlayout.hxx"
+#include "svids.hrc"
+#include "window.h"
+
+#include "unotools/fontcvt.hxx"
+#include "unotools/fontcfg.hxx"
+
 #include "osl/file.h"
+
 #ifdef ENABLE_GRAPHITE
-#include "vcl/graphite_features.hxx"
+#include "graphite_features.hxx"
 #endif
 #ifdef USE_BUILTIN_RASTERIZER
-#include "vcl/glyphcache.hxx"
+#include "glyphcache.hxx"
 #endif
 
-#include "vcl/unohelp.hxx"
 #include "pdfwriter_impl.hxx"
-#include "vcl/controllayout.hxx"
-#include "rtl/logfile.hxx"
 
 #include "com/sun/star/beans/PropertyValues.hpp"
 #include "com/sun/star/i18n/XBreakIterator.hpp"

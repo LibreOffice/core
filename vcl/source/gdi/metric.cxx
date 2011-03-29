@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/impfont.hxx>
+#include <impfont.hxx>
 #include <vcl/metric.hxx>
 
 #include <vector>

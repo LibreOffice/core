@@ -27,12 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/salinst.hxx>
-#include <vcl/salsession.hxx>
+
 #include <cppuhelper/compbase1.hxx>
+
 #include <tools/debug.hxx>
+
+#include <vcl/svapp.hxx>
+
+#include <svdata.hxx>
+#include <salinst.hxx>
+#include <salsession.hxx>
+
 #include <com/sun/star/frame/XSessionManagerClient.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XSessionManagerListener2.hpp>

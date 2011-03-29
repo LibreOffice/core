@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salvd.h"
-#include "salinst.h"
-#include "salgdi.h"
-#include "saldata.hxx"
-#include "salframe.h"
-#include <vcl/svapp.hxx>
-
+#include "vcl/svapp.hxx"
 #include "vcl/sysdata.hxx"
+
+#include "aqua/salvd.h"
+#include "aqua/salinst.h"
+#include "aqua/salgdi.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salframe.h"
 
 // -----------------------------------------------------------------------
 
@@ -149,7 +149,7 @@ SalGraphics* AquaSalVirtualDevice::GetGraphics()
 
 // -----------------------------------------------------------------------
 
-void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
+void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
 }

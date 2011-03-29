@@ -28,8 +28,8 @@
 #pragma once
 
 #include <rtl/string.hxx>
-#include <saldisp.hxx>
-#include <salgdi.h>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
 
 #define Region QtXRegion
 #include <QImage>

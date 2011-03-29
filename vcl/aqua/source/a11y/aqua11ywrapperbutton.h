@@ -28,7 +28,7 @@
 #ifndef _SV_AQUA11WRAPPERBUTTON_H
 #define _SV_AQUA11WRAPPERBUTTON_H
 
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
 
 @interface AquaA11yWrapperButton : AquaA11yWrapper
 {

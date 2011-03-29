@@ -27,48 +27,58 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#ifndef _SV_SVSYS_HXX
-#include "svsys.h"
-#endif
-#include "vcl/salframe.hxx"
-#include "vcl/salobj.hxx"
-#include "vcl/salinst.hxx"
-#include "vcl/salgtype.hxx"
-#include "vcl/salgdi.hxx"
 
-#include "vcl/unohelp.hxx"
 #include "tools/time.hxx"
 #include "tools/debug.hxx"
-#ifndef _SV_RC_H
 #include "tools/rc.h"
-#endif
-#include "vcl/svdata.hxx"
-#include "vcl/dbggui.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/outdev.h"
-#include "vcl/region.h"
+
+#include "unotools/fontcfg.hxx"
+#include "unotools/confignode.hxx"
+
+#include "vcl/unohelp.hxx"
+#include "vcl/salgtype.hxx"
 #include "vcl/event.hxx"
 #include "vcl/help.hxx"
 #include "vcl/cursor.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/syswin.hxx"
 #include "vcl/syschild.hxx"
-#include "vcl/brdwin.hxx"
-#include "vcl/helpwin.hxx"
 #include "vcl/dockwin.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
-#include "vcl/toolbox.h"
-#include "unotools/fontcfg.hxx"
-#include "vcl/sysdata.hxx"
-#include "vcl/sallayout.hxx"
 #include "vcl/salctype.hxx"
-#include "vcl/button.hxx" // Button::GetStandardText
+#include "vcl/button.hxx"
 #include "vcl/taskpanelist.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/unowrap.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/pdfextoutdevdata.hxx"
+#include "vcl/lazydelete.hxx"
+
+// declare system types in sysdata.hxx
+#include "svsys.h"
+#include "vcl/sysdata.hxx"
+
+#include "salframe.hxx"
+#include "salobj.hxx"
+#include "salinst.hxx"
+#include "salgdi.hxx"
+#include "svdata.hxx"
+#include "dbggui.hxx"
+#include "outfont.hxx"
+#include "window.h"
+#include "toolbox.h"
+#include "outdev.h"
+#include "region.h"
+#include "brdwin.hxx"
+#include "helpwin.hxx"
+#include "sallayout.hxx"
+#include "dndlcon.hxx"
+#include "dndevdis.hxx"
+
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/rendering/XCanvas.hpp"
 #include "com/sun/star/rendering/XSpriteCanvas.hpp"
@@ -84,16 +94,6 @@
 #include "com/sun/star/lang/XServiceName.hpp"
 #include "com/sun/star/accessibility/XAccessible.hpp"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
-
-#include "vcl/dialog.hxx"
-#include "vcl/unowrap.hxx"
-#include "vcl/dndlcon.hxx"
-#include "vcl/dndevdis.hxx"
-#include "unotools/confignode.hxx"
-#include "vcl/gdimtf.hxx"
-
-#include "vcl/pdfextoutdevdata.hxx"
-#include "vcl/lazydelete.hxx"
 
 #include <set>
 #include <typeinfo>
@@ -9703,7 +9703,7 @@ sal_Bool Window::IsNativeWidgetEnabled() const
 }
 
 #ifdef WNT // see #140456#
-#include <salframe.h>
+#include <win/salframe.h>
 #endif
 
 uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,

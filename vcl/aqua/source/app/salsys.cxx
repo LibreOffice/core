@@ -29,13 +29,16 @@
 #include "precompiled_vcl.hxx"
 
 #include "tools/rc.hxx"
-#include "vcl/svids.hrc"
+
+#include "rtl/ustrbuf.hxx"
+
 #include "vcl/button.hxx"
 
-#include "salsys.h"
-#include "saldata.hxx"
-#include "salinst.h"
-#include "rtl/ustrbuf.hxx"
+#include "aqua/salsys.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salinst.h"
+
+#include "svids.hrc"
 
 using namespace rtl;
 

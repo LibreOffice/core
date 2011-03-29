@@ -27,11 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/debug.hxx>
+
 #include <vcl/dockingarea.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/svdata.hxx>
+
+#include <svdata.hxx>
 
 #include <map>
 
