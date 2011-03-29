@@ -628,51 +628,73 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
 void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 {
+    if (!pSdrView)
+        return;
+
     using namespace i18n;
+
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+    case SID_TRANSLITERATE_SENTENCE_CASE:
+        nMode = TransliterationModulesExtra::SENTENCE_CASE;
+        break;
+    case SID_TRANSLITERATE_TITLE_CASE:
+        nMode = TransliterationModulesExtra::TITLE_CASE;
+        break;
+    case SID_TRANSLITERATE_TOGGLE_CASE:
+        nMode = TransliterationModulesExtra::TOGGLE_CASE;
+        break;
+    case SID_TRANSLITERATE_UPPER:
+        nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+        break;
+    case SID_TRANSLITERATE_LOWER:
+        nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+        break;
 
-        switch( rReq.GetSlot() )
-        {
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
-        case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
-            break;
-        case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
-            break;
-        case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-            break;
-        case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-            break;
+    case SID_TRANSLITERATE_HALFWIDTH:
+        nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+        break;
+    case SID_TRANSLITERATE_FULLWIDTH:
+        nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+        break;
 
-        case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-            break;
-        case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-            break;
+    case SID_TRANSLITERATE_HIRAGANA:
+        nMode = TransliterationModules_KATAKANA_HIRAGANA;
+        break;
+    case SID_TRANSLITERATE_KATAGANA:
+        nMode = TransliterationModules_HIRAGANA_KATAKANA;
+        break;
 
-        case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
-            break;
-        case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
-            break;
+    default:
+        OSL_ENSURE(!this, "wrong dispatcher");
+    }
 
-        default:
-            OSL_ENSURE(!this, "wrong dispatcher");
-        }
+    if( nMode )
+    {
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
 
-        if( nMode )
-        {
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-            pOLV->TransliterateText( nMode );
-        }
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( nMode );
+    }
+}
+
+void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+    {
+        if (!pSdrView)
+            return;
+
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( m_aRotateCase.getNextMode() );
     }
 }
 

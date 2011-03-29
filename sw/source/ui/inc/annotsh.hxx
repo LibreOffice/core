@@ -31,11 +31,13 @@
 #include <sfx2/shell.hxx>
 #include "shellid.hxx"
 #include "swmodule.hxx"
+#include <unotools/caserotate.hxx>
 
 class SwView;
 class SwAnnotationShell: public SfxShell
 {
     SwView&     rView;
+    RotateTransliteration m_aRotateCase;
 
 public:
     SFX_DECL_INTERFACE(SW_ANNOTATIONSHELL)
@@ -60,6 +62,7 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
 
     void        ExecTransliteration(SfxRequest &);
+    void                ExecRotateTransliteration(SfxRequest &);
 
     void        ExecUndo(SfxRequest &rReq);
     void        StateUndo(SfxItemSet &rSet);

@@ -30,6 +30,7 @@
 
 #include <sfx2/shell.hxx>
 #include "shellid.hxx"
+#include <unotools/caserotate.hxx>
 
 class SdrView;
 class SwView;
@@ -39,6 +40,7 @@ class SfxModule;
 class SwDrawTextShell: public SfxShell
 {
     SwView      &rView;
+    RotateTransliteration m_aRotateCase;
 
     SdrView     *pSdrView;
 
@@ -79,6 +81,7 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
     void        ExecTransliteration(SfxRequest &);
+    void                ExecRotateTransliteration(SfxRequest &);
 
     void        Init();
     void        StateStatusline(SfxItemSet &rSet);

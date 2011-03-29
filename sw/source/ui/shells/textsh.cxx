@@ -954,80 +954,56 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
 void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 {
     using namespace ::com::sun::star::i18n;
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+    case SID_TRANSLITERATE_SENTENCE_CASE:
+        nMode = TransliterationModulesExtra::SENTENCE_CASE;
+        break;
+    case SID_TRANSLITERATE_TITLE_CASE:
+        nMode = TransliterationModulesExtra::TITLE_CASE;
+        break;
+    case SID_TRANSLITERATE_TOGGLE_CASE:
+        nMode = TransliterationModulesExtra::TOGGLE_CASE;
+        break;
+    case SID_TRANSLITERATE_UPPER:
+        nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+        break;
+    case SID_TRANSLITERATE_LOWER:
+        nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+        break;
 
-        switch( rReq.GetSlot() )
-        {
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
-        case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
-            break;
-        case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
-            break;
-        case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-            break;
-        case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-            break;
+    case SID_TRANSLITERATE_HALFWIDTH:
+        nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+        break;
+    case SID_TRANSLITERATE_FULLWIDTH:
+        nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+        break;
 
-        case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-            break;
-        case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-            break;
+    case SID_TRANSLITERATE_HIRAGANA:
+        nMode = TransliterationModules_KATAKANA_HIRAGANA;
+        break;
+    case SID_TRANSLITERATE_KATAGANA:
+        nMode = TransliterationModules_HIRAGANA_KATAKANA;
+        break;
 
-        case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
-            break;
-        case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
-            break;
-
-        default:
-            OSL_ENSURE(!this, "wrong dispatcher");
-        }
-
-        if( nMode )
-            GetShell().TransliterateText( nMode );
+    default:
+        OSL_ENSURE(!this, "wrong dispatcher");
     }
+
+    if( nMode )
+        GetShell().TransliterateText( nMode );
 }
 
 void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 {
-    using namespace ::com::sun::star::i18n;
-    {
-        sal_uInt32 nMode = 0;
-
-        if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE ) {
-            switch ( nF3ShiftCounter ) {
-                case 0:
-                    nMode = TransliterationModulesExtra::TITLE_CASE;
-                    break;
-                case 1:
-                    nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-                    break;
-                case 2:
-                    nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-                    nF3ShiftCounter = -1;
-                    break;
-            }
-
-            if ( nMode )
-                GetShell().TransliterateText( nMode );
-
-            nF3ShiftCounter++;
-        }
-    }
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+        GetShell().TransliterateText( m_aRotateCase.getNextMode() );
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :
-    SwBaseShell(_rView), pPostItFldMgr( 0 ), nF3ShiftCounter(0)
+    SwBaseShell(_rView), pPostItFldMgr( 0 )
 {
     SetName(String::CreateFromAscii("Text"));
     SetHelpId(SW_TEXTSHELL);
