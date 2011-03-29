@@ -209,6 +209,20 @@ AC_ARG_ENABLE(cairo,
 AC_ARG_WITH(system-cairo,
 [  --with-system-cairo      Use Cairo libraries already on system
 ],,)
+AC_ARG_ENABLE(librsvg,
+[  --enable-librsvg        Determines whether to use librsvg library on
+                          platforms where librsvg is available.
+                          (actually, it is possible to build with
+                          --disable-librsvg and to still have SVG support
+                          within a running soffice instance, since this
+                          dependency is a runtime only dependency.
+                          To have SVG suppport at runtime, the librsvg, the cairo
+                          and the gobject library - and all depending libraries
+                          as well - need to be accessible by the running soffice
+                          instance.
+                          The intention of defaulting this flag to yes is to
+                          indicate this fact to the build maintainer)
+],,enable_librsvg=yes)
 AC_ARG_ENABLE(opengl,
 [  --enable-opengl         Determines whether to build the OpenGL 3D slide 
                           transitions component
@@ -929,6 +943,7 @@ case "$build_os" in
 	solaris*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -963,6 +978,7 @@ case "$build_os" in
 	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -978,6 +994,7 @@ case "$build_os" in
 	cygwin*) # Windows
 		test_cups=no
 		test_cairo=yes
+		test_librsvg=no
 		test_freetype=no
         test_gstreamer=no
 		_os=WINNT
@@ -986,6 +1003,7 @@ case "$build_os" in
 		test_cups=yes
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=no
         test_randr=no
 		test_freetype=no
         test_gstreamer=no
@@ -1001,6 +1019,7 @@ case "$build_os" in
 		test_cups=no
         test_randr=no
 		test_gtk=no
+		test_librsvg=no
 		test_freetype=no
         test_gstreamer=no
 		_os=OS2
@@ -1008,6 +1027,7 @@ case "$build_os" in
 	freebsd*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -1043,6 +1063,7 @@ case "$build_os" in
 	netbsd)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=no
@@ -5849,6 +5870,29 @@ AC_SUBST(BUILD_PIXMAN)
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+
+dnl ===================================================================
+dnl Check whether the librsvg libraries are available.
+dnl ===================================================================
+
+ENABLE_LIBRSVG=""
+LIBRSVG_CFLAGS=""
+LIBRSVG_LIBS=""
+
+if test  "$test_librsvg" = "yes"; then
+    AC_MSG_CHECKING([whether to use librsvg])
+    if test "x$enable_librsvg" != "xno" ; then
+        PKG_CHECK_MODULES( LIBRSVG, librsvg-2.0 >= 2.14,,AC_MSG_ERROR([requirements to build with librsvg support not met. Use --disable-librsvg or install the missing packages]))
+        ENABLE_LIBRSVG="TRUE"
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+AC_SUBST(ENABLE_LIBRSVG)
+AC_SUBST(LIBRSVG_CFLAGS)
+AC_SUBST(LIBRSVG_LIBS)
 
 dnl ===================================================================
 dnl Check whether the OpenGL libraries are available
