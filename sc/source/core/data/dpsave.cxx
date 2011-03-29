@@ -34,6 +34,7 @@
 
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
+#include "dpobject.hxx"     // GetMemberNames used in BuildAllDimensionMembersFromSource
 #include "miscuno.hxx"
 #include "scerrors.hxx"
 #include "unonames.hxx"
@@ -874,6 +875,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, sal_False );
     aDimList.Insert( pNew, LIST_APPEND );
+    mbDimensionMembersBuilt = false;        // BuildAllDimensionMembers only handles existing entries in aDimList
     return pNew;
 }
 
@@ -900,6 +902,7 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, sal_False );
     aDimList.Insert( pNew, LIST_APPEND );
+    mbDimensionMembersBuilt = false;        // BuildAllDimensionMembers only handles existing entries in aDimList
     return pNew;
 }
 
@@ -911,6 +914,7 @@ ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
+    mbDimensionMembersBuilt = false;        // BuildAllDimensionMembers only handles existing entries in aDimList
     return pNew;
 }
 
@@ -935,6 +939,7 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
     pNew->SetDupFlag( sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
+    mbDimensionMembersBuilt = false;        // BuildAllDimensionMembers only handles existing entries in aDimList
     return pNew;
 }
 
@@ -958,6 +963,7 @@ ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rD
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
     pNew->SetDupFlag( sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
+    mbDimensionMembersBuilt = false;        // BuildAllDimensionMembers only handles existing entries in aDimList
     return *pNew;
 }
 
@@ -1262,6 +1268,63 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
             String aMemName = pMemberData->GetString();
+            if (pDim->GetExistingMemberByName(aMemName))
+                // this member instance already exists.  nothing to do.
+                continue;
+
+            auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
+            pNewMember->SetIsVisible(true);
+            pDim->AddMember(pNewMember.release());
+        }
+    }
+
+    mbDimensionMembersBuilt = true;
+}
+
+void ScDPSaveData::BuildAllDimensionMembersFromSource( ScDPObject* pDPObj )
+{
+    // Initialize all members like BuildAllDimensionMembers, but access only the DataPilotSource, not the table data.
+    // This could also replace BuildAllDimensionMembers, but the performance implications still have to be checked.
+    // ScDPObject is used for the helper method GetMemberNames.
+
+    if (mbDimensionMembersBuilt)
+        return;
+
+    uno::Reference<sheet::XDimensionsSupplier> xSource = pDPObj->GetSource();
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    // GetMemberNames uses the dimension index from getElementNames
+    uno::Sequence<OUString> aDimNames = xDimsName->getElementNames();
+
+    // First, build a dimension name-to-index map.
+    typedef hash_map<OUString, long, ::rtl::OUStringHash> NameIndexMap;
+    NameIndexMap aMap;
+    long nColCount = aDimNames.getLength();
+    for (long i = 0; i < nColCount; ++i)
+        aMap.insert( NameIndexMap::value_type(aDimNames[i], i) );
+
+    NameIndexMap::const_iterator itrEnd = aMap.end();
+
+    sal_uInt32 n = aDimList.Count();
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
+        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
+        const String& rDimName = pDim->GetName();
+        if (!rDimName.Len())
+            // empty dimension name.  It must be data layout.
+            continue;
+
+        NameIndexMap::const_iterator itr = aMap.find(rDimName);
+        if (itr == itrEnd)
+            // dimension name not in the data.  This should never happen!
+            continue;
+
+        long nDimIndex = itr->second;
+        uno::Sequence<OUString> aMemberNames;
+        pDPObj->GetMemberNames( nDimIndex, aMemberNames );
+        sal_Int32 nMemberCount = aMemberNames.getLength();
+        for (sal_Int32 j = 0; j < nMemberCount; ++j)
+        {
+            String aMemName = aMemberNames[j];
             if (pDim->GetExistingMemberByName(aMemName))
                 // this member instance already exists.  nothing to do.
                 continue;

@@ -644,9 +644,12 @@ void ScDPObject::BuildAllDimensionMembers()
         return;
 
     // #i111857# don't always create empty mpTableData for external service.
-    // Ideally, xSource should be used instead of mpTableData.
+    // #163781# Initialize all members from xSource instead.
     if (pServDesc)
+    {
+        pSaveData->BuildAllDimensionMembersFromSource( this );
         return;
+    }
 
     pSaveData->BuildAllDimensionMembers(GetTableData());
 }
