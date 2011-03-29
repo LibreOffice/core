@@ -82,7 +82,9 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
             sDirName.indexOf( WCARD7 , 0 ) > -1 ||
+#ifndef WNT
             sDirName.indexOf( WCARD8 , 0 ) > -1 ||
+#endif
             sDirName.indexOf( WCARD9 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
