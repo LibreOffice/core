@@ -1,0 +1,526 @@
+--- misc/librsvg-2.32.1/librsvg-features.h	2010-11-13 11:52:49.000000000 +0100
++++ misc/build/librsvg-2.32.1/librsvg-features.h	2011-03-28 16:29:01.357827800 +0200
+@@ -11,7 +11,7 @@
+    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION > (minor)) || \
+    (LIBRSVG_MAJOR_VERSION == (major) && LIBRSVG_MINOR_VERSION == (minor) && LIBRSVG_MICRO_VERSION >= (micro)))
+ 
+-#define LIBRSVG_HAVE_SVGZ  (1)
++#define LIBRSVG_HAVE_SVGZ  (0)
+ #define LIBRSVG_HAVE_CSS   (1)
+ 
+ #define LIBRSVG_CHECK_FEATURE(FEATURE) (defined(LIBRSVG_HAVE_##FEATURE) && LIBRSVG_HAVE_##FEATURE)
+--- misc/librsvg-2.32.1/rsvg-image.c	2010-09-27 19:18:35.000000000 +0200
++++ misc/build/librsvg-2.32.1/rsvg-image.c	2011-03-28 20:14:53.630005800 +0200
+@@ -22,8 +22,8 @@
+    Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+ 
+-   Authors: Raph Levien <raph@artofcode.com>, 
+-            Dom Lachowicz <cinamod@hotmail.com>, 
++   Authors: Raph Levien <raph@artofcode.com>,
++            Dom Lachowicz <cinamod@hotmail.com>,
+             Caleb Moore <c.moore@student.unsw.edu.au>
+ */
+ 
+@@ -34,15 +34,167 @@
+ #include <math.h>
+ #include <errno.h>
+ #include "rsvg-css.h"
++#ifdef HAVE_GIO
+ #include <gio/gio.h>
++#endif
++
++static const char s_UTF8_B64Alphabet[64] = {
++    0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f,
++    0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a,   /* A-Z */
++    0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
++    0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a,   /* a-z */
++    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, /* 0-9 */
++    0x2b,                       /* + */
++    0x2f                        /* / */
++};
++static const char utf8_b64_pad = 0x3d;
++
++static gboolean
++b64_decode_char (char c, int *b64)
++{
++    if ((c >= 0x41) && (c <= 0x5a)) {
++        *b64 = c - 0x41;
++        return TRUE;
++    }
++    if ((c >= 0x61) && (c <= 0x7a)) {
++        *b64 = c - (0x61 - 26);
++        return TRUE;
++    }
++    if ((c >= 0x30) && (c <= 0x39)) {
++        *b64 = c + (52 - 0x30);
++        return TRUE;
++    }
++    if (c == 0x2b) {
++        *b64 = 62;
++        return TRUE;
++    }
++    if (c == 0x2f) {
++        *b64 = 63;
++        return TRUE;
++    }
++    return FALSE;
++}
++
++static gboolean
++utf8_base64_decode (guchar ** binptr, size_t * binlen, const char *b64ptr, size_t b64len)
++{
++    gboolean decoded = TRUE;
++    gboolean padding = FALSE;
++
++    int i = 0;
++    glong ucs4_len, j;
++
++    unsigned char byte1 = 0;
++    unsigned char byte2;
++
++    gunichar ucs4, *ucs4_str;
++
++    if (b64len == 0)
++        return TRUE;
++
++    if ((binptr == 0) || (b64ptr == 0))
++        return FALSE;
++
++    ucs4_str = g_utf8_to_ucs4_fast (b64ptr, b64len, &ucs4_len);
++
++    for (j = 0; j < ucs4_len; j++) {
++        ucs4 = ucs4_str[j];
++        if ((ucs4 & 0x7f) == ucs4) {
++            int b64;
++            char c = (char) (ucs4);
++
++            if (b64_decode_char (c, &b64)) {
++                if (padding || (*binlen == 0)) {
++                    decoded = FALSE;
++                    break;
++                }
++
++                switch (i) {
++                case 0:
++                    byte1 = (unsigned char) (b64) << 2;
++                    i++;
++                    break;
++                case 1:
++                    byte2 = (unsigned char) (b64);
++                    byte1 |= byte2 >> 4;
++                    *(*binptr)++ = (char) (byte1);
++                    (*binlen)--;
++                    byte1 = (byte2 & 0x0f) << 4;
++                    i++;
++                    break;
++                case 2:
++                    byte2 = (unsigned char) (b64);
++                    byte1 |= byte2 >> 2;
++                    *(*binptr)++ = (char) (byte1);
++                    (*binlen)--;
++                    byte1 = (byte2 & 0x03) << 6;
++                    i++;
++                    break;
++                default:
++                    byte1 |= (unsigned char) (b64);
++                    *(*binptr)++ = (char) (byte1);
++                    (*binlen)--;
++                    i = 0;
++                    break;
++                }
++
++                if (!decoded)
++                    break;
++
++                continue;
++            } else if (c == utf8_b64_pad) {
++                switch (i) {
++                case 0:
++                case 1:
++                    decoded = FALSE;
++                    break;
++                case 2:
++                    if (*binlen == 0)
++                        decoded = FALSE;
++                    else {
++                        *(*binptr)++ = (char) (byte1);
++                        (*binlen)--;
++                        padding = TRUE;
++                    }
++                    i++;
++                    break;
++                default:
++                    if (!padding) {
++                        if (*binlen == 0)
++                            decoded = FALSE;
++                        else {
++                            *(*binptr)++ = (char) (byte1);
++                            (*binlen)--;
++                            padding = TRUE;
++                        }
++                    }
++                    i = 0;
++                    break;
++                }
++                if (!decoded)
++                    break;
++
++                continue;
++            }
++        }
++        if (g_unichar_isspace (ucs4))
++            continue;
++
++        decoded = FALSE;
++        break;
++    }
++
++    g_free (ucs4_str);
++    return decoded;
++}
+ 
+ static GByteArray *
+ rsvg_acquire_base64_resource (const char *data, GError ** error)
+ {
+-    GByteArray *array = NULL;
+-    gsize data_len, written_len;
+-    int state = 0;
+-    guint save = 0;
++    GByteArray *array;
++
++    guchar *bufptr;
++    size_t buffer_len, buffer_max_len, data_len;
+ 
+     rsvg_return_val_if_fail (data != NULL, NULL, error);
+ 
+@@ -51,10 +203,19 @@
+             break;
+ 
+     data_len = strlen (data);
+-    array = g_byte_array_sized_new (data_len / 4 * 3);
+-    written_len = g_base64_decode_step (data, data_len, array->data,
+-                                        &state, &save);
+-    g_byte_array_set_size (array, written_len);
++
++    buffer_max_len = ((data_len >> 2) + 1) * 3;
++    buffer_len = buffer_max_len;
++
++    array = g_byte_array_sized_new (buffer_max_len);
++    bufptr = array->data;
++
++    if (!utf8_base64_decode (&bufptr, &buffer_len, data, data_len)) {
++        g_byte_array_free (array, TRUE);
++        return NULL;
++    }
++
++    array->len = buffer_max_len - buffer_len;
+ 
+     return array;
+ }
+@@ -75,7 +236,7 @@
+             if (base_filename != NULL) {
+                 tmpcdir = g_path_get_dirname (base_filename);
+                 g_free (base_filename);
+-            } else 
++            } else
+                 return NULL;
+         } else
+             tmpcdir = g_get_current_dir ();
+@@ -92,8 +253,10 @@
+ {
+     GByteArray *array;
+     gchar *path;
+-    gchar *data = NULL;
+-    gsize length;
++
++    guchar buffer[4096];
++    int length;
++    FILE *f;
+ 
+     rsvg_return_val_if_fail (filename != NULL, NULL, error);
+ 
+@@ -101,20 +264,53 @@
+     if (path == NULL)
+         return NULL;
+ 
+-    if (!g_file_get_contents (path, &data, &length, error)) {
+-        g_free (path);
++    f = fopen (path, "rb");
++    g_free (path);
++
++    if (!f) {
++        g_set_error (error,
++                     G_FILE_ERROR,
++                     g_file_error_from_errno (errno),
++                     _("Failed to open file '%s': %s"), filename, g_strerror (errno));
+         return NULL;
+     }
+ 
++    /* TODO: an optimization is to use the file's size */
+     array = g_byte_array_new ();
+ 
+-    g_byte_array_append (array, (guint8 *)data, length);
+-    g_free (data);
+-    g_free (path);
++    while (!feof (f)) {
++        length = fread (buffer, 1, sizeof (buffer), f);
++        if (length > 0) {
++            if (g_byte_array_append (array, buffer, length) == NULL) {
++                fclose (f);
++                g_byte_array_free (array, TRUE);
++                return NULL;
++            }
++        } else if (ferror (f)) {
++            fclose (f);
++            g_byte_array_free (array, TRUE);
++            return NULL;
++        }
++    }
++
++    fclose (f);
+ 
+     return array;
+ }
+ 
++#ifdef HAVE_GIO
++
++static void
++rsvg_free_error (GError ** err)
++{
++        if (err) {
++                if (*err) {
++                        g_error_free (*err);
++                        *err = NULL;
++                }
++        }
++}
++
+ static GByteArray *
+ rsvg_acquire_vfs_resource (const char *filename, const char *base_uri, GError ** error)
+ {
+@@ -133,19 +329,19 @@
+         if (base_uri != NULL) {
+             GFile *base;
+ 
+-            g_clear_error (error);
+-
+-            g_object_unref (file);
++                        rsvg_free_error(error);
++                       
++                        g_object_unref (file);
+ 
+             base = g_file_new_for_uri (base_uri);
+             file = g_file_resolve_relative_path (base, filename);
+             g_object_unref (base);
+ 
+-            res = g_file_load_contents (file, NULL, &data, &size, NULL, error);
++                        res = g_file_load_contents (file, NULL, &data, &size, NULL, error);
+         }
+     }
+ 
+-    g_object_unref (file);
++        g_object_unref (file);
+ 
+     if (res) {
+         array = g_byte_array_new ();
+@@ -158,6 +354,7 @@
+ 
+     return array;
+ }
++#endif
+ 
+ GByteArray *
+ _rsvg_acquire_xlink_href_resource (const char *href, const char *base_uri, GError ** err)
+@@ -173,8 +370,10 @@
+     if (!arr)
+         arr = rsvg_acquire_file_resource (href, base_uri, NULL);
+ 
++#ifdef HAVE_GIO
+     if (!arr)
+         arr = rsvg_acquire_vfs_resource (href, base_uri, NULL);
++#endif
+ 
+     return arr;
+ }
+@@ -274,10 +473,9 @@
+     RsvgNodeImage *z = (RsvgNodeImage *) self;
+     rsvg_state_finalize (z->super.state);
+     g_free (z->super.state);
+-    z->super.state = NULL;
+     if (z->img)
+-        g_object_unref (z->img);
+-    _rsvg_node_free(self);
++        g_object_unref (G_OBJECT (z->img));
++    g_free (z);
+ }
+ 
+ static void
+@@ -300,7 +498,7 @@
+ 
+     rsvg_push_discrete_layer (ctx);
+ 
+-    if (!rsvg_current_state (ctx)->overflow && (aspect_ratio & RSVG_ASPECT_RATIO_SLICE)) {
++    if (!rsvg_current_state(ctx)->overflow && (aspect_ratio & RSVG_ASPECT_RATIO_SLICE)) {
+         rsvg_add_clipping_rect (ctx, x, y, w, h);
+     }
+ 
+@@ -357,10 +555,11 @@
+     RsvgNodeImage *image;
+     image = g_new (RsvgNodeImage, 1);
+     _rsvg_node_init (&image->super);
+-    g_assert (image->super.state);
+     image->img = NULL;
+     image->preserve_aspect_ratio = RSVG_ASPECT_RATIO_XMID_YMID;
+     image->x = image->y = image->w = image->h = _rsvg_css_parse_length ("0");
++    image->super.state = g_new (RsvgState, 1);
++    rsvg_state_init (image->super.state);
+     image->super.free = rsvg_node_image_free;
+     image->super.draw = rsvg_node_image_draw;
+     image->super.set_atts = rsvg_node_image_set_atts;
+--- misc/librsvg-2.32.1/config.h	2011-03-28 20:38:20.301880800 +0200
++++ misc/build/librsvg-2.32.1/config.h	2011-03-28 20:40:54.958130800 +0200
+@@ -1 +1,27 @@
+-dummy
++#define HAVE_FLOAT_H 1
++/* #undef ENABLE_XEMBED */
++/* #undef HAVE_BASENAME */
++/* #undef HAVE_DLFCN_H */
++#define  HAVE_GIO 1
++/* #undef HAVE_INTTYPES_H */
++/* #undef HAVE_LC_MESSAGES */
++#define HAVE_LOCALE_H 1
++#define HAVE_MEMORY_H 1
++/* #undef HAVE_STDINT_H */
++#define HAVE_STDLIB_H 1
++/* #undef HAVE_STRINGS_H */
++#define HAVE_STRING_H 1
++/* #undef HAVE_STRTOK_R */
++#define HAVE_SYS_STAT_H 1
++#define HAVE_SYS_TYPES_H 1
++/* #undef HAVE_UNISTD_H */
++
++#define PACKAGE "librsvg"
++#define PACKAGE_BUGREPORT ""
++#define PACKAGE_NAME ""
++#define PACKAGE_STRING ""
++#define PACKAGE_TARNAME ""
++#define PACKAGE_VERSION ""
++#define VERSION "2.32.1"
++#define STDC_HEADERS 1
++#define X_DISPLAY_MISSING 1
+--- misc/librsvg-2.32.1/makefile.mk	2011-03-28 20:38:20.489380800 +0200
++++ misc/build/librsvg-2.32.1/makefile.mk	2011-03-28 20:40:38.786255800 +0200
+@@ -1 +1,111 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++PRJINC=.
++PRJNAME=librsvg
++TARGET=librsvg-2-2
++
++VISIBILITY_HIDDEN=TRUE
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++# --- Settings ----------------------------------
++
++.INCLUDE : settings.mk
++
++CFLAGS+=	-DHAVE_GSF -DHAVE_LIBCROCO 						\
++				-I. -I$(SOLARINCDIR)$/external/glib-2.0			\
++				-I. -I$(SOLARINCDIR)$/external/gdk-pixbuf-2.0	\
++				-I$(SOLARINCDIR)$/external/pango-1.0			\
++				-I$(SOLARINCDIR)$/external/cairo					\
++				-I$(SOLARINCDIR)$/external/libgsf-1				\
++				-I$(SOLARINCDIR)$/external/libcroco-0.6			
++
++# --- Files -------------------------------------
++
++SLOFILES=\
++	$(SLO)$/librsvg-enum-types.obj	\
++	$(SLO)$/librsvg-features.obj		\
++	$(SLO)$/rsvg-affine.obj				\
++	$(SLO)$/rsvg-base-file-util.obj	\
++	$(SLO)$/rsvg-base.obj				\
++	$(SLO)$/rsvg-bpath-util.obj		\
++	$(SLO)$/rsvg-cairo-clip.obj		\
++	$(SLO)$/rsvg-cairo-draw.obj		\
++	$(SLO)$/rsvg-cairo-render.obj	\
++	$(SLO)$/rsvg-cond.obj				\
++	$(SLO)$/rsvg-convert.obj			\
++	$(SLO)$/rsvg-css.obj				\
++	$(SLO)$/rsvg-defs.obj				\
++	$(SLO)$/rsvg-file-util.obj			\
++	$(SLO)$/rsvg-filter.obj				\
++	$(SLO)$/rsvg-gobject.obj			\
++	$(SLO)$/rsvg-image.obj				\
++	$(SLO)$/rsvg-marker.obj			\
++	$(SLO)$/rsvg-mask.obj				\
++	$(SLO)$/rsvg-paint-server.obj	\
++	$(SLO)$/rsvg-path.obj				\
++	$(SLO)$/rsvg-shapes.obj			\
++	$(SLO)$/rsvg-structure.obj		\
++	$(SLO)$/rsvg-styles.obj				\
++	$(SLO)$/rsvg-text.obj				\
++	$(SLO)$/rsvg-xml.obj				\
++	$(SLO)$/rsvg.obj
++
++# --- Library -----------------------------------
++
++SHL1TARGET=	$(TARGET)
++SHL1OBJS=$(SLOFILES)
++SHL1STDLIBS=\
++    intl.lib 				\
++    gobject-2.0.lib 	\
++    gmodule-2.0.lib 	\
++	glib-2.0.lib 			\
++    gio-2.0.lib 			\
++    gthread-2.0.lib    \
++    gdk_pixbuf-2.0.lib \
++    cairo.lib 			\
++    libxml2.lib 			\
++    igsf-1.lib     	    \
++    libcroco-0.6-3.lib	\
++    pango-1.0.lib 		\
++    pangocairo-1.0.lib 	
++
++SHL1IMPLIB= i$(TARGET)
++SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
++DEF1NAME= $(SHL1TARGET)
++DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt $(SLB)$/$(TARGET).lib
++DEFLIB1NAME= $(TARGET)
++
++# --- Targets ----------------------------------
++
++.INCLUDE : target.mk
++
++# --- filter file ------------------------------
++
++$(MISC)$/$(SHL1TARGET).flt: makefile.mk
++    @echo CLEAR_THE_FILE	> $@

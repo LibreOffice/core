@@ -1,0 +1,1543 @@
+--- misc/pango-1.28.3/configure	2010-09-29 13:02:33.000000000 +0200
++++ misc/build/pango-1.28.3/configure	2011-03-26 06:09:01.021181200 +0100
+@@ -18596,16 +18596,16 @@
+   fi
+ 
+   if $have_atsui; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
++#    if test -n "$PKG_CONFIG" && \
++#    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
++#  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
++#  ac_status=$?
++#  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++#  test $ac_status = 0; }; then
+   have_cairo_atsui=true
+-else
+-  :
+-fi
++#else
++#  :
++#fi
+   fi
+   if $have_cairo_atsui; then
+ 
+@@ -18859,7 +18859,7 @@
+ 
+ # Setup GLIB_MKENUMS to use glib-mkenums even if GLib is uninstalled.
+ GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ # Add in gthread-2.0 to CFLAGS but not to LIBS so we get any
+--- misc/pango-1.28.3/pango/makefile.msc	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/makefile.msc	2011-03-26 15:41:45.375966400 +0100
+@@ -1,5 +1,15 @@
+-TOP = ../..
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++PRJ_TOP = ..
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
++CAIRO_INC = -I$(OUTDIR)\inc\external\cairo
++
++INTL_LIB = $(OUTDIR)\lib\intl.lib
++GLIB_LIB = $(OUTDIR)\lib\glib-2.0.lib		\
++				$(OUTDIR)\lib\gobject-2.0.lib	\
++				$(OUTDIR)\lib\gmodule-2.0.lib 
++CAIRO_LIB = $(OUTDIR)\lib\cairo.lib
++USP10_LIB = $(OUTDIR)\lib\USP10.lib
++
++!INCLUDE $(PRJ_TOP)\make.msc
+ 
+ !IFNDEF PERL
+ PERL = perl
+@@ -16,7 +26,7 @@
+ 
+ !IFNDEF PACKAGE
+ 
+-DLLS = pango pangowin32 pangoft2 pangocairo # pangox
++DLLS = pango pangowin32 pangocairo # pangox pangoft2 
+ EXES = querymodules testfonts
+ #? test1 test2 test3 test4 test5
+ 
+@@ -40,28 +50,28 @@
+ 
+ !ELSE
+ 
+-PRJ_TOP = ..
++CFLAGS = -I. -I$(PRJ_TOP) $(SOLARINC) $(GLIB_INC) $(CAIRO_INC)	
++
+ PKG_VER = $(PANGO_VER)
+ PKG_DEF = $(PACKAGE).def
+-
+-PKG_CFLAGS = -FImsvc_recommended_pragmas.h -I.. -I. -I$(PRJ_TOP) \
++PKG_CFLAGS = -FI$(PRJ_TOP)\msvc_recommended_pragmas.h $(CFLAGS) \
+ 		-DPACKAGE=\"Pango\" -DVERSION=\"$(PANGO_VER)\" \
+ 		-DPANGO_ENABLE_BACKEND -DPANGO_ENABLE_ENGINE \
+ 		-DMODULE_VERSION=\"$(PANGO_MODULE_VERSION)\" \
+ 		$(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
+ 		$(X11_CFLAGS)  -DSYSCONFDIR=\"/etc\" \
+-		-DPANGO_BINARY_AGE=0 
++		-DPANGO_BINARY_AGE=0 	\
++		-DLIBDIR=\".\\\\\"	
+ 
+ #-DHAVE_USP10_H
+-		
+ 
+ !IFDEF OBJS_pango
+ # don't link with itself
+-PKG_LINK = $(GLIB_LIBS) $(FONTCONFIG_LIBS)
++PKG_LINK = $(GLIB_LIB)
+ !ENDIF
+ 
+ !IFDEF OBJS_pangowin32
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) $(USP10_LIB)	\
+ 	pango-$(PANGO_VER).lib
+ !ENDIF
+ 
+@@ -69,23 +79,24 @@
+ PKG_CFLAGS = $(PKG_CFLAGS) $(FREETYPE2_CFLAGS) $(FONTCONFIG_CFLAGS) \
+ 	-DPANGO_MODULE_PREFIX=_pango_basic_ft2
+ 
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) $(FREETYPE2_LIBS) $(FONTCONFIG_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) $(FREETYPE2_LIBS) $(FONTCONFIG_LIBS) \
+ 	pango-$(PANGO_VER).lib opentype\pango-ot.lib
+ !ENDIF
+ 
+ !IFDEF OBJS_pangox
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
+ 	pango-$(PANGO_VER).lib $(X11_LIBS)
+ !ENDIF
+ 
+ !IFDEF OBJS_pangocairo
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
+-	pango-$(PANGO_VER).lib $(CAIRO_LIBS) \
+-	pangowin32-$(PANGO_VER).lib $(FONTCONFIG_LIBS) 
++PKG_CFLAGS = $(PKG_CFLAGS)
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
++	pango-$(PANGO_VER).lib $(CAIRO_LIB) \
++	pangowin32-$(PANGO_VER).lib 
+ !ENDIF
+ 
+ !IF DEFINED (OBJS_querymodules) || DEFINED (OBJS_testfonts)
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
+ 	pango-$(PANGO_VER).lib pangowin32-$(PANGO_VER).lib
+ !ENDIF
+ 
+@@ -99,9 +110,10 @@
+ 	ellipsize.obj \
+ 	fonts.obj \
+ 	glyphstring.obj \
+-	mapping.obj \
++#	mapping.obj \
+ 	modules.obj \
+ 	pango-attributes.obj \
++	pango-bidi-type.obj \
+ 	pango-engine.obj \
+ 	pango-color.obj \
+ 	pango-context.obj \
+@@ -121,7 +133,6 @@
+ 	pango-utils.obj \
+ 	reorder-items.obj \
+ 	shape.obj \
+-	\
+ 	fribidi.obj \
+ 	fribidi_types.obj \
+ 	fribidi_char_type.obj
+@@ -215,15 +226,6 @@
+ OBJECTS = $(PACKAGE).obj
+ !ENDIF
+ 
+-module-defs-win32.c : module-defs-win32.c.win32
+-	copy module-defs-win32.c.win32 module-defs-win32.c
+-
+-module-defs-fc.c : module-defs-fc.c.win32
+-	copy module-defs-fc.c.win32 module-defs-fc.c
+-
+-module-defs-lang.c : module-defs-lang.c.win32
+-	copy module-defs-lang.c.win32 module-defs-lang.c
+-
+ pango_headers=		   \
+ 	pango.h		   \
+ 	pango-attributes.h \
+@@ -249,7 +251,7 @@
+ 	pangofc-fontmap.h
+ 
+ pango-enum-types.h: $(pango_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums  \
++	$(PERL) $(PRJ_TOP)\glib-mkenums.pl  \
+ 		--fhead "#ifndef __PANGO_ENUM_TYPES_H__\n#define __PANGO_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
+ 		--fprod "/* enumerations from \"@filename@\" */\n" \
+ 		--vhead "GType @enum_name@_get_type (void);\n#define PANGO_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" 	\
+@@ -257,7 +259,7 @@
+ 		$(pango_headers) > pango-enum-types.h
+ 
+ pango-enum-types.c: $(pango_headers) pango-enum-types.h makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums  \
++	$(PERL) $(PRJ_TOP)\glib-mkenums.pl  \
+ 		--fhead "#include <pango.h>" \
+ 		--fprod "\n/* enumerations from \"@filename@\" */" \
+ 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" 	\
+@@ -275,15 +277,6 @@
+ $(PACKAGE).exe : $(PKG_LINK) $(OBJECTS)
+ 	$(CC) $(CFLAGS) -Fe$(PACKAGE).exe $(OBJECTS) $(PKG_LINK) gdi32.lib user32.lib
+ 
+-$(PRJ_TOP)\config.h.win32 : makefile.msc
+-	echo /*almostempty*/ > $(PRJ_TOP)\config.h.win32
+-	echo #define PANGO_BINARY_AGE 0 >> $(PRJ_TOP)\config.h.win32
+-	echo #define DHAVE_USP10_H 1 >> $(PRJ_TOP)\config.h.win32
+-
+-$(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
+-	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+-
+-
+ .c.obj :
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+--- misc/pango-1.28.3/pango/module-defs-win32.c	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/module-defs-win32.c	2011-03-26 08:57:53.088370000 +0100
+@@ -1,7 +1,25 @@
+-/* Autogenerated by configure. Do not edit */
++/* Hand-written, for builds using Microsoft's compiler and makefile.msc,
++ * where the configure mechanism isn't used.
++ */
+ 
+-#include "module-defs.h"
++#include "modules.h"
++
++#ifdef PANGO_MODULE_PREFIX
++void         _pango_basic_win32_script_engine_list   (PangoEngineInfo **engines,
++                                                      gint             *n_engines);
++void         _pango_basic_win32_script_engine_init   (GTypeModule      *module);
++void         _pango_basic_win32_script_engine_exit   (void);
++PangoEngine *_pango_basic_win32_script_engine_create (const char       *id);
++#endif
+ 
+ PangoIncludedModule _pango_included_win32_modules[] = {
+- { NULL, NULL, NULL, NULL },
++#ifdef PANGO_MODULE_PREFIX
++ { 
++   _pango_basic_win32_script_engine_list,  
++   _pango_basic_win32_script_engine_init, 
++   _pango_basic_win32_script_engine_exit,  
++   _pango_basic_win32_script_engine_create 
++ },
++#endif
++ { NULL, NULL, NULL },
+ };
+--- misc/pango-1.28.3/pango/pango-enum-types.c	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-enum-types.c	2011-03-26 15:41:51.313542400 +0100
+@@ -35,7 +35,7 @@
+       { PANGO_ATTR_GRAVITY_HINT, "PANGO_ATTR_GRAVITY_HINT", "gravity-hint" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoAttrType"), values);
++    etype = g_enum_register_static ("PangoAttrType", values);
+   }
+   return etype;
+ }
+@@ -52,59 +52,7 @@
+       { PANGO_UNDERLINE_ERROR, "PANGO_UNDERLINE_ERROR", "error" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoUnderline"), values);
+-  }
+-  return etype;
+-}
+-
+-/* enumerations from "pango-bidi-type.h" */
+-GType
+-pango_bidi_type_get_type (void)
+-{
+-  static GType etype = 0;
+-  if (etype == 0) {
+-    static const GEnumValue values[] = {
+-      { PANGO_BIDI_TYPE_L, "PANGO_BIDI_TYPE_L", "l" },
+-      { PANGO_BIDI_TYPE_LRE, "PANGO_BIDI_TYPE_LRE", "lre" },
+-      { PANGO_BIDI_TYPE_LRO, "PANGO_BIDI_TYPE_LRO", "lro" },
+-      { PANGO_BIDI_TYPE_R, "PANGO_BIDI_TYPE_R", "r" },
+-      { PANGO_BIDI_TYPE_AL, "PANGO_BIDI_TYPE_AL", "al" },
+-      { PANGO_BIDI_TYPE_RLE, "PANGO_BIDI_TYPE_RLE", "rle" },
+-      { PANGO_BIDI_TYPE_RLO, "PANGO_BIDI_TYPE_RLO", "rlo" },
+-      { PANGO_BIDI_TYPE_PDF, "PANGO_BIDI_TYPE_PDF", "pdf" },
+-      { PANGO_BIDI_TYPE_EN, "PANGO_BIDI_TYPE_EN", "en" },
+-      { PANGO_BIDI_TYPE_ES, "PANGO_BIDI_TYPE_ES", "es" },
+-      { PANGO_BIDI_TYPE_ET, "PANGO_BIDI_TYPE_ET", "et" },
+-      { PANGO_BIDI_TYPE_AN, "PANGO_BIDI_TYPE_AN", "an" },
+-      { PANGO_BIDI_TYPE_CS, "PANGO_BIDI_TYPE_CS", "cs" },
+-      { PANGO_BIDI_TYPE_NSM, "PANGO_BIDI_TYPE_NSM", "nsm" },
+-      { PANGO_BIDI_TYPE_BN, "PANGO_BIDI_TYPE_BN", "bn" },
+-      { PANGO_BIDI_TYPE_B, "PANGO_BIDI_TYPE_B", "b" },
+-      { PANGO_BIDI_TYPE_S, "PANGO_BIDI_TYPE_S", "s" },
+-      { PANGO_BIDI_TYPE_WS, "PANGO_BIDI_TYPE_WS", "ws" },
+-      { PANGO_BIDI_TYPE_ON, "PANGO_BIDI_TYPE_ON", "on" },
+-      { 0, NULL, NULL }
+-    };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoBidiType"), values);
+-  }
+-  return etype;
+-}
+-GType
+-pango_direction_get_type (void)
+-{
+-  static GType etype = 0;
+-  if (etype == 0) {
+-    static const GEnumValue values[] = {
+-      { PANGO_DIRECTION_LTR, "PANGO_DIRECTION_LTR", "ltr" },
+-      { PANGO_DIRECTION_RTL, "PANGO_DIRECTION_RTL", "rtl" },
+-      { PANGO_DIRECTION_TTB_LTR, "PANGO_DIRECTION_TTB_LTR", "ttb-ltr" },
+-      { PANGO_DIRECTION_TTB_RTL, "PANGO_DIRECTION_TTB_RTL", "ttb-rtl" },
+-      { PANGO_DIRECTION_WEAK_LTR, "PANGO_DIRECTION_WEAK_LTR", "weak-ltr" },
+-      { PANGO_DIRECTION_WEAK_RTL, "PANGO_DIRECTION_WEAK_RTL", "weak-rtl" },
+-      { PANGO_DIRECTION_NEUTRAL, "PANGO_DIRECTION_NEUTRAL", "neutral" },
+-      { 0, NULL, NULL }
+-    };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoDirection"), values);
++    etype = g_enum_register_static ("PangoUnderline", values);
+   }
+   return etype;
+ }
+@@ -122,7 +70,7 @@
+       { PANGO_COVERAGE_EXACT, "PANGO_COVERAGE_EXACT", "exact" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoCoverageLevel"), values);
++    etype = g_enum_register_static ("PangoCoverageLevel", values);
+   }
+   return etype;
+ }
+@@ -139,7 +87,7 @@
+       { PANGO_STYLE_ITALIC, "PANGO_STYLE_ITALIC", "italic" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoStyle"), values);
++    etype = g_enum_register_static ("PangoStyle", values);
+   }
+   return etype;
+ }
+@@ -153,7 +101,7 @@
+       { PANGO_VARIANT_SMALL_CAPS, "PANGO_VARIANT_SMALL_CAPS", "small-caps" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoVariant"), values);
++    etype = g_enum_register_static ("PangoVariant", values);
+   }
+   return etype;
+ }
+@@ -176,7 +124,7 @@
+       { PANGO_WEIGHT_ULTRAHEAVY, "PANGO_WEIGHT_ULTRAHEAVY", "ultraheavy" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoWeight"), values);
++    etype = g_enum_register_static ("PangoWeight", values);
+   }
+   return etype;
+ }
+@@ -197,7 +145,7 @@
+       { PANGO_STRETCH_ULTRA_EXPANDED, "PANGO_STRETCH_ULTRA_EXPANDED", "ultra-expanded" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoStretch"), values);
++    etype = g_enum_register_static ("PangoStretch", values);
+   }
+   return etype;
+ }
+@@ -216,7 +164,7 @@
+       { PANGO_FONT_MASK_GRAVITY, "PANGO_FONT_MASK_GRAVITY", "gravity" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_flags_register_static (g_intern_static_string ("PangoFontMask"), values);
++    etype = g_flags_register_static ("PangoFontMask", values);
+   }
+   return etype;
+ }
+@@ -235,7 +183,7 @@
+       { PANGO_GRAVITY_AUTO, "PANGO_GRAVITY_AUTO", "auto" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoGravity"), values);
++    etype = g_enum_register_static ("PangoGravity", values);
+   }
+   return etype;
+ }
+@@ -250,7 +198,7 @@
+       { PANGO_GRAVITY_HINT_LINE, "PANGO_GRAVITY_HINT_LINE", "line" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoGravityHint"), values);
++    etype = g_enum_register_static ("PangoGravityHint", values);
+   }
+   return etype;
+ }
+@@ -267,7 +215,7 @@
+       { PANGO_ALIGN_RIGHT, "PANGO_ALIGN_RIGHT", "right" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoAlignment"), values);
++    etype = g_enum_register_static ("PangoAlignment", values);
+   }
+   return etype;
+ }
+@@ -282,7 +230,7 @@
+       { PANGO_WRAP_WORD_CHAR, "PANGO_WRAP_WORD_CHAR", "word-char" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoWrapMode"), values);
++    etype = g_enum_register_static ("PangoWrapMode", values);
+   }
+   return etype;
+ }
+@@ -298,7 +246,7 @@
+       { PANGO_ELLIPSIZE_END, "PANGO_ELLIPSIZE_END", "end" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoEllipsizeMode"), values);
++    etype = g_enum_register_static ("PangoEllipsizeMode", values);
+   }
+   return etype;
+ }
+@@ -316,7 +264,7 @@
+       { PANGO_RENDER_PART_STRIKETHROUGH, "PANGO_RENDER_PART_STRIKETHROUGH", "strikethrough" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoRenderPart"), values);
++    etype = g_enum_register_static ("PangoRenderPart", values);
+   }
+   return etype;
+ }
+@@ -409,7 +357,7 @@
+       { PANGO_SCRIPT_LYDIAN, "PANGO_SCRIPT_LYDIAN", "lydian" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoScript"), values);
++    etype = g_enum_register_static ("PangoScript", values);
+   }
+   return etype;
+ }
+@@ -424,7 +372,7 @@
+       { PANGO_TAB_LEFT, "PANGO_TAB_LEFT", "left" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoTabAlign"), values);
++    etype = g_enum_register_static ("PangoTabAlign", values);
+   }
+   return etype;
+ }
+--- misc/pango-1.28.3/pango/pango-enum-types.h	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-enum-types.h	2011-03-26 15:41:50.922912400 +0100
+@@ -12,11 +12,6 @@
+ #define PANGO_TYPE_ATTR_TYPE (pango_attr_type_get_type())
+ GType pango_underline_get_type (void);
+ #define PANGO_TYPE_UNDERLINE (pango_underline_get_type())
+-/* enumerations from "pango-bidi-type.h" */
+-GType pango_bidi_type_get_type (void);
+-#define PANGO_TYPE_BIDI_TYPE (pango_bidi_type_get_type())
+-GType pango_direction_get_type (void);
+-#define PANGO_TYPE_DIRECTION (pango_direction_get_type())
+ /* enumerations from "pango-coverage.h" */
+ GType pango_coverage_level_get_type (void);
+ #define PANGO_TYPE_COVERAGE_LEVEL (pango_coverage_level_get_type())
+@@ -53,7 +48,6 @@
+ GType pango_tab_align_get_type (void);
+ #define PANGO_TYPE_TAB_ALIGN (pango_tab_align_get_type())
+ G_END_DECLS
+-
+ #endif /* __PANGO_ENUM_TYPES_H__ */
+ 
+ 
+--- misc/pango-1.28.3/pango/pango-language.c	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/pango-language.c	2011-03-26 10:25:32.858819200 +0100
+@@ -169,7 +169,6 @@
+ static gchar *
+ _pango_get_lc_ctype (void)
+ {
+-#ifdef G_OS_WIN32
+   /* Somebody might try to set the locale for this process using the
+    * LANG or LC_ environment variables. The Microsoft C library
+    * doesn't know anything about them. You set the locale in the
+@@ -196,9 +195,6 @@
+     return g_strdup (p);
+ 
+   return g_win32_getlocale ();
+-#else
+-  return g_strdup (setlocale (LC_CTYPE, NULL));
+-#endif
+ }
+ 
+ /**
+--- misc/pango-1.28.3/pango/pango-utils.c	2010-09-29 12:39:16.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-utils.c	2011-03-26 11:07:49.125658000 +0100
+@@ -38,15 +38,11 @@
+ #  define getc_unlocked(f) getc(f)
+ #endif /* !HAVE_FLOCKFILE */
+ 
+-#ifdef G_OS_WIN32
+-
+ #include <sys/types.h>
+ 
+ #define STRICT
+ #include <windows.h>
+ 
+-#endif
+-
+ struct PangoAlias
+ {
+   char *alias;
+@@ -204,25 +200,6 @@
+ 
+ 	  continue;
+ 	}
+-#ifndef G_OS_WIN32
+-      /* '~' is a quite normal and common character in file names on
+-       * Windows, especially in the 8.3 versions of long file names, which
+-       * still occur now and then. Also, few Windows user are aware of the
+-       * Unix shell convention that '~' stands for the home directory,
+-       * even if they happen to have a home directory.
+-       */
+-      if (file[0] == '~' && file[1] == G_DIR_SEPARATOR)
+-	{
+-	  char *tmp = g_strconcat (g_get_home_dir(), file + 1, NULL);
+-	  g_free (file);
+-	  file = tmp;
+-	}
+-      else if (file[0] == '~' && file[1] == '\0')
+-	{
+-	  g_free (file);
+-	  file = g_strdup (g_get_home_dir());
+-	}
+-#endif
+       g_free (files[i]);
+       files[i] = file;
+ 
+@@ -655,8 +632,6 @@
+   return g_strdup (g_hash_table_lookup (config_hash, key));
+ }
+ 
+-#ifdef G_OS_WIN32
+-
+ /* DllMain function needed to tuck away the DLL handle */
+ 
+ static HMODULE pango_dll;
+@@ -676,8 +651,6 @@
+   return TRUE;
+ }
+ 
+-#endif
+-
+ /**
+  * pango_get_sysconf_subdirectory:
+  *
+@@ -692,7 +665,6 @@
+ G_CONST_RETURN char *
+ pango_get_sysconf_subdirectory (void)
+ {
+-#ifdef G_OS_WIN32
+   static gchar *result = NULL;
+ 
+   if (result == NULL)
+@@ -702,9 +674,6 @@
+       g_free (root);
+     }
+   return result;
+-#else
+-  return SYSCONFDIR "/pango";
+-#endif
+ }
+ 
+ /**
+@@ -721,7 +690,6 @@
+ G_CONST_RETURN char *
+ pango_get_lib_subdirectory (void)
+ {
+-#ifdef G_OS_WIN32
+   static gchar *result = NULL;
+ 
+   if (result == NULL)
+@@ -737,9 +705,6 @@
+       g_free (root);
+     }
+   return result;
+-#else
+-  return LIBDIR "/pango";
+-#endif
+ }
+ 
+ 
+--- misc/pango-1.28.3/pango/pango.def	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/pango.def	2011-03-26 11:10:51.284239600 +0100
+@@ -49,7 +49,6 @@
+ 	pango_attribute_destroy
+ 	pango_attribute_equal
+ 	pango_bidi_type_for_unichar
+-	pango_bidi_type_get_type
+ 	pango_break
+ 	pango_color_copy
+ 	pango_color_free
+@@ -89,7 +88,6 @@
+ 	pango_coverage_to_bytes
+ 	pango_coverage_unref
+ 	pango_default_break
+-	pango_direction_get_type
+ 	pango_ellipsize_mode_get_type
+ 	pango_engine_get_type
+ 	pango_engine_lang_get_type
+--- misc/pango-1.28.3/config.h	2011-03-26 08:43:30.577330000 +0100
++++ misc/build/pango-1.28.3/config.h	2011-03-26 08:42:01.216811200 +0100
+@@ -1 +1,3 @@
+-dummy
++/*almostempty*/
++#define PANGO_BINARY_AGE 0
++#define DHAVE_USP10_H   1
+--- misc/pango-1.28.3/make.msc	2011-03-26 08:32:25.068811600 +0100
++++ misc/build/pango-1.28.3/make.msc	2011-03-26 09:00:42.356161600 +0100
+@@ -1 +1,237 @@
+-dummy
++# Note that this file is hardly maintained, hardly usable without
++# manual editing, and not really part of a recommended way to build
++# GLib and related software with Microsoft's compilers. Only a few
++# persons use a build setup that involves this file.
++
++# Common makefile definitions for building GLib, GTk+, and various
++# software that use these libraries with msvc on Win32
++
++# Debug builds shoud link with msvcrtd release build with msvcrt.
++!IFNDEF DEBUG
++# Full optimization:
++OPTIMIZE = -Ox
++# release with debug
++OPTIMIZE = -Zi -DG_ENABLE_DEBUG=1
++CRUNTIME = -MD
++LINKDEBUG = /OPT:REF
++!ELSE
++# Debugging:
++OPTIMIZE = 
++CRUNTIME = -MDd
++DEBUGINFO = -Zi -DG_ENABLE_DEBUG=1
++LINKDEBUG = /debug /nodefaultlib:msvcrt.lib
++!ENDIF
++
++LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
++
++!IFNDEF TOP
++TOP = ..
++!ENDIF
++
++!IFNDEF PERL
++PERL = perl
++!ENDIF
++
++XSLTPROC = d:\gnome-0\xsltproc
++
++# paths and version numbers
++!INCLUDE module.defs
++
++################
++# CFLAGS and LIBS for the packages in module.defs.
++# In alphabetical order.
++
++# Note that these CFLAGS and LIBS refer to stuff in "source"
++# directories. This is for historical reasons, and only useable if you
++# have the GLib, Pango, etc sources. If you use the prebuilt developer
++# packages, you should fix these to instead refer to the place where
++# you unzipped the developer packages. Easiest of all, run pkg-config
++# --cflags gtk+-2.0 (for instance), and paste its output as the
++# definition of GTK2_CFLAGS. Etc.
++
++ATK_CFLAGS = -I $(ATK)
++ATK_LIBS = $(ATK)\atk\atk-$(ATK_VER).lib
++BABL_CFLAGS = -I $(BABL)
++BABL_LIBS = $(BABL)\babl\babl-1.0.lib
++
++# force inclusion of the _right_ cairoversion.h even when using without installation 
++CAIRO_CFLAGS = -I $(CAIRO)\src -I $(CAIRO)
++CAIRO_LIBS = $(CAIRO)\src\libcairo.lib
++
++DIRENT_CFLAGS = -I ..\build\win32\dirent
++DIRENT_LIBS = ..\build\win32\dirent\dirent.lib
++
++!IFNDEF EXIF
++EXIF_CFLAGS = -I $(DEVTOP)\include 
++EXIF_LIBS = $(DEVTOP)\lib\exif.lib
++EXIF = 1
++!ENDIF
++
++# Don't know if Freetype2, FriBiDi and some others actually can be
++# built with MSVC, but one can produce an import library even if the
++# DLL was built with gcc.
++!IFDEF FREETYPE2
++FREETYPE2_CFLAGS = -I $(FREETYPE2)\include
++FREETYPE2_LIBS = $(FREETYPE2)\obj\freetype-$(FREETYPE2_VER).lib
++!ELSE
++FREETYPE2_CFLAGS = -I $(DEVTOP)\include -I $(DEVTOP)\include\freetype2
++FREETYPE2_LIBS = $(DEVTOP)\lib\freetype6.lib
++!ENDIF
++
++!IFNDEF FONTCONFIG
++FONTCONFIG_CFLAGS = -I $(DEVTOP)\include
++FONTCONFIG_LIBS = $(DEVTOP)\lib\fontconfig.lib
++!ENDIF
++
++GDK_PIXBUF_CFLAGS = -I $(GDK_PIXBUF)
++GDK_PIXBUF_LIBS = $(GTK2)\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib
++
++GIMP_CFLAGS = -I $(GIMP)
++GIMP_PLUGIN_LIBS = $(GIMP)\libgimp\gimp-$(GIMP_VER).lib $(GIMP)\libgimp\gimpui-$(GIMP_VER).lib
++
++# overide definition to use it as callable path
++GLIB = $(TOP)\glib
++
++GLIB_CFLAGS = -I $(GLIB) -I $(GLIB)\glib -I $(GLIB)\gmodule $(INTL_CFLAGS) $(SOLARINC)
++GLIB_LIBS = $(GLIB)\glib\glib-$(GLIB_VER).lib $(GLIB)\gmodule\gmodule-$(GLIB_VER).lib $(GLIB)\gobject\gobject-$(GLIB_VER).lib $(GLIB)\gio\gio-$(GLIB_VER).lib
++GTHREAD_LIBS = $(GLIB)\gthread\gthread-$(GLIB_VER).lib
++
++!IFNDEF GDK_PIXBUF
++GDK_PIXBUF_CFLAGS = $(GTK2_CFLAGS)
++GDK_PIXBUF_LIBS = $(GTK2_LIBS)
++!ENDIF
++
++GNOMECANVAS_CFLAGS = -I $(GNOMECANVAS)
++GNOMECANVAS_LIBS = $(GNOMECANVAS)\libgnomecanvas\libgnomecanvas-$(GNOMECANVAS_VER).lib
++
++GNOMEPRINT_CFLAGS = -I $(GNOMEPRINT)
++GNOMEPRINT_LIBS = $(GNOMEPRINT)\libgnomeprint\gnome-print-$(GNOMEPRINT_VER).lib
++
++GNOMEPRINTUI_CFLAGS = -I $(GNOMEPRINTUI)
++GNOMEPRINTUI_LIBS = $(GNOMEPRINTUI)\libgnomeprintui\gnome-printui-$(GNOMEPRINTUI_VER).lib
++
++GTK_CFLAGS = -I$(GTK)\gdk -I$(GTK)\gdk -I$(GTK) 
++GTK_LIBS = $(GTK)\gtk\gtk.lib $(GTK)\gdk\gdk.lib 
++
++GTK2_CFLAGS = $(GLIB_CFLAGS) $(ATK_CFLAGS) -I$(GTK2)\gdk -I$(GTK2)\gdk -I$(GTK2) -I$(PANGO) -I$(ATK) $(CAIRO_CFLAGS)
++GTK2_LIBS = $(GTK2)\gtk\gtk-win32-$(GTK2_VER).lib $(GTK2)\gdk\gdk-win32-$(GTK2_VER).lib $(GTK2)\gdk-pixbuf\gdk_pixbuf-$(GTK2_VER).lib $(PANGO_LIBS)
++
++GTKGLAREA_CFLAGS = -I $(GTKGLAREA)
++GTKGLAREA_LIBS = $(GTKGLAREA)\gtkgl\gtkgl-$(GTKGLAREA_VER).lib
++
++GTKSOURCEVIEW_CFLAGS = -I $(GTKSOURCEVIEW)
++GTKSOURCEVIEW_LIBS = $(GTKSOURCEVIEW)\gtksourceview\gtksourceview.lib
++
++LIBART_CFLAGS = -I$(LIBART)\.. -FIlibart_lgpl/art_config.h
++LIBART_LIBS = $(LIBART)\art_lgpl_2.lib
++
++!IFNDEF INTL
++INTL_CFLAGS = -I $(OUTDIR)\inc\external
++INTL_LIBS = $(OUTDIR)/lib/intl.lib 
++!ELSE
++INTL_CFLAGS = -I $(OUTDIR)\inc\external
++INTL_LIBS = $(OUTDIR)/lib/intl.lib 
++!ENDIF
++
++!IFDEF LCMS
++LCMS_CFLAGS = -DLCMS_DLL -I $(LCMS)\include
++LCMS_LIBS = $(LCMS)\Projects\VC6\Release\lcms.lib 
++!ENDIF
++
++LIBICONV_CFLAGS = -I $(LIBICONV)\include
++LIBICONV_LIBS = $(LIBICONV)\lib\iconv.lib
++
++LIBXML_CFLAGS = -I $(LIBXML)
++LIBXML_LIBS = $(LIBXML)\xml-$(LIBXML_VER).lib
++
++LIBXML2_CFLAGS = $(LIBICONV_CFLAGS) -I $(LIBXML2)\include
++LIBXML2_LIBS = $(LIBXML2)\libxml2.lib
++
++LIBXSLT_CFLAGS = -I $(LIBXSLT)
++LIBXSLT_LIBS = $(LIBXSLT)\libxslt\libxslt.lib
++
++LCMS_CFLAGS = -I $(LCMS)\include -DLCMS_DLL
++LCMS_LIBS = $(LCMS)\Projects\VC6\Release\lcms.lib
++
++!IFNDEF JPEG
++JPEG_CFLAGS = -I $(DEVTOP)\include
++JPEG_LIBS = $(DEVTOP)\lib\jpeg.lib
++!ELSE
++JPEG_CFLAGS = -I $(JPEG)
++JPEG_LIBS = $(JPEG)\libjpeg.lib
++!ENDIF
++
++OPENGL_CFLAGS = # None needed, headers bundled with the compiler
++OPENGL_LIBS = opengl32.lib lglu32.lib
++
++PANGO_CFLAGS = -I $(PANGO)
++PANGO_LIBS = $(PANGO)\pango\pango-$(PANGO_VER).lib
++PANGOCAIRO_LIBS = $(PANGO_LIBS) $(PANGO)\pango\pangocairo-$(PANGO_VER).lib
++PANGOWIN32_LIBS = $(PANGO_LIBS) $(PANGO)\pango\pangowin32-$(PANGO_VER).lib
++PANGOFT2_LIBS = $(PANGO_LIBS) $(PANGO)\pango\pangoft2-$(PANGO_VER).lib
++
++!IFDEF PNG
++PNG_CFLAGS = -I $(PNG) $(ZLIB_CFLAGS)
++PNG_LIBS = $(PNG)\projects\visualc6\Win32_LIB_Release\libpng.lib  $(ZLIB_LIBS)
++!ELSE
++PNG_CFLAGS = -I $(DEVTOP)\include $(ZLIB_CFLAGS)
++PNG_LIBS = $(DEVTOP)\lib\libpng.lib  $(ZLIB_LIBS)
++!ENDIF
++
++RSVG_CFLAGS = -I $(RSVG)\..
++RSVG_LIBS = $(RSVG)\librsvg-2.lib
++
++SVG_CFLAGS = -I $(SVG)\src
++SVG_LIBS = $(SVG)\src\libsvg-$(SVG_VER).lib
++
++!IFDEF TIFF
++TIFF_CFLAGS = -I $(TIFF)\libtiff
++# Use single import library for both libtiff DLL versions (with or
++# without LZW code). The user selects which DLL to use.
++TIFF_LIBS = $(TIFF)\libtiff\libtiff.lib $(JPEG_LIBS) $(ZLIB_LIBS) user32.lib
++!ELSE
++TIFF_CFLAGS = -I $(DEVTOP)\include
++TIFF_LIBS = $(DEVTOP)\lib\libtiff.lib
++!ENDIF
++
++VIPS_CFLAGS = -I $(VIPS)/include
++VIPS_LIBS = $(VIPS)/libsrc/vips.lib
++
++!IFDEF ZLIB
++ZLIB_CFLAGS = -I $(ZLIB)
++ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
++!ELSE
++ZLIB_CFLAGS = -I $(ZLIB)
++ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
++!ENDIF
++
++################
++# Compiler to use.
++
++CCOMPILER = cl
++CC = $(CCOMPILER) $(OPTIMIZE) $(CRUNTIME) -W3 -nologo
++
++################
++# The including makefile should define INCLUDES, DEFINES and
++# DEPCFLAGS.  INCLUDES are the includes related to the module being
++# built.  DEFINES similarly. DEPCFLAGS should be set to a set of
++# GLIB_CFLAGS, GTK_CFLAGS etc corresponding to what other modules we
++# depend on.
++
++CFLAGS = $(OPTIMIZE) $(DEBUGINFO) $(INCLUDES) $(DEFINES) $(DEPCFLAGS)
++# make cl/wcl386 compatible (c99 and cdecl)
++#OPTIMIZE = -Ox
++#CFLAGS = /passwopts:-za99 /passwopts:-ecc $(DEBUGINFO) $(INCLUDES) $(DEFINES) $(DEPCFLAGS)
++.c.i :
++	$(CC) $(CFLAGS) -E $< >$@
++
++# The default target should be "all"
++
++default: all
++
++clean::
++	-del *.obj *.res *.i *.exe *.dll *.lib *.err *.map *.exp *.lk1 *.mk1 *.ilk *.manifest
++	-del *.pdb
++
++# Needed by hacker rule to make makefile.msc from makefile.msc.in:
++SED = e:\cygwin\bin\sed
+--- misc/pango-1.28.3/module.defs	2011-03-26 15:50:26.773265200 +0100
++++ misc/build/pango-1.28.3/module.defs	2011-03-26 15:49:47.850892000 +0100
+@@ -1 +1,124 @@
+-dummy
++# Note that this file is hardly maintained, hardly usable without
++# manual editing, and not really part of a recommended way to build
++# GLib and related software with Microsoft's compilers. Only a few
++# persons use a build setup that involves this file.
++
++# This file is included by makefiles for both GNU Make (for gcc
++# (mingw) builds, and NMAKE (for MSVC builds).
++
++MODULE_DEFS_INCLUDED=1
++
++# fallback if a specifc library is not contained in TOP (i.e. not self-compiled)
++DEVTOP=$(TOP)\..\other\dev
++
++################
++# The version macros define what versions of libraries to use.
++
++# The version numbers are defined unconditionally. If you want to
++# produce a newer version of one of these libraries, the new number
++# should be defined in the specific project makefile _after_ including
++# this file (or make.{mingw,msc}). These version numbers are used in
++# the names of some import libraries. 
++
++# Please note that there are two (or three) ways to build the GLib
++# (and GTK+ etc) libraries on Win32: Either using the same
++# auto*/configure mechanism to generate makefiles as on Unix, and
++# libtool to handle DLL creation. This currently only works for gcc,
++# and even then it is hellish to set up to work 100% correctly. For
++# people using that, this file is totally irrelevant.
++
++# Or, use hand-written makefiles, either for MSVC (these are called
++# makefile.msc and maintained by Hans Breuer), or for gcc
++# (makefile.mingw, by Tor Lillqvist). Only for GLib are the
++# makefile.mingw files believed to be up-to-date, for other modules
++# they have been left to rot after Tor started using the
++# autoconfiscated way of building.
++
++# The stuff here uses the same name for (import) libraries as on Unix,
++# as libtool uses those, and the semi-official developer packages are
++# built using libtool.
++
++ATK_VER = 1.0
++CAIRO_VER = 1.4
++FREETYPE2_VER = 2.0
++GIMP_VER = 1.2
++GDK_PIXBUF_VER = 2.0
++GLIB_VER = 2.0
++GTKGLAREA_VER = 1.2.2
++GTK2_VER = 2.0
++LIBGLADE_VER = 0.14
++LIBICONV_VER = 1.7
++LIBXML_VER = 1.8.7
++LIBXML2_VER = 2.4.2
++PANGO_VER = 1.0
++POPT_VER = 1.4
++SVG_VER = 0.1
++RSVG_VER = 2.4
++
++################
++# Locations of various source directories. TOP is defined in make.{mingw,msc}
++
++# First stuff that is in the GNOME CVS repository.
++# In alphabetical order.
++
++ATK = $(TOP)/atk
++BABL = $(TOP)/babl
++CAIRO = d:\devel\from-svn\other\cairo-1.8.4
++GIMP = $(TOP)/gimp
++GEGL = $(TOP)/gegl
++GLIB = $(TOP)/glib
++GNOMECANVAS = $(TOP)\libgnomecanvas
++GNOMECANVAS_VER = 2.9
++
++# GTK+ 1.3.0, gtk-1-3-win32-production branch. Rename directory
++# to gtk+p after initial checkout from CVS.
++GTK = $(TOP)/gtk+p
++# GTK+ 2.0
++GTK2 = $(TOP)/gtk+
++GTKSOURCEVIEW = $(TOP)/gtksourceview
++GNOMEPRINT = $(TOP)\libgnomeprint
++GNOMEPRINT_VER = 2.8
++LIBGLADE = $(TOP)/libglade
++LIBXML = $(TOP)/libxml-$(LIBXML_VER)
++LIBXML2 = $(TOP)/libxml2
++#PANGO = $(TOP)/pango-1-8
++PANGO = $(TOP)/pango
++
++GNOMEPRINTUI = $(TOP)\libgnomeprintui
++GNOMEPRINTUI_VER = 2.2
++
++# Aux programs
++GLIB_GENMARSHAL = $(GLIB)/gobject/glib-genmarshal
++
++# Stuff from other places.
++
++# Note this was is specific to what tml happened to have on his disk
++# at some time in history. To really be able to recompile something
++# that uses for instance libjpeg, you should download a suitable
++# binary "developer" distribution of it, unpack it into some location,
++# and edit this file correspondingly. You should not take the versions
++# mentioned here too literally, use the latest version you can find,
++# or the ones the current GTK+ 2.0 for Windows uses.
++
++#FREETYPE2 = $(TOP)/freetype2
++GTKEXTRA = $(TOP)/gtk+extra
++GTKGLAREA = $(TOP)/gtkglarea
++#INTL = d:/devel/from-svn/other/intl-tml
++JPEG = d:/devel/from-svn/other/jpeg-6b
++LCMS = d:/devel/other/lcms-1.15
++LIBART = $(TOP)/libart_lgpl
++LIBICONV = $(TOP)/libiconv-$(LIBICONV_VER)
++LIBXSLT = $(TOP)/libxslt
++#PNG = d:/devel/from-svn/other/lpng1224
++RSVG = $(TOP)\librsvg
++SVG = $(TOP)\libsvg
++#TIFF = d:/devel/from-svn/other/tiff-3.7.2
++#ZLIB = d:/devel/from-svn/other/zlib123
++
++# Headers from Microsoft's PlatformSDK (that aren't present in
++# mingw) are needed by a just a few packages when compiling with gcc.
++# This is just where tml has it installed.
++PLATFORMSDK = i:/src/psdk
++
++# 
++WTKIT = d:/devel/from-svn/other\wtkit126
+--- misc/pango-1.28.3/glib-mkenums.pl	2011-03-26 07:31:15.240588400 +0100
++++ misc/build/pango-1.28.3/glib-mkenums.pl	2011-03-26 07:34:33.961882000 +0100
+@@ -1 +1,538 @@
+-dummy
++#! perl.exe
++
++use warnings;
++use File::Basename;
++use Safe;
++
++# glib-mkenums.pl 
++# Information about the current enumeration
++my $flags;			# Is enumeration a bitmask?
++my $option_underscore_name;	# Overriden underscore variant of the enum name
++				# for example to fix the cases we don't get the
++				# mixed-case -> underscorized transform right.
++my $option_lowercase_name;	# DEPRECATED.  A lower case name to use as part
++				# of the *_get_type() function, instead of the
++				# one that we guess. For instance, when an enum
++				# uses abnormal capitalization and we can not
++				# guess where to put the underscores.
++my $seenbitshift;		# Have we seen bitshift operators?
++my $enum_prefix;		# Prefix for this enumeration
++my $enumname;			# Name for this enumeration
++my $enumshort;			# $enumname without prefix
++my $enumname_prefix;		# prefix of $enumname
++my $enumindex = 0;		# Global enum counter
++my $firstenum = 1;		# Is this the first enumeration per file?
++my @entries;			# [ $name, $val ] for each entry
++my $sandbox = Safe->new;        # sandbox for safe evaluation of expressions
++
++sub parse_trigraph {
++    my $opts = shift;
++    my @opts;
++
++    for $opt (split /\s*,\s*/, $opts) {
++	$opt =~ s/^\s*//;
++	$opt =~ s/\s*$//;
++        my ($key,$val) = $opt =~ /(\w+)(?:=(.+))?/;
++	defined $val or $val = 1;
++	push @opts, $key, $val;
++    }
++    @opts;
++}
++sub parse_entries {
++    my $file = shift;
++    my $file_name = shift;
++    my $looking_for_name = 0;
++    
++    while (<$file>) {
++	# read lines until we have no open comments
++	while (m@/\*([^*]|\*(?!/))*$@) {
++	    my $new;
++	    defined ($new = <$file>) || die "Unmatched comment in $ARGV";
++	    $_ .= $new;
++	}
++	# strip comments w/o options
++	s@/\*(?!<)
++	    ([^*]+|\*(?!/))*
++	   \*/@@gx;
++	
++	# strip newlines
++	s@\n@ @;
++	
++	# skip empty lines
++	next if m@^\s*$@;
++	
++	if ($looking_for_name) {
++	    if (/^\s*(\w+)/) {
++		$enumname = $1;
++		return 1;
++	    }
++	}
++	
++	# Handle include files
++	if (/^\#include\s*<([^>]*)>/ ) {
++            my $file= "../$1";
++	    open NEWFILE, $file or die "Cannot open include file $file: $!\n";
++	    
++	    if (parse_entries (\*NEWFILE, $NEWFILE)) {
++		return 1;
++	    } else {
++		next;
++	    }
++	}
++	
++	if (/^\s*\}\s*(\w+)/) {
++	    $enumname = $1;
++	    $enumindex++;
++	    return 1;
++	}
++	
++	if (/^\s*\}/) {
++	    $enumindex++;
++	    $looking_for_name = 1;
++	    next;
++	}
++
++        if (m@^\s*
++              (\w+)\s*                   # name
++              (?:=(                      # value
++		   \s*\w+\s*\(.*\)\s*       # macro with multiple args
++		   |                        # OR
++                   (?:[^,/]|/(?!\*))*       # anything but a comma or comment
++                  ))?,?\s*
++              (?:/\*<                    # options
++                (([^*]|\*(?!/))*)
++               >\s*\*/)?,?
++              \s*$
++             @x) {
++            my ($name, $value, $options) = ($1,$2,$3);
++
++	    if (!defined $flags && defined $value && $value =~ /<</) {
++		$seenbitshift = 1;
++	    }
++
++	    if (defined $options) {
++		my %options = parse_trigraph($options);
++		if (!defined $options{skip}) {
++		    push @entries, [ $name, $value, $options{nick} ];
++		}
++	    } else {
++		push @entries, [ $name, $value ];
++	    }
++	} elsif (m@^\s*\#@) {
++	    # ignore preprocessor directives
++	} else {
++	    print STDERR "$0: $file_name:$.: Failed to parse `$_'\n";
++	}
++    }
++
++    return 0;
++}
++
++sub version {
++    print "glib-mkenums version glib-@GLIB_VERSION@\n";
++    print "glib-mkenums comes with ABSOLUTELY NO WARRANTY.\n";
++    print "You may redistribute copies of glib-mkenums under the terms of\n";
++    print "the GNU General Public License which can be found in the\n";
++    print "GLib source package. Sources, examples and contact\n";
++    print "information are available at http://www.gtk.org\n";
++    exit 0;
++}
++sub usage {
++    print "Usage:\n";
++    print "  glib-mkenums [OPTION...] [FILES...]\n\n";
++    print "Help Options:\n";
++    print "  -h, --help            Show this help message\n\n";
++    print "Utility Options:\n";
++    print "  --fhead <text>        Output file header\n";
++    print "  --fprod <text>        Per input file production\n";
++    print "  --ftail <text>        Output file trailer\n";
++    print "  --eprod <text>        Per enum text (produced prior to value itarations)\n";
++    print "  --vhead <text>        Value header, produced before iterating over enum values\n";
++    print "  --vprod <text>        Value text, produced for each enum value\n";
++    print "  --vtail <text>        Value tail, produced after iterating over enum values\n";
++    print "  --comments <text>     Comment structure\n";
++    print "  --template file       Template file\n";
++    print "  -v, --version         Print version informations\n\n";
++    print "Production text substitutions:\n";
++    print "  \@EnumName\@            PrefixTheXEnum\n";
++    print "  \@enum_name\@           prefix_the_xenum\n";
++    print "  \@ENUMNAME\@            PREFIX_THE_XENUM\n";
++    print "  \@ENUMSHORT\@           THE_XENUM\n";
++    print "  \@ENUMPREFIX\@          PREFIX\n";
++    print "  \@VALUENAME\@           PREFIX_THE_XVALUE\n";
++    print "  \@valuenick\@           the-xvalue\n";
++    print "  \@valuenum\@            the integer value (limited support, Since: 2.26)\n";
++    print "  \@type\@                either enum or flags\n";
++    print "  \@Type\@                either Enum or Flags\n";
++    print "  \@TYPE\@                either ENUM or FLAGS\n";
++    print "  \@filename\@            name of current input file\n";
++    print "  \@basename\@            base name of the current input file (Since: 2.22)\n";
++    exit 0;
++}
++
++# production variables:
++my $fhead = "";   # output file header
++my $fprod = "";   # per input file production
++my $ftail = "";   # output file trailer
++my $eprod = "";   # per enum text (produced prior to value itarations)
++my $vhead = "";   # value header, produced before iterating over enum values
++my $vprod = "";   # value text, produced for each enum value
++my $vtail = "";   # value tail, produced after iterating over enum values
++my $comment_tmpl = "";   # comment template
++
++sub read_template_file {
++  my ($file) = @_;
++  my %tmpl = ('file-header', $fhead, 
++	      'file-production', $fprod, 
++	      'file-tail', $ftail, 
++	      'enumeration-production', $eprod,
++	      'value-header', $vhead,
++	      'value-production', $vprod,
++	      'value-tail', $vtail,
++	      'comment', $comment_tmpl);
++  my $in = 'junk';
++  open (FILE, $file) || die "Can't open $file: $!\n";
++  while (<FILE>) {
++    if (/^\/\*\*\*\s+(BEGIN|END)\s+([\w-]+)\s+\*\*\*\//) {
++      if (($in eq 'junk') && ($1 eq 'BEGIN') && (exists($tmpl{$2}))) {
++	$in = $2;
++	next;
++      }
++      elsif (($in eq $2) && ($1 eq 'END') && (exists($tmpl{$2}))) {
++	$in = 'junk';
++	next;
++      } else {
++	  die "Malformed template file $file\n";
++      }
++    }
++    if (!($in eq 'junk')) {
++	$tmpl{$in} .= $_;
++    }
++  }
++  close (FILE);
++  if (!($in eq 'junk')) {
++      die "Malformed template file $file\n";
++  }
++  $fhead = $tmpl{'file-header'};
++  $fprod = $tmpl{'file-production'};
++  $ftail = $tmpl{'file-tail'};
++  $eprod = $tmpl{'enumeration-production'};
++  $vhead = $tmpl{'value-header'};
++  $vprod = $tmpl{'value-production'};
++  $vtail = $tmpl{'value-tail'};
++  $comment_tmpl = $tmpl{'comment'};
++
++  # default to C-style comments
++  $comment_tmpl = "/* \@comment\@ */" if $comment_tmpl eq "";
++}
++
++if (!defined $ARGV[0]) {
++    usage;
++}
++while ($_=$ARGV[0],/^-/) {
++    shift;
++    last if /^--$/;
++    if (/^--template$/)                      { read_template_file (shift); }
++    elsif (/^--fhead$/)                      { $fhead = $fhead . shift }
++    elsif (/^--fprod$/)                      { $fprod = $fprod . shift }
++    elsif (/^--ftail$/)                      { $ftail = $ftail . shift }
++    elsif (/^--eprod$/)                      { $eprod = $eprod . shift }
++    elsif (/^--vhead$/)                      { $vhead = $vhead . shift }
++    elsif (/^--vprod$/)                      { $vprod = $vprod . shift }
++    elsif (/^--vtail$/)                      { $vtail = $vtail . shift }
++    elsif (/^--comments$/)                   { $comment_tmpl = shift }
++    elsif (/^--help$/ || /^-h$/ || /^-\?$/)  { usage; }
++    elsif (/^--version$/ || /^-v$/)          { version; }
++    else { usage; }
++    last if not defined($ARGV[0]);
++}
++
++# put auto-generation comment
++{
++    my $comment = $comment_tmpl;
++    $comment =~ s/\@comment\@/Generated data (by glib-mkenums)/;
++    print "\n" . $comment . "\n\n";
++}
++
++if (length($fhead)) {
++    my $prod = $fhead;
++    my $base = basename ($ARGV[0]);
++
++    $prod =~ s/\@filename\@/$ARGV[0]/g;
++    $prod =~ s/\@basename\@/$base/g;
++    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++    chomp ($prod);
++		
++    print "$prod\n";
++}
++
++while (<>) {
++    if (eof) {
++	close (ARGV);		# reset line numbering
++	$firstenum = 1;		# Flag to print filename at next enum
++    }
++
++    # read lines until we have no open comments
++    while (m@/\*([^*]|\*(?!/))*$@) {
++	my $new;
++	defined ($new = <>) || die "Unmatched comment in $ARGV";
++	$_ .= $new;
++    }
++    # strip comments w/o options
++    s@/\*(?!<)
++       ([^*]+|\*(?!/))*
++       \*/@@gx;
++	
++    if (m@^\s*typedef\s+enum\s*
++           ({)?\s*
++           (?:/\*<
++             (([^*]|\*(?!/))*)
++            >\s*\*/)?
++           \s*({)?
++         @x) {
++	if (defined $2) {
++	    my %options = parse_trigraph ($2);
++	    next if defined $options{skip};
++	    $enum_prefix = $options{prefix};
++	    $flags = $options{flags};
++	    $option_lowercase_name = $options{lowercase_name};
++	    $option_underscore_name = $options{underscore_name};
++	} else {
++	    $enum_prefix = undef;
++	    $flags = undef;
++	    $option_lowercase_name = undef;
++	    $option_underscore_name = undef;
++	}
++	if (defined $option_lowercase_name) {
++	    if (defined $option_underscore_name) {
++		print STDERR "$0: $ARGV:$.: lowercase_name overriden with underscore_name\n";
++		$option_lowercase_name = undef;
++	    } else {
++		print STDERR "$0: $ARGV:$.: lowercase_name is deprecated, use underscore_name\n";
++	    }
++	}
++	# Didn't have trailing '{' look on next lines
++	if (!defined $1 && !defined $4) {
++	    while (<>) {
++		if (s/^\s*\{//) {
++		    last;
++		}
++	    }
++	}
++
++	$seenbitshift = 0;
++	@entries = ();
++
++	# Now parse the entries
++	parse_entries (\*ARGV, $ARGV);
++
++	# figure out if this was a flags or enums enumeration
++	if (!defined $flags) {
++	    $flags = $seenbitshift;
++	}
++
++	# Autogenerate a prefix
++	if (!defined $enum_prefix) {
++	    for (@entries) {
++		my $nick = $_->[2];
++		if (!defined $nick) {
++		    my $name = $_->[0];
++		    if (defined $enum_prefix) {
++			my $tmp = ~ ($name ^ $enum_prefix);
++			($tmp) = $tmp =~ /(^\xff*)/;
++			$enum_prefix = $enum_prefix & $tmp;
++		    } else {
++			$enum_prefix = $name;
++		    }
++		}
++	    }
++	    if (!defined $enum_prefix) {
++		$enum_prefix = "";
++	    } else {
++		# Trim so that it ends in an underscore
++		$enum_prefix =~ s/_[^_]*$/_/;
++	    }
++	} else {
++	    # canonicalize user defined prefixes
++	    $enum_prefix = uc($enum_prefix);
++	    $enum_prefix =~ s/-/_/g;
++	    $enum_prefix =~ s/(.*)([^_])$/$1$2_/;
++	}
++	
++	for $entry (@entries) {
++	    my ($name,$num,$nick) = @{$entry};
++            if (!defined $nick) {
++ 	        ($nick = $name) =~ s/^$enum_prefix//;
++	        $nick =~ tr/_/-/;
++	        $nick = lc($nick);
++	        @{$entry} = ($name, $num, $nick);
++            }
++	}
++	
++
++	# Spit out the output
++	if (defined $option_underscore_name) {
++	    $enumlong = uc $option_underscore_name;
++	    $enumsym = lc $option_underscore_name;
++	    $enumshort = $enumlong;
++	    $enumshort =~ s/^[A-Z][A-Z0-9]*_//;
++
++	    $enumname_prefix = $enumlong;
++	    $enumname_prefix =~ s/$enumshort$//;
++	} else {
++	    # enumname is e.g. GMatchType
++	    $enspace = $enumname;
++	    $enspace =~ s/^([A-Z][a-z]*).*$/$1/;
++
++	    $enumshort = $enumname;
++	    $enumshort =~ s/^[A-Z][a-z]*//;
++	    $enumshort =~ s/([^A-Z])([A-Z])/$1_$2/g;
++	    $enumshort =~ s/([A-Z][A-Z])([A-Z][0-9a-z])/$1_$2/g;
++	    $enumshort = uc($enumshort);
++
++	    $enumname_prefix = $enumname;
++	    $enumname_prefix =~ s/^([A-Z][a-z]*).*$/$1/;
++	    $enumname_prefix = uc($enumname_prefix);
++
++	    $enumlong = uc($enspace) . "_" . $enumshort;
++	    $enumsym = lc($enspace) . "_" . lc($enumshort);
++
++	    if (defined($option_lowercase_name)) {
++		$enumsym = $option_lowercase_name;
++	    }
++	}
++
++	if ($firstenum) {
++	    $firstenum = 0;
++	    
++	    if (length($fprod)) {
++		my $prod = $fprod;
++		my $base = basename ($ARGV);
++
++		$prod =~ s/\@filename\@/$ARGV/g;
++		$prod =~ s/\@basename\@/$base/g;
++		$prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++		$prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++	        chomp ($prod);
++		
++		print "$prod\n";
++	    }
++	}
++	
++	if (length($eprod)) {
++	    my $prod = $eprod;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++	    $prod =~ s/\@EnumName\@/$enumname/g;
++	    $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++	    $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++	    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++	    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++
++	    print "$prod\n";
++	}
++
++	if (length($vhead)) {
++	    my $prod = $vhead;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++            $prod =~ s/\@EnumName\@/$enumname/g;
++            $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++            $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++            $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++            $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++	    
++            print "$prod\n";
++	}
++
++	if (length($vprod)) {
++	    my $prod = $vprod;
++            my $next_num = 0;
++	    
++	    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++	    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++	    for (@entries) {
++		my ($name,$num,$nick) = @{$_};
++		my $tmp_prod = $prod;
++
++                if ($prod =~ /\@valuenum\@/) {
++                    # only attempt to eval the value if it is requested
++                    # this prevents us from throwing errors otherwise
++                    if (defined $num) {
++                        # use sandboxed perl evaluation as a reasonable
++                        # approximation to C constant folding
++                        $num = $sandbox->reval ($num);
++
++                        # make sure it parsed to an integer
++                        if (!defined $num or $num !~ /^-?\d+$/) {
++                            die "Unable to parse enum value '$num'";
++                        }
++                    } else {
++                        $num = $next_num;
++                    }
++
++                    $tmp_prod =~ s/\@valuenum\@/$num/g;
++                    $next_num = $num + 1;
++                }
++
++		$tmp_prod =~ s/\@VALUENAME\@/$name/g;
++		$tmp_prod =~ s/\@valuenick\@/$nick/g;
++		if ($flags) { $tmp_prod =~ s/\@type\@/flags/g; } else { $tmp_prod =~ s/\@type\@/enum/g; }
++		if ($flags) { $tmp_prod =~ s/\@Type\@/Flags/g; } else { $tmp_prod =~ s/\@Type\@/Enum/g; }
++		if ($flags) { $tmp_prod =~ s/\@TYPE\@/FLAGS/g; } else { $tmp_prod =~ s/\@TYPE\@/ENUM/g; }
++		chomp ($tmp_prod);
++
++		print "$tmp_prod\n";
++	    }
++	}
++
++	if (length($vtail)) {
++	    my $prod = $vtail;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++            $prod =~ s/\@EnumName\@/$enumname/g;
++            $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++            $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++            $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++            $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++	    
++            print "$prod\n";
++	}
++    }
++}
++
++if (length($ftail)) {
++    my $prod = $ftail;
++    my $base = basename ($ARGV);
++
++    $prod =~ s/\@filename\@/$ARGV/g;
++    $prod =~ s/\@basename\@/$base/g;
++    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++    chomp ($prod);
++		
++    print "$prod\n";
++}
++
++# put auto-generation comment
++{
++    my $comment = $comment_tmpl;
++    $comment =~ s/\@comment\@/Generated data ends here/;
++    print "\n" . $comment . "\n\n";
++}
+--- misc/pango-1.28.3/msvc_recommended_pragmas.h	2011-03-26 07:30:07.692848800 +0100
++++ misc/build/pango-1.28.3/msvc_recommended_pragmas.h	2011-03-26 07:34:43.524504400 +0100
+@@ -1 +1,31 @@
+-dummy
++#ifndef _MSC_VER
++#pragma error "This header is for Microsoft VC only."
++#endif /* _MSC_VER */
++
++/* Make MSVC more pedantic, this is a recommended pragma list
++ * from _Win32_Programming_ by Rector and Newcomer.
++ */
++#pragma warning(error:4002) /* too many actual parameters for macro */
++#pragma warning(error:4003) /* not enough actual parameters for macro */
++#pragma warning(1:4010)     /* single-line comment contains line-continuation character */
++#pragma warning(error:4013) /* 'function' undefined; assuming extern returning int */
++#pragma warning(1:4016)     /* no function return type; using int as default */
++#pragma warning(error:4020) /* too many actual parameters */
++#pragma warning(error:4021) /* too few actual parameters */
++#pragma warning(error:4027) /* function declared without formal parameter list */
++#pragma warning(error:4029) /* declared formal parameter list different from definition */
++#pragma warning(error:4033) /* 'function' must return a value */
++#pragma warning(error:4035) /* 'function' : no return value */
++#pragma warning(error:4045) /* array bounds overflow */
++#pragma warning(error:4047) /* different levels of indirection */
++#pragma warning(error:4049) /* terminating line number emission */
++#pragma warning(error:4053) /* An expression of type void was used as an operand */
++#pragma warning(error:4071) /* no function prototype given */
++#pragma warning(disable:4101) /* unreferenced local variable */
++#pragma warning(error:4150)
++
++#pragma warning(disable:4244)	/* No possible loss of data warnings */
++#pragma warning(disable:4305)   /* No truncation from int to char warnings */
++
++/* work around Microsoft's premature attempt to deprecate the C-Library */
++#pragma warning(disable:4996)   /* This function or variable may be unsafe. */

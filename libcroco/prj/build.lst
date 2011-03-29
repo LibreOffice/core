@@ -1,0 +1,3 @@
+cr	libcroco	: libxml2 glib soltools NULL
+cr	libcroco			    usr1	-	all	cr_mkout NULL
+cr	libcroco			    nmake	-	all	cr_libcroco NULL
