@@ -296,7 +296,7 @@ namespace DOM
         OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(msg.getStr());
+        OSL_TRACE(msg.getStr());
     }
 
     // default error handler triggers assertion
