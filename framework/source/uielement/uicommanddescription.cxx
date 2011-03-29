@@ -64,7 +64,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -75,7 +74,6 @@ using namespace ::com::sun::star::frame;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 struct ModuleToCommands
 {
@@ -238,7 +236,6 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
 
     m_aConfigPopupAccess += aModuleName;
     m_aConfigPopupAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_POP_ELEMENT_ACCESS ));
-    //m_xConfigProviderPopups = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
 
     rtl::OUString aTmp;
     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= aTmp;

@@ -30,8 +30,6 @@
 #define __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 
 #include <com/sun/star/container/XIndexContainer.hpp>
-
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>
@@ -56,11 +54,9 @@ namespace framework
             // to optimize the time of creation of a menu from a actiontrigger structure.
             // IMPORTANT: The caller must ensure that the menu pointer is valid through the
             //            life time of the XIndexContainer object!!!
-            //
             // @param pNewMenu = Must be a valid menu. Please be aware that this implementation is based on
             //                   the above mentioned restriction!!!
 
-            // #110897#
             static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                 const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier );

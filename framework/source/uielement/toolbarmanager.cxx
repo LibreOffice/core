@@ -350,7 +350,6 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
 
-//    delete m_pToolBar;
     m_pToolBar = 0;
 }
 
@@ -527,22 +526,6 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
          {
          }
 
-       /* m_bUpdateControllers = sal_True;
-        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
-
-        while ( pIter != m_aControllerMap.end() )
-        {
-            try
-            {
-                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
-                if ( xUpdatable.is() )
-                    xUpdatable->update();
-            }
-            catch ( Exception& )
-            {
-            }
-            ++pIter;
-        }*/
 
     }
     m_bUpdateControllers = sal_False;
@@ -1105,7 +1088,6 @@ void ToolBarManager::CreateControllers()
                 //for Support Visiblitly by shizhoubo
                 if (pController)
                 {
-                //  rtl::OUString aCommandURL = pController->m_aCommandURL;
                     if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||

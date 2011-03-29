@@ -799,61 +799,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         ::rtl::OUString m_sProductName                 ;
         ::rtl::OUString m_sFormatVersion               ;
 };
-/*DRAFT
-class FilterCFGListener : public  css::util::XChangesListener
-                        , private ThreadHelpBase
-                        , public  ::cppu::OWeakObject
-{
-    public:
-
-        enum ECFGType
-        {
-            E_TYPE          ,
-            E_FILTER        ,
-            E_LOADER        ,
-            E_DETECTOR      ,
-            E_CONTENTHANDLER
-        };
-
-    private:
-
-        // read only access to the configuration, where we are regsieterd as changes listener.
-        css::uno::Reference< css::uno::XInterface > m_xCFG;
-
-        // indicates, for which type of configuration item we listen.
-        ECFGType m_eType;
-
-        DataContainer* m_pData;
-
-        // we must know, if we are already registered as listener or not.
-        //    That can be usefull to supress double registration calls ...
-        //    which may will force double call backs in our disposing method!
-        //    Such superflous calls can be dangerous.
-        sal_Bool m_bListening;
-
-    public:
-
-        DECLARE_XINTERFACE
-
-        FilterCFGListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                                 ECFGType                                                eType ,
-                                 DataContainer*                                          pData );
-
-        void startListening();
-        void stopListening ();
-
-        virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& aEvent ) throw(css::uno::RuntimeException);
-        virtual void SAL_CALL disposing      ( const css::lang::EventObject&  aEvent ) throw(css::uno::RuntimeException);
-
-    private:
-
-        FileType       impl_readType    ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Filter         impl_readFilter  ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Detector       impl_readDetector( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Loader         impl_readLoader  ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        ContentHandler impl_readHandler ( const css::uno::Reference< css::uno::XInterface >& xNode );
-};
-*/
 
 }       //  namespace framework
 

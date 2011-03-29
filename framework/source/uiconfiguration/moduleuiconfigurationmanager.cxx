@@ -297,7 +297,6 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         }
     }
 
-    //rElementTypeData.bLoaded = true;
 }
 
 void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData )

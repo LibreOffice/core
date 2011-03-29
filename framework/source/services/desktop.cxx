@@ -686,13 +686,6 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 {
     LOG_WARNING("Desktop::getTasks()", "Use of obsolete interface XTaskSupplier")
     return NULL;
-    /*
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    OTasksAccess* pTasksAccess = new OTasksAccess( this, &m_aChildTaskContainer );
-    css::uno::Reference< css::container::XEnumerationAccess > xAccess( static_cast< ::cppu::OWeakObject* >(pTasksAccess), css::uno::UNO_QUERY );
-    return xAccess;
-    */
 }
 
 /*-************************************************************************************************************//**
@@ -715,11 +708,6 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw( css::uno::RuntimeException )
 {
-    /*
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    return css::uno::Reference< css::frame::XTask >( m_aChildTaskContainer.getActive(), css::uno::UNO_QUERY );
-    */
     LOG_WARNING("Desktop::getActiveTask()", "Use of obsolete interface XTaskSupplier")
     return NULL;
 }

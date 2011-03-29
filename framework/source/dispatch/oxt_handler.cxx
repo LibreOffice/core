@@ -205,17 +205,6 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         xListener->dispatchFinished( aEvent );
     }
 
-/*
-    // Try to initialize player.
-    m_xListener = xListener;
-    if (m_aPlayer.SetSoundName(aURL.Complete))
-    {
-        // OK- we can start async playing ...
-        // Count this request and initialize self-holder against dieing by uno ref count ...
-        m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-        m_aPlayer.Play();
-    }
-*/
     // } SAFE
     aLock.unlock();
 }

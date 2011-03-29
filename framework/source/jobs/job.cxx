@@ -756,9 +756,6 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    // don't disagree with this request if job was already stopped or finished it's work
-    // if (m_eRunState != E_RUNNING)
-    //    return;
 
     // Otherwhise try to close() it
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);

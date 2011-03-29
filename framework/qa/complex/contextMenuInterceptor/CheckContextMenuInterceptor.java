@@ -180,8 +180,6 @@ public class CheckContextMenuInterceptor
                 }
             }
 
-            //  utils.shortWait(10000);
-
             openContextMenu(UnoRuntime.queryInterface(XModel.class, xDrawDoc));
 
             checkHelpEntry();
@@ -231,9 +229,6 @@ public class CheckContextMenuInterceptor
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getTopWindow(0));
 
             xRoot = at.getAccessibleObject(xWindow);
-
-//            at.printAccessibleTree((PrintWriter)log, xRoot, param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-            // at.printAccessibleTree(System.out, xRoot, true);
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {

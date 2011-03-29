@@ -179,7 +179,6 @@ public class _XComponent {
     * Forces object recreation.
     */
     protected void after() {
-//        disposeEnvironment();
     }
 
 } // finished class _XComponent

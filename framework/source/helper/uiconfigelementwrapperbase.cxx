@@ -499,8 +499,6 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( xSettings.is() )
     {
@@ -540,8 +538,6 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( bWriteable )
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );

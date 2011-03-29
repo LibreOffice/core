@@ -31,7 +31,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.uno.UnoRuntime;
 import helper.OfficeProvider;
-//import complex.persistent_window_states.helper.DocumentHandle;
 
 // ---------- junit imports -----------------
 import org.junit.After;

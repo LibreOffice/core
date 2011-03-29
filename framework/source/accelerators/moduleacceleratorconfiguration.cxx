@@ -102,7 +102,6 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::R
 //-----------------------------------------------
 ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 {
-   // m_aPresetHandler.removeStorageListener(this);
 }
 
 //-----------------------------------------------

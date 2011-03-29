@@ -230,8 +230,6 @@ XCDGenerator gGenerator;
 //*****************************************************************************************************************
 void XCDGenerator::Main()
 {
-    // Must be :-)
-//    impl_printCopyright();
 
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
@@ -343,24 +341,6 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
     while( nArgument<nCount )
     {
         osl_getCommandArg( nArgument, &sArgument.pData );
-/*OBSOLETE
-        //_____________________________________________________________________________________________________
-        // look for "-fis=..."
-        if( sArgument.compareTo( ARGUMENT_FILENAME_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
-        {
-            rMember.sFileNameStandard = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
-            ++nMinCount;
-        }
-        else
-        //_____________________________________________________________________________________________________
-        // look for "-fia=..."
-        if( sArgument.compareTo( ARGUMENT_FILENAME_ADDITIONAL, ARGUMENTLENGTH ) == ARGUMENTFOUND )
-        {
-            rMember.sFileNameAdditional = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
-            ++nMinCount;
-        }
-        else
-*/
         //_____________________________________________________________________________________________________
         // look for "-pas=..."
         if( sArgument.compareTo( ARGUMENT_PACKAGE_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )

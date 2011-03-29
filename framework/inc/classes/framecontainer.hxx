@@ -103,14 +103,6 @@ class FrameContainer : private ThreadHelpBase
         TFrameContainer m_aContainer;
         /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
         css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
-/*DEPRECATEME
-        /// indicates using of the automatic async quit feature in case last task will be closed
-        sal_Bool m_bAsyncQuit;
-        /// used to execute the terminate request asyncronous
-        ::vcl::EventPoster m_aAsyncCall;
-        /// used for async quit feature (must be weak to prevent us against strange situations!)
-        css::uno::WeakReference< css::frame::XDesktop > m_xDesktop;
-*/
 
     //_______________________________________
     // interface

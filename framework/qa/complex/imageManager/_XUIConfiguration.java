@@ -77,6 +77,5 @@ public class _XUIConfiguration {
      * Dispose because the UIConfigurationManager has to be recreated
      */
     public void after() {
-//        disposeEnvironment();
     }
 }

@@ -121,13 +121,11 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
 class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        // #110897#
         OReadMenuDocumentHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
         virtual ~OReadMenuDocumentHandler();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
@@ -165,14 +163,12 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        // #110897#
         OReadMenuBarHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuBarContainer,
             const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuBarHandler();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
@@ -204,7 +200,6 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuBarHandler
 

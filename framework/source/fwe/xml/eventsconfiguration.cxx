@@ -64,26 +64,20 @@ namespace framework
 {
 
 static Reference< XParser > GetSaxParser(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
     return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
-// #110897#
+
 sal_Bool EventsConfiguration::LoadEventsConfig(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rInStream, EventsConfig& aItems )
@@ -124,7 +118,7 @@ sal_Bool EventsConfiguration::LoadEventsConfig(
     }
 }
 
-// #110897#
+
 sal_Bool EventsConfiguration::StoreEventsConfig(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rOutStream, const EventsConfig& aItems )

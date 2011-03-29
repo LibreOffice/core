@@ -102,7 +102,6 @@ DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
                             ::com::sun::star::container::XNameAccess
                         )
 
-// #110897#
 MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
@@ -209,7 +208,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // support. This feature is currently used for "Inplace editing"!
                 Reference< XDispatchProvider > xDispatchProvider;
 
-                // #110897#
                 MenuBarManager* pMenuBarManager = new MenuBarManager( m_xServiceFactory,
                                                                       xFrame,
                                                                       xTrans,

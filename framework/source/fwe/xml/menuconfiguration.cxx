@@ -103,7 +103,6 @@ throw ( WrappedTargetException )
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
 
-    // #110897# Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( xItemContainer ));
     Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( m_rxServiceManager, xItemContainer ));
 
     Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));

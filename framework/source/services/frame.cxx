@@ -959,7 +959,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             //  Search on all our direct siblings - means all childrens of our parent.
             //  Use this flag in combination with TASK. We must supress such upper search if
             //  user has not set it and if we are a top frame.
-            //
             //  Attention: Don't forward this request to our parent as a findFrame() call.
             //  In such case we must protect us against recursive calls.
             //  Use snapshot of our parent. But don't use queryFrames() of XFrames interface.
@@ -1546,9 +1545,6 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
 css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // It seems to be unavoidable that disposed frames allow to ask for a Controller (#111452)
-    // Register transaction and reject wrong calls.
-    // TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -2272,7 +2268,6 @@ aEvent
     // Activate the new active path from here to top.
     if( eState == E_INACTIVE )
     {
-//       CheckMenuCloser_Impl();
         setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
         activate();
     }
@@ -2307,7 +2302,6 @@ aEvent
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
         SolarMutexClearableGuard aSolarGuard;
-//       CheckMenuCloser_Impl();
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
                 ( xContainerWindow.is()                                                              ==  sal_True    )   &&

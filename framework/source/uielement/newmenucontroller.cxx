@@ -71,7 +71,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -571,16 +570,6 @@ IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, p
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
-/*
-    }
-    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
-    {
-        throw exFilters;
-    }
-    catch (const Exception& )
-    {
-    }
-*/
     delete pNewDocument;
     return 0;
 }

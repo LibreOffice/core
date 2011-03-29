@@ -443,12 +443,6 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
     }
 
-    /*
-    #i75167# dont disturb window manager handling .-)
-    css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
-    if (xParentWindowTop.is())
-        xParentWindowTop->toFront();
-    */
 }
 
 //-----------------------------------------------

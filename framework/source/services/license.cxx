@@ -258,10 +258,6 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             Bootstrap::locateBaseInstallation(aBaseInstallPath);
         if (aBaseLocateResult != Bootstrap::PATH_EXISTS)
         {
-            // base install noit found
-            // prepare termination
-            // m_bTerminate = sal_True;
-            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
             return aRet;
         }
@@ -321,10 +317,6 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         {
             // get LicenseFileDate from base install
             ::rtl::OUString aLicenseURL = aLicensePath;
-            /*
-            if (FileBase::getFileURLFromSystemPath(aLicensePath, aLicenseURL) != FileBase::E_None)
-                return makeAny(sal_False);
-                */
             DirectoryItem aDirItem;
             if (DirectoryItem::get(aLicenseURL, aDirItem) != FileBase::E_None)
                 return makeAny(sal_False);
@@ -374,10 +366,6 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         else
         {
-            // license was not accepted
-            // prepare termination
-            // m_bTerminate = sal_True;
-            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
         }
     }
@@ -460,7 +448,6 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
         sal_uInt64 nPosition = 0;
         sal_uInt32 nBytes = (sal_uInt32)fs.getFileSize();
         sal_Char *pBuffer = new sal_Char[nBytes];
-        // FileBase RC r = FileBase::E_None;
         while (aLicenseFile.read(pBuffer+nPosition, nBytes-nPosition, nBytesRead) == FileBase::E_None
             && nPosition + nBytesRead < nBytes)
         {

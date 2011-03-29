@@ -97,7 +97,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                        public ::cppu::OWeakObject
 {
     protected:
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
@@ -106,7 +105,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool            bDelete,
             sal_Bool            bDeleteChildren );
 
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
@@ -116,7 +114,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool            bDeleteChildren );
 
     public:
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
@@ -127,7 +124,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         virtual ~MenuBarManager();

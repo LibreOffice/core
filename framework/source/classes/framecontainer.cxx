@@ -153,12 +153,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         // We don't need the write lock any longer ...
         // downgrade to read access.
         aWriteLock.downgrade();
-/*DEPRECATEME
-        // If last frame was removed and special quit mode is enabled by the desktop
-        // we must terminate the application by using this asynchronous callback!
-        if (m_aContainer.size()<1 && m_bAsyncQuit)
-            m_aAsyncCall.Post(0);
-*/
     }
 
     aWriteLock.unlock();
@@ -204,12 +198,6 @@ void FrameContainer::clear()
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
-/*DEPRECATEME
-    // If special quit mode is used - we must terminate the desktop.
-    // He is the owner of this container and can't work without any visible tasks/frames!
-    if (m_bAsyncQuit)
-        m_aAsyncCall.Post(0);
-*/
 
     aWriteLock.unlock();
     // } SAFE

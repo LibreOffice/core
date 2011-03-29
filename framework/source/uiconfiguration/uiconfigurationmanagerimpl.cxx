@@ -1357,7 +1357,6 @@ Reference< XInterface > UIConfigurationManagerImpl::getImageManager() throw (::c
 
     return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
 
-//    return Reference< XInterface >();
 }
 
 Reference< XInterface > UIConfigurationManagerImpl::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
@@ -1454,14 +1453,12 @@ void UIConfigurationManagerImpl::setStorage( const Reference< XStorage >& Storag
             else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
                 aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
 
-            //if ( aResourceType.getLength() > 0 )
-            {
-                m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
-                m_pStorageHandler[i]->connectToResource( PresetHandler::E_DOCUMENT,
-                                                         rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), // this path wont be used later ... seee next lines!
-                                                         sEmpty,
-                                                         m_xUserConfigStorage);
-            }
+
+            m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
+            m_pStorageHandler[i]->connectToResource( PresetHandler::E_DOCUMENT,
+                                                     rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), // this path wont be used later ... see next lines!
+                                                     sEmpty,
+                                                     m_xUserConfigStorage);
         }
         Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
         if ( xPropSet.is() )

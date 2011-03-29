@@ -134,11 +134,10 @@ namespace framework
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
-// #110897#
 MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
-:   // #110897#
+:
     ThreadHelpBase( &Application::GetSolarMutex() ),
     mxServiceFactory(xServiceFactory)
 {
@@ -179,8 +178,6 @@ MenuManager::MenuManager(
             if (! (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
                 ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 )) )
             {
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
@@ -205,8 +202,6 @@ MenuManager::MenuManager(
                         aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
-                        // #110897#
-                        // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                         AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
@@ -226,15 +221,10 @@ MenuManager::MenuManager(
             if ( nItemId == SID_NEWDOCDIRECT ||
                  aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotNewDocDirect)) )
             {
-                // #110897#
-                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
@@ -246,15 +236,10 @@ MenuManager::MenuManager(
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotAutoPilot)) )
             {
-                // #110897#
-                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
 
 
@@ -405,7 +390,6 @@ throw ( RuntimeException )
             URL aTargetURL;
             aTargetURL.Complete = pStatusChangedMenu->aMenuItemURL;
 
-            // #110897#
             m_xURLTransformer->parseStrict( aTargetURL );
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -434,7 +418,6 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
     // disposing called from parent dispatcher
     // remove all listener to prepare shutdown
 
-    // #110897#
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
@@ -492,7 +475,6 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
                 URL aTargetURL;
                 aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
 
-                // #110897#
                 m_xURLTransformer->parseStrict( aTargetURL );
 
                 pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
@@ -546,7 +528,6 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         URL aTargetURL;
         REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-        // #110897#
         REFERENCE< XDISPATCH > xMenuItemDispatch;
 
         static const ::rtl::OUString s_sDefault(RTL_CONSTASCII_USTRINGPARAM("_default"));
@@ -675,7 +656,6 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XMultiSe
     // update window list
     ::std::vector< ::rtl::OUString > aNewWindowListVector;
 
-    // #110897#
     Reference< XDesktop > xDesktop( xServiceFactory->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
     sal_uInt16  nActiveItemId = 0;
@@ -836,7 +816,6 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         {
             URL aTargetURL;
 
-            // #110897#
             ResetableGuard aGuard( m_aLock );
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -920,9 +899,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                // #110897#
-                // Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                //  DESKTOP_SERVICE ), UNO_QUERY );
                 Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
                 if ( xDesktop.is() )
@@ -987,10 +963,8 @@ IMPL_LINK( MenuManager, Highlight, Menu *, EMPTYARG )
     return 0;
 }
 
-// #110897#
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuManager::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 

@@ -149,14 +149,9 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
-        //pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
             UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacrosMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
-//                xDispatch->dispatch( aTargetURL, aArgs );
         Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
-    }
-    else
-    {
     }
 }
 

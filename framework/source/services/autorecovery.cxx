@@ -604,7 +604,6 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 
     try
     {
-        // if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         //  Auto save is called from our internal timer ... not via dispatch() API !
         // else
         if (
@@ -1612,7 +1611,6 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
     }
     catch(const css::uno::Exception&)
     {
-        LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
     }
 
     return 0;
@@ -3227,9 +3225,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         { return AutoRecovery::E_WRONG_TARGET_PATH; }
 
     sal_Int32 nNameClash;
-//  nNameClash = css::ucb::NameClash::ERROR;
     nNameClash = css::ucb::NameClash::RENAME;
-//  nNameClash = css::ucb::NameClash::OVERWRITE;
 
     try
     {

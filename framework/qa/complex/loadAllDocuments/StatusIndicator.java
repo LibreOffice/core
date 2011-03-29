@@ -41,9 +41,6 @@ import com.sun.star.task.XStatusIndicator;
 // helper
 import com.sun.star.uno.UnoRuntime;
 
-// others
-//import java.lang.*;
-
 // __________ Implementation __________
 
 /**
@@ -79,7 +76,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     private int             m_nRange    ;
     private int             m_nValue    ;
     private int             m_nOut      ;
-//    private Protocol        m_aProtocol ;
     private boolean         m_bWasUsed  ;
 
     // ____________________
@@ -94,9 +90,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         m_nRange    = 100           ;
         m_nValue    = 0             ;
         m_nOut      = nOut          ;
-        //m_aProtocol = aProtocol     ;
         m_bWasUsed  = false;
-//        aProtocol.resetUsingState();
     }
 
     // ____________________
@@ -114,10 +108,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     {
         synchronized(this)
         {
-            //m_aProtocol.log("start("+sText+","+nRange+")\n");
             m_bWasUsed = true;
-//            m_aProtocol.itWasUsed();
-
             m_sText  = sText ;
             m_nRange = nRange;
             m_nValue = 0     ;
@@ -134,10 +125,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     {
         synchronized(this)
         {
-            //m_aProtocol.log("end()\n");
             m_bWasUsed = true;
-//            m_aProtocol.itWasUsed();
-
             m_sText  = new String();
             m_nRange = 100;
             m_nValue = 0;
@@ -157,10 +145,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     {
         synchronized(this)
         {
-            //m_aProtocol.log("setText("+sText+")\n");
             m_bWasUsed = true;
-//            m_aProtocol.itWasUsed();
-
             m_sText = sText;
         }
         impl_show();
@@ -179,9 +164,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     {
         synchronized(this)
         {
-            //m_aProtocol.log("setValue("+nValue+")\n");
             m_bWasUsed = true;
-//            m_aProtocol.itWasUsed();
 
             if (nValue<=m_nRange)
                 m_nValue = nValue;
@@ -198,10 +181,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     {
         synchronized(this)
         {
-            //m_aProtocol.log("reset()\n");
             m_bWasUsed = true;
-//            m_aProtocol.itWasUsed();
-
             m_sText  = new String();
             m_nValue = 0;
         }

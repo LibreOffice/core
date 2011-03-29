@@ -61,14 +61,12 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 namespace framework
 {
@@ -136,31 +134,6 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
     const uno::Reference< uno::XComponentContext >& /*xContext*/ )
 throw (uno::Exception, uno::RuntimeException)
 {
-/*
-    // Currently this method cannot be implemented for generic use. There is no way for external
-       code to get a handle to the dialog model.
-
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), uno::UNO_QUERY );
-
-    const ::rtl::OUString sToolkitService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit"));
-    uno::Reference< awt::XToolkit > xToolkit( xServiceManager->createInstance( sToolkitService ), uno::UNO_QUERY_THROW );
-
-    const ::rtl::OUString sDialogModelService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDialogModel"));
-    uno::Reference< awt::XControlModel > xDialogModel( xServiceManager->createInstance( sDialogModelService ), uno::UNO_QUERY_THROW );
-
-    const ::rtl::OUString sDecoration(RTL_CONSTASCII_USTRINGPARAM("Decoration"));
-    uno::Reference< beans::XPropertySet > xPropSet( xDialogModel, uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue( sDecoration, uno::makeAny(false));
-
-    const ::rtl::OUString sDialogService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDialog"));
-    uno::Reference< awt::XControl > xDialogControl( xServiceManager->createInstance( sDialogService ), uno::UNO_QUERY_THROW );
-
-    xDialogControl->setModel( xDialogModel );
-
-    uno::Reference< awt::XWindowPeer > xWindowParentPeer( xToolkit->getDesktopWindow(), uno::UNO_QUERY );
-    xDialogControl->createPeer( xToolkit, xWindowParentPeer );
-    uno::Reference< uno::XInterface > xWindow( xDialogControl->getPeer(), uno::UNO_QUERY );
-*/
     uno::Reference< uno::XInterface > xWindow;
     return xWindow;
 }

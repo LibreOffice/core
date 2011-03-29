@@ -53,7 +53,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #define REFERENCE                                       ::com::sun::star::uno::Reference
@@ -76,7 +75,6 @@ class MenuManager : public ThreadHelpBase           ,
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
     public:
-        // #110897#
         MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
@@ -98,7 +96,6 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
@@ -154,7 +151,6 @@ class MenuManager : public ThreadHelpBase           ,
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
 };

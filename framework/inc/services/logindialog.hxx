@@ -121,11 +121,9 @@ namespace framework{
 //  UseProxy=[browser|custom|none]
 //  SecurityProxy=so-webcache:3128
 //  dialog=[big|small]
-//
 //  [DefaultPorts]
 //  https=8445
 //  http=8090
-//
 //  [ServerHistory]
 //  Server_1=localhost
 //  Server_2=munch:7202

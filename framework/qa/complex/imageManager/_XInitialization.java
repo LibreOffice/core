@@ -86,7 +86,6 @@ public class _XInitialization {
     * Disposes object environment.
     */
     public void after() {
-//        disposeEnvironment() ;
     }
 
 } // finished class _XInitialization

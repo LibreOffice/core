@@ -188,12 +188,6 @@ class TabWindowService :  public css::lang::XTypeProvider
         void impl_checkTabIndex (::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
         TTabPageInfoHash::iterator impl_getTabPageInfo(::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
         FwkTabWindow* mem_TabWin ();
-/*
-        ::cppu::IPropertyArrayHelper& SAL_CALL              getInfoHelper();
-        const css::uno::Sequence< css::beans::Property >    impl_getStaticPropertyDescriptor();
-        static css::uno::Reference < css::beans::XPropertySetInfo > SAL_CALL
-                                                            createPropertySetInfo( ::cppu::IPropertyArrayHelper& rProperties ) SAL_THROW( () );
-*/
     //-------------------------------------------------------------------------------------------------------------
     //  variables
     //  (should be private everyway!)

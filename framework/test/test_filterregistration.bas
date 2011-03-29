@@ -64,7 +64,7 @@ rem	Dim	lFilters()	as com.sun.star.beans.PropertyValue
 	for nCount=0 to ubound(lProperties()) step 1
 		sOut = sOut + lProperties(nCount).Name
 		sOut = sOut + " = "
-rem #85829# Disable follow if statement to produce bug!
+rem Disable follow if statement to produce bug!
 rem		if( lProperties(nCount).Name <> "UserData" ) then
 			sOut = sOut + lProperties(nCount).Value
 rem		endif

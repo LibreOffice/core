@@ -191,7 +191,6 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
     return n;
 }
 
-// #110897#
 MenuBarManager::MenuBarManager(
     const Reference< XMultiServiceFactory >& xServiceFactory,
     const Reference< XFrame >& rFrame,
@@ -216,7 +215,6 @@ MenuBarManager::MenuBarManager(
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
 
-// #110897#
 MenuBarManager::MenuBarManager(
     const Reference< XMultiServiceFactory >& xServiceFactory,
     const Reference< XFrame >& rFrame,
@@ -239,7 +237,6 @@ MenuBarManager::MenuBarManager(
     Init(rFrame,pAddonMenu,bDelete,bDeleteChildren);
 }
 
-// #110897#
 MenuBarManager::MenuBarManager(
     const Reference< XMultiServiceFactory >& xServiceFactory,
     const Reference< XFrame >& rFrame,
@@ -381,7 +378,6 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
 
     {
         ResetableGuard aGuard( m_aLock );
-//        RemoveListener();
         Destroy();
         m_bDisposed = sal_True;
 
@@ -521,7 +517,7 @@ throw ( RuntimeException )
                 status::Visibility  aVisibilityStatus;
 
                 #ifdef UNIX
-                // #b6673979# enable some slots hardly, because UNIX clipboard does not notify all changes
+                //enable some slots hardly, because UNIX clipboard does not notify all changes
                 // Can be removed if follow up task will be fixed directly within applications.
                 if (
                     ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Paste"))) ||
@@ -614,8 +610,6 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 
 void MenuBarManager::RequestImages()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::RequestImages" );
-    // must be locked from callee
-    // ResetableGuard aGuard( m_aLock );
 
     m_bRetrieveImages = sal_True;
     const sal_uInt32 nCount = m_aMenuItemHandlerVector.size();
@@ -1083,8 +1077,6 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                // #110897#
-                // Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( DESKTOP_SERVICE ), UNO_QUERY );
                 Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
                 if ( xDesktop.is() )
@@ -1359,7 +1351,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                      ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
             {
                 // A special addon popup menu, must be created with a different ctor
-                // #110897#
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), m_xFrame, m_xURLTransformer,(AddonPopupMenu *)pPopup, bDeleteChildren, bDeleteChildren );
                 AddMenu(pSubMenuManager,aItemCommand,nItemId);
             }
@@ -1406,8 +1397,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
                 if ( nItemId == ITEMID_ADDONLIST )
                 {
-                    // Create control structure within the "Tools" sub menu for the Add-Ons popup menu
-                    // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pSubMenu, sal_True, sal_False );
                     AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup );
                     if ( pSubMenu )
                     {
@@ -1427,7 +1416,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
                 else
                 {
-                    // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
                     MenuBarManager* pSubMenuMgr = new MenuBarManager( getServiceFactory(), rFrame, m_xURLTransformer,rDispatchProvider, aModuleIdentifier, pPopup, bDeleteChildren, bDeleteChildren );
                     AddMenu(pSubMenuMgr,aItemCommand,nItemId);
                 }
@@ -1996,10 +1984,8 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
     }
 }
 
-// #110897#
 const Reference< XMultiServiceFactory >& MenuBarManager::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 
@@ -2063,7 +2049,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         PopupMenu* pPopupMenu = pAddonMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
-            // #110897#
             Reference< XDispatchProvider > xDispatchProvider;
             MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pPopupMenu, _bHandlePopUp ? sal_False : bDeleteChildren, _bHandlePopUp ? sal_False : bDeleteChildren );
 

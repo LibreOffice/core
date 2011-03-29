@@ -160,10 +160,7 @@ public class RecoveryTest extends ComplexTestCase {
         restoreBackupRecoveryData();
         startOffice();
         int expectedDocumentCount = 3;
-//        handleRecoveryDialog_QuickExit(expectedDocumentCount);
         handleRecoveryDialog_QuickExitAndSave(expectedDocumentCount);
-        //handleCrashReporterDialog(true, true);
-        //checkDocumentCount(expectedDocumentCount);
     }
 
     public void before() throws Exception {
@@ -194,7 +191,6 @@ public class RecoveryTest extends ComplexTestCase {
         // make window ranges
         makeWindowPositionRage();
 
-        //makeRecoveryData();
     }
 
     private void makeRecoveryData(){
@@ -482,10 +478,8 @@ public class RecoveryTest extends ComplexTestCase {
 
                 rt.pause();
 
-                //XAccessibleContext oButton = oUITools.getButton("Start Recovery >");
                 int counter = 0;
                 int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
-                //boolean enabeld = oButton.getAccessibleStateSet().contains(com.sun.star.accessibility.AccessibleStateType.ENABLED);
 
                 XAccessibleContext oButton = null;
                 while ((oButton == null) && (counter < maximum)){
@@ -632,23 +626,9 @@ public class RecoveryTest extends ComplexTestCase {
 
         // create some documents with content
         makeWriterDoc("WriterDoc1", true);
-//        makeCalcDoc("CalcDoc1", true);
-//        makeDrawDoc("DrawDoc1", true);
-//        makeImpressDoc("ImpressDoc1", true);
-//        makeMathDoc("MathDoc1", true);
 
-        // create some documents without content
-//        makeMathDoc("_blank_math", false);
-//        makeDrawDoc("_blank_draw", false);
-//        makeCalcDoc("_blank_calc", false);
-//        makeWriterDoc("_blank_writer", false);
-//        makeImpressDoc("_blank_impress", false);
 
-//        makeMathDoc("MathDocEmpty", false);
-//        makeDrawDoc("DrawDocEmpty", false);
-//        makeCalcDoc("CalcDocEmpty", false);
         makeWriterDoc("WriterDocEmpty", false);
-//        makeImpressDoc("ImpressDocEmpty", false);
 
         log.println("Test object successfully created.");
 

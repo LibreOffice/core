@@ -38,8 +38,6 @@ import com.sun.star.task.XInteractionRetry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
-//import java.lang.*;
-
 
 /**
  * Implemets a simple interaction handler,
@@ -78,7 +76,6 @@ public class InteractionHandler implements XInteractionHandler
     public InteractionHandler()
     {
         m_aRequest  = null     ;
-        //m_aProtocol = aProtocol;
         m_nTry      = 0        ;
         m_bWasUsed = false;
     }

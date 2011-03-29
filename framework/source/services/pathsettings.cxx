@@ -175,10 +175,6 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
     throw (css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::changesOccurred" );
-    /*
-    if (m_bIgnoreEvents)
-        return;
-    */
 
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
@@ -310,7 +306,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
@@ -948,17 +943,6 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
     // TODO check if path has at least one path value set
     // At least it depends from the feature using this path, if an empty path list is allowed.
-    /*
-    if (impl_isPathEmpty(aChangePath))
-    {
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The path '"    );
-        sMsg.append     (aChangePath.sPathName);
-        sMsg.appendAscii("' is empty now ... Not a real good idea.");
-        throw css::uno::Exception(sMsg.makeStringAndClear(),
-                                  static_cast< ::cppu::OWeakObject* >(this));
-    }
-    */
 
     // first we should try to store the changed (copied!) path ...
     // In case an error occure on saving time an exception is thrown ...

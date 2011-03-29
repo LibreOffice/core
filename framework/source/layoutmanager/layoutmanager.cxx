@@ -1215,7 +1215,6 @@ throw (uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     m_bInplaceMenuSet = sal_False;
 
-    // if ( m_xMenuBar.is() &&
     if ( m_xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;

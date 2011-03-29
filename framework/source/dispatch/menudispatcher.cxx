@@ -270,8 +270,6 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
 //*****************************************************************************************************************
 //  private method
-//
-//
 //*****************************************************************************************************************
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
@@ -292,8 +290,6 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
 
 //*****************************************************************************************************************
 //  private method
-//
-//
 //*****************************************************************************************************************
 sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
 {
@@ -355,14 +351,10 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 // set new menu on our system window and create new menu manager
                 if ( bMenuFromResource )
                 {
-                    // #110897#
-                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
                     m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
                 }
                 else
                 {
-                    // #110897#
-                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
                     m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
                 }
 

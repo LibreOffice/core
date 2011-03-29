@@ -89,27 +89,11 @@ namespace framework
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-        /*
-        XJob...
-        any execute([in] sequence< ::com::sun::star::beans::NamedValue > Arguments )
-            raises(
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::Exception );
-        */
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence<css::beans::NamedValue>& args)
             throw( css::lang::IllegalArgumentException, css::uno::Exception);
 
-        /*
-        XCLoseable
-        void close( [in] boolean DeliverOwnership ) raises(CloseVetoException );
-        */
         virtual void SAL_CALL close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException);
 
-        /*
-        XCloseVroadcaster
-        [oneway] void addCloseListener([in] XCloseListenerListener );
-        [oneway] void removeCloseListener([in] XCloseListenerListener );
-        */
         virtual void SAL_CALL addCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
         virtual void SAL_CALL removeCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
 

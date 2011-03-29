@@ -253,10 +253,8 @@ OReadMenuDocumentHandler::OReadMenuDocumentHandler(
 {
 }
 
-// #110897#
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuDocumentHandler::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 
@@ -296,8 +294,6 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-
-        // #110897# m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
         m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_xMenuBarContainer, m_xContainerFactory ));
 
         m_xReader->startDocument();
@@ -336,8 +332,6 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const ::rtl::OUString& aName
 
 // -----------------------------------------------------------------------------
 
-
-// #110897#
 OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
@@ -350,10 +344,9 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 {
 }
 
-// #110897#
+
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuBarHandler::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 

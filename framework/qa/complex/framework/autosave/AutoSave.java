@@ -316,16 +316,6 @@ public class AutoSave
 
             m_aLog.log(Protocol.TYPE_OK, "saveDoc('"+sURL+"') = OK.");
         }
-/*
-        catch(com.sun.star.io.IOException exIO)
-        {
-            m_aLog.log(Protocol.TYPE_WARNING     , "got IOException on calling doc.store()."                                                            );
-            m_aLog.log(Protocol.TYPE_WARNING_INFO, "Please check the reason for that more in detail."                                                   );
-            m_aLog.log(Protocol.TYPE_WARNING_INFO, "A message like \"Concurrent save requests are not allowed.\" was intended and doesnt show an error!");
-            m_aLog.log(Protocol.TYPE_WARNING_INFO, "Message of the original exception:"                                                                 );
-            m_aLog.log(Protocol.TYPE_WARNING_INFO, exIO.getMessage());
-        }
-*/
         catch(Throwable ex)
         {
             m_aLog.log(ex);

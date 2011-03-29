@@ -42,9 +42,6 @@ public class CheckImageManager  {
         param.put("ServiceFactory", xMSF); // some qadevOOo functions need the ServiceFactory
     }
 
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkImageManagerFromModule"};//, "checkImageManager"};
-//    }
 
     @Test public void checkImageManagerFromModule()
     {
@@ -163,31 +160,6 @@ public class CheckImageManager  {
         public void fireEvent() {
             // remove for real action:
             triggered = !triggered;
-/*            try {
-                XIndexAccess xMenuBarSettings = xUIManager.getSettings(
-                                        "private:resource/menubar/menubar", true);
-
-            }
-            catch(com.sun.star.container.NoSuchElementException e) {
-                System.out.println("_XUIConfiguration.XUIConfigurationListenerImpl: Exception.");
-                e.printStackTrace((java.io.PrintWriter)log);
-            }
-            catch(com.sun.star.lang.IllegalArgumentException e) {
-                System.out.println("_XUIConfiguration.XUIConfigurationListenerImpl: Exception.");
-                e.printStackTrace((java.io.PrintWriter)log);
-            }
-            catch(com.sun.star.lang.IllegalAccessException e) {
-                System.out.println("_XUIConfiguration.XUIConfigurationListenerImpl: Exception.");
-                e.printStackTrace((java.io.PrintWriter)log);
-            }
-            catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-                System.out.println("_XUIConfiguration.XUIConfigurationListenerImpl: Exception.");
-                e.printStackTrace((java.io.PrintWriter)log);
-            }
-            catch(com.sun.star.lang.WrappedTargetException e) {
-                System.out.println("_XUIConfiguration.XUIConfigurationListenerImpl: Exception.");
-                e.printStackTrace((java.io.PrintWriter)log);
-            } */
         }
 
         public void reset() {

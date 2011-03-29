@@ -424,109 +424,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
 
     protected:
 
-        //---------------------------------------------------------------------------
-        //  OPropertySetHelper
-        //---------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      try to convert a property value
-            @descr      This method is calling from helperclass "OPropertySetHelper".
-                        Don't use this directly!
-                        You must try to convert the value of given propertyhandle and
-                        return results of this operation. This will be use to ask vetoable
-                        listener. If no listener have a veto, we will change value realy!
-                        ( in method setFastPropertyValue_NoBroadcast(...) )
-
-            @seealso    OPropertySetHelper
-            @seealso    setFastPropertyValue_NoBroadcast()
-
-            @param      "aConvertedValue"   new converted value of property
-            @param      "aOldValue"         old value of property
-            @param      "nHandle"           handle of property
-            @param      "aValue"            new value of property
-
-            @return     sal_True if value will be changed, sal_FALSE otherway
-
-            @onerror    IllegalArgumentException, if you call this with an invalid argument
-        *//*-*****************************************************************************************************/
-/*
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
-                                                                      css::uno::Any&        aOldValue       ,
-                                                                    sal_Int32           nHandle         ,
-                                                            const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
-*/
-        /*-****************************************************************************************************//**
-            @short      set value of a transient property
-            @descr      This method is calling from helperclass "OPropertySetHelper".
-                        Don't use this directly!
-                        Handle and value are valid everyway! You must set the new value only.
-                        After this, baseclass send messages to all listener automaticly.
-
-            @seealso    OPropertySetHelper
-
-            @param      "nHandle"   handle of property to change
-            @param      "aValue"    new value of property
-
-            @return     -
-
-            @onerror    An exception is thrown.
-        *//*-*****************************************************************************************************/
-/*
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32       nHandle ,
-                                                                  const css::uno::Any&  aValue  ) throw( css::uno::Exception );
-*/
-        /*-****************************************************************************************************//**
-            @short      get value of a transient property
-            @descr      This method is calling from helperclass "OPropertySetHelper".
-                        Don't use this directly!
-
-            @seealso    OPropertySetHelper
-
-            @param      "nHandle"   handle of property to change
-            @param      "aValue"    current value of property
-
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-/*
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
-                                                      sal_Int32     nHandle ) const;
-*/
-        /*-****************************************************************************************************//**
-            @short      return structure and information about transient properties
-            @descr      This method is calling from helperclass "OPropertySetHelper".
-                        Don't use this directly!
-
-            @seealso    OPropertySetHelper
-
-            @param      -
-
-            @return     structure with property-informations
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-/*
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-*/
-        /*-****************************************************************************************************//**
-            @short      return propertysetinfo
-            @descr      You can call this method to get information about transient properties
-                        of this object.
-
-            @seealso    OPropertySetHelper
-            @seealso    XPropertySet
-            @seealso    XMultiPropertySet
-
-            @param      -
-
-            @return     reference to object with information [XPropertySetInfo]
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-/*
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
-*/
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -535,27 +433,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
 
         DECL_LINK( Close_Impl, void* );
 
-//        void    impl_SaveWindowAttributes();
 
-/*      sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   ::rtl::OUString&    sProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   css::awt::Point&    aProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   css::awt::Size&     aProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-
-        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
-*/
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

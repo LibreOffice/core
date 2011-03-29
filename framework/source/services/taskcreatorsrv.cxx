@@ -175,8 +175,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
         xContainerWindow = implts_createContainerWindow(xParentWindow, aPosSize, bCreateTopWindow);
     }
 
-    //------------------->
-    // HACK  #125187# + #i53630#
+    // #i53630#
     // Mark all document windows as "special ones", so VCL can bind
     // special features to it. Because VCL doesnt know anything about documents ...
     // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)

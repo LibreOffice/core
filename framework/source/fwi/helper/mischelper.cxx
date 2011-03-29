@@ -77,7 +77,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     return m_xLanguageGuesser;
 }
 
-////////////////////////////////////////////////////////////
 
 ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& aCmdURL,
@@ -153,7 +152,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     return aLabel;
 }
 
-////////////////////////////////////////////////////////////
 
 void FillLangItems( std::set< OUString > &rLangItems,
         const SvtLanguageTable &    rLanguageTable,

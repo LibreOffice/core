@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace framework
@@ -50,12 +49,10 @@ struct FWE_DLLPUBLIC EventsConfig
 class FWE_DLLPUBLIC EventsConfiguration
 {
     public:
-        // #110897#
         static sal_Bool LoadEventsConfig(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, EventsConfig& aItems );
 
-        // #110897#
         static sal_Bool StoreEventsConfig(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const EventsConfig& aItems );

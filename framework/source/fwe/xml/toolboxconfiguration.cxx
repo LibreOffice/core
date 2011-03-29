@@ -65,7 +65,6 @@ namespace framework
 {
 
 static Reference< XParser > GetSaxParser(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
@@ -73,14 +72,12 @@ static Reference< XParser > GetSaxParser(
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
-// #110897#
 sal_Bool ToolBoxConfiguration::LoadToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
@@ -120,7 +117,6 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
 }
 
 
-// #110897#
 sal_Bool ToolBoxConfiguration::StoreToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,

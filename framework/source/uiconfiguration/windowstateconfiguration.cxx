@@ -61,7 +61,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -74,7 +73,6 @@ using namespace ::com::sun::star::ui;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
@@ -589,12 +587,10 @@ void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerE
 
 void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 // lang.XEventListener

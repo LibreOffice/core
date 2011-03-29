@@ -146,14 +146,6 @@ struct IndicatorInfo
             return (m_xIndicator == xIndicator);
         }
 };
-/*
-    //---------------------------------------------------------------------------------------------------------
-    // norm nValue to fit range of 0..100%
-    sal_Int32 calcPercentage()
-    {
-    return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
-    }
-*/
 
 //===============================================
 /** @descr  Define a lits of child indicator objects and her data. */

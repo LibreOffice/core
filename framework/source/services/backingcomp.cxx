@@ -513,12 +513,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     {
         xLayoutManager->lock();
         xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
-        /* #i85963# new backing window comes withoud standard bar and statusbar
-        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-        */
         xLayoutManager->unlock();
     }
 

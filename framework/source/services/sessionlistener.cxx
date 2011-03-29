@@ -250,7 +250,6 @@ void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
     {
         if (event.FeatureDescriptor.compareToAscii("update")==0)
             m_bRestored = sal_True; // a document was restored
-        // if (event.FeatureDescriptor.compareToAscii("stop")==0)
 
     }
     else if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionSave")))

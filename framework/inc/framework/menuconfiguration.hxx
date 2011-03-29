@@ -88,7 +88,7 @@ class FWE_DLLPUBLIC MenuConfiguration
         };
 
         MenuConfiguration(
-            // #110897#-1 use const when giving a uno reference by reference
+            // use const when giving a uno reference by reference
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
 
         virtual ~MenuConfiguration();
@@ -118,7 +118,7 @@ class FWE_DLLPUBLIC MenuConfiguration
         static sal_Bool IsWindowListItemId( sal_uInt16 nId );
 
     private:
-        // #110897#-1 do not hold the uno reference by reference
+        // do not hold the uno reference by reference
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_rxServiceManager;
 };
 

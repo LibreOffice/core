@@ -321,7 +321,6 @@ IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
 
 IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
 {
-//    Close();
     return 0;
 }
 

@@ -80,7 +80,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -262,11 +261,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    //
     // now add menu entries
     // the different menues purpose will be handled by the different string
     // for aCmd_Dialog and aCmd_Language
-    //
 
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
     const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection

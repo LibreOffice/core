@@ -35,7 +35,6 @@
 #include <tools/stream.hxx>
 #include <tools/color.hxx>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -103,12 +102,10 @@ struct FWE_DLLPUBLIC ImageListsDescriptor
 class FWE_DLLPUBLIC ImagesConfiguration
 {
     public:
-        // #110897#
         static sal_Bool LoadImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, ImageListsDescriptor& aItems );
 
-        // #110897#
         static sal_Bool StoreImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const ImageListsDescriptor& aItems );

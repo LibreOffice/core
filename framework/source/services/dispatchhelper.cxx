@@ -168,7 +168,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         // dispatch it and wait for a notification
         // TODO/MBA: waiting in main thread?!
         xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
-        //m_aBlock.wait();
         aResult = m_aResult;
     }
     else
