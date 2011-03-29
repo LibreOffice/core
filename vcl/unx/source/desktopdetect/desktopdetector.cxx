@@ -293,7 +293,8 @@ VCL_DLLPUBLIC rtl::OUString get_desktop_environment()
             for( int i = 0; i < nParams; i++ )
             {
                 osl_getCommandArg( i, &aParam.pData );
-                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) )
+                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) ||
+                    aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--headless" ) ) )
                 {
                     pDisplayStr = NULL;
                     break;

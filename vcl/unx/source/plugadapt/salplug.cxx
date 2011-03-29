@@ -215,8 +215,11 @@ static SalInstance* check_headless_plugin()
     for( int i = 0; i < nParams; i++ )
     {
         osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-headless")) )
+        if( aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-headless")) ||
+            aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--headless")) )
+        {
             return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
+        }
     }
     return NULL;
 }
