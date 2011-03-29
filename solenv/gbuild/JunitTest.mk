@@ -29,6 +29,7 @@
 # JunitTest class
 
 gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER) $(JAVAIFLAGS)
+gb_JunitTest_HEADLESS := $(true)
 
 # in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
 DBGSV_ERROR_OUT := shell
@@ -44,7 +45,7 @@ $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-		$(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
+		$(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(if $(strip $(gb_JunitTest_HEADLESS)),-Dorg.openoffice.test.arg.headless=$(gb_JunitTest_HEADLESS)) $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
