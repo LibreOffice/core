@@ -34,8 +34,8 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XResourceId;
-interface XResourceFactory;
+published interface XResourceId;
+published interface XResourceFactory;
 
 /** The XResourceFactoryManager is part of the configuration controller and
     manages the set of registered resource factories.
@@ -43,7 +43,7 @@ interface XResourceFactory;
     @see XConfigurationController
     @see XResourceFactory
 */
-interface XResourceFactoryManager
+published interface XResourceFactoryManager
 {
     /** Register a new resource factory for the given URL.
         <p>When one factory is responsible for more than one type of resource

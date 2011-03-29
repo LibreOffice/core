@@ -25,10 +25,6 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_crypto_seinitializer_idl_
 #define __com_sun_star_xml_crypto_seinitializer_idl_
 
@@ -44,7 +40,7 @@ module com { module sun { module star { module xml { module crypto {
 /**
  * Service of SEInitializer
  */
-service SEInitializer {
+published service SEInitializer {
     interface com::sun::star::xml::crypto::XSEInitializer ;
     interface com::sun::star::lang::XServiceInfo ;
 };

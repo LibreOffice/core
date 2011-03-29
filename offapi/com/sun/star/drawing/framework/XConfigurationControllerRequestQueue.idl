@@ -34,7 +34,7 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XConfigurationChangeRequest;
+published interface XConfigurationChangeRequest;
 
 /** The request queue of the configuration controller handles requests for
     changes to the current configuration.
@@ -44,7 +44,7 @@ interface XConfigurationChangeRequest;
     should normally not be necessary for anyone else than the
     <type>XConfigurationController</type>.  It may be removed in the future.</p>
 */
-interface XConfigurationControllerRequestQueue
+published interface XConfigurationControllerRequestQueue
 {
     /** Return whether there are pending requests for configuration changes.
         @return

@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-struct RealSize2D
+published struct RealSize2D
 {
     /// Amount of space occupied in the x direction.
     double Width;

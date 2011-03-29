@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-interface XNumericControl : XPropertyControl
+published interface XNumericControl : XPropertyControl
 {
     /** describes the number of decimal digits to use for the value
     */

@@ -43,7 +43,7 @@
 
 /**
 */
-interface XAnimationNode : ::com::sun::star::container::XChild
+published interface XAnimationNode : ::com::sun::star::container::XChild
 {
     /**  a value from <const>AnimationNodeType</const>.
 

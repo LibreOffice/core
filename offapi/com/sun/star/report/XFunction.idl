@@ -44,7 +44,7 @@
 //=============================================================================
 /** specifies a format condition for a control.
 */
-interface XFunction
+published interface XFunction
 {
     /** gives access to the properties.
     */

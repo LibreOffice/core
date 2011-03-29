@@ -63,7 +63,7 @@ module com {  module sun {  module star {  module awt {
 
     @since OOo 3.1
  */
-interface XPopupMenuExtended
+published interface XPopupMenuExtended
 {
     /** specifies basic functions for a popup menu.
     */

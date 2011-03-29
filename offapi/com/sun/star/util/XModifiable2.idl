@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module util {
     Please use this interface very carefuly.
     </p>
  */
-interface XModifiable2: com::sun::star::util::XModifiable
+published interface XModifiable2: com::sun::star::util::XModifiable
 {
     //-------------------------------------------------------------------------
     /** disable possibility to change modified state of the document

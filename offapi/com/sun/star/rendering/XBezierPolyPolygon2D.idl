@@ -43,7 +43,7 @@
 module com { module sun { module star { module rendering {
 
 /** This is a specialized interface for a 2D poly-polygon containing
-     straight line and bezier segments.<p>
+    straight line and bezier segments.<p>
 
     This poly-polygon can contain polygons consisting of a mixture of
     cubic bezier curves and straight lines. As the straight line is a
@@ -56,7 +56,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XBezierPolyPolygon2D : XPolyPolygon2D
+published interface XBezierPolyPolygon2D : XPolyPolygon2D
 {
     /** Query subset of this poly-polygon.<p>
 

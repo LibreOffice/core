@@ -34,7 +34,7 @@ module com { module sun { module star { module deployment {
 
     @since OOo 2.3
 */
-singleton PackageInformationProvider : XPackageInformationProvider;
+published singleton PackageInformationProvider : XPackageInformationProvider;
 
 }; }; }; };
 

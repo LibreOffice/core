@@ -51,7 +51,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-service WindowStateConfiguration
+published service WindowStateConfiguration
 {
     /** provides access to window based information about user interface elements
         of all installed application modules.

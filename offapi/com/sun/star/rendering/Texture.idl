@@ -36,8 +36,8 @@
 
 module com { module sun { module star { module rendering {
 
-interface XBitmap;
-interface XParametricPolyPolygon2D;
+published interface XBitmap;
+published interface XParametricPolyPolygon2D;
 
 /** Contains all information needed to define a texture.<p>
 
@@ -53,7 +53,7 @@ interface XParametricPolyPolygon2D;
 
     @since OOo 2.0
  */
-struct Texture
+published struct Texture
 {
     /** Texture transformation from texture to primitive space.<p>
 

@@ -51,7 +51,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-struct FontMetrics
+published struct FontMetrics
 {
     /// Ascent (above the baseline) part of the font.
     double      Ascent;
@@ -84,14 +84,14 @@ struct FontMetrics
         characters, and if one needs a font with double character
         width, the referenceCharSize should be doubled.<p>
      */
-    double      ReferenceCharSize;
+    double          ReferenceCharSize;
 
     //-------------------------------------------------------------------------
 
     /** Specifies the offset to be added to the baseline when drawing
         underlined text.
      */
-    double      UnderlineOffset;
+    double          UnderlineOffset;
 
     //-------------------------------------------------------------------------
 

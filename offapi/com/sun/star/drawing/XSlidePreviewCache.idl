@@ -44,7 +44,6 @@
 #include <com/sun/star/rendering/XCanvas.idl>
 #endif
 
-
 module com { module sun { module star { module drawing {
 
 /** Listener for asynchronous preview creations.  Called when a slide
@@ -53,7 +52,7 @@ module com { module sun { module star { module drawing {
     implementor may then call <method>getSlidePreview()</method> a second
     time to get the up-to-date version of the preview.
 */
-interface XSlidePreviewCacheListener
+published interface XSlidePreviewCacheListener
 {
     /** Called by a <interface>XSlidePreviewCache</interface> object when a
         preview has been created for the slide with the given index.
@@ -77,7 +76,7 @@ interface XSlidePreviewCacheListener
     order to allow multiple references to a single slide (custom
     presentations).
 */
-interface XSlidePreviewCache
+published interface XSlidePreviewCache
 {
     /** Set the set of slides for which the cache will provide the
         previews.  All slides in the given XIndexAccess are required to come

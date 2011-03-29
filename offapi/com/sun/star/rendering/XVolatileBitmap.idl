@@ -36,7 +36,7 @@ module com { module sun { module star { module rendering {
 /** This is a specialized interface to a volatile bitmap (which can
     become invalid at any point in time).
  */
-interface XVolatileBitmap : XBitmap
+published interface XVolatileBitmap : XBitmap
 {
     /** Query whether this volatile bitmap still has valid content.
 

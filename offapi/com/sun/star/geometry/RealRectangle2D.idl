@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-struct RealRectangle2D
+published struct RealRectangle2D
 {
     /// X coordinate of upper left corner .
     double X1;

@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module awt {  module tree {
     <p>You have to set the <member>TreeControlModel::Editable</member> property to
     <TRUE/> before a tree supports editing.</p>
  */
-interface XTreeEditListener : ::com::sun::star::lang::XEventListener
+published interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 {
     /** This method is called from the <type>TreeControl</type> implementation when editing of
         <var>Node</var> is requested by calling <member>XTreeControl::startEditingAtNode()</member>.

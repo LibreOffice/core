@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-struct Matrix2D
+published struct Matrix2D
 {
     /// The top, left matrix entry.
     double m00;

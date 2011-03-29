@@ -38,7 +38,7 @@
     <p>This does not apply to page header or page footer.</p>
     @see XSection
  */
-constants ForceNewPage
+published constants ForceNewPage
 {
     //-------------------------------------------------------------------------
 

@@ -46,10 +46,10 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XConfigurationChangeListener;
-interface XConfigurationChangeRequest;
-interface XResourceId;
-interface XResource;
+published interface XConfigurationChangeListener;
+published interface XConfigurationChangeRequest;
+published interface XResourceId;
+published interface XResource;
 
 /** The configuration controller is responsible for the management of the
     set of active resources.
@@ -157,7 +157,7 @@ interface XResource;
     deactivated resource.</p></li>
     </ul></p>
 */
-interface XConfigurationController
+published interface XConfigurationController
 {
     interface XConfigurationControllerRequestQueue;
     interface XConfigurationControllerBroadcaster;

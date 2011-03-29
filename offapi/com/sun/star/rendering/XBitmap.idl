@@ -45,8 +45,6 @@
 
 module com { module sun { module star { module rendering {
 
-interface XBitmapCanvas;
-
 /** This is a generic interface to a bitmap.<p>
 
     This interface contains the generic functionality to be used on
@@ -57,14 +55,14 @@ interface XBitmapCanvas;
 
     @since OOo 2.0
  */
-interface XBitmap : ::com::sun::star::uno::XInterface
+published interface XBitmap : ::com::sun::star::uno::XInterface
 {
     /** Query the size of the bitmap.<p>
 
         This method queries the bitmap size in pixel.<p>
 
         @return the bitmap size in pixel.
-      */
+     */
     ::com::sun::star::geometry::IntegerSize2D   getSize();
 
     //-------------------------------------------------------------------------
@@ -80,7 +78,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
         @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
         not.
-      */
+     */
     boolean                                     hasAlpha();
 
     //-------------------------------------------------------------------------

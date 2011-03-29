@@ -39,7 +39,7 @@ module com { module sun { module star { module awt {
 /** is the event broadcasted by a <type>XListItems</type> implementation for changes
     in its item list.
  */
-struct ItemListEvent : ::com::sun::star::lang::EventObject
+published struct ItemListEvent : ::com::sun::star::lang::EventObject
 {
     /** specifies the position of the item which is affected by the event
 

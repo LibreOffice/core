@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module sdb { module tools {
 
     @since OOo 2.0.4
 */
-interface XObjectNames
+published interface XObjectNames
 {
     /** suggests a (unique) table or query name
 

@@ -55,8 +55,8 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-interface XObjectInspectorUI;
-interface XPropertyControlFactory;
+published interface XObjectInspectorUI;
+published interface XPropertyControlFactory;
 
 //-----------------------------------------------------------------------------
 /** is the basic interface for object inspection.
@@ -72,7 +72,7 @@ interface XPropertyControlFactory;
 
     @since OOo 2.0.3
 */
-interface XPropertyHandler
+published interface XPropertyHandler
 {
     /** used for controlling resources acquired by the handler
 

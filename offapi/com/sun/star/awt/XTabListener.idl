@@ -48,7 +48,7 @@
 /** such listener will be informed if tab's was inserted/removed from
     an XSimpleTabController instance or if the properties of a tab was changed.
  */
-interface XTabListener : com::sun::star::lang::XEventListener
+published interface XTabListener : com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** a new tab was inserted.

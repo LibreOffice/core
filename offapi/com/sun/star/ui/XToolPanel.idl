@@ -38,7 +38,7 @@ module com { module sun { module star { module ui {
 
 /** describes the basic interface to be implemented by a tool panel
  */
-interface XToolPanel
+published interface XToolPanel
 {
     /** provides access to the tool panel's main window.
 

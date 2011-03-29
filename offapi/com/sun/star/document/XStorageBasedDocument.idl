@@ -63,7 +63,7 @@
 /** allows to initialize document with a storage, to store document to
     a storage, and to set document to be based on provided storage.
  */
-interface XStorageBasedDocument: com::sun::star::uno::XInterface
+published interface XStorageBasedDocument: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** lets the document load itself using provided storage.

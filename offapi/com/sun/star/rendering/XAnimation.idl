@@ -60,7 +60,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XAnimation : ::com::sun::star::uno::XInterface
+published interface XAnimation : ::com::sun::star::uno::XInterface
 {
     /** Render the animation content at time t into the specified
         canvas.<p>

@@ -46,7 +46,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XLinePolyPolygon2D : XPolyPolygon2D
+published interface XLinePolyPolygon2D : XPolyPolygon2D
 {
     /** Query subset of this poly-polygon, starting at the given
         polygon and the given point within that polygon, and

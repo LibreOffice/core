@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module sdb {
 //=============================================================================
 /** simplifies the accessing of data sources, and it's corresponding database document and forms, and reports.
 */
-interface XOfficeDatabaseDocument
+published interface XOfficeDatabaseDocument
 {
     /** allows to access the supplier for forms.
         @see com::sun::star::sdb::Forms

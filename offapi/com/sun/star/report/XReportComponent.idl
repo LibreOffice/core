@@ -55,13 +55,15 @@
 //=============================================================================
 
  module com {  module sun {  module star {  module report {
- interface XSection;
+
+published interface XSection;
+
 //=============================================================================
 /** describes a component which may be part of a report.
 
     @see XReportDefinition
  */
-interface XReportComponent
+published interface XReportComponent
 {
     interface com::sun::star::util::XCloneable;
     /** identifies the component as a candidate for being part of a report.
