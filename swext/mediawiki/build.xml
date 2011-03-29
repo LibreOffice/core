@@ -149,24 +149,24 @@
     <target name="development-package" depends="jar, init">
         <delete file="${dist}/${target}_develop.zip"/>
         <zip  destfile="${dist}/${target}_develop.zip">
-            <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu"  excludes="**/ProtocolHandler.xcu,**/Paths.xcu" casesensitive="yes"/>
+            <zipfileset dir="${dist}" includes="${target}.jar" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu"  excludes="**/ProtocolHandler.xcu,**/Paths.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
         <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
-            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
          -->
-            <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
-            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
-            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
-            <zipfileset dir="${out}/misc/${target}/help" includes="component.txt" casesensitive="yes" prefix="help"/>
-            <zipfileset dir="${out}/misc/${target}_merge/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
-            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
-            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
-            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
-            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl" filemode="664" dirmode="775"/>
+            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="component.txt" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}_merge/help" includes="**/*.xhp" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor" filemode="664" dirmode="775"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license" filemode="664" dirmode="775"/>
+            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license" filemode="664" dirmode="775"/>
         </zip>
     </target>
 
