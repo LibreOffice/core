@@ -480,6 +480,48 @@ sal_Bool ImpGraphic::ImplIsAnimated() const
 
 // ------------------------------------------------------------------------
 
+sal_Bool ImpGraphic::ImplIsEPS() const
+{
+    return( ( meType == GRAPHIC_GDIMETAFILE ) &&
+            ( maMetaFile.GetActionCount() > 0 ) &&
+            ( maMetaFile.GetAction( 0 )->GetType() == META_EPS_ACTION ) );
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool ImpGraphic::ImplIsRenderGraphic() const
+{
+    return( ( GRAPHIC_GDIMETAFILE == meType ) &&
+            ( 1 == maMetaFile.GetActionCount() ) &&
+            ( META_RENDERGRAPHIC_ACTION == maMetaFile.GetAction( 0 )->GetType() ) );
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool ImpGraphic::ImplHasRenderGraphic() const
+{
+    sal_Bool bRet = sal_False;
+
+    if( GRAPHIC_GDIMETAFILE == meType )
+    {
+        GDIMetaFile& rMtf = const_cast< ImpGraphic* >( this )->maMetaFile;
+
+        for( MetaAction* pAct = rMtf.FirstAction(); pAct && !bRet; pAct = rMtf.NextAction() )
+        {
+            if( META_RENDERGRAPHIC_ACTION == pAct->GetType() )
+            {
+                bRet = sal_True;
+            }
+        }
+
+        rMtf.WindStart();
+    }
+
+    return( bRet );
+}
+
+// ------------------------------------------------------------------------
+
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
     Bitmap aRetBmp;
@@ -588,6 +630,18 @@ Animation ImpGraphic::ImplGetAnimation() const
         aAnimation = *mpAnimation;
 
     return aAnimation;
+}
+
+// ------------------------------------------------------------------------
+
+::vcl::RenderGraphic ImpGraphic::ImplGetRenderGraphic() const
+{
+    ::vcl::RenderGraphic aRet;
+
+    if( ImplIsRenderGraphic() )
+        aRet = static_cast< MetaRenderGraphicAction* >( maMetaFile.GetAction( 0 ) )->GetRenderGraphic();
+
+    return( aRet );
 }
 
 // ------------------------------------------------------------------------

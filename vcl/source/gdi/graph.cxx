@@ -427,6 +427,27 @@ sal_Bool Graphic::IsAnimated() const
 
 // ------------------------------------------------------------------------
 
+sal_Bool Graphic::IsEPS() const
+{
+    return mpImpGraphic->ImplIsEPS();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool Graphic::IsRenderGraphic() const
+{
+    return mpImpGraphic->ImplIsRenderGraphic();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool Graphic::HasRenderGraphic() const
+{
+    return mpImpGraphic->ImplHasRenderGraphic();
+}
+
+// ------------------------------------------------------------------------
+
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmap(rParameters);
@@ -451,6 +472,13 @@ Animation Graphic::GetAnimation() const
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
+}
+
+// ------------------------------------------------------------------------
+
+::vcl::RenderGraphic Graphic::GetRenderGraphic() const
+{
+    return mpImpGraphic->ImplGetRenderGraphic();
 }
 
 // ------------------------------------------------------------------------

@@ -42,6 +42,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/rendergraphic.hxx>
 
 class SvStream;
 
@@ -102,6 +103,7 @@ class SvStream;
 #define META_LAYOUTMODE_ACTION              (149)
 #define META_TEXTLANGUAGE_ACTION            (150)
 #define META_OVERLINECOLOR_ACTION           (151)
+#define META_RENDERGRAPHIC_ACTION           (152)
 
 #define META_COMMENT_ACTION                 (512)
 
@@ -110,6 +112,11 @@ class SvStream;
 struct ImplMetaReadData
 {
     rtl_TextEncoding        meActualCharSet;
+
+                            ImplMetaReadData() :
+                                meActualCharSet( RTL_TEXTENCODING_ASCII_US )
+                            {
+                            }
 };
 
 // ------------------------------------------------------------------------
@@ -117,6 +124,13 @@ struct ImplMetaReadData
 struct ImplMetaWriteData
 {
     rtl_TextEncoding        meActualCharSet;
+    GDIMetaFileWriteFlags   mnWriteFlags;
+
+                            ImplMetaWriteData() :
+                                meActualCharSet( RTL_TEXTENCODING_ASCII_US ),
+                                mnWriteFlags( GDIMETAFILE_WRITE_DEFAULT )
+                            {
+                            }
 };
 
 // ------------------------------------------------------------------------
@@ -1541,6 +1555,43 @@ public:
                         MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
+};
+
+// ---------------------------
+// - MetaRenderGraphicAction -
+// ---------------------------
+
+class VCL_DLLPUBLIC MetaRenderGraphicAction : public MetaAction
+{
+private:
+
+    ::vcl::RenderGraphic        maRenderGraphic;
+    Point                       maPoint;
+    Size                        maSize;
+    double                      mfRotateAngle;
+    double                      mfShearAngleX;
+    double                      mfShearAngleY;
+
+    virtual sal_Bool            Compare( const MetaAction& ) const;
+
+public:
+                                DECL_META_ACTION( RenderGraphic, META_RENDERGRAPHIC_ACTION )
+
+                                MetaRenderGraphicAction( const Point& rPoint, const Size& rSize,
+                                                         const vcl::RenderGraphic& rRenderData,
+                                                         double fRotateAngle = 0.0,
+                                                         double fShearAngleX = 0.0,
+                                                         double fShearAngleY = 0.0 );
+
+    virtual void                Move( long nHorzMove, long nVertMove );
+    virtual void                Scale( double fScaleX, double fScaleY );
+
+    const ::vcl::RenderGraphic& GetRenderGraphic() const { return maRenderGraphic; }
+    const Point&                GetPoint() const { return maPoint; }
+    const Size&                 GetSize() const { return maSize; }
+    double                      GetRotateAngle() const { return mfRotateAngle; }
+    double                      GetShearAngleX() const { return mfShearAngleX; }
+    double                      GetShearAngleY() const { return mfShearAngleY; }
 };
 
 #endif // _SV_METAACT_HXX

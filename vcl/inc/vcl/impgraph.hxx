@@ -33,6 +33,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/rendergraphic.hxx>
 #include <vcl/graph.h>
 
 // ---------------
@@ -96,14 +97,19 @@ private:
     void                ImplSetDefaultType();
     sal_Bool                ImplIsSupportedGraphic() const;
 
-    sal_Bool                ImplIsTransparent() const;
-    sal_Bool                ImplIsAlpha() const;
-    sal_Bool                ImplIsAnimated() const;
+    sal_Bool            ImplIsTransparent() const;
+    sal_Bool            ImplIsAlpha() const;
+    sal_Bool            ImplIsAnimated() const;
+    sal_Bool            ImplIsEPS() const;
+    sal_Bool            ImplIsRenderGraphic() const;
+    sal_Bool            ImplHasRenderGraphic() const;
 
-    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
-    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
-    Animation           ImplGetAnimation() const;
-    const GDIMetaFile&  ImplGetGDIMetaFile() const;
+    Bitmap                  ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx                ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
+    Animation               ImplGetAnimation() const;
+    const GDIMetaFile&      ImplGetGDIMetaFile() const;
+    ::vcl::RenderGraphic    ImplGetRenderGraphic() const;
+
 
     Size                ImplGetPrefSize() const;
     void                ImplSetPrefSize( const Size& rPrefSize );

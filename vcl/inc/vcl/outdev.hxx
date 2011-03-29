@@ -108,6 +108,7 @@ namespace vcl
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
+    class RenderGraphic;
 }
 
 #define OUTDEV_BUFFER_SIZE  128
@@ -808,7 +809,19 @@ public:
 
     void                DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
-    void                DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize, const Gradient& rTransparenceGradient );
+    void                DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                         const Gradient& rTransparenceGradient );
+
+    /** Added return value to see if EPS could be painted directly.
+        Theoreticaly, handing over a matrix would be needed to handle
+        painting rotated EPS files (e.g. contained in Metafiles). This
+        would then need to be supported for Mac and PS printers, but
+        that's too much for now, wrote #i107046# for this */
+    bool                DrawEPS( const Point& rPt, const Size& rSz,
+                                 const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
+
+    void                DrawRenderGraphic( const Point& rPt, const Size& rSz,
+                                           const ::vcl::RenderGraphic& rRenderGraphic );
 
     Color               GetPixel( const Point& rPt ) const;
     Color*              GetPixel( const Polygon& rPts ) const;
@@ -1116,14 +1129,6 @@ public:
         @return sal_True, if this device has an alpha channel.
      */
     sal_Bool                HasAlpha();
-
-    /** Added return value to see if EPS could be painted directly.
-        Theoreticaly, handing over a matrix would be needed to handle
-        painting rotated EPS files (e.g. contained in Metafiles). This
-        would then need to be supported for Mac and PS printers, but
-        that's too much for now, wrote #i107046# for this */
-    bool                DrawEPS( const Point& rPt, const Size& rSz,
-                                 const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
 
     /// request XCanvas render interface for this OutputDevice
     ::com::sun::star::uno::Reference<

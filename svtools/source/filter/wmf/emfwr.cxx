@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 // -----------
 // - Defines -
@@ -1186,7 +1187,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_BMP_ACTION:
             {
                 const MetaBmpAction* pA = (const MetaBmpAction *) pAction;
-                ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), pA->GetBitmap().GetSizePixel(), WIN_SRCCOPY );
+                ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), maVDev.PixelToLogic( pA->GetBitmap().GetSizePixel() ), WIN_SRCCOPY );
             }
             break;
 
@@ -1217,8 +1218,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
-                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), aMsk.GetSizePixel(), WIN_SRCPAINT );
-                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), aBmp.GetSizePixel(), WIN_SRCAND );
+                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), maVDev.PixelToLogic( aMsk.GetSizePixel() ), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), maVDev.PixelToLogic( aBmp.GetSizePixel() ), WIN_SRCAND );
                 }
                 else
                     ImplWriteBmpRecord( aBmp, pA->GetPoint(), aBmp.GetSizePixel(), WIN_SRCCOPY );
@@ -1404,6 +1405,26 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_GRADIENTEX_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
+            }
+            break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pAction;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( maVDev.LogicToPixel( pA->GetSize() ) ) );
+                Bitmap                                  aBmp( aBmpEx.GetBitmap() );
+                Bitmap                                  aMsk( aBmpEx.GetMask() );
+
+                if( !!aMsk )
+                {
+                    aBmp.Replace( aMsk, COL_WHITE );
+                    aMsk.Invert();
+                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), pA->GetSize(), WIN_SRCPAINT );
+                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), pA->GetSize(), WIN_SRCAND );
+                }
+                else
+                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), pA->GetSize(), WIN_SRCCOPY );
             }
             break;
 

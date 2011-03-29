@@ -38,6 +38,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 // ========================================================================
 
@@ -235,6 +236,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         case( META_COMMENT_ACTION ): pAction = new MetaCommentAction; break;
         case( META_LAYOUTMODE_ACTION ): pAction = new MetaLayoutModeAction; break;
         case( META_TEXTLANGUAGE_ACTION ): pAction = new MetaTextLanguageAction; break;
+        case( META_RENDERGRAPHIC_ACTION ): pAction = new MetaRenderGraphicAction; break;
 
         default:
         {
@@ -2565,7 +2567,10 @@ MetaGradientExAction::~MetaGradientExAction()
 void MetaGradientExAction::Execute( OutputDevice* pOut )
 {
     if( pOut->GetConnectMetaFile() )
-        pOut->GetConnectMetaFile()->AddAction( Clone() );
+    {
+        Duplicate();
+        pOut->GetConnectMetaFile()->AddAction( this );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -4059,7 +4064,10 @@ void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 
 void MetaCommentAction::Execute( OutputDevice* pOut )
 {
     if ( pOut->GetConnectMetaFile() )
-        pOut->GetConnectMetaFile()->AddAction( Clone() );
+    {
+        Duplicate();
+        pOut->GetConnectMetaFile()->AddAction( this );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -4294,3 +4302,81 @@ void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 }
 
 // ========================================================================
+
+IMPL_META_ACTION( RenderGraphic, META_RENDERGRAPHIC_ACTION )
+
+// ------------------------------------------------------------------------
+
+MetaRenderGraphicAction::MetaRenderGraphicAction( const Point& rPoint, const Size& rSize,
+                                                  const vcl::RenderGraphic& rRenderGraphic,
+                                                  double fRotateAngle, double fShearAngleX, double fShearAngleY ) :
+    MetaAction( META_RENDERGRAPHIC_ACTION ),
+    maRenderGraphic( rRenderGraphic ),
+    maPoint( rPoint ),
+    maSize( rSize ),
+    mfRotateAngle( fRotateAngle ),
+    mfShearAngleX( fShearAngleX ),
+    mfShearAngleY( fShearAngleY )
+{
+}
+
+// ------------------------------------------------------------------------
+
+void MetaRenderGraphicAction::Execute( OutputDevice* pOut )
+{
+    pOut->DrawRenderGraphic( maPoint, maSize, maRenderGraphic );
+}
+
+// ------------------------------------------------------------------------
+
+MetaAction* MetaRenderGraphicAction::Clone()
+{
+    MetaAction* pClone = (MetaAction*) new MetaRenderGraphicAction( *this );
+    pClone->ResetRefCount();
+    return pClone;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaRenderGraphicAction::Move( long nHorzMove, long nVertMove )
+{
+    maPoint.Move( nHorzMove, nVertMove );
+}
+
+// ------------------------------------------------------------------------
+
+void MetaRenderGraphicAction::Scale( double fScaleX, double fScaleY )
+{
+    Rectangle aRectangle( maPoint, maSize );
+    ImplScaleRect( aRectangle, fScaleX, fScaleY );
+    maPoint = aRectangle.TopLeft();
+    maSize = aRectangle.GetSize();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool MetaRenderGraphicAction::Compare( const MetaAction& rMetaAction ) const
+{
+    return ( maRenderGraphic.IsEqual( ( (MetaRenderGraphicAction&) rMetaAction).maRenderGraphic ) &&
+           ( maPoint == ( (MetaRenderGraphicAction&) rMetaAction).maPoint ) &&
+           ( maSize == ( (MetaRenderGraphicAction&) rMetaAction).maSize ) &&
+           ( mfRotateAngle == ( (MetaRenderGraphicAction&) rMetaAction).mfRotateAngle ) &&
+           ( mfShearAngleX == ( (MetaRenderGraphicAction&) rMetaAction).mfShearAngleX ) &&
+           ( mfShearAngleY == ( (MetaRenderGraphicAction&) rMetaAction).mfShearAngleY ) );
+}
+
+// ------------------------------------------------------------------------
+
+void MetaRenderGraphicAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
+{
+    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    rOStm << maRenderGraphic << maPoint << maSize << mfRotateAngle << mfShearAngleX << mfShearAngleY;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaRenderGraphicAction::Read( SvStream& rIStm, ImplMetaReadData* )
+{
+    COMPAT( rIStm );
+    rIStm >> maRenderGraphic >> maPoint >> maSize >> mfRotateAngle >> mfShearAngleX >> mfShearAngleY;
+}

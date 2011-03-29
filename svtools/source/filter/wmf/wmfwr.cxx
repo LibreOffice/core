@@ -29,6 +29,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <vcl/salbtype.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 #include "wmfwr.hxx"
 #include <unotools/fontcvt.hxx>
 #include "emfwr.hxx"
@@ -318,6 +319,7 @@ void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
             case META_BMPEX_ACTION:
             case META_BMPEXSCALE_ACTION:
             case META_BMPEXSCALEPART_ACTION:
+            case META_RENDERGRAPHIC_ACTION:
                 nNumberOfBitmaps++;
             break;
         }
@@ -1794,6 +1796,32 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_MOVECLIPREGION_ACTION:
                 {
                     DBG_ERROR( "Unsupported action: MetaMoveClipRegionAction!" );
+                }
+                break;
+
+                case( META_RENDERGRAPHIC_ACTION ):
+                {
+                    const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
+                    const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                    const BitmapEx                          aBmpEx( aRasterizer.Rasterize( pVirDev->LogicToPixel( pA->GetSize(), aSrcMapMode ) ) );
+                    Bitmap                                  aBmp( aBmpEx.GetBitmap() );
+                    Bitmap                                  aMsk( aBmpEx.GetMask() );
+
+                    if( !!aMsk )
+                    {
+                        aBmp.Replace( aMsk, COL_WHITE );
+                        aMsk.Invert();
+                        WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aMsk, W_SRCPAINT );
+                        WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aBmp, W_SRCAND );
+                    }
+                    else
+                        WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aBmp );
+                }
+                break;
+
+                default:
+                {
+                    DBG_ERROR( "Unsupported meta action!" );
                 }
                 break;
           }

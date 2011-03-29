@@ -1510,4 +1510,3 @@ IMPL_LINK( ExportDialog, OK, void *, EMPTYARG )
 
     return 0;
 }
-

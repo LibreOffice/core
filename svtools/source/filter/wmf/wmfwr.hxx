@@ -132,7 +132,7 @@ private:
 
     void MayCallback();
         // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
-        // und macht dann ggf. einen Callback. Setzt bStatus auf sal_False wenn User abbrechen
+        // und macht dann ggf. einen Callback. Setzt bStatus auf FALSE wenn User abbrechen
         // moechte.
 
     void CountActionsAndBitmaps(const GDIMetaFile & rMTF);
@@ -154,7 +154,7 @@ private:
     void UpdateRecordHeader();
         // berichtig die Groesse des Records nach dem Schreiben der Parameter, wenn
         // nSizeWords bei Aufruf von WriteRecordHeader(..) unbekannt war.
-        // fuegt ggf. noch ein sal_uInt8 0 ein damit Anzahl Bytes immer gerade.
+        // fuegt ggf. noch ein BYTE 0 ein damit Anzahl Bytes immer gerade.
 
     void WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
     void WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);

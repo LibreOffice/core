@@ -178,27 +178,27 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/textwindowpeer \
     svtools/source/edit/txtattr \
     svtools/source/edit/xtextedt \
-    svtools/source/filter.vcl/filter/FilterConfigCache \
-    svtools/source/filter.vcl/filter/FilterConfigItem \
-    svtools/source/filter.vcl/filter/SvFilterOptionsDialog \
-    svtools/source/filter.vcl/filter/exportdialog \
-    svtools/source/filter.vcl/filter/filter \
-    svtools/source/filter.vcl/filter/filter2 \
-    svtools/source/filter.vcl/filter/sgfbram \
-    svtools/source/filter.vcl/filter/sgvmain \
-    svtools/source/filter.vcl/filter/sgvspln \
-    svtools/source/filter.vcl/filter/sgvtext \
-    svtools/source/filter.vcl/igif/decode \
-    svtools/source/filter.vcl/igif/gifread \
-    svtools/source/filter.vcl/ixbm/xbmread \
-    svtools/source/filter.vcl/ixpm/xpmread \
-    svtools/source/filter.vcl/jpeg/jpeg \
-    svtools/source/filter.vcl/wmf/emfwr \
-    svtools/source/filter.vcl/wmf/enhwmf \
-    svtools/source/filter.vcl/wmf/winmtf \
-    svtools/source/filter.vcl/wmf/winwmf \
-    svtools/source/filter.vcl/wmf/wmf \
-    svtools/source/filter.vcl/wmf/wmfwr \
+    svtools/source/filter/FilterConfigCache \
+    svtools/source/filter/FilterConfigItem \
+    svtools/source/filter/SvFilterOptionsDialog \
+    svtools/source/filter/exportdialog \
+    svtools/source/filter/filter \
+    svtools/source/filter/filter2 \
+    svtools/source/filter/sgfbram \
+    svtools/source/filter/sgvmain \
+    svtools/source/filter/sgvspln \
+    svtools/source/filter/sgvtext \
+    svtools/source/filter/igif/decode \
+    svtools/source/filter/igif/gifread \
+    svtools/source/filter/ixbm/xbmread \
+    svtools/source/filter/ixpm/xpmread \
+    svtools/source/filter/jpeg/jpeg \
+    svtools/source/filter/wmf/emfwr \
+    svtools/source/filter/wmf/enhwmf \
+    svtools/source/filter/wmf/winmtf \
+    svtools/source/filter/wmf/winwmf \
+    svtools/source/filter/wmf/wmf \
+    svtools/source/filter/wmf/wmfwr \
     svtools/source/graphic/descriptor \
     svtools/source/graphic/graphic \
     svtools/source/graphic/graphicunofactory \
@@ -291,7 +291,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
 ))
 
 $(eval $(call gb_Library_add_cobjects,svt,\
-    svtools/source/filter.vcl/jpeg/jpegc \
+    svtools/source/filter/jpeg/jpegc \
 ))
 
 ifeq ($(OS),WNT)

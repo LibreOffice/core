@@ -43,6 +43,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/wall2.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>
@@ -1143,6 +1144,7 @@ void OutputDevice::Erase()
         return;
 
     sal_Bool bNativeOK = sal_False;
+
     if( meOutDevType == OUTDEV_WINDOW )
     {
         Window* pWindow = static_cast<Window*>(this);
@@ -1193,6 +1195,8 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
+    DBG_TRACE( "OutputDevice::DrawEPS()" );
+
     bool bDrawn(true);
 
     if ( mpMetaFile )
@@ -1211,7 +1215,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     if( mbOutputClipped )
         return bDrawn;
 
-    Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+    Rectangle aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
 
     if( !aRect.IsEmpty() )
     {
@@ -1244,4 +1248,27 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
 
     return bDrawn;
+}
+
+// ------------------------------------------------------------------
+
+void OutputDevice::DrawRenderGraphic( const Point& rPoint, const Size& rSize,
+                                      const ::vcl::RenderGraphic& rRenderGraphic )
+{
+    DBG_TRACE( "OutputDevice::DrawRenderGraphic()" );
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaRenderGraphicAction( rPoint, rSize, rRenderGraphic ) );
+
+    if( !rRenderGraphic.IsEmpty() )
+    {
+        ::vcl::RenderGraphicRasterizer  aRasterizer( rRenderGraphic );
+        BitmapEx                        aBmpEx;
+        const Size                      aSizePixel( LogicToPixel( rSize ) );
+        GDIMetaFile*                    pOldMetaFile = mpMetaFile;
+
+        mpMetaFile = NULL;
+        DrawBitmapEx( rPoint, rSize, aRasterizer.Rasterize( aSizePixel ) );
+        mpMetaFile = pOldMetaFile;
+    }
 }

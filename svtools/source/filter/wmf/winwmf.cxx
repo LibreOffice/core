@@ -1428,4 +1428,3 @@ WMFReader::~WMFReader()
     if( pEMFStream )
         delete pEMFStream;
 }
-

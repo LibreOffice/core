@@ -1268,13 +1268,13 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
 sal_Bool EnhWMFReader::ReadHeader()
 {
-    sal_uInt32      nUINT32, nHeaderSize, nPalEntries;
+    sal_uInt32      nsal_uInt32, nHeaderSize, nPalEntries;
     sal_Int32       nLeft, nTop, nRight, nBottom;
 
     // METAFILEHEADER SPARE ICH MIR HIER
     // Einlesen des METAHEADER
-    *pWMF >> nUINT32 >> nHeaderSize;
-    if ( nUINT32 != 1 )         // Typ
+    *pWMF >> nsal_uInt32 >> nHeaderSize;
+    if ( nsal_uInt32 != 1 )         // Typ
         return sal_False;
 
     // bound size
@@ -1293,12 +1293,12 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nUINT32;                                   // signature
+    *pWMF >> nsal_uInt32;                                   // signature
 
-    if ( nUINT32 != 0x464d4520 )
+    if ( nsal_uInt32 != 0x464d4520 )
         return sal_False;
 
-    *pWMF >> nUINT32;                                   // nVersion
+    *pWMF >> nsal_uInt32;                                   // nVersion
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
 
@@ -1340,4 +1340,3 @@ EnhWMFReader::~EnhWMFReader()
 {
 
 };
-

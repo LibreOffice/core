@@ -91,6 +91,8 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\ptrstyle.hxx %_DEST%\inc%_EXT%\vcl\ptrstyle.hxx
 ..\inc\vcl\regband.hxx %_DEST%\inc%_EXT%\vcl\regband.hxx
 ..\inc\vcl\region.hxx %_DEST%\inc%_EXT%\vcl\region.hxx
+..\inc\vcl\rendergraphic.hxx %_DEST%\inc%_EXT%\vcl\rendergraphic.hxx
+..\inc\vcl\rendergraphicrasterizer.hxx %_DEST%\inc%_EXT%\vcl\rendergraphicrasterizer.hxx
 ..\inc\vcl\salbtype.hxx %_DEST%\inc%_EXT%\vcl\salbtype.hxx
 ..\inc\vcl\salctype.hxx %_DEST%\inc%_EXT%\vcl\salctype.hxx
 ..\inc\vcl\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
@@ -153,6 +155,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 ..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
+..\inc\vcl\svgread.hxx %_DEST%\inc%_EXT%\vcl\svgread.hxx
 ..\inc\vcl\arrange.hxx %_DEST%\inc%_EXT%\vcl\arrange.hxx
 ..\inc\vcl\wpropset.hxx %_DEST%\inc%_EXT%\vcl\wpropset.hxx
 ..\%__SRC%\misc\vcl.component %_DEST%\xml%_EXT%\vcl.component

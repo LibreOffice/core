@@ -83,6 +83,7 @@ class Graphic;
 #define IMP_JPEG                "SVIJPEG"
 #define IMP_XBM                 "SVIXBM"
 #define IMP_XPM                 "SVIXPM"
+#define IMP_SVG                 "SVISVG"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -101,6 +102,7 @@ class Graphic;
 #define TIF_SHORTNAME           "TIF"
 #define WMF_SHORTNAME           "WMF"
 #define EMF_SHORTNAME           "EMF"
+#define SVG_SHORTNAME           "SVG"
 
 // ------------------------------------
 // - Info-Klasse fuer alle von uns
@@ -132,6 +134,7 @@ class Graphic;
 #define GFF_WMF ( (sal_uInt16)0x00f6 )
 #define GFF_SGV ( (sal_uInt16)0x00f7 )
 #define GFF_EMF ( (sal_uInt16)0x00f8 )
+#define GFF_SVG ( (sal_uInt16)0x00f9 )
 #define GFF_XXX ( (sal_uInt16)0xffff )
 
 // ---------------------
@@ -153,30 +156,31 @@ class SVT_DLLPUBLIC GraphicDescriptor
 
     void                ImpConstruct();
 
-    sal_Bool                ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectJPG( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPCD( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectXBM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectXPM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPBM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPGM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPPM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectRAS( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectTGA( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectEPS( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectDXF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectMET( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectPCT( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectSGF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectWMF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool                ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectJPG( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPCD( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectXBM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectXPM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPBM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPGM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPPM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectRAS( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectTGA( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectEPS( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectDXF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectMET( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectPCT( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectSGF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectWMF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectSVG( SvStream& rStm, sal_Bool bExtendedInfo );
 
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );

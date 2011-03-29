@@ -114,6 +114,7 @@ sal_Bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
         else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = sal_True;
         else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = sal_True;
         else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = sal_True;
+        else if ( ImpDetectSVG( rStm, bExtendedInfo ) ) bRet = sal_True;
         else if ( ImpDetectPCT( rStm, bExtendedInfo ) ) bRet = sal_True;
         else if ( ImpDetectXBM( rStm, bExtendedInfo ) ) bRet = sal_True;
         else if ( ImpDetectXPM( rStm, bExtendedInfo ) ) bRet = sal_True;
@@ -1301,6 +1302,21 @@ sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
+sal_Bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, sal_Bool /*bExtendedInfo*/ )
+{
+    sal_Bool bRet = aPathExt.CompareToAscii( "svg", 3 ) == COMPARE_EQUAL;
+    if (bRet)
+        nFormat = GFF_SVG;
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     ByteString          aKeyName;
@@ -1331,9 +1347,8 @@ String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
         case( GFF_SVM ) :   aKeyName = "svm";   break;
         case( GFF_WMF ) :   aKeyName = "wmf";   break;
         case( GFF_EMF ) :   aKeyName = "emf";   break;
+        case( GFF_SVG ) :   aKeyName = "svg";   break;
     }
 
     return String( aKeyName, RTL_TEXTENCODING_ASCII_US );
 }
-
-

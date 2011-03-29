@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sallayout.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -110,6 +111,9 @@ static bool ImplIsActionSpecial( const MetaAction& rAct )
 
         case META_BMPEXSCALEPART_ACTION:
             return static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsTransparent();
+
+        case META_RENDERGRAPHIC_ACTION:
+            return true;
 
         default:
             return false;
@@ -198,6 +202,16 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                 aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
                 break;
 
+            case META_RENDERGRAPHIC_ACTION:
+            {
+                const ::vcl::RenderGraphicRasterizer aRasterizer( static_cast<const MetaRenderGraphicAction&>(rAct).
+                                                                      GetRenderGraphic() );
+
+                aBmpEx = aRasterizer.Rasterize( rStateOutDev.LogicToPixel(
+                             static_cast<const MetaRenderGraphicAction&>(rAct).GetSize() ) );
+                break;
+            }
+
             case META_TRANSPARENT_ACTION:
 
             default:
@@ -265,6 +279,11 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetSrcSize(),
                                        aBmp ));
                 break;
+            case META_RENDERGRAPHIC_ACTION:
+                o_rMtf.AddAction( new MetaBmpScaleAction(
+                                       static_cast<const MetaRenderGraphicAction&>(rAct).GetPoint(),
+                                       static_cast<const MetaRenderGraphicAction&>(rAct).GetSize(),
+                                       aBmp ));
             default:
                 DBG_ERROR("Unexpected case");
                 break;
@@ -377,6 +396,7 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
         case META_TEXTRECT_ACTION:
         case META_STRETCHTEXT_ACTION:
         case META_TEXTLINE_ACTION:
+        case META_RENDERGRAPHIC_ACTION:
             // all other actions: generate non-transparent output
             bRet = true;
             break;
@@ -629,7 +649,14 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 
         case META_TEXTLINE_ACTION:
             DBG_ERROR("META_TEXTLINE_ACTION not supported");
-            break;
+        break;
+
+        case( META_RENDERGRAPHIC_ACTION ):
+        {
+            const MetaRenderGraphicAction& rRenderAct = static_cast<const MetaRenderGraphicAction&>(rAct);
+            aActionBounds = Rectangle( rRenderAct.GetPoint(), rRenderAct.GetSize() );
+        }
+        break;
 
         default:
             break;
@@ -656,6 +683,7 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
         case META_BMPEX_ACTION:
         case META_BMPEXSCALE_ACTION:
         case META_BMPEXSCALEPART_ACTION:
+        case META_RENDERGRAPHIC_ACTION:
             return true;
 
         default:

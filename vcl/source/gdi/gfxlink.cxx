@@ -258,6 +258,7 @@ sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
                 case( GFX_LINK_TYPE_NATIVE_WMF ): nCvtType = CVT_WMF; break;
                 case( GFX_LINK_TYPE_NATIVE_MET ): nCvtType = CVT_MET; break;
                 case( GFX_LINK_TYPE_NATIVE_PCT ): nCvtType = CVT_PCT; break;
+                case( GFX_LINK_TYPE_NATIVE_SVG ): nCvtType = CVT_SVG; break;
 
                 default: nCvtType = CVT_UNKNOWN; break;
             }
