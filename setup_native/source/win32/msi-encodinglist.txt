@@ -131,6 +131,7 @@ ti-ER    0  1139
 tn       0  1074   # Setsuana
 tr    1254  1055   # Turkish
 ts       0  1073   # Tsonga
+tk       0  1090
 tt    1251  1092   # Tatar
 ug       0  2200
 uk    1251  1058   # Ukrainian
