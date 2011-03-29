@@ -1192,16 +1192,14 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         // look for the next slot with the same StateMethod like me
         // the slotlist is set to the current slot
 
+        SvSlotElementList::iterator it = ( pCurSlot != rSlotList.end() ) ? ++pCurSlot : rSlotList.end();
+
+        for ( ; it != rSlotList.end(); ++it)
         {
-            SvSlotElementList::iterator it = ( pCurSlot != rSlotList.end() ) ? ++pCurSlot : rSlotList.end();
+            pNextSlot = (*it)->xSlot;
 
-            for ( ; it != rSlotList.end(); ++it)
-            {
-                pNextSlot = (*it)->xSlot;
-
-                if (!pNextSlot || (!pNextSlot->pNextSlot && pNextSlot->GetStateMethod() == GetStateMethod()) )
-                    break;
-            }
+            if (!pNextSlot || (!pNextSlot->pNextSlot && pNextSlot->GetStateMethod() == GetStateMethod()) )
+                break;
         }
 
         if ( !pNextSlot )
