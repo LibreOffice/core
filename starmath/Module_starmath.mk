@@ -27,6 +27,8 @@ $(eval $(call gb_Module_add_targets,sm,\
     Library_sm \
     Library_smd \
     Package_uiconfig \
-    JunitTest_starmath_unoapi \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,sm,\
+    JunitTest_starmath_unoapi \
+))
