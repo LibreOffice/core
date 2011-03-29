@@ -494,6 +494,14 @@ void SvxSearchDialog::Construct_Impl()
     {
         aJapMatchFullHalfWidthCB.Hide();
     }
+
+    aSimilarityBtn.SetAccessibleRelationLabeledBy(&aSimilarityBox);
+    aSimilarityBtn.SetAccessibleRelationMemberOf(&aOptionsFL);
+    aJapOptionsBtn.SetAccessibleRelationLabeledBy(&aJapOptionsCB);
+    aJapOptionsBtn.SetAccessibleRelationMemberOf(&aOptionsFL);
+    aRowsBtn.SetAccessibleRelationMemberOf(&aCalcSearchDirFT);
+    aColumnsBtn.SetAccessibleRelationMemberOf(&aCalcSearchDirFT);
+
     //component extension - show component search buttons if the commands
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();

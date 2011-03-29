@@ -91,7 +91,10 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         ::osl::File::RC err = ::osl::DirectoryItem::get(m_urlDb, item);
         if (err == ::osl::File::E_None)
         {
-            m_doc = xDocBuilder->parseURI(m_urlDb);
+            ::ucbhelper::Content descContent(
+                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>());
+            Reference<css::io::XInputStream> xIn = descContent.openStream();
+            m_doc = xDocBuilder->parse(xIn);
         }
         else if (err == ::osl::File::E_NOENT)
         {
