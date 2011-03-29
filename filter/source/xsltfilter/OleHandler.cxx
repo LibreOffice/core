@@ -146,7 +146,7 @@ namespace XSLT
             }
 
         // Decompress the bytes
-        ::Inflater* decompresser = new ::Inflater(sal_False);
+        ::ZipUtils::Inflater* decompresser = new ::ZipUtils::Inflater(sal_False);
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
@@ -217,7 +217,7 @@ namespace XSLT
 
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
-        ::Deflater* compresser = new ::Deflater((sal_Int32) 3, sal_False);
+        ::ZipUtils::Deflater* compresser = new ::ZipUtils::Deflater((sal_Int32) 3, sal_False);
         compresser->setInputSegment(oledata, 0, oledata.getLength());
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());
