@@ -51,7 +51,8 @@ PATCH_FILES=\
     Python-$(PYVERSION).patch \
     Python-parallel-make.patch \
     Python-ssl.patch \
-    Python-2.6.1-sysbase.patch
+    Python-2.6.1-sysbase.patch\
+    Python-2.6.1-nohardlink.patch
 
 CONFIGURE_DIR=
 

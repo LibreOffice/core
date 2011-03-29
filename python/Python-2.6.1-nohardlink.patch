@@ -1,0 +1,20 @@
+--- misc/Python-2.6.1/Makefile.pre.in	2011-03-08 18:23:37.230410480 +0100
++++ misc/build/Python-2.6.1/Makefile.pre.in	2011-03-08 18:22:57.935746999 +0100
+@@ -414,7 +414,7 @@
+ libpython$(VERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+ 		$(LDSHARED) $(LDFLAGS) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+-		$(LN) -f $(INSTSONAME) $@; \
++		$(LN) -fs $(INSTSONAME) $@; \
+ 	else\
+ 		$(LDSHARED) $(LDFLAGS) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+ 	fi
+@@ -767,7 +767,7 @@
+ 	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
+ 	else true; \
+ 	fi
+-	(cd $(DESTDIR)$(BINDIR); $(LN) python$(VERSION)$(EXE) $(PYTHON))
++	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) $(PYTHON))
+ 	-rm -f $(DESTDIR)$(BINDIR)/python-config
+ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-config python-config)
+ 
