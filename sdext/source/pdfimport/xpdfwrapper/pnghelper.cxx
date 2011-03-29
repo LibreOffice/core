@@ -33,6 +33,7 @@
 #ifdef SYSTEM_ZLIB
 #include "zlib.h"
 #else
+#define ZLIB_INTERNAL 1
 #include <zlib/zlib.h>
 #endif
 
