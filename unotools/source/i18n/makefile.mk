@@ -40,6 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+    $(SLO)$/caserotate.obj \
     $(SLO)$/charclass.obj	\
     $(SLO)$/calendarwrapper.obj	\
     $(SLO)$/collatorwrapper.obj	\
