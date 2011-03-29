@@ -33,7 +33,6 @@ $(eval $(call gb_SrsTarget_set_include,sc/res,\
 	-I$(OUTDIR)/inc \
 	-I$(WORKDIR)/inc/sc \
 	-I$(realpath $(SRCDIR)/sc/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/wrtsh) \
 	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
 	-I$(realpath $(SRCDIR)/sc/source/ui/navipi) \
 	-I$(realpath $(SRCDIR)/sc/source/ui/docshell) \
