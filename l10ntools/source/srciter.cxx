@@ -70,6 +70,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "unxmac" ) );
         static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
         static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
+        static rtl::OUString WCARD8 ( rtl::OUString::createFromAscii( ".hg" ) );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -78,7 +79,8 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1
+            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD8 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
