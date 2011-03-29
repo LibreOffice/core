@@ -105,7 +105,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     SetExchangeSupport();
 
     ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
-    DBG_ASSERT( pResMgr, "No ResMgr in Module" );
+    OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 
     SfxStyleSheetBasePool* pPool = 0;
@@ -113,7 +113,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     if ( pDocShell )
         pPool = pDocShell->GetStyleSheetPool();
-    DBG_ASSERT( pPool, "no Pool or no DocShell" );
+    OSL_ENSURE( pPool, "no Pool or no DocShell" );
 
     if ( pPool )
     {
@@ -351,7 +351,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
         case FUNIT_MILE:    eUnit = SFX_MAPUNIT_INCH; break;
 
         default:
-            DBG_ERRORFILE( "non supported field unit" );
+            OSL_FAIL( "non supported field unit" );
     }
     aDescFt.SetText( pStyle->GetDescription( eUnit ) );
 }
@@ -425,7 +425,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
          aFilterLb.IsEnabled() )
     {
         bModified = sal_True;
-        DBG_ASSERT( pItem, "No Item" );
+        OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
         sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );

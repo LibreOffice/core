@@ -1153,7 +1153,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( sal_Bool bEnable )
 
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
-    DBG_ASSERT( pTreeBox, "FillTreeBox() without treebox");
+    OSL_ENSURE( pTreeBox, "FillTreeBox() without treebox");
     if(pStyleSheetPool && nActFamily != 0xffff)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
@@ -1219,7 +1219,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 // nFlags: what we should update.
 void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 {
-    DBG_ASSERT(nFlags, "nothing to do");
+    OSL_ENSURE(nFlags, "nothing to do");
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     if (!pItem)
     {
@@ -1245,7 +1245,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
     if(!nFilter)   // automatic
         nFilter = nAppFilter;
 
-    DBG_ASSERT(pStyleSheetPool, "no StyleSheetPool");
+    OSL_ENSURE(pStyleSheetPool, "no StyleSheetPool");
     if(pStyleSheetPool)
     {
         pStyleSheetPool->SetSearchMask(eFam, nFilter);
@@ -1709,7 +1709,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )
     {
         SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
-        DBG_ASSERT(pFilterItem, "SfxUINT16Item expected");
+        OSL_ENSURE(pFilterItem, "SfxUINT16Item expected");
         sal_uInt16 nFilterFlags = pFilterItem->GetValue() & ~SFXSTYLEBIT_USERDEF;
         if(!nFilterFlags)       // User Template?
             nFilterFlags = pFilterItem->GetValue();
@@ -1887,8 +1887,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
 
 static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_xModMgr, SfxObjectShell* i_pObjSh )
 {
-    DBG_ASSERT( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
-    DBG_ASSERT( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
+    OSL_ENSURE( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
+    OSL_ENSURE( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
 
     ::rtl::OUString sIdentifier;
 
@@ -1898,11 +1898,11 @@ static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_x
     }
     catch ( ::com::sun::star::frame::UnknownModuleException& )
     {
-        DBG_WARNING( "getModuleIdentifier(): unknown module" );
+        OSL_TRACE( "getModuleIdentifier(): unknown module" );
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "getModuleIdentifier(): exception of XModuleManager::identify()" );
+        OSL_FAIL( "getModuleIdentifier(): exception of XModuleManager::identify()" );
     }
 
     return sIdentifier;
@@ -1912,7 +1912,7 @@ static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_x
 
 sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh )
 {
-    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     sal_Int32 nFilter = -1;
 
     Sequence< PropertyValue > lProps;
@@ -1932,7 +1932,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
 
 void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter )
 {
-    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Reference< ::com::sun::star::container::XNameReplace > xContainer( xModuleManager, UNO_QUERY );
     if ( xContainer.is() )
     {
@@ -2071,7 +2071,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
 {
     if(IsInitialized() && HasSelectedStyle())
     {
-        DBG_ASSERT(pStyleSheetPool, "No StyleSheetPool");
+        OSL_ENSURE(pStyleSheetPool, "No StyleSheetPool");
         const String aTemplName(GetSelectedEntry());
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
@@ -2083,7 +2083,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleSheetBase *pStyle =
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL: nFilter);
 
-        DBG_ASSERT(pStyle, "Style ot found");
+        OSL_ENSURE(pStyle, "Style ot found");
         if(pStyle && pStyle->IsUserDefined())
         {
             EnableDel(sal_True);
@@ -2191,7 +2191,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, Window* pWin )
 {
     // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
-    DBG_ASSERT( sal_False, "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
+    OSL_FAIL( "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
 
     PopupMenu* pMenu = CreateContextMenu();
     pMenu->Execute( pWin, rPos );
