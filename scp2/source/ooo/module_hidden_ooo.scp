@@ -262,6 +262,32 @@ Module gid_Module_Root_Files_5
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root5,
+#if ! defined SYSTEM_GETTEXT
+    gid_File_Lib_Intl,
+#endif
+#if ! defined SYSTEM_GLIB
+    gid_File_Lib_Glib,
+    gid_File_Lib_Gobject,
+    gid_File_Lib_Gthread,
+    gid_File_Lib_Gmodule,
+    gid_File_Lib_Gio,
+#endif
+#if ! defined SYSTEM_GDKPIXBUF
+    gid_File_Lib_Gdkpixbuf,
+#endif
+#if ! defined SYSTEM_LIBCROCO
+    gid_File_Lib_Libcroco,
+#endif
+#if ! defined SYSTEM_PANGO
+    gid_File_Lib_Libpango,
+    gid_File_Lib_Libpangocairo,
+#ifdef WNT
+    gid_File_Lib_Libpangowin32,
+#endif
+#endif
+#if ! defined SYSTEM_LIBGSF
+    gid_File_Lib_Libgsf,
+#endif
 	gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,
     gid_File_Lib_Collator_Data,

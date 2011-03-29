@@ -1751,3 +1751,151 @@ STD_LIB_FILE(gid_File_Lib_Unordf, unordf)
 STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
+// RSVG and dependencies
+#if ! defined (SYSTEM_GETTEXT)
+File gid_File_Lib_Intl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libintl.8.dylib";
+    #elif defined WNT
+    Name = "intl.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_GLIB
+File gid_File_Lib_Glib
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libglib-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libglib-2.0-0.dll";
+    #endif
+End
+File gid_File_Lib_Gthread
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgthread-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgthread-2.0-0.dll";
+    #endif
+End
+File gid_File_Lib_Gobject
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgobject-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgobject-2.0-0.dll";
+    #endif
+End
+File gid_File_Lib_Gio
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgio-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgio-2.0-0.dll";
+    #endif
+End
+File gid_File_Lib_Gmodule
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgmodule-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgmodule-2.0-0.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_GDKPIXBUF
+File gid_File_Lib_Gdkpixbuf
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgdk_pixbuf-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgdk_pixbuf-2.0-0.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_LIBCROCO
+File gid_File_Lib_Libcroco
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libcroco-0.6.3.0.1.dylib";
+    #elif defined WNT
+    Name = "libcroco-0.6-3.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_PANGO
+File gid_File_Lib_Libpango
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libpango-1.0.0.dylib";
+    #elif defined WNT
+    Name = "libpango-1.0-0.dll";
+    #endif
+End
+File gid_File_Lib_Libpangocairo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libpangocairo-1.0.0.dylib";
+    #elif defined WNT
+    Name = "libpangocairo-1.0-0.dll";
+    #endif
+End
+#if defined WNT
+File gid_File_Lib_Libpangowin32
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "libpangowin32-1.0-0.dll";
+End
+#endif
+#endif
+
+#if ! defined SYSTEM_LIBGSF
+File gid_File_Lib_Libgsf
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+#ifdef WNT
+    Name = "gsf-1.dll";
+#endif
+End
+#endif
+
+#if ! defined SYSTEM_LIBRSVG
+File gid_File_Lib_Librsvg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "librsvg-2.2.dylib";
+    #elif defined WNT
+    Name = "librsvg-2-2.dll";
+    #endif
+End
+#endif
+
