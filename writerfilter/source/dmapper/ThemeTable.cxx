@@ -33,6 +33,10 @@
 #endif
 #include "dmapperLoggers.hxx"
 
+#if DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
+#endif
+
 namespace writerfilter {
 namespace dmapper
 {
