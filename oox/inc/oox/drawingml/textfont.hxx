@@ -55,14 +55,14 @@ public:
         placeholder names, e.g. '+mj-lt' for the major latin theme font. */
     bool                getFontData(
                             ::rtl::OUString& rFontName,
-                            sal_Int16 rnFontPitch,
+                            sal_Int16& rnFontPitch,
                             sal_Int16& rnFontFamily,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
 private:
     bool                implGetFontData(
                             ::rtl::OUString& rFontName,
-                            sal_Int16 rnFontPitch,
+                            sal_Int16& rnFontPitch,
                             sal_Int16& rnFontFamily ) const;
 
 private:
