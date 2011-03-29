@@ -816,7 +816,7 @@ void SmMathConfig::SaveFontFormatList()
         pVal->Value <<= (sal_Int16) aFntFmt.nItalic;
         pVal++;
     }
-    OSL_ENSURE( pVal - pValues == nCount * nSymbolProps, "properties missing" );
+    OSL_ENSURE( sal::static_int_cast<size_t>(pVal - pValues) == nCount * nSymbolProps, "properties missing" );
     ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
 
     rFntFmtList.SetModified( false );
