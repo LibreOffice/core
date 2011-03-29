@@ -8264,6 +8264,9 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
 
 void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout )
 {
+    //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
+    //to tweak this
+
     String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
     String aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
@@ -8285,7 +8288,27 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     // strikeout string is left aligned non-CTL text
     sal_uLong nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
+
+    push( PUSH_CLIPREGION );
+    FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
+    Rectangle aRect;
+    aRect.nLeft = rPos.X();
+    aRect.nRight = aRect.nLeft+nWidth;
+    aRect.nBottom = rPos.Y()+aRefDevFontMetric.GetDescent();
+    aRect.nTop = rPos.Y()-aRefDevFontMetric.GetAscent();
+
+    ImplFontEntry* pFontEntry = m_pReferenceDevice->mpFontEntry;
+    if (pFontEntry->mnOrientation)
+    {
+        Polygon aPoly( aRect );
+        aPoly.Rotate( rPos, pFontEntry->mnOrientation);
+        aRect = aPoly.GetBoundRect();
+    }
+
+    intersectClipRegion( aRect );
     drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+    pop();
+
     m_pReferenceDevice->SetLayoutMode( nOrigTLM );
 
     if ( bShadow )

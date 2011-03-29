@@ -4005,6 +4005,11 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
+    //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
+    //to tweak this
+    if (!nWidth)
+        return;
+
     // PDF-export does its own strikeout drawing... why again?
     if( mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) )
         return;
@@ -4017,35 +4022,23 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         cStrikeoutChar = 'X';
     static const int nTestStrLen = 4;
     static const int nMaxStrikeStrLen = 2048;
-    xub_Unicode aChars[ nMaxStrikeStrLen +1]; // +1 for valgrind...
+    xub_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
     const String aStrikeoutTest( aChars, nTestStrLen );
 
     // calculate approximation of strikeout atom size
-    long nStrikeoutWidth = nWidth;
+    long nStrikeoutWidth = 0;
     SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
-        nStrikeoutWidth = (pLayout->GetTextWidth() +nTestStrLen/2) / (nTestStrLen * pLayout->GetUnitsPerPixel());
+        nStrikeoutWidth = pLayout->GetTextWidth() / (nTestStrLen * pLayout->GetUnitsPerPixel());
         pLayout->Release();
     }
     if( nStrikeoutWidth <= 0 ) // sanity check
         return;
 
-    // calculate acceptable strikeout length
-    // allow the strikeout to be one pixel larger than the text it strikes out
-    long nMaxWidth = nStrikeoutWidth * 3 / 4;
-    if ( nMaxWidth < 2 )
-        nMaxWidth = 2;
-    nMaxWidth += nWidth + 1;
-
-    int nStrikeStrLen = (nMaxWidth - 1) / nStrikeoutWidth;
-    // if the text width is smaller than the strikeout text, then do not
-    // strike out at all. This case requires user interaction, e.g. adding
-    // a space to the text
-    if( nStrikeStrLen <= 0 )
-        return;
+    int nStrikeStrLen = (nWidth+(nStrikeoutWidth-1)) / nStrikeoutWidth;
     if( nStrikeStrLen > nMaxStrikeStrLen )
         nStrikeStrLen = nMaxStrikeStrLen;
 
@@ -4074,8 +4067,29 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     ImplInitTextColor();
 
     pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
+
+    Rectangle aPixelRect;
+    aPixelRect.nLeft = nBaseX+mnTextOffX;
+    aPixelRect.nRight = aPixelRect.nLeft+nWidth;
+    aPixelRect.nBottom = nBaseY+mpFontEntry->maMetric.mnDescent;
+    aPixelRect.nTop = nBaseY-mpFontEntry->maMetric.mnAscent;
+
+    if (mpFontEntry->mnOrientation)
+    {
+        Polygon aPoly( aPixelRect );
+        aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), mpFontEntry->mnOrientation);
+        aPixelRect = aPoly.GetBoundRect();
+    }
+
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion( PixelToLogic(aPixelRect) );
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
     pLayout->DrawText( *mpGraphics );
+
     pLayout->Release();
+    Pop();
 
     SetTextColor( aOldColor );
     ImplInitTextColor();
