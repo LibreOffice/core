@@ -1,0 +1,21 @@
+--- misc/icu/source/data/pkgdataMakefile.in	2010-12-22 23:44:02.000000000 +0100
++++ misc/build/icu/source/data/pkgdataMakefile.in	2011-01-03 17:52:44.000000000 +0100
+@@ -15,6 +15,9 @@ include $(top_builddir)/icudefs.mk
+ OUTPUTFILE=icupkg.inc
+ MIDDLE_SO_TARGET=
+ 
++# escape $ with \ when passing to echo; needed to preserve $ORIGIN
++SHLIB.c.shell := $(subst $$,\$$,$(SHLIB.c))
++
+ all : clean 
+ 	@echo GENCCODE_ASSEMBLY_TYPE=$(GENCCODE_ASSEMBLY) >> $(OUTPUTFILE)
+ 	@echo SO=$(SO) >> $(OUTPUTFILE)
+@@ -24,7 +27,7 @@ all : clean
+ 	@echo LIB_EXT_ORDER=$(FINAL_SO_TARGET) >> $(OUTPUTFILE)
+ 	@echo COMPILE="$(COMPILE.c)" >> $(OUTPUTFILE)
+ 	@echo LIBFLAGS="-I$(top_srcdir)/common -I$(top_builddir)/common $(SHAREDLIBCPPFLAGS) $(SHAREDLIBCFLAGS)" >> $(OUTPUTFILE)
+-	@echo GENLIB="$(SHLIB.c)" >> $(OUTPUTFILE)
++	@echo GENLIB="$(SHLIB.c.shell)" >> $(OUTPUTFILE)
+ 	@echo LDICUDTFLAGS=$(LDFLAGSICUDT) >> $(OUTPUTFILE)
+ 	@echo LD_SONAME=$(LD_SONAME) >> $(OUTPUTFILE)
+ 	@echo RPATH_FLAGS=$(RPATH_FLAGS) >> $(OUTPUTFILE)

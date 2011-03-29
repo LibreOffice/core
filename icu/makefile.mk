@@ -46,6 +46,7 @@ TARFILE_ROOTDIR=icu
 
 PATCH_FILES=\
     icu4c-build.patch \
+    icu4c-rpath.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
     icu4c-4_4_2-wchar_t.patch \
