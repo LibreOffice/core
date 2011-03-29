@@ -269,7 +269,7 @@ void SvxAutocorrWordList::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 {
     if( nL )
     {
-        DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
+        OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
         for( sal_uInt16 n=nP; n < nP + nL; n++ )
             delete *((SvxAutocorrWordPtr*)pData+n);
         SvPtrarr::Remove( nP, nL );
@@ -1557,7 +1557,7 @@ sal_Bool SvxAutoCorrect::AddCplSttException( const String& rNew,
     {
         pLists = pLangTable->Seek(sal_uLong(LANGUAGE_DONTKNOW));
     }
-    DBG_ASSERT(pLists, "No auto correction data");
+    OSL_ENSURE(pLists, "No auto correction data");
     return pLists->AddToCplSttExceptList(rNew);
 }
 
@@ -1573,7 +1573,7 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
     else if(pLangTable->IsKeyValid(sal_uLong(LANGUAGE_DONTKNOW))||
             CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
         pLists = pLangTable->Seek(sal_uLong(LANGUAGE_DONTKNOW));
-    DBG_ASSERT(pLists, "keine Autokorrekturdatei");
+    OSL_ENSURE(pLists, "keine Autokorrekturdatei");
     return pLists->AddToWrdSttExceptList(rNew);
 }
 
@@ -1652,7 +1652,7 @@ sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
 sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFile )
 {
-    DBG_ASSERT(!pLangTable->IsKeyValid(sal_uLong(eLang)), "Language already exists ");
+    OSL_ENSURE(!pLangTable->IsKeyValid(sal_uLong(eLang)), "Language already exists ");
 
     String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False )),
            sShareDirFile( sUserDirFile );
@@ -1938,7 +1938,7 @@ sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sW
             }
         }
     }
-    DBG_ASSERT( !(nPos && '~' == (*pList)[ --nPos ]->GetChar( 0 ) ),
+    OSL_ENSURE( !(nPos && '~' == (*pList)[ --nPos ]->GetChar( 0 ) ),
             "Wrongly sorted exception list?" );
     return sal_False;
 }
@@ -2092,7 +2092,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
             {
                 uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
-                DBG_ASSERT( xServiceFactory.is(),
+                OSL_ENSURE( xServiceFactory.is(),
                     "XMLReader::Read: got no service manager" );
                 if( !xServiceFactory.is() )
                 {
@@ -2109,7 +2109,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 // get parser
                 uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
-                DBG_ASSERT( xXMLParser.is(),
+                OSL_ENSURE( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
                 if( !xXMLParser.is() )
                 {
@@ -2182,7 +2182,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 
                 uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
-                DBG_ASSERT( xServiceFactory.is(),
+                OSL_ENSURE( xServiceFactory.is(),
                             "XMLReader::Read: got no service manager" );
                 if( !xServiceFactory.is() )
                 {
@@ -2191,7 +2191,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 
                     uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-                    DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+                    OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
                 uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
                     uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
                     xSrc->setOutputStream(xOut);
@@ -2242,7 +2242,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 
         // get parser
         uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
-        DBG_ASSERT( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        OSL_ENSURE( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {
             uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
@@ -2274,7 +2274,7 @@ void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pLis
     pAutocorr_List = pList;
     if( !pAutocorr_List )
     {
-        DBG_ASSERT( !this, "No valid list" );
+        OSL_ENSURE( !this, "No valid list" );
         pAutocorr_List = new SvxAutocorrWordList( 16, 16 );
     }
     nFlags |= ChgWordLstLoad;
@@ -2370,7 +2370,7 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
     pCplStt_ExcptLst = pList;
     if( !pCplStt_ExcptLst )
     {
-        DBG_ASSERT( !this, "No valid list" );
+        OSL_ENSURE( !this, "No valid list" );
         pCplStt_ExcptLst = new SvStringsISortDtor( 16, 16 );
     }
     nFlags |= CplSttLstLoad;
@@ -2406,7 +2406,7 @@ void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList
     pWrdStt_ExcptLst = pList;
     if( !pWrdStt_ExcptLst )
     {
-        DBG_ASSERT( !this, "No valid list" );
+        OSL_ENSURE( !this, "No valid list" );
         pWrdStt_ExcptLst = new SvStringsISortDtor( 16, 16 );
     }
     nFlags |= WrdSttLstLoad;
@@ -2557,7 +2557,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 
             uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
-            DBG_ASSERT( xServiceFactory.is(),
+            OSL_ENSURE( xServiceFactory.is(),
                         "XMLReader::Read: got no service manager" );
             if( !xServiceFactory.is() )
             {
@@ -2566,7 +2566,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 
                 uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-                DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+                OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
             uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
                 uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
                 xSrc->setOutputStream(xOut);
