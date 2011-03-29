@@ -26,8 +26,8 @@ $(eval $(call gb_Library_add_precompiled_header,scd,$(SRCDIR)/sc/inc/pch/precomp
 $(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
 
 $(eval $(call gb_Library_set_include,scd,\
-        -I$(SRCDIR)/sc/inc/pch \
-        -I$(SRCDIR)/sc/inc \
+        -I$(realpath $(SRCDIR)/sc/inc/pch) \
+        -I$(realpath $(SRCDIR)/sc/inc) \
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc/offuh \

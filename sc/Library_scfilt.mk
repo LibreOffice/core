@@ -24,11 +24,11 @@ $(eval $(call gb_Library_Library,scfilt))
 $(eval $(call gb_Library_add_precompiled_header,sc,$(SRCDIR)/sc/source/filter/inc/filt_pch))
 
 $(eval $(call gb_Library_set_include,scfilt,\
-        -I$(SRCDIR)/sc/source/core/inc \
-        -I$(SRCDIR)/sc/source/filter/inc \
-        -I$(SRCDIR)/sc/source/ui/inc \
-        -I$(SRCDIR)/sc/inc \
-        -I$(SRCDIR)/sc/inc/pch \
+        -I$(realpath $(SRCDIR)/sc/source/core/inc) \
+        -I$(realpath $(SRCDIR)/sc/source/filter/inc) \
+        -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
+        -I$(realpath $(SRCDIR)/sc/inc) \
+        -I$(realpath $(SRCDIR)/sc/inc/pch) \
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc/offuh \
