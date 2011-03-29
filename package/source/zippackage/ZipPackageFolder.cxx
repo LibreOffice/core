@@ -412,7 +412,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                     if ( !bToBeCompressed || bRawStream )
                     {
                         // The raw stream can neither be encrypted nor connected
-                        OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
+                        OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
                         xSeek->seek ( bRawStream ? rInfo.pStream->GetMagicalHackPos() : 0 );
                         ImplSetStoredData ( *pTempEntry, xStream );
 
