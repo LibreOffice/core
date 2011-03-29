@@ -62,6 +62,7 @@ using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 using rtl::OUString;
+using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */

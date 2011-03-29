@@ -31,13 +31,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "packagedllapi.hxx"
 
-extern "C"
-{
-    typedef struct z_stream_s z_stream;
-}
+struct z_stream_s;
+
+namespace ZipUtils {
 
 class DLLPUBLIC_PACKAGE Deflater
 {
+    typedef struct z_stream_s z_stream;
+
 protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
     sal_Bool                bFinish;
@@ -64,6 +65,8 @@ public:
     void SAL_CALL reset(  );
     void SAL_CALL end(  );
 };
+
+}
 
 #endif
 

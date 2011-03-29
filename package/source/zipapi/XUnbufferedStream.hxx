@@ -59,7 +59,7 @@ protected:
     ZipEntry maEntry;
     rtl::Reference < EncryptionData > mxData;
     rtlCipher maCipher;
-    Inflater maInflater;
+    ZipUtils::Inflater maInflater;
     sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
