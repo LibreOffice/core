@@ -788,7 +788,12 @@ namespace cairocanvas
             else if ( aTexture.RepeatModeX == rendering::TexturingMode::CLAMP &&
                       aTexture.RepeatModeY == rendering::TexturingMode::CLAMP )
             {
+#if CAIRO_VERSION >= 10200
                 cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_PAD );
+#else
+#warning "fallback for cairo before version 1.2"
+                cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_NONE );
+#endif
             }
 
             aScaledTextureMatrix.x0 = basegfx::fround( aScaledTextureMatrix.x0 );
@@ -1396,7 +1401,9 @@ namespace cairocanvas
                 ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
                 ::rtl::math::approxEqual( aMatrix.y0, 0 ) )
                  cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
+#if CAIRO_VERSION >= 10200
             cairo_pattern_set_extend( cairo_get_source(mpCairo.get()), CAIRO_EXTEND_PAD );
+#endif
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
 
