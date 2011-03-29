@@ -951,6 +951,10 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
+AC_ARG_WITH(linker-hash-style,
+[  --with-linker-hash-style
+], WITH_LINKER_HASH_STYLE=$withval, WITH_LINKER_HASH_STYLE=gnu)
+
 AC_ARG_WITH(stlport,
     AS_HELP_STRING([--with-stlport],
         [Build the STLPort library for compatibility with old extensions for
@@ -2013,9 +2017,9 @@ if test "$_os" = "SunOS"; then
 fi
 
 if test "$GCC" = "yes"; then
-   AC_MSG_CHECKING( for --hash-style=both linker support )
+   AC_MSG_CHECKING( for --hash-style=$WITH_LINKER_HASH_STYLE linker support )
    hash_style_ldflags_save=$LDFLAGS
-   LDFLAGS="$LDFLAGS -Wl,--hash-style=both"
+   LDFLAGS="$LDFLAGS -Wl,--hash-style=$WITH_LINKER_HASH_STYLE"
    AC_LINK_IFELSE([AC_LANG_PROGRAM([
    #include <stdio.h>
    ],[
@@ -2029,6 +2033,7 @@ if test "$GCC" = "yes"; then
    LDFLAGS=$hash_style_ldflags_save
 fi
 AC_SUBST(HAVE_LD_HASH_STYLE)
+AC_SUBST(WITH_LINKER_HASH_STYLE)
 
 dnl ===================================================================
 dnl Check whether there's a Perl version available.

@@ -130,7 +130,7 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
     BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-CXX+= -Wl,--hash-style=both
+CXX+= -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
 .ENDIF
 
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
