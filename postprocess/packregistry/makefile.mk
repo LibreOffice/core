@@ -515,14 +515,16 @@ $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
 # It can happen that localized $(SOLARPCKDIR)/fcfg_langpack_*.zip contain
 # zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
 # find shell command below (see issue 110041):
+
 $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
     - $(RM) $(MISC)/$(@:b).list
+    # filter out filenames starting with "."
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip -name \*.xcu -size +0c -print) \
+        find $(@:b).unzip -name \[!.\]\*.xcu -size +0c -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
@@ -540,8 +542,9 @@ $(MISC)/lang/registry_%.xcd .ERRREMOVE :
     cd $(MISC)/fcfg_drivers_$*.unzip && \
         unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
     - $(RM) $(MISC)/$(@:b).list
+    # filter out filenames starting with "."
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip fcfg_drivers_$*.unzip -name \*.xcu -print) \
+        find $(@:b).unzip fcfg_drivers_$*.unzip -name \[!.\]\*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
