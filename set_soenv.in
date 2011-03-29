@@ -1934,6 +1934,7 @@ ToFile( "SYSTEM_GLIB",       "@SYSTEM_GLIB@",   "e" );
 ToFile( "SYSTEM_GETTEXT",    "@SYSTEM_GETTEXT@",   "e" );
 ToFile( "SYSTEM_LIBCROCO",   "@SYSTEM_LIBCROCO@",   "e" );
 ToFile( "SYSTEM_PANGO",      "@SYSTEM_PANGO@",   "e" );
+ToFile( "SYSTEM_LIBGSF",     "@SYSTEM_LIBGSF@",   "e" );
 ToFile( "SYSTEM_LIBPNG",     "@SYSTEM_LIBPNG@",   "e" );
 ToFile( "SYSTEM_LIBJPEG",    "@SYSTEM_LIBJPEG@",   "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );

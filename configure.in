@@ -6790,6 +6790,23 @@ esac
 AC_SUBST(SYSTEM_PANGO)
 
 dnl ===================================================================
+dnl Test whether to build libgsf or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of libgsf])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBGSF=NO
+	    AC_MSG_RESULT([yes])
+		;;
+   *)
+   SYSTEM_PANGO=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_LIBGSF)
+
+dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build own version of libpng])
