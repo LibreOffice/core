@@ -37,6 +37,7 @@
 #include "pres.hxx"
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>
+#include <unotools/caserotate.hxx>
 
 class SdPage;
 class DrawDocShell;
@@ -436,7 +437,7 @@ private:
     */
     bool mbIsInSwitchPage;
 
-    sal_uInt32  nF3ShiftCounter;
+    RotateTransliteration m_aRotateCase;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 

@@ -142,7 +142,6 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 , maTabControl(this, pParentWindow)
 , mbIsLayerModeActive(false)
 , mbIsInSwitchPage(false)
-, nF3ShiftCounter(0)
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
