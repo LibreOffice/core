@@ -38,7 +38,6 @@ EXTENSION_VERSION_BASE=1.2.1
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
@@ -95,6 +94,7 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/reportbuilderwizard.jar
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 COMPONENT_EXTJARFILES += \
     $(EXTENSIONDIR)$/flute-$(FLUTE_VERSION).jar				            \
     $(EXTENSIONDIR)$/libserializer-$(LIBSERIALIZER_VERSION).jar			\

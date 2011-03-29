@@ -33,13 +33,13 @@ PACKAGE = com$/sun$/star$/report$/pentaho
 nodep=true
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 
 #----- compile .java files -----------------------------------------
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES += $(FLUTE_JAR) $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR) $(LIBLOADER_JAR) $(SAC_JAR) $(LIBLAYOUT_JAR) $(LIBSERIALIZER_JAR) $(LIBFONTS_JAR) $(LIBFORMULA_JAR) $(LIBREPOSITORY_JAR)
 .ELSE
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 JARFILES += \
     flute-$(FLUTE_VERSION).jar				            \
     libserializer-$(LIBSERIALIZER_VERSION).jar			\

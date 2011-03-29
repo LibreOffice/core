@@ -32,12 +32,12 @@ PACKAGE = com$/sun$/star$/report$/util
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 #----- compile .java files -----------------------------------------
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES   = $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR)
 .ELSE
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 JARFILES += \
     libbase-$(LIBBASE_VERSION).jar                      \
     libxml-$(LIBXML_VERSION).jar						\
