@@ -101,7 +101,7 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
     @echo ----------------------------------------------------------
     @echo - start unit test \#2 on library $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+    $(CPPUNITTESTER) $(SHL1TARGETN) --headless --invisible \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
         -env:OOO_INBUILD_SHAREDLIB_DIR="$(my_file)$(PWD)/$(DLLDEST)"
