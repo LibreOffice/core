@@ -150,6 +150,7 @@ tlh \
 th \
 tn \
 tr \
+tk \
 ts \
 tg \
 ug \

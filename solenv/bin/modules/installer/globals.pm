@@ -94,7 +94,8 @@ BEGIN
         "fur",
         "ny",
         "so",
-        "kab"
+        "kab",
+        "tk"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
