@@ -119,6 +119,7 @@ private:
     FrameView* mpFrameView;
 
     class ViewCache;
+    ::boost::shared_ptr<Window> mpWindow;
     ::boost::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
