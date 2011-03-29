@@ -56,6 +56,7 @@ namespace drawinglayer { namespace primitive2d {
     class MetafilePrimitive2D;
     class TextSimplePortionPrimitive2D;
     class BitmapPrimitive2D;
+    class RenderGraphicPrimitive2D;
     class TransparencePrimitive2D;
     class PolygonStrokePrimitive2D;
     class FillBitmapPrimitive2D;
@@ -108,6 +109,7 @@ namespace drawinglayer
             void impRenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rMetaCandidate);
             void impRenderTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
             void impRenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
+            void impRenderRenderGraphicPrimitive2D(const primitive2d::RenderGraphicPrimitive2D& rRenderGraphicCandidate);
             void impRenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
             void impRenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive);
             void impRenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapPrimitive2D);

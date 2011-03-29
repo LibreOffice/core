@@ -41,6 +41,7 @@ namespace drawinglayer { namespace primitive2d {
     class TextSimplePortionPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class BitmapPrimitive2D;
+    class RenderGraphicPrimitive2D;
     class FillBitmapPrimitive2D;
     class PolyPolygonGradientPrimitive2D;
     class PolyPolygonBitmapPrimitive2D;
@@ -97,6 +98,7 @@ namespace drawinglayer
             void RenderTextSimpleOrDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
             void RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate, bool bPixelBased);
             void RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
+            void RenderRenderGraphicPrimitive2D(const primitive2d::RenderGraphicPrimitive2D& rRenderGraphicCandidate);
             void RenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapCandidate);
             void RenderPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
             void RenderPolyPolygonBitmapPrimitive2D(const primitive2d::PolyPolygonBitmapPrimitive2D& rPolygonCandidate);

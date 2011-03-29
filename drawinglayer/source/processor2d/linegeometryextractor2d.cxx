@@ -123,6 +123,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
                 case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D :
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                case PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D :
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
                 {
