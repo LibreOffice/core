@@ -290,7 +290,7 @@ namespace DOM
     }
 #endif
 
-    // default warning handler triggers assertion
+    // default warning handler does not trigger assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
         OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
