@@ -39,10 +39,8 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 .IF "$(USE_GMAKE)" != "1"
-SC_COMPONENTS:=sc scd
 SM_COMPONENTS:=sm smd vbaobj
 .ELSE
-SC_COMPONENTS:= component/sc/util/sc component/sc/util/scd component/sc/util/vbaobj
 SM_COMPONENTS:= component/starmath/util/sm component/starmath/util/smd
 .END
 
@@ -67,6 +65,9 @@ my_components = \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/vbahelper/util/msforms \
+    component/sc/util/sc \
+    component/sc/util/scd \
+    component/sc/util/vbaobj \
     component/sfx2/util/sfx \
     component/sot/util/sot \
     component/svl/source/fsstor/fsstorage \
@@ -144,7 +145,6 @@ my_components = \
     rptxml \
     sax \
     sb \
-    $(SC_COMPONENTS)\
     scn \
     scriptframe \
     sd \
