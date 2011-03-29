@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,17 +25,32 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,toolkit))
+$(eval $(call gb_JunitTest_JunitTest,toolkit_complex))
 
-$(eval $(call gb_Module_add_targets,toolkit,\
-    AllLangResTarget_tk \
-    Library_tk \
-    Package_inc \
+$(eval $(call gb_JunitTest_add_jars,toolkit_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
-    JunitTest_toolkit_complex \
-    JunitTest_toolkit_unoapi \
+$(eval $(call gb_JunitTest_add_sourcefiles,toolkit_complex,\
+    toolkit/qa/complex/toolkit/accessibility/_XAccessibleComponent \
+    toolkit/qa/complex/toolkit/accessibility/_XAccessibleContext \
+    toolkit/qa/complex/toolkit/accessibility/_XAccessibleEventBroadcaster \
+    toolkit/qa/complex/toolkit/accessibility/_XAccessibleExtendedComponent \
+    toolkit/qa/complex/toolkit/accessibility/_XAccessibleText \
+    toolkit/qa/complex/toolkit/Assert \
+    toolkit/qa/complex/toolkit/awtgrid/GridDataListener \
+    toolkit/qa/complex/toolkit/awtgrid/TMutableGridDataModel \
+    toolkit/qa/complex/toolkit/awtgrid/DummyColumn \
+    toolkit/qa/complex/toolkit/GridControl \
+    toolkit/qa/complex/toolkit/UnitConversion \
+))
+
+$(eval $(call gb_JunitTest_add_classes,toolkit_complex,\
+    complex.toolkit.GridControl \
+    complex.toolkit.UnitConversion \
 ))
 
 # vim: set noet sw=4 ts=4:
