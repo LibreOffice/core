@@ -3670,13 +3670,6 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = MsLangId::convertLocaleToLanguage(
                 pLocales[nLocale]);
-#if OSL_DEBUG_LEVEL > 1
-        LanguageType eReal = MsLangId::getRealLanguage( eLang );
-        if ( eReal != eLang ) {
-            sal_Bool bBreak;
-            bBreak = sal_True;
-        }
-#endif
         pLocaleData->setLocale( pLocales[nLocale] );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
