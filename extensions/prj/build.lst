@@ -17,9 +17,8 @@ ex  extensions\source\plugin\unx                nmake   -   u   ex_plunx ex_inc 
 ex  extensions\source\plugin\util               nmake   -   all ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_plaqua.u ex_inc NULL
 ex  extensions\source\macosx\spotlight          nmake   -   u   ex_mxspotlight NULL
 ex  extensions\source\scanner                   nmake   -   all ex_scan ex_resrc ex_inc NULL
-ex  extensions\source\svg                       nmake   -   all ex_svg ex_scan ex_inc NULL
 ex  extensions\source\bibliography              nmake   -   all ex_bib ex_inc NULL
-ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_svg ex_inc NULL
+ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_inc NULL
 ex  extensions\source\propctrlr                 nmake   -   all ex_propctrlr ex_bib ex_inc NULL
 ex  extensions\source\dbpilots                  nmake   -   all ex_dbpilots ex_inc NULL
 ex  extensions\source\abpilot                   nmake   -   all ex_abpilot ex_inc NULL
