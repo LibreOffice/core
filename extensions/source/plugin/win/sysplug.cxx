@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+
 #include <plugin/impl.hxx>
 
 #pragma warning (push,1)

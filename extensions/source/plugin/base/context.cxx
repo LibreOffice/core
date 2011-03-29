@@ -35,6 +35,12 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
 #include <cstdarg>
 #include <cstdio>
 

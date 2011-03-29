@@ -33,6 +33,13 @@
 #include <sys/timer.h>
 #undef _LINUX_SOURCE_COMPAT
 #endif
+
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>

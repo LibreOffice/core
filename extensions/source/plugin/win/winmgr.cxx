@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+
 #include "vcl/svapp.hxx"
 #include "tools/fsys.hxx"
 #include "tools/urlobj.hxx"
