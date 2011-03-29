@@ -25,43 +25,28 @@
  *
  ************************************************************************/
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#define com_sun_star_graphic_XGraphic_idl
+#ifndef com_sun_star_graphic_GraphicRasterizer_idl
+#define com_sun_star_graphic_GraphicRasterizer_idl
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/graphic/GraphicType.idl>
+#include <com/sun/star/graphic/XGraphicRasterizer.idl>
 
 module com { module sun { module star { module graphic
 {
 
-/** This interface acts as a container for the loaded graphic.
+/** Service that describes the necessary interfaces and properties
+    to convert arbitrary graphic data to a <type>XGraphic</type>
+    interface containing a pixel graphic, that can be rendered the usual
+    ways.
+ */
 
-    <p>The interface itself can be retrieved by using the appropriate
-    methods of <type>XGraphicProvider</type> interface.
-    <type>XGraphicProvider</type> also offers a method to store
-    the graphic content at a specific location</p>
-
-    <p>To render the graphic content onto a specific device, you
-    have to create a <type>XGraphicRenderer</type> interface and pass
-    this interface appropriately</p>
-
-    @see XGraphicProvider
-    @see XGraphicRenderer
-  */
-published interface XGraphic : ::com::sun::star::uno::XInterface
+service GraphicRasterizer
 {
-    /** Get the type of the contained graphic
-
-        @returns
-            The type of the contained graphic
-
-        @see GraphicType
+    /** Interface to initiate the rasterizing process
     */
-    byte getType();
+    interface ::com::sun::star::graphic::XGraphicRasterizer;
+
 };
 
 } ; } ; } ; } ;
 
 #endif
-
-
