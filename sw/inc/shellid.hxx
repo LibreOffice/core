@@ -71,7 +71,7 @@
 #define SW_MEDIASHELL           (SFX_INTERFACE_SW_START + 31)
 #define SW_ANNOTATIONSHELL      (SFX_INTERFACE_SW_START + 32)
 
-#define SW_NAVIGATIONSHELL              (SFX_INTERFACE_SW_START + 33)
+#define SW_NAVIGATIONSHELL      (SFX_INTERFACE_SW_START + 33)
 #endif // _UIPARAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -208,6 +208,7 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/insertbar.xml,swriter/toolbar/insertbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/mediaobjectbar.xml,swriter/toolbar/mediaobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/moreformcontrols.xml,swriter/toolbar/moreformcontrols.xml))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/navigationobjectbar.xml,swriter/toolbar/navigationobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/numobjectbar.xml,swriter/toolbar/numobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/oleobjectbar.xml,swriter/toolbar/oleobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/optimizetablebar.xml,swriter/toolbar/optimizetablebar.xml))
