@@ -2094,30 +2094,8 @@ void ScCellShell::ExecuteTrans( SfxRequest& rReq )
 
 void ScCellShell::ExecuteRotateTrans( SfxRequest& rReq )
 {
-    using namespace ::com::sun::star::i18n;
-    {
-        sal_uInt32 nMode = 0;
-
-        if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE ) {
-            switch ( nF3ShiftCounter ) {
-                case 0:
-                    nMode = TransliterationModulesExtra::TITLE_CASE;
-                    break;
-                case 1:
-                    nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-                    break;
-                case 2:
-                    nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-                    nF3ShiftCounter = -1;
-                    break;
-            }
-
-            if ( nMode )
-                GetViewData()->GetView()->TransliterateText( nMode );
-
-            nF3ShiftCounter++;
-        }
-    }
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+        GetViewData()->GetView()->TransliterateText( m_aRotateCase.getNextMode() );
 }
 
 void ScCellShell::ExecuteExternalSource(

@@ -86,8 +86,7 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 ScCellShell::ScCellShell(ScViewData* pData) :
     ScFormatShell(pData),
     pImpl( new CellShell_Impl() ),
-    bPastePossible(false),
-    nF3ShiftCounter(0)
+    bPastePossible(false)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Cell")));

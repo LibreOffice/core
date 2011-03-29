@@ -33,6 +33,7 @@
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
 #include <svx/svdmark.hxx>
+#include <unotools/caserotate.hxx>
 #include <tools/link.hxx>
 #include "formatsh.hxx"
 #include "address.hxx"
@@ -72,7 +73,7 @@ private:
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
-    sal_uInt32  nF3ShiftCounter;
+    RotateTransliteration m_aRotateCase;
 
 public:
 
