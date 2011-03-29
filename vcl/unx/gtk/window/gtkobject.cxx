@@ -219,7 +219,6 @@ void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
 
 void GtkSalObject::SetForwardKey( sal_Bool bEnable )
 {
-    printf ("GtkSalObject::SetForwardKey\n");
     if( bEnable )
         gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
     else
