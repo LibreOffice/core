@@ -427,10 +427,6 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         bModified = sal_True;
         DBG_ASSERT( pItem, "No Item" );
         // is only possibly for user templates
-#if OSL_DEBUG_LEVEL > 1
-        sal_uInt16 nIdx = (sal_uInt16)(long)aFilterLb.GetEntryData( nFilterIdx );
-        SfxFilterTupel* p = pItem->GetFilterList()[ nIdx ];
-#endif
         sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
