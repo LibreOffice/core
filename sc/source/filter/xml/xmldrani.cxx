@@ -370,6 +370,10 @@ void ScXMLDatabaseRangeContext::EndElement()
                                 pDBCollection->SearchName(sDatabaseRangeName, nIndex);
                                 pDBData = (*pDBCollection)[nIndex];
                             }
+
+                            if (!pDBData)
+                                return;
+
                             pDBData->SetImportSelection(bIsSelection);
                             pDBData->SetAutoFilter(bAutoFilter);
                             if (bAutoFilter)

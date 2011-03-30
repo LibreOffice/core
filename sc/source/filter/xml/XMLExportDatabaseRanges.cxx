@@ -612,6 +612,10 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 pDBCollection->SearchName(sDatabaseRangeName, nIndex);
                                 pDBData = (*pDBCollection)[nIndex];
                             }
+
+                            if (!pDBData)
+                                continue;
+
                             if (pDBData->HasImportSelection())
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
                             if (pDBData->HasAutoFilter())
