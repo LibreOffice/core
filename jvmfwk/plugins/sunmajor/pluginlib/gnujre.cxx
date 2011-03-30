@@ -51,7 +51,7 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
         "gij",
-        "bin/gij",
+        "bin/gij"
     };
     *size = sizeof (ar) / sizeof (char*);
     return ar;
