@@ -3577,8 +3577,6 @@ void ScInputHandler::InputSelection( EditView* pView )
 
 void ScInputHandler::InputChanged( EditView* pView, sal_Bool bFromNotify )
 {
-    ESelection aSelection = pView->GetSelection();
-
     UpdateActiveView();
 
     // #i20282# DataChanged needs to know if this is from the input line's modify handler
