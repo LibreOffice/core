@@ -591,8 +591,6 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
     SCTAB nTab = rPos.Tab();
 
     const ScChangeAction* pFound = NULL;
-    const ScChangeAction* pFoundContent = NULL;
-    const ScChangeAction* pFoundMove = NULL;
     long nModified = 0;
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
@@ -614,19 +612,6 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
                 if ( aRange.In( rPos ) )
                 {
                     pFound = pAction;       // der letzte gewinnt
-                    switch ( pAction->GetType() )
-                    {
-                        case SC_CAT_CONTENT :
-                            pFoundContent = pAction;
-                        break;
-                        case SC_CAT_MOVE :
-                            pFoundMove = pAction;
-                        break;
-                        default:
-                        {
-                            // added to avoid warnings
-                        }
-                    }
                     ++nModified;
                 }
             }
