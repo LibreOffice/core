@@ -1,0 +1,6 @@
+--- misc/mysql-connector-cpp/driver/nativeapi/binding_config.h	2009-08-14 10:17:23.640625000 +0200
++++ misc/build/mysql-connector-cpp/driver/nativeapi/binding_config.h	2009-08-14 10:13:50.359375000 +0200
+@@ -1 +1,2 @@
+-dummy
++#define HAVE_DLFCN_H 1
++#define MYSQLCLIENT_STATIC_BINDING 1

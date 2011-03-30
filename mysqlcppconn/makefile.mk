@@ -49,8 +49,19 @@ ADDITIONAL_FILES=\
 CONVERTFILES=\
                 cppconn$/build_config.h
 
+# distro-specific builds want to link against a particular mysql library
+# then they do not require mysql-devel package at runtime
+# So put mysql-connector-cpp/driver/nativeapi/binding_config.h into separate patch
+# and enable/disable MYSQLCLIENT_STATIC_BINDING according to the used mysql library
+.IF "$(SYSTEM_MYSQL)" == "YES"
+MYSQL_BINDING=static
+.ELSE
+MYSQL_BINDING=dynamic
+.ENDIF
+
 PATCH_FILES=\
     $(TARFILE_NAME).patch \
+    mysql-connector-cpp-mysql-binding-$(MYSQL_BINDING).patch \
     patches/default_to_protocol_tcp.patch
 
 BUILD_DIR=driver
