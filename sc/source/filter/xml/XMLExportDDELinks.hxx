@@ -33,7 +33,7 @@
 
 class String;
 class ScXMLExport;
-class ScMatrixValue;
+struct ScMatrixValue;
 
 class ScXMLExportDDELinks
 {
