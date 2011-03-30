@@ -534,7 +534,9 @@ public:
                         VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
 protected:
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    using VMLExport::StartShape;
     virtual sal_Int32   StartShape();
+    using VMLExport::EndShape;
     virtual void        EndShape( sal_Int32 nShapeElement );
 };
 
