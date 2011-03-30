@@ -232,6 +232,7 @@
 #define STR_STYLE_FILTER_ALL                (RID_SFX_START+12)
 // +13 already used!
 #define STR_STYLE_FILTER_HIERARCHICAL       (RID_SFX_START+1200)
+#define STR_STYLE_ELEMTLIST                 (RID_SFX_START+1202)
 
 #define STR_NONAME                          (RID_SFX_START+100)
 #define STR_NONE                            (RID_SFX_START+101)
