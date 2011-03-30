@@ -53,15 +53,19 @@ sed '
 
 # now append our stuff to the temporary file
 cat >> /etc/mime.types.tmp$$ << END
-application/vnd.oasis.opendocument.text	odt
+application/vnd.oasis.opendocument.text odt
+application/vnd.oasis.opendocument.text-flat-xml fodt
 application/vnd.oasis.opendocument.text-template ott
 application/vnd.oasis.opendocument.text-web oth
 application/vnd.oasis.opendocument.text-master odm
 application/vnd.oasis.opendocument.graphics odg
+application/vnd.oasis.opendocument.graphics-flat-xml fodg
 application/vnd.oasis.opendocument.graphics-template otg
 application/vnd.oasis.opendocument.presentation odp
+application/vnd.oasis.opendocument.presentation-flat-xml fodp
 application/vnd.oasis.opendocument.presentation-template otp
 application/vnd.oasis.opendocument.spreadsheet ods
+application/vnd.oasis.opendocument.spreadsheet-flat-xml fods
 application/vnd.oasis.opendocument.spreadsheet-template ots
 application/vnd.oasis.opendocument.chart odc
 application/vnd.oasis.opendocument.formula odf
@@ -125,6 +129,7 @@ then
   cat >> /etc/mailcap.tmp$$ << END
 # OpenOffice.org
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
+application/vnd.oasis.opendocument.text-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-master; %unixfilename -view %s
@@ -140,6 +145,7 @@ application/vnd.stardivision.math; %unixfilename -view %s
 application/x-starmath; %unixfilename -view %s
 application/msword; %unixfilename -view %s
 application/vnd.oasis.opendocument.spreadsheet; %unixfilename -view %s
+application/vnd.oasis.opendocument.spreadsheet-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.spreadsheet-template; %unixfilename -view %s
 application/vnd.sun.xml.calc; %unixfilename -view %s
 application/vnd.sun.xml.calc.template; %unixfilename -view %s
@@ -152,6 +158,7 @@ application/msexcel; %unixfilename -view %s
 application/vnd.ms-excel; %unixfilename -view %s
 application/x-msexcel; %unixfilename -view %s
 application/vnd.oasis.opendocument.presentation; %unixfilename -view %s
+application/vnd.oasis.opendocument.presentation-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.presentation-template; %unixfilename -view %s
 application/vnd.sun.xml.impress; %unixfilename -view %s
 application/vnd.sun.xml.impress.template; %unixfilename -view %s
@@ -162,6 +169,7 @@ application/mspowerpoint; %unixfilename -view %s
 application/vnd.ms-powerpoint; %unixfilename -view %s
 application/x-mspowerpoint; %unixfilename -view %s
 application/vnd.oasis.opendocument.graphics; %unixfilename -view %s
+application/vnd.oasis.opendocument.graphics-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.graphics-template; %unixfilename -view %s
 application/vnd.sun.xml.draw; %unixfilename -view %s
 application/vnd.sun.xml.draw.template; %unixfilename -view %s

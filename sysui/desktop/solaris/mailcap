@@ -20,6 +20,7 @@ sed '
 cat << END
 # OpenOffice.org
 application/vnd.oasis.opendocument.text; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-flat-xml; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-template; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-web; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-master; %PREFIX -view %s
@@ -35,6 +36,7 @@ application/vnd.stardivision.math; %PREFIX -view %s
 application/x-starmath; %PREFIX -view %s
 application/msword; %PREFIX -view %s
 application/vnd.oasis.opendocument.spreadsheet; %PREFIX -view %s
+application/vnd.oasis.opendocument.spreadsheet-flat-xml; %PREFIX -view %s
 application/vnd.oasis.opendocument.spreadsheet-template; %PREFIX -view %s
 application/vnd.sun.xml.calc; %PREFIX -view %s
 application/vnd.sun.xml.calc.template; %PREFIX -view %s
@@ -47,6 +49,7 @@ application/msexcel; %PREFIX -view %s
 application/vnd.ms-excel; %PREFIX -view %s
 application/x-msexcel; %PREFIX -view %s
 application/vnd.oasis.opendocument.presentation; %PREFIX -view %s
+application/vnd.oasis.opendocument.presentation-flat-xml; %PREFIX -view %s
 application/vnd.oasis.opendocument.presentation-template; %PREFIX -view %s
 application/vnd.sun.xml.impress; %PREFIX -view %s
 application/vnd.sun.xml.impress.template; %PREFIX -view %s
@@ -57,6 +60,7 @@ application/mspowerpoint; %PREFIX -view %s
 application/vnd.ms-powerpoint; %PREFIX -view %s
 application/x-mspowerpoint; %PREFIX -view %s
 application/vnd.oasis.opendocument.graphics; %PREFIX -view %s
+application/vnd.oasis.opendocument.graphics-flat-xml; %PREFIX -view %s
 application/vnd.oasis.opendocument.graphics-template; %PREFIX -view %s
 application/vnd.sun.xml.draw; %PREFIX -view %s
 application/vnd.sun.xml.draw.template; %PREFIX -view %s
