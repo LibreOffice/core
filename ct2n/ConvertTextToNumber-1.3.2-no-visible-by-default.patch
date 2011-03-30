@@ -1,0 +1,104 @@
+diff -purN misc/Office/UI/BaseWindowState.xcu misc/build/Office/UI/BaseWindowState.xcu
+--- misc/Office/UI/BaseWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/BaseWindowState.xcu	2010-03-05 21:36:37.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/BasicIDEWindowState.xcu misc/build/Office/UI/BasicIDEWindowState.xcu
+--- misc/Office/UI/BasicIDEWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/BasicIDEWindowState.xcu	2010-03-05 21:36:46.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/CalcWindowState.xcu misc/build/Office/UI/CalcWindowState.xcu
+--- misc/Office/UI/CalcWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/CalcWindowState.xcu	2010-03-05 21:36:32.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/DrawWindowState.xcu misc/build/Office/UI/DrawWindowState.xcu
+--- misc/Office/UI/DrawWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/DrawWindowState.xcu	2010-03-05 21:36:54.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/ImpressWindowState.xcu misc/build/Office/UI/ImpressWindowState.xcu
+--- misc/Office/UI/ImpressWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/ImpressWindowState.xcu	2010-03-05 21:36:59.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/MathWindowState.xcu misc/build/Office/UI/MathWindowState.xcu
+--- misc/Office/UI/MathWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/MathWindowState.xcu	2010-03-05 21:37:03.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/StartModuleWindowState.xcu misc/build/Office/UI/StartModuleWindowState.xcu
+--- misc/Office/UI/StartModuleWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/StartModuleWindowState.xcu	2010-03-05 21:37:09.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
+diff -purN misc/Office/UI/WriterWindowState.xcu misc/build/Office/UI/WriterWindowState.xcu
+--- misc/Office/UI/WriterWindowState.xcu	2008-02-09 23:26:50.000000000 +0100
++++ misc/build/Office/UI/WriterWindowState.xcu	2010-03-05 21:37:17.000000000 +0100
+@@ -9,6 +9,9 @@
+ 				<prop oor:name="UIName" oor:type="xs:string">
+ 					<value>CT2N</value>
+ 				</prop>
++				<prop oor:name="Visible" oor:type="xs:boolean">
++					<value>false</value>
++				</prop>
+ 			</node>
+ 		</node>
+ 	</node>
