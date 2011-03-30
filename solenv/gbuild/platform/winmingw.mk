@@ -158,7 +158,7 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS := -O0
 else
 gb_COMPILEROPTFLAGS := -Os
@@ -370,10 +370,14 @@ endef
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-gb_LinkTarget_CFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
+ifneq ($(gb_DEBUGLEVEL),0)
+gb_LinkTarget_CXXFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
+gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
+endif
 
+ifeq ($(gb_SYMBOL),$(true))
+gb_LinkTarget_CXXFLAGS += -ggdb3
+gb_LinkTarget_CFLAGS += -ggdb3
 endif
 
 gb_LinkTarget_INCLUDE :=\

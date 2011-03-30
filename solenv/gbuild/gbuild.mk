@@ -87,16 +87,9 @@ else
 gb_SYMBOL := $(false)
 endif
 
-
+gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 1
-gb_SYMBOL := $(true)
-else
-ifeq ($(gb_PRODUCT),$(true))
-gb_DEBUGLEVEL := 0
-else
-gb_DEBUGLEVEL := 1
-endif
 endif
 
 ifneq ($(strip $(DBGLEVEL)$(dbglevel)),)
@@ -105,6 +98,9 @@ gb_DEBUGLEVEL := $(strip $(dbglevel))
 else
 gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
 endif
+endif
+
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
 endif
 
@@ -303,21 +299,27 @@ SYNOPSIS
        make [ -f makefile ] [ options ] [ variable=value ... ] [ targets ] ...
 
 IMPORTANT OPTIONS
-       -r Eliminate use of the built-in implicit rules. Improves performance, please use always.
+       -r Eliminate use of the built-in implicit rules. Improves performance,
+          please use always.
        -s Silent operation; do not print the commands as they are executed.
 
        -n Print the commands that would be executed, but do not execute them.
        -k Continue as much as possible after an error.
 
        -j Specifies the number of jobs (commands) to run simultaneously.
-       -l Specifies that no new jobs (commands) should be started if there are others jobs running and the load average is at least load.
+       -l Specifies that no new jobs (commands) should be started if there are
+          others jobs running and the load average is at least load.
 
-       -t Touch files (mark them up to date without really changing them) instead of running their commands.
+       -t Touch files (mark them up to date without really changing them)
+          instead of running their commands.
        -W Pretend that the target file has just been modified.
-       -o Do not remake the file file even if it is older than its dependencies, and do not remake anything on account of changes in file.
+       -o Do not remake the file file even if it is older than its
+          dependencies, and do not remake anything on account of changes in file.
 
-       -p Print the data base (rules and variable values) that results from reading the makefiles.
+       -p Print the data base (rules and variable values) that results from
+          reading the makefiles.
        --debug=b debug make run, see GNU make man page for details
+
        (descriptions from GNU make man page)
 
 AVAILABLE TARGETS
@@ -328,10 +330,16 @@ AVAILABLE TARGETS
        clean           remove all generated files
 
 INTERACTIVE VARIABLES:
-       DEBUG           If not empty, build with OSL_DEBUG_LEVEL=2 and symbols.
-       debug
-       ENABLE_SYMBOLS  If not empty, build with debug symbols. Automatically enabled by DEBUG/debug.
-       enable_symbols
+       DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).
+       ENABLE_SYMBOLS / enable_symbols
+                       If not empty, build with debug symbols. Automatically
+                       enabled by DEBUG/debug.
+       DBGLEVEL / dbglevel
+                       If not empty, force the debug level to the specified value.
+                       0 = no debug
+                       1 = symbols + no optimizations
+                       2 = symbols + no optimizations + extra debug output
+                           (OSL_DEBUG_LEVEL is set to 2)
        ENABLE_PCH      If not empty, use precompiled headers (Windows only).
        CFLAGS          Add as compiler flags for plain c compilation.
        CXXFLAGSX       Add as compiler flags for c++ compilation.

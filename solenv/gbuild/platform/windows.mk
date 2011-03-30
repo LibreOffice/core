@@ -204,7 +204,7 @@ gb_CXXFLAGS +=-Zi
 gb_CFLAGS +=-Zi
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS :=
 gb_LinkTarget_LDFLAGS += -DEBUG
 else

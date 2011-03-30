@@ -106,7 +106,7 @@ gb_LinkTarget_LDFLAGS := \
 	-PIC \
 	-library=no%Cstd \
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS :=
 else
 ifeq ($(CPUNAME),INTEL)

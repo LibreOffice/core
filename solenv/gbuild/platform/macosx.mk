@@ -130,7 +130,7 @@ gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS := -O0
 else
 gb_COMPILEROPTFLAGS := -O2

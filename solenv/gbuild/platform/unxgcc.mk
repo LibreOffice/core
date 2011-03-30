@@ -141,7 +141,7 @@ gb_LinkTarget_LDFLAGS += \
 
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS := -O0
 else
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
@@ -215,10 +215,9 @@ gb_LinkTarget__RPATHS := \
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_LinkTarget_CXXFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
 gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
-
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
