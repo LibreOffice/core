@@ -99,7 +99,7 @@ Directory gid_Dir_Share_Readme_Sdk
 End
 
 
-Module gid_Module_Root
+Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";
     PackageInfo = "packinfo_sdkoo.txt";
