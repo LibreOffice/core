@@ -89,14 +89,7 @@ my @sdfparticles;
 parse_options();
 
 my $binpath = '';
-if( defined $ENV{UPDMINOREXT} )
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin".$ENV{UPDMINOREXT}."/" ;
-}
-else
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
-}
+$binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
 

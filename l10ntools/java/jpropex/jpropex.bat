@@ -10,4 +10,4 @@ if "x%JAVA_HOME%x" EQU "xx" (
    exit
 )
 
-java -DSOLARSRC=%SOLARSRC% -DWORK_STAMP=%WORK_STAMP% -DUSE_SHELL=  -jar %SOLARVER%\%INPATH%\bin%UPDMINOREXT%\jpropex.jar %*
+java -DSOLARSRC=%SOLARSRC% -DWORK_STAMP=%WORK_STAMP% -DUSE_SHELL=  -jar %SOLARVER%\%INPATH%\bin\jpropex.jar %*

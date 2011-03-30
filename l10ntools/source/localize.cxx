@@ -353,7 +353,6 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sPath1( Export::GetEnv("SOLARVER") );
             ByteString sPath2( Export::GetEnv("INPATH") );
             ByteString sPath3( "bin" );
-            ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
             ByteString sExecutable( sPath1 );
 #if defined(WNT) || defined(OS2)
             sExecutable.SearchAndReplaceAll( "/", sDel );
@@ -362,7 +361,6 @@ void SourceTreeLocalizer::WorkOnFile(
             sExecutable += sPath2 ;
             sExecutable += sDel;
             sExecutable += sPath3 ;
-            sExecutable += sPath4 ;
             sExecutable += sDel ;
             sExecutable += rExecutable ;
 
@@ -976,25 +974,11 @@ int _cdecl main( int argc, char *argv[] )
     bool hasPwd = treeconfig.getActiveRepositories( repos );
     if( hasPwd ) cout << "Found special path!\n";
 
-    string minor_ext;
-    bool has_minor_ext;
-
-    if( Export::GetEnv("UPDMINOREXT") != NULL )
-    {
-        minor_ext     = string( Export::GetEnv("UPDMINOREXT") );
-        has_minor_ext = minor_ext.size();
-    }
-    else
-        has_minor_ext = false;
-
     // localize through all repositories
     for( vector<string>::iterator iter = repos.begin(); iter != repos.end() ; ++iter )
     {
         string curRepository;
-        if( has_minor_ext )
-            curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter + minor_ext;
-        else
-            curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter;
+        curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter;
         cout << "Localizing repository " << curRepository << "\n";
         SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
         aIter.SetLanguageRestriction( sLanguages );
