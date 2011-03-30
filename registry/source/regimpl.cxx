@@ -519,6 +519,10 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         } else
             return REG_INVALID_REGISTRY;
     }
+
+    // this line is never accessed
+    // just workaround to avoid warning: control reaches end of non-void function
+    return REG_INVALID_REGISTRY;
 }
 
 
