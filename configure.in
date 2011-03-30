@@ -7579,10 +7579,6 @@ fi
 AC_SUBST(ANT_LIB)
 
 ant_minver=1.6.0
-# update for more extensions...
-if test "$ENABLE_MEDIAWIKI" = "YES"; then
-  ant_minver=1.7.0
-fi
 ant_minminor1=`echo $ant_minver | cut -d"." -f2`
 
 AC_MSG_CHECKING([whether ant is >= $ant_minver])
