@@ -719,8 +719,16 @@ sub install_simple ($$$$$$)
 
         if ((!($dir =~ /\bPREDEFINED_/ )) || ( $dir =~ /\bPREDEFINED_PROGDIR\b/ ))
         {
-            mkdir $destdir . $onedir->{'HostName'};
-            push @lines, "%dir " . $onedir->{'HostName'} . "\n";
+            my $hostname = $onedir->{'HostName'};
+
+            # ignore '.' subdirectories
+            next if ( $hostname =~ m/\.$/ );
+            # remove './' from the path
+            $hostname =~ s/\.\///g;
+
+            # printf "mkdir $destdir$hostname\n";
+            mkdir $destdir . $hostname;
+            push @lines, "%dir " . $hostname . "\n";
         }
     }
 
@@ -736,6 +744,10 @@ sub install_simple ($$$$$$)
         # is not correct
         $destination =~ s/\$\$/\$/;
         $sourcepath =~ s/\$\$/\$/;
+
+        # remove './' from the path
+        $sourcepath =~ s/\.\///g;
+        $destination =~ s/\.\///g;
 
         push @lines, "$destination\n";
         if(-d  "$destdir$destination"){
