@@ -139,12 +139,13 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
 
 } // namespace
 
-void TextField::insertAt(
+sal_Int32 TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextCharacterStyle ) const
 {
+    sal_Int32 nCharHeight = 0;
     try
     {
         PropertyMap aioBulletList;
@@ -157,6 +158,8 @@ void TextField::insertAt(
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
         aTextCharacterProps.assignUsed( getTextCharacterProperties() );
+        if ( aTextCharacterProps.moHeight.has() )
+            nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         std::list< Reference< XTextField > > fields;
@@ -191,6 +194,8 @@ void TextField::insertAt(
     {
         OSL_TRACE("OOX:  TextField::insertAt() exception");
     }
+
+    return nCharHeight;
 }
 
 } }

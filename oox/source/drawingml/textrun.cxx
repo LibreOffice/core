@@ -55,18 +55,21 @@ TextRun::~TextRun()
 {
 }
 
-void TextRun::insertAt(
+sal_Int32 TextRun::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextCharacterStyle ) const
 {
+    sal_Int32 nCharHeight = 0;
     try {
         Reference< XTextRange > xStart( xAt, UNO_QUERY );
         PropertySet aPropSet( xStart );
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextCharacterProperties );
+        if ( aTextCharacterProps.moHeight.has() )
+            nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         if( maTextCharacterProperties.maHyperlinkPropertyMap.empty() )
@@ -163,6 +166,8 @@ void TextRun::insertAt(
     {
         OSL_TRACE("OOX:  TextRun::insertAt() exception");
     }
+
+    return nCharHeight;
 }
 
 

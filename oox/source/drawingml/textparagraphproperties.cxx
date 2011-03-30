@@ -405,9 +405,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
 
     if ( maParaTopMargin.bHasValue )
-        aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( getCharHeightPoints( 18.0 ) ) );
+        aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
     if ( maParaBottomMargin.bHasValue )
-        aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( getCharHeightPoints( 18.0 ) ) );
+        aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
     if ( nNumberingType == NumberingType::BITMAP )
     {
         fCharacterSize = getCharHeightPoints( fCharacterSize );

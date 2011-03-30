@@ -80,19 +80,23 @@ void TextParagraph::insertAt(
             xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
             xAt->gotoEnd( sal_True );
         }
+
+        sal_Int32 nCharHeight = 0;
         if ( maRuns.begin() == maRuns.end() )
         {
             PropertySet aPropSet( xStart );
 
             TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
             aTextCharacterProps.assignUsed( maEndProperties );
+            if ( aTextCharacterProps.moHeight.has() )
+                nCharHeight = aTextCharacterProps.moHeight.get();
             aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
         }
         else
         {
             for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
             {
-                (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle );
+                nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle ) );
                 nParagraphSize += (*aIt)->getText().getLength();
             }
         }
@@ -100,11 +104,11 @@ void TextParagraph::insertAt(
 
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-        float fCharacterSize = 18;
+        float fCharacterSize = nCharHeight > 0 ? GetFontHeight( nCharHeight ) :  18;
         if ( pTextParagraphStyle.get() )
         {
             pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
-            fCharacterSize = pTextParagraphStyle->getCharHeightPoints( 18 );
+            fCharacterSize = pTextParagraphStyle->getCharHeightPoints( fCharacterSize );
         }
         maProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
