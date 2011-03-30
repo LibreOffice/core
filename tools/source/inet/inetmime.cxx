@@ -3064,7 +3064,7 @@ ByteString INetMIME::decodeUTF8(const ByteString & rText,
     ByteString sDecoded;
     while (p != pEnd)
     {
-        sal_uInt32 nCharacter;
+        sal_uInt32 nCharacter = 0;
         if (translateUTF8Char(p, pEnd, eEncoding, nCharacter))
             sDecoded += sal_Char(nCharacter);
         else
@@ -3497,7 +3497,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 const sal_Char * pUTF8Begin = p - 1;
                 const sal_Char * pUTF8End = pUTF8Begin;
-                sal_uInt32 nCharacter;
+                sal_uInt32 nCharacter = 0;
                 if (translateUTF8Char(pUTF8End, pEnd, RTL_TEXTENCODING_UCS4,
                                       nCharacter))
                 {
