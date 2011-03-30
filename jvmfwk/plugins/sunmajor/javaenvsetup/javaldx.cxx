@@ -82,12 +82,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     JavaInfo * pInfo = NULL;
     errcode = jfw_getSelectedJRE( & pInfo);
 
-    if (errcode == JFW_E_INVALID_SETTINGS)
-    {
-        fprintf(stderr,"javaldx failed. User must select a JRE from options dialog!");
-        return -1;
-    }
-    else if (errcode != JFW_E_NONE)
+    if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
     {
         fprintf(stderr,"javaldx failed! \n");
         return -1;
