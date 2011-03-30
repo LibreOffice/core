@@ -31,7 +31,6 @@ import java.util.HashMap;
 
 /**
  * This class defines the precedence applied to each operator when performing a conversion
- * {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaCompiler.infix2RPN  from infix to RPN}.
  */
 public class PrecedenceTable {
     public static final int DEFAULT_PRECEDENCE  = 0;
