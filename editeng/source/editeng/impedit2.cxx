@@ -113,6 +113,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pCTLOptions         = NULL;
 
     nCurTextHeight      = 0;
+    nCurTextHeightNTP   = 0;
     nBlockNotifications = 0;
     nBigTextObjectStart = 20;
 
@@ -700,6 +701,7 @@ EditPaM ImpEditEngine::Clear()
     EditSelection aSel( aPaM );
 
     nCurTextHeight = 0;
+    nCurTextHeightNTP = 0;
 
     ResetUndoManager();
 
@@ -758,8 +760,10 @@ void ImpEditEngine::SetText( const XubString& rText )
             pView->GetWindow()->Invalidate( aTmpRec );
         }
     }
-    if( !rText.Len() )  // otherwise it must be invalidated later, !bFormatted is enough.
+    if( !rText.Len() ) {    // otherwise it must be invalidated later, !bFormatted is enough.
         nCurTextHeight = 0;
+        nCurTextHeightNTP = 0;
+    }
     EnableUndo( bUndoCurrentlyEnabled );
     OSL_ENSURE( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Undo after SetText?" );
 }
@@ -3198,12 +3202,34 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
     return nWidth;
 }
 
-sal_uInt32 ImpEditEngine::CalcTextHeight()
+sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
+{
+    DBG_ASSERT( GetUpdateMode(), "Should not be used for Update=FALSE: GetTextHeight" );
+    DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
+    return nCurTextHeightNTP;
+}
+
+sal_uInt32 ImpEditEngine::CalcTextHeight( sal_uInt32* pHeightNTP )
 {
     OSL_ENSURE( GetUpdateMode(), "Should not be used when Update=FALSE: CalcTextHeight" );
     sal_uInt32 nY = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
-        nY += GetParaPortions()[nPortion]->GetHeight();
+    sal_uInt32 nPH;
+    sal_uInt32 nEmptyHeight = 0;
+    for ( sal_uInt16 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ ) {
+        ParaPortionPtr pPortion = GetParaPortions()[nPortion];
+        nPH = pPortion->GetHeight();
+        nY += nPH;
+        if( pHeightNTP ) {
+            if ( pPortion->IsEmpty() )
+                nEmptyHeight += nPH;
+            else
+                nEmptyHeight = 0;
+        }
+    }
+
+    if ( pHeightNTP )
+        *pHeightNTP = nY - nEmptyHeight;
+
     return nY;
 }
 

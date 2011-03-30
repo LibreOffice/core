@@ -1445,7 +1445,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
     const size_t aStretchArySize=sizeof(aOldStretchXVals)/sizeof(*aOldStretchXVals);
     for(unsigned int i=0; i<aStretchArySize; ++i)
     {
-        const Size aCurrTextSize = rOutliner.CalcTextSize();
+        const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
         double fFactor(1.0);
         if( bIsVerticalWriting )
             fFactor = double(rTextSize.Width())/aCurrTextSize.Width();

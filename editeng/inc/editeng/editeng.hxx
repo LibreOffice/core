@@ -205,6 +205,7 @@ public:
     String          GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
+    sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
 
     String          GetText( sal_uInt16 nParagraph ) const;

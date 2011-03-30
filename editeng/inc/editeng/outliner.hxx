@@ -907,6 +907,7 @@ public:
         const Color& rTextLineColor);
 
     Size            CalcTextSize();
+    Size            CalcTextSizeNTP();
 
     Point           GetDocPos( Paragraph* pPara );
 

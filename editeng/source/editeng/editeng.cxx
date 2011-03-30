@@ -1270,6 +1270,19 @@ sal_uInt32 EditEngine::GetTextHeight() const
     return nHeight;
 }
 
+sal_uInt32 EditEngine::GetTextHeightNTP() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+
+    if ( IsVertical() )
+        return pImpEditEngine->CalcTextWidth( sal_True );
+
+    return pImpEditEngine->GetTextHeightNTP();
+}
+
 sal_uInt32 EditEngine::CalcTextWidth()
 {
     DBG_CHKTHIS( EditEngine, 0 );

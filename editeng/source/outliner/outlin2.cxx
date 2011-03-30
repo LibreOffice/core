@@ -327,6 +327,12 @@ Size Outliner::CalcTextSize()
     return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeight());
 }
 
+Size Outliner::CalcTextSizeNTP()
+{
+    DBG_CHKTHIS(Outliner,0);
+    return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeightNTP());
+}
+
 Point Outliner::GetDocPos( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);

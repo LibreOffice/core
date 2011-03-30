@@ -450,7 +450,8 @@ void ImpEditEngine::FormatDoc()
     // One can also get into the formatting through UpdateMode ON=>OFF=>ON...
     // enable optimization first after Vobis delivery ...
     {
-        sal_uInt32 nNewHeight = CalcTextHeight();
+        sal_uInt32 nNewHeightNTP;
+        sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
         long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTHEIGHTCHANGED : EE_STAT_TEXTWIDTHCHANGED;
@@ -467,6 +468,7 @@ void ImpEditEngine::FormatDoc()
         }
 
         nCurTextHeight = nNewHeight;
+        nCurTextHeightNTP = nNewHeightNTP;
 
         if ( aStatus.AutoPageSize() )
             CheckAutoPageSize();

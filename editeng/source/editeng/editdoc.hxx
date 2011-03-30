@@ -615,6 +615,8 @@ public:
     void                SetVisible( sal_Bool bVisible );
     sal_Bool                IsVisible()                 { return bVisible; }
 
+    sal_Bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
+
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_uInt16              GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
     void                ResetHeight()   { nHeight = 0; nFirstLineOffset = 0; }

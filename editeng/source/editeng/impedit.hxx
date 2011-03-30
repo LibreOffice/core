@@ -500,6 +500,7 @@ private:
     DeletedNodesList    aDeletedNodes;
     Rectangle           aInvalidRec;
     sal_uInt32          nCurTextHeight;
+    sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16          nOnePixelInRef;
 
     IdleFormattter      aIdleFormatter;
@@ -806,8 +807,9 @@ public:
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos, EditView* pCurView );
 
-    sal_uInt32      CalcTextHeight();
+    sal_uInt32      CalcTextHeight( sal_uInt32* pHeightNTP );
     sal_uInt32      GetTextHeight() const;
+    sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( sal_Bool bIgnoreExtraSpace );
     sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, sal_Bool bIgnoreExtraSpace );
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
