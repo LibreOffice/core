@@ -791,7 +791,6 @@ sub install_simple ($$$$$$)
     {
         my $filelist;
         my $fname = $installer::globals::destdir . "/$packagename";
-        if ($installer::globals::languagepack || $installer::globals::helppack) { $fname .= ".$languagestring"; }
         open ($filelist, ">$fname") || die "Can't open $fname: $!";
         print $filelist @lines;
         close ($filelist);
