@@ -33,7 +33,7 @@
 #include "image.hxx"
 #include "sbtrace.hxx"
 #include <basic/sbobjmod.hxx>
-
+#include <stdio.h>
 
 //==========================================================================
 // Tracing, for debugging only
