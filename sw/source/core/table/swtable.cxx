@@ -2257,7 +2257,6 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         const SwTblBoxNumFormat *pNewFmt = 0;
         const SwTblBoxFormula *pNewFml = 0;
         const SwTblBoxValue *pNewVal = 0;
-        double aOldValue = 0;
         sal_uLong nOldFmt = NUMBERFORMAT_TEXT;
 
         switch( pNew ? pNew->Which() : 0 )
@@ -2271,10 +2270,6 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
                 rSet.GetItemState( RES_BOXATR_FORMULA, sal_False,
                                     (const SfxPoolItem**)&pNewFml );
-                if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_VALUE,
-                                    sal_False, (const SfxPoolItem**)&pNewVal ) )
-                    aOldValue = ((SwTblBoxValue&)((SwAttrSetChg*)pOld)->
-                            GetChgSet()->Get( RES_BOXATR_VALUE )).GetValue();
             }
             break;
 
@@ -2287,7 +2282,6 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             break;
         case RES_BOXATR_VALUE:
             pNewVal = (SwTblBoxValue*)pNew;
-            aOldValue = ((SwTblBoxValue*)pOld)->GetValue();
             break;
         }
 
