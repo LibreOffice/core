@@ -80,7 +80,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
 {
     if ( !m_pProperties )
     {
-        DBG_ASSERT( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
+        OSL_ENSURE( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
         m_pProperties = new cppu::OPropertyArrayHelper( &m_aProperties[0], m_aProperties.size(), sal_False );
     }
     return *m_pProperties;
@@ -94,10 +94,10 @@ Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  ) t
 void PropertySetBase::registerProperty( const Property& rProperty,
     const ::rtl::Reference< PropertyAccessorBase >& rAccessor )
 {
-    DBG_ASSERT( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
+    OSL_ENSURE( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
     m_aAccessors.insert( PropertyAccessors::value_type( rProperty.Handle, rAccessor ) );
 
-    DBG_ASSERT( ( rAccessor->isWriteable() == true )
+    OSL_ENSURE( ( rAccessor->isWriteable() == true )
                 == ( ( rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY ) == 0 ),
         "PropertySetBase::registerProperty: inconsistence!" );
 
@@ -149,13 +149,13 @@ void PropertySetBase::initializePropertyValueCache( sal_Int32 nHandle )
     ::std::pair< PropertyValueCache::iterator, bool > aInsertResult =
 #endif
     m_aCache.insert( PropertyValueCache::value_type( nHandle, aCurrentValue ) );
-    DBG_ASSERT( aInsertResult.second, "PropertySetBase::initializePropertyValueCache: already cached a value for this property!" );
+    OSL_ENSURE( aInsertResult.second, "PropertySetBase::initializePropertyValueCache: already cached a value for this property!" );
 }
 
 PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle ) const
 {
     PropertyAccessors::const_iterator aPropertyPos = m_aAccessors.find( nHandle );
-    DBG_ASSERT( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
+    OSL_ENSURE( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
         "PropertySetBase::locatePropertyHandler: accessor map is corrupted!" );
         // neither should this be called for handles where there is no accessor, nor should a
         // NULL accssor be in the map
