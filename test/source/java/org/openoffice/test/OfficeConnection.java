@@ -56,8 +56,7 @@ public final class OfficeConnection {
             String headless_flags = "";
             try {
                 if(Argument.get("headless").length() > 0) {
-                    // meh, we warn about -headless being replaced by --headless, but that does not actually work
-                    headless_flags = "-headless";
+                    headless_flags = "--headless";
                 }
             } catch(Exception e) {}
             description = "pipe,name=oootest" + UUID.randomUUID();
