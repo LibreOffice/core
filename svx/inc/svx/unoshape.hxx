@@ -145,8 +145,6 @@ protected:
 
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
-    sal_Bool tryQueryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& rAny );
-
     sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName );
 
     /** called from the XActionLockable interface methods on initial locking */
