@@ -136,7 +136,7 @@ namespace svt
     //====================================================================
     DBG_NAME( RoadmapWizard )
     //--------------------------------------------------------------------
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     const char* CheckInvariants( const void* pVoid )
     {
         return static_cast< const RoadmapWizard* >( pVoid )->checkInvariants();

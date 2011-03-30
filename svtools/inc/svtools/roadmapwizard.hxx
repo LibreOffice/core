@@ -232,7 +232,7 @@ protected:
         void    updateRoadmapItemLabel( WizardState _nState );
 
     protected:
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         const sal_Char* checkInvariants() const;
         friend const char* CheckInvariants( const void* pVoid );
 #endif
