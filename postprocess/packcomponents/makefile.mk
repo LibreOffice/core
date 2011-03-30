@@ -39,7 +39,7 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 .IF "$(USE_GMAKE)" != "1"
-SM_COMPONENTS:=sm smd vbaobj
+SM_COMPONENTS:=sm smd
 .ELSE
 SM_COMPONENTS:= component/starmath/util/sm component/starmath/util/smd
 .END
