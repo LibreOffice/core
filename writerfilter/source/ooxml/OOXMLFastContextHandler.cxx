@@ -1220,13 +1220,6 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
     getPropertySetAttrs()->resolve(aHyperlinkHandler);
 }
 
-void OOXMLFastContextHandlerStream::lcl_characters
-(const ::rtl::OUString & rChars)
-throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    text(rChars);
-}
-
 /*
   class OOXMLFastContextHandlerProperties
  */
