@@ -7,7 +7,13 @@
 #All a bit hacky, but it should work
 
 tempfoo=`basename $0`
+
 XSL=`mktemp /tmp/${tempfoo}.XXXXXX`
+
+# On Windows, xsltproc is a non-Cygwin program, so we can't pass
+# a Cygwin /tmp path to it
+[ "$COM" == MSC ] && XSL=`cygpath -m -s $XSL`
+
 if [ $? -ne 0 ]; then
     echo "$0: Can't create temp file, exiting..."
     exit 1
