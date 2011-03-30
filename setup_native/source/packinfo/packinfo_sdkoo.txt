@@ -26,7 +26,7 @@
 #*************************************************************************
 
 Start
-module = "gid_Module_Root"
+module = "gid_Module_Root_SDK"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-sdk"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
 packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-sdk"
