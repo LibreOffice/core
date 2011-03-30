@@ -21,13 +21,13 @@
 
 $(eval $(call gb_Library_Library,smd))
 
-$(eval $(call gb_Library_add_precompiled_header,smd,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
+$(eval $(call gb_Library_add_precompiled_header,smd,$(realpath $(SRCDIR)/starmath/inc/pch/precompiled_starmath)))
 
 $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
 
 $(eval $(call gb_Library_set_include,smd,\
-        -I$(SRCDIR)/starmath/inc/pch \
-        -I$(SRCDIR)/starmath/inc \
+        -I$(realpath $(SRCDIR)/starmath/inc/pch) \
+        -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(WORKDIR)/Misc/sm/ \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc/offuh \

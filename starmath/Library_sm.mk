@@ -23,13 +23,13 @@ $(eval $(call gb_Library_Library,sm))
 
 $(eval $(call gb_Library_add_sdi_headers,sm,starmath/sdi/smslots))
 
-$(eval $(call gb_Library_add_precompiled_header,sm,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
+$(eval $(call gb_Library_add_precompiled_header,sm,$(realpath $(SRCDIR)/starmath/inc/pch/precompiled_starmath)))
 
 $(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm))
 
 $(eval $(call gb_Library_set_include,sm,\
-        -I$(SRCDIR)/starmath/inc/pch \
-        -I$(SRCDIR)/starmath/inc \
+        -I$(realpath $(SRCDIR)/starmath/inc/pch) \
+        -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
         -I$(WORKDIR)/Misc/starmath/ \
         $$(INCLUDE) \
@@ -100,8 +100,8 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
 $(eval $(call gb_SdiTarget_SdiTarget,starmath/sdi/smslots,starmath/sdi/smath))
 
 $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
-        -I$(SRCDIR)/starmath/inc \
-        -I$(SRCDIR)/starmath/sdi \
+        -I$(realpath $(SRCDIR)/starmath/inc) \
+        -I$(realpath $(SRCDIR)/starmath/sdi) \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc \
 ))

@@ -34,7 +34,7 @@ $(eval $(call gb_SrsTarget_set_include,starmath/res,\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc \
 	-I$(WORKDIR)/inc/starmath \
-	-I$(SRCDIR)/starmath/inc \
+	-I$(realpath $(SRCDIR)/starmath/inc) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,starmath/res,\

@@ -29,9 +29,9 @@ $(eval $(call gb_JunitTest_JunitTest,starmath_unoapi))
 
 $(eval $(call gb_JunitTest_set_defs,starmath_unoapi,\
     $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/starmath/qa/unoapi/sm.sce \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/starmath/qa/unoapi/knownissues.xcl \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/starmath/qa/unoapi/testdocuments \
+    -Dorg.openoffice.test.arg.sce=$(realpath $(SRCDIR)/starmath/qa/unoapi/sm.sce) \
+    -Dorg.openoffice.test.arg.xcl=$(realpath $(SRCDIR)/starmath/qa/unoapi/knownissues.xcl) \
+    -Dorg.openoffice.test.arg.tdoc=$(realpath $(SRCDIR)/starmath/qa/unoapi/testdocuments) \
 ))
 
 $(eval $(call gb_JunitTest_add_jars,starmath_unoapi,\

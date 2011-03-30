@@ -19,7 +19,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,sm_uiconfig,$(SRCDIR)/starmath/uiconfig))
+$(eval $(call gb_Package_Package,sm_uiconfig,$(realpath $(SRCDIR)/starmath/uiconfig)))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/menubar/menubar.xml,smath/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/statusbar/statusbar.xml,smath/statusbar/statusbar.xml))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/toolbar.xml,smath/toolbar/toolbar.xml))
