@@ -101,6 +101,8 @@ gb_LinkTarget_LDFLAGS := \
     -temp=/tmp \
     -w \
     -mt \
+    -Bdirect \
+    -z defs \
     -z combreloc \
     -norunpath \
     -PIC \
@@ -248,10 +250,15 @@ gb_Library_OOOEXT := ss$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
+gb_STDLIBS := \
+    Crun \
+    m \
+    c \
+
 gb_Library_PLAINLIBS_NONE += \
+    $(gb_STDLIBS) \
     dl \
     jpeg \
-    m \
     pthread \
     X11 \
     z
