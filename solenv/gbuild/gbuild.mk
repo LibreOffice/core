@@ -100,8 +100,11 @@ endif
 endif
 
 ifneq ($(strip $(DBGLEVEL)$(dbglevel)),)
-# FIXME: problem if both set
-gb_DEBUGLEVEL := $(strip $(DBGLEVEL)$(dbglevel))
+ifneq ($(strip $(dbglevel)),)
+gb_DEBUGLEVEL := $(strip $(dbglevel))
+else
+gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
+endif
 gb_SYMBOL := $(true)
 endif
 
