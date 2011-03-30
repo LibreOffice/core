@@ -1485,9 +1485,12 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( aRanges.UpdateReference( rRef.GetMode(), pDoc, rRef.GetRange(),
                                     rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
         {
+            // i#90076; the object "this" was destroyed after calling ScTableSheetObj::getImplementation
+            // this hack make sure that the object lives a bit longer
+            uno::Reference<uno::XInterface> xInterface((cppu::OWeakObject*)this, uno::UNO_QUERY);
             if (  rRef.GetMode() == URM_INSDEL
                && aRanges.size() == 1
-               && ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this )
+               && ScTableSheetObj::getImplementation( xInterface )
                )
             {
                 // #101755#; the range size of a sheet does not change
