@@ -38,7 +38,7 @@
 class ScDocShell;
 class ScRange;
 class ScAutoStyleData;
-class ScAutoStyleInitData;
+struct ScAutoStyleInitData;
 
 class ScAutoStyleList
 {
