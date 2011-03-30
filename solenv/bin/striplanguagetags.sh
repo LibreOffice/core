@@ -9,15 +9,15 @@
 tempfoo=`basename $0`
 
 XSL=`mktemp /tmp/${tempfoo}.XXXXXX`
+if [ $? -ne 0 ]; then
+    echo "$0: Can't create temp file, exiting..."
+    exit 1
+fi
 
 # On Windows, xsltproc is a non-Cygwin program, so we can't pass
 # a Cygwin /tmp path to it
 [ "$COM" == MSC ] && XSL=`cygpath -m -s $XSL`
 
-if [ $? -ne 0 ]; then
-    echo "$0: Can't create temp file, exiting..."
-    exit 1
-fi
 WRKDIR=`mktemp -d /tmp/${tempfoo}.XXXXXX`
 if [ $? -ne 0 ]; then
     echo "$0: Can't create temp dir, exiting..."
