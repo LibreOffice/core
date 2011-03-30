@@ -99,9 +99,8 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                     if (xDatabaseRange.is())
                     {
                         uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
-                        bool xDatabaseRangePropertySetis = xDatabaseRangePropertySet.is();
-                        bool propVal = ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT))));
-                        if (xDatabaseRangePropertySetis && propVal)
+                        if (xDatabaseRangePropertySet.is() &&
+                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
                         {
                             uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
                             sal_Int32 nLength = aImportProperties.getLength();
