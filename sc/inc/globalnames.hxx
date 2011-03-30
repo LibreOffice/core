@@ -28,7 +28,7 @@
 #ifndef __SC_GLOBALNAMES_HXX__
 #define __SC_GLOBALNAMES_HXX__
 
-#define STR_DB_LOCAL_NONAME  "unnamed"
+#define STR_DB_LOCAL_NONAME  "__Anonymous_Sheet_DB__"
 #define STR_DB_GLOBAL_NONAME "unnamed"
 
 #endif
