@@ -159,8 +159,8 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters();
 
-        virtual SAL_CALL
-        Reference<XMultiServiceFactory> getServiceFactory() {
+        virtual Reference<XMultiServiceFactory> SAL_CALL
+        getServiceFactory() {
             return m_rServiceFactory;
         }
 
