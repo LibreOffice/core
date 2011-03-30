@@ -246,14 +246,15 @@ namespace osl_Condition
 
         void setUp( )
         {
-            tv1 = (TimeValue*)malloc(sizeof(TimeValue));
+            tv1 = new TimeValue;
             tv1->Seconds = 1;
+            tv1->Nanosec = 0;
 
         }
 
         void tearDown( )
         {
-            free( tv1 );
+            delete tv1;
         }
 
 
