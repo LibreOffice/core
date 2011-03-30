@@ -48,6 +48,11 @@ AC_ARG_ENABLE(ext-nlpsolver,
         [Download and enables the NLPSolver extension.]),
 ,)
 
+AC_ARG_ENABLE(ext-ct2n,
+    AS_HELP_STRING([--enable-ext-ct2n],
+        [Enables the ConvertTextToNumber extension.]),
+,)
+
 AC_ARG_ENABLE(ext-numbertext,
     AS_HELP_STRING([--enable-ext-numbertext],
         [Enables the Numbertext extension.]),
@@ -7143,7 +7148,7 @@ dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension
 dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
-if test "z$with_ct2n" = "z" -o "z$with_ct2n" = "zno" ; then
+if test "z$enable_ext_ct2n" = "z" -o "z$enable_ext_ct2n" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
