@@ -78,6 +78,7 @@ public:
     virtual void SAL_CALL setHyphenationZone( ::sal_Int32 _hyphenationzone ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getConsecutiveHyphensLimit() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setConsecutiveHyphensLimit( ::sal_Int32 _consecutivehyphenslimit ) throw (css::uno::RuntimeException);
+    using VbaDocumentBase::Protect;
     virtual void SAL_CALL Protect( ::sal_Int32 Type, const css::uno::Any& NOReset, const css::uno::Any& Password, const css::uno::Any& UseIRM, const css::uno::Any& EnforceStyleLock ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL PrintOut( const css::uno::Any& Background, const css::uno::Any& Append, const css::uno::Any& Range, const css::uno::Any& OutputFileName, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Item, const css::uno::Any& Copies, const css::uno::Any& Pages, const css::uno::Any& PageType, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& FileName, const css::uno::Any& ActivePrinterMacGX, const css::uno::Any& ManualDuplexPrint, const css::uno::Any& PrintZoomColumn, const css::uno::Any& PrintZoomRow, const css::uno::Any& PrintZoomPaperWidth, const css::uno::Any& PrintZoomPaperHeight ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL PrintPreview(  ) throw (css::uno::RuntimeException);
