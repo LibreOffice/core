@@ -43,6 +43,7 @@ StringArray TEMPLATE_SHORT_NAMES_ARY
         < "layout" ; > ;
         < "presnt" ; > ;
         < "misc" ; > ;
+        < "labels" ; > ;
     };
 };
 
@@ -60,6 +61,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Presentation Backgrounds" ; > ;
         < "Presentations" ; > ;
         < "Miscellaneous" ; > ;
+        < "Labels" ; > ;
     };
 
     };
