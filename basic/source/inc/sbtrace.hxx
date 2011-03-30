@@ -28,7 +28,7 @@
 #ifndef _SBTRACE_HXX
 #define _SBTRACE_HXX
 
-#define DBG_TRACE_BASIC
+//#define DBG_TRACE_BASIC
 
 // ###############################################################################
 // ###
