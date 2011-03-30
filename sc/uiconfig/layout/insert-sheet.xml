@@ -23,7 +23,7 @@
             </vbox>
             <vbox>
             <hbox>
-                <numericfield has_border="true" maximum="256" minimum="1" repeat="true" id="NF_COUNT" spin="true" spin-size="1" tabstop="true" value="1" cnt:fill="true" cnt:expand="false"/>
+                <numericfield has_border="true" maximum="256" minimum="1" repeat="true" id="NF_COUNT" spin="true" spin-size="1" tabstop="true" value="1" cnt:fill="true" cnt:expand="true"/>
             </hbox>
             <edit has_border="true" id="ED_TABNAME"  cnt:fill="true" cnt:expand="true"/>
             </vbox>
