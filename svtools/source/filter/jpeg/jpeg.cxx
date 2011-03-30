@@ -34,8 +34,8 @@ extern "C"
 {
     #include "stdio.h"
     #include "jpeg.h"
-    #include "jpeglib.h"
-    #include "jerror.h"
+    #include "jpeg/jpeglib.h"
+    #include "jpeg/jerror.h"
 }
 
 #define _JPEGPRIVATE
@@ -112,7 +112,7 @@ extern "C" void init_destination (j_compress_ptr cinfo)
   dest->pub.free_in_buffer = BUF_SIZE;
 }
 
-extern "C" int empty_output_buffer (j_compress_ptr cinfo)
+extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 {
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
@@ -217,7 +217,7 @@ long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
         return nRead;
 }
 
-extern "C" int fill_input_buffer (j_decompress_ptr cinfo)
+extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
   my_src_ptr src = (my_src_ptr) cinfo->src;
   size_t nbytes;

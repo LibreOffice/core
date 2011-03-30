@@ -43,7 +43,6 @@ $(eval $(call gb_Library_set_include,svt,\
     -I$(SRCDIR)/svtools/source/inc \
     -I$(SRCDIR)/svtools/inc/pch \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,svt,\

@@ -264,7 +264,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
-    vcl/source/components/rasterizer_svg \
+    vcl/source/components/rasterizer_rsvg \
     vcl/source/components/stringmirror \
     vcl/source/control/button \
     vcl/source/control/combobox \
@@ -359,6 +359,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/sallayout \
     vcl/source/gdi/salmisc \
     vcl/source/gdi/salnativewidgets-none \
+    vcl/source/gdi/svgread \
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
