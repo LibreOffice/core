@@ -1,6 +1,6 @@
---- misc/jpeg-8c/jconfig.h	2011-03-24 21:20:52.542761397 +0100
-+++ misc/build/jpeg-8c/jconfig.h	2011-03-24 21:15:20.712761156 +0100
-@@ -1 +1,58 @@
+--- misc/jpeg-8c/jconfig.h	2011-03-30 11:20:06.266329889 +0200
++++ misc/build/jpeg-8c/jconfig.h	2011-03-30 11:02:01.926080079 +0200
+@@ -1 +1,60 @@
 -dummy
 +/* jconfig.h.  Generated from jconfig.cfg by configure.  */
 +/* jconfig.cfg --- source file edited by configure script */
@@ -35,6 +35,8 @@
 +/* #undef RIGHT_SHIFT_IS_UNSIGNED */
 +#ifdef WNT
 +#define INLINE __inline
++#elif defined SOLARIS
++#define INLINE 
 +#else
 +#define INLINE inline
 +#endif
@@ -60,7 +62,6 @@
 +/* #undef PROGRESS_REPORT 		*/
 +
 +#endif /* JPEG_CJPEG_DJPEG 	*/
-Nur in misc/build/jpeg-8c: jconfig.h.dummy.
 --- misc/jpeg-8c/jmorecfg.h	2009-11-20 09:01:24.000000000 +0100
 +++ misc/build/jpeg-8c/jmorecfg.h	2011-03-24 21:29:02.073761750 +0100
 @@ -21,7 +21,7 @@
@@ -171,4 +172,3 @@ Nur in misc/build/jpeg-8c: jconfig.h.dummy.
 +LIB1OBJFILES=$(SLOFILES)
 +
 +.INCLUDE :  target.mk
-Nur in misc/build/jpeg-8c: makefile.mk.dummy.

@@ -49,7 +49,7 @@
 +				$(OUTDIR)\lib\gobject-2.0.lib	\
 +				$(OUTDIR)\lib\gmodule-2.0.lib 
 +CAIRO_LIB = $(OUTDIR)\lib\cairo.lib
-+USP10_LIB = $(OUTDIR)\lib\USP10.lib
++USP10_LIB = USP10.lib
 +
 +!INCLUDE $(PRJ_TOP)\make.msc
  

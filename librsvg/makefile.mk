@@ -69,7 +69,7 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  GTHREAD_CFLAGS=-I$(SOLARINCDIR)$/external/$glib-2.0 \
                  GTHREAD_LIBS=-lgthread-2.0 \
                  LIBCROCO_CFLAGS="-I$(SOLARINCDIR)$/external$/libcroco-0.6" \
-                 LIBCROCO_LIBS=-lcroco-0.6
+                 LIBCROCO_LIBS=-lcroco-0.6 \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0 -I$(SOLARINCDIR)$/external$/pango-1.0 -I$(SOLARINCDIR)$/cairo" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)"
 

@@ -52,7 +52,7 @@ PATCH_FILES=
 
 .IF "$(OS)"=="MACOSX"
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
+CONFIGURE_ACTION=.$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL)) --disable-curses --without-emacs --without-git --disable-java
 
 BUILD_ACTION=$(GNUMAKE)
