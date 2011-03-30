@@ -72,6 +72,8 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
@@ -1738,8 +1740,19 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
     if( pObj )
     {
-        pObj->RecalcBoundRect(true);
-        const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+        Rectangle aBoundRect(0,0,0,0);
+
+        const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(pObj->GetViewContact().getViewIndependentPrimitive2DSequence());
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+           const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
+
+        if(!aRange.isEmpty())
+        {
+            aBoundRect = Rectangle(
+                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
+                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+        }
+
         const Point aCenter( aBoundRect.Center() );
 
         xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
