@@ -23,7 +23,7 @@ $(eval $(call gb_Library_Library,sm))
 
 $(eval $(call gb_Library_add_sdi_headers,sm,starmath/sdi/smslots))
 
-$(eval $(call gb_Library_add_precompiled_header,sm,$(realpath $(SRCDIR)/starmath/inc/pch/precompiled_starmath)))
+$(eval $(call gb_Library_add_precompiled_header,sm,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
 
 $(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm))
 
