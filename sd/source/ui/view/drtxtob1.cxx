@@ -96,14 +96,12 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pPoolItem = NULL;
     sal_uInt16 nSlot = rReq.GetSlot();
-    sal_Bool bOutlineMode = sal_False;
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
 
     if (mpView->ISA(OutlineView))
     {
-        bOutlineMode = sal_True;
         pOLV = static_cast<OutlineView*>(mpView)
             ->GetViewByWindow(mpViewShell->GetActiveWindow());
 
