@@ -89,7 +89,7 @@ endif
 
 
 ifneq ($(strip $(DEBUG)$(debug)),)
-gb_DEBUGLEVEL := 2
+gb_DEBUGLEVEL := 1
 gb_SYMBOL := $(true)
 else
 ifeq ($(gb_PRODUCT),$(true))
