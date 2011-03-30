@@ -5670,7 +5670,6 @@ ScVbaRange:: ClearOutline(  ) throw (script::BasicErrorException, uno::RuntimeEx
         return;
     }
     RangeHelper thisRange( mxRange );
-    table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     uno::Reference< sheet::XSheetOutline > xSheetOutline( thisRange.getSpreadSheet(), uno::UNO_QUERY_THROW );
     xSheetOutline->clearOutline();
 }
