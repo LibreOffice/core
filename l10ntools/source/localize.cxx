@@ -31,7 +31,6 @@
 
 #include "srciter.hxx"
 #include "export.hxx"
-#include "treeconfig.hxx"
 #include <string>
 #include <vector>
 #include <stdio.h>
@@ -43,6 +42,8 @@
 #define L10NTOOLS_FILE_HXX
 #include <l10ntools/file.hxx>
 #endif
+
+using namespace std;
 
 namespace transex3
 {
@@ -310,11 +311,11 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 bool skipProject( ByteString sPrj )
 {
     int nIndex = 0;
-    bool bReturn = TRUE;
+    bool bReturn = true;
     ByteString sModule( ModuleList[ nIndex ] );
     while( !sModule.Equals( "NULL" ) && bReturn ) {
         if( sPrj.Equals ( sModule ) )
-            bReturn = FALSE;
+            bReturn = false;
         nIndex++;
         sModule = ModuleList[ nIndex ];
     }
@@ -969,48 +970,16 @@ int _cdecl main( int argc, char *argv[] )
     //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
     sFileName = sFileABS;
 
-    Treeconfig treeconfig;
-    vector<string> repos;
-    bool hasPwd = treeconfig.getActiveRepositories( repos );
-    if( hasPwd ) cout << "Found special path!\n";
-
-    // localize through all repositories
-    for( vector<string>::iterator iter = repos.begin(); iter != repos.end() ; ++iter )
-    {
-        string curRepository;
-        curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter;
-        cout << "Localizing repository " << curRepository << "\n";
-        SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            if( *iter == "ooo" )
-                aIter.Extract( sFileName );
-            else
-            {
-                ByteString sFileNameWithExt( sFileName );
-                sFileNameWithExt += ByteString( "." );
-                sFileNameWithExt += ByteString( (*iter).c_str() );
-                aIter.Extract( sFileNameWithExt );
-            }
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
+    string pwd;
+    Export::getCurrentDir( pwd );
+    cout << "Localizing directory " << pwd << "\n";
+    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
+    aIter.SetLanguageRestriction( sLanguages );
+    if ( bExport ){
+        fflush( stdout );
+        aIter.Extract( sFileName );
+        printf("\n%d files found!\n",aIter.GetFileCnt());
     }
-    if( hasPwd )
-    {
-        string pwd;
-        Export::getCurrentDir( pwd );
-        cout << "Localizing repository " << pwd << "\n";
-        SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            aIter.Extract( sFileName );
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
-
-    }
-
     return 0;
 }
 
