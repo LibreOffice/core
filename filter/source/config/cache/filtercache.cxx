@@ -810,10 +810,10 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
         case E_CONTENTHANDLER : return m_lContentHandlers;
         case E_DETECTSERVICE  : return m_lDetectServices ;
 
-        default : throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown sub container requested." )),
-                                            css::uno::Reference< css::uno::XInterface >()                      );
     }
 
+    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown sub container requested." )),
+                                            css::uno::Reference< css::uno::XInterface >()                      );
     // <- SAFE ----------------------------------
 }
 
