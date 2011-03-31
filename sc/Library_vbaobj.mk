@@ -60,6 +60,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	utl \
 	vbahelper \
 	vcl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vbaobj,\

@@ -45,24 +45,25 @@ $(eval $(call gb_Library_add_linked_libs,scfilt,\
         cppu \
         cppuhelper \
         drawinglayer \
-	editeng \
-	for \
-	msfilter \
-	oox \
-	sal \
-	sax \
-	sb \
-	sc \
-	sfx \
-	sot \
-	svl \
-	svt \
-	svx \
-	svxcore \
-	tk \
-	tl \
-	utl \
-	vcl \
+        editeng \
+        for \
+        msfilter \
+        oox \
+        sal \
+        sax \
+        sb \
+        sc \
+        sfx \
+        sot \
+        svl \
+        svt \
+        svx \
+        svxcore \
+        tk \
+        tl \
+        utl \
+        vcl \
+        $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\

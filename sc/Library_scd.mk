@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,scd,\
         tl \
         ucbhelper \
         vcl \
+        $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scd,\
