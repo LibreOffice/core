@@ -313,7 +313,7 @@ End
 File gid_File_Dl_Sal_TextEnc
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_VER("sal_textenc", "3");
+    Name = SCP2_URE_DL_VER("sal_textenc", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
