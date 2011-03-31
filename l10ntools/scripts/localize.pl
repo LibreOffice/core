@@ -307,8 +307,9 @@ sub merge_gsicheck{
     $command .= "$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck";
 
     my $errfile = $sdffile.".err";
-    $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
+    $command .= " -k -c -wcf $tmpfile -wef ".fix_cygwin_path($errfile)." -l \"\" ".fix_cygwin_path($sdffile);
     #my $rc = system( $command );
+    if ($bVerbose) { print STDOUT "localize.pl running $command\n"; }
     my $output = `$command`;
     my $rc = $? << 8;
     if ( $output ne "" ){
@@ -407,7 +408,7 @@ sub collectfiles{
         # if ( -x $command ){
         if( $command ){
             if( !$bVerbose  ){ $args .= " "; }
-            $args .= " -e -f $localizeSDF -l ";
+            $args .= " -e -f ".fix_cygwin_path($localizeSDF)." -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}
             else{
@@ -1067,5 +1068,18 @@ sub usage{
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
     print STDERR "\nlocalize -m -l cs -f my.sdf\n( Merge cs translation into the sourcecode ) \n";
+}
+
+sub fix_cygwin_path
+{
+    my ( $path ) = @_;
+
+    if ( $^O eq 'cygwin' )
+    {
+    $path = qx{cygpath -m "$path"};
+    chomp($path);
+    }
+
+    return $path;
 }
 
