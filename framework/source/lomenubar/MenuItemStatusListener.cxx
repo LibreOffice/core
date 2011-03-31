@@ -8,7 +8,7 @@ using com::sun::star::frame::status::Visibility;
 MenuItemStatusListener::MenuItemStatusListener (FrameHelper *helper)
 {
     if (!helper) throw ("FrameHelper cannot be NULL");
-    this->helper = helper;
+    this->m_helper = helper;
 }
 
 void SAL_CALL
@@ -24,7 +24,7 @@ MenuItemStatusListener::statusChanged(const FeatureStateEvent& Event)
                                     url.getLength(),
                                     NULL, NULL, NULL);
 
-    GHashTable *commandsInfo = helper->getCommandsInfo ();
+    GHashTable *commandsInfo = m_helper->getCommandsInfo ();
     MenuItemInfo *info = (MenuItemInfo*)g_hash_table_lookup (commandsInfo, (gpointer)c_url);
     if (!info)
     {
@@ -32,7 +32,7 @@ MenuItemStatusListener::statusChanged(const FeatureStateEvent& Event)
         g_hash_table_insert (commandsInfo, c_url, info);
 
         //Set the default label
-        oULabel = helper->getLabelFromCommandURL(url);
+        oULabel = m_helper->getLabelFromCommandURL(url);
         // Replace tilde with underscore for Dbusmenu Alt accelerators
         oULabel = oULabel.replace ((sal_Unicode)0x007e, (sal_Unicode)0x005f);
 

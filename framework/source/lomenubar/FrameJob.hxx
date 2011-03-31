@@ -49,9 +49,9 @@ using css::uno::Reference;
 class FrameJob : public cppu::WeakImplHelper2 < css::task::XJob, css::lang::XServiceInfo >
 {
  private:
-    Reference < css::lang::XMultiServiceFactory > mxMSF;
-    Reference < css::container::XNameAccess >     xUICommands;
-    Reference < css::frame::XFrame >              xFrame;
+    Reference < css::lang::XMultiServiceFactory > m_xMSF;
+    Reference < css::container::XNameAccess >     m_xUICommands;
+    Reference < css::frame::XFrame >              m_xFrame;
 
     unsigned long xid;
 
@@ -62,7 +62,7 @@ class FrameJob : public cppu::WeakImplHelper2 < css::task::XJob, css::lang::XSer
 
  public:
     FrameJob( const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF)
-          : mxMSF( rxMSF ) {};
+          : m_xMSF( rxMSF ) {};
 
     void exportMenus (Reference < css::frame::XFrame > xFrame);
 

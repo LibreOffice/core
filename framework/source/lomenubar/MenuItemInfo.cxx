@@ -26,78 +26,78 @@
 
 MenuItemInfo::MenuItemInfo ()
 {
-    label = NULL;
-    check_state = DBUSMENU_MENUITEM_TOGGLE_STATE_UNKNOWN;
-    check_type  = (gchar*)DBUSMENU_MENUITEM_TOGGLE_CHECK;
+    m_label = NULL;
+    m_check_state = DBUSMENU_MENUITEM_TOGGLE_STATE_UNKNOWN;
+    m_check_type  = (gchar*)DBUSMENU_MENUITEM_TOGGLE_CHECK;
 
-    is_visible = TRUE;
-    is_enabled = TRUE;
+    m_is_visible = TRUE;
+    m_is_enabled = TRUE;
 }
 
 MenuItemInfo::~MenuItemInfo ()
 {
-    if (label)
-        g_free(label);
+    if (m_label)
+        g_free(m_label);
 }
 
 //Setters
 void
 MenuItemInfo::setLabel (gchar* label)
 {
-    this->label = g_strdup (label);
+    this->m_label = g_strdup (label);
 }
 
 void
 MenuItemInfo::setEnabled (gboolean is_enabled)
 {
-    this->is_enabled = is_enabled;
+    this->m_is_enabled = is_enabled;
 }
 
 void
 MenuItemInfo::setCheckState (gint check_state)
 {
-    this->check_state = check_state;
+    this->m_check_state = check_state;
 }
 
 void
 MenuItemInfo::setCheckType (const gchar* check_type)
 {
-    this->check_type = (gchar*)check_type;
+    this->m_check_type = (gchar*)check_type;
 }
 
 void
 MenuItemInfo::setVisible (gboolean is_visible)
 {
-    this->is_visible = is_visible;
+    this->m_is_visible = is_visible;
 }
 
 //Getters
 gchar*
 MenuItemInfo::getLabel ()
 {
-    return label;
+    return m_label;
 }
 
 gboolean
 MenuItemInfo::getEnabled ()
 {
-    return is_enabled;
+    return m_is_enabled;
 }
 
 gint
 MenuItemInfo::getCheckState ()
 {
-    return check_state;
+    return m_check_state;
 }
 
 const gchar*
 MenuItemInfo::getCheckType ()
 {
-    return check_type;
+    return m_check_type;
 }
 
 gboolean
 MenuItemInfo::getVisible ()
 {
-    return is_visible;
+    return m_is_visible;
 }

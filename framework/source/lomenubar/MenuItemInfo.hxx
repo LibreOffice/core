@@ -27,11 +27,11 @@
 
 // This is used in a hash table with commandurls as keys
 class MenuItemInfo {
-    gchar*            label;         //Label text in UTF-8 with tildes subst by underscores
-    gint              check_state;
-    gchar*            check_type;
-    gboolean          is_enabled;
-    gboolean          is_visible;
+    gchar*            m_label;         //Label text in UTF-8 with tildes subst by underscores
+    gint              m_check_state;
+    gchar*            m_check_type;
+    gboolean          m_is_enabled;
+    gboolean          m_is_visible;
 
   public:
     MenuItemInfo ();

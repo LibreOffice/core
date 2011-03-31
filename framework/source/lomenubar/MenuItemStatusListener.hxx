@@ -18,8 +18,8 @@ using com::sun::star::lang::EventObject;
 class MenuItemStatusListener : public cppu::WeakImplHelper1 < XStatusListener >
 {
   private:
-    guint16 id;
-    FrameHelper *helper;
+    guint16 m_id;
+    FrameHelper *m_helper;
 
   public:
     MenuItemStatusListener (FrameHelper *helper);
@@ -29,7 +29,7 @@ class MenuItemStatusListener : public cppu::WeakImplHelper1 < XStatusListener >
     statusChanged(const FeatureStateEvent& Event)
       throw (RuntimeException);
 
-    virtual void SAL_CALL disposing(const EventObject& aEvent)
+    virtual void SAL_CALL disposing(const EventObject& /*aEvent*/)
       throw (RuntimeException) {}
 };
 #endif

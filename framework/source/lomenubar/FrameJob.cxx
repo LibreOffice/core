@@ -140,9 +140,9 @@ xid_to_object_path (unsigned long xid)
 //-------------------------- GObject callbacks -------------------------------//
 //This is called when a registrar becomes available. It registers the hides the menubar.
 static void
-on_registrar_available (GDBusConnection *connection,
-                        const gchar     *name,
-                        const gchar     *name_owner,
+on_registrar_available (GDBusConnection * /*connection*/,
+                        const gchar     * /*name*/,
+                        const gchar     * /*name_owner*/,
                         gpointer         user_data)
 {
     GError     *error = NULL;
@@ -195,8 +195,8 @@ on_registrar_available (GDBusConnection *connection,
 
 //This is called when the registrar becomes unavailable. It shows the menubar.
 static void
-on_registrar_unavailable (GDBusConnection *connection,
-                          const gchar     *name,
+on_registrar_unavailable (GDBusConnection * /*connection*/,
+                          const gchar     * /*name*/,
                           gpointer         user_data)
 {
     //TODO: Unregister window?
@@ -245,11 +245,11 @@ Any SAL_CALL FrameJob::execute( const Sequence< NamedValue >& aArguments )
     if (!xController.is())
         return Any();
 
-    xFrame = Reference< XFrame > ( xController->getFrame(), UNO_QUERY);
-    if (!xFrame.is ())
+    m_xFrame = Reference< XFrame > ( xController->getFrame(), UNO_QUERY);
+    if (!m_xFrame.is ())
         return Any();
 
-    exportMenus (xFrame);
+    exportMenus (m_xFrame);
     return Any();
 }
 
@@ -259,7 +259,7 @@ FrameJob::exportMenus (Reference < XFrame > xFrame)
 {
     //Set the xFrame for this object
 
-    this->xFrame = xFrame;
+    this->m_xFrame = xFrame;
 
     //Create dbusmenu server object path string
     DbusmenuServer *server = dbusmenu_server_new (xid_to_object_path(getXID (xFrame)).getStr());
@@ -294,7 +294,7 @@ FrameJob::exportMenus (Reference < XFrame > xFrame)
     }
 
     //Create a new frame helper to close the server when needed
-    FrameHelper *helper = new FrameHelper (mxMSF, xFrame, server);
+    FrameHelper *helper = new FrameHelper (m_xMSF, xFrame, server);
     xFrame->addFrameActionListener (Reference < XFrameActionListener > (helper));
 
     //Populate dbusmenu items and start the server

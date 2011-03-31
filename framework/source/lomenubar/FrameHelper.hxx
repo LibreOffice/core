@@ -43,7 +43,10 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include <libdbusmenu-glib/server.h>
+//#pragma GCC diagnostic pop
 #include <libdbusmenu-glib/menuitem.h>
 
 using com::sun::star::awt::KeyEvent;
@@ -76,30 +79,30 @@ using rtl::OUString;
 class FrameHelper : public cppu::WeakImplHelper1 < XFrameActionListener >
 {
   private:
-    Reference < XFrame >                xFrame;
-    Reference < XMultiServiceFactory >  xMSF;
-    Reference < XNameAccess >           xUICommands;
-    DbusmenuServer                     *server;
-    DbusmenuMenuitem                   *root;
-    gboolean                            watcher_set;
-    guint                               watcher;
-    XStatusListener                    *xSL;
-    Reference < XURLTransformer >       xTrans;
-    Reference < XDispatchProvider >     xdp;
-    GHashTable                         *commandsInfo;
-    gboolean                            blockDetach;
+    Reference < XFrame >                m_xFrame;
+    Reference < XMultiServiceFactory >  m_xMSF;
+    Reference < XNameAccess >           m_xUICommands;
+    DbusmenuServer                     *m_server;
+    DbusmenuMenuitem                   *m_root;
+    gboolean                            m_watcher_set;
+    guint                               m_watcher;
+    XStatusListener                    *m_xSL;
+    Reference < XURLTransformer >       m_xTrans;
+    Reference < XDispatchProvider >     m_xdp;
+    GHashTable                         *m_commandsInfo;
+    gboolean                            m_blockDetach;
 
     //These object/methods are used to recreate dynamic popupmenus
-    Reference < XMultiComponentFactory > xPCF;
-    Reference < XModuleManager>          xMM;
-    Sequence  < Any >                    args;
+    Reference < XMultiComponentFactory > m_xPCF;
+    Reference < XModuleManager>          m_xMM;
+    Sequence  < Any >                    m_args;
 
     gboolean                             isSpecialSubmenu (OUString command);
 
     //This is to build the shortcut database
-    Reference< XAcceleratorConfiguration > docAccelConf;
-    Reference< XAcceleratorConfiguration > modAccelConf;
-    Reference< XAcceleratorConfiguration > globAccelConf;
+    Reference< XAcceleratorConfiguration > m_docAccelConf;
+    Reference< XAcceleratorConfiguration > m_modAccelConf;
+    Reference< XAcceleratorConfiguration > m_globAccelConf;
 
     void getAcceleratorConfigurations (Reference < XModel >,
                                        Reference < XModuleManager>);

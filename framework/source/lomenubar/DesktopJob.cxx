@@ -70,23 +70,23 @@ using com::sun::star::uno::XInterface;
 
 //-------------------------- D-Bus Callbacks ----------------------------------
 static void
-on_bus (GDBusConnection * connection,
-        const gchar * name,
-        gpointer user_data)
+on_bus (GDBusConnection * /*connection*/,
+        const gchar * /*name*/,
+        gpointer /*user_data*/)
 {
     //TODO: Should we actually do something here?
     return;
 }
 
 static void
-name_lost (GDBusConnection * connection, const gchar * name, gpointer user_data)
+name_lost (GDBusConnection * /*connection*/, const gchar * name, gpointer /*user_data*/)
 {
     g_error ("Unable to get name '%s' on DBus", name);
     return;
 }
 
 // --------------------------- DesktopJob ----------------------------------
-Any SAL_CALL DesktopJob::execute( const Sequence< NamedValue >& aArguments )
+Any SAL_CALL DesktopJob::execute( const Sequence< NamedValue >& /*aArguments*/ )
     throw ( IllegalArgumentException, Exception, RuntimeException )
 {
     g_type_init ();
