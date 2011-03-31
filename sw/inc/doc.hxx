@@ -599,7 +599,7 @@ private:
 
     sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
-    bool        mbSetDrawDefaults;               ;    // set draw pool defaults for freshly created documents
+    bool        mbSetDrawDefaults                ;    // set draw pool defaults for freshly created documents
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
 
