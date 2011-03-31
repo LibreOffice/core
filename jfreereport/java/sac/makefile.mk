@@ -60,7 +60,7 @@ JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dproject.revision="$(VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) all
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dproject.revision="$(VERSION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) all
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
