@@ -51,7 +51,13 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
         "gij",
-        "bin/gij"
+        "bin/gij",
+        "gij-4.3",
+        "bin/gij-4.3",
+        "gij-4.2",
+        "bin/gij-4.2",
+        "gij-4.1",
+        "bin/gij-4.1"
     };
     *size = sizeof (ar) / sizeof (char*);
     return ar;
@@ -69,6 +75,20 @@ char const* const* GnuInfo::getRuntimePaths(int * size)
         "/libjvm.so",
         "/lib/" GCJ_JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/gcj-4.1.1/libjvm.so",
+        "/gcj-4.3-90/libjvm.so",
+        "/gcj-4.2-81/libjvm.so",
+        "/gcj-4.2/libjvm.so",
+        "/gcj-4.2.1/libjvm.so",
+        "/gcj-4.2.2/libjvm.so",
+        "/gcj-4.2.3/libjvm.so",
+        "/gcj-4.1-71/libjvm.so",
+        "/gcj-4_1/libjvm.so",
+        "/gcj-4.1/libjvm.so",
+        "/libgcj.so.81",
+        "/libgcj.so.80",
+        "/libgcj.so.8",
+        "/libgcj.so.71",
+        "/libgcj.so.70",
         "/libgcj.so.7",
         "/libgcj.so.6"
     };
