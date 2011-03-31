@@ -165,7 +165,7 @@ End
 
 Directory gid_Dir_ShellnewToo
     ParentID = gid_Dir_Program;
-    DosName = "shellnew2";
+    DosName = "2shellnew";
 End
 
 #endif
