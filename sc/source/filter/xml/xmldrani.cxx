@@ -63,12 +63,15 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
+#include <memory>
+
 #define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
 #define SC_USERSORTLISTINDEX    "UserSortListIndex"
 #define SC_USERLIST             "UserList"
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -146,7 +149,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bFilterIsCaseSensitive(false),
     bFilterSkipDuplicates(false),
     bFilterUseRegularExpressions(false),
-    bFilterConditionSourceRange(false)
+    bFilterConditionSourceRange(false),
+    meRangeType(GlobalNamed)
 {
     nSourceType = sheet::DataImportMode_NONE;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -216,6 +220,9 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
         }
     }
+
+    if (sDatabaseRangeName.matchAsciiL(STR_DB_LOCAL_NONAME, strlen(STR_DB_LOCAL_NONAME)))
+        meRangeType = SheetAnonymous;
 }
 
 ScXMLDatabaseRangeContext::~ScXMLDatabaseRangeContext()
@@ -278,13 +285,113 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
     return pContext;
 }
 
+ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
+{
+    ScDocument* pDoc = GetScImport().GetDocument();
+
+    sal_Int32 nOffset = 0;
+    ScRange aRange;
+    if (!ScRangeStringConverter::GetRangeFromString(aRange, sRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
+        return NULL;
+
+    ::std::auto_ptr<ScDBData> pData(
+        new ScDBData(rName, aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row()));
+
+    pData->SetAutoFilter(bAutoFilter);
+    pData->SetKeepFmt(bKeepFormats);
+    pData->SetDoSize(bMoveCells);
+    pData->SetStripData(bStripData);
+
+    // TODO: Properly import other paramters as well.
+
+    if (bContainsSubTotal)
+    {
+        ScSubTotalParam aParam;
+        aParam.bIncludePattern = bSubTotalsBindFormatsToContent;
+        aParam.bUserDef = bSubTotalsEnabledUserList;
+        aParam.nUserIndex = nSubTotalsUserListIndex;
+        aParam.bPagebreak = bSubTotalsInsertPageBreaks;
+        aParam.bCaseSens = bSubTotalsIsCaseSensitive;
+        aParam.bDoSort = bSubTotalsSortGroups;
+        aParam.bAscending = bSubTotalsAscending;
+        aParam.bUserDef = bSubTotalsEnabledUserList;
+        aParam.nUserIndex = nSubTotalsUserListIndex;
+        std::vector <ScSubTotalRule>::iterator itr = aSubTotalRules.begin(), itrEnd = aSubTotalRules.end();
+        for (size_t nPos = 0; itr != itrEnd; ++itr, ++nPos)
+        {
+            if (nPos >= MAXSUBTOTAL)
+                break;
+
+            const uno::Sequence<sheet::SubTotalColumn>& rColumns = itr->aSubTotalColumns;
+            sal_Int32 nColCount = rColumns.getLength();
+            sal_Int16 nGroupColumn = itr->nSubTotalRuleGroupFieldNumber;
+            aParam.bGroupActive[nPos] = true;
+            aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
+
+            SCCOL nCount = static_cast<SCCOL>(nColCount);
+            aParam.nSubTotals[nPos] = nCount;
+            if (nCount != 0)
+            {
+                aParam.pSubTotals[nPos] = new SCCOL[nCount];
+                aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
+
+                const sheet::SubTotalColumn* pAry = rColumns.getConstArray();
+                for (SCCOL i = 0; i < nCount; ++i)
+                {
+                    aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
+                    aParam.pFunctions[nPos][i] =
+                        ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
+                }
+            }
+            else
+            {
+                aParam.pSubTotals[nPos] = NULL;
+                aParam.pFunctions[nPos] = NULL;
+            }
+        }
+
+        pData->SetSubTotalParam(aParam);
+    }
+
+    return pData.release();
+}
+
 void ScXMLDatabaseRangeContext::EndElement()
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (!pDoc)
+        return;
+
+    if (meRangeType == SheetAnonymous)
+    {
+        OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
+
+        if (pData.get())
+        {
+            // Infer sheet index from the name.
+            OUString aStrNum = sDatabaseRangeName.copy(aName.getLength());
+            SCTAB nTab = static_cast<SCTAB>(aStrNum.toInt32());
+
+            if (bAutoFilter)
+            {
+                // Set autofilter flags so that the buttons get displayed.
+                ScRange aRange;
+                pData->GetArea(aRange);
+                pDoc->ApplyFlagsTab(
+                    aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab(), SC_MF_AUTO);
+            }
+
+            pDoc->SetAnonymousDBData(nTab, pData.release());
+        }
+        return;
+    }
+
     if (GetScImport().GetModel().is())
     {
         uno::Reference <beans::XPropertySet> xPropertySet( GetScImport().GetModel(), uno::UNO_QUERY );
-        ScDocument* pDoc = GetScImport().GetDocument();
-        if (pDoc && xPropertySet.is())
+        if (xPropertySet.is())
         {
             uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG))), uno::UNO_QUERY);
             if (xDatabaseRanges.is())
@@ -345,35 +452,10 @@ void ScXMLDatabaseRangeContext::EndElement()
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISNATIVE)))
                                     aImportDescriptor[i].Value <<= bNative;
                             }
-                            ScDBData* pDBData = NULL;
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                            rtl::OUString aLocalNoName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
-                            rtl::OUString aGlobalNoName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
-                            if (sDatabaseRangeName.match(aLocalNoName)||sDatabaseRangeName==aGlobalNoName)
-                            {
-                                SCTAB nTab = 0;
-                                if (sDatabaseRangeName==aGlobalNoName)//convert old global anonymous db ranges to new sheet local ones
-                                {
-                                    nTab = static_cast<SCTAB> (aCellRangeAddress.Sheet);
-                                }
-                                else
-                                {
-                                    rtl::OUString aDBNoName(sDatabaseRangeName);
-                                    aDBNoName = aDBNoName.replaceAt(0,aLocalNoName.getLength(),rtl::OUString());
-                                    nTab = aDBNoName.toInt32();
-                                }
-                                pDBData = pDoc->GetAnonymousDBData(nTab);
-                            }
-                            else
-                            {
-                                sal_uInt16 nIndex;
-                                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                                pDBData = (*pDBCollection)[nIndex];
-                            }
-
-                            if (!pDBData)
-                                return;
-
+                            sal_uInt16 nIndex;
+                            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
+                            ScDBData* pDBData = (*pDBCollection)[nIndex];
                             pDBData->SetImportSelection(bIsSelection);
                             pDBData->SetAutoFilter(bAutoFilter);
                             if (bAutoFilter)

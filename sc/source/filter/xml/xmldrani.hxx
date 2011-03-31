@@ -39,6 +39,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 
+class ScDBData;
 class ScXMLImport;
 
 class ScXMLDatabaseRangesContext : public SvXMLImportContext
@@ -71,6 +72,8 @@ struct ScSubTotalRule
 
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
+    enum RangeType { GlobalNamed, GlobalAnonymous, SheetAnonymous };
+
     rtl::OUString   sDatabaseRangeName;
     rtl::OUString   sConnectionRessource;
     rtl::OUString   sRangeAddress;
@@ -106,9 +109,12 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Bool        bFilterSkipDuplicates;
     sal_Bool        bFilterUseRegularExpressions;
     sal_Bool        bFilterConditionSourceRange;
+    RangeType       meRangeType;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    ScDBData* ConvertToDBData(const ::rtl::OUString& rName);
 
 public:
 

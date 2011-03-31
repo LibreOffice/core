@@ -48,6 +48,7 @@
 #include "XMLExportSharedData.hxx"
 #include "rangeutl.hxx"
 #include "subtotalparam.hxx"
+#include "queryparam.hxx"
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
@@ -59,6 +60,8 @@
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 
+#include <map>
+
 //! not found in unonames.hxx
 #define SC_USERLIST "UserList"
 #define SC_SORTASCENDING "SortAscending"
@@ -67,6 +70,8 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport),
@@ -569,11 +574,182 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
     }
 }
 
+namespace {
+
+class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>
+{
+public:
+    WriteDatabaseRange(ScXMLExport& rExport, ScDocument* pDoc) :
+        mrExport(rExport), mpDoc(pDoc), mnCounter(0) {}
+
+    void operator() (const ::std::pair<SCTAB, const ScDBData*>& r)
+    {
+        // name
+        OUStringBuffer aBuf;
+        aBuf.appendAscii(STR_DB_LOCAL_NONAME);
+        aBuf.append(static_cast<sal_Int32>(r.first)); // appended number equals sheet index on import.
+
+        write(aBuf.makeStringAndClear(), *r.second);
+    }
+
+    void operator() (const ScDBData& rData)
+    {
+        // name
+        OUStringBuffer aBuf;
+        aBuf.appendAscii(STR_DB_GLOBAL_NONAME);
+        aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
+
+        write(aBuf.makeStringAndClear(), rData);
+    }
+
+private:
+    void write(const OUString& rName, const ScDBData& rData)
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rName);
+
+        // range
+        ScRange aRange;
+        rData.GetArea(aRange);
+        OUString aRangeStr;
+        ScRangeStringConverter::GetStringFromRange(
+            aRangeStr, aRange, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aRangeStr);
+
+        // various boolean flags.
+        if (rData.HasImportSelection())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
+        if (rData.HasAutoFilter())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS, XML_TRUE);
+        if (rData.IsKeepFmt())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES, XML_TRUE);
+        if (rData.IsDoSize())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE, XML_FALSE);
+        if (rData.IsStripData())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
+
+        ScQueryParam aQueryParam;
+        rData.GetQueryParam(aQueryParam);
+        if (!aQueryParam.bHasHeader)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
+
+        ScSortParam aSortParam;
+        rData.GetSortParam(aSortParam);
+        if (!aSortParam.bByRow)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
+
+        sal_Int32 nRefresh = rData.GetRefreshDelay();
+        if (nRefresh)
+        {
+            OUStringBuffer aBuf;
+            SvXMLUnitConverter::convertTime(aBuf, static_cast<double>(nRefresh) / 86400.0);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, aBuf.makeStringAndClear());
+        }
+
+        SvXMLElementExport aElemDR(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGE, sal_True, sal_True);
+
+        writeSheetFilter(rData);
+        writeSubtotals(rData);
+    }
+
+    void writeSheetFilter(const ScDBData& rData)
+    {
+
+    }
+
+    void writeSubtotals(const ScDBData& rData)
+    {
+        ScSubTotalParam aParam;
+        rData.GetSubTotalParam(aParam);
+
+        if (!aParam.bIncludePattern)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
+
+        if (aParam.bPagebreak)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TRUE);
+
+        if (aParam.bCaseSens)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
+        SvXMLElementExport aElemSTRs(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES, sal_True, sal_True);
+
+        if (aParam.bDoSort)
+        {
+            if (!aParam.bAscending)
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+
+            if (aParam.bUserDef)
+            {
+                OUStringBuffer aBuf;
+                aBuf.appendAscii(SC_USERLIST);
+                aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
+            }
+            SvXMLElementExport aElemSGs(mrExport, XML_NAMESPACE_TABLE, XML_SORT_GROUPS, sal_True, sal_True);
+        }
+
+        for (size_t i = 0; i < MAXSUBTOTAL; ++i)
+        {
+            if (!aParam.bGroupActive[i])
+                // We're done!
+                break;
+
+            sal_Int32 nFieldCol = static_cast<sal_Int32>(aParam.nField[i]);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, rtl::OUString::valueOf(nFieldCol));
+            SvXMLElementExport aElemSTR(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, sal_True, sal_True);
+
+            SCCOL nCount = aParam.nSubTotals[i];
+            for (SCCOL j = 0; j < nCount; ++j)
+            {
+                sal_Int32 nCol = static_cast<sal_Int32>(aParam.pSubTotals[i][j]);
+                ScSubTotalFunc eFunc = aParam.pFunctions[i][j];
+
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nCol));
+                OUString aFuncStr;
+                ScXMLConverter::GetStringFromFunction(aFuncStr, eFunc);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, aFuncStr);
+
+                SvXMLElementExport aElemSTF(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD, sal_True, sal_True);
+            }
+        }
+    }
+
+private:
+    ScXMLExport& mrExport;
+    ScDocument* mpDoc;
+    sal_Int32 mnCounter;
+};
+
+}
+
 void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)
 {
+    typedef ::std::map<SCTAB, const ScDBData*> SheetLocalDBs;
+
     pDoc = rExport.GetDocument();
     if (pDoc)
     {
+        // Get sheet-local anonymous ranges.
+        SCTAB nTabCount = pDoc->GetTableCount();
+        SheetLocalDBs aSheetDBs;
+        for (SCTAB i = 0; i < nTabCount; ++i)
+        {
+            const ScDBData* p = pDoc->GetAnonymousDBData(i);
+            if (p)
+                aSheetDBs.insert(SheetLocalDBs::value_type(i, p));
+        }
+
+        bool bHasRanges = !aSheetDBs.empty();
+
+        // See if we have global ranges.
+        ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+        if (pDBCollection && pDBCollection->GetCount() > 0)
+            bHasRanges = true;
+
+        if (!bHasRanges)
+            // No ranges to export. Bail out.
+            return;
+
+        SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, sal_True, sal_True);
         uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
         if (xPropertySet.is())
         {
@@ -585,37 +761,22 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                 sal_Int32 nDatabaseRangesCount = aRanges.getLength();
                 if (nDatabaseRangesCount > 0)
                 {
-                    SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, sal_True, sal_True);
                     for (sal_Int32 i = 0; i < nDatabaseRangesCount; ++i)
                     {
                         rtl::OUString sDatabaseRangeName(aRanges[i]);
                         uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
                         if (xDatabaseRange.is())
                         {
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
+                            rtl::OUString sOUUnbenannt (ScGlobal::GetRscString(STR_DB_NONAME));
+                            if (sOUUnbenannt != sDatabaseRangeName)
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
                             table::CellRangeAddress aRangeAddress(xDatabaseRange->getDataArea());
                             rtl::OUString sOUAddress;
                             ScRangeStringConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                             rExport.AddAttribute (XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUAddress);
-                            ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-
-                            ScDBData* pDBData= NULL;
-                            if (sDatabaseRangeName.match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME))))
-                            {
-                                rtl::OUString aDBNoName = sDatabaseRangeName.replaceAt(0,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)).getLength(),rtl::OUString());
-                                SCTAB nTab = aDBNoName.toInt32();;
-                                pDBData=pDoc->GetAnonymousDBData(nTab);
-                            }
-                            else
-                            {
-                                sal_uInt16 nIndex;
-                                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                                pDBData = (*pDBCollection)[nIndex];
-                            }
-
-                            if (!pDBData)
-                                continue;
-
+                            sal_uInt16 nIndex;
+                            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
+                            ScDBData* pDBData = (*pDBCollection)[nIndex];
                             if (pDBData->HasImportSelection())
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
                             if (pDBData->HasAutoFilter())
@@ -679,6 +840,10 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                 }
             }
         }
+
+        WriteDatabaseRange func(rExport, pDoc);
+        // Write sheet-local ranges.
+        ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
     }
 }
 
