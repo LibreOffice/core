@@ -377,7 +377,7 @@ void SwCaptionDialog::DrawSample()
     String aStr;
     String sCaption = aTextEdit.GetText();
 
-    // Nummer
+    // number
     String sFldTypeName = aCategoryBox.GetText();
     sal_Bool bNone = sFldTypeName == sNone;
     if( !bNone )
@@ -386,7 +386,7 @@ void SwCaptionDialog::DrawSample()
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            // Kategorie
+            // category
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
@@ -543,7 +543,7 @@ void SwSequenceOptionDialog::Apply()
     }
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
-        // dann muessen wir das mal einfuegen
+        // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFldType.SetDelimiter( cDelim );
         aFldType.SetOutlineLvl( nLvl );

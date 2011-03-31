@@ -52,7 +52,7 @@
 #include "colmgr.hxx"
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Uebernahme der aktualisierten Werte aus dem Set
+    Description: acquisition of the updates values from the set
  -----------------------------------------------------------------------*/
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
@@ -62,7 +62,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // Ausrichtung
+        // alignment
         pPage = (const SvxPageItem*)&rSet.Get( nWhich );
 
         if ( pPage )
@@ -73,14 +73,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // Orientation und Size aus dem PageItem
+        // Orientation and Size from PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // linken und rechten Rand einstellen
+        // set left and right border
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
 
         SetLeft( rLRSpace.GetLeft() );
@@ -96,7 +96,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // oberen und unteren Rand einstellen
+        // set upper and lower border
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
 
         SetTop( rULSpace.GetUpper() );
@@ -109,7 +109,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     }
 
 
-    // Kopfzeilen-Attribute auswerten
+    // evaluate header-attributes
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
             sal_False, &pItem ) )
@@ -219,7 +219,7 @@ void SwColExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // fuer gespiegelt drehen
+            // rotate for mirrored
             nL = GetRight();
             nR = GetLeft();
         }
@@ -360,7 +360,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     SetFillColor( aGrayColor );
 
-    //Spaltentrenner?
+    //column seperator?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
@@ -487,7 +487,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // fuer gespiegelt drehen
+            // rotate for mirrored
             nL = GetRight();
             nR = GetLeft();
         }

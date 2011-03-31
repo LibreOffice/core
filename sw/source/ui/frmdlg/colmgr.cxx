@@ -41,7 +41,7 @@
 
 // PRIVATE METHODES ------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
+ Description:   set column width to current width
 ------------------------------------------------------------------------*/
 void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 {
@@ -56,7 +56,7 @@ void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
+ Description:   set column quantity and Gutterwidth
 ------------------------------------------------------------------------*/
 void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
 {
@@ -94,7 +94,7 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Hoehe Trennlinie
+ Description:   height seperation line
 ------------------------------------------------------------------------*/
 short SwColMgr::GetLineHeightPercent() const
 {
@@ -108,7 +108,7 @@ void SwColMgr::SetLineHeightPercent(short nPercent)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Spaltenbreite
+ Description:   column width
 ------------------------------------------------------------------------*/
 sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
@@ -124,7 +124,7 @@ void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Groesse neu setzen
+    Description:    newly set size
  --------------------------------------------------------------------*/
 void SwColMgr::SetActualWidth(sal_uInt16 nW)
 {
@@ -133,7 +133,7 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: ctor
+    Description: ctor
  --------------------------------------------------------------------*/
 SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),

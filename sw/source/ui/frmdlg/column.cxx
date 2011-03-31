@@ -82,7 +82,7 @@
 SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
 
 /*--------------------------------------------------------------------
-    Beschreibung:  Statische Daten
+    Description:  static data
  --------------------------------------------------------------------*/
 
 static const sal_uInt16 nVisCols = 3;
@@ -201,12 +201,12 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
         aApplyToLB.RemoveEntry( nPagePos );
 
     OSL_ENSURE( pColPgSet, "" );
-    // TabPage erzeugen
+    // create TabPage
     SwColumnPage* pPage = (SwColumnPage*) SwColumnPage::Create( this,
                                                                 *pColPgSet );
     pTabPage = pPage;
 
-    //Groesse anpassen
+    // adjust size
     Size aPageSize(pTabPage->GetSizePixel());
     Size aDlgSize(GetOutputSizePixel());
     aDlgSize.Height() = aPageSize.Height();
@@ -298,7 +298,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
 
 IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
 {
-    //aktuelle Selektion auswerten
+    // evaluate current selection
     SfxItemSet* pSet = 0;
     switch(nOldSelection)
     {
@@ -326,9 +326,9 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
 
     if(pSelectionSet && SFX_ITEM_SET == pSelectionSet->GetItemState(RES_COL))
     {
-        //Bereich mit Spalten einfuegen
+        //insert region with columns
         const SwFmtCol& rColItem = (const SwFmtCol&)pSelectionSet->Get(RES_COL);
-        //nur, wenn es auch Spalten gibt!
+        //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
                 FN_INSERT_REGION, SFX_CALLMODE_ASYNCHRON, *pSelectionSet );
@@ -350,7 +350,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
 
     if(pPageSet && SFX_ITEM_SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
-        // aktuellen PageDescriptor ermitteln und damit den Set fuellen
+        // deterine current PageDescriptor and fill the Set with it
         const sal_uInt16 nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrmFmt &rFmt = aPageDesc.GetMaster();
@@ -364,7 +364,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         rWrtShell.StartAction();
         rWrtShell.Push();
         rWrtShell.SetFlyFrmAttr( aTmp );
-        //die Rahmenselektion wieder aufheben
+        // undo the frame selction again
         if(rWrtShell.IsFrmSelected())
         {
             rWrtShell.UnSelectFrm();
@@ -409,7 +409,7 @@ void SwColumnPage::ResetColWidth()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Jetzt als TabPage
+    Description:    Now as TabPage
  --------------------------------------------------------------------*/
 SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
@@ -492,7 +492,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
-    // Controls fuer Zusaetzebereich beim MoreButton anmelden
+    // announce Controls for additional region at the MoreButton
     Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
     aCLNrEdt.SetLoseFocusHdl(aCLNrLk);
     aCLNrEdt.SetUpHdl(aCLNrLk);
@@ -610,7 +610,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 
     if(bFrm)
     {
-        if(bFormat)                     // hier gibt es keine Size
+        if(bFormat)                     // there is no size here
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
@@ -643,7 +643,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   TabPage erzeugen
+    Description:    create TabPage
  --------------------------------------------------------------------*/
 SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
@@ -651,15 +651,14 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Description:    stuff attributes into the Set when OK
  --------------------------------------------------------------------*/
 sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(aCLNrEdt.HasChildPathFocus())
         aCLNrEdt.GetDownHdl().Call(&aCLNrEdt);
-    // Im ItemSet setzen
-    // Die aktuellen Einstellungen sind
-    // schon vorhanden
+    // set in ItemSet setzen
+    // the current settings are already present
     //
     const SfxPoolItem* pOldItem;
     const SwFmtCol& rCol = pColMgr->GetColumns();
@@ -683,15 +682,15 @@ sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ColumnManager updaten
+    Description:    update ColumnManager
  --------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
     if(nCols > 1)
     {
-            // Ermitteln, ob die schmalste Spalte zu schmal ist
-            // fuer den eingestellten Spaltenabstand
+            // Determine whether the most narrow column is too narrow
+            // for the adjusted column gap
         long nMin = nColWidth[0];
         sal_uInt16 i;
 
@@ -702,8 +701,8 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         if(!bAutoWidth)
         {
             pColMgr->SetAutoWidth(sal_False);
-                // falls der Benutzer nicht die Gesamtbreite vergeben hat,
-                // den fehlenden Betrag auf die letzte Spalte addieren.
+                // when the user didn't allocate the whole width,
+                // add the missing amount to the last column.
             long nSum = 0;
             for(i = 0; i < nCols; ++i)
                 nSum += nColWidth[i];
@@ -727,7 +726,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 
         }
 
-            // keins ist ausgeschaltet
+            // nothing is turned off
         const sal_uInt16 nPos = aLineTypeDLB.GetSelectEntryPos();
         sal_Bool bEnable = 0 != nPos;
         aLineHeightEdit.Enable( bEnable );
@@ -761,13 +760,13 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         nCols = 0;
     }
 
-    //Maximalwerte setzen
+    //set maximum values
     aCLNrEdt.SetMax(Max(1L,
         Min(long(nMaxCols), long( pColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
     aCLNrEdt.SetLast(aCLNrEdt.GetMax());
     aCLNrEdt.Reformat();
 
-    //Beispielfenster anregen
+    //prompt example window
     if(!bLockUpdate)
     {
         if(bFrm)
@@ -783,7 +782,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Initialisierung
+ Description:   Initialisation
 ------------------------------------------------------------------------*/
 void SwColumnPage::Init()
 {
@@ -793,7 +792,7 @@ void SwColumnPage::Init()
     aAutoWidthBox.Check( bAutoWidth );
 
     sal_Int32 nColumnWidthSum = 0;
-    // Setzen der Breiten
+    // set the widths
     sal_uInt16 i;
     for(i = 0; i < nCols; ++i)
     {
@@ -813,10 +812,10 @@ void SwColumnPage::Init()
                 nColWidth[i] = nColumnWidthSum;
         }
         SwColLineAdj eAdj = pColMgr->GetAdjust();
-        if( COLADJ_NONE == eAdj )       // der Dialog kennt kein NONE!
+        if( COLADJ_NONE == eAdj )       // the dialog doesn't know a NONE!
         {
             eAdj = COLADJ_TOP;
-            //ohne Adjust auch kein Linientyp
+            //without Adjust no line type
             aLineTypeDLB.SelectEntryPos( 0 );
             aLineHeightEdit.SetValue( 100 );
         }
@@ -842,21 +841,20 @@ void SwColumnPage::Init()
     UpdateCols();
     Update();
 
-        // Maximale Spaltenzahl setzen
-        // Werte kleiner als 1 sind nicht erlaubt
+        // set maximum number of columns
+        // values below 1 are not allowed
     aCLNrEdt.SetMax(Max(1L,
         Min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Die Anzahl der Spalten hat sich veraendert -- hier werden
-                die Controls fuer die Bearbeitung der Spalten entsprechend
-                der Spaltenzahl en- oder disabled.
-                Falls es mehr als nVisCols (= 3) Spalten gibt, werden
-                alle Edit enabled und die Buttons fuer das Scrollen
-                ebenfalls.
-                Andernfalls werden die Edits jeweils fuer die entsprechenden
-                Spaltenzahl enabled; eine Spalte kann nicht bearbeitet werden.
+ Description:   The number of columns has changed -- here the controls for
+                editing of the columns are en- or disabled according to the
+                column number.
+                In case there are more than nVisCols (=3) all Edit are being
+                enabled and the buttons for scrolling too.
+                Otherwise Edits are being enabled according to the column
+                numbers; one column can not be edited.
 ------------------------------------------------------------------------*/
 void SwColumnPage::UpdateCols()
 {
@@ -871,7 +869,7 @@ void SwColumnPage::UpdateCols()
     }
     else if( bEdit )
     {
-        // hier gibt es absichtlich kaum noch breaks
+        // here are purposely hardly any breaks
         switch(nCols)
         {
             case 3: bEnable3 = sal_True;
@@ -950,11 +948,9 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler, der bei einer Veraenderung der Spaltenzahl
-                gerufen wird.
-                Eine Aenderung der Spaltenzahl ueberschreibt eventuelle
-                Breiteneinstellungen des Benutzers; alle Spalten sind
-                gleich breit.
+ Description:   Handler that is called at alteration of the column number.
+                An alteration of the column number overwrites potential
+                user's width settings; all columns are equally wide.
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
@@ -983,13 +979,12 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Modify- Handler fuer eine Aenderung der Spaltenbreite
-                oder des Spaltenabstandes.
-                Diese Aenderungen wirken sich erst zeitversetzt aus.
-                Durch eine Aenderung der Spaltenbreite wird die automatische
-                Berechnung der Spaltenbreite ausser Kraft gesetzt; erst
-                eine Aenderung der Spaltenzahl kehrt wieder zu diesem
-                Default zurueck.
+ Description:   Modify handler for an alteration of the column width or
+                the column gap.
+                These changes take effect time-displaced. With an
+                alteration of the column width the automatic calculation
+                of the column width is overruled; only an alteration
+                of the column number leads back to that default.
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
 {
@@ -1070,9 +1065,9 @@ IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter der Checkbox fuer automatische Breite.
-                Ist die Box gecheckt, koennen keine expliziten Werte
-                fuer die Spaltenbreite eingegeben werden.
+ Description:   Handler behind the Checkbox for automatic width.
+                When the box is checked no expicit values for the column
+                width can be entered.
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 {
@@ -1092,7 +1087,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Raufscrollen der Inhalte der Edits.
+ Description:   scroll up the contents of the edits
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
 {
@@ -1106,7 +1101,7 @@ IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Runterscrollen der Inhalte der Edits.
+ Description:   scroll down the contents of the edits.
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
 {
@@ -1120,16 +1115,16 @@ IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Relikt aus alten Zeiten - jetzt direkt ohne time
- *              Timer- Handler; angetriggert durch eine Aenderung der
-                Spaltenbreite oder des Spaltenabstandes.
+ Description:   relict from ancient times - now directly without time
+                handler; triggered by an alteration of the column width
+                or the column gap.
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
 {
     DBG_PROFSTART(columnhdl) ;
     if(pModifiedField)
     {
-            // Finden der veraenderten Spalte
+            // find the changed column
         sal_uInt16 nChanged = nFirstVis;
         if(pModifiedField == &aEd2)
             ++nChanged;
@@ -1140,7 +1135,7 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
             pModifiedField->DenormalizePercent(pModifiedField->GetValue(FUNIT_TWIP));
         long nDiff = nNewWidth - nColWidth[nChanged];
 
-        // wenn es die letzte Spalte ist
+        // when it's the last column
         if(nChanged == nCols - 1)
         {
             nColWidth[0] -= nDiff;
@@ -1169,7 +1164,7 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisierung der Anzeige
+ Description:   Update the view
 ------------------------------------------------------------------------*/
 void SwColumnPage::Update()
 {
@@ -1202,7 +1197,7 @@ void SwColumnPage::Update()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Update Bsp
+    Description:    Update Bsp
  --------------------------------------------------------------------*/
 void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -1242,7 +1237,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         long nDistance = rBox.GetDistance();
         const sal_uInt16 nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : sal_uInt16(rSize.GetWidth() - 2 * nDistance);
 
-        // Maximalwerte der Spaltenbreiten setzen
+        // set maximum values of column width
         SetPageWidth(nTotalWish);
 
         if(pColMgr->GetActualSize() != nTotalWish)
@@ -1251,17 +1246,17 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             Init();
         }
         sal_Bool bPercent;
-        // im Rahmenformat nur relative Angaben
+        // only relative data in frame format
         if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff) )
         {
-            // Wert fuer 100% setzen
+            // set value for 100%
             aEd1.SetRefValue(nTotalWish);
             aEd2.SetRefValue(nTotalWish);
             aEd3.SetRefValue(nTotalWish);
             aDistEd1.SetRefValue(nTotalWish);
             aDistEd2.SetRefValue(nTotalWish);
 
-            // Auf %-Darstellung umschalten
+            // switch to %-view
             bPercent = sal_True;
         }
         else
@@ -1308,7 +1303,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
         aAutoWidthBox.Check(sal_False);
         aDistEd1.SetPrcntValue(0);
         ColModify(0);
-        // jetzt noch das Breitenverhaeltnisse auf 2 : 1 bzw. 1 : 2 stellen
+        // now set the width ratio to 2 : 1 or 1 : 2 respectively
         sal_uInt16 nSmall = pColMgr->GetActualSize()  / 3;
         if(nItem == 4)
         {
