@@ -67,6 +67,7 @@ my_components = \
     component/vbahelper/util/msforms \
     component/sc/util/sc \
     component/sc/util/scd \
+    component/sc/util/scfilt \
     component/sc/util/vbaobj \
     component/sfx2/util/sfx \
     component/sot/util/sot \
