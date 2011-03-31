@@ -21,10 +21,10 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 symlink: %_DEST%\lib%_EXT%\libuno_sal.so.3 %_DEST%\lib%_EXT%\libuno_sal.so
 ..\%__SRC%\lib\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib.3
 symlink: %_DEST%\lib%_EXT%\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib
-..\%__SRC%\lib\libuno_sal_textenc.so.3 %_DEST%\lib%_EXT%\libuno_sal_textenc.so.3
-symlink: %_DEST%\lib%_EXT%\libuno_sal_textenc.so.3 %_DEST%\lib%_EXT%\libuno_sal_textenc.so
-..\%__SRC%\lib\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal_textenc.dylib.3
-symlink: %_DEST%\lib%_EXT%\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal_textenc.dylib
+..\%__SRC%\lib\libsal_textenc.so.3 %_DEST%\lib%_EXT%\libsal_textenc.so.3
+symlink: %_DEST%\lib%_EXT%\libsal_textenc.so.3 %_DEST%\lib%_EXT%\libsal_textenc.so
+..\%__SRC%\lib\libsal_textenc.dylib.3 %_DEST%\lib%_EXT%\libsal_textenc.dylib.3
+symlink: %_DEST%\lib%_EXT%\libsal_textenc.dylib.3 %_DEST%\lib%_EXT%\libsal_textenc.dylib
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 

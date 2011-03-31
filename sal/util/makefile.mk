@@ -166,11 +166,7 @@ SHL1STDLIBS+=-lgcc
 
 SHL4DEPN+=$(SHL1TARGETN)
 SHL4LIBS=$(SLB)$/textenc_tables.lib
-.IF "$(GUI)" == "WNT"
 SHL4TARGET=sal_textenc
-.ELSE
-SHL4TARGET=uno_sal_textenc
-.ENDIF
 SHL4STDLIBS=$(SALLIB)
 SHL4VERSIONMAP=saltextenc.map
 
