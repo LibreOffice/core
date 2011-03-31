@@ -273,7 +273,7 @@ void ScDbNameDlg::Init()
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
                     pDBData->GetName( theDbName );
-                    if (theDbName!=aStrNoName )
+                    if ( theDbName != aStrNoName )
                         aEdName.SetText( theDbName );
                     else
                         aEdName.SetText( EMPTY_STRING );
@@ -385,7 +385,7 @@ void ScDbNameDlg::UpdateNames()
             if ( pDbData )
             {
                 pDbData->GetName( aString );
-                if (aString!=aStrNoName )
+                if ( aString != aStrNoName )
                     aEdName.InsertEntry( aString );
             }
         }

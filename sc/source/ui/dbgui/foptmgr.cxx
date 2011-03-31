@@ -192,7 +192,7 @@ void ScFilterOptionsMgr::Init()
                 rBtnHeader.Check( pDBData->HasHeader() );
                 pDBData->GetName( theDbName );
 
-                if ( theDbName!=rStrNoName )
+                if ( theDbName != rStrNoName )
                 {
                     rBtnHeader.Disable();
                 }
