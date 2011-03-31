@@ -272,8 +272,8 @@ public:
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
 
-    void        SetAnonymousDBData(ScDBData* aDBData);
-    ScDBData*      GetAnonymousDBData();
+    void        SetAnonymousDBData(ScDBData* pDBData);
+    ScDBData*   GetAnonymousDBData();
 
     void        GetCodeName( String& rName ) const {  rName = aCodeName; }
     void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }

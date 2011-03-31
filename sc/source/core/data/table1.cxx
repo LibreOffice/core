@@ -1811,12 +1811,10 @@ SCROW ScTable::VisibleDataCellIterator::getRow() const
     return mnCurRow;
 }
 
-void ScTable::SetAnonymousDBData(ScDBData* aDBData)
+void ScTable::SetAnonymousDBData(ScDBData* pDBData)
 {
-    //don't delete old dbdata, will still be used by undo/redo
-    if (!(rtl::OUString(aDBData->GetName()) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unnamed"))))
-        OSL_FAIL("Falscher Name für lokale DB");
-    pDBDataNoName = aDBData;
+    delete pDBDataNoName;
+    pDBDataNoName = pDBData;
 }
 
 ScDBData* ScTable::GetAnonymousDBData()
