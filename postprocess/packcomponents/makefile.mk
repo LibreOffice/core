@@ -245,9 +245,7 @@ my_components += productregistration.jar
 my_components += \
     LuceneHelpWrapper \
     ScriptFramework \
-    ScriptProviderForBeanShell \
     ScriptProviderForJava \
-    ScriptProviderForJavaScript \
     XMergeBridge \
     XSLTFilter.jar \
     XSLTValidate \
