@@ -27,7 +27,7 @@
 #include "frmui.hrc"
 
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Align
+    Description: V-Align
  -----------------------------------------------------------------------*/
 String STR_TOP
 {
@@ -46,7 +46,7 @@ String STR_CENTER_HORI
     Text [ en-US ] = "~Center" ;
 };
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Rel
+    Description: V-Rel
  -----------------------------------------------------------------------*/
 String STR_TOPPRT
 {
@@ -54,13 +54,13 @@ String STR_TOPPRT
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: H-Rel
+    Description: H-Rel
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Rel Zeichenausrichtungen
+    Description: V-Rel character alignment
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
+    Description: character alignment for frmsh.cxx - context menu
  -----------------------------------------------------------------------*/
 String STR_TOP_BASE
 {

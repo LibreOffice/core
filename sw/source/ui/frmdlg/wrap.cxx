@@ -73,7 +73,7 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Boo
     pWrtShell(pSh)
 
 {
-    // TabPage erzeugen
+    // create TabPage
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(this, rSet);
     pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
@@ -178,7 +178,7 @@ SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 {
-    //Contour fuer Draw, Grafik und OLE (Einfuegen/Grafik/Eigenschaften fehlt noch!)
+    //Contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
     if( bDrawMode )
     {
         aWrapOutlineCB.Show();
@@ -284,9 +284,9 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     {
         pBtn->Check();
         WrapTypeHdl(pBtn);
-        // Hier wird fuer Zeichenobjekte, die im Moment auf Durchlauf stehen,
-        // schon mal der Default "Kontur an" vorbereitet, falls man spaeter auf
-        // irgendeinen Umlauf umschaltet.
+        // For character objects that currently are in passage, the default
+        // "contour on" is prepared here, in case we switch to any other
+        // passage later.
         if (bDrawMode && !aWrapOutlineCB.IsEnabled())
             aWrapOutlineCB.Check();
     }
@@ -295,7 +295,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
     const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
 
-    // Abstand zum Text
+    // gap to text
     aLeftMarginED.SetValue(aLeftMarginED.Normalize(rLR.GetLeft()), FUNIT_TWIP);
     aRightMarginED.SetValue(aRightMarginED.Normalize(rLR.GetRight()), FUNIT_TWIP);
     aTopMarginED.SetValue(aTopMarginED.Normalize(rUL.GetUpper()), FUNIT_TWIP);
@@ -306,7 +306,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Description:    stuff attributes into the set when OK
  --------------------------------------------------------------------*/
 sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
@@ -411,7 +411,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bsp - Update
+    Description:    example update
  --------------------------------------------------------------------*/
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -430,7 +430,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
         Size aSize = rFrmSize.GetSize();
 
-        // Rand
+        // Margin
         const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
         nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
@@ -496,7 +496,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                     if (aVal.nVPos <= aVal.nMaxHeight)
                         nTop = aVal.nMaxVPos - aVal.nHeight;
                     else
-                        nTop = nBottom = 0; // Kein Umlauf
+                        nTop = nBottom = 0; // no passage
                 }
                 else
                     nTop = aVal.nMaxVPos - aVal.nHeight - aVal.nVPos;
@@ -616,7 +616,7 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bereichspruefung
+    Description:    range check
  --------------------------------------------------------------------*/
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {
@@ -682,7 +682,7 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
     aWrapOutsideCB.Enable(!bEnable);
 
     bEnable =  !aWrapOutlineCB.IsChecked();
-    if (bEnable == bContourImage) // damit es nicht immer flackert
+    if (bEnable == bContourImage) // so that it doesn't always flicker
     {
         bContourImage = !bEnable;
         ApplyImageList();
