@@ -245,17 +245,17 @@ SdPage* DocumentHelper::AddMasterPage (
             // master page.
             rTargetDocument.InsertMasterPage (pClonedMasterPage);
         }
-        catch (uno::Exception& rException)
+        catch(const uno::Exception&)
         {
             pClonedMasterPage = NULL;
             DBG_UNHANDLED_EXCEPTION();
         }
-        catch (::std::exception rException)
+        catch(const ::std::exception&)
         {
             pClonedMasterPage = NULL;
             OSL_TRACE ("caught general exception");
         }
-        catch (...)
+        catch(...)
         {
             pClonedMasterPage = NULL;
             OSL_TRACE ("caught general exception");
