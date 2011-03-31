@@ -138,7 +138,6 @@ my_components = \
     preload \
     protocolhandler \
     pythonloader \
-    pythonscript \
     res \
     rpt \
     rptui \
