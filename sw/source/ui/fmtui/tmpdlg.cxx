@@ -57,12 +57,12 @@
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
 #include <pggrid.hxx>
-#include <tmpdlg.hxx>       // der Dialog
-#include <column.hxx>       // Spalten
-#include <drpcps.hxx>       // Initialen
-#include <frmpage.hxx>      // Rahmen
-#include <wrap.hxx>         // Rahmen
-#include <frmmgr.hxx>       // Rahmen
+#include <tmpdlg.hxx>       // the dialog
+#include <column.hxx>       // columns
+#include <drpcps.hxx>       // initials
+#include <frmpage.hxx>      // frames
+#include <wrap.hxx>         // frames
+#include <frmmgr.hxx>       // frames
 #include <ccoll.hxx>        // CondColl
 #include <swuiccoll.hxx>
 #include <docstyle.hxx>     //
@@ -91,7 +91,7 @@
 extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    the dialog's carrier
  --------------------------------------------------------------------*/
 
 SwTemplateDlg::SwTemplateDlg(Window*            pParent,
@@ -114,10 +114,10 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    // TabPages zusammenfieseln
+    // tinker TabPages together
     switch( nRegion )
     {
-        // Zeichenvorlagen
+        // character templates
         case SFX_STYLE_FAMILY_CHAR:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
@@ -145,7 +145,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 RemoveTabPage(TP_CHAR_TWOLN);
         }
         break;
-        // Absatzvorlagen
+        // paragraph templates
         case SFX_STYLE_FAMILY_PARA:
         {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
@@ -230,7 +230,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             }
         }
         break;
-        // Rahmenvorlagen
+        // frame templates
         case SFX_STYLE_FAMILY_FRAME:
         {
             AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
@@ -253,7 +253,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         break;
         }
-        // Seitenvorlagen
+        // page templates
         case SFX_STYLE_FAMILY_PAGE:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
@@ -274,7 +274,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
                                             pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ),
                                             sal_False,
-                                            1 ); // nach der Verwalten-Page
+                                            1 ); // after the manage-page
             if(!pActShell || 0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
@@ -298,7 +298,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         }
         break;
-        // Numerierungsvorlagen
+        // numbering templates
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
@@ -355,7 +355,7 @@ short SwTemplateDlg::Ok()
     }
     else
         //JP 09.01.98 Bug #46446#:
-        // das ist der Ok - Handler also muss auf OK defaultet werden!
+        // that's the Ok-Handler, so OK has to be default!
         nRet = RET_OK;
     return nRet;
 }
@@ -370,7 +370,7 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    //Namen der Vorlagen und Metric setzen
+    // set template's and metric's names
     String sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
@@ -551,7 +551,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // Zeichenvorlagen sammeln
+            // collect character templates
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
