@@ -213,7 +213,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
                 if (mnLockCount == 0)
                     UpdateCore(aClassifier);
             }
-            catch(RuntimeException)
+            catch(const RuntimeException&)
             {
             }
 
@@ -236,7 +236,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 #endif
         }
     }
-    catch (RuntimeException &e)
+    catch(const RuntimeException &)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -331,7 +331,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         if (aResourcesToDeactivate.size() > 0)
             mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
     }
-    catch(RuntimeException)
+    catch(const RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
