@@ -79,7 +79,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
-     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
+     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
@@ -1355,11 +1355,12 @@ if ($platform =~ m/solaris/)
    $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB.
-                        $L.'$JAVA_HOME'.$LIB.
+                        $L.$XLIB;
+
+   $JAVALIB          =  $L.'$JAVA_HOME'.$LIB.
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR.
-                        $L.$XLIB;
+                        $L.$JRETHREADDIR;
 }
 elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
@@ -1369,14 +1370,13 @@ elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
    if ($platform =~ m/openbsd/) {
       $SOLARLIB       .= $L.$USR_LOCAL.$LIB;
    }
-   $SOLARLIB         .= $L.'$JAVA_HOME'.$LIB64.
-                        $L.$JRELIBDIR.
-                        $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR;
-
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
       $SOLARLIB       .= $L.$XLIB;
    }
+   $JAVALIB           = $L.'$JAVA_HOME'.$LIB64.
+                        $L.$JRELIBDIR.
+                        $L.$JRETOOLKITDIR.
+                        $L.$JRETHREADDIR;
 }
 elsif ($platform =~ m/cygwin|os2/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1804,6 +1804,7 @@ ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
 ToFile( "PATH",              $PATH,              "e" );
 ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
+ToFile( "JAVALIB",           $JAVALIB,           "e" );
 ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
