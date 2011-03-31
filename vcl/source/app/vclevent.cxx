@@ -29,7 +29,8 @@
 #include "precompiled_vcl.hxx"
 
 #include "vcl/vclevent.hxx"
-#include "vcl/svdata.hxx"
+
+#include "svdata.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 

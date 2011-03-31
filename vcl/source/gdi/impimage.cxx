@@ -27,14 +27,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/image.h>
 #include <vcl/image.hxx>
+
+#include <image.h>
 
 // -----------
 // - Defines -

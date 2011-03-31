@@ -63,6 +63,7 @@
 #include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -3065,6 +3066,33 @@ namespace
                     rPropertyHolders.Current().setOverlineColorActive(bActive);
                     if(bActive)
                         rPropertyHolders.Current().setOverlineColor(pA->GetColor().getBColor());
+
+                    break;
+                }
+                case META_RENDERGRAPHIC_ACTION :
+                {
+                    const MetaRenderGraphicAction* pA = (const MetaRenderGraphicAction*)pAction;
+                    const Rectangle aRectangle(pA->GetPoint(), pA->GetSize());
+
+                    if(!aRectangle.IsEmpty())
+                    {
+                        // create object transform
+                        basegfx::B2DHomMatrix aObjectTransform;
+
+                        aObjectTransform.set(0, 0, aRectangle.GetWidth());
+                        aObjectTransform.set(1, 1, aRectangle.GetHeight());
+                        aObjectTransform.set(0, 2, aRectangle.Left());
+                        aObjectTransform.set(1, 2, aRectangle.Top());
+
+                        // add current transformation
+                        aObjectTransform = rPropertyHolders.Current().getTransformation() * aObjectTransform;
+
+                        // embed using EpsPrimitive
+                        rTargetHolders.Current().append(
+                            new drawinglayer::primitive2d::RenderGraphicPrimitive2D(
+                                pA->GetRenderGraphic(),
+                                aObjectTransform ) );
+                    }
 
                     break;
                 }

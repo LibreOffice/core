@@ -47,32 +47,6 @@
 #pragma warning(pop)
 #endif
 
-// ATL/WTL
-//#include <atlbase.h>
-//#include <atlstr.h>
-//#include <atlapp.h>
-//extern CAppModule _Module;
-//#include <atlcom.h>
-//#include <atlwin.h>
-//#include <atlframe.h>
-//#include <atlcrack.h>
-//#include <atlctrls.h>
-//#include <atlctrlx.h>
-//#include <atldlgs.h>
-//#include <atlmisc.h>
-
-/*
-// STL
-#include <vector>
-
-// Global functions
-LPCTSTR PrepFilterString ( CString& sFilters );
-bool    PathFromShellItem ( IShellItem* pItem, CString& sPath );
-bool    BuildFilterSpecList ( _U_STRINGorID szFilterList,
-                              std::vector<CString>& vecsFilterParts,
-                              std::vector<COMDLG_FILTERSPEC>& vecFilters );
-*/
-
 #if defined _M_IX86
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #elif defined _M_IA64
@@ -84,4 +58,3 @@ bool    BuildFilterSpecList ( _U_STRINGorID szFilterList,
 #endif
 
 #endif
-

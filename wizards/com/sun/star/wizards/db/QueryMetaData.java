@@ -196,7 +196,7 @@ public class QueryMetaData extends CommandMetaData
         ArrayList<String> CommandNames = new ArrayList<String>(1);
         for (int i = 0; i < _FieldNames.length; i++)
         {
-            String CurCommandName = "";
+            String CurCommandName = PropertyNames.EMPTY_STRING;
             String[] MetaList = JavaTools.ArrayoutofString(_FieldNames[i], ".");
             if (MetaList.length > 1)
             {

@@ -39,11 +39,11 @@ VCLKDEApplication::VCLKDEApplication() :
     disp = 0;
 }
 
-bool VCLKDEApplication::x11EventFilter(XEvent* event)
+bool VCLKDEApplication::x11EventFilter(XEvent* ev)
 {
     //if we have a display and the display consumes the event
     //do not process the event in qt
-    if (disp && disp->Dispatch(event) > 0)
+    if (disp && disp->Dispatch(ev) > 0)
     {
         return true;
     }

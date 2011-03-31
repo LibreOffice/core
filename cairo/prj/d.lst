@@ -1,5 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\cairo
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\cairo
 ..\%__SRC%\inc\cairo*.h %_DEST%\inc%_EXT%\cairo\cairo*.h
+..\%__SRC%\inc\cairo*.h %_DEST%\inc%_EXT%\external\cairo\cairo*.h
 
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*

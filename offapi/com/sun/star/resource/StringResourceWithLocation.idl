@@ -42,7 +42,7 @@ module com { module sun { module star { module resource {
 /** specifies a service providing access to a resource string table implementing the
     <type scope="com::sun::star::resource">XStringResourceWithLocation</type> interface.
  */
-service StringResourceWithLocation : com::sun::star::resource::XStringResourceWithLocation
+published service StringResourceWithLocation : com::sun::star::resource::XStringResourceWithLocation
 {
     /** is used to initialize the object on its creation.
 

@@ -28,17 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
 #include <rtl/logfile.hxx>
+
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
-
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
+#include <tools/poly.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/accel.hxx>
@@ -48,14 +44,18 @@
 #include <vcl/virdev.hxx>
 #include <vcl/spin.h>
 #include <vcl/toolbox.hxx>
-#include <vcl/toolbox.h>
 #include <vcl/bitmap.hxx>
-#include <tools/poly.hxx>
-#include <vcl/salframe.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/window.h>
+
+#include <svdata.hxx>
+#include <window.h>
+#include <toolbox.h>
+#include <salframe.hxx>
+#if defined WNT
+#include <svsys.h>
+#endif
 
 #include <string.h>
 #include <vector>

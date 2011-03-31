@@ -42,7 +42,7 @@
 //=============================================================================
 /** specifies a format condition for a control.
 */
-interface XReportControlFormat
+published interface XReportControlFormat
 {
     /** specifies the background color (RGB) of the control.
      */
@@ -374,7 +374,7 @@ interface XReportControlFormat
     };
 
     /** determins the rotation of a character in degree.
-         <p>Depending on the implementation only certain values may be allowed.
+        <p>Depending on the implementation only certain values may be allowed.
         </p>
      */
     [attribute,bound] short CharRotation

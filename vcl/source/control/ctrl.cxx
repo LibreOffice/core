@@ -28,20 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
+#include <comphelper/processfactory.hxx>
+
+#include <tools/diagnose_ex.h>
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/controldata.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/textlayout.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <textlayout.hxx>
+#include <svdata.hxx>
+#include <controldata.hxx>
+
 
 using namespace vcl;
 

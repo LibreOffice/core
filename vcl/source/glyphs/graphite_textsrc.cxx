@@ -37,7 +37,7 @@
 #include <string>
 #include <cassert>
 #include "graphite_textsrc.hxx"
-#include <vcl/graphite_features.hxx>
+#include <graphite_features.hxx>
 
 // class TextSourceAdaptor implementation.
 //

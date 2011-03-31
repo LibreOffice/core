@@ -27,12 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
+#include <tools/poly.hxx>
+
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
-#include <tools/poly.hxx>
 #include <vcl/region.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/bmpfast.hxx>
+
+#include <bmpfast.hxx>
 
 // ---------------------
 // - BitmapWriteAccess -

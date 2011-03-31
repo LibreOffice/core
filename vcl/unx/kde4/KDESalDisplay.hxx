@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <saldisp.hxx>
+#include <unx/saldisp.hxx>
 
 class SalKDEDisplay : public SalX11Display
 {
@@ -35,3 +35,4 @@ class SalKDEDisplay : public SalX11Display
         SalKDEDisplay( Display* pDisp );
             virtual ~SalKDEDisplay();
 };
+

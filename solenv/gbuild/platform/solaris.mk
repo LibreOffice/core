@@ -250,10 +250,14 @@ endif
 
 gb_Library_PLAINLIBS_NONE += \
     dl \
+    freetype \
     jpeg \
     m \
     pthread \
     X11 \
+    Xext \
+    SM \
+    ICE \
     z
 
 gb_Library_FILENAMES := \

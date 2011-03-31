@@ -109,7 +109,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     {
         try
         {
-            XTopWindow top = (XTopWindow) UnoRuntime.queryInterface(XTopWindow.class, xWindow);
+            XTopWindow top = UnoRuntime.queryInterface(XTopWindow.class, xWindow);
             if (top != null)
             {
                 top.toFront();
@@ -178,12 +178,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public void setRoadmapInteractive(boolean _bInteractive)
     {
-        Helper.setUnoPropertyValue(oRoadmap, "Activated", new Boolean(_bInteractive));
+        Helper.setUnoPropertyValue(oRoadmap, "Activated", Boolean.valueOf(_bInteractive));
     }
 
     public void setRoadmapComplete(boolean bComplete)
     {
-        Helper.setUnoPropertyValue(oRoadmap, "Complete", new Boolean(bComplete));
+        Helper.setUnoPropertyValue(oRoadmap, "Complete", Boolean.valueOf(bComplete));
     }
 
     public boolean isRoadmapComplete()
@@ -254,18 +254,18 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                         Boolean.TRUE,
                         85
                     });
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
+            XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, "rdmNavi");
 
-            xSSFRoadmap = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, oRoadmap);
-            xIndexContRoadmap = (XIndexContainer) UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
+            xSSFRoadmap = UnoRuntime.queryInterface(XSingleServiceFactory.class, oRoadmap);
+            xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
             //    XPropertySet xPropRoadmapModel = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             //    xPropRoadmapModel.addPropertyChangeListener("CurrentItemID", new WizardDialog.RoadmapItemListener(this.xDialogModel));
 
             MethodInvocation mi = new MethodInvocation("itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
             getGuiEventListener().add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
             xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
-            xRoadmapBroadcaster = (XItemEventBroadcaster) UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
+            xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener((XItemListener) getGuiEventListener());
 
             //     xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
@@ -310,11 +310,10 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         {
             Object oRoadmapItem = xSSFRoadmap.createInstance();
             Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_LABEL, _sLabel);
-            Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnabled));
+            Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnabled));
             Helper.setUnoPropertyValue(oRoadmapItem, "ID", new Integer(_CurItemID));
             xIndexContRoadmap.insertByIndex(Index, oRoadmapItem);
-            int NextIndex = Index + 1;
-            return NextIndex;
+            return Index + 1;
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -467,7 +466,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnNaviSep",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -477,7 +476,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -496,30 +495,30 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(false), IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardFinish", FINISH_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
@@ -588,7 +587,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         XInterface xRoadmapItem = getRoadmapItemByID(_nStep);
         if (xRoadmapItem != null)
         {
-            Helper.setUnoPropertyValue(xRoadmapItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+            Helper.setUnoPropertyValue(xRoadmapItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
         }
     }
 
@@ -747,7 +746,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             insertLabel("lblQueryTitle" + String.valueOf(i),
                     new String[]
                     {
-                        "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {

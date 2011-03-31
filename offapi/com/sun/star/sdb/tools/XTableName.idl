@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module sdb { module tools {
 
     @since OOo 2.0.4
 */
-interface XTableName
+published interface XTableName
 {
     /** denotes the name of the catalog which the table is a part of
     */

@@ -30,16 +30,16 @@
 
 #include <string.h>
 #include <stdlib.h>
+
 #include <tools/svwin.h>
 #include <tools/debug.hxx>
-#include <wincomp.hxx>
-#include <salbmp.h>
-#include <saldata.hxx>
-#ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
-#endif
-#include <salgdi.h>
-#include <salframe.h>
+
+#include <win/wincomp.hxx>
+#include <win/salbmp.h>
+#include <win/saldata.hxx>
+#include <win/salids.hrc>
+#include <win/salgdi.h>
+#include <win/salframe.h>
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {

@@ -64,9 +64,9 @@
 
 module com { module sun { module star { module rendering {
 
-interface XCanvas;
-interface XCanvasFont;
-interface XPolyPolygon2D;
+published interface XCanvas;
+published interface XCanvasFont;
+published interface XPolyPolygon2D;
 
 /** This is the central interface for text layouting.<p>
 
@@ -92,7 +92,7 @@ interface XPolyPolygon2D;
 
     @since OOo 2.0
  */
-interface XTextLayout : ::com::sun::star::uno::XInterface
+published interface XTextLayout : ::com::sun::star::uno::XInterface
 {
     /** Extract the polygonal shapes of the layouted text.<p>
 
@@ -107,7 +107,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** Query the ink bounding boxes for every glyph in the layouted
-         text.<p>
+        text.<p>
 
         Ink, or tight bounding boxes in this case means that for
         e.g. an 'a', the bounding box for the

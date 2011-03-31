@@ -195,7 +195,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
         ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
-            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
+            ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  parse the file format string
         rtl::OUString sRepresentation;
@@ -273,7 +273,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
         ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
-            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
+            ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
         String aFormatStr;

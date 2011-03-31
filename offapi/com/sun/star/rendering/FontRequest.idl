@@ -50,7 +50,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-struct FontRequest
+published struct FontRequest
 {
     /** The description of the font.<p>
 
@@ -85,7 +85,7 @@ struct FontRequest
         query methods, for both <type>XCanvasFont</type> and
         <type>XTextLayout</type>.<p>
     */
-    double                          CellSize;
+    double                              CellSize;
 
     //-------------------------------------------------------------------------
 

@@ -34,13 +34,13 @@
 
 module com { module sun { module star { module awt {
 
-interface XItemListListener;
+published interface XItemListListener;
 
 //==================================================================================================================
 
 /** provides convenient access to the list of items in a list box
  */
-interface XItemList
+published interface XItemList
 {
     /** is the number of items in the list
     */

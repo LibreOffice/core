@@ -48,7 +48,7 @@ module com { module sun { module star { module awt {
 /** Handles events fired by windows represented by a
     <type scope="com::sun::star::awt">XWindow</type> interface.
  */
-interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
+published interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
 
     //-------------------------------------------------------------------------
 

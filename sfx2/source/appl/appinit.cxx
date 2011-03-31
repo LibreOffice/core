@@ -262,12 +262,11 @@ bool SfxApplication::Initialize_Impl()
     // nichtgehandelte Fehler durch Errorcode 1 an SFX gegeben.
     new SimpleErrorHandler;
 #endif
-    new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
-
-    new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
-    new SfxErrorHandler(
-        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
+    pAppData_Impl->pBasicResMgr = CreateResManager("sb");
+    pAppData_Impl->pSvtResMgr = CreateResManager("svt");
+    new SfxErrorHandler( RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1 );
+    new SfxErrorHandler( RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );
+    new SfxErrorHandler( RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
     // diverse Pointer
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );

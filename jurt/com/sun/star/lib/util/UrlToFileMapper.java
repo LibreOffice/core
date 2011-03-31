@@ -145,7 +145,7 @@ public final class UrlToFileMapper {
                 try {
                     enc = (String) urlEncoderEncode.invoke(
                         null,
-                        new Object[] { new Character(c).toString(), "UTF-8" });
+                        new Object[] {Character.toString(c), "UTF-8" });
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException("This cannot happen: " + e);
                 } catch (InvocationTargetException e) {

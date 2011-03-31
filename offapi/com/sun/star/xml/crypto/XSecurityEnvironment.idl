@@ -25,10 +25,6 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_crypto_xsecurityenvironment_idl_
 #define __com_sun_star_xml_crypto_xsecurityenvironment_idl_
 
@@ -47,7 +43,7 @@ module com { module sun { module star { module xml { module crypto {
 /**
  * Interface of Security Environment
  */
-interface XSecurityEnvironment : com::sun::star::uno::XInterface
+published interface XSecurityEnvironment : com::sun::star::uno::XInterface
 {
     /**
      * Get personal certificate from the environment

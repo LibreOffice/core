@@ -361,6 +361,12 @@ public:
     static void CheckTabQuotes( String& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
+    /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc..
+
+        @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
+                 STRING_NOTFOUND if none. */
+    static xub_StrLen GetDocTabPos( const String& rString );
+
     static sal_Bool EnQuote( String& rStr );
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 

@@ -1048,8 +1048,21 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                                !rFrmBreak.IsInside( rLine ) )
                            : rFrmBreak.IsBreakNow( rLine ) ) ) )
                      ? 1 : 0;
+    // --> OD #i84870#
+    // no split of text frame, which only contains a as-character anchored object
+    const bool bOnlyContainsAsCharAnchoredObj =
+            !IsFollow() && nStrLen == 1 &&
+            GetDrawObjs() && GetDrawObjs()->Count() == 1 &&
+            (*GetDrawObjs())[0]->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR;
+    if ( nNew && bOnlyContainsAsCharAnchoredObj )
+    {
+        nNew = 0;
+    }
+    // <--
     if ( nNew )
+    {
         SplitFrm( nEnd );
+    }
 
     const SwFrm *pBodyFrm = (const SwFrm*)(FindBodyFrm());
 
@@ -1104,8 +1117,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
             // the numbering and must stay.
             if ( GetFollow()->GetOfst() != nEnd ||
                  GetFollow()->IsFieldFollow() ||
-                 ( nStrLen == 0 && GetTxtNode()->GetNumRule())
-               )
+                 ( nStrLen == 0 && GetTxtNode()->GetNumRule() ) )
             {
                 nNew |= 3;
             }
@@ -1116,8 +1128,11 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         {
             // OD 21.03.2003 #108121# - Only split frame, if the frame contains
             // content or contains no content, but has a numbering.
-            if ( nStrLen > 0 ||
-                 ( nStrLen == 0 && GetTxtNode()->GetNumRule())
+            // OD #i84870# - no split, if text frame only contains one
+            // as-character anchored object.
+            if ( !bOnlyContainsAsCharAnchoredObj &&
+                 ( nStrLen > 0 ||
+                   ( nStrLen == 0 && GetTxtNode()->GetNumRule() ) )
                )
             {
                 SplitFrm( nEnd );
@@ -1138,7 +1153,15 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     const SwTwips nDocPrtTop = Frm().Top() + Prt().Top();
     const SwTwips nOldHeight = Prt().SSize().Height();
-    const SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
+    SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
+    // --> OD #i84870# - no shrink of text frame, if it only contains one
+    // as-character anchored object.
+    if ( nChg < 0 &&
+         bOnlyContainsAsCharAnchoredObj )
+    {
+        nChg = 0;
+    }
+    // <--
 
     // Vertical Formatting:
     // The (rotated) repaint rectangle's x coordinate referes to the frame.

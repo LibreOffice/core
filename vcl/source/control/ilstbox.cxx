@@ -27,29 +27,25 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 #include <vcl/lstbox.h>
-#include <vcl/ilstbox.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
+#include <vcl/i18nhelp.hxx>
+
+#include <ilstbox.hxx>
+#include <controldata.hxx>
+#include <svdata.hxx>
+
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_VCENTER )
 

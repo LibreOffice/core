@@ -179,11 +179,13 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
     DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
     if ( pVCLXWindow )
     {
-        if( pWindow->GetWindowPeer() )
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+        if( xPeer.is() )
         {
-            int i = 0;
-            i++;
-            //          DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+            bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
+            DBG_ASSERT( bSameInstance, "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+            if ( bSameInstance )
+                return;
         }
         pVCLXWindow->SetWindow( pWindow );
         pWindow->SetWindowPeer( xIFace, pVCLXWindow );

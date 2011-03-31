@@ -37,7 +37,7 @@ module com { module sun { module star { module deployment {
 
     @since OOo 2.0
  */
-exception DeploymentException : com::sun::star::uno::Exception
+published exception DeploymentException : com::sun::star::uno::Exception
 {
     /** reflects the cause of the error.  Commonly an exception.
     */

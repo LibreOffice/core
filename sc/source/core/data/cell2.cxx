@@ -990,6 +990,10 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 pUndoDoc->PutCell( aUndoPos, pFCell );
             }
         }
+        // #i116833# If the formula is changed, always invalidate the stream (even if the result is the same).
+        // If the formula is moved, the change is recognized separately.
+        if (bValChanged && pDocument->IsStreamValid(aPos.Tab()))
+            pDocument->SetStreamValid(aPos.Tab(), sal_False);
         bValChanged = sal_False;
         if ( pRangeData )
         {   // Replace shared formula with own formula

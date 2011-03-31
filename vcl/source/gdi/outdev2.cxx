@@ -28,30 +28,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salbmp.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/impbmp.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/outdata.hxx>
-#include <vcl/outdev.h>
 #include <vcl/bmpacc.hxx>
-#include <vcl/region.h>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/window.h>
-#include <vcl/sallayout.hxx>
-#include <vcl/image.h>
 #include <vcl/image.hxx>
-#include <vcl/bmpfast.hxx>
+
+#include <bmpfast.hxx>
+#include <salbmp.hxx>
+#include <salgdi.hxx>
+#include <impbmp.hxx>
+#include <sallayout.hxx>
+#include <image.h>
+#include <outdev.h>
+#include <window.h>
+#include <region.h>
+#include <outdata.hxx>
 
 #define BAND_MAX_SIZE 512000
 

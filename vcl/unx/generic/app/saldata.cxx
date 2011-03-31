@@ -1,0 +1,867 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
+#ifdef USE_XTOOLKIT
+#  define SAL_XT
+#endif
+
+// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <stdio.h> // snprintf, seems not to be in namespace std on every platform
+#include <limits.h>
+#include <errno.h>
+#include <pthread.h>
+#include <sys/resource.h>
+#ifdef SUN
+#include <sys/systeminfo.h>
+#endif
+#ifdef AIX
+#include <strings.h>
+#endif
+#ifdef FREEBSD
+#include <sys/types.h>
+#include <sys/time.h>
+#include <unistd.h>
+#endif
+
+#include <vos/process.hxx>
+#include <vos/mutex.hxx>
+
+#include "unx/Xproto.h"
+#include "unx/saldisp.hxx"
+#include "unx/saldata.hxx"
+#include "unx/salframe.h"
+#include "unx/sm.hxx"
+#include "unx/i18n_im.hxx"
+#include "unx/i18n_xkb.hxx"
+#include "salinst.hxx"
+
+#include <osl/signal.h>
+#include <osl/thread.h>
+#include <osl/process.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/bootstrap.hxx>
+
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
+
+// -=-= <signal.h> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#ifndef UNX
+#ifndef SIGBUS
+#define SIGBUS 10
+#endif
+#ifndef SIGSEGV
+#define SIGSEGV 11
+#endif
+#ifndef SIGIOT
+#define SIGIOT SIGABRT
+#endif
+#endif
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static const struct timeval noyield__ = { 0, 0 };
+static const struct timeval yield__   = { 0, 10000 };
+
+static const char* XRequest[] = {
+    // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
+    NULL,
+    "X_CreateWindow",
+    "X_ChangeWindowAttributes",
+    "X_GetWindowAttributes",
+    "X_DestroyWindow",
+    "X_DestroySubwindows",
+    "X_ChangeSaveSet",
+    "X_ReparentWindow",
+    "X_MapWindow",
+    "X_MapSubwindows",
+    "X_UnmapWindow",
+    "X_UnmapSubwindows",
+    "X_ConfigureWindow",
+    "X_CirculateWindow",
+    "X_GetGeometry",
+    "X_QueryTree",
+    "X_InternAtom",
+    "X_GetAtomName",
+    "X_ChangeProperty",
+    "X_DeleteProperty",
+    "X_GetProperty",
+    "X_ListProperties",
+    "X_SetSelectionOwner",
+    "X_GetSelectionOwner",
+    "X_ConvertSelection",
+    "X_SendEvent",
+    "X_GrabPointer",
+    "X_UngrabPointer",
+    "X_GrabButton",
+    "X_UngrabButton",
+    "X_ChangeActivePointerGrab",
+    "X_GrabKeyboard",
+    "X_UngrabKeyboard",
+    "X_GrabKey",
+    "X_UngrabKey",
+    "X_AllowEvents",
+    "X_GrabServer",
+    "X_UngrabServer",
+    "X_QueryPointer",
+    "X_GetMotionEvents",
+    "X_TranslateCoords",
+    "X_WarpPointer",
+    "X_SetInputFocus",
+    "X_GetInputFocus",
+    "X_QueryKeymap",
+    "X_OpenFont",
+    "X_CloseFont",
+    "X_QueryFont",
+    "X_QueryTextExtents",
+    "X_ListFonts",
+    "X_ListFontsWithInfo",
+    "X_SetFontPath",
+    "X_GetFontPath",
+    "X_CreatePixmap",
+    "X_FreePixmap",
+    "X_CreateGC",
+    "X_ChangeGC",
+    "X_CopyGC",
+    "X_SetDashes",
+    "X_SetClipRectangles",
+    "X_FreeGC",
+    "X_ClearArea",
+    "X_CopyArea",
+    "X_CopyPlane",
+    "X_PolyPoint",
+    "X_PolyLine",
+    "X_PolySegment",
+    "X_PolyRectangle",
+    "X_PolyArc",
+    "X_FillPoly",
+    "X_PolyFillRectangle",
+    "X_PolyFillArc",
+    "X_PutImage",
+    "X_GetImage",
+    "X_PolyText8",
+    "X_PolyText16",
+    "X_ImageText8",
+    "X_ImageText16",
+    "X_CreateColormap",
+    "X_FreeColormap",
+    "X_CopyColormapAndFree",
+    "X_InstallColormap",
+    "X_UninstallColormap",
+    "X_ListInstalledColormaps",
+    "X_AllocColor",
+    "X_AllocNamedColor",
+    "X_AllocColorCells",
+    "X_AllocColorPlanes",
+    "X_FreeColors",
+    "X_StoreColors",
+    "X_StoreNamedColor",
+    "X_QueryColors",
+    "X_LookupColor",
+    "X_CreateCursor",
+    "X_CreateGlyphCursor",
+    "X_FreeCursor",
+    "X_RecolorCursor",
+    "X_QueryBestSize",
+    "X_QueryExtension",
+    "X_ListExtensions",
+    "X_ChangeKeyboardMapping",
+    "X_GetKeyboardMapping",
+    "X_ChangeKeyboardControl",
+    "X_GetKeyboardControl",
+    "X_Bell",
+    "X_ChangePointerControl",
+    "X_GetPointerControl",
+    "X_SetScreenSaver",
+    "X_GetScreenSaver",
+    "X_ChangeHosts",
+    "X_ListHosts",
+    "X_SetAccessControl",
+    "X_SetCloseDownMode",
+    "X_KillClient",
+    "X_RotateProperties",
+    "X_ForceScreenSaver",
+    "X_SetPointerMapping",
+    "X_GetPointerMapping",
+    "X_SetModifierMapping",
+    "X_GetModifierMapping",
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    "X_NoOperation"
+};
+
+// -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+{
+    GetX11SalData()->XError( pDisplay, pEvent );
+    return 0;
+}
+
+int X11SalData::XIOErrorHdl( Display * )
+{
+    /*  #106197# hack: until a real shutdown procedure exists
+     *  _exit ASAP
+     */
+    if( ImplGetSVData()->maAppData.mbAppQuit )
+        _exit(1);
+
+    // really bad hack
+    if( ! SessionManagerClient::checkDocumentsSaved() )
+        /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+
+    std::fprintf( stderr, "X IO Error\n" );
+    std::fflush( stdout );
+    std::fflush( stderr );
+
+    /*  #106197# the same reasons to use _exit instead of exit in salmain
+     *  do apply here. Since there is nothing to be done after an XIO
+     *  error we have to _exit immediately.
+     */
+    _exit(0);
+    return 0;
+}
+
+// -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <pthread.h>
+
+X11SalData::X11SalData()
+{
+    bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
+
+    pXLib_          = NULL;
+    m_pSalDisplay   = NULL;
+    m_pInstance     = NULL;
+    m_pPlugin       = NULL;
+
+    hMainThread_    = pthread_self();
+    osl_getLocalHostname( &maLocalHostName.pData );
+}
+
+X11SalData::~X11SalData()
+{
+    DeleteDisplay();
+}
+
+void X11SalData::DeleteDisplay()
+{
+    delete m_pSalDisplay;
+    m_pSalDisplay   = NULL;
+    delete pXLib_;
+    pXLib_      = NULL;
+}
+
+void X11SalData::Init()
+{
+    pXLib_ = new SalXLib();
+    pXLib_->Init();
+}
+
+void X11SalData::initNWF( void )
+{
+}
+
+void X11SalData::deInitNWF( void )
+{
+}
+
+// -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+SalXLib::SalXLib()
+{
+    m_aTimeout.tv_sec       = 0;
+    m_aTimeout.tv_usec      = 0;
+    m_nTimeoutMS            = 0;
+
+    nFDs_                   = 0;
+    FD_ZERO( &aReadFDS_ );
+    FD_ZERO( &aExceptionFDS_ );
+
+    m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
+    if (pipe (m_pTimeoutFDS) != -1)
+    {
+        // initialize 'wakeup' pipe.
+        int flags;
+
+        // set close-on-exec descriptor flag.
+        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
+        {
+            flags |= FD_CLOEXEC;
+            fcntl (m_pTimeoutFDS[0], F_SETFD, flags);
+        }
+        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
+        {
+            flags |= FD_CLOEXEC;
+            fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
+        }
+
+        // set non-blocking I/O flag.
+        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
+        {
+            flags |= O_NONBLOCK;
+            fcntl (m_pTimeoutFDS[0], F_SETFL, flags);
+        }
+        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
+        {
+            flags |= O_NONBLOCK;
+            fcntl (m_pTimeoutFDS[1], F_SETFL, flags);
+        }
+
+        // insert [0] into read descriptor set.
+        FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
+        nFDs_ = m_pTimeoutFDS[0] + 1;
+    }
+
+    m_bHaveSystemChildFrames        = false;
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
+}
+
+SalXLib::~SalXLib()
+{
+    // close 'wakeup' pipe.
+    close (m_pTimeoutFDS[0]);
+    close (m_pTimeoutFDS[1]);
+
+    PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigXIOErrorHandler);
+}
+
+void SalXLib::PushXErrorLevel( bool bIgnore )
+{
+    m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
+    XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
+    rEnt.m_bWas = false;
+    rEnt.m_bIgnore = bIgnore;
+    rEnt.m_nLastErrorRequest = 0;
+    rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)X11SalData::XErrorHdl );
+}
+
+void SalXLib::PopXErrorLevel()
+{
+    if( m_aXErrorHandlerStack.size() )
+    {
+        XSetErrorHandler( m_aXErrorHandlerStack.back().m_aHandler );
+        m_aXErrorHandlerStack.pop_back();
+    }
+}
+
+void SalXLib::Init()
+{
+    SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
+    pInputMethod->SetLocale();
+    XrmInitialize();
+
+    /*
+     * open connection to X11 Display
+     * try in this order:
+     *  o  -display command line parameter,
+     *  o  $DISPLAY environment variable
+     *  o  default display
+     */
+
+    Display *pDisp = NULL;
+
+    // is there a -display command line parameter?
+    vos::OExtCommandLine aCommandLine;
+    sal_uInt32 nParams = aCommandLine.getCommandArgCount();
+    rtl::OUString aParam;
+    rtl::OString aDisplay;
+    for (sal_uInt16 i=0; i<nParams; i++)
+    {
+        aCommandLine.getCommandArg(i, aParam);
+        if (aParam.equalsAscii("-display"))
+        {
+            aCommandLine.getCommandArg(i+1, aParam);
+            aDisplay = rtl::OUStringToOString(
+                   aParam, osl_getThreadTextEncoding());
+
+            if ((pDisp = XOpenDisplay(aDisplay.getStr()))!=NULL)
+            {
+                /*
+                 * if a -display switch was used, we need
+                 * to set the environment accoringly since
+                 * the clipboard build another connection
+                 * to the xserver using $DISPLAY
+                 */
+                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                osl_setEnvironment(envVar.pData, aParam.pData);
+            }
+            break;
+        }
+    }
+
+    if (!pDisp && !aDisplay.getLength())
+    {
+        // Open $DISPLAY or default...
+        char *pDisplay = getenv("DISPLAY");
+        if (pDisplay != NULL)
+            aDisplay = rtl::OString(pDisplay);
+        pDisp  = XOpenDisplay(pDisplay);
+    }
+
+    if ( !pDisp )
+    {
+        rtl::OUString aProgramFileURL;
+        osl_getExecutableFile( &aProgramFileURL.pData );
+        rtl::OUString aProgramSystemPath;
+        osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
+        rtl::OString  aProgramName = rtl::OUStringToOString(
+                                            aProgramSystemPath,
+                                            osl_getThreadTextEncoding() );
+        std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",
+                aProgramName.getStr(), aDisplay.getStr());
+        std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
+        std::fprintf( stderr, "   or check permissions of your X-Server\n");
+        std::fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
+        std::fflush( stderr );
+        exit(0);
+    }
+
+    SalDisplay *pSalDisplay = new SalX11Display( pDisp );
+
+    pInputMethod->CreateMethod( pDisp );
+    pInputMethod->AddConnectionWatch( pDisp, (void*)this );
+    pSalDisplay->SetInputMethod( pInputMethod );
+
+    PushXErrorLevel( true );
+    SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
+    XSync( pDisp, False );
+
+    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    PopXErrorLevel();
+
+    pSalDisplay->SetKbdExtension( pKbdExtension );
+}
+
+extern "C" {
+void EmitFontpathWarning( void )
+{
+    static Bool bOnce = False;
+    if ( !bOnce )
+    {
+        bOnce = True;
+        std::fprintf( stderr, "Please verify your fontpath settings\n"
+                "\t(See \"man xset\" for details"
+                " or ask your system administrator)\n" );
+    }
+}
+
+} /* extern "C" */
+
+static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
+{
+    char msg[ 120 ] = "";
+#if ! ( defined LINUX && defined PPC )
+    XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
+#endif
+    std::fprintf( stderr, "X-Error: %s\n", msg );
+    if( pEvent->request_code < capacityof( XRequest ) )
+    {
+        const char* pName = XRequest[pEvent->request_code];
+        if( !pName )
+            pName = "BadRequest?";
+        std::fprintf( stderr, "\tMajor opcode: %d (%s)\n", pEvent->request_code, pName );
+    }
+    else
+    {
+        std::fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
+        // TODO: also display extension name?
+        std::fprintf( stderr, "\tMinor opcode: %d\n", pEvent->minor_code );
+    }
+
+    std::fprintf( stderr, "\tResource ID:  0x%lx\n",
+             pEvent->resourceid );
+    std::fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
+             pEvent->serial, LastKnownRequestProcessed(pDisplay) );
+
+    if( !getenv( "SAL_SYNCHRONIZE" ) )
+    {
+        std::fprintf( stderr, "These errors are reported asynchronously,\n");
+        std::fprintf( stderr, "set environment variable SAL_SYNCHRONIZE to 1 to help debugging\n");
+    }
+
+    std::fflush( stdout );
+    std::fflush( stderr );
+}
+
+void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
+{
+    if( m_bHaveSystemChildFrames )
+        return;
+
+    if( ! m_aXErrorHandlerStack.back().m_bIgnore )
+    {
+        if (   (pEvent->error_code   == BadAlloc)
+            && (pEvent->request_code == X_OpenFont) )
+        {
+            static Bool bOnce = False;
+            if ( !bOnce )
+            {
+                std::fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                EmitFontpathWarning();
+
+                bOnce = True ;
+            }
+            return;
+        }
+        /* ignore
+        * X_SetInputFocus: it's a hint only anyway
+        * X_GetProperty: this is part of the XGetWindowProperty call and will
+        *                be handled by the return value of that function
+        */
+        else if( pEvent->request_code == X_SetInputFocus ||
+                 pEvent->request_code == X_GetProperty
+            )
+            return;
+
+
+        if( pDisplay != GetX11SalData()->GetDisplay()->GetDisplay() )
+            return;
+
+        PrintXError( pDisplay, pEvent );
+
+        oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+        switch (eToDo)
+        {
+            case osl_Signal_ActIgnore       :
+                return;
+            case osl_Signal_ActAbortApp     :
+                abort();
+            case osl_Signal_ActKillApp      :
+                exit(0);
+            case osl_Signal_ActCallNextHdl  :
+                break;
+            default :
+                break;
+        }
+
+    }
+
+    m_aXErrorHandlerStack.back().m_bWas = true;
+}
+
+struct YieldEntry
+{
+    YieldEntry* next;       // pointer to next entry
+    int         fd;         // file descriptor for reading
+    void*           data;       // data for predicate and callback
+    YieldFunc       pending;    // predicate (determins pending events)
+    YieldFunc       queued;     // read and queue up events
+    YieldFunc       handle;     // handle pending events
+
+    inline int  HasPendingEvent()   const { return pending( fd, data ); }
+    inline int  IsEventQueued()     const { return queued( fd, data ); }
+    inline void HandleNextEvent()   const { handle( fd, data ); }
+};
+
+#define MAX_NUM_DESCRIPTORS 128
+
+static YieldEntry yieldTable[ MAX_NUM_DESCRIPTORS ];
+
+void SalXLib::Insert( int nFD, void* data,
+                      YieldFunc     pending,
+                      YieldFunc     queued,
+                      YieldFunc     handle )
+{
+    DBG_ASSERT( nFD, "can not insert stdin descriptor" );
+    DBG_ASSERT( !yieldTable[nFD].fd, "SalXLib::Insert fd twice" );
+
+    yieldTable[nFD].fd      = nFD;
+    yieldTable[nFD].data    = data;
+    yieldTable[nFD].pending = pending;
+    yieldTable[nFD].queued  = queued;
+    yieldTable[nFD].handle  = handle;
+
+    FD_SET( nFD, &aReadFDS_ );
+    FD_SET( nFD, &aExceptionFDS_ );
+
+    if( nFD >= nFDs_ )
+        nFDs_ = nFD + 1;
+}
+
+void SalXLib::Remove( int nFD )
+{
+    FD_CLR( nFD, &aReadFDS_ );
+    FD_CLR( nFD, &aExceptionFDS_ );
+
+    yieldTable[nFD].fd = 0;
+
+    if ( nFD == nFDs_ )
+    {
+        for ( nFD = nFDs_ - 1;
+              nFD >= 0 && !yieldTable[nFD].fd;
+              nFD-- ) ;
+
+        nFDs_ = nFD + 1;
+    }
+}
+
+bool SalXLib::CheckTimeout( bool bExecuteTimers )
+{
+    bool bRet = false;
+    if( m_aTimeout.tv_sec ) // timer is started
+    {
+        timeval aTimeOfDay;
+        gettimeofday( &aTimeOfDay, 0 );
+        if( aTimeOfDay >= m_aTimeout )
+        {
+            bRet = true;
+            if( bExecuteTimers )
+            {
+                // timed out, update timeout
+                m_aTimeout = aTimeOfDay;
+                /*
+                *  #107827# autorestart immediately, will be stopped (or set
+                *  to different value in notify hdl if necessary;
+                *  CheckTimeout should return false while
+                *  timers are being dispatched.
+                */
+                m_aTimeout += m_nTimeoutMS;
+                // notify
+                GetX11SalData()->Timeout();
+            }
+        }
+    }
+    return bRet;
+}
+
+void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+{
+    // check for timeouts here if you want to make screenshots
+    static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
+    if (p_prioritize_timer != NULL)
+        CheckTimeout();
+
+    // first, check for already queued events.
+    for ( int nFD = 0; nFD < nFDs_; nFD++ )
+    {
+        YieldEntry* pEntry = &(yieldTable[nFD]);
+        if ( pEntry->fd )
+        {
+            DBG_ASSERT( nFD == pEntry->fd, "wrong fd in Yield()" );
+            if ( pEntry->HasPendingEvent() )
+            {
+                pEntry->HandleNextEvent();
+                // #63862# da jetzt alle user-events ueber die interne
+                // queue kommen, wird die Kontrolle analog zum select
+                // gesteuerten Zweig einmal bei bWait abgegeben
+
+                /* #i9277# do not reschedule since performance gets down the
+                   the drain under heavy load
+                YieldMutexReleaser aReleaser;
+                if ( bWait ) osl_yieldThread();
+                */
+
+                return;
+            }
+        }
+    }
+
+    // next, select with or without timeout according to bWait.
+    int      nFDs         = nFDs_;
+    fd_set   ReadFDS      = aReadFDS_;
+    fd_set   ExceptionFDS = aExceptionFDS_;
+    int      nFound       = 0;
+
+    timeval  Timeout      = noyield__;
+    timeval *pTimeout     = &Timeout;
+
+    if (bWait)
+    {
+        pTimeout = 0;
+        if (m_aTimeout.tv_sec) // Timer is started.
+        {
+            // determine remaining timeout.
+            gettimeofday (&Timeout, 0);
+            Timeout = m_aTimeout - Timeout;
+            if (yield__ >= Timeout)
+            {
+                // guard against micro timeout.
+                Timeout = yield__;
+            }
+            pTimeout = &Timeout;
+        }
+    }
+
+    {
+        // release YieldMutex (and re-acquire at block end)
+        YieldMutexReleaser aReleaser;
+        nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
+    }
+    if( nFound < 0 ) // error
+    {
+#ifdef DBG_UTIL
+        std::fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
+#endif
+        if( EINTR == errno )
+        {
+            errno = 0;
+        }
+    }
+
+    // usually handle timeouts here (as in 5.2)
+    if (p_prioritize_timer == NULL)
+        CheckTimeout();
+
+    // handle wakeup events.
+    if ((nFound > 0) && (FD_ISSET(m_pTimeoutFDS[0], &ReadFDS)))
+    {
+        int buffer;
+        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)
+            continue;
+        nFound -= 1;
+    }
+
+    // handle other events.
+    if( nFound > 0 )
+    {
+        // now we are in the protected section !
+        // recall select if we have acquired fd's, ready for reading,
+
+        struct timeval noTimeout = { 0, 0 };
+        nFound = select( nFDs_, &ReadFDS, NULL,
+                         &ExceptionFDS, &noTimeout );
+
+        // someone-else has done the job for us
+        if (nFound == 0)
+            return;
+
+        for ( int nFD = 0; nFD < nFDs_; nFD++ )
+        {
+            YieldEntry* pEntry = &(yieldTable[nFD]);
+            if ( pEntry->fd )
+            {
+                if ( FD_ISSET( nFD, &ExceptionFDS ) ) {
+#if OSL_DEBUG_LEVEL > 1
+                    std::fprintf( stderr, "SalXLib::Yield exception\n" );
+#endif
+                    nFound--;
+                }
+                if ( FD_ISSET( nFD, &ReadFDS ) )
+                {
+                    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+                    for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
+                    {
+                        pEntry->HandleNextEvent();
+                        // if a recursive call has done the job
+                        // so abort here
+                    }
+                    nFound--;
+                }
+            }
+        }
+    }
+}
+
+void SalXLib::Wakeup()
+{
+    write (m_pTimeoutFDS[1], "", 1);
+}
+
+void SalXLib::PostUserEvent()
+{
+    Wakeup();
+}
+
+const char* X11SalData::getFrameResName()
+{
+    /*  according to ICCCM:
+     *  first search command line for -name parameter
+     *  then try RESOURCE_NAME environment variable
+     *  then use argv[0] stripped by directories
+     */
+    static rtl::OStringBuffer aResName;
+    if( !aResName.getLength() )
+    {
+        int nArgs = osl_getCommandArgCount();
+        for( int n = 0; n < nArgs-1; n++ )
+        {
+            rtl::OUString aArg;
+            if( ! osl_getCommandArg( n, &aArg.pData ) &&
+                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
+                ! osl_getCommandArg( n+1, &aArg.pData ) )
+            {
+                aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
+                break;
+            }
+        }
+        if( !aResName.getLength() )
+        {
+            const char* pEnv = getenv( "RESOURCE_NAME" );
+            if( pEnv && *pEnv )
+                aResName.append( pEnv );
+        }
+        if( !aResName.getLength() )
+            aResName.append( "VCLSalFrame" );
+    }
+    return aResName.getStr();
+}
+
+const char* X11SalData::getFrameClassName()
+{
+    static rtl::OStringBuffer aClassName;
+    if( !aClassName.getLength() )
+    {
+        rtl::OUString aIni, aProduct;
+        rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aIni );
+        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+        rtl::Bootstrap aBootstrap( aIni );
+        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
+
+        if( aProduct.getLength() )
+            aClassName.append( rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
+        else
+            aClassName.append( "VCLSalFrame" );
+    }
+    return aClassName.getStr();
+}
+
+rtl::OString X11SalData::getFrameResName( SalExtStyle nStyle )
+{
+    rtl::OStringBuffer aBuf( 64 );
+    aBuf.append( getFrameResName() );
+    if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
+        aBuf.append( ".DocumentWindow" );
+
+    return aBuf.makeStringAndClear();
+}

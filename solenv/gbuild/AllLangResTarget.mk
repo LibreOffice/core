@@ -72,7 +72,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(DEFS) \
         -fp=$(1) \
-        $(if $<,$<,$(MERGEDFILE))" > $${RESPONSEFILE} && \
+        $(if $(MERGEDFILE),$(MERGEDFILE),$<)" > $${RESPONSEFILE} && \
     $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
     rm -rf $${RESPONSEFILE})
 

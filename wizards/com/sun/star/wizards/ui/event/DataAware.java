@@ -320,7 +320,7 @@ public abstract class DataAware {
                 ex2.printStackTrace();
             } catch (NullPointerException npe) {
                 if (getMethod.getReturnType().equals(String.class))
-                    return "";
+                    return PropertyNames.EMPTY_STRING;
                 if (getMethod.getReturnType().equals(Short.class))
                     return new Short((short) 0);
                 if (getMethod.getReturnType().equals(Integer.class))
@@ -347,7 +347,7 @@ public abstract class DataAware {
          */
         public void set(Object value, Object target) {
             try {
-                setMethod.invoke(target, new Object[] {value});
+                setMethod.invoke(target, value);
             } catch (IllegalAccessException ex1) {
                 ex1.printStackTrace();
             } catch (InvocationTargetException ex2) {

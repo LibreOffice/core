@@ -195,7 +195,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_POP_ACTION            : DoAction((MetaPopAction            &)*pAct); break;
             case META_HATCH_ACTION          : DoAction((MetaHatchAction          &)*pAct); break;
             case META_COMMENT_ACTION        : DoAction((MetaCommentAction        &)*pAct, pMtf); break;
-
+            case META_RENDERGRAPHIC_ACTION  : DoAction((MetaRenderGraphicAction  &)*pAct); break;
         }
 
         if(pProgrInfo != NULL)
@@ -272,7 +272,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
 {
     bNoLine = sal_False; bNoFill = sal_False;
     FASTBOOL bLine=sal_True && !bForceTextAttr;
-    FASTBOOL bFill=pObj==NULL || pObj->IsClosedObj() && !bForceTextAttr;
+    FASTBOOL bFill=pObj==NULL || ( pObj->IsClosedObj() && !bForceTextAttr );
     FASTBOOL bText=bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
 
     if ( bLine )
@@ -1023,6 +1023,27 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
             pSkipAct = pMtf->NextAction();
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ImpSdrGDIMetaFileImport::DoAction(MetaRenderGraphicAction& rAct)
+{
+    GDIMetaFile                 aMtf;
+    const ::vcl::RenderGraphic& rRenderGraphic = rAct.GetRenderGraphic();
+    Rectangle                   aRect( rAct.GetPoint(), rAct.GetSize() );
+    const Point                 aPos;
+    const Size                  aPrefSize( rRenderGraphic.GetPrefSize() );
+
+    aRect.Right()++; aRect.Bottom()++;
+
+    aMtf.SetPrefMapMode( rRenderGraphic.GetPrefMapMode() );
+    aMtf.SetPrefSize( aPrefSize );
+    aMtf.AddAction( new MetaRenderGraphicAction( aPos, aPrefSize, rRenderGraphic ) );
+    aMtf.WindStart();
+
+    SdrGrafObj* pGraf=new SdrGrafObj( aMtf, aRect );
+    InsertObj( pGraf );
 }
 
 // eof

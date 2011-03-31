@@ -39,12 +39,11 @@ public class TextFrameHandler
 
     public static XTextFrame getFrameByName(String sFrameName, XTextDocument xTD) throws NoSuchElementException, WrappedTargetException
     {
-        XTextFramesSupplier xFrameSupplier = (XTextFramesSupplier) UnoRuntime.queryInterface(XTextFramesSupplier.class, xTD);
+        XTextFramesSupplier xFrameSupplier = UnoRuntime.queryInterface(XTextFramesSupplier.class, xTD);
         if (xFrameSupplier.getTextFrames().hasByName(sFrameName))
         {
             Object oTextFrame = xFrameSupplier.getTextFrames().getByName(sFrameName);
-            XTextFrame xTextFrame = (XTextFrame) UnoRuntime.queryInterface(XTextFrame.class, oTextFrame);
-            return xTextFrame;
+            return UnoRuntime.queryInterface(XTextFrame.class, oTextFrame);
         }
         return null;
     }

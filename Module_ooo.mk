@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sw \
     toolkit \
     tools \
+    vcl \
     unoxml \
     xmloff \
     vbahelper \

@@ -28,9 +28,9 @@
 #include "precompiled_vcl.hxx"
 
 #include "pdffontcache.hxx"
-#include <vcl/salgdi.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/sallayout.hxx>
+#include <salgdi.hxx>
+#include <outfont.hxx>
+#include <sallayout.hxx>
 
 using namespace vcl;
 

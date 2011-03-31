@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <comphelper/sequenceasvector.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -41,6 +42,8 @@
 #include <limits.h>
 #endif
 #include "..\misc\WinImplHelper.hxx"
+
+#include <Shlguid.h>
 
  inline bool is_current_process_window(HWND hwnd)
 {
@@ -199,6 +202,10 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
                     impl_sta_appendFilter(rRequest);
                     break;
 
+            case E_APPEND_FILTERGROUP :
+                    impl_sta_appendFilterGroup(rRequest);
+                    break;
+
             case E_SET_CURRENT_FILTER :
                     impl_sta_setCurrentFilter(rRequest);
                     break;
@@ -328,6 +335,28 @@ void VistaFilePickerImpl::impl_sta_appendFilter(const RequestRef& rRequest)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     m_lFilters.addFilter(sTitle, sFilter);
+}
+
+//-------------------------------------------------------------------------------
+void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
+{
+    const css::uno::Sequence< css::beans::StringPair > aFilterGroup  =
+        rRequest->getArgumentOrDefault(PROP_FILTER_GROUP, css::uno::Sequence< css::beans::StringPair >());
+
+    // SYNCHRONIZED->
+    ::rtl::OUString aEmpty;
+    ::osl::ResettableMutexGuard aLock(m_aMutex);
+
+    if ( m_lFilters.numFilter() > 0 && aFilterGroup.getLength() > 0 )
+        m_lFilters.addFilter( STRING_SEPARATOR, aEmpty, sal_True );
+
+    ::sal_Int32 c = aFilterGroup.getLength();
+    ::sal_Int32 i = 0;
+    for (i=0; i<c; ++i)
+    {
+        const css::beans::StringPair& rFilter = aFilterGroup[i];
+        m_lFilters.addFilter(rFilter.First, rFilter.Second);
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -941,7 +970,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
         return;
 
     impl_sta_getSelectedFiles(rRequest);
-    rRequest->setArgument(PROP_DIALOG_SHOW_RESULT, (::sal_Bool)sal_True);
+    rRequest->setArgument(PROP_DIALOG_SHOW_RESULT, sal_True);
 }
 
 //-------------------------------------------------------------------------------
@@ -1179,6 +1208,23 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const rtl::OUString& current
    }
 }
 
+static void impl_refreshFileDialog( TFileDialog iDialog )
+{
+    if ( SUCCEEDED(iDialog->SetFileName(L"")) &&
+         SUCCEEDED(iDialog->SetFileName(L"*.*")) )
+    {
+        IOleWindow* iOleWindow;
+        if (SUCCEEDED(iDialog->QueryInterface(IID_PPV_ARGS(&iOleWindow))))
+        {
+            HWND hwnd;
+            if (SUCCEEDED(iOleWindow->GetWindow(&hwnd)))
+            {
+                PostMessage(hwnd, WM_COMMAND, IDOK, 0);
+            }
+            iOleWindow->Release();
+        }
+    }
+}
 
 //-------------------------------------------------------------------------------
 void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
@@ -1205,6 +1251,11 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
             pExt++;
     }
     iDialog->SetDefaultExtension( pExt );
+}
+
+bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
+{
+    return true;
 }
 
 } // namespace vista

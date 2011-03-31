@@ -59,6 +59,7 @@ namespace rptui
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pReportListener;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
+        sal_Int32                   m_nPaintEntranceCount;
 
         DlgEdMode                   m_eMode;
         sal_Bool                        m_bDialogModelChanged;
@@ -67,6 +68,9 @@ namespace rptui
         /** fills the section with all control from the report section
         */
         void fill();
+        /** checks all objects if they fit in the new paper width.
+        */
+        void impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_Int32 i_nLeftMargin,sal_Int32 i_nRightMargin);
 
         OReportSection(OReportSection&);
         void operator =(OReportSection&);

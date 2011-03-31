@@ -456,6 +456,18 @@ private:
 
 }
 
+bool lcl_GetLabelIndex( size_t& rLabelIndex, long nDimension, const ScDPLabelDataVector& rLabelArray )
+{
+    size_t n = rLabelArray.size();
+    for (size_t i = 0; i < n; ++i)
+        if (static_cast<long>(rLabelArray[i].mnCol) == nDimension)
+        {
+            rLabelIndex = i;
+            return true;
+        }
+    return false;
+}
+
 void ScGridWindow::DPLaunchFieldPopupMenu(
     const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
 {
@@ -467,11 +479,12 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     sal_uInt16 nOrient;
     pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
 
-    if (pDPData->maDPParam.maLabelArray.size() <= static_cast<size_t>(pDPData->mnDim))
-        // out-of-bound dimension ID.  This should never happen!
+    // #i116457# FillLabelData skips empty column names, so mnDim can't be used directly as index into maLabelArray.
+    size_t nLabelIndex = 0;
+    if (!lcl_GetLabelIndex( nLabelIndex, pDPData->mnDim, pDPData->maDPParam.maLabelArray ))
         return;
 
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[nLabelIndex];
 
     mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
     mpDPFieldPopup->setName(OUString::createFromAscii("Pivot table field member popup"));
@@ -567,8 +580,11 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     if (!pDim)
         return;
 
+    size_t nLabelIndex = 0;
+    lcl_GetLabelIndex( nLabelIndex, pDPData->mnDim, pDPData->maDPParam.maLabelArray );
+
     // Build a map of layout names to original names.
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[nLabelIndex];
     MemNameMapType aMemNameMap;
     for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
            itr != itrEnd; ++itr)

@@ -1,0 +1,44 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\pango-1.0
+mkdir: %_DEST%\inc%_EXT%\external\pango-1.0\pango
+
+..\%__SRC%\inc\pango.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango.h
+..\%__SRC%\inc\pangocairo.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pangocairo.h
+..\%__SRC%\inc\pangoatsui.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pangoatsui.h
+..\%__SRC%\inc\pango-attributes.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-attributes.h
+..\%__SRC%\inc\pango-bidi-type.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-bidi-type.h
+..\%__SRC%\inc\pango-break.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-break.h
+..\%__SRC%\inc\pango-context.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-context.h
+..\%__SRC%\inc\pango-coverage.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-coverage.h
+..\%__SRC%\inc\pango-engine.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-engine.h
+..\%__SRC%\inc\pango-enum-types.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-enum-types.h
+..\%__SRC%\inc\pango-features.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-features.h
+..\%__SRC%\inc\pango-font.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-font.h
+..\%__SRC%\inc\pango-fontmap.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-fontmap.h
+..\%__SRC%\inc\pango-fontset.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-fontset.h
+..\%__SRC%\inc\pango-glyph.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-glyph.h
+..\%__SRC%\inc\pango-glyph-item.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-glyph-item.h
+..\%__SRC%\inc\pango-gravity.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-gravity.h
+..\%__SRC%\inc\pango-item.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-item.h
+..\%__SRC%\inc\pango-language.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-language.h
+..\%__SRC%\inc\pango-layout.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-layout.h
+..\%__SRC%\inc\pango-matrix.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-matrix.h
+..\%__SRC%\inc\pango-modules.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-modules.h
+..\%__SRC%\inc\pango-renderer.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-renderer.h
+..\%__SRC%\inc\pango-script.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-script.h
+..\%__SRC%\inc\pango-tabs.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-tabs.h
+..\%__SRC%\inc\pango-types.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-types.h
+..\%__SRC%\inc\pango-utils.h %_DEST%\inc%_EXT%\external\pango-1.0\pango\pango-utils.h
+
+..\%__SRC%\lib\libpango-1.0.0.dylib %_DEST%\lib%_EXT%\libpango-1.0.0.dylib
+symlink: %_DEST%\lib%_EXT%\libpango-1.0.0.dylib %_DEST%\lib%_EXT%\libpango-1.0.dylib
+..\%__SRC%\lib\libpangocairo-1.0.0.dylib %_DEST%\lib%_EXT%\libpangocairo-1.0.0.dylib
+symlink: %_DEST%\lib%_EXT%\libpangocairo-1.0.0.dylib %_DEST%\lib%_EXT%\libpangocairo-1.0.dylib
+
+..\%__SRC%\lib\pango-1.0.lib %_DEST%\lib%_EXT%\pango-1.0.lib
+..\%__SRC%\lib\pangocairo-1.0.lib %_DEST%\lib%_EXT%\pangocairo-1.0.lib
+..\%__SRC%\lib\pangowin32-1.0.lib %_DEST%\lib%_EXT%\pangowin32-1.0.lib
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
+..\%__SRC%\bin\pango-querymodules %_DEST%\bin%_EXT%\pango-querymodules
+..\%__SRC%\bin\querymodules.exe %_DEST%\bin%_EXT%\pango-querymodules.exe

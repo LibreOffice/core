@@ -28,17 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "salprn.h"
-#include "aquaprintview.h"
-#include "salgdi.h"
-#include "saldata.hxx"
-#include "vcl/jobset.h"
-#include "vcl/salptype.hxx"
+#include <boost/bind.hpp>
+
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
 
-#include <boost/bind.hpp>
+#include "aqua/salinst.h"
+#include "aqua/salprn.h"
+#include "aqua/aquaprintview.h"
+#include "aqua/salgdi.h"
+#include "aqua/saldata.hxx"
+
+#include "jobset.h"
+#include "salptype.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -176,7 +178,7 @@ void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalInfoPrinter::Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData )
+sal_Bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return sal_False;
 }
@@ -360,14 +362,14 @@ sal_Bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetu
 
 // -----------------------------------------------------------------------
 
-sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* i_pSetupData )
+sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 {
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin )
+XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
     return XubString();
 }
@@ -436,7 +438,7 @@ static bool getUseNativeDialog()
     return bNative;
 }
 
-sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType )
+sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
 {
     switch( i_nType )
     {
@@ -520,7 +522,7 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
 
 sal_Bool AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    const String& i_rJobName,
-                                   const String& i_rAppName,
+                                   const String& /*i_rAppName*/,
                                    ImplJobSetup* i_pSetupData,
                                    vcl::PrinterController& i_rController
                                    )
@@ -771,13 +773,13 @@ sal_Bool AquaSalPrinter::StartJob( const String* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const XubString* i_pFileName,
-                               const XubString& i_rJobName,
-                               const XubString& i_rAppName,
-                               sal_uLong i_nCopies,
-                               bool i_bCollate,
-                               bool i_bDirect,
-                               ImplJobSetup* i_pSetupData )
+sal_Bool AquaSalPrinter::StartJob( const XubString* /*i_pFileName*/,
+                               const XubString& /*i_rJobName*/,
+                               const XubString& /*i_rAppName*/,
+                               sal_uLong /*i_nCopies*/,
+                               bool /*i_bCollate*/,
+                               bool /*i_bDirect*/,
+                               ImplJobSetup* )
 {
     DBG_ERROR( "should never be called" );
     return sal_False;
@@ -818,7 +820,7 @@ sal_uLong AquaSalPrinter::GetErrorCode()
     return mpInfoPrinter->GetErrorCode();
 }
 
-void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
+void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -883,7 +885,7 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, 
     return pMatch;
 }
 
-int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* i_pSetupData )
+int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
 }

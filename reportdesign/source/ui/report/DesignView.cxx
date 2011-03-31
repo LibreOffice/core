@@ -494,11 +494,8 @@ IMPL_LINK( ODesignView, SplitHdl, void*,  )
     if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow.getMaxMarkerWidth(sal_False) )
     {
         long nOldSplitPos = getController().getSplitPos();
+        (void)nOldSplitPos;
         getController().setSplitPos(nTest);
-        if ( nOldSplitPos != -1 && nOldSplitPos <= nTest )
-        {
-            Invalidate(/*INVALIDATE_NOCHILDREN*/);
-        }
     }
 
     return 0L;

@@ -37,7 +37,7 @@
 #include <vos/mutex.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <vcl/canvasbitmap.hxx>
+#include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>

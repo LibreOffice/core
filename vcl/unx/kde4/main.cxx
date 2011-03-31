@@ -35,6 +35,8 @@
 #include "KDEData.hxx"
 #include "KDESalInstance.hxx"
 
+#include "vclpluginapi.h"
+
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -43,7 +45,7 @@
 
 /// entry point for the KDE4 VCL plugin
 extern "C" {
-    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
+    VCLPLUG_KDE4_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

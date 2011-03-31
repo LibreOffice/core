@@ -40,7 +40,7 @@ public class ColumnPropertySet
     TypeInspector oTypeInspector;
     public XPropertySet xPropertySet;
     private int nType;
-    private String sTypeName = "";
+    private String sTypeName = PropertyNames.EMPTY_STRING;
 
     public ColumnPropertySet(TypeInspector _oTypeInspector, XPropertySet _xPropertySet)
     {
@@ -149,7 +149,7 @@ public class ColumnPropertySet
 
     private void setType(int _nType, String _sTypeName, Integer precision)
     {
-        if (_sTypeName.equals(""))
+        if (_sTypeName.equals(PropertyNames.EMPTY_STRING))
         {
             sTypeName = oTypeInspector.getDefaultTypeName(nType, precision);
         }
@@ -174,7 +174,7 @@ public class ColumnPropertySet
             else if (_spropname.equals(PropertyNames.PROPERTY_NAME))
             {
                 String sName = (String) _oValue;
-                if (!sName.equals(""))
+                if (!sName.equals(PropertyNames.EMPTY_STRING))
                 {
                     xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
                 }

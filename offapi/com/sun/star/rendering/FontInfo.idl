@@ -42,7 +42,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-struct FontInfo
+published struct FontInfo
 {
     /** The PANOSE font classification.<p>
 
@@ -73,7 +73,7 @@ struct FontInfo
     //-------------------------------------------------------------------------
 
     /** This value specifies which unicode ranges are supported by
-         this font.<p>
+        this font.<p>
 
         This is to be interpreted as a split-up 128bit value, see <a
         href=http://partners.adobe.com/asn/tech/type/opentype/os2.jsp#ur>Adobe's

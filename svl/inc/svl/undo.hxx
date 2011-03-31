@@ -35,6 +35,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <vector>
+#include <limits>
 
 //====================================================================
 

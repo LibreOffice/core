@@ -28,25 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
-#include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+#include <tools/line.hxx>
+#include <tools/poly.hxx>
+
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/outdata.hxx>
-#include <tools/poly.hxx>
 #include <vcl/salbtype.hxx>
-#include <tools/line.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
 
 #include "pdfwriter_impl.hxx"
-#include "vcl/window.h"
-#include "vcl/salframe.hxx"
+
+#include "window.h"
+#include "salframe.hxx"
+#include "salgdi.hxx"
+#include "svdata.hxx"
+#include "outdata.hxx"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

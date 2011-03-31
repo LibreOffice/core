@@ -28,8 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "aqua/aqua11yfactory.h"
+
 #include "aqua11yrolehelper.h"
-#include "aqua11yfactory.h"
+
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 

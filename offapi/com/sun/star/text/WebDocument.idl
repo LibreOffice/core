@@ -38,8 +38,10 @@
 //=============================================================================
 
 /** Specify the document service of the web module.
+
+    @deprecated
  */
-service WebDocument
+published service WebDocument
 {
     /** Provides the functionality of such web document. */
     service GenericTextDocument;

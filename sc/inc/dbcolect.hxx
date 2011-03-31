@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -44,7 +44,7 @@ class ScDocument;
 
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
-
+friend class ScDBCollection;
 private:
     // DBParam
     String          aName;
@@ -219,6 +219,7 @@ public:
     virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData*       GetFilterDBAtTable(SCTAB nTab) const;
 
     sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;
 

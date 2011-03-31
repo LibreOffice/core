@@ -35,12 +35,12 @@
 //
 
 // Platform
-#include <vcl/sallayout.hxx>
+#include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"
-#include <vcl/graphite_features.hxx>
+#include <graphite_features.hxx>
 #include "graphite_textsrc.hxx"
-#include <vcl/graphite_serverfont.hxx>
+#include <graphite_serverfont.hxx>
 
 #ifndef WNT
 

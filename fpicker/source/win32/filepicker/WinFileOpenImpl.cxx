@@ -316,11 +316,24 @@ void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const rtl::OUString& sGroupTit
 // XExtendedFilePicker
 //=================================================================================================================
 
+// #i90917: Due to a different feature set for the system-dependent file pickers
+// it's possible that generic code (e.g. sfx2) provides control ids
+// (see ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR) which are NOT
+// available on all platforms. This filter function should filter out control ids
+// which are only available on KDE/GTK file pickers.
+static bool filterControlCommand( sal_Int16 nControlId )
+{
+    if ( nControlId == LISTBOX_FILTER_SELECTOR )
+        return true;
+    return false;
+}
+
 void SAL_CALL CWinFileOpenImpl::setValue(sal_Int16 aControlId, sal_Int16 aControlAction, const uno::Any& aValue)
     throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
-    m_FilePickerState->setValue(aControlId, aControlAction, aValue);
+    if ( !filterControlCommand( aControlId ))
+        m_FilePickerState->setValue(aControlId, aControlAction, aValue);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -332,7 +345,10 @@ uno::Any SAL_CALL CWinFileOpenImpl::getValue(sal_Int16 aControlId, sal_Int16 aCo
     throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
-    return m_FilePickerState->getValue(aControlId, aControlAction);
+    if ( !filterControlCommand( aControlId ))
+        return m_FilePickerState->getValue(aControlId, aControlAction);
+    else
+        return uno::Any();
 }
 
 //-----------------------------------------------------------------------------------------
@@ -343,7 +359,8 @@ void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, sal_Bool bEna
     throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
-    m_FilePickerState->enableControl(ControlID, bEnable);
+    if ( !filterControlCommand( ControlID ))
+        m_FilePickerState->enableControl(ControlID, bEnable);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -353,7 +370,9 @@ void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, sal_Bool bEna
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const rtl::OUString& aLabel )
     throw (uno::RuntimeException)
 {
-    m_FilePickerState->setLabel(aControlId, aLabel);
+    OSL_ASSERT(m_FilePickerState);
+    if ( !filterControlCommand( aControlId ))
+        m_FilePickerState->setLabel(aControlId, aLabel);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -363,7 +382,11 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const rtl::OUStr
 rtl::OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
         throw (uno::RuntimeException)
 {
-    return m_FilePickerState->getLabel(aControlId);
+    OSL_ASSERT(m_FilePickerState);
+    if ( !filterControlCommand( aControlId ))
+        return m_FilePickerState->getLabel(aControlId);
+    else
+        return rtl::OUString();
 }
 
 //-----------------------------------------------------------------------------------------

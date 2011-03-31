@@ -86,6 +86,13 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
+// <--
+// --> OD #i76669#
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+// <--
+
 #include <ndole.hxx>
 #include <svtools/chartprettypainter.hxx>
 #include <PostItMgr.hxx>
@@ -2696,6 +2703,46 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 // FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
 //
 
+// --> OD #i76669#
+namespace
+{
+    class SwViewObjectContactRedirector : public ::sdr::contact::ViewObjectContactRedirector
+    {
+        private:
+            const ViewShell& mrViewShell;
+
+        public:
+            SwViewObjectContactRedirector( const ViewShell& rSh )
+                : mrViewShell( rSh )
+            {};
+
+            virtual ~SwViewObjectContactRedirector()
+            {}
+
+            virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+                                    const sdr::contact::ViewObjectContact& rOriginal,
+                                    const sdr::contact::DisplayInfo& rDisplayInfo)
+            {
+                sal_Bool bPaint( sal_True );
+
+                SdrObject* pObj = rOriginal.GetViewContact().TryToGetSdrObject();
+                if ( pObj )
+                {
+                    bPaint = SwFlyFrm::IsPaint( pObj, &mrViewShell );
+                }
+
+                if ( !bPaint )
+                {
+                    return drawinglayer::primitive2d::Primitive2DSequence();
+                }
+
+                return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+                                                        rOriginal, rDisplayInfo );
+            }
+    };
+
+} // end of anonymous namespace
+// <--
 
 /*************************************************************************
 |*
@@ -2717,7 +2764,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 void
 SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
-        ASSERT( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
+    ASSERT( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
 
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
@@ -2756,8 +2803,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     // --> OD 2008-10-07 #i92745#
     // Extend check on certain states of the 'current' <ViewShell> instance to
     // all existing <ViewShell> instances.
-//    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
-//         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
     bool bPerformLayoutAction( true );
     {
         ViewShell* pTmpViewShell = pSh;
@@ -2812,10 +2857,11 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
-    // --> OD 2008-05-16 #i84659#
-//    while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
-    while ( pPage )
+    // --> OD #i76669#
+    SwViewObjectContactRedirector aSwRedirector( *pSh );
     // <--
+
+    while ( pPage )
     {
         const bool bPaintRightShadow =  !bBookMode || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
         const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
@@ -2826,12 +2872,10 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
             SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect, bRightSidebar );
 
             if ( aRect.IsOver( aPaintRect ) )
-            // <--
             {
                 if ( pSh->GetWin() )
                 {
                     pSubsLines = new SwSubsRects;
-                    // OD 18.11.2002 #99672# - create array for special sub-lines
                     pSpecSubsLines = new SwSubsRects;
                 }
 
@@ -2842,15 +2886,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 // marks), if painting on a window and the paint is trigger by an
                 // end action. The inefficient and simple enlargement of the
                 // paint area is replaced by this invalidation.
-    //            if ( bExtraData )
-    //            {
-    //                //Ja, das ist grob, aber wie macht man es besser?
-    //                SWRECTFN( pPage )
-    //                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
-    //                    (pPage->Frm().*fnRect->fnGetLeft)(),
-    //                    (pPage->Frm().*fnRect->fnGetWidth)() );
-    //                aPaintRect._Intersection( pSh->VisArea() );
-    //            }
                 if ( bExtraData &&
                      pSh->GetWin() && pSh->IsInEndAction() )
                 {
@@ -2911,32 +2946,31 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( pSh->Imp()->HasDrawView() )
                 {
                     pLines->LockLines( sal_True );
-                    // OD 29.08.2002 #102450# - add 3rd parameter
-                    // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
-                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), pPrintData, aPaintRect,
-                                            &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
+                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
+                                            pPrintData,
+                                            aPaintRect,
+                                            &aPageBackgrdColor,
+                                            (pPage->IsRightToLeft() ? true : false),
+                                            &aSwRedirector );
                     pLines->PaintLines( pSh->GetOut() );
                     pLines->LockLines( sal_False );
                 }
 
                 if( pSh->GetWin() )
                 {
-                    // OD 18.11.2002 #99672# - collect sub-lines
+                    // collect sub-lines
                     pPage->RefreshSubsidiary( aPaintRect );
-                    // OD 18.11.2002 #99672# - paint special sub-lines
+                    // paint special sub-lines
                     pSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL );
                 }
 
                 pPage->Paint( aPaintRect );
 
-                // OD 20.12.2002 #94627# - no paint of page border and shadow, if
-                // writer is in place mode.
+                // no paint of page border and shadow, if writer is in place mode.
                 if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
                     !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
                 {
-                    // OD 12.02.2003 #i9719#, #105645# - use new method
-                    // <SwPageFrm::PaintBorderAndShadow(..)>.
                     SwPageFrm::PaintBorderAndShadow( pPage->Frm(), pSh, bPaintRightShadow, bRightSidebar );
                     SwPageFrm::PaintNotesSidebar( pPage->Frm(), pSh, pPage->GetPhyPageNum(), bRightSidebar);
                 }
@@ -2947,9 +2981,12 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 {
                     /// OD 29.08.2002 #102450# - add 3rd parameter
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), pPrintData, aPaintRect,
+                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
+                                            pPrintData,
+                                            aPaintRect,
                                             &aPageBackgrdColor,
-                                            (pPage->IsRightToLeft() ? true : false) );
+                                            (pPage->IsRightToLeft() ? true : false),
+                                            &aSwRedirector );
                 }
 
                 if ( bExtraData )
@@ -6413,21 +6450,20 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
             {
-                // OD 30.08.2002 #102450#
-                // determine background color of page for <PaintLayer> method
-                // calls, painting <hell> or <heaven>
                 const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
-                // OD 29.08.2002 #102450#
-                // add 3rd parameter to <PaintLayer> method calls
-                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                 const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+                // --> OD #i76669#
+                SwViewObjectContactRedirector aSwRedirector( *pSh );
+                // <--
 
                 pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
-                                        (pPage->IsRightToLeft() ? true : false) );
+                                        (pPage->IsRightToLeft() ? true : false),
+                                        &aSwRedirector );
                 pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
-                                        (pPage->IsRightToLeft() ? true : false) );
+                                        (pPage->IsRightToLeft() ? true : false),
+                                        &aSwRedirector );
             }
 
             SetRetouche();
@@ -6668,22 +6704,22 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
-        // OD 30.08.2002 #102450#
-        // determine color of page, the fly frame is on, for <PaintLayer> method
-        // calls, painting <hell> or <heaven>
         const Color aPageBackgrdColor = pFlyPage->GetDrawBackgrdColor();
-        // OD 30.08.2002 #102450# - add 3rd parameter
-        // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
         const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+        // --> OD #i76669#
+        SwViewObjectContactRedirector aSwRedirector( *pSh );
+        // <--
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
-                          (pFlyPage->IsRightToLeft() ? true : false) );
+                          (pFlyPage->IsRightToLeft() ? true : false),
+                          &aSwRedirector );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
         /// OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
-                          (pFlyPage->IsRightToLeft() ? true : false) );
+                          (pFlyPage->IsRightToLeft() ? true : false),
+                          &aSwRedirector );
         pLines->PaintLines( &aDev );
         DELETEZ( pLines );
         pFlyOnlyDraw = 0;

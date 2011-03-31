@@ -38,8 +38,10 @@
 //=============================================================================
 
 /** Specify the document service of the global text module.
+
+    @deprecated
  */
-service GlobalDocument
+published service GlobalDocument
 {
     /** Provides the functionality of such global document. */
     service GenericTextDocument;

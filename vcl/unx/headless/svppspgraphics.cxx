@@ -28,33 +28,34 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "svppspgraphics.hxx"
-#include "svpbmp.hxx"
-
-#include "vcl/jobdata.hxx"
-#include "vcl/printergfx.hxx"
-#include "vcl/printerinfomanager.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/salbmp.hxx"
-#include "vcl/glyphcache.hxx"
-#include "vcl/impfont.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/fontsubset.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/salprn.hxx"
-#include "vcl/sysdata.hxx"
-#include "vcl/region.h"
-
-#include "basegfx/vector/b2ivector.hxx"
-#include "basegfx/point/b2ipoint.hxx"
-#include "basebmp/color.hxx"
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#include "basegfx/vector/b2ivector.hxx"
+#include "basegfx/point/b2ipoint.hxx"
+
+#include "basebmp/color.hxx"
+
+#include "vcl/jobdata.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/bmpacc.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/sysdata.hxx"
+
+#include "salprn.hxx"
+#include "salbmp.hxx"
+#include "glyphcache.hxx"
+#include "impfont.hxx"
+#include "outfont.hxx"
+#include "fontsubset.hxx"
+#include "printergfx.hxx"
+#include "svppspgraphics.hxx"
+#include "svpbmp.hxx"
+#include "region.h"
 
 using namespace psp;
 using namespace rtl;

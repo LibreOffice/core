@@ -37,10 +37,10 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-struct AnimationAttributes
+published struct AnimationAttributes
 {
     /// Preferred duration of the animation sequence in seconds.
-    double                                      Duration;
+    double                                          Duration;
 
     //-------------------------------------------------------------------------
 

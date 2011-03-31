@@ -33,19 +33,12 @@
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
-#include <vcl/svdata.hxx>
-#ifndef _VCL_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-#ifndef _VCL_EVENT_HXX
-#include <vcl/event.hxx>
-#endif
-#ifndef _VCL_SCRWND_HXX
+#include <svids.hrc>
+#include <svdata.hxx>
 #include <scrwnd.hxx>
-#endif
+
+#include <vcl/timer.hxx>
+#include <vcl/event.hxx>
 
 #include <math.h>
 #include <limits.h>

@@ -954,7 +954,7 @@ IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
     (void)pButton; //unused
     pPage->FillItemSet( *pOutSet );
-    EndDialog( RET_CANCEL );
+    EndDialog( RET_OK );
     return 0;
 }
 

@@ -51,4 +51,18 @@ public class PropertyNames
     public static String PROPERTY_MOVEABLE = "Moveable";
     public static String PROPERTY_CLOSEABLE = "Closeable";
     public static String PROPERTY_ALIGN = "Align";
+    public static String COMMAND = "Command";
+    public static String COMMAND_TYPE = "CommandType";
+    public static String SELECTED_ITEMS = "SelectedItems";
+    public static String URL = "URL";
+    public static String ACTIVE_CONNECTION = "ActiveConnection";
+    public static String ASC = "ASC";
+    public static String SEMI_COLON = ";";
+    public static String EMPTY_STRING = "";
+    public static String START = "start";
+    public static String ORIENTATION = "Orientation";
+    public static String READ_ONLY = "ReadOnly";
+    public static String SPACE = " ";
+    public static String STRING_ITEM_LIST = "StringItemList";
+    public static String FONT_DESCRIPTOR = "FontDescriptor";
 }

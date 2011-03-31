@@ -55,7 +55,7 @@ module com { module sun { module star { module drawing { module framework {
     method on its creation.  Arguments are only available through the
     getFullResourceURL().  The getResourceURL() method strips them away.</p>
 */
-interface XResourceId
+published interface XResourceId
 {
     /** Return the URL of the resource.  Arguments supplied on creation are
         stripped away.  Use getFullResourceURL() to access them.

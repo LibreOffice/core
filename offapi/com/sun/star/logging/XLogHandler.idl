@@ -53,7 +53,7 @@ module com { module sun { module star { module logging {
 
     @since OOo 2.3
  */
-interface XLogHandler
+published interface XLogHandler
 {
     /** allows life time control for the handler
 

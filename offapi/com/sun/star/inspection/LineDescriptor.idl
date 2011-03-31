@@ -35,7 +35,7 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-interface XPropertyControl;
+published interface XPropertyControl;
 
 //-----------------------------------------------------------------------------
 /** describes the appearance of a line representing a single property in an <type>ObjectInspector</type>.
@@ -55,7 +55,7 @@ interface XPropertyControl;
 
     @since OOo 2.0.3
 */
-struct LineDescriptor
+published struct LineDescriptor
 {
     /** denotes the human-readable display name used to present a property to the user
     */

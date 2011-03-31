@@ -66,6 +66,8 @@ class IVistaFilePickerInternalNotify
     public:
 
         virtual void onAutoExtensionChanged (bool bChecked) = 0;
+
+        virtual bool onFileTypeChanged( UINT nTypeIndex ) = 0;
 };
 
 }}}

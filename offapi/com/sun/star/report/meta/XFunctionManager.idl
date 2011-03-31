@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module report { module meta {
 /** identifies a <type>XFunctionManager</type> which allows to retrieve the meta data of all supported functions.
 
 */
-interface XFunctionManager
+published interface XFunctionManager
 {
     /** allows life-time control of report engine.
      */

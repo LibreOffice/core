@@ -128,7 +128,7 @@ public class AbstractListener
      */
     public static String getEventSourceName(EventObject eventObject)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, eventObject.Source);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, eventObject.Source);
         return (String) Helper.getUnoPropertyValue(xControl.getModel(), PropertyNames.PROPERTY_NAME, String.class);
     }
 }

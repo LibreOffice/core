@@ -42,11 +42,6 @@ ZIP1TARGET      = $(WORDBOOK_ALL_TARGET)
 ZIP1LIST        = oracle.dic
 
 
-ZIP2TARGET      = $(WORDBOOK_USER_TARGET)
-
-ZIP2LIST        = standard.dic
-
-
 
 
 .INCLUDE : target.mk

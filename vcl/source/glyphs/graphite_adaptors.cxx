@@ -45,17 +45,17 @@
 #include <i18npool/mslangid.hxx>
 // Platform
 #ifndef WNT
-#include <saldisp.hxx>
+#include <unx/saldisp.hxx>
 
-#include <vcl/salgdi.hxx>
+#include <salgdi.hxx>
 
 #include <freetype/ftsynth.h>
 
 // Module
 #include "gcach_ftyp.hxx"
 
-#include <vcl/graphite_features.hxx>
-#include <vcl/graphite_adaptors.hxx>
+#include <graphite_features.hxx>
+#include <graphite_adaptors.hxx>
 
 // Module private type definitions and forward declarations.
 //

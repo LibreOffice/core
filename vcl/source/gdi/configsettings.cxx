@@ -29,7 +29,9 @@
 #include "precompiled_vcl.hxx"
 
 #include <vcl/configsettings.hxx>
-#include <vcl/svdata.hxx>
+
+#include <svdata.hxx>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

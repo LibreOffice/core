@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class ScDPDimensionSaveData;
 class ScDPTableData;
+class ScDPObject;
 
 // --------------------------------------------------------------------
 //
@@ -272,6 +273,7 @@ public:
     SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
     void                    BuildAllDimensionMembers(ScDPTableData* pData);
+    void                    BuildAllDimensionMembersFromSource(ScDPObject* pDPObj);
 
     /**
      * Check whether a dimension has one or more invisible members.

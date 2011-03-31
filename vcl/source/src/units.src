@@ -26,9 +26,7 @@
  ************************************************************************/
 #define _SV_UNITS_SRC
 
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
+#include <svids.hrc>
 
 StringArray SV_FUNIT_STRINGS
 {

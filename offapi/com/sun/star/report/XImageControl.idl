@@ -39,7 +39,7 @@
  module com {  module sun {  module star {  module report {
 
 //=============================================================================
-interface XImageControl
+published interface XImageControl
 {
     interface XReportControlModel;
 
@@ -81,7 +81,7 @@ interface XImageControl
     [attribute,bound] boolean PreserveIRI;
 };
 
-service ImageControl : XImageControl;
+published service ImageControl : XImageControl;
 //=============================================================================
 
 }; }; }; };

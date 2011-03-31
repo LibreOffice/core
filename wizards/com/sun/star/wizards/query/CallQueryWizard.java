@@ -31,6 +31,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
@@ -81,15 +82,15 @@ public class CallQueryWizard
         {
             super();
             m_serviceFactory = i_serviceFactory;
-            registerProperty( "Command", (short)( PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID ) );
-            registerProperty( "CommandType", PropertyAttribute.READONLY );
+            registerProperty( PropertyNames.COMMAND, (short)( PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID ) );
+            registerProperty( PropertyNames.COMMAND_TYPE, PropertyAttribute.READONLY );
         }
 
         public void trigger(String sEvent)
         {
             try
             {
-                if (sEvent.compareTo("start") == 0)
+                if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
                     QueryWizard CurQueryWizard = new QueryWizard( m_serviceFactory, m_wizardContext );
                     Command = CurQueryWizard.startQueryWizard();
@@ -168,7 +169,7 @@ public class CallQueryWizard
 
             try
             {
-                byteReturn = ("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {

@@ -42,15 +42,15 @@
 //=============================================================================
 
  module com {  module sun {  module star {  module report {
-interface XReportDefinition;
-interface XFunction;
+published interface XReportDefinition;
+published interface XFunction;
 //=============================================================================
 
 /** This interface specifies the functions collections of the report definition or a group.
     @see XFunction
     @see XReportDefinition
  */
-interface XFunctions
+published interface XFunctions
 {
     /** allows to register listeners to be notified of changes in the container.
     */

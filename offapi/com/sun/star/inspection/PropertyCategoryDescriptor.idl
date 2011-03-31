@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-struct PropertyCategoryDescriptor
+published struct PropertyCategoryDescriptor
 {
     /** contains the programmatic name of the category.
 

@@ -61,6 +61,7 @@ $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library__get_linktargetname,$(1)))
+$(call gb_Library_add_default_nativeres,$(1),default)
 
 endef
 

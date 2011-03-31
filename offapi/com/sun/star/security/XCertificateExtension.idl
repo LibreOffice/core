@@ -25,10 +25,6 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_security_XCertificateExtension_idl_
 #define __com_sun_star_security_XCertificateExtension_idl_
 
@@ -41,7 +37,7 @@ module com { module sun { module star { module security {
  *
  * <p>This interface represents a x509 certificate.</p>
  */
-interface XCertificateExtension : com::sun::star::uno::XInterface
+published interface XCertificateExtension : com::sun::star::uno::XInterface
 {
     /**
      * Check whether it is a critical extension

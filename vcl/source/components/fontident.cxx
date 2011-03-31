@@ -28,6 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <tools/debug.hxx>
+
+#include "vcl/svapp.hxx"
+#include "vcl/font.hxx"
+
+#include "svdata.hxx"
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -38,14 +45,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include "vcl/svapp.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/font.hxx"
-
 #include <cppuhelper/implbase3.hxx>
-
-#include <tools/debug.hxx>
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

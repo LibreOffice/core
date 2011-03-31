@@ -256,6 +256,7 @@ public:
     void    Reset();
     const   FormulaToken* First();
     const   FormulaToken* Next();
+    const   FormulaToken* PeekNextOperator();
     bool    IsEndOfPath() const;    /// if a jump or subroutine path is done
     bool    HasStacked() const { return pCur->pNext != 0; }
     short   GetPC() const { return pCur->nPC; }
@@ -276,6 +277,9 @@ public:
     void Jump( short nStart, short nNext, short nStop = SHRT_MAX );
     void Push( const FormulaTokenArray* );
     void Pop();
+
+private:
+    const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
 // =============================================================================
 } // formula

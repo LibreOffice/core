@@ -30,17 +30,19 @@
 #include <sys/time.h>
 #include <sys/poll.h>
 
+#include <sal/types.h>
+
+#include <vcl/apptypes.hxx>
+
 #include "svpinst.hxx"
 #include "svpframe.hxx"
 #include "svpdummies.hxx"
 #include "svpvd.hxx"
 #include "svpbmp.hxx"
 
-#include <vcl/salframe.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/apptypes.hxx>
-#include <vcl/saldatabasic.hxx>
-#include <sal/types.h>
+#include <salframe.hxx>
+#include <svdata.hxx>
+#include <saldatabasic.hxx>
 
 // plugin factory function
 extern "C"

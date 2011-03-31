@@ -28,9 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "saldata.hxx"
-#include "salnsmenu.h"
-#include "salinst.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salnsmenu.h"
+#include "aqua/salinst.h"
+
 #import "apple_remote/RemoteMainController.h"
 
 oslThreadKey SalData::s_aAutoReleaseKey = 0;

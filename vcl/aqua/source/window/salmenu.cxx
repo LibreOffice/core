@@ -25,21 +25,23 @@
  *
  ************************************************************************/
 
-#include "saldata.hxx"
-#include "salinst.h"
-#include "salmenu.h"
-#include "salnsmenu.h"
-#include "salframe.h"
-#include "salbmp.h"
-#include "vcl/svids.hrc"
+#include "rtl/ustrbuf.hxx"
+
 #include "vcl/cmdevt.hxx"
 #include "vcl/floatwin.hxx"
-#include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 
-#include "rtl/ustrbuf.hxx"
-#include "aqua11ywrapper.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salinst.h"
+#include "aqua/salmenu.h"
+#include "aqua/salnsmenu.h"
+#include "aqua/salframe.h"
+#include "aqua/salbmp.h"
+#include "aqua/aqua11ywrapper.h"
+
+#include "svids.hrc"
+#include "window.h"
 
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
@@ -79,12 +81,14 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
 -(void)showPreferences: (id) sender
 {
+    (void)sender;
     YIELD_GUARD;
 
     [self showDialog: SHOWDIALOG_ID_PREFERENCES];
 }
 -(void)showAbout: (id) sender
 {
+    (void)sender;
     YIELD_GUARD;
 
     [self showDialog: SHOWDIALOG_ID_ABOUT];
@@ -591,7 +595,7 @@ void AquaSalMenu::RemoveItem( unsigned nPos )
         [mpMenu removeItemAtIndex: getItemIndexByPos(nPos)];
 }
 
-void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
+void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned /*nPos*/ )
 {
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
     AquaSalMenu *subAquaSalMenu = static_cast<AquaSalMenu*>(pSubMenu);
@@ -649,7 +653,7 @@ void AquaSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
     }
 }
 
-void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& rImage )
+void AquaSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSMI, const Image& rImage )
 {
     AquaSalMenuItem* pSalMenuItem = static_cast<AquaSalMenuItem*>( pSMI );
     if( ! pSalMenuItem || ! pSalMenuItem->mpMenuItem )
@@ -662,7 +666,7 @@ void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& r
         [pImage release];
 }
 
-void AquaSalMenu::SetItemText( unsigned i_nPos, SalMenuItem* i_pSalMenuItem, const XubString& i_rText )
+void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem, const XubString& i_rText )
 {
     if (!i_pSalMenuItem)
         return;
@@ -699,7 +703,7 @@ void AquaSalMenu::SetItemText( unsigned i_nPos, SalMenuItem* i_pSalMenuItem, con
     }
 }
 
-void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
+void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& /*rKeyName*/ )
 {
     sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;
@@ -782,7 +786,7 @@ void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, cons
         [pString release];
 }
 
-void AquaSalMenu::GetSystemMenuData( SystemMenuData* pData )
+void AquaSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 

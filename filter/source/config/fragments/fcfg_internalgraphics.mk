@@ -68,6 +68,7 @@ F4_INTERNALGRAPHICS = \
     sgf_Import \
     sgv_Import \
     svg_Export \
+    svg_Import \
     svm_Export \
     svm_Import \
     tga_Import \

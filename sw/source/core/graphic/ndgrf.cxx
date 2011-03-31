@@ -1183,7 +1183,10 @@ void SwGrfNode::ApplyInputStream(
 
 void SwGrfNode::UpdateLinkWithInputStream()
 {
-    if ( IsLinkedFile() )
+    // --> OD #i85105#
+    // do not work on link, if a <SwapIn> has been triggered.
+    if ( !bInSwapIn && IsLinkedFile() )
+    // <--
     {
         GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
         GetLink()->Update();

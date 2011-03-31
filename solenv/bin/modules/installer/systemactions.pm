@@ -954,7 +954,7 @@ sub find_file_with_file_extension
     push(@installer::globals::logfileinfo, $infoline);
 
     opendir(DIR, $dir);
-    @sourcefiles = readdir(DIR);
+    @sourcefiles = sort readdir(DIR);
     closedir(DIR);
 
     my $onefile;

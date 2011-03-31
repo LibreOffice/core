@@ -115,6 +115,7 @@ using namespace ::com::sun::star::util;
 
 -(void)dockIconClicked: (NSObject*)pSender
 {
+    (void)pSender;
     // start start module
     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( STARTMODULE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
 }

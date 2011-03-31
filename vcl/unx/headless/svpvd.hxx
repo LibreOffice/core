@@ -28,7 +28,7 @@
 #ifndef _SVP_SVPVD_HXX
 #define _SVP_SVPVD_HXX
 
-#include <vcl/salvd.hxx>
+#include <salvd.hxx>
 #include "svpelement.hxx"
 
 #include <list>

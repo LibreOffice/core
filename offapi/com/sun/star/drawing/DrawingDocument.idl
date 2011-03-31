@@ -40,7 +40,7 @@
 /** specifies a document which consists of multiple pages
     with drawings.
  */
-service DrawingDocument
+published service DrawingDocument
 {
     /** this base service describes the whole functionality of such DrawingDocument. */
     service GenericDrawingDocument;

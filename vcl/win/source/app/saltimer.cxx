@@ -31,9 +31,9 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
-#include <saldata.hxx>
-#include <saltimer.h>
-#include <salinst.h>
+#include <win/saldata.hxx>
+#include <win/saltimer.h>
+#include <win/salinst.h>
 
 // =======================================================================
 

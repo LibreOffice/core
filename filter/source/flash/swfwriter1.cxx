@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svtools/filter.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
@@ -1887,6 +1888,19 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 ( (MetaAction*) pAction )->Execute( mpVDev );
 //              mbClipAttrChanged = sal_True;
+            }
+            break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pAction;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                const Point                             aPointPixel;
+                const Size                              aSizePixel( mpVDev->LogicToPixel( pA->GetSize() ) );
+                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( aSizePixel ) );
+
+                Impl_writeImage( aBmpEx, pA->GetPoint(), pA->GetSize(),
+                                 aPointPixel, aBmpEx.GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
 

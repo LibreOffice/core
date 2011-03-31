@@ -28,7 +28,7 @@
 #ifndef _SV_AQUA11WRAPPERROW_H
 #define _SV_AQUA11WRAPPERROW_H
 
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
 
 @interface AquaA11yWrapperRow : AquaA11yWrapper
 {

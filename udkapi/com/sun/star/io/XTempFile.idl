@@ -46,7 +46,7 @@ module com { module sun { module star { module io {
 //========================================================================
 /** This interface offers access to temp files.
  */
-interface XTempFile
+published interface XTempFile
 {
     // INTERFACES
     //

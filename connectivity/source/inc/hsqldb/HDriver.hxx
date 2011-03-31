@@ -123,6 +123,7 @@ namespace connectivity
             virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
             void shutdownConnections();
+            void flushConnections();
         protected:
             /// dtor
             virtual ~ODriverDelegator();

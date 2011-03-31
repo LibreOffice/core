@@ -31,6 +31,7 @@
 #include "ViewsWindow.hxx"
 #include "ReportRuler.hxx"
 #include "DesignView.hxx"
+#include "UITools.hxx"
 
 #include <tools/debug.hxx>
 #include <svtools/colorcfg.hxx>
@@ -65,6 +66,7 @@ DBG_NAME( rpt_OReportWindow )
 //------------------------------------------------------------------------------
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
+, ::comphelper::OPropertyChangeListener(m_aMutex)
 ,m_aHRuler(this)
 ,m_pView(_pView)
 ,m_pParent(_pParent)
@@ -88,11 +90,14 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
     m_aHRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
 
     ImplInitSettings();
+    m_pReportListener = addStyleListener(_pView->getController().getReportDefinition(),this);
 }
 //------------------------------------------------------------------------------
 OReportWindow::~OReportWindow()
 {
     DBG_DTOR( rpt_OReportWindow,NULL);
+    if ( m_pReportListener.is() )
+        m_pReportListener->dispose();
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::initialize()
@@ -437,6 +442,15 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
     }
 
     return nZoom;
+}
+// -----------------------------------------------------------------------------
+void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
+{
+    (void)_rEvent;
+    Resize();
+    m_aViewsWindow.Resize();
+    static sal_Int32 nIn = INVALIDATE_TRANSPARENT;
+    Invalidate(nIn);
 }
 //==================================================================
 }   //rptui

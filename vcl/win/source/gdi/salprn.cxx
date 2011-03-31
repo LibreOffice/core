@@ -29,26 +29,26 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
-#include <tools/svwin.h>
 
+#include <osl/module.h>
+
+#include <tools/urlobj.hxx>
+#include <tools/svwin.h>
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
 
-#ifndef _OSL_MODULE_H
-#include <osl/module.h>
-#endif
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salgdi.h>
-#include <salframe.h>
-#include <vcl/salptype.hxx>
-#include <salprn.h>
-#include <vcl/print.h>
-#include <vcl/jobset.h>
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salgdi.h>
+#include <win/salframe.h>
+#include <win/salprn.h>
 
-#include <tools/urlobj.hxx>
+#include <salptype.hxx>
+#include <print.h>
+#include <jobset.h>
+
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>

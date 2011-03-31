@@ -2598,7 +2598,13 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
-                    aMergeDesc.bCreateSingleFile= true;
+                    aMergeDesc.bCreateSingleFile = !pImpl->pMergeDialog->IsSaveIndividualDocs();
+                    if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
+                    {
+                        aMergeDesc.sAddressFromColumn = pImpl->pMergeDialog->GetColumnName();
+                        aMergeDesc.sSubject = pImpl->pMergeDialog->GetPath();
+                    }
+
                     MergeNew(aMergeDesc);
 
                     pWorkDoc->SetNewDBMgr( pWorkDBMgr );

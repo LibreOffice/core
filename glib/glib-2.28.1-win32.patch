@@ -1,0 +1,1982 @@
+--- misc/glib-2.28.1/build/win32/dirent/makefile.msc	2009-04-01 01:04:20.000000000 +0200
++++ misc/build/glib-2.28.1/build/win32/dirent/makefile.msc	2011-03-04 09:06:56.391118000 +0100
+@@ -1,10 +1,10 @@
+ TOP = ..\..\..\..
+ 
+-!INCLUDE $(TOP)\glib\build\win32\make.msc
++!INCLUDE ..\make.msc
+ 
+ dirent_OBJECTS = dirent.obj wdirent.obj
+ 
+-INCLUDES = -I.
++INCLUDES = -I. $(SOLARINC) 
+ 
+ all : dirent.lib
+ 
+@@ -12,5 +12,5 @@
+ 	lib /out:dirent.lib /nodefaultlib $(dirent_OBJECTS)
+ 
+ clean::
+-	del /f $(dirent_OBJECTS)
+-	del /f dirent.lib
++	rm /f $(dirent_OBJECTS)
++	rm /f dirent.lib
+--- misc/glib-2.28.1/build/win32/make.msc	2009-08-29 04:52:21.000000000 +0200
++++ misc/build/glib-2.28.1/build/win32/make.msc	2011-03-04 12:36:27.513145100 +0100
+@@ -35,7 +35,7 @@
+ XSLTPROC = d:\gnome-0\xsltproc
+ 
+ # paths and version numbers
+-!INCLUDE $(TOP)\glib\build\win32\module.defs
++!INCLUDE module.defs
+ 
+ ################
+ # CFLAGS and LIBS for the packages in module.defs.
+@@ -58,8 +58,8 @@
+ CAIRO_CFLAGS = -FI $(CAIRO)\cairo-version.h -I $(CAIRO)\src -I $(CAIRO)
+ CAIRO_LIBS = $(CAIRO)\src\libcairo.lib
+ 
+-DIRENT_CFLAGS = -I $(GLIB)\build\win32\dirent
+-DIRENT_LIBS = $(GLIB)\build\win32\dirent\dirent.lib
++DIRENT_CFLAGS = -I ..\build\win32\dirent
++DIRENT_LIBS = ..\build\win32\dirent\dirent.lib
+ 
+ !IFNDEF EXIF
+ EXIF_CFLAGS = -I $(DEVTOP)\include 
+@@ -92,7 +92,7 @@
+ # overide definition to use it as callable path
+ GLIB = $(TOP)\glib
+ 
+-GLIB_CFLAGS = -I $(GLIB) -I $(GLIB)\glib -I $(GLIB)\gmodule $(INTL_CFLAGS)
++GLIB_CFLAGS = -I $(GLIB) -I $(GLIB)\glib -I $(GLIB)\gmodule $(INTL_CFLAGS) $(SOLARINC)
+ GLIB_LIBS = $(GLIB)\glib\glib-$(GLIB_VER).lib $(GLIB)\gmodule\gmodule-$(GLIB_VER).lib $(GLIB)\gobject\gobject-$(GLIB_VER).lib $(GLIB)\gio\gio-$(GLIB_VER).lib
+ GTHREAD_LIBS = $(GLIB)\gthread\gthread-$(GLIB_VER).lib
+ 
+@@ -126,11 +126,11 @@
+ LIBART_LIBS = $(LIBART)\art_lgpl_2.lib
+ 
+ !IFNDEF INTL
+-INTL_CFLAGS = -I $(DEVTOP)\include
+-INTL_LIBS = $(DEVTOP)\lib\intl.lib 
++INTL_CFLAGS = -I $(OUTDIR)\inc\external
++INTL_LIBS = $(OUTDIR)/lib/intl.lib 
+ !ELSE
+-INTL_CFLAGS = -I $(INTL)
+-INTL_LIBS = $(INTL)\intl.lib 
++INTL_CFLAGS = -I $(OUTDIR)\inc\external
++INTL_LIBS = $(OUTDIR)/lib/intl.lib 
+ !ENDIF
+ 
+ !IFDEF LCMS
+@@ -199,10 +199,10 @@
+ 
+ !IFDEF ZLIB
+ ZLIB_CFLAGS = -I $(ZLIB)
+-ZLIB_LIBS = $(ZLIB)\projects\visualc6\Win32_LIB_Release\zlib.lib
++ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
+ !ELSE
+-ZLIB_CFLAGS = -I $(DEVTOP)\include
+-ZLIB_LIBS = $(DEVTOP)\lib\zdll.lib
++ZLIB_CFLAGS = -I $(ZLIB)
++ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
+ !ENDIF
+ 
+ ################
+--- misc/glib-2.28.1/gio/gzlibcompressor.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/gzlibcompressor.c	2011-03-07 10:33:19.559189800 +0100
+@@ -25,7 +25,7 @@
+ #include "gzlibcompressor.h"
+ 
+ #include <errno.h>
+-#include <zlib.h>
++#include <zlib/zlib.h>
+ #include <string.h>
+ 
+ #include "gfileinfo.h"
+@@ -64,8 +64,10 @@
+ 
+   GZlibCompressorFormat format;
+   int level;
++#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
+   z_stream zstream;
+   gz_header gzheader;
++#endif
+   GFileInfo *file_info;
+ };
+ 
+@@ -73,7 +75,7 @@
+ g_zlib_compressor_set_gzheader (GZlibCompressor *compressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && ! defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   const gchar *filename;
+ 
+   if (compressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP ||
+--- misc/glib-2.28.1/gio/gzlibdecompressor.c	2011-03-07 09:13:41.324890400 +0100
++++ misc/build/glib-2.28.1/gio/gzlibdecompressor.c	2011-03-04 11:28:39.712480200 +0100
+@@ -25,7 +25,7 @@
+ #include "gzlibdecompressor.h"
+ 
+ #include <errno.h>
+-#include <zlib.h>
++#include <zlib/zlib.h>
+ #include <string.h>
+ 
+ #include "gfileinfo.h"
+@@ -76,7 +76,7 @@
+ g_zlib_decompressor_set_gzheader (GZlibDecompressor *decompressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP)
+     return;
+ 
+@@ -376,7 +376,7 @@
+   *bytes_read = inbuf_size - decompressor->zstream.avail_in;
+   *bytes_written = outbuf_size - decompressor->zstream.avail_out;
+ 
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->header_data != NULL &&
+       decompressor->header_data->gzheader.done == 1)
+     {
+--- misc/glib-2.28.1/gio/makefile.msc	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/makefile.msc	2011-03-04 12:43:54.423706900 +0100
+@@ -3,9 +3,9 @@
+ PRJ_TOP = ..
+ PACKAGE = gio
+ PKG_VER = 2.0
+-!INCLUDE $(TOP)\glib\build\win32\make.msc
++!INCLUDE ..\build\win32\make.msc
+ 
+-SUBDIRS = win32
++SUBDIRS = win32 gvdb
+ 
+ sub-all: 
+ 	for %d in ($(SUBDIRS)) do nmake -nologo -f makefile.msc sub-one THIS=%d
+@@ -18,13 +18,15 @@
+ INCLUDES = \
+ 	-FImsvc_recommended_pragmas.h \
+ 	-I .. -I ..\glib -I ..\gmodule -I . \
+-	$(INTL_CFLAGS)
++	$(INTL_CFLAGS) \
++	$(SOLARINC) \
+ 
+ DEFINES = \
+ 	-DG_LOG_DOMAIN=\"GLib-GIO\" \
+ 	-DGIO_MODULE_DIR=\"$(libdir)/gio/modules\" \
+ 	-DGIO_COMPILATION
+ 
++
+ appinfo_sources = \
+ 	gwin32appinfo.c gwin32appinfo.h
+ 
+@@ -75,19 +77,50 @@
+ 	$(NULL)
+ 
+ OBJECTS = \
++	gaction.obj \
++	gactiongroup.obj \
+ 	gappinfo.obj \
++	gapplication.obj \
++	gapplicationcommandline.obj \
++	gapplicationimpl-dbus.obj \
+ 	gasynchelper.obj \
+ 	gasyncinitable.obj \
+ 	gasyncresult.obj \
+ 	gbufferedinputstream.obj \
+ 	gbufferedoutputstream.obj \
+ 	gcancellable.obj \
++	gcharsetconverter.obj \
+ 	gcontenttype.obj \
++	gconverter.obj \
++	gconverterinputstream.obj \
++	gconverteroutputstream.obj \
++	gcredentials.obj \
+ 	gdatainputstream.obj \
+ 	gdataoutputstream.obj \
++	gdbusaddress.obj \
++	gdbusauth.obj \
++	gdbusauthmechanism.obj \
++	gdbusauthmechanismanon.obj \
++	gdbusauthmechanismexternal.obj \
++	gdbusauthmechanismsha1.obj \
++	gdbusauthobserver.obj \
++	gdbusconnection.obj \
++	gdbuserror.obj \
++	gdbusintrospection.obj \
++	gdbusmessage.obj \
++	gdbusmethodinvocation.obj \
++	gdbusnameowning.obj \
++	gdbusnamewatching.obj \
++	gdbusprivate.obj \
++	gdbusproxy.obj \
++	gdbusserver.obj \
++	gdbusutils.obj \
++	gdelayedsettingsbackend.obj \
+ #	gdesktopappinfo.obj \
+ 	gdrive.obj \
+ 	gdummyfile.obj \
++	gdummyproxyresolver.obj \
++	gdummytlsbackend.obj \
+ 	gemblem.obj \
+ 	gemblemedicon.obj \
+ 	gfile.obj \
+@@ -112,20 +145,39 @@
+ 	giomodule.obj \
+ 	gioscheduler.obj \
+ 	giostream.obj \
++	gkeyfilesettingsbackend.obj \
+ 	gloadableicon.obj \
+ 	glocalfileiostream.obj \
+ 	gmemoryinputstream.obj \
+ 	gmemoryoutputstream.obj \
++	gmemorysettingsbackend.obj \
+ 	gmount.obj \
+ 	gmountoperation.obj \
+ 	gnativevolumemonitor.obj \
+ 	gnetworkaddress.obj \
+ 	gnetworkservice.obj \
++	gnullsettingsbackend.obj \
+ 	goutputstream.obj \
++	gpermission.obj \
++	gpollableinputstream.obj \
++	gpollableoutputstream.obj \
+ 	gpollfilemonitor.obj \
++	gproxy.obj\
++	gproxyaddress.obj \
++	gproxyaddressenumerator.obj \
++	gproxyresolver.obj \
++	gregistrysettingsbackend.obj \
+ 	gresolver.obj \
++	gsettings-mapping.obj \
++	gsettings-tool.obj \
++	gsettings.obj \
++	gsettingsbackend.obj \
++	gsettingsschema.obj \
+ 	gseekable.obj \
++	gsimpleaction.obj \
++	gsimpleactiongroup.obj \
+ 	gsimpleasyncresult.obj \
++	gsimplepermission.obj \
+ 	gsocket.obj \
+ 	gsocketaddress.obj \
+ 	gsocketaddressenumerator.obj \
+@@ -135,13 +187,22 @@
+ 	gsocketcontrolmessage.obj \
+ 	gsocketlistener.obj \
+ 	gsocketservice.obj \
++	gsocks4aproxy.obj \
++	gsocks4proxy.obj \
++	gsocks5proxy.obj \
+ 	gsocketinputstream.obj \
+ 	gsocketoutputstream.obj \
+ 	gsrvtarget.obj \
+ 	gtcpconnection.obj \
++	gtcpwrapperconnection.obj \
+ 	gthreadedresolver.obj \
+ 	gthreadedsocketservice.obj \
+ 	gthemedicon.obj \
++	gtlsbackend.obj \
++	gtlscertificate.obj \
++	gtlsclientconnection.obj \
++	gtlsconnection.obj \
++	gtlsserverconnection.obj \
+ 	gunionvolumemonitor.obj \
+ 	gvfs.obj \
+ 	gvolume.obj \
+@@ -156,11 +217,15 @@
+ 	glocalfilemonitor.obj \
+ 	glocaldirectorymonitor.obj \
+ 	gwin32appinfo.obj \
++	gwin32outputstream.obj \
+ 	\
+ 	gio-marshal.obj \
++	gwin32inputstream.obj \
+ 	gwin32mount.obj \
+ 	gwin32volumemonitor.obj \
+-	gwin32resolver.obj 
++	gwin32resolver.obj \
++	gzlibdecompressor.obj \
++	gzlibcompressor.obj
+ 
+ libgio_2_0_la_LIBADD = \
+ 	$(top_builddir)/glib/libglib-2.0.la \
+@@ -190,14 +255,14 @@
+ 
+ gio-marshal.h: gio-marshal.list
+ 	$(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --header >> xgen-gwmh \
+-	&& copy /y xgen-gwmh gio-marshal.h \
+-	&& del xgen-gwmh xgen-gwmh~
++	&& $(GNUCOPY) /y xgen-gwmh gio-marshal.h \
++	&& rm xgen-gwmh xgen-gwmh~
+ 
+ gio-marshal.c: gio-marshal.h
+ 	echo #include "gio-marshal.h" >> xgen-gwmc \
+ 	&& $(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --body >> xgen-gwmc \
+-	&& copy xgen-gwmc gio-marshal.c \
+-	&& del xgen-gwmc xgen-gwmc~
++	&& $(GNUCOPY) xgen-gwmc gio-marshal.c \
++	&& rm xgen-gwmc xgen-gwmc~
+ 
+ local_sources = \
+ 	glocaldirectorymonitor.c \
+@@ -228,7 +293,7 @@
+ 
+ 
+ $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
+-	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
++	$(GNUCOPY) $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+ 
+ gioenumtypes.h: $(gio_headers) gioenumtypes.h.template
+ 	$(PERL) ..\gobject\glib-mkenums --template gioenumtypes.h.template $(gio_headers) > gioenumtypes.h
+@@ -245,14 +310,14 @@
+ RESOURCE = $(PACKAGE).res
+ 
+ $(PACKAGE).res : $(PACKAGE).rc
+-	rc -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
++	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo $(PACKAGE).res $(PACKAGE).rc
+ 
+-libgio-$(PKG_VER)-0.dll : $(OBJECTS) win32\giowin32.lib $(PACKAGE).def $(RESOURCE)
++libgio-$(PKG_VER)-0.dll : $(OBJECTS) win32\giowin32.lib gvdb\giogvdb.lib $(PACKAGE).def $(RESOURCE)
+ 	$(CC) $(CFLAGS) -LD -Felibgio-$(PKG_VER)-0.dll $(OBJECTS) $(RESOURCE) \
+ 	..\glib\glib-2.0.lib ..\gobject\gobject-2.0.lib ..\gmodule\gmodule-2.0.lib \
+-	win32\giowin32.lib \
+-	$(INTL_LIBS) \
+-	kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ws2_32.lib dnsapi.lib mpr.lib $(LDFLAGS) \
++	win32\giowin32.lib gvdb\giogvdb.lib \
++	$(INTL_LIBS) $(ZLIB_LIBS) \
++	kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib Shlwapi.lib ws2_32.lib dnsapi.lib mpr.lib $(LDFLAGS) \
+ 	/implib:gio-2.0.lib /def:$(PACKAGE).def
+ 
+ .c.obj :
+--- misc/glib-2.28.1/glib/gatomic.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/glib/gatomic.c	2011-02-25 15:51:45.000000000 +0100
+@@ -28,6 +28,7 @@
+ #endif
+ 
+ #include "gatomic.h"
++#include "gthread.h"
+ #include "gthreadprivate.h"
+ 
+ /**
+--- misc/glib-2.28.1/glib/gnulib/makefile.msc	2009-04-01 01:04:20.000000000 +0200
++++ misc/build/glib-2.28.1/glib/gnulib/makefile.msc	2011-03-04 08:37:50.624265900 +0100
+@@ -1,7 +1,7 @@
+ TOP = ..\..\..
+ !INCLUDE ..\..\build\win32\make.msc
+ 
+-INCLUDES = -I ..\.. -I ..
++INCLUDES = -I ..\.. -I .. $(SOLARINC)
+ DEFINES = -DHAVE_CONFIG_H -DHAVE_LONG_LONG_FORMAT
+ 
+ OBJECTS = \
+--- misc/glib-2.28.1/glib/makefile.msc	2011-02-18 16:34:53.000000000 +0100
++++ misc/build/glib-2.28.1/glib/makefile.msc	2011-03-07 11:41:13.874227300 +0100
+@@ -7,7 +7,7 @@
+ 
+ ################################################################
+ 
+-INCLUDES = -FImsvc_recommended_pragmas.h -I . -I ..
++INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. $(SOLARINC)
+ DEFINES = \
+ 	-DHAVE_CONFIG_H -DGLIB_COMPILATION -DG_LOG_DOMAIN=\"GLib\" \
+ 	-DG_ENABLE_DEBUG -DPCRE_STATIC -DG_DISABLE_DEPRECATED \
+@@ -17,13 +17,11 @@
+ 
+ all :				\
+ 	..\config.h		\
+-	..\glibconfig.h	\
++	glibconfig.h	\
+ 	gnulib\gnulib.lib	\
+ 	pcre\pcre.lib		\
+ 	libglib-2.0-0.dll \
+-	glib-2.28s.lib \
+-	gspawn-win32-helper.exe	\
+-	gspawn-win32-helper-console.exe	\
++	glib-2.28s.lib
+ 
+ 
+ gnulib\gnulib.lib :
+@@ -37,37 +35,40 @@
+ 	cd ..
+ 
+ glib_OBJECTS =			\
+-	garray.obj		\
+-	gasyncqueue.obj		\
+-	gatomic.obj	\
+-	gbacktrace.obj		\
+-	gbase64.obj	\
++	garray.obj \
++	gasyncqueue.obj \
++	gatomic.obj \
++	gbacktrace.obj \
++	gbase64.obj \
++	gbitlock.obj \
+ 	gbookmarkfile.obj \
++	gbuffer.obj \
+ 	gcache.obj \
+-	gchecksum.obj	\
+-	gcompletion.obj	\
++	gchecksum.obj \
+ 	gconvert.obj \
++	gcompletion.obj \
+ 	gdataset.obj \
+ 	gdate.obj \
++	gdatetime.obj \
+ 	gdir.obj \
+ 	gerror.obj \
+ 	gfileutils.obj \
+ 	ghash.obj \
+-	ghostutils.obj \
+ 	ghook.obj \
++	ghostutils.obj \
+ 	giochannel.obj \
+ 	giowin32.obj \
+-	gpoll.obj \
+ 	gkeyfile.obj \
+ 	glist.obj \
+ 	gmain.obj \
+-	gmappedfile.obj	\
++	gmappedfile.obj \
+ 	gmarkup.obj \
+ 	gmem.obj \
+ 	gmessages.obj \
+ 	gnode.obj \
+ 	goption.obj \
+ 	gpattern.obj \
++	gpoll.obj \
+ 	gprimes.obj \
+ 	gprintf.obj \
+ 	gqsort.obj \
+@@ -88,22 +89,29 @@
+ 	gthread.obj \
+ 	gthreadpool.obj \
+ 	gtimer.obj \
++	gtimezone.obj \
+ 	gtree.obj \
+ 	gunibreak.obj \
+ 	gunicollate.obj \
+ 	gunidecomp.obj \
+ 	guniprop.obj \
+ 	gurifuncs.obj \
+-	gutf8.obj		\
+-	gutils.obj		\
+-	gwin32.obj		\
++	gutf8.obj \
++	gutils.obj \
++	gvariant-core.obj \
++	gvariant-parser.obj \
++	gvariant-serialiser.obj \
++	gvariant.obj \
++	gvarianttype.obj \
++	gvarianttypeinfo.obj \
++	gwin32.obj \
+ 	localcharset.obj
+ 
+-..\glibconfig.h: ..\glibconfig.h.win32
+-	copy ..\glibconfig.h.win32 ..\glibconfig.h
++glibconfig.h: glibconfig.h.win32
++	$(GNUCOPY) glibconfig.h.win32 glibconfig.h
+ 
+ ..\config.h: ..\config.h.win32
+-	copy ..\config.h.win32 ..\config.h
++	$(GNUCOPY) ..\config.h.win32 ..\config.h
+ 
+ localcharset.obj : libcharset\localcharset.c
+ 	$(CC) $(CFLAGS) -DLIBDIR=\".\" -c libcharset\localcharset.c
+@@ -115,7 +123,7 @@
+ 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF -DG_GNUC_FORMAT=;G_GNUC_FORMAT glib.symbols >> glib.def
+ 
+ glib.res : glib.rc
+-	rc -DBUILDNUMBER=0 -r -fo glib.res glib.rc
++	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo glib.res glib.rc
+ 
+ ################ glib
+ 
+@@ -124,20 +132,14 @@
+ glib-2.28s.lib : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib
+ 	lib /out:glib-2.28s.lib $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib
+ 
+-libglib-2.0-0.dll : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib glib.def glib.res
++libglib-2.0-0.dll : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib glib.def glib.res 
+ 	$(CC) $(CFLAGS) -LD -Fe$@ $(glib_OBJECTS) glib.res $(INTL_LIBS) \
+ 	gnulib\gnulib.lib pcre\pcre.lib $(DIRENT_LIBS) user32.lib advapi32.lib shell32.lib wsock32.lib ole32.lib ws2_32.lib \
+ 	$(LDFLAGS) /implib:glib-2.0.lib /def:glib.def
+ 
+-gspawn-win32-helper.exe : gspawn-win32-helper.c libglib-2.0-0.dll
+-	$(CC) $(CFLAGS) -Fe$@ -DG_LOG_DOMAIN=\"gspawn-win32-helper\" gspawn-win32-helper.c glib-2.0.lib $(LDFLAGS) /subsystem:windows user32.lib
+-
+-gspawn-win32-helper-console.exe : gspawn-win32-helper.c libglib-2.0-0.dll
+-	$(CC) $(CFLAGS) -Fe$@ -DG_LOG_DOMAIN=\"gspawn-win32-helper\" gspawn-win32-helper.c glib-2.0.lib $(LDFLAGS) /subsystem:console user32.lib
+-
+ ################ other stuff
+ 
+ clean::
+-	del ..\config.h
+-	del ..\glibconfig.h
++	rm ..\config.h
++	rm glibconfig.h
+ 
+--- misc/glib-2.28.1/glib/pcre/makefile.msc	2010-06-20 06:35:47.000000000 +0200
++++ misc/build/glib-2.28.1/glib/pcre/makefile.msc	2011-03-04 09:06:02.748049800 +0100
+@@ -3,7 +3,8 @@
+ 
+ INCLUDES = \
+         -I ..\.. \
+-        -I ..
++        -I .. \
++		$(SOLARINC)
+         
+ DEFINES = \
+         -DPCRE_STATIC \
+@@ -18,10 +19,24 @@
+         -DMAX_NAME_COUNT=10000 \
+         -DMAX_DUPLENGTH=30000 \
+         -DLINK_SIZE=2 \
+-        -DEBCDIC=0 \
+         -DPOSIX_MALLOC_THRESHOLD=10
+ 
+ OBJECTS = \
++	pcre_chartables.obj \
++	pcre_compile.obj \
++	pcre_config.obj \
++	pcre_dfa_exec.obj \
++	pcre_exec.obj \
++	pcre_fullinfo.obj \
++	pcre_get.obj \
++	pcre_globals.obj \
++	pcre_newline.obj \
++	pcre_ord2utf8.obj \
++	pcre_study.obj \
++	pcre_tables.obj \
++	pcre_try_flipped.obj \
++	pcre_ucp_searchfuncs.obj \
++	pcre_xclass.obj \
+ 
+ 
+ all : pcre.lib
+--- misc/glib-2.28.1/gmodule/makefile.msc	2011-02-18 16:34:58.000000000 +0100
++++ misc/build/glib-2.28.1/gmodule/makefile.msc	2011-03-04 08:43:06.896355600 +0100
+@@ -7,7 +7,7 @@
+ 
+ ################################################################
+ 
+-INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib
++INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib $(SOLARINC)
+ DEFINES = -DHAVE_CONFIG_H -DG_LOG_DOMAIN=\"GModule\"
+ 
+ all : \
+@@ -16,22 +16,22 @@
+ 
+ gmodule_OBJECTS = \
+ 	gmodule.obj
+-gmodule.def: gmodule.symbols
+-	echo EXPORTS > gmodule.def
+-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DINCLUDE_INTERNAL_SYMBOLS -DALL_FILES \
+-		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
+-		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gmodule.symbols >> gmodule.def
+-
++gmodule.def: gmodule.symbols
++	echo EXPORTS > gmodule.def
++	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DINCLUDE_INTERNAL_SYMBOLS -DALL_FILES \
++		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
++		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gmodule.symbols >> gmodule.def
++
+ 
+ gmoduleconf.h: gmoduleconf.h.win32
+-	copy gmoduleconf.h.win32 gmoduleconf.h
++	$(GNUCOPY) gmoduleconf.h.win32 gmoduleconf.h
+ 
+ gmodule.res : gmodule.rc
+-	rc -DBUILDNUMBER=0 -r -fo gmodule.res gmodule.rc
++	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo gmodule.res gmodule.rc
+ 
+ libgmodule-2.0-0.dll : $(gmodule_OBJECTS) gmodule.def gmodule.res
+ 	$(CC) $(CFLAGS) -LD -Fe$@ $(gmodule_OBJECTS) gmodule.res \
+ 	..\glib\glib-2.0.lib $(LDFLAGS) /implib:gmodule-2.0.lib /def:gmodule.def
+ 
+ clean::
+-	del gmoduleconf.h
++	rm gmoduleconf.h
+--- misc/glib-2.28.1/gobject/makefile.msc	2011-02-18 16:35:05.000000000 +0100
++++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-04 12:33:52.399273100 +0100
+--- misc/glib-2.28.1/gobject/makefile.msc	2011-02-18 16:35:05.000000000 +0100
++++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-09 09:29:52.712284300 +0100
+@@ -7,7 +7,7 @@
+ 
+ ################################################################
+ 
+-INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib
++INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib $(SOLARINC)
+ DEFINES = -DHAVE_CONFIG_H -DGOBJECT_COMPILATION -DG_LOG_DOMAIN=\"GLib-GObject\" \
+ 		-DG_ENABLE_DEBUG
+ #		-DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DG_DISABLE_CAST_CHECKS
+@@ -16,7 +16,6 @@
+ all :				\
+ 	glib-genmarshal.exe     \
+ 	gmarshal.h              \
+-	gmarshal.c              \
+ 	gmarshal.strings \
+ 	gobject-query.exe \
+ 	libgobject-2.0-0.dll	\
+@@ -24,8 +23,10 @@
+ 	testgobject.exe
+ 
+ gobject_OBJECTS =		\
++	gatomicarray.obj \
++	gbinding.obj \
+ 	gboxed.obj		\
+ 	gclosure.obj		\
+ 	genums.obj		\
+ 	gobject.obj		\
+ 	gparam.obj		\
+@@ -47,21 +49,18 @@
+ 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gobject.symbols >> gobject.def
+ 
+ gobject.res : gobject.rc
+-	rc -DBUILDNUMBER=0 -r -fo gobject.res gobject.rc
++	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo gobject.res gobject.rc
+ 
+ gmarshal.h : gmarshal.list glib-genmarshal.exe
+ 	echo #ifndef __G_MARSHAL_H__ > xgen-gmh
+ 	echo #define __G_MARSHAL_H__ >> xgen-gmh
+ 	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --header >> xgen-gmh
+ 	echo #endif /* __G_MARSHAL_H__ */ >> xgen-gmh
+-	copy xgen-gmh gmarshal.h
+-
+-gmarshal.c: gmarshal.list gmarshal.h glib-genmarshal.exe
+-	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --body > gmarshal.c
++	$(GNUCOPY) xgen-gmh gmarshal.h
+ 
+ libgobject-2.0-0.dll : $(gobject_OBJECTS) gobject.def gobject.res
+ 	$(CC) $(CFLAGS) -Fm -LD -Fe$@ $(gobject_OBJECTS) gobject.res \
+-	..\glib\glib-2.0.lib $(LDFLAGS) /implib:gobject-2.0.lib /def:gobject.def || del $@
++	..\glib\glib-2.0.lib ..\gthread\gthread-2.0.lib $(LDFLAGS) /implib:gobject-2.0.lib /def:gobject.def || rm $@
+ 
+ gobject-2.28s.lib : $(gobject_OBJECTS) 
+ 	lib /out:$@ $(gobject_OBJECTS)
+@@ -69,7 +68,7 @@
+ # link glib's static version to avoid installing 
+ glib-genmarshal.exe : glib-genmarshal.c gmarshal.strings
+ 	$(CC) -Fe$@ $(CFLAGS) -UGOBJECT_COMPILATION glib-genmarshal.c \
+-	..\glib\glib-2.28s.lib user32.lib advapi32.lib ole32.lib shell32.lib $(INTL_LIBS) 
++	..\glib\glib-2.28s.lib user32.lib advapi32.lib ole32.lib shell32.lib $(INTL_LIBS)
+ 
+ gobject-query.exe : gobject-query.c libgobject-2.0-0.dll
+ 	$(CC) -Fe$@ $(CFLAGS) -UGOBJECT_COMPILATION gobject-query.c \
+--- misc/glib-2.28.1/gthread/makefile.msc	2011-02-18 16:35:00.000000000 +0100
++++ misc/build/glib-2.28.1/gthread/makefile.msc	2011-03-04 08:43:06.900355800 +0100
+@@ -7,7 +7,7 @@
+ 
+ ################################################################
+ 
+-INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib
++INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib $(SOLARINC)
+ DEFINES = -DHAVE_CONFIG_H -DG_LOG_DOMAIN=\"GThread\"
+ all : \
+ 	libgthread-2.0-0.dll
+@@ -19,7 +19,7 @@
+ 	$(CC) -c $(CFLAGS) gthread-impl.c
+ 
+ gthread.res : gthread.rc
+-	rc -DBUILDNUMBER=0 -r -fo gthread.res gthread.rc
++	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo gthread.res gthread.rc
+ 
+ libgthread-2.0-0.dll : $(gthread_OBJECTS) gthread.def gthread.res
+ 	$(CC) $(CFLAGS) -LD -Fe$@ $(gthread_OBJECTS) gthread.res \
+--- misc/glib-2.28.1/makefile.msc	2009-04-01 01:04:20.000000000 +0200
++++ misc/build/glib-2.28.1/makefile.msc	2011-03-04 09:11:06.663432800 +0100
+@@ -1,7 +1,7 @@
+ ## Makefile for building the GLib dlls with Microsoft C
+ ## Use: nmake -f makefile.msc
+ 
+-PARTS = glib gmodule gthread gobject gio tests
++PARTS = "build\win32\dirent" glib gmodule gthread gobject gio tests 
+ 
+ all : \
+ 	config.h \
+@@ -22,7 +22,7 @@
+ 	@cd ..
+ 
+ config.h: config.h.win32
+-	copy config.h.win32 config.h
++	$(GNUCOPY) config.h.win32 config.h
+ 
+-glibconfig.h: glibconfig.h.win32
+-	copy glibconfig.h.win32 glibconfig.h
++glibconfig.h: glib/glibconfig.h.win32
++	$(GNUCOPY) glib/glibconfig.h.win32 glib/glibconfig.h
+--- misc/glib-2.28.1/tests/makefile.msc	2011-02-18 16:35:43.000000000 +0100
++++ misc/build/glib-2.28.1/tests/makefile.msc	2011-03-04 08:33:02.079762100 +0100
+@@ -7,7 +7,7 @@
+ 
+ ################################################################
+ 
+-INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I ..\glib -I ..\gmodule
++INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I ..\glib -I ..\gmodule $(SOLARINC)
+ DEFINES = -DHAVE_CONFIG_H -DENABLE_REGEX
+ 
+ NONAUTOMATIC_TESTS = \
+@@ -79,7 +79,7 @@
+ 	libmoduletestplugin_a.dll \
+ 	libmoduletestplugin_b.dll
+ 
+-all :	$(TESTS) $(NONAUTOMATIC_TESTS) $(DLLS)
++all :	
+ 
+ .c.exe :
+ 	$(CC) $(CFLAGS) -c $<
+--- misc/glib-2.28.1/glib/glibconfig.h	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/glib/glibconfig.h	Wed Aug 20 14:26:42 2008
+@@ -1 +1,285 @@
+-dummy
++/* glibconfig.h.win32.in. Originally merged from two versions of
++ * glibconfig.h, generated by the GLib configure script, for gcc and
++ * MSVC.
++ */
++
++/* glibconfig.h
++ *
++ * This is a generated file.  Please modify 'glibconfig.h.win32.in'
++ */
++
++#ifndef __G_LIBCONFIG_H__
++#define __G_LIBCONFIG_H__
++
++#include <glib/gmacros.h>
++
++#include <limits.h>
++#include <float.h>
++
++G_BEGIN_DECLS
++
++#define G_MINFLOAT	FLT_MIN
++#define G_MAXFLOAT	FLT_MAX
++#define G_MINDOUBLE	DBL_MIN
++#define G_MAXDOUBLE	DBL_MAX
++#define G_MINSHORT	SHRT_MIN
++#define G_MAXSHORT	SHRT_MAX
++#define G_MAXUSHORT	USHRT_MAX
++#define G_MININT	INT_MIN
++#define G_MAXINT	INT_MAX
++#define G_MAXUINT	UINT_MAX
++#define G_MINLONG	LONG_MIN
++#define G_MAXLONG	LONG_MAX
++#define G_MAXULONG	ULONG_MAX
++
++typedef signed char gint8;
++typedef unsigned char guint8;
++typedef signed short gint16;
++typedef unsigned short guint16;
++#define G_GINT16_MODIFIER "h"
++#define G_GINT16_FORMAT "hi"
++#define G_GUINT16_FORMAT "hu"
++typedef signed int gint32;
++typedef unsigned int guint32;
++#define G_GINT32_MODIFIER ""
++#define G_GINT32_FORMAT "i"
++#define G_GUINT32_FORMAT "u"
++#define G_HAVE_GINT64 1          /* deprecated, always true */
++
++#ifndef _MSC_VER
++G_GNUC_EXTENSION typedef signed long long gint64;
++G_GNUC_EXTENSION typedef unsigned long long guint64;
++#else /* _MSC_VER */
++typedef signed __int64 gint64;
++typedef unsigned __int64 guint64;
++#endif /* _MSC_VER */
++
++#ifndef _MSC_VER
++#define G_GINT64_CONSTANT(val)	(G_GNUC_EXTENSION (val##LL))
++#else /* _MSC_VER */
++#define G_GINT64_CONSTANT(val)	(val##i64)
++#endif /* _MSC_VER */
++#ifndef _MSC_VER
++#define G_GUINT64_CONSTANT(val)	(G_GNUC_EXTENSION (val##ULL))
++#else /* _MSC_VER */
++#define G_GUINT64_CONSTANT(val)	(val##Ui64)
++#endif /* _MSC_VER */
++#define G_GINT64_MODIFIER "I64"
++#define G_GINT64_FORMAT "I64i"
++#define G_GUINT64_FORMAT "I64u"
++
++#if defined(_WIN64) || defined(_M_X64) || defined(_M_AMD64)
++
++#define GLIB_SIZEOF_VOID_P 8
++#define GLIB_SIZEOF_LONG   4
++#define GLIB_SIZEOF_SIZE_T 8
++
++typedef signed long long gssize;
++typedef unsigned long long gsize;
++#define G_GSIZE_MODIFIER "I64"
++#define G_GSSIZE_FORMAT "I64d"
++#define G_GSIZE_FORMAT "I64u"
++
++#define G_MAXSIZE	G_MAXUINT64
++#define G_MINSSIZE	G_MININT64
++#define G_MAXSSIZE	G_MAXINT64
++
++#else
++
++#define GLIB_SIZEOF_VOID_P 4
++#define GLIB_SIZEOF_LONG   4
++#define GLIB_SIZEOF_SIZE_T 4
++
++typedef signed int gssize;
++typedef unsigned int gsize;
++#define G_GSIZE_MODIFIER ""
++#define G_GSSIZE_FORMAT "i"
++#define G_GSIZE_FORMAT "u"
++
++#define G_MAXSIZE	G_MAXUINT
++#define G_MINSSIZE	G_MININT
++#define G_MAXSSIZE	G_MAXINT
++
++#endif
++
++typedef gint64 goffset;
++#define G_MINOFFSET	G_MININT64
++#define G_MAXOFFSET	G_MAXINT64
++
++#define G_GOFFSET_MODIFIER      G_GINT64_MODIFIER
++#define G_GOFFSET_FORMAT        G_GINT64_FORMAT
++#define G_GOFFSET_CONSTANT(val) G_GINT64_CONSTANT(val)
++
++
++#ifndef _WIN64
++
++#define GPOINTER_TO_INT(p)	((gint)   (p))
++#define GPOINTER_TO_UINT(p)	((guint)  (p))
++
++#define GINT_TO_POINTER(i)	((gpointer)  (i))
++#define GUINT_TO_POINTER(u)	((gpointer)  (u))
++
++typedef signed int gintptr;
++typedef unsigned int guintptr;
++
++#define G_GINTPTR_MODIFIER      ""
++#define G_GINTPTR_FORMAT        "i"
++#define G_GUINTPTR_FORMAT       "u"
++
++#else
++
++#define GPOINTER_TO_INT(p)	((gint)  (gint64) (p))
++#define GPOINTER_TO_UINT(p)	((guint) (guint64) (p))
++
++#define GINT_TO_POINTER(i)	((gpointer) (gint64) (i))
++#define GUINT_TO_POINTER(u)	((gpointer) (guint64) (u))
++
++#ifndef _MSC_VER
++typedef signed long long gintptr;
++typedef unsigned long long guintptr;
++#else
++typedef signed __int64 gintptr;
++typedef unsigned __int64 guintptr;
++#endif
++
++#define G_GINTPTR_MODIFIER      "I64"
++#define G_GINTPTR_FORMAT        "I64i"
++#define G_GUINTPTR_FORMAT       "I64u"
++
++#endif
++
++#ifdef NeXT /* @#%@! NeXTStep */
++# define g_ATEXIT(proc)	(!atexit (proc))
++#else
++# define g_ATEXIT(proc)	(atexit (proc))
++#endif
++
++#define g_memmove(dest,src,len) G_STMT_START { memmove ((dest), (src), (len)); } G_STMT_END
++
++#define GLIB_MAJOR_VERSION 2
++#define GLIB_MINOR_VERSION 28
++#define GLIB_MICRO_VERSION 1
++
++#define G_OS_WIN32
++#define G_PLATFORM_WIN32
++
++
++#ifndef _MSC_VER
++#define G_VA_COPY	va_copy
++#endif /* not _MSC_VER */
++
++#ifdef	__cplusplus
++#define	G_HAVE_INLINE	1
++#else	/* !__cplusplus */
++#ifndef _MSC_VER
++#define G_HAVE_INLINE 1
++#endif /* _MSC_VER */
++#define G_HAVE___INLINE 1
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define G_HAVE___INLINE__ 1
++#endif /* !_MSC_VER and !__DMC__ */
++#endif	/* !__cplusplus */
++
++#define G_CAN_INLINE	1
++
++#ifndef _MSC_VER
++#define G_HAVE_ISO_VARARGS 1
++
++/* gcc-2.95.x supports both gnu style and ISO varargs, but if -ansi
++ * is passed ISO vararg support is turned off, and there is no work
++ * around to turn it on, so we unconditionally turn it off.
++ */
++#if __GNUC__ == 2 && __GNUC_MINOR__ == 95
++#  undef G_HAVE_ISO_VARARGS
++#endif
++
++#define G_HAVE_GNUC_VARARGS 1
++#else /* _MSC_VER */
++/* varargs macros available since msvc8 (vs2005) */
++#  if _MSC_VER >= 1400
++#    define G_HAVE_ISO_VARARGS 1
++#   endif
++#endif /* not _MSC_VER */
++#define G_HAVE_GROWING_STACK 0
++
++#define G_GNUC_INTERNAL
++
++#define G_THREADS_ENABLED
++#define G_THREADS_IMPL_WIN32
++typedef struct _GMutex* GStaticMutex;
++#define G_STATIC_MUTEX_INIT NULL
++#define g_static_mutex_get_mutex(mutex) \
++  (g_static_mutex_get_mutex_impl_shortcut (mutex))
++/* This represents a system thread as used by the implementation. An
++ * alien implementaion, as loaded by g_thread_init can only count on
++ * "sizeof (gpointer)" bytes to store their info. We however need more
++ * for some of our native implementations. */
++typedef union _GSystemThread GSystemThread;
++union _GSystemThread
++{
++#ifndef _WIN64
++  char   data[4];
++#else
++  char   data[8];
++#endif
++  double dummy_double;
++  void  *dummy_pointer;
++  long   dummy_long;
++};
++
++#define GINT16_TO_LE(val)	((gint16) (val))
++#define GUINT16_TO_LE(val)	((guint16) (val))
++#define GINT16_TO_BE(val)	((gint16) GUINT16_SWAP_LE_BE (val))
++#define GUINT16_TO_BE(val)	(GUINT16_SWAP_LE_BE (val))
++#define GINT32_TO_LE(val)	((gint32) (val))
++#define GUINT32_TO_LE(val)	((guint32) (val))
++#define GINT32_TO_BE(val)	((gint32) GUINT32_SWAP_LE_BE (val))
++#define GUINT32_TO_BE(val)	(GUINT32_SWAP_LE_BE (val))
++#define GINT64_TO_LE(val)	((gint64) (val))
++#define GUINT64_TO_LE(val)	((guint64) (val))
++#define GINT64_TO_BE(val)	((gint64) GUINT64_SWAP_LE_BE (val))
++#define GUINT64_TO_BE(val)	(GUINT64_SWAP_LE_BE (val))
++#define GLONG_TO_LE(val)	((glong) GINT32_TO_LE (val))
++#define GULONG_TO_LE(val)	((gulong) GUINT32_TO_LE (val))
++#define GLONG_TO_BE(val)	((glong) GINT32_TO_BE (val))
++#define GULONG_TO_BE(val)	((gulong) GUINT32_TO_BE (val))
++#define GINT_TO_LE(val)		((gint) GINT32_TO_LE (val))
++#define GUINT_TO_LE(val)	((guint) GUINT32_TO_LE (val))
++#define GINT_TO_BE(val)		((gint) GINT32_TO_BE (val))
++#define GUINT_TO_BE(val)	((guint) GUINT32_TO_BE (val))
++#define GSIZE_TO_LE(val)	((gsize) GUINT32_TO_LE (val))
++#define GSSIZE_TO_LE(val)	((gssize) GINT32_TO_LE (val))
++#define GSIZE_TO_BE(val)	((gsize) GUINT32_TO_BE (val))
++#define GSSIZE_TO_BE(val)	((gssize) GINT32_TO_BE (val))
++#define G_BYTE_ORDER G_LITTLE_ENDIAN
++
++#define GLIB_SYSDEF_POLLIN =1
++#define GLIB_SYSDEF_POLLOUT =4
++#define GLIB_SYSDEF_POLLPRI =2
++#define GLIB_SYSDEF_POLLHUP =16
++#define GLIB_SYSDEF_POLLERR =8
++#define GLIB_SYSDEF_POLLNVAL =32
++
++#define G_MODULE_SUFFIX "dll"
++
++/* A GPid is an abstraction for a process "handle". It is *not* an
++ * abstraction for a process identifier in general. GPid is used in
++ * GLib only for descendant processes spawned with the g_spawn*
++ * functions. On POSIX there is no "process handle" concept as such,
++ * but on Windows a GPid is a handle to a process, a kind of pointer,
++ * not a process identifier.
++ */
++typedef void * GPid;
++
++#define GLIB_SYSDEF_AF_UNIX 1
++#define GLIB_SYSDEF_AF_INET 2
++#define GLIB_SYSDEF_AF_INET6 23
++
++#define GLIB_SYSDEF_MSG_OOB       1
++#define GLIB_SYSDEF_MSG_PEEK      2
++#define GLIB_SYSDEF_MSG_DONTROUTE 4
++
++G_END_DECLS
++
++#endif /* GLIBCONFIG_H */
++
+--- misc/glib-2.28.1/gmodule/gmoduleconf.h	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/gmodule/gmoduleconf.h	Wed Aug 20 14:26:42 2008
+@@ -1 +1,45 @@
+-dummy
++/* GMODULE - GLIB wrapper code for dynamic module loading
++ * Copyright (C) 1998 Tim Janik
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++ * Boston, MA 02111-1307, USA.
++ */
++#ifndef __G_MODULE_CONF_H__
++#define __G_MODULE_CONF_H__
++
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */
++
++
++#define	G_MODULE_IMPL_NONE	0
++#define	G_MODULE_IMPL_DL	1
++#define	G_MODULE_IMPL_DLD	2
++#define	G_MODULE_IMPL_WIN32	3
++#define	G_MODULE_IMPL_OS2	4
++#define	G_MODULE_IMPL_BEOS	5
++#define	G_MODULE_IMPL_DYLD	6
++
++#define	G_MODULE_IMPL		G_MODULE_IMPL_WIN32
++#undef	G_MODULE_HAVE_DLERROR
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++
++#endif /* __G_MODULE_CONF_H__ */
++
+--- misc/glib-2.28.1/config.h	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/config.h	Wed Aug 20 14:26:42 2008
+@@ -1 +1,834 @@
+-dummy
++/* config.h.win32.in Merged from two versions generated by configure for gcc and MSVC.  */
++/* config.h.  Generated by configure.  */
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define if building universal (internal helper macro) */
++/* #undef AC_APPLE_UNIVERSAL_BUILD */
++
++/* define if asm blocks can use numeric local labels */
++/* #undef ASM_NUMERIC_LABELS */
++
++/* poll doesn't work on devices */
++#define BROKEN_POLL 1
++
++/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
++   systems. This function is required for `alloca.c' support on those systems.
++   */
++/* #undef CRAY_STACKSEG_END */
++
++/* Define to 1 if using `alloca.c'. */
++/* #undef C_ALLOCA */
++
++/* Whether to disable memory pools */
++/* #undef DISABLE_MEM_POOLS */
++
++/* Whether to enable GC friendliness by default */
++/* #undef ENABLE_GC_FRIENDLY_DEFAULT */
++
++/* always defined to indicate that i18n is enabled */
++#define ENABLE_NLS 1
++
++/* include GRegex */
++#define ENABLE_REGEX /**/
++
++/* Define the gettext package to be used */
++#define GETTEXT_PACKAGE "glib20"
++
++/* Define to the GLIB binary age */
++#define GLIB_BINARY_AGE 2801
++
++/* Byte contents of gmutex */
++/* #undef GLIB_BYTE_CONTENTS_GMUTEX */
++
++/* Define to the GLIB interface age */
++#define GLIB_INTERFACE_AGE 1
++
++/* Define the location where the catalogs will be installed */
++#define GLIB_LOCALE_DIR "NONE/share/locale"
++
++/* Define to the GLIB major version */
++#define GLIB_MAJOR_VERSION 2
++
++/* Define to the GLIB micro version */
++#define GLIB_MICRO_VERSION 1
++
++/* Define to the GLIB minor version */
++#define GLIB_MINOR_VERSION 28
++
++/* The size of gmutex, as computed by sizeof. */
++/* #undef GLIB_SIZEOF_GMUTEX */
++
++/* The size of system_thread, as computed by sizeof. */
++#define GLIB_SIZEOF_SYSTEM_THREAD 4
++
++/* alpha atomic implementation */
++/* #undef G_ATOMIC_ALPHA */
++
++/* arm atomic implementation */
++/* #undef G_ATOMIC_ARM */
++
++/* cris atomic implementation */
++/* #undef G_ATOMIC_CRIS */
++
++/* crisv32 atomic implementation */
++/* #undef G_ATOMIC_CRISV32 */
++
++/* i486 atomic implementation */
++#ifndef _MSC_VER
++#define G_ATOMIC_I486 1
++#endif /* _MSC_VER */
++
++/* ia64 atomic implementation */
++/* #undef G_ATOMIC_IA64 */
++
++/* powerpc atomic implementation */
++/* #undef G_ATOMIC_POWERPC */
++
++/* s390 atomic implementation */
++/* #undef G_ATOMIC_S390 */
++
++/* sparcv9 atomic implementation */
++/* #undef G_ATOMIC_SPARCV9 */
++
++/* x86_64 atomic implementation */
++/* #undef G_ATOMIC_X86_64 */
++
++/* Have inline keyword */
++#ifndef _MSC_VER
++#define G_HAVE_INLINE 1
++#else /* _MSC_VER */
++/* #undef G_HAVE_INLINE */
++#endif /* _MSC_VER */
++
++/* Have __inline keyword */
++#define G_HAVE___INLINE 1
++
++/* Have __inline__ keyword */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define G_HAVE___INLINE__ 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef G_HAVE___INLINE__ */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Source file containing theread implementation */
++#define G_THREAD_SOURCE "gthread-win32.c"
++
++/* A 'va_copy' style function */
++#ifndef _MSC_VER
++#define G_VA_COPY va_copy
++#else /* _MSC_VER */
++/* #undef G_VA_COPY */
++#endif /* _MSC_VER */
++
++/* 'va_lists' cannot be copies as values */
++/* #undef G_VA_COPY_AS_ARRAY */
++
++/* Define to 1 if you have `alloca', as a function or macro. */
++#define HAVE_ALLOCA 1
++
++/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
++   */
++/* #undef HAVE_ALLOCA_H */
++
++/* Define to 1 if you have the <arpa/nameser_compat.h> header file. */
++/* #undef HAVE_ARPA_NAMESER_COMPAT_H */
++
++/* Define to 1 if you have the `atexit' function. */
++#define HAVE_ATEXIT 1
++
++/* Define to 1 if you have the <attr/xattr.h> header file. */
++/* #undef HAVE_ATTR_XATTR_H */
++
++/* Define to 1 if you have the `bind_textdomain_codeset' function. */
++#define HAVE_BIND_TEXTDOMAIN_CODESET 1
++
++/* Define if you have a version of the snprintf function with semantics as
++   specified by the ISO C99 standard. */
++/* #undef HAVE_C99_SNPRINTF */
++
++/* Define if you have a version of the vsnprintf function with semantics as
++   specified by the ISO C99 standard. */
++/* #undef HAVE_C99_VSNPRINTF */
++
++/* define to 1 if Carbon is available */
++/* #undef HAVE_CARBON */
++
++/* Define to 1 if you have the `chown' function. */
++/* #undef HAVE_CHOWN */
++
++/* Define to 1 if you have the `clock_gettime' function. */
++/* #undef HAVE_CLOCK_GETTIME */
++
++/* Have nl_langinfo (CODESET) */
++/* #undef HAVE_CODESET */
++
++/* Define to 1 if you have the <crt_externs.h> header file. */
++/* #undef HAVE_CRT_EXTERNS_H */
++
++/* Define if dbus-1 is available */
++/* #undef HAVE_DBUS1 */
++
++/* Define to 1 if you have the `dcgettext' function. */
++#define HAVE_DCGETTEXT 1
++
++/* Define to 1 if you have the <dirent.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_DIRENT_H 1
++#else
++/* #undef HAVE_DIRENT_H */
++#endif
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++/* #undef HAVE_DLFCN_H */
++
++/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
++/* #undef HAVE_DOPRNT */
++
++/* define for working do while(0) macros */
++#define HAVE_DOWHILE_MACROS 1
++
++/* Define to 1 if you have the `endmntent' function. */
++/* #undef HAVE_ENDMNTENT */
++
++/* Define to 1 if you have the `endservent' function. */
++/* #undef HAVE_ENDSERVENT */
++
++/* Define if we have FAM */
++/* #undef HAVE_FAM */
++
++/* Define to 1 if you have the <fam.h> header file. */
++/* #undef HAVE_FAM_H */
++
++/* Define if we have FAMNoExists in fam */
++/* #undef HAVE_FAM_NO_EXISTS */
++
++/* Define to 1 if you have the `fchmod' function. */
++/* #undef HAVE_FCHMOD */
++
++/* Define to 1 if you have the `fchown' function. */
++/* #undef HAVE_FCHOWN */
++
++/* Define to 1 if you have the `fdwalk' function. */
++/* #undef HAVE_FDWALK */
++
++/* Define to 1 if you have the <float.h> header file. */
++#define HAVE_FLOAT_H 1
++
++/* Define to 1 if you have the <fstab.h> header file. */
++/* #undef HAVE_FSTAB_H */
++
++/* Define to 1 if you have the `fsync' function. */
++/* #undef HAVE_FSYNC */
++
++/* we have the futex(2) system call */
++/* #undef HAVE_FUTEX */
++
++/* Define to 1 if you have the `getcwd' function. */
++#define HAVE_GETCWD 1
++
++/* Define to 1 if you have the `getc_unlocked' function. */
++/* #undef HAVE_GETC_UNLOCKED */
++
++/* Define to 1 if you have the `getgrgid' function. */
++/* #undef HAVE_GETGRGID */
++
++/* Define to 1 if you have the `getmntent_r' function. */
++/* #undef HAVE_GETMNTENT_R */
++
++/* Define to 1 if you have the `getmntinfo' function. */
++/* #undef HAVE_GETMNTINFO */
++
++/* Define to 1 if you have the `getprotobyname_r' function. */
++/* #undef HAVE_GETPROTOBYNAME_R */
++
++/* Define to 1 if you have the `getpwuid' function. */
++/* #undef HAVE_GETPWUID */
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++#define HAVE_GETTEXT 1
++
++/* Define to 1 if you have the `gmtime_r' function. */
++/* #undef HAVE_GMTIME_R */
++
++/* define to use system printf */
++/* #undef HAVE_GOOD_PRINTF */
++
++/* Define to 1 if you have the <grp.h> header file. */
++/* #undef HAVE_GRP_H */
++
++/* Define to 1 if you have the `hasmntopt' function. */
++/* #undef HAVE_HASMNTOPT */
++
++/* Define to 1 if you have the `inotify_init1' function. */
++/* #undef HAVE_INOTIFY_INIT1 */
++
++/* define to support printing 64-bit integers with format I64 */
++#define HAVE_INT64_AND_I64 1
++
++/* Define if you have the 'intmax_t' type in <stdint.h> or <inttypes.h>. */
++#ifndef _MSC_VER
++#define HAVE_INTMAX_T 1
++#else /* _MSC_VER */
++/* #undef HAVE_INTMAX_T */
++#endif /* _MSC_VER */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_INTTYPES_H 1
++#else /* _MSC_VER */
++/* #undef HAVE_INTTYPES_H */
++#endif /* _MSC_VER */
++
++/* Define if <inttypes.h> exists, doesn't clash with <sys/types.h>, and
++   declares uintmax_t. */
++#ifndef _MSC_VER
++#define HAVE_INTTYPES_H_WITH_UINTMAX 1
++#else /* _MSC_VER */
++/* #undef HAVE_INTTYPES_H_WITH_UINTMAX */
++#endif /* _MSC_VER */
++
++/* Define if you have <langinfo.h> and nl_langinfo(CODESET). */
++/* #undef HAVE_LANGINFO_CODESET */
++
++/* Define to 1 if you have the `lchmod' function. */
++/* #undef HAVE_LCHMOD */
++
++/* Define to 1 if you have the `lchown' function. */
++/* #undef HAVE_LCHOWN */
++
++/* Define if your <locale.h> file defines LC_MESSAGES. */
++/* #undef HAVE_LC_MESSAGES */
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if you have the `link' function. */
++/* #undef HAVE_LINK */
++
++/* Define to 1 if you have the <locale.h> header file. */
++#define HAVE_LOCALE_H 1
++
++/* Define to 1 if you have the `localtime_r' function. */
++/* #undef HAVE_LOCALTIME_R */
++
++/* Define if you have the 'long double' type. */
++#define HAVE_LONG_DOUBLE 1
++
++/* Define if you have the 'long long' type. */
++#ifndef _MSC_VER
++#define HAVE_LONG_LONG 1
++#else /* _MSC_VER */
++/* #undef HAVE_LONG_LONG */
++#endif /* _MSC_VER */
++
++/* define if system printf can print long long */
++#define HAVE_LONG_LONG_FORMAT 1
++
++/* Define to 1 if you have the `lstat' function. */
++/* #undef HAVE_LSTAT */
++
++/* Define to 1 if you have the <malloc.h> header file. */
++#define HAVE_MALLOC_H 1
++
++/* Define to 1 if you have the `memalign' function. */
++/* #undef HAVE_MEMALIGN */
++
++/* Define to 1 if you have the `memmem' function. */
++/* #undef HAVE_MEMMEM */
++
++/* Define to 1 if you have the `memmove' function. */
++#define HAVE_MEMMOVE 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `mmap' function. */
++/* #undef HAVE_MMAP */
++
++/* Define to 1 if you have the <mntent.h> header file. */
++/* #undef HAVE_MNTENT_H */
++
++/* Have a monotonic clock */
++/* #undef HAVE_MONOTONIC_CLOCK */
++
++/* Define to 1 if you have the `nanosleep' function. */
++/* #undef HAVE_NANOSLEEP */
++
++/* Define to 1 if you have the <netdb.h> header file. */
++/* #undef HAVE_NETDB_H */
++
++/* Have non-POSIX function getgrgid_r */
++/* #undef HAVE_NONPOSIX_GETGRGID_R */
++
++/* Have non-POSIX function getpwuid_r */
++/* #undef HAVE_NONPOSIX_GETPWUID_R */
++
++/* Define to 1 if you have the `nsleep' function. */
++/* #undef HAVE_NSLEEP */
++
++/* Define to 1 if you have the `on_exit' function. */
++/* #undef HAVE_ON_EXIT */
++
++/* Define to 1 if you have the `pipe2' function. */
++/* #undef HAVE_PIPE2 */
++
++/* Define to 1 if you have the `poll' function. */
++/* #undef HAVE_POLL */
++
++/* Have POSIX function getgrgid_r */
++/* #undef HAVE_POSIX_GETGRGID_R */
++
++/* Have POSIX function getpwuid_r */
++/* #undef HAVE_POSIX_GETPWUID_R */
++
++/* Define to 1 if you have the `posix_memalign' function. */
++/* #undef HAVE_POSIX_MEMALIGN */
++
++/* Have function pthread_attr_setstacksize */
++/* #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE */
++
++/* Define to 1 if the system has the type `ptrdiff_t'. */
++#define HAVE_PTRDIFF_T 1
++
++/* Define to 1 if you have the <pwd.h> header file. */
++/* #undef HAVE_PWD_H */
++
++/* Define to 1 if you have the `readlink' function. */
++/* #undef HAVE_READLINK */
++
++/* Define to 1 if you have the <sched.h> header file. */
++/* #undef HAVE_SCHED_H */
++
++/* Define to 1 if libselinux is available */
++/* #undef HAVE_SELINUX */
++
++/* Define to 1 if you have the <selinux/selinux.h> header file. */
++/* #undef HAVE_SELINUX_SELINUX_H */
++
++/* Define to 1 if you have the `setenv' function. */
++/* #undef HAVE_SETENV */
++
++/* Define to 1 if you have the `setlocale' function. */
++#define HAVE_SETLOCALE 1
++
++/* Define to 1 if you have the `setmntent' function. */
++/* #undef HAVE_SETMNTENT */
++
++/* Define to 1 if you have the `setresuid' function. */
++/* #undef HAVE_SETRESUID */
++
++/* Define to 1 if you have the `setreuid' function. */
++/* #undef HAVE_SETREUID */
++
++/* Define to 1 if you have the `snprintf' function. */
++#ifndef _MSC_VER
++#define HAVE_SNPRINTF 1
++#ifdef __DMC__
++#define snprintf _snprintf
++#endif
++#else /* _MSC_VER */
++/* #undef HAVE_SNPRINTF */
++#endif /* _MSC_VER */
++
++/* Define to 1 if you have the `splice' function. */
++/* #undef HAVE_SPLICE */
++
++/* Define to 1 if you have the `statfs' function. */
++/* #undef HAVE_STATFS */
++
++/* Define to 1 if you have the `statvfs' function. */
++/* #undef HAVE_STATVFS */
++
++/* Define to 1 if you have the <stddef.h> header file. */
++#define HAVE_STDDEF_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_STDINT_H 1
++#else /* _MSC_VER */
++/* #undef HAVE_STDINT_H */
++#endif /* _MSC_VER */
++
++/* Define if <stdint.h> exists, doesn't clash with <sys/types.h>, and declares
++   uintmax_t. */
++#ifndef _MSC_VER
++#define HAVE_STDINT_H_WITH_UINTMAX 1
++#else /* _MSC_VER */
++/* #undef HAVE_STDINT_H_WITH_UINTMAX */
++#endif /* _MSC_VER */
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `stpcpy' function. */
++/* #undef HAVE_STPCPY */
++
++/* Define to 1 if you have the `strcasecmp' function. */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define HAVE_STRCASECMP 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef HAVE_STRCASECMP */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Define to 1 if you have the `strerror' function. */
++#define HAVE_STRERROR 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define HAVE_STRINGS_H 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef HAVE_STRINGS_H */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Have functions strlcpy and strlcat */
++/* #undef HAVE_STRLCPY */
++
++/* Define to 1 if you have the `strncasecmp' function. */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define HAVE_STRNCASECMP 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef HAVE_STRNCASECMP */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Define to 1 if you have the `strndup' function. */
++/* #undef HAVE_STRNDUP */
++
++/* Define to 1 if you have the `strsignal' function. */
++/* #undef HAVE_STRSIGNAL */
++
++/* Define to 1 if `f_bavail' is member of `struct statfs'. */
++/* #undef HAVE_STRUCT_STATFS_F_BAVAIL */
++
++/* Define to 1 if `f_fstypename' is member of `struct statfs'. */
++/* #undef HAVE_STRUCT_STATFS_F_FSTYPENAME */
++
++/* Define to 1 if `f_basetype' is member of `struct statvfs'. */
++/* #undef HAVE_STRUCT_STATVFS_F_BASETYPE */
++
++/* Define to 1 if `st_atimensec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_ATIMENSEC */
++
++/* Define to 1 if `st_atim.tv_nsec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC */
++
++/* Define to 1 if `st_blksize' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_BLKSIZE */
++
++/* Define to 1 if `st_blocks' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_BLOCKS */
++
++/* Define to 1 if `st_ctimensec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_CTIMENSEC */
++
++/* Define to 1 if `st_ctim.tv_nsec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_CTIM_TV_NSEC */
++
++/* Define to 1 if `st_mtimensec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_MTIMENSEC */
++
++/* Define to 1 if `st_mtim.tv_nsec' is member of `struct stat'. */
++/* #undef HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC */
++
++/* Define to 1 if you have the `symlink' function. */
++/* #undef HAVE_SYMLINK */
++
++/* Define to 1 if you have the <sys/inotify.h> header file. */
++/* #undef HAVE_SYS_INOTIFY_H */
++
++/* Define to 1 if you have the <sys/mntctl.h> header file. */
++/* #undef HAVE_SYS_MNTCTL_H */
++
++/* Define to 1 if you have the <sys/mnttab.h> header file. */
++/* #undef HAVE_SYS_MNTTAB_H */
++
++/* Define to 1 if you have the <sys/mount.h> header file. */
++/* #undef HAVE_SYS_MOUNT_H */
++
++/* Define to 1 if you have the <sys/param.h> header file. */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define HAVE_SYS_PARAM_H 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef HAVE_SYS_PARAM_H */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Define to 1 if you have the <sys/poll.h> header file. */
++/* #undef HAVE_SYS_POLL_H */
++
++/* Define to 1 if you have the <sys/prctl.h> header file. */
++/* #undef HAVE_SYS_PRCTL_H */
++
++/* Define to 1 if you have the <sys/resource.h> header file. */
++/* #undef HAVE_SYS_RESOURCE_H */
++
++/* found fd_set in sys/select.h */
++/* #undef HAVE_SYS_SELECT_H */
++
++/* Define to 1 if you have the <sys/statfs.h> header file. */
++/* #undef HAVE_SYS_STATFS_H */
++
++/* Define to 1 if you have the <sys/statvfs.h> header file. */
++/* #undef HAVE_SYS_STATVFS_H */
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/sysctl.h> header file. */
++/* #undef HAVE_SYS_SYSCTL_H */
++
++/* Define to 1 if you have the <sys/times.h> header file. */
++/* #undef HAVE_SYS_TIMES_H */
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_SYS_TIME_H 1
++#else /* _MSC_VER */
++/* #undef HAVE_SYS_TIME_H */
++#endif /* _MSC_VER */
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <sys/uio.h> header file. */
++/* #undef HAVE_SYS_UIO_H */
++
++/* Define to 1 if you have the <sys/vfstab.h> header file. */
++/* #undef HAVE_SYS_VFSTAB_H */
++
++/* Define to 1 if you have the <sys/vfs.h> header file. */
++/* #undef HAVE_SYS_VFS_H */
++
++/* Define to 1 if you have the <sys/vmount.h> header file. */
++/* #undef HAVE_SYS_VMOUNT_H */
++
++/* Define to 1 if you have the <sys/wait.h> header file. */
++/* #undef HAVE_SYS_WAIT_H */
++
++/* Define to 1 if you have the <sys/xattr.h> header file. */
++/* #undef HAVE_SYS_XATTR_H */
++
++/* Define to 1 if you have the `timegm' function. */
++/* #undef HAVE_TIMEGM */
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_UNISTD_H 1
++#else /* _MSC_VER */
++/* #undef HAVE_UNISTD_H */
++#endif /* _MSC_VER */
++
++/* Define if your printf function family supports positional parameters as
++   specified by Unix98. */
++/* #undef HAVE_UNIX98_PRINTF */
++
++/* Define to 1 if you have the `unsetenv' function. */
++/* #undef HAVE_UNSETENV */
++
++/* Define to 1 if you have the `utimes' function. */
++/* #undef HAVE_UTIMES */
++
++/* Define to 1 if you have the `valloc' function. */
++/* #undef HAVE_VALLOC */
++
++/* Define to 1 if you have the <values.h> header file. */
++#if !defined(_MSC_VER) && !defined(__DMC__)
++#define HAVE_VALUES_H 1
++#else /* _MSC_VER or __DMC__ */
++/* #undef HAVE_VALUES_H */
++#endif /* _MSC_VER or __DMC__ */
++
++/* Define to 1 if you have the `vasprintf' function. */
++#define HAVE_VASPRINTF 1
++
++/* Define to 1 if you have the `vprintf' function. */
++#define HAVE_VPRINTF 1
++
++/* Define to 1 if you have the `vsnprintf' function. */
++#ifndef _MSC_VER
++#define HAVE_VSNPRINTF 1
++#ifdef __DMC__
++#define vsnprintf _vsnprintf
++#endif
++#else /* _MSC_VER */
++/* #undef HAVE_VSNPRINTF */
++#endif /* _MSC_VER */
++
++/* Define if you have the 'wchar_t' type. */
++#define HAVE_WCHAR_T 1
++
++/* Define to 1 if you have the `wcslen' function. */
++#define HAVE_WCSLEN 1
++
++/* Define if you have the 'wint_t' type. */
++#define HAVE_WINT_T 1
++
++/* Have a working bcopy */
++/* #undef HAVE_WORKING_BCOPY */
++
++/* Define to 1 if you have the <wspiapi.h> header file. */
++#ifndef _MSC_VER
++/* #undef HAVE_WSPIAPI_H */
++#else
++#define HAVE_WSPIAPI_H 1
++#endif
++
++/* Define to 1 if xattr is available */
++/* #undef HAVE_XATTR */
++
++/* Define to 1 if xattr API uses XATTR_NOFOLLOW */
++/* #undef HAVE_XATTR_NOFOLLOW */
++
++/* Define to 1 if you have the `_NSGetEnviron' function. */
++/* #undef HAVE__NSGETENVIRON */
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#define LT_OBJDIR ".libs/"
++
++/* Do we cache iconv descriptors */
++#define NEED_ICONV_CACHE 1
++
++/* didn't find fd_set */
++#define NO_FD_SET 1
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++/* #undef NO_MINUS_C_MINUS_O */
++
++/* global 'sys_errlist' not found */
++#define NO_SYS_ERRLIST 1
++
++/* global 'sys_siglist' not found */
++#define NO_SYS_SIGLIST 1
++
++/* global 'sys_siglist' not declared */
++#define NO_SYS_SIGLIST_DECL 1
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "http://bugzilla.gnome.org/enter_bug.cgi?product=glib"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "glib"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "glib 2.28.1"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "glib"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "2.28.1"
++
++/* Maximum POSIX RT priority */
++/* #undef POSIX_MAX_PRIORITY */
++
++/* define if posix_memalign() can allocate any size */
++/* #undef POSIX_MEMALIGN_WITH_COMPLIANT_ALLOCS */
++
++/* Minimum POSIX RT priority */
++/* #undef POSIX_MIN_PRIORITY */
++
++/* The POSIX RT yield function */
++/* #undef POSIX_YIELD_FUNC */
++
++/* whether realloc (NULL,) works */
++#define REALLOC_0_WORKS 1
++
++/* Define if you have correct malloc prototypes */
++#ifndef _MSC_VER
++#define SANE_MALLOC_PROTOS 1
++#else /* _MSC_VER */
++/* #undef SANE_MALLOC_PROTOS */
++#endif /* _MSC_VER */
++
++/* The size of `char', as computed by sizeof. */
++#define SIZEOF_CHAR 1
++
++/* The size of `int', as computed by sizeof. */
++#define SIZEOF_INT 4
++
++/* The size of `long', as computed by sizeof. */
++#define SIZEOF_LONG 4
++
++/* The size of `long long', as computed by sizeof. */
++#ifndef _MSC_VER
++#define SIZEOF_LONG_LONG 8
++#else /* _MSC_VER */
++#define SIZEOF_LONG_LONG 0
++#endif /* _MSC_VER */
++
++/* The size of `short', as computed by sizeof. */
++#define SIZEOF_SHORT 2
++
++/* The size of `size_t', as computed by sizeof. */
++#define SIZEOF_SIZE_T 4
++
++/* The size of `void *', as computed by sizeof. */
++#define SIZEOF_VOID_P 4
++
++/* The size of `__int64', as computed by sizeof. */
++#define SIZEOF___INT64 8
++
++/* If using the C implementation of alloca, define if you know the
++   direction of stack growth for your system; otherwise it will be
++   automatically deduced at runtime.
++	STACK_DIRECTION > 0 => grows toward higher addresses
++	STACK_DIRECTION < 0 => grows toward lower addresses
++	STACK_DIRECTION = 0 => direction of growth unknown */
++/* #undef STACK_DIRECTION */
++
++/* Number of arguments to statfs() */
++/* #undef STATFS_ARGS */
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Using GNU libiconv */
++/* #undef USE_LIBICONV_GNU */
++
++/* Using a native implementation of iconv in a separate library */
++#define USE_LIBICONV_NATIVE 1
++
++/* using the system-supplied PCRE library */
++/* #undef USE_SYSTEM_PCRE */
++
++/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
++   significant byte first (like Motorola and SPARC, unlike Intel). */
++#if defined AC_APPLE_UNIVERSAL_BUILD
++# if defined __BIG_ENDIAN__
++#  define WORDS_BIGENDIAN 1
++# endif
++#else
++# ifndef WORDS_BIGENDIAN
++/* #  undef WORDS_BIGENDIAN */
++# endif
++#endif
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++/* #undef _FILE_OFFSET_BITS */
++
++/* Define for large files, on AIX-style hosts. */
++/* #undef _LARGE_FILES */
++
++/* Needed to get declarations for msg_control and msg_controllen on Solaris */
++/* #undef _XOPEN_SOURCE */
++
++/* Needed to get declarations for msg_control and msg_controllen on Solaris */
++/* #undef _XOPEN_SOURCE_EXTENDED */
++
++/* Needed to get declarations for msg_control and msg_controllen on Solaris */
++/* #undef __EXTENSIONS__ */
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* Define to long or long long if <inttypes.h> and <stdint.h> don't define. */
++/* #undef intmax_t */
++
++/* Define to empty if the C compiler doesn't support this keyword. */
++/* #undef signed */
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++/* #undef size_t */
++
+--- misc/glib-2.28.1/gio/gvdb/makefile.msc	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/gio/gvdb/makefile.msc	Wed Aug 20 14:26:42 2008
+@@ -1 +1,24 @@
+-dummy
++TOP = ..\..\..
++
++!INCLUDE ..\..\build\win32\make.msc
++
++INCLUDES = \
++	-FImsvc_recommended_pragmas.h \
++	-I .. -I ..\..\glib -I ..\..\gmodule -I . -I ..\.. \
++	$(INTL_CFLAGS) \
++	$(SOLARINC)
++
++DEFINES = \
++	-DG_LOG_DOMAIN=\"GLib-GIO\" \
++	-DGIO_MODULE_DIR=\"$(libdir)/gio/modules\" \
++	-DGIO_COMPILATION
++
++OBJECTS = \
++	gvdb-reader.obj \
++	gvdb-builder.obj 
++
++all : giogvdb.lib
++
++giogvdb.lib : $(OBJECTS)
++	lib -out:giogvdb.lib $(OBJECTS)
++
+--- misc/glib-2.28.1/gio/win32/makefile.msc	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/gio/win32/makefile.msc	Wed Aug 20 14:26:42 2008
+@@ -1 +1,27 @@
+-dummy
++TOP = ..\..\..
++
++!INCLUDE ..\..\build\win32\make.msc
++
++INCLUDES = \
++	-FImsvc_recommended_pragmas.h \
++	-I .. -I ..\..\glib -I ..\..\gmodule -I . -I ..\.. \
++	$(INTL_CFLAGS) \
++	$(SOLARINC)
++
++DEFINES = \
++	-DG_LOG_DOMAIN=\"GLib-GIO\" \
++	-DGIO_MODULE_DIR=\"$(libdir)/gio/modules\" \
++	-DGIO_COMPILATION
++
++OBJECTS = \
++	gwin32directorymonitor.obj \
++	gwinhttpfile.obj \
++	gwinhttpfileinputstream.obj \
++	gwinhttpfileoutputstream.obj \
++	gwinhttpvfs.obj \
++
++all : giowin32.lib
++
++giowin32.lib : $(OBJECTS)
++	lib -out:giowin32.lib $(OBJECTS)
++
+--- misc/glib-2.28.1/gobject/gmarshal.c	Wed Aug 20 14:33:55 2008
++++ misc/build/glib-2.28.1/gobject/gmarshal.c	Wed Aug 20 14:26:42 2008
+@@ -1,4 +1,13 @@
++#include "config.h"
+ 
++#include "gsourceclosure.h"
++#include "gboxed.h"
++#include "genums.h"
++#include "gmarshal.h"
++#include "gvalue.h"
++#include "gvaluetypes.h"
++#include "gparam.h"
++#include "gobject.h"
+ 
+ #ifdef G_ENABLE_DEBUG
+ #define g_marshal_value_peek_boolean(v)  g_value_get_boolean (v)

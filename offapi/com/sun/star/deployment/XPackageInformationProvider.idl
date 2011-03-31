@@ -36,7 +36,7 @@ module com { module sun { module star { module deployment {
 
     @since OOo 2.3
 */
-interface XPackageInformationProvider
+published interface XPackageInformationProvider
 {
     /** get Package information for a specific extension.
 

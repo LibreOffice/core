@@ -28,17 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <plugins/gtk/gtkframe.hxx>
-#include <plugins/gtk/gtkdata.hxx>
-#include <plugins/gtk/gtkinst.hxx>
-#include <plugins/gtk/gtkgdi.hxx>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkgdi.hxx>
 #include <vcl/keycodes.hxx>
-#include <wmadaptor.hxx>
-#include <sm.hxx>
-#include <salbmp.h>
-#include <salprn.h>
+#include <unx/wmadaptor.hxx>
+#include <unx/sm.hxx>
+#include <unx/salbmp.h>
+#include <unx/salprn.h>
 #include <vcl/floatwin.hxx>
-#include <salprn.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -49,8 +48,8 @@
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/impbmp.hxx>
-#include <vcl/svids.hrc>
+#include <impbmp.hxx>
+#include <svids.hrc>
 
 #include <algorithm>
 

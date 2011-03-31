@@ -28,6 +28,32 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "rtl/logfile.hxx"
+
+#include "osl/file.hxx"
+
+#include "vos/signal.hxx"
+#include "vos/process.hxx"
+
+#include "tools/tools.h"
+#include "tools/debug.hxx"
+#include "tools/unqid.hxx"
+#include "tools/resmgr.hxx"
+
+#include "comphelper/processfactory.hxx"
+
+#include "unotools/syslocaleoptions.hxx"
+#include "unotools/fontcfg.hxx"
+
+#include "vcl/svapp.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/cvtgrf.hxx"
+#include "vcl/image.hxx"
+#include "vcl/settings.hxx"
+#include "vcl/unowrap.hxx"
+#include "vcl/configsettings.hxx"
+#include "vcl/lazydelete.hxx"
+
 #ifdef WNT
 #include <tools/prewin.h>
 #include <process.h>    // for _beginthreadex
@@ -40,46 +66,28 @@
 // building X11 graphics layers.
 
 #if defined UNX && ! defined QUARTZ
-#include "svunx.h"
+//#include "svunx.h"
 #endif
 
-#include "svsys.h"
-#include "vcl/salinst.hxx"
-#include "vcl/salwtype.hxx"
-#include "vos/signal.hxx"
-#include "tools/tools.h"
-#include "tools/debug.hxx"
-#include "tools/unqid.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/dbggui.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/cvtgrf.hxx"
-#include "vcl/image.hxx"
-#include "tools/resmgr.hxx"
-#include "vcl/accmgr.hxx"
-#include "vcl/idlemgr.hxx"
-#include "vcl/outdev.h"
-#include "vcl/outfont.hxx"
-#include "vcl/print.h"
-#include "vcl/settings.hxx"
-#include "vcl/unowrap.hxx"
-#include "vcl/salsys.hxx"
-#include "vcl/saltimer.hxx"
-#include "vcl/salimestatus.hxx"
-#include "vcl/impimagetree.hxx"
-#include "vcl/xconnection.hxx"
+//#include "svsys.h"
 
-#include "vos/process.hxx"
-#include "osl/file.hxx"
-#include "comphelper/processfactory.hxx"
+#include "salinst.hxx"
+#include "salwtype.hxx"
+#include "svdata.hxx"
+#include "dbggui.hxx"
+#include "accmgr.hxx"
+#include "idlemgr.hxx"
+#include "outdev.h"
+#include "outfont.hxx"
+#include "print.h"
+#include "salsys.hxx"
+#include "saltimer.hxx"
+#include "salimestatus.hxx"
+#include "impimagetree.hxx"
+#include "xconnection.hxx"
+
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
-#include "rtl/logfile.hxx"
-#include <unotools/syslocaleoptions.hxx>
-#include "unotools/fontcfg.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/lazydelete.hxx"
 
 #include "cppuhelper/implbase1.hxx"
 #include "uno/current_context.hxx"

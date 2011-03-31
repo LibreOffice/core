@@ -61,8 +61,7 @@ public class Resource
             Object[][] DummyArray = new Object[1][];
             Object[] nIDArray = new Object[1];
             nIDArray[0] = new Integer(nID);
-            final String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
-            return IDString;
+            return (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
         }
         catch (Exception exception)
         {
@@ -80,8 +79,7 @@ public class Resource
             Object[] nIDArray = new Object[1];
             nIDArray[0] = new Integer(nID);
             //Object bla = xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
-            PropertyValue[] ResProp = (PropertyValue[]) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
-            return ResProp;
+            return (PropertyValue[]) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
         }
         catch (Exception exception)
         {
@@ -120,7 +118,7 @@ public class Resource
             }
             else
             {
-                XInvocation xResInvoke = (XInvocation) com.sun.star.uno.UnoRuntime.queryInterface(XInvocation.class, xResource);
+                XInvocation xResInvoke = com.sun.star.uno.UnoRuntime.queryInterface(XInvocation.class, xResource);
                 xResInvoke.setValue("FileName", Module);
                 return xResInvoke;
             }

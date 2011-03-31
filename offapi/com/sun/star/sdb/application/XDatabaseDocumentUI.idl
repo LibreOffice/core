@@ -54,7 +54,7 @@ module com { module sun { module star { module sdb { module application {
 
     @since OOo 2.2
  */
-interface XDatabaseDocumentUI
+published interface XDatabaseDocumentUI
 {
     /** provides access to the data source belong to the database document
     */

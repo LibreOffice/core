@@ -391,6 +391,7 @@ namespace cppcanvas
                                 case META_TEXTLINE_ACTION:
                                 case META_TEXTRECT_ACTION:
                                 case META_STRETCHTEXT_ACTION:
+                                case META_RENDERGRAPHIC_ACTION:
                                     // output-generating action - only
                                     // copy, if we're within the
                                     // requested subset

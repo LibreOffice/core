@@ -43,6 +43,7 @@ sub action($$$)
          'shl/URELIB/URELIB' => '@loader_path',
          'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
          'shl/OOO/OOO' => '@loader_path',
+         'shl/LOADER/LOADER' => '@loader_path',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
          'shl/BOXT/URELIB' => '@executable_path/urelibs',
          'shl/BOXT/OOO' => '@loader_path/../../../basis-link/program',
@@ -56,7 +57,7 @@ sub action($$$)
 }
 
 @ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or die
-  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|BOXT|NONE <filepath>*';
+  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|BOXT|NONE|LOADER <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "SharedLibrary")
@@ -84,10 +85,21 @@ if ($type eq "extshl")
         $change .= " -change $1 " . action($type, $loc, $loc) . "/$2";
         $inames{$file} = $2;
     }
-    foreach $file (@ARGV)
+    if( $loc eq "LOADER" )
     {
-        my $call = "install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
-        system($call) == 0 or die "cannot $call";
+        foreach $file (@ARGV)
+        {
+            my $call = "install_name_tool$change -id \@loader_path/$inames{$file} $file";
+            system($call) == 0 or die "cannot $call";
+        }
+    }
+    else
+    {
+        foreach $file (@ARGV)
+        {
+            my $call = "install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
+            system($call) == 0 or die "cannot $call";
+        }
     }
 }
 foreach $file (@ARGV)

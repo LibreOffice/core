@@ -875,12 +875,16 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0)
 void OStatement_Base::setFetchSize(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(_par0>0,"Illegal fetch size!");
+    if ( _par0 > 0 )
+    {
 
-    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+        SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
 
-    delete m_pRowStatusArray;
-    m_pRowStatusArray = new SQLUSMALLINT[_par0];
-    nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+        delete m_pRowStatusArray;
+        m_pRowStatusArray = new SQLUSMALLINT[_par0];
+        nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+    }
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxFieldSize(sal_Int32 _par0)

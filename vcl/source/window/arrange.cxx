@@ -27,9 +27,10 @@
 
 #include "precompiled_vcl.hxx"
 
+#include "svdata.hxx"
+
 #include "vcl/arrange.hxx"
 #include "vcl/edit.hxx"
-#include "vcl/svdata.hxx"
 #include "vcl/svapp.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"

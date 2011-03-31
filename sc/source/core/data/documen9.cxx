@@ -111,17 +111,21 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
-                // #116235#
-                SdrObject* pNewObject = pOldObject->Clone();
-                // SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
-                pNewObject->SetModel(pDrawLayer);
-                pNewObject->SetPage(pNewPage);
+                // #i112034# do not copy internal objects (detective) and note captions
+                if ( pOldObject->GetLayer() != SC_LAYER_INTERN && !ScDrawLayer::IsNoteCaption( pOldObject ) )
+                {
+                    // #116235#
+                    SdrObject* pNewObject = pOldObject->Clone();
+                    // SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
+                    pNewObject->SetModel(pDrawLayer);
+                    pNewObject->SetPage(pNewPage);
 
-                pNewObject->NbcMove(Size(0,0));
-                pNewPage->InsertObject( pNewObject );
+                    pNewObject->NbcMove(Size(0,0));
+                    pNewPage->InsertObject( pNewObject );
 
-                if (pDrawLayer->IsRecording())
-                    pDrawLayer->AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+                    if (pDrawLayer->IsRecording())
+                        pDrawLayer->AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+                }
 
                 pOldObject = aIter.Next();
             }

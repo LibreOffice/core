@@ -34,15 +34,13 @@
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/longcurr.hxx>
 
+#include <svdata.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

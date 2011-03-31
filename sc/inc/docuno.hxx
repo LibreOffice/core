@@ -129,7 +129,7 @@ public:
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;
 
-    void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
+    void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL, bool bCalcOutputFactor = false );
 
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);

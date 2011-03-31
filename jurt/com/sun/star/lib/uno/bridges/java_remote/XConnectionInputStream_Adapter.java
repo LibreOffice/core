@@ -50,7 +50,7 @@ class XConnectionInputStream_Adapter extends InputStream {
 
     public int read() throws IOException {
 
-        int len = 0;
+        int len  ;
 
         try {
             len = _xConnection.read(_bytes, 1);

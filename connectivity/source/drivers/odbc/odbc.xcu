@@ -152,6 +152,11 @@
             <value>true</value>
           </prop>
         </node>
+        <node oor:name="RespectDriverResultSetType" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="MetaData">
         <node oor:name="SupportsTableCreation" oor:op="replace">

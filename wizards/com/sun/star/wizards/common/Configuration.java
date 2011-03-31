@@ -97,7 +97,7 @@ public abstract class Configuration
         Object o = getNode(name, parent);
         if (AnyConverter.isVoid(o))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         return (String) o;
     }
@@ -114,7 +114,7 @@ public abstract class Configuration
 
     public static Object getNode(String name, Object parent) throws Exception
     {
-        return ((XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, parent)).getByName(name);
+        return UnoRuntime.queryInterface(XNameAccess.class, parent).getByName(name);
     }
 
     public static void set(int value, String name, Object parent) throws Exception
@@ -134,7 +134,7 @@ public abstract class Configuration
 
     public static void set(boolean value, String name, Object parent) throws Exception
     {
-        if (value == true)
+        if (value)
         {
             set(Boolean.TRUE, name, parent);
         }
@@ -146,7 +146,7 @@ public abstract class Configuration
 
     public static void set(Object value, String name, Object parent) throws com.sun.star.lang.IllegalArgumentException, PropertyVetoException, UnknownPropertyException, WrappedTargetException
     {
-        ((XHierarchicalPropertySet) UnoRuntime.queryInterface(XHierarchicalPropertySet.class, parent)).setHierarchicalPropertyValue(name, value);
+        UnoRuntime.queryInterface(XHierarchicalPropertySet.class, parent).setHierarchicalPropertyValue(name, value);
     }
 
     /** Creates a new instance of RegistryEntry
@@ -157,7 +157,7 @@ public abstract class Configuration
      */
     public static Object getConfigurationNode(String name, Object parent) throws Exception
     {
-        return ((XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, parent)).getByName(name);
+        return UnoRuntime.queryInterface(XNameAccess.class, parent).getByName(name);
     }
 
     public static Object getConfigurationRoot(XMultiServiceFactory xmsf, String sPath, boolean updateable) throws com.sun.star.uno.Exception
@@ -165,7 +165,7 @@ public abstract class Configuration
 
         Object oConfigProvider;
         oConfigProvider = xmsf.createInstance("com.sun.star.configuration.ConfigurationProvider");
-        XMultiServiceFactory confMsf = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
+        XMultiServiceFactory confMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
 
         final String sView = updateable ? "com.sun.star.configuration.ConfigurationUpdateAccess" : "com.sun.star.configuration.ConfigurationAccess";
 
@@ -192,7 +192,7 @@ public abstract class Configuration
 
     public static String[] getChildrenNames(Object configView)
     {
-        XNameAccess nameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, configView);
+        XNameAccess nameAccess = UnoRuntime.queryInterface(XNameAccess.class, configView);
         return nameAccess.getElementNames();
     }
 
@@ -201,8 +201,7 @@ public abstract class Configuration
         try
         {
             Object oProdNameAccess = getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", false);
-            String ProductName = (String) Helper.getUnoObjectbyName(oProdNameAccess, "ooName");
-            return ProductName;
+            return (String) Helper.getUnoObjectbyName(oProdNameAccess, "ooName");
         }
         catch (Exception exception)
         {
@@ -213,7 +212,7 @@ public abstract class Configuration
 
     public static String getOfficeLocaleString(XMultiServiceFactory xMSF)
     {
-        String sLocale = "";
+        String sLocale = PropertyNames.EMPTY_STRING;
         try
         {
             Locale aLocLocale = new Locale();
@@ -247,8 +246,7 @@ public abstract class Configuration
         try
         {
             Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
-            String sLinguistic = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
-            return sLinguistic;
+            return (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
         }
         catch (Exception exception)
         {
@@ -273,11 +271,11 @@ public abstract class Configuration
     public static Object addConfigNode(Object configView, String name) throws com.sun.star.lang.WrappedTargetException, ElementExistException, NoSuchElementException, com.sun.star.uno.Exception
     {
 
-        XNameContainer xNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, configView);
+        XNameContainer xNameContainer = UnoRuntime.queryInterface(XNameContainer.class, configView);
 
         if (xNameContainer == null)
         {
-            XNameReplace xNameReplace = (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class, configView);
+            XNameReplace xNameReplace = UnoRuntime.queryInterface(XNameReplace.class, configView);
             return xNameReplace.getByName(name);
         }
         else
@@ -287,7 +285,7 @@ public abstract class Configuration
             xNameContainer.removeByName(name);*/
 
             // create a new detached set element (instance of DataSourceDescription)
-            XSingleServiceFactory xElementFactory = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, configView);
+            XSingleServiceFactory xElementFactory = UnoRuntime.queryInterface(XSingleServiceFactory.class, configView);
 
             // the new element is the result !
             Object newNode = xElementFactory.createInstance();
@@ -300,7 +298,7 @@ public abstract class Configuration
 
     public static void removeNode(Object configView, String name) throws NoSuchElementException, WrappedTargetException
     {
-        XNameContainer xNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, configView);
+        XNameContainer xNameContainer = UnoRuntime.queryInterface(XNameContainer.class, configView);
 
         if (xNameContainer.hasByName(name))
         {
@@ -310,7 +308,7 @@ public abstract class Configuration
 
     public static void commit(Object configView) throws WrappedTargetException
     {
-        XChangesBatch xUpdateControl = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, configView);
+        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, configView);
         xUpdateControl.commitChanges();
     }
 
@@ -319,7 +317,7 @@ public abstract class Configuration
         Object view = Configuration.getConfigurationRoot(xmsf, path, true);
         addConfigNode(path, name);
         node.writeConfiguration(view, param);
-        XChangesBatch xUpdateControl = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, view);
+        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, view);
         xUpdateControl.commitChanges();
     }
 
@@ -327,7 +325,7 @@ public abstract class Configuration
     {
         Object view = Configuration.getConfigurationRoot(xmsf, path, true);
         removeNode(view, name);
-        XChangesBatch xUpdateControl = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, view);
+        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, view);
         xUpdateControl.commitChanges();
     }
 
@@ -371,8 +369,7 @@ public abstract class Configuration
         {
             String[] snames = _xNameAccess.getElementNames();
             Object oNode = _xNameAccess.getByName(snames[_index]);
-            XNameAccess xNameAccessNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oNode);
-            return xNameAccessNode;
+            return UnoRuntime.queryInterface(XNameAccess.class, oNode);
         }
         catch (Exception e)
         {
@@ -387,7 +384,7 @@ public abstract class Configuration
         {
             if (_xNameAccessNode.hasByName(_SubNodeName))
             {
-                return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(_SubNodeName));
+                return UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(_SubNodeName));
             }
         }
         catch (Exception e)
@@ -415,7 +412,7 @@ public abstract class Configuration
                 String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
                 if (curdisplayname.equals(_displayname))
                 {
-                    return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
+                    return UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
                 }
             }
         }
@@ -444,7 +441,7 @@ public abstract class Configuration
 
                 if (curdisplayname.equals(_displayname))
                 {
-                    return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
+                    return UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
                 }
             }
         }

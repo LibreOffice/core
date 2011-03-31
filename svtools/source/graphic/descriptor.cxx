@@ -169,6 +169,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL
             case( GFF_WMF ): pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
             case( GFF_SGV ): pMimeType = MIMETYPE_SGV; cType = graphic::GraphicType::VECTOR; break;
             case( GFF_EMF ): pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
+            case( GFF_SVG ): pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
 
             default:
             break;

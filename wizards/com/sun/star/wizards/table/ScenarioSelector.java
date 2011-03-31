@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sun.star.awt.ItemEvent;
@@ -196,7 +197,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public void initializeTable(int _iTable)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     (short) _iTable
                 });
@@ -207,8 +208,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public String[] getSelectedFieldNames()
     {
         String[] displayfieldnames = super.getSelectedFieldNames();
-        Vector<String> afieldnameVector = new Vector<String>();
-        int a = 0;
+        ArrayList<String> afieldnameVector = new ArrayList<String>();
         for (int i = 0; i < displayfieldnames.length; i++)
         {
             try
@@ -216,8 +216,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(displayfieldnames[i]);
                 if (ofielddescription != null)
                 {
-                    afieldnameVector.addElement(ofielddescription.getName());
-                    a++;
+                    afieldnameVector.add(ofielddescription.getName());
                 }
             }
             catch (RuntimeException e)
@@ -225,9 +224,8 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 e.printStackTrace(System.out);
             }
         }
-        String[] fieldnames = new String[a];
-        afieldnameVector.toArray(fieldnames);
-        return fieldnames;
+        String[] fieldnames = new String[afieldnameVector.size()];
+        return afieldnameVector.toArray(fieldnames);
     }
 
     public boolean iscompleted()
@@ -266,7 +264,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             for (int i = 0; i < CurTableWizardUnoDialog.fielditems.size(); i++)
             {
-                String stablename = "";
+                String stablename = PropertyNames.EMPTY_STRING;
                 try
                 {
                     FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
@@ -276,7 +274,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 {
                     e.printStackTrace(System.out);
                 }
-                if (!stablename.equals(""))
+                if (!stablename.equals(PropertyNames.EMPTY_STRING))
                 {
                     return stablename;
                 }
@@ -347,7 +345,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     if (iduplicate != -1)
                     {
                         XNameAccess xNameAccessFieldNode;
-                        String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], "");
+                        String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], PropertyNames.EMPTY_STRING);
                         FieldDescription curfielddescription = new FieldDescription(xMSF, aLocale, this, sdisplayname, NewItems[iduplicate], imaxcolumnchars);
                         CurTableWizardUnoDialog.fielditems.put(sdisplayname, curfielddescription);
                         NewItems[iduplicate] = sdisplayname;

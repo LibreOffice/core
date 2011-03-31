@@ -30,7 +30,7 @@
 #include <rtl/memory.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpfast.hxx>
+#include <bmpfast.hxx>
 
 // -----------
 // - Defines -

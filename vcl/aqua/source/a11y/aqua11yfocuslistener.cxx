@@ -28,11 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "aqua11yfocuslistener.hxx"
-#include "aqua11yfocustracker.hxx"
-#include "aqua11yfactory.h"
-
 #include <salhelper/refobj.hxx>
+
+#include "aqua/aqua11yfocustracker.hxx"
+#include "aqua/aqua11yfactory.h"
+
+#include "aqua11yfocuslistener.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

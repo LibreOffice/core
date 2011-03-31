@@ -28,12 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "svsys.h"
-#include "rtl/ref.hxx"
-#include "vcl/xconnection.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/salinst.hxx"
 #include "vcl/svapp.hxx"
+
+#include "xconnection.hxx"
+#include "svdata.hxx"
+#include "salinst.hxx"
 
 namespace {
 

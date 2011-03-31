@@ -38,7 +38,7 @@ module com { module sun { module star { module io {
 //========================================================================
 /** This service allows to get access to temp files.
  */
-service TempFile : XTempFile;
+published service TempFile : XTempFile;
 
 //=========================================================================
 

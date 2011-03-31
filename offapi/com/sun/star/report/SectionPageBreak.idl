@@ -37,7 +37,7 @@
 /** Specifies that page breaks are allowed inside this section.
     @see XSection
  */
-constants SectionPageBreak
+published constants SectionPageBreak
 {
     //-------------------------------------------------------------------------
 

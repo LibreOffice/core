@@ -32,6 +32,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.ConfigSet;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.web.data.CGIconSet;
 
@@ -79,7 +80,7 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
                     resources.resCounter
                 });
 
-        htmlexpDirectory = FileAccess.getOfficePath(xmsf, "Gallery", "share", "");
+        htmlexpDirectory = FileAccess.getOfficePath(xmsf, "Gallery", "share", PropertyNames.EMPTY_STRING);
         set = set_;
         objects = new Integer[set.getSize() * icons.length];
         for (int i = 0; i < objects.length; i++)
@@ -174,7 +175,7 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
     {
         if (object == null)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         int i = ((Number) object).intValue();
         int iset = getIconsetNum(i);

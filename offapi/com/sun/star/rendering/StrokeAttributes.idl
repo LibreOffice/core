@@ -27,14 +27,6 @@
 #ifndef __com_sun_star_rendering_StrokeAttributes_idl__
 #define __com_sun_star_rendering_StrokeAttributes_idl__
 
-#ifndef __com_sun_star_rendering_PathCapType_idl__
-#include <com/sun/star/rendering/PathCapType.idl>
-#endif
-#ifndef __com_sun_star_rendering_PathJoinType_idl__
-#include <com/sun/star/rendering/PathJoinType.idl>
-#endif
-
-
 module com { module sun { module star { module rendering {
 
 /** This structure contains all attributes required for path stroking.<p>
@@ -45,14 +37,14 @@ module com { module sun { module star { module rendering {
 
     @single #110496#
  */
-struct StrokeAttributes
+published struct StrokeAttributes
 {
     /** Defines the width of the stroke, measured in user
         coordinate space.
 
         This value must be positive (or 0.0)
      */
-    double              StrokeWidth;
+    double                  StrokeWidth;
 
     //-------------------------------------------------------------------------
 

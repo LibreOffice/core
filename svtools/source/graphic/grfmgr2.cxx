@@ -869,6 +869,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     // FALLTHROUGH intended
                 case META_GRADIENTEX_ACTION:
                     // FALLTHROUGH intended
+                case META_RENDERGRAPHIC_ACTION:
+                    // FALLTHROUGH intended
 
                     // OutDev state changes that _do_ affect bitmap
                     // output
@@ -2379,4 +2381,3 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
         }
     }
 }
-

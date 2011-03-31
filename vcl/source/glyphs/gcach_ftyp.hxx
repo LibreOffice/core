@@ -28,7 +28,7 @@
 #ifndef _SV_GCACHFTYP_HXX
 #define _SV_GCACHFTYP_HXX
 
-#include <vcl/glyphcache.hxx>
+#include <glyphcache.hxx>
 #include <rtl/textcvt.h>
 
 #include <ft2build.h>

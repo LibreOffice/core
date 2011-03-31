@@ -61,6 +61,7 @@ sub main
     Call tXPM   'X PixMap
     Call tGIF   'Graphics Interchange Format     
     Call tJPEG  'Joint Photographic Experts Group
+    Call tSVG   'Scalable Vector Graphics
 
     Call hStatusOut
 end sub

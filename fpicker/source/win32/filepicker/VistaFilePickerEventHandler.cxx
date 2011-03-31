@@ -269,33 +269,16 @@ STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*         
 }
 
 //-----------------------------------------------------------------------------------------
-STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* /*pDialog*/)
+STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
 {
-    /*
-    IFileDialogCustomize               *iCustomize;
-    pDialog->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustomize));
+    UINT nFileTypeIndex;
+    HRESULT hResult = pDialog->GetFileTypeIndex( &nFileTypeIndex );
 
-    BOOL bValue = FALSE;
-    HRESULT hResult = iCustomize->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
-
-    if ( bValue )
+    if ( hResult == S_OK )
     {
-        UINT nIndex;
-
-        pDialog->GetFileTypeIndex( &nIndex );
-
-        LPCWSTR lpFilterExt = lFilters[nIndex].pszSpec;
-
-        lpFilterExt = wcschr( lpFilterExt, '.' );
-        if ( lpFilterExt )
-            lpFilterExt++;
-        pDialog->SetDefaultExtension( lpFilterExt );
+        if ( m_pInternalNotify->onFileTypeChanged( nFileTypeIndex ))
+            impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
     }
-    return S_OK;
-
-    */
-
-    impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
 
     return S_OK;
 }
@@ -334,31 +317,8 @@ STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustom
                                                                DWORD                 nIDCtl    ,
                                                                BOOL                  bChecked  )
 {
-    /*
-    if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
-    {
-        LPCWSTR lpFilterExt = 0;
-        if ( bChecked )
-        {
-            UINT nIndex;
-            if (m_pDialog)
-            {
-                m_pDialog->GetFileTypeIndex( &nIndex );
-                lpFilterExt = lFilters[nIndex].pszSpec;
-                lpFilterExt = wcschr( lpFilterExt, '.' );
-                if ( lpFilterExt )
-                    lpFilterExt++;
-            }
-        }
-
-        if (m_pDialog)
-            m_pDialog->SetDefaultExtension( lpFilterExt );
-    }
-    */
-
     if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
         m_pInternalNotify->onAutoExtensionChanged(bChecked);
-
 
     impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
 

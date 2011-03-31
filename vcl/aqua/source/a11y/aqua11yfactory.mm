@@ -28,10 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "aqua11yfactory.h"
+#include "aqua/salinst.h"
+#include "aqua/aqua11yfactory.h"
+#include "aqua/aqua11yfocustracker.hxx"
+
 #include "aqua11yfocuslistener.hxx"
-#include "aqua11yfocustracker.hxx"
 #include "aqua11yrolehelper.h"
 #include "aqua11ywrapperbutton.h"
 #include "aqua11ywrapperstatictext.h"
@@ -49,6 +50,7 @@
 #include "aqua11ywrappertabgroup.h"
 #include "aqua11ywrappertoolbar.h"
 #include "aqua11ytablewrapper.h"
+
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;

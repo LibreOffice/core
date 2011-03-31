@@ -73,7 +73,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
+published interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 {
     /** resets the configuration manager to the default user interface
         configuration data.

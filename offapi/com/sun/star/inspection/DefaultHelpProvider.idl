@@ -35,7 +35,7 @@
 
 module com { module sun { module star { module inspection {
 
-interface XObjectInspectorUI;
+published interface XObjectInspectorUI;
 
 //=============================================================================
 
@@ -48,7 +48,7 @@ interface XObjectInspectorUI;
     the extended help text of this control's window, and set this help text at the
     object inspector's help section.</p>
  */
-service DefaultHelpProvider : com::sun::star::uno::XInterface
+published service DefaultHelpProvider : com::sun::star::uno::XInterface
 {
     /** creates a help provider instance
         @param InspectorUI

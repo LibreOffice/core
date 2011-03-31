@@ -36,7 +36,7 @@ module com { module sun { module star { module drawing { module framework {
     whether a requested resource is to replace an existing resource of the
     same class or is to be activated additionally.
 */
-enum ResourceActivationMode
+published enum ResourceActivationMode
 {
     /** A resource is requested in addition to already existing ones.  This
         is used for example for panes.

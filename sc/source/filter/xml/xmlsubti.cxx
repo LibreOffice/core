@@ -614,7 +614,8 @@ void ScMyTables::UpdateRowHeights()
             if (aUpdateSheets.GetSelectCount())
             {
                 pDoc->LockStreamValid( true );      // ignore draw page size (but not formula results)
-                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
+                // #i114839# make sure the output factor is valid for UpdateAllRowHeights
+                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets, true);
                 pDoc->LockStreamValid( false );
             }
         }

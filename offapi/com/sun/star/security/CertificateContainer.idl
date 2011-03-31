@@ -37,9 +37,10 @@
 module com { module sun { module star { module security {
 
 /**  the service to be used for <type>XCertificateContainer</type>.
+
     @since OOo 2.3.1
 */
-service CertificateContainer: XCertificateContainer;
+published service CertificateContainer: XCertificateContainer;
 
 }; }; }; };
 

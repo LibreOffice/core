@@ -48,7 +48,7 @@ module com {  module sun {  module star { module script {
     preference for a Multi-Dimensional array representation to be specified.</p>
 */
 
-struct ArrayWrapper
+published struct ArrayWrapper
 {
     /** Indicates whether the Array should be have 1 or 0 based indexing.
     */

@@ -109,7 +109,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                 },
                 new Object[]
                 {
-                    8, "", new Integer(width * 2 / 3), 6, new Short(tabstop++), new Integer(width / 3 - 4)
+                    8, PropertyNames.EMPTY_STRING, new Integer(width * 2 / 3), 6, new Short(tabstop++), new Integer(width / 3 - 4)
                 });
         progressBar = insertProgressBar("progress",
                 new String[]

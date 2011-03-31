@@ -28,7 +28,7 @@
 #ifndef _SV_AQUA11WRAPPERCOMBOBOX_H
 #define _SV_AQUA11WRAPPERCOMBOBOX_H
 
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 @interface AquaA11yWrapperComboBox : AquaA11yWrapper

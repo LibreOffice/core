@@ -29,13 +29,12 @@
 #include "precompiled_vcl.hxx"
 
 #include <osl/module.h>
-#include <plugins/gtk/gtkdata.hxx>
-#include <plugins/gtk/gtkinst.hxx>
-#include <salframe.h>
-#include <salobj.h>
-#include <plugins/gtk/gtkframe.hxx>
-#include <plugins/gtk/gtkobject.hxx>
-#include <plugins/gtk/atkbridge.hxx>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/salobj.h>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkobject.hxx>
+#include <unx/gtk/atkbridge.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -131,7 +130,7 @@ extern "C"
         return true;
     }
 
-    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
+    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

@@ -3255,6 +3255,9 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
                 ExportShape(aItr->xShape, &aPoint);
+                // if there's an error in ExportShape, the attributes from above must be removed
+                CheckAttrList();    // asserts in non pro if we have attributes left
+                ClearAttrList();    // clears the attributes
             }
             ++aItr;
         }

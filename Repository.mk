@@ -43,9 +43,12 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    AppleRemote \
     avmedia \
     basegfx \
+    basebmp \
     cui \
+    desktop_detector \
     drawinglayer \
     editeng \
     eggtray \
@@ -79,6 +82,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unoxml \
     vbahelper \
     vcl \
+    vclplug_gen \
+    vclplug_gtk \
+    vclplug_kde \
+    vclplug_kde4 \
+    vclplug_svp \
     xcr \
     xo \
     xof \
@@ -91,6 +99,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     cppunit \
     icuuc \
+    icule \
+    graphite_dll \
+    cppunit \
     rdf \
     xslt \
 ))
@@ -100,6 +111,7 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
+    jvmaccess \
     ucbhelper \
     vos3 \
 ))
@@ -133,8 +145,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
-    vclmain \
     zlib \
+    graphite \
     vclmain \
 ))
 

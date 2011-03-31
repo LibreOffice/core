@@ -42,6 +42,7 @@ SLOFILES= \
         $(SLO)$/baseprimitive2d.obj					\
         $(SLO)$/backgroundcolorprimitive2d.obj		\
         $(SLO)$/bitmapprimitive2d.obj				\
+        $(SLO)$/rendergraphicprimitive2d.obj			\
         $(SLO)$/borderlineprimitive2d.obj			\
         $(SLO)$/chartprimitive2d.obj				\
         $(SLO)$/controlprimitive2d.obj				\

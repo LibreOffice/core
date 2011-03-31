@@ -40,8 +40,8 @@
 
 module com { module sun { module star { module document {
 
-interface XUndoAction;
-interface XUndoManagerListener;
+published interface XUndoAction;
+published interface XUndoManagerListener;
 
 //==================================================================================================================
 
@@ -76,7 +76,7 @@ interface XUndoManagerListener;
     <member>XLockable::unlock</member> methods. When it is locked, then every attempt to add an undo action, or to
     enter or leave an Undo context, will be silently ignored.</p>
  */
-interface XUndoManager
+published interface XUndoManager
 {
     /** allows <a href="#locking">locking</a> the undo manager.
     */

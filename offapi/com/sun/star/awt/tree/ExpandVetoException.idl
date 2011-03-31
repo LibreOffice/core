@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module awt { module tree {
     @see XTreeExpansionListener
     @see XTreeControl
  */
-exception ExpandVetoException : com::sun::star::util::VetoException
+published exception ExpandVetoException : com::sun::star::util::VetoException
 {
     /** The event that the exception was created for. */
     TreeExpansionEvent Event;

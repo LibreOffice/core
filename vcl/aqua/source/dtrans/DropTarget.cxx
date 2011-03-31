@@ -50,8 +50,8 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
-#include <salframe.h>
-#include <salframeview.h>
+#include <aqua/salframe.h>
+#include <aqua/salframeview.h>
 
 using namespace rtl;
 using namespace cppu;
@@ -317,20 +317,20 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
 }
 
 
-  void DropTarget::draggingExited(id sender)
-  {
+void DropTarget::draggingExited(id /*sender*/)
+{
     DropTargetEvent dte(static_cast<OWeakObject*>(this), 0);
     fire_dragExit(dte);
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
     SetThemeCursor(kThemeArrowCursor);
-  }
+}
 
 
-  BOOL DropTarget::prepareForDragOperation(id sender)
-  {
+BOOL DropTarget::prepareForDragOperation(id /*sender*/)
+{
     return 1;
-  }
+}
 
 
 BOOL DropTarget::performDragOperation(id sender)
@@ -372,13 +372,13 @@ BOOL DropTarget::performDragOperation(id sender)
 }
 
 
-  void DropTarget::concludeDragOperation(id sender)
-  {
+void DropTarget::concludeDragOperation(id /*sender*/)
+{
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
     mXCurrentDragClipboard = uno::Reference<XClipboard>();
     SetThemeCursor(kThemeArrowCursor);
-  }
+}
 
 
   // called from WeakComponentImplHelperX::dispose

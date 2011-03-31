@@ -447,7 +447,12 @@ ScDocument::~ScDocument()
     delete pChangeViewSettings;         // und weg damit
     delete pVirtualDevice_100th_mm;
 
-    delete pDPCollection;
+    if (pDPCollection)
+    {
+        pDPCollection->FreeAll();
+        RemoveUnusedDPObjectCaches();
+        delete pDPCollection;
+    }
 
     // delete the EditEngine before destroying the xPoolHelper
     delete pCacheFieldEditEngine;

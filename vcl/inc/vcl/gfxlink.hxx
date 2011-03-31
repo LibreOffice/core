@@ -109,11 +109,12 @@ enum GfxLinkType
     GFX_LINK_TYPE_NATIVE_WMF    = 6,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_MET    = 7,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_PCT    = 8,    // Don't forget to update the following defines
+    GFX_LINK_TYPE_NATIVE_SVG    = 9,    // Don't forget to update the following defines
     GFX_LINK_TYPE_USER          = 0xffff
 };
 
 #define GFX_LINK_FIRST_NATIVE_ID    GFX_LINK_TYPE_NATIVE_GIF
-#define GFX_LINK_LAST_NATIVE_ID     GFX_LINK_TYPE_NATIVE_PCT
+#define GFX_LINK_LAST_NATIVE_ID     GFX_LINK_TYPE_NATIVE_SVG
 
 // -----------
 // - GfxLink -

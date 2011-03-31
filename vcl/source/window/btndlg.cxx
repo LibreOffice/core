@@ -30,13 +30,12 @@
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+#include <tools/rc.h>
+
+#include <svdata.hxx>
+
 #include <vcl/button.hxx>
 #include <vcl/btndlg.hxx>
-
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
 
 
 

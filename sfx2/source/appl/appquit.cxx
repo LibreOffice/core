@@ -167,4 +167,6 @@ void SfxApplication::Deinitialize()
     NoChaos::ReleaseItemPool();
 */
     pAppData_Impl->pPool = NULL;
+    DELETEZ(pAppData_Impl->pBasicResMgr);
+    DELETEZ(pAppData_Impl->pSvtResMgr);
 }

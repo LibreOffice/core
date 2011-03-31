@@ -28,8 +28,7 @@
 #ifndef _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
 #define _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
 
 @interface AquaA11yTextAttributesWrapper : NSObject
 {

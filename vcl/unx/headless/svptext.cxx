@@ -25,12 +25,10 @@
  *
  ************************************************************************/
 
-#include "svpgdi.hxx"
-#include "svpbmp.hxx"
-
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+
 #include <basebmp/scanlineformats.hxx>
 
 #include <tools/debug.hxx>
@@ -39,10 +37,12 @@
 #include <basebmp/debug.hxx>
 #endif
 
-#include <vcl/outfont.hxx>
-#include <vcl/glyphcache.hxx>
-#include <vcl/impfont.hxx>
+#include <outfont.hxx>
+#include <glyphcache.hxx>
+#include <impfont.hxx>
 
+#include "svpgdi.hxx"
+#include "svpbmp.hxx"
 #include "svppspgraphics.hxx"
 
 using namespace basegfx;

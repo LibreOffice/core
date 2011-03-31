@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -751,6 +751,27 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
             }
     }
     return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+}
+
+ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
+{
+    ScDBData* pDataEmpty = NULL;
+    if (pItems)
+    {
+        for (sal_uInt16 i = 0; i < nCount; i++)
+        {
+            ScDBData* pDBTemp = (ScDBData*)pItems[i];
+            if ( pDBTemp->nTable == nTab )
+            {
+                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
+
+                if ( bFilter )
+                    return pDBTemp;
+            }
+        }
+    }
+
+    return pDataEmpty;
 }
 
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const

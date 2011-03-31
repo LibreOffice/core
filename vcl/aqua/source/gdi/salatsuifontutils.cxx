@@ -32,10 +32,11 @@
 #include <vector>
 #include <set>
 
-#include "salgdi.h"
-#include "saldata.hxx"
 #include "vcl/svapp.hxx"
-#include "salatsuifontutils.hxx"
+
+#include "aqua/salgdi.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salatsuifontutils.hxx"
 
 // we have to get the font attributes from the name table
 // since neither head's macStyle nor OS/2's panose are easily available

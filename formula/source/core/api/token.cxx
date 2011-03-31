@@ -1265,19 +1265,30 @@ const FormulaToken* FormulaTokenIterator::First()
 
 const FormulaToken* FormulaTokenIterator::Next()
 {
-    const FormulaToken* t = NULL;
-    ++pCur->nPC;
-    if( pCur->nPC < pCur->pArr->nRPN && pCur->nPC < pCur->nStop )
-    {
-        t = pCur->pArr->pRPN[ pCur->nPC ];
-        // such an OpCode ends an IF() or CHOOSE() path
-        if( t->GetOpCode() == ocSep || t->GetOpCode() == ocClose )
-            t = NULL;
-    }
+    const FormulaToken* t = GetNonEndOfPathToken( ++pCur->nPC );
     if( !t && pCur->pNext )
     {
         Pop();
         t = Next();
+    }
+    return t;
+}
+
+const FormulaToken* FormulaTokenIterator::PeekNextOperator()
+{
+    const FormulaToken* t = NULL;
+    short nIdx = pCur->nPC;
+    while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != NULL))
+    {
+        if (t->GetOpCode() == ocPush)
+            t = NULL;   // ignore operands
+    }
+    if (!t && pCur->pNext)
+    {
+        ImpTokenIterator* pHere = pCur;
+        pCur = pCur->pNext;
+        t = PeekNextOperator();
+        pCur = pHere;
     }
     return t;
 }
@@ -1295,17 +1306,22 @@ void FormulaTokenIterator::Jump( short nStart, short nNext, short nStop )
     }
 }
 
+const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) const
+{
+    if (nIdx < pCur->pArr->nRPN && nIdx < pCur->nStop)
+    {
+        const FormulaToken* t = pCur->pArr->pRPN[ nIdx ];
+        // such an OpCode ends an IF() or CHOOSE() path
+        return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? NULL : t;
+    }
+    return NULL;
+}
+
 bool FormulaTokenIterator::IsEndOfPath() const
 {
-    sal_uInt16 nTest = pCur->nPC + 1;
-    if( nTest < pCur->pArr->nRPN  && nTest < pCur->nStop )
-    {
-        const FormulaToken* t = pCur->pArr->pRPN[ nTest ];
-        // such an OpCode ends an IF() or CHOOSE() path
-        return t->GetOpCode() == ocSep || t->GetOpCode() == ocClose;
-    }
-    return true;
+    return GetNonEndOfPathToken( pCur->nPC + 1) != NULL;
 }
+
 // -----------------------------------------------------------------------------
 // ==========================================================================
 // real implementations of virtual functions
@@ -1364,6 +1380,27 @@ const String&   FormulaMissingToken::GetString() const
 sal_Bool FormulaMissingToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );
+}
+
+
+FormulaSubroutineToken::FormulaSubroutineToken( const FormulaSubroutineToken& r ) :
+    FormulaToken( r ),
+    mpArray( r.mpArray->Clone())
+{
+}
+FormulaSubroutineToken::~FormulaSubroutineToken()
+{
+    delete mpArray;
+}
+const FormulaTokenArray* FormulaSubroutineToken::GetTokenArray() const
+{
+    return mpArray;
+}
+sal_Bool FormulaSubroutineToken::operator==( const FormulaToken& r ) const
+{
+    // Arrays don't equal..
+    return FormulaToken::operator==( r ) &&
+        (mpArray == static_cast<const FormulaSubroutineToken&>(r).mpArray);
 }
 
 

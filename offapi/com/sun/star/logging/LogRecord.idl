@@ -44,7 +44,7 @@ module com { module sun { module star { module logging {
 
     @since OOo 2.3
  */
-struct LogRecord
+published struct LogRecord
 {
     /// specifies the name of the logger at which the record is logged
     string  LoggerName;

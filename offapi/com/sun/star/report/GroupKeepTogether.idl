@@ -38,7 +38,7 @@
     <member scope="XGroup">KeepTogether</member> set to WHOLE_GROUP or WITH_FIRST_DETAIL will keep together by page or column.
     @see XGroup
  */
-constants GroupKeepTogether
+published constants GroupKeepTogether
 {
     //-------------------------------------------------------------------------
 

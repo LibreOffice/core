@@ -46,7 +46,7 @@ module com { module sun { module star { module awt {
 /** specifies a provider for dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-service DialogProvider : com::sun::star::awt::XDialogProvider;
+published service DialogProvider : com::sun::star::awt::XDialogProvider;
 
 // service DialogProvider {
     // interface com::sun::star::awt::XDialogProvider;

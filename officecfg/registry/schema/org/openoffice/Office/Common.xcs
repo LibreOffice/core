@@ -4833,6 +4833,33 @@
 							<value>1</value>
 						</prop>
 					</group>
+                    <group oor:name="SVG">
+                        <info>
+                            <author>KA</author>
+                            <desc>Specifies default settings of SVG export dialog.</desc>
+                        </info>
+                        <prop oor:name="TinyMode" oor:type="xs:boolean">
+                            <info>
+                                <author>KA</author>
+                                <desc>Specifies if SVG Tiny profile should be used for export.</desc>
+                            </info>
+                            <value>false</value>
+                        </prop>
+                        <prop oor:name="EmbedFonts" oor:type="xs:boolean">
+                            <info>
+                                <author>KA</author>
+                                <desc>Specifies if fonts should be embedded into SVG file.</desc>
+                            </info>
+                            <value>true</value>
+                        </prop>
+                        <prop oor:name="UseNativeTextDecoration" oor:type="xs:boolean">
+                            <info>
+                                <author>KA</author>
+                                <desc>Specifies if text decoration like underlining and strike-through be drawm by using SVG attributes (true) or by drawing SVG primitives (false).</desc>
+                            </info>
+                            <value>true</value>
+                        </prop>
+                    </group>            
 				</group>
 			</group>
 			<group oor:name="HTML">

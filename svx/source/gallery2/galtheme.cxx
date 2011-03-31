@@ -901,6 +901,7 @@ sal_Bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInse
                 case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = CVT_WMF; break;
                 case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = CVT_MET; break;
                 case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = CVT_PCT; break;
+                case( GFX_LINK_TYPE_NATIVE_SVG ): nExportFormat = CVT_SVG; break;
                 default:
                     break;
             }

@@ -44,7 +44,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 #include <svl/solar.hrc>
+
 
 // -----------------------------Feld-Typen-------------------------------
 
@@ -164,6 +166,9 @@ private:
     sal_uLong               nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
     sal_uLong               nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
 
+    ::std::auto_ptr< VirtualDevice >    apDummyVDev;
+    OutputDevice*                       pCompDev;
+
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void MayCallback();
@@ -203,7 +208,7 @@ private:
 
     void METSetAndPushLineInfo( const LineInfo& rLineInfo );
     void METPopLineInfo( const LineInfo& rLineInfo );
-    void METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap);
+    void METBitBlt(Point aPt, Size aSize, const Size& rSizePixel);
     void METBeginArea(sal_Bool bBoundaryLine);
     void METEndArea();
     void METBeginPath(sal_uInt32 nPathId);
@@ -242,7 +247,18 @@ private:
 
 public:
 
-    METWriter() {}
+    METWriter() :
+        pCompDev( NULL )
+    {
+#ifndef NO_GETAPPWINDOW
+        pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
+#endif
+        if( !pCompDev )
+        {
+            apDummyVDev.reset( new VirtualDevice );
+            pCompDev = apDummyVDev.get();
+        }
+    }
 
     sal_Bool WriteMET( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                         FilterConfigItem* pConfigItem );
@@ -311,6 +327,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
             case META_BMPEX_ACTION:
             case META_BMPEXSCALE_ACTION:
             case META_BMPEXSCALEPART_ACTION:
+            case META_RENDERGRAPHIC_ACTION:
                 nNumberOfBitmaps++;
             break;
         }
@@ -334,7 +351,7 @@ void METWriter::WriteBigEndianLong(sal_uLong nLong)
 
 void METWriter::WritePoint(Point aPt)
 {
-    Point aNewPt = OutputDevice::LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
+    Point aNewPt = pCompDev->LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
 
     *pMET << (long) ( aNewPt.X() - aPictureRect.Left() )
           << (long) ( aPictureRect.Bottom() - aNewPt.Y() );
@@ -783,6 +800,17 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
                 }
             }
             break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( pCompDev->LogicToPixel( pA->GetSize() ) ) );
+
+                METSetMix( eGDIRasterOp );
+                WriteImageObject( Graphic( aBmpEx ).GetBitmap() );
+            }
+            break;
         }
 
         if (bStatus==sal_False)
@@ -1127,7 +1155,7 @@ void METWriter::WillWriteOrder(sal_uLong nNextOrderMaximumLength)
 
 
 
-void METWriter::METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap)
+void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
 {
     WillWriteOrder(46);
     *pMET << (sal_uInt8)0xd6 << (sal_uInt8)44 << (sal_uInt16)0 << (sal_uInt16) 0x00cc;
@@ -1136,13 +1164,13 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap)
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
     WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
     *pMET << (sal_uInt32)0 << (sal_uInt32)0
-          << (sal_uInt32)(rBitmap.GetSizePixel().Width())
-          << (sal_uInt32)(rBitmap.GetSizePixel().Height());
+          << (sal_uInt32)(rBmpSizePixel.Width())
+          << (sal_uInt32)(rBmpSizePixel.Height());
 }
 
 void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
 {
-    sal_Int32 nWidth = OutputDevice::LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
+    sal_Int32 nWidth = pCompDev->LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
     WillWriteOrder( 8 );            // set stroke linewidth
     *pMET   << (sal_uInt8)0x15
@@ -1968,10 +1996,11 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMP_ACTION:
             {
-                const MetaBmpAction* pA = (const MetaBmpAction*) pMA;
+                const MetaBmpAction*    pA = (const MetaBmpAction*) pMA;
+                const Size              aSizePixel( pA->GetBitmap().GetSizePixel() );
 
                 METSetMix(eGDIRasterOp);
-                METBitBlt( pA->GetPoint(), pA->GetBitmap().GetSizePixel(), pA->GetBitmap() );
+                METBitBlt( pA->GetPoint(), pCompDev->PixelToLogic( aSizePixel, aPictureMapMode ), aSizePixel );
             }
             break;
 
@@ -1980,7 +2009,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pMA;
 
                 METSetMix(eGDIRasterOp);
-                METBitBlt( pA->GetPoint(), pA->GetSize(), pA->GetBitmap() );
+                METBitBlt( pA->GetPoint(), pA->GetSize(), pA->GetBitmap().GetSizePixel() );
             }
             break;
 
@@ -1991,27 +2020,27 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 METSetMix( eGDIRasterOp );
-                METBitBlt( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
+                METBitBlt( pA->GetDestPoint(), pA->GetDestSize(), pA->GetBitmap().GetSizePixel() );
             }
             break;
 
             case META_BMPEX_ACTION:
             {
                 const MetaBmpExAction*  pA = (const MetaBmpExAction*) pMA;
-                Bitmap                  aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                const Size              aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
-                METSetMix(eGDIRasterOp);
-                METBitBlt( pA->GetPoint(), aTmp.GetSizePixel(), aTmp );
+                METSetMix( eGDIRasterOp );
+                METBitBlt( pA->GetPoint(), pCompDev->PixelToLogic( aSizePixel, aPictureMapMode ), aSizePixel );
             }
             break;
 
             case META_BMPEXSCALE_ACTION:
             {
                 const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
-                Bitmap                      aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
+                const Size                  aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
-                METSetMix(eGDIRasterOp);
-                METBitBlt( pA->GetPoint(), pA->GetSize(), aTmp );
+                METSetMix( eGDIRasterOp );
+                METBitBlt( pA->GetPoint(), pA->GetSize(), aSizePixel );
             }
             break;
 
@@ -2021,8 +2050,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Bitmap                          aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
-                METSetMix(eGDIRasterOp);
-                METBitBlt( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
+                METSetMix( eGDIRasterOp );
+                METBitBlt( pA->GetDestPoint(), pA->GetDestSize(), aTmp.GetSizePixel() );
             }
             break;
 
@@ -2039,7 +2068,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     {
                         const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*)pMetaAct;
                         METSetMix(eGDIRasterOp);
-                        METBitBlt( pA->GetPoint(), pA->GetSize(), pBmpScaleAction->GetBitmap() );
+                        METBitBlt( pA->GetPoint(), pA->GetSize(), pBmpScaleAction->GetBitmap().GetSizePixel() );
                         break;
                     }
                 }
@@ -2329,6 +2358,15 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 WriteOrders( &aTmpMtf );
             }
             break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*  pA = (const MetaRenderGraphicAction*) pMA;
+
+                METSetMix( eGDIRasterOp );
+                METBitBlt( pA->GetPoint(), pA->GetSize(), pCompDev->LogicToPixel( pA->GetSize(), pMTF->GetPrefMapMode() ) );
+            }
+            break;
       }
 
       nWrittenActions++;
@@ -2591,4 +2629,3 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic &
         return aMETWriter.WriteMET( aMTF, rStream, pFilterConfigItem );
     }
 }
-

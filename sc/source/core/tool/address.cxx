@@ -1648,8 +1648,8 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName.GetChar(0) == '\'' )
             {   // "'Doc'#Tab"
-                xub_StrLen nPos = ScGlobal::FindUnquoted( aTabName, SC_COMPILER_FILE_TAB_SEP);
-                if (nPos != STRING_NOTFOUND && nPos > 0 && aTabName.GetChar(nPos-1) == '\'')
+                xub_StrLen nPos = ScCompiler::GetDocTabPos( aTabName);
+                if (nPos != STRING_NOTFOUND)
                 {
                     aDocName = aTabName.Copy( 0, nPos + 1 );
                     aTabName.Erase( 0, nPos + 1 );
@@ -1731,8 +1731,8 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName.GetChar(0) == '\'' )
     {   // "'Doc'#Tab"
-        xub_StrLen nPos = ScGlobal::FindUnquoted( rTabName, SC_COMPILER_FILE_TAB_SEP);
-        if (nPos != STRING_NOTFOUND && nPos > 0 && rTabName.GetChar(nPos-1) == '\'')
+        xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
+        if (nPos != STRING_NOTFOUND)
         {
             rDocName = rTabName.Copy( 0, nPos + 1 );
             rTabName.Erase( 0, nPos + 1 );

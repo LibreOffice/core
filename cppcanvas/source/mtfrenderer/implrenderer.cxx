@@ -83,6 +83,7 @@
 #include <lineaction.hxx>
 #include <pointaction.hxx>
 #include <polypolyaction.hxx>
+#include <rendergraphicaction.hxx>
 #include <textaction.hxx>
 #include <transparencygroupaction.hxx>
 #include <vector>
@@ -2650,6 +2651,32 @@ namespace cppcanvas
                             pDXArray.get(),
                             rFactoryParms,
                             bSubsettableActions );
+                    }
+                    break;
+
+                    case META_RENDERGRAPHIC_ACTION:
+                    {
+                        MetaRenderGraphicAction* pAct = static_cast<MetaRenderGraphicAction*>(pCurrAct);
+
+                        ActionSharedPtr pRenderGraphicAction(
+                                internal::RenderGraphicActionFactory::createRenderGraphicAction(
+                                    pAct->GetRenderGraphic(),
+                                    getState( rStates ).mapModeTransform *
+                                    ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
+                                    getState( rStates ).mapModeTransform *
+                                    ::vcl::unotools::b2DSizeFromSize( pAct->GetSize() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pRenderGraphicAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pRenderGraphicAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pRenderGraphicAction->getActionCount()-1;
+                        }
                     }
                     break;
 

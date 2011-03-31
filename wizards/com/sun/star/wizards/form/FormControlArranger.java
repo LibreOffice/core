@@ -126,7 +126,7 @@ public class FormControlArranger
     {
         if (LastIndex < DBControlList.length && DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX)
         {
-            return (int) ((oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2);
+            return (oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2;
         }
         return 0;
     }
@@ -363,7 +363,7 @@ public class FormControlArranger
             m_currentMaxRowHeight = 0;
             nSecMaxRowY = 0;
             m_maxPostionX = 0;
-            xProgressBar.start("", FieldColumns.length);
+            xProgressBar.start(PropertyNames.EMPTY_STRING, FieldColumns.length);
             for (int i = 0; i < FieldColumns.length; i++)
             {
                 try
@@ -596,7 +596,7 @@ public class FormControlArranger
             {
                 curLabelControl.setSize(new Size(m_LabelWidth, m_LabelHeight));
             }
-//      if (CurHelpText != ""){
+//      if (CurHelpText != PropertyNames.EMPTY_STRING){
 //          oModel.HelpText = CurHelptext;
 //      }
         }
@@ -630,7 +630,7 @@ public class FormControlArranger
                     if (DBControlList[i].getControlType() == FormHandler.SOCHECKBOX)
                     {
                         // Checkboxes have no Label near by
-                        DBControlList[i].setPropertyValue(PropertyNames.PROPERTY_LABEL, "");
+                        DBControlList[i].setPropertyValue(PropertyNames.PROPERTY_LABEL, PropertyNames.EMPTY_STRING);
                     }
                 }
             }

@@ -34,6 +34,8 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener
 { // extends ReportWizard
@@ -95,8 +97,8 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
 ////            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
 ////            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
-//                curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
-//                curproperties[2] = Properties.createProperty("Command", "Table2");
+//                curproperties[1] = Properties.createProperty(PropertyNames.COMMAND_TYPE, new Integer(CommandType.TABLE));
+//                curproperties[2] = Properties.createProperty(PropertyNames.COMMAND, "Table2");
 //
 //                Dataimport CurDataimport = new Dataimport(xMSF);
 //                TextDocument oTextDocument = new TextDocument(xMSF, true, null);
@@ -132,7 +134,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDBConnection",
                         new String[]
                         {
-                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                            PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -154,7 +156,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
                         new String[]
                         {
-                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                            PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -168,7 +170,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        10, "", 12, 42, 0, 120
+                        10, PropertyNames.EMPTY_STRING, 12, 42, 0, 120
                     });
 
             insertButton("cmdCancel", 10000, this,
@@ -184,16 +186,15 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
             xWindow.setVisible(true);
             super.xReschedule.reschedule();
-            return;
-        }
-        catch (Exception exception)
+            }
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(Dataimport.class.getName()).log(Level.SEVERE, null, e);
         // return;
         }
-        catch (java.lang.Exception jexception)
+        catch (java.lang.Exception e)
         {
-            jexception.printStackTrace(System.out);
+            Logger.getLogger(Dataimport.class.getName()).log(Level.SEVERE, null, e);
         // return;
         }
     }

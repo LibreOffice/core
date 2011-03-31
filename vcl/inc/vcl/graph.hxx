@@ -35,6 +35,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/rendergraphic.hxx>
 #include <vcl/graph.h>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -119,9 +120,12 @@ public:
     void                SetDefaultType();
     sal_Bool                IsSupportedGraphic() const;
 
-    sal_Bool                IsTransparent() const;
-    sal_Bool                IsAlpha() const;
-    sal_Bool                IsAnimated() const;
+    sal_Bool            IsTransparent() const;
+    sal_Bool            IsAlpha() const;
+    sal_Bool            IsAnimated() const;
+    sal_Bool            IsEPS() const;
+    sal_Bool            IsRenderGraphic() const;
+    sal_Bool            HasRenderGraphic() const;
 
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
@@ -131,8 +135,9 @@ public:
     Bitmap              GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
     BitmapEx            GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
 
-    Animation           GetAnimation() const;
-    const GDIMetaFile&  GetGDIMetaFile() const;
+    Animation               GetAnimation() const;
+    const GDIMetaFile&      GetGDIMetaFile() const;
+    ::vcl::RenderGraphic    GetRenderGraphic() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
@@ -219,4 +224,3 @@ public:
 };
 
 #endif  // _SV_GRAPH_HXX
-

@@ -458,12 +458,13 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
     ScDocument* pDoc = pDocSh->GetDocument();
 
     SCTAB nTab = pViewData->GetTabNo();
+    ScRange aTabRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
     ScMarkData aTabMark = pViewData->GetMarkData();
     aTabMark.ResetMark();   // doesn't change marked table information
-    aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
+    aTabMark.SetMarkArea( aTabRange );
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-    ScClipParam aClipParam(ScRange(0, 0, 0, MAXCOL, MAXROW, 0), false);
+    ScClipParam aClipParam(aTabRange, false);
     pDoc->CopyToClip(aClipParam, pClipDoc, &aTabMark, false);
 
     TransferableObjectDescriptor aObjDesc;

@@ -1,0 +1,20 @@
+--- misc/libgsf-1.14.19/configure	2010-09-25 18:53:55.000000000 +0200
++++ misc/build/libgsf-1.14.19/configure	2011-03-03 12:42:21.000000000 +0100
+@@ -11475,7 +11475,7 @@
+ 
+ 
+ 
+-
++if 0; then
+ case "$am__api_version" in
+     1.01234)
+ 	as_fn_error "Automake 1.5 or newer is required to use intltool" "$LINENO" 5
+@@ -11650,7 +11650,7 @@
+ 
+ 
+ 
+-
++fi
+ 
+ 
+ 

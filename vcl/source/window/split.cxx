@@ -28,19 +28,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
+#include <tools/poly.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/gradient.hxx>
-#include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
+
 #include <rtl/instance.hxx>
-#include <vcl/window.h>
+
+#include <window.h>
 
 namespace
 {

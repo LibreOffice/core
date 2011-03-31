@@ -28,10 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
+#include "aqua/salinst.h"
+
 #include "aqua11ytextwrapper.h"
 #include "aqua11ytextattributeswrapper.h"
 #include "aqua11yutil.h"
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
@@ -49,8 +51,11 @@ using namespace ::rtl;
     return CreateNSString ( [ wrapper accessibleText ] -> getText() );
 }
 
-+(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
++(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value
+{
     // TODO
+    (void)wrapper;
+    (void)value;
 }
 
 +(id)numberOfCharactersAttributeForElement:(AquaA11yWrapper *)wrapper {
@@ -103,15 +108,22 @@ using namespace ::rtl;
     return [ NSValue valueWithRange: NSMakeRange ( 0, [ wrapper accessibleText ] -> getCharacterCount() ) ];
 }
 
-+(void)setVisibleCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
++(void)setVisibleCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value
+{
     // do nothing
+    (void)wrapper;
+    (void)value;
 }
 
-+(id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper *)wrapper {
++(id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper *)wrapper
+{
+    (void)wrapper;
     return [ [ NSArray alloc ] init ]; // unsupported
 }
 
-+(id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper {
++(id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper
+{
+    (void)wrapper;
     return [ NSValue valueWithRange: NSMakeRange ( 0, 0 ) ]; // unsupported
 }
 

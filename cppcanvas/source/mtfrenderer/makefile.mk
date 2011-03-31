@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,7 @@ SLOFILES =	$(SLO)$/cachedprimitivebase.obj \
             $(SLO)$/lineaction.obj \
             $(SLO)$/pointaction.obj \
             $(SLO)$/polypolyaction.obj \
+            $(SLO)$/rendergraphicaction.obj \
             $(SLO)$/textaction.obj \
             $(SLO)$/transparencygroupaction.obj \
             $(SLO)$/mtftools.obj

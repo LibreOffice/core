@@ -54,7 +54,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-service ObjectInspectorModel : XObjectInspectorModel
+published service ObjectInspectorModel : XObjectInspectorModel
 {
     /** creates a default ObjectInspectorModel, whose one and only handler factory
         creates a <type>GenericPropertyHandler</type>.

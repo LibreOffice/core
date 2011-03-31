@@ -304,11 +304,11 @@ testcase tInFilterCountCompare()
     printlog( "Check filterlist (filterstring) for graphics files" )
 
     const FILE_NAME = "graphic_filters.txt"
-    const SUFFIX_STRING_LENGTH = 178
+    const SUFFIX_STRING_LENGTH = 184
 
 '   List of filter suffixes for verification in case of error
 '   *.bmp;*.dxf;*.emf;*.eps;*.gif;*.jpg;*.jpeg;*.jfif;*.jif;*.met;*.pbm;*.pcd;
-'   *.pct;*.pcx;*.pgm;*.png;*.ppm;*.psd;*.ras;*.sgf;*.sgv;*.svm;*.tga;*.tif;
+'   *.pct;*.pcx;*.pgm;*.png;*.ppm;*.psd;*.ras;*.sgf;*.sgv;*.svg;*.svm;*.tga;*.tif;
 '   *.tiff;*.wmf;*.xbm;*.xpm;*.pict
 
     dim caUIFilters( 30 ) as string
@@ -383,6 +383,8 @@ testcase tInFilterCountCompare()
         endif
 
         irc = iEnd - iBegin
+        printlog irc
+        printlog SUFFIX_STRING_LENGTH
         if ( irc <> SUFFIX_STRING_LENGTH ) then
             warnlog( "The list of file suffixes has changed, please verify" )
             printlog( "Found: " & irc & " chars, expected " & SUFFIX_STRING_LENGTH )

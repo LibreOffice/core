@@ -27,17 +27,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/wall2.hxx>
 #include <vcl/svapp.hxx>
 
+#include <wall2.hxx>
 
-DBG_NAME( Wallpaper );
+
+DBG_NAME( Wallpaper )
 
 // -----------------------------------------------------------------------
 

@@ -50,7 +50,7 @@ module com {   module sun {   module star {   module rdf {
     @see XBlankNode
     @see XURI
  */
-interface XResource : XNode
+published interface XResource : XNode
 {
 };
 

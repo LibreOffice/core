@@ -109,7 +109,6 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     }
 
     _propertyChanged(aEvent);
-    SetPaintTransparent(sal_True);
 }
 // -----------------------------------------------------------------------------
 OSectionWindow::~OSectionWindow()
@@ -135,18 +134,15 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
         if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
         {
+            static bool t4 = true;
+        if ( t4 )
             m_pParent->getView()->SetUpdateMode(sal_False);
-            Resize();
+            //Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
+            if ( t4 )
             m_pParent->getView()->SetUpdateMode(sal_True);
-            m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
-            m_aEndMarker.Invalidate(INVALIDATE_NOERASE);
-            m_aReportSection.Invalidate(/*INVALIDATE_NOERASE*/);
-            getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
-            // Invalidate(INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
-            // m_pParent->Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE|INVALIDATE_TRANSPARENT);
-            // m_pParent->Invalidate(/*INVALIDATE_NOCHILDREN | INVALIDATE_NOERASE |*/ INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
+            // getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
         }
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
         {
@@ -155,7 +151,9 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fun(&OReportHelper::getReportFooter),::std::mem_fun(&OReportHelper::getReportFooterOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
+            {
                 m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
+            }
             else
             {
                 String sTitle = String(ModuleRes(RID_STR_DETAIL));
@@ -167,10 +165,9 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     else if ( _rEvent.PropertyName.equals(PROPERTY_EXPRESSION) )
     {
         uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
-        if ( xGroup.is() )
+        if ( xGroup.is() && !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn)))
         {
-            if ( !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn)) )
-                setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fun(&OGroupHelper::getFooter),::std::mem_fun(&OGroupHelper::getFooterOn));
+            setGroupSectionTitle(xGroup,RID_STR_FOOTER,::std::mem_fun(&OGroupHelper::getFooter),::std::mem_fun(&OGroupHelper::getFooterOn));
         }
     }
 }
@@ -211,8 +208,14 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
 //------------------------------------------------------------------------------
 void OSectionWindow::ImplInitSettings()
 {
+    static bool t = false;
+    if ( t )
+    {
+    EnableChildTransparentMode( sal_True );
+    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetPaintTransparent( sal_True );
+    }
     SetBackground( );
-    //SetBackground( Wallpaper( COL_RED ));
 }
 //-----------------------------------------------------------------------------
 void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -307,10 +310,6 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
         m_aSplitter.Show(bShow);
 
         m_pParent->resize(*this);
-        Resize();
-        // TRY
-        // m_pParent->Invalidate(INVALIDATE_TRANSPARENT | INVALIDATE_NOCHILDREN);
-        Invalidate();
     }
     return 0L;
 }
@@ -408,8 +407,6 @@ void OSectionWindow::scrollChildren(long _nX)
 
     lcl_setOrigin(m_aSplitter,_nX, 0);
     lcl_scroll(m_aSplitter,aDiff);
-
-    Resize();
 }
 //==============================================================================
 } // rptui

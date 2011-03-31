@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module report { module inspection {
 
     @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories
 */
-service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInspectorModel
+published service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInspectorModel
 {
     /** creates a default DefaultComponentInspectorModel, providing factories for all
         handlers listed above.

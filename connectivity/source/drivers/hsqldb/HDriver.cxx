@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
 #include "HTerminateListener.hxx"
 #include "hsqldb/HCatalog.hxx"
 #include "diagnose_ex.h"
@@ -70,6 +71,7 @@ namespace connectivity
     using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::reflection;
 
     namespace hsqldb
@@ -614,6 +616,22 @@ namespace connectivity
         }
         m_aConnections.clear();
         m_bInShutDownConnections = sal_True;
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::flushConnections()
+    {
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            try
+            {
+                Reference<XFlushable> xCon(i->second.second.first.get(),UNO_QUERY);
+                xCon->flush();
+            }
+            catch(Exception&)
+            {
+            }
+        }
     }
     //------------------------------------------------------------------
     void SAL_CALL ODriverDelegator::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)

@@ -2,9 +2,11 @@ mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\jpeg
 
 ..\%__SRC%\slb\jpeglib.lib %_DEST%\lib%_EXT%\jpeglib.lib
+..\%__SRC%\slb\jpeglib.lib %_DEST%\lib%_EXT%\jpeg.lib
 ..\%__SRC%\lib\libjpeglib.a %_DEST%\lib%_EXT%\libjpeglib.a
+..\%__SRC%\lib\libjpeglib.a %_DEST%\lib%_EXT%\libjpeg.a
 
-..\%__SRC%\inc\jerror.h %_DEST%\inc%_EXT%\external\jerror.h
-..\%__SRC%\inc\jpeglib.h %_DEST%\inc%_EXT%\external\jpeglib.h
-..\%__SRC%\inc\jconfig.h %_DEST%\inc%_EXT%\external\jconfig.h
-..\%__SRC%\inc\jmorecfg.h %_DEST%\inc%_EXT%\external\jmorecfg.h
+..\%__SRC%\inc\jerror.h %_DEST%\inc%_EXT%\external\jpeg\jerror.h
+..\%__SRC%\inc\jpeglib.h %_DEST%\inc%_EXT%\external\jpeg\jpeglib.h
+..\%__SRC%\inc\jconfig.h %_DEST%\inc%_EXT%\external\jpeg\jconfig.h
+..\%__SRC%\inc\jmorecfg.h %_DEST%\inc%_EXT%\external\jpeg\jmorecfg.h

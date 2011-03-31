@@ -979,7 +979,8 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1011,7 +1012,8 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1077,7 +1079,8 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1110,7 +1113,8 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1139,6 +1143,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
+    if ( catalog.hasValue() )
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
@@ -1228,7 +1233,8 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1257,7 +1263,8 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1287,7 +1294,8 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,

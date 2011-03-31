@@ -34,13 +34,13 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-interface XWizardController;
+published interface XWizardController;
 
 //==================================================================================================================
 
 /** provides a framework for implementing a wizard dialog.
  */
-service Wizard : XWizard
+published service Wizard : XWizard
 {
     /** creates a wizard with a single execution path
         @param PageIds

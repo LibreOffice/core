@@ -46,7 +46,7 @@ module com { module sun { module star { module awt {
 /** specifies a provider for container windows implementing the
     <type scope="com::sun::star::awt">XWindow</type> interface.
  */
-service ContainerWindowProvider : com::sun::star::awt::XContainerWindowProvider;
+published service ContainerWindowProvider : com::sun::star::awt::XContainerWindowProvider;
 
 
 //=============================================================================

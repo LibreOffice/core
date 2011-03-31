@@ -129,7 +129,6 @@ TEMPLATE_WIZARD_WEB_TARGET		= tplwizweb
 
 
 WORDBOOK_ALL_TARGET             = wordbook
-WORDBOOK_USER_TARGET            = wordbookuser
 
 FONTS_WIN_ARIOSO_BOLD           = fontwinariosobold
 FONTS_WIN_ARIOSO_NORMAL         = fontwinariosonormal

@@ -67,7 +67,7 @@ module com {  module sun {  module star {  module geometry {
 
     @since OOo 2.0
  */
-struct AffineMatrix2D
+published struct AffineMatrix2D
 {
     /// The top, left matrix entry.
     double m00;

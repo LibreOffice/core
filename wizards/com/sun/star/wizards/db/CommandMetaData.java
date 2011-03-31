@@ -41,6 +41,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,8 +76,8 @@ public class CommandMetaData extends DBMetaData
     private int CommandType;
     private String Command;
     boolean bCatalogAtStart = true;
-    String sCatalogSep = "";
-    String sIdentifierQuote = "";
+    String sCatalogSep = PropertyNames.EMPTY_STRING;
+    String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     boolean bCommandComposerAttributesalreadyRetrieved = false;
     private XIndexAccess xIndexKeys;
 
@@ -153,8 +154,7 @@ public class CommandMetaData extends DBMetaData
             String CurCommandName = CurFieldColumn.getCommandName();
             CommandObject oCommand = getTableByName(CurCommandName);
             Object oColumn = oCommand.getColumns().getByName(CurFieldColumn.getFieldName());
-            XPropertySet xColumn = UnoRuntime.queryInterface(XPropertySet.class, oColumn);
-            return xColumn;
+            return UnoRuntime.queryInterface(XPropertySet.class, oColumn);
         }
         catch (Exception exception)
         {
@@ -178,7 +178,7 @@ public class CommandMetaData extends DBMetaData
             }
             else
             {
-                sSortFieldName[1] = "ASC";
+                sSortFieldName[1] = PropertyNames.ASC;
             }
             aSortFields.add(sSortFieldName);
         }
@@ -334,19 +334,16 @@ public class CommandMetaData extends DBMetaData
     public String[] getOrderableColumns(String[] _fieldnames)
     {
         ArrayList<String> aOrderableColumns = new ArrayList<String>();
-        int ncount = 0;
         for (int i = 0; i < _fieldnames.length; i++)
         {
             FieldColumn ofieldcolumn = getFieldColumnByFieldName(_fieldnames[i]);
             if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.getXColumnPropertySet()))
             {
                 aOrderableColumns.add(_fieldnames[i]);
-                ncount++;
             }
         }
-        String[] sretfieldnames = new String[ncount];
-        aOrderableColumns.toArray(sretfieldnames);
-        return sretfieldnames;
+        String[] sretfieldnames = new String[aOrderableColumns.size()];
+        return aOrderableColumns.toArray(sretfieldnames);
     }
 
     /**

@@ -224,7 +224,7 @@ void SAL_CALL VistaFilePicker::setTitle(const ::rtl::OUString& sTitle)
 
 //-----------------------------------------------------------------------------------------
 void SAL_CALL VistaFilePicker::appendFilter(const ::rtl::OUString& sTitle ,
-                                             const ::rtl::OUString& sFilter)
+                                            const ::rtl::OUString& sFilter)
     throw(css::lang::IllegalArgumentException,
           css::uno::RuntimeException         )
 {
@@ -263,17 +263,15 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const ::rtl::OUString& sTitle)
 
 //-----------------------------------------------------------------------------------------
 void SAL_CALL VistaFilePicker::appendFilterGroup(const ::rtl::OUString&                              /*sGroupTitle*/,
-                                                 const css::uno::Sequence< css::beans::StringPair >& lFilters   )
+                                                 const css::uno::Sequence< css::beans::StringPair >& rFilters   )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    ::sal_Int32 c = lFilters.getLength();
-    ::sal_Int32 i = 0;
-    for (i=0; i<c; ++i)
-    {
-        const css::beans::StringPair& rFilter = lFilters[i];
-        appendFilter(rFilter.First, rFilter.Second);
-    }
+    RequestRef rRequest(new Request());
+    rRequest->setRequest (VistaFilePickerImpl::E_APPEND_FILTERGROUP);
+    rRequest->setArgument(PROP_FILTER_GROUP, rFilters);
+
+    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
 
 //-----------------------------------------------------------------------------------------

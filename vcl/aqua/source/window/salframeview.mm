@@ -28,15 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "salgdi.h"
-#include "salframe.h"
-#include "salframeview.h"
-#include "aqua11yfactory.h"
 #include <sal/alloca.h>
-#include "vcl/window.hxx"
 
+#include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
+
+#include "aqua/salinst.h"
+#include "aqua/salgdi.h"
+#include "aqua/salframe.h"
+#include "aqua/salframeview.h"
+#include "aqua/aqua11yfactory.h"
 
 #define WHEEL_EVENT_FACTOR 1.5
 
@@ -206,6 +207,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidBecomeKey: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -236,6 +238,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidResignKey: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -247,6 +250,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -255,6 +259,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidMove: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -266,6 +271,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidResize: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -278,6 +284,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidMiniaturize: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -290,6 +297,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -302,6 +310,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(BOOL)windowShouldClose: (NSNotification*)pNotification
 {
+    (void)pNotification;
     YIELD_GUARD;
 
     BOOL bRet = YES;
@@ -321,6 +330,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)dockMenuItemTriggered: (id)sender
 {
+    (void)sender;
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -369,6 +379,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)unregisterDraggingDestinationHandler:(id)theHandler
 {
+    (void)theHandler;
     mDraggingDestinationHandler = nil;
 }
 
@@ -420,6 +431,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(BOOL)acceptsFirstMouse: (NSEvent*)pEvent
 {
+    (void)pEvent;
     return YES;
 }
 
@@ -730,6 +742,7 @@ private:
 {
     //Rotation : -(float)rotation;
     // TODO: create new CommandType so rotation is available to the applications
+    (void)pEvent;
 }
 
 - (void)swipeWithEvent: (NSEvent*)pEvent
@@ -1025,294 +1038,352 @@ private:
 
 -(void)insertTab: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_TAB character: '\t' modifiers: 0];
 }
 
 -(void)insertBacktab: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: (KEY_TAB | KEY_SHIFT) character: '\t' modifiers: 0];
 }
 
 -(void)moveLeft: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0 modifiers: 0];
 }
 
 -(void)moveLeftAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0 modifiers: NSShiftKeyMask];
 }
 
 -(void)moveBackwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveRight: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0 modifiers: 0];
 }
 
 -(void)moveRightAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0 modifiers: NSShiftKeyMask];
 }
 
 -(void)moveForwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordLeft: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordBackward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordBackwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordLeftAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordRight: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordForward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordForwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordRightAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToRightEndOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfLineAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToRightEndOfLineAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToLeftEndOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToLeftEndOfLineAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfParagraph: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfParagraphAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphForward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphForwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfParagraph: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphBackward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphBackwardAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfDocument: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)scrollToEndOfDocument: (id)aSender
 {
+    (void)aSender;
     // this is not exactly what we should do, but it makes "End" and "Shift-End" behave consistent
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfDocument: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)scrollToBeginningOfDocument: (id)aSender
 {
+    (void)aSender;
     // this is not exactly what we should do, but it makes "Home" and "Shift-Home" behave consistent
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_UP character: 0 modifiers: 0];
 }
 
 -(void)moveDown: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_DOWN character: 0 modifiers: 0];
 }
 
 -(void)insertNewline: (id)aSender
 {
+    (void)aSender;
     // #i91267# make enter and shift-enter work by evaluating the modifiers
     [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n' modifiers: mpFrame->mnLastModifierFlags];
 }
 
 -(void)deleteBackward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
 }
 
 -(void)deleteForward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f modifiers: 0];
 }
 
 -(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
 }
 
 -(void)deleteWordBackward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)deleteWordForward: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)deleteToBeginningOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)deleteToEndOfLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)deleteToBeginningOfParagraph: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)deleteToEndOfParagraph: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)insertLineBreak: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_LINEBREAK character: 0  modifiers: 0];
 }
 
 -(void)insertParagraphSeparator: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)selectWord: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD character: 0  modifiers: 0];
 }
 
 -(void)selectLine: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_LINE character: 0  modifiers: 0];
 }
 
 -(void)selectParagraph: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)selectAll: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_ALL character: 0  modifiers: 0];
 }
 
 -(void)cancelOperation: (id)aSender
 {
+    (void)aSender;
     [self sendKeyInputAndReleaseToFrame: KEY_ESCAPE character: 0x1b modifiers: 0];
 }
 
 -(void)noop: (id)aSender
 {
+    (void)aSender;
     if( ! mbKeyHandled )
     {
         if( ! [self sendSingleCharacter:mpLastEvent] )
@@ -1512,12 +1583,14 @@ private:
 
 - (NSAttributedString *)attributedSubstringFromRange:(NSRange)theRange
 {
+    (void)theRange;
     // FIXME
     return nil;
 }
 
 - (unsigned int)characterIndexForPoint:(NSPoint)thePoint
 {
+    (void)thePoint;
     // FIXME
     return 0;
 }
@@ -1561,6 +1634,7 @@ private:
 
 - (NSRect)firstRectForCharacterRange:(NSRange)theRange
 {
+    (void)theRange;
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
 
@@ -1606,7 +1680,8 @@ private:
 
 -(void)unregisterMouseEventListener: (id)theListener
 {
-  mpMouseEventListener = nil;
+    (void)theListener;
+    mpMouseEventListener = nil;
 }
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
@@ -1646,7 +1721,8 @@ private:
 
 -(void)unregisterDraggingDestinationHandler:(id)theHandler
 {
-  mDraggingDestinationHandler = nil;
+    (void)theHandler;
+    mDraggingDestinationHandler = nil;
 }
 
 @end

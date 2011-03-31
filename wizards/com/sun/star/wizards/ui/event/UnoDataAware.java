@@ -126,7 +126,7 @@ public class UnoDataAware extends DataAware
         {
             return ((short[]) value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
         }
-        else if (value.equals(""))
+        else if (value.equals(PropertyNames.EMPTY_STRING))
         {
             return Boolean.FALSE;
         }
@@ -152,7 +152,7 @@ public class UnoDataAware extends DataAware
 
     private static UnoDataAware attachTextControl(Object data, String prop, Object unoText, final Listener listener, String unoProperty, boolean field, Object value)
     {
-        XTextComponent text = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, unoText);
+        XTextComponent text = UnoRuntime.queryInterface(XTextComponent.class, unoText);
         final UnoDataAware uda = new UnoDataAware(data,
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, value)
@@ -179,7 +179,7 @@ public class UnoDataAware extends DataAware
 
     public static UnoDataAware attachEditControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
     {
-        return attachTextControl(data, prop, unoControl, listener, "Text", field, "");
+        return attachTextControl(data, prop, unoControl, listener, "Text", field, PropertyNames.EMPTY_STRING);
     }
 
     public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
@@ -199,7 +199,7 @@ public class UnoDataAware extends DataAware
 
     public static UnoDataAware attachCheckBox(Object data, String prop, Object checkBox, final Listener listener, boolean field)
     {
-        XCheckBox xcheckBox = ((XCheckBox) UnoRuntime.queryInterface(XCheckBox.class, checkBox));
+        XCheckBox xcheckBox = UnoRuntime.queryInterface(XCheckBox.class, checkBox);
         final UnoDataAware uda = new UnoDataAware(data,
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
@@ -232,26 +232,26 @@ public class UnoDataAware extends DataAware
     public static UnoDataAware attachLabel(Object data, String prop, Object label, final Listener listener, boolean field)
     {
         return new UnoDataAware(data,
-                field ? DataAwareFields.getFieldValueFor(data, prop, "")
+                field ? DataAwareFields.getFieldValueFor(data, prop, PropertyNames.EMPTY_STRING)
                 : new DataAware.PropertyValue(prop, data),
                 label, PropertyNames.PROPERTY_LABEL);
     }
 
     public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field)
     {
-        XListBox xListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, listBox);
+        XListBox xListBox = UnoRuntime.queryInterface(XListBox.class, listBox);
         final UnoDataAware uda = new UnoDataAware(data,
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, new short[0])
                 : new DataAware.PropertyValue(prop, data),
-                listBox, "SelectedItems");
+                listBox, PropertyNames.SELECTED_ITEMS);
         xListBox.addItemListener(itemListener(uda, listener));
         return uda;
     }
 
     public static Object getModel(Object control)
     {
-        return ((XControl) UnoRuntime.queryInterface(XControl.class, control)).getModel();
+        return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
     public static void setEnabled(Object control, boolean enabled)

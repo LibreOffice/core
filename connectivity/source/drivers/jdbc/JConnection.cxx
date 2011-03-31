@@ -822,7 +822,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
+        jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )

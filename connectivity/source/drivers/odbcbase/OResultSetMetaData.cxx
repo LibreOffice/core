@@ -60,7 +60,11 @@ OResultSetMetaData::~OResultSetMetaData()
                                     );
     ::rtl::OUString sValue;
     if ( nRet == SQL_SUCCESS )
+    {
+        if ( nRealLen < 0 )
+            nRealLen = BUFFER_LEN;
         sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+    }
     delete [] pName;
     OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(nRealLen > BUFFER_LEN)
@@ -74,7 +78,7 @@ OResultSetMetaData::~OResultSetMetaData()
                                     &nRealLen,
                                     NULL
                                     );
-        if ( nRet == SQL_SUCCESS )
+        if ( nRet == SQL_SUCCESS && nRealLen > 0)
             sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
         delete [] pName;
         OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);

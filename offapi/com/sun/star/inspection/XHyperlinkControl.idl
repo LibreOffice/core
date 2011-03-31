@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-interface XHyperlinkControl : XPropertyControl
+published interface XHyperlinkControl : XPropertyControl
 {
     /** adds a listener which will be notified when the user clicked the hyperlink text in the control
         @param listener

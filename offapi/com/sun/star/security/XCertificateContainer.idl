@@ -37,7 +37,7 @@ module com { module sun { module star { module security {
     @see CertificateContainer
     @since OOo 2.3.1
 */
-interface XCertificateContainer
+published interface XCertificateContainer
 {
     /** Store the certificate in memory.
         @param url

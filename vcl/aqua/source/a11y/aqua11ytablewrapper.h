@@ -28,7 +28,7 @@
 #ifndef _SV_AQUA11TABLEWRAPPER_H
 #define _SV_AQUA11TABLEWRAPPER_H
 
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
 
 #define MAXIMUM_ACCESSIBLE_TABLE_CELLS 1000
 

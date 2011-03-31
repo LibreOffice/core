@@ -111,7 +111,7 @@ public class ReportLayouter
             xContentListBox = CurUnoDialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -146,7 +146,7 @@ public class ReportLayouter
             xLayoutListBox = CurUnoDialog.insertListBox("lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -195,7 +195,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Short("0"), 23, 164, 158, new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), 30
+                        new Short("0"), 23, 164, 158, Boolean.FALSE, new Integer(ReportWizard.SOTEMPLATEPAGE), 30
                     });
 
             String sNote = ReportWizard.getBlindTextNote(CurReportDocument, CurUnoDialog.m_oResource);
@@ -206,7 +206,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        34, sNote, new Boolean(true), 205, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), 99
+                        34, sNote, Boolean.TRUE, 205, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), 99
                     });
             if (m_nLandscapeState == 1)
             {
@@ -227,7 +227,7 @@ public class ReportLayouter
     {
 //             CurReportDocument.getDoc().xTextDocument.lockControllers();
         CurReportDocument.layout_setupRecordSection(_defaultTemplatePath);
-        if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals(""))
+        if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals(PropertyNames.EMPTY_STRING))
         {
             String[] sCommandNames = CurReportDocument.getRecordParser().getIncludedCommandNames();
             CurUnoDialog.setControlProperty("txtTitle", "Text", sCommandNames[0]);
@@ -246,7 +246,7 @@ public class ReportLayouter
             try
             {
                 int iPos;
-                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(false));
+                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
                 // LLA: should we lock controllers here?
                 //                    CurReportDocument.getDoc().xTextDocument.lockControllers();
                 int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
@@ -306,7 +306,7 @@ public class ReportLayouter
                 e.printStackTrace();
             }
             // CurReportDocument.getDoc().unlockallControllers();
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(true));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
 
         public void disposing(EventObject eventObject)
@@ -325,17 +325,17 @@ public class ReportLayouter
         {
             try
             {
-                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(false));
+                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
 //                     CurReportDocument.getDoc().xTextDocument.lockControllers();
                 boolean blandscape = (((Short) CurUnoDialog.getControlProperty("optLandscape", PropertyNames.PROPERTY_STATE)).shortValue() == 1);
-                CurReportDocument.setPageOrientation((blandscape == true) ? SOOPTLANDSCAPE : SOOPTPORTRAIT);
+                CurReportDocument.setPageOrientation((blandscape) ? SOOPTLANDSCAPE : SOOPTPORTRAIT);
             }
             catch (Exception exception)
             {
                 exception.printStackTrace(System.out);
             }
 //                CurReportDocument.getDoc().unlockallControllers();
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(true));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
     }
 }

@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module frame {
 
     @since OOo 3.0
 */
-interface XController2 : XController
+published interface XController2 : XController
 {
     /** denotes the &quot;root window&quot; of the controller.
 

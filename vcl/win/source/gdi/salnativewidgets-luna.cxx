@@ -30,13 +30,15 @@
 
 #define _SV_SALNATIVEWIDGETS_CXX
 
-#include "svsys.h"
-#include "salgdi.h"
-#include "saldata.hxx"
+#include "rtl/ustring.h"
+
+#include "osl/module.h"
+
 #include "vcl/svapp.hxx"
 
-#include "rtl/ustring.h"
-#include "osl/module.h"
+#include "win/svsys.h"
+#include "win/salgdi.h"
+#include "win/saldata.hxx"
 
 #include "uxtheme.h"
 #include "vssym32.h"

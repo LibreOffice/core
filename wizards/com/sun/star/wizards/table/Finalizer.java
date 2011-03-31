@@ -92,7 +92,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, new Short(curtabindex++), "", 223
+                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, new Short(curtabindex++), PropertyNames.EMPTY_STRING, 223
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -103,7 +103,7 @@ public class Finalizer
                     if (sCatalogNames.length > 0)
                     {
                         bsupportsCatalogs = true;
-                        String sCatalog = "";
+                        String sCatalog = PropertyNames.EMPTY_STRING;
                         try
                         {
                             sCatalog = curtabledescriptor.DBConnection.getCatalog();
@@ -127,7 +127,7 @@ public class Finalizer
                             xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
@@ -138,7 +138,7 @@ public class Finalizer
                             {
                                 isel = 0;
                             }
-                            CurUnoDialog.setControlProperty("lstCatalog", "SelectedItems", new short[]
+                            CurUnoDialog.setControlProperty("lstCatalog", PropertyNames.SELECTED_ITEMS, new short[]
                                     {
                                         (short) isel
                                     });
@@ -158,7 +158,7 @@ public class Finalizer
                     if (sSchemaNames.length > 0)
                     {
                         bsupportsSchemata = true;
-                        String sSchema = "";
+                        String sSchema = PropertyNames.EMPTY_STRING;
                         try
                         {
                             sSchema = (String) curtabledescriptor.getDataSourcePropertySet().getPropertyValue("User");
@@ -182,7 +182,7 @@ public class Finalizer
                             xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
@@ -193,7 +193,7 @@ public class Finalizer
                             {
                                 isel = 0;
                             }
-                            CurUnoDialog.setControlProperty("lstSchema", "SelectedItems", new short[]
+                            CurUnoDialog.setControlProperty("lstSchema", PropertyNames.SELECTED_ITEMS, new short[]
                                     {
                                         (short) isel
                                     });
@@ -302,7 +302,7 @@ public class Finalizer
 
     public void setTableName(String _tablename)
     {
-        if (txtTableName.getText().equals(""))
+        if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))
         {
             String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.getTableNamesAsNameAccess(), getComposedTableName(_tablename));
             txtTableName.setText(_tablename + ssuffix);
@@ -317,7 +317,7 @@ public class Finalizer
 
     public String getTableName(String _firsttablename)
     {
-        if (txtTableName.getText().equals(""))
+        if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))
         {
             setTableName(_firsttablename);
         }
@@ -332,7 +332,7 @@ public class Finalizer
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -344,7 +344,7 @@ public class Finalizer
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 

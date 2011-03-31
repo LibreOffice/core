@@ -65,14 +65,12 @@ abstract public class SectionObject
 
     public int getHeight(int _nDefault)
     {
-        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger(PropertyNames.PROPERTY_HEIGHT, _nDefault);
-        return nHeight;
+        return getPropertySetHelper().getPropertyValueAsInteger(PropertyNames.PROPERTY_HEIGHT, _nDefault);
     }
 
     public float getCharWeight(float _nDefault)
     {
-        final float fCharWeight = (float) getPropertySetHelper().getPropertyValueAsDouble("CharWeight", _nDefault);
-        return fCharWeight;
+        return(float) getPropertySetHelper().getPropertyValueAsDouble("CharWeight", _nDefault);
     }
 
     public void setFontToBold()

@@ -36,7 +36,7 @@
 
 /** Specifies wether a page header or footer is printed on the same page as the report header or report footer.
  */
-constants ReportPrintOption
+published constants ReportPrintOption
 {
     //-------------------------------------------------------------------------
 

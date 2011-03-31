@@ -60,7 +60,7 @@ class XConnectionOutputStream_Adapter extends OutputStream {
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
-        byte bytes[] = null;
+        byte bytes[]  ;
 
         if(off == 0 && len == b.length)
             bytes = b;

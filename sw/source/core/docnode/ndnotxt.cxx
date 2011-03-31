@@ -136,6 +136,30 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
+            // --> OD #i102238#
+            double nGrfDPIx = 0.0;
+            double nGrfDPIy = 0.0;
+            {
+                if ( !bPixelGrf && bPixelContour )
+                {
+                    const Size aGrfPixelSize( GetGraphic().GetSizePixel() );
+                    const Size aGrfPrefMapModeSize( GetGraphic().GetPrefSize() );
+                    if ( aGrfMap.GetMapUnit() == MAP_INCH )
+                    {
+                        nGrfDPIx = aGrfPixelSize.Width() / ( (double)aGrfMap.GetScaleX() * aGrfPrefMapModeSize.Width() );
+                        nGrfDPIy = aGrfPixelSize.Height() / ( (double)aGrfMap.GetScaleY() * aGrfPrefMapModeSize.Height() );
+                    }
+                    else
+                    {
+                        const Size aGrf1000thInchSize =
+                            OutputDevice::LogicToLogic( aGrfPrefMapModeSize,
+                                                        aGrfMap, MAP_1000TH_INCH );
+                        nGrfDPIx = 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
+                        nGrfDPIy = 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
+                    }
+                }
+            }
+            // <--
             ASSERT( !bPixelGrf || aGrfMap == aContourMap,
                     "scale factor for pixel unsupported" );
             OutputDevice* pOutDev =
@@ -153,7 +177,16 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                         rPoly[i] = pOutDev->LogicToPixel( rPoly[i],
                                                           aContourMap );
                     else if( bPixelContour )
+                    {
                         rPoly[i] = pOutDev->PixelToLogic( rPoly[i], aGrfMap );
+                        // --> OD #i102238#
+                        if ( nGrfDPIx != 0 && nGrfDPIy != 0 )
+                        {
+                            rPoly[i] = Point( rPoly[i].X() * pOutDev->ImplGetDPIX() / nGrfDPIx,
+                                              rPoly[i].Y() * pOutDev->ImplGetDPIY() / nGrfDPIy );
+                        }
+                        // <--
+                    }
                     else
                         rPoly[i] = OutputDevice::LogicToLogic( rPoly[i],
                                                                  aContourMap,
@@ -203,7 +236,9 @@ sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
             sal_uInt16 nPolyCount = rContour.Count();
             for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
-                Polygon& rPoly = (*pContour)[j];
+                // --> OD #i102238# - use the right <PolyPolygon> instance
+                Polygon& rPoly = rContour[j];
+                // <--
 
                 sal_uInt16 nCount = rPoly.GetSize();
                 for( sal_uInt16 i=0 ; i<nCount; i++ )

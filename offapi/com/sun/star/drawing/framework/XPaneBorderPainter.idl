@@ -43,7 +43,7 @@ module com { module sun { module star { module drawing { module framework {
 /** See XPaneBorderPainter and its addBorder() and removeBorder() methods
     for an explanation of the border type and its values.
 */
-enum BorderType
+published enum BorderType
 {
     INNER_BORDER,
     OUTER_BORDER,
@@ -65,7 +65,7 @@ enum BorderType
     left corner bitmap is painted with its lower right at the upper left of
     the center box.</p>
 */
-interface XPaneBorderPainter
+published interface XPaneBorderPainter
 {
     /** Enlarge the given rectangle by the size of the specified part of the
         border.  This method can be used to convert an inner bounding box

@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-interface XPropertyControlContext : XPropertyControlObserver
+published interface XPropertyControlContext : XPropertyControlObserver
 {
     /** instructs the <type>XPropertyControlContext</type> to active the next control
 

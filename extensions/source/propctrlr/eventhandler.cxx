@@ -74,6 +74,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
+#include <vcl/msgbox.hxx>
 
 #include <map>
 #include <algorithm>
@@ -940,7 +941,7 @@ namespace pcr
 
         // DF definite problem here
         // OK & Cancel seem to be both returning 0
-        if ( pDialog->Execute() != 0 )
+        if ( pDialog->Execute() == RET_CANCEL )
             return InteractiveSelectionResult_Cancelled;
 
         try

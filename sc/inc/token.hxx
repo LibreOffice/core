@@ -198,14 +198,14 @@ public:
                                 ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
     virtual                     ~ScExternalSingleRefToken();
 
-    virtual sal_uInt16                  GetIndex() const;
+    virtual sal_uInt16              GetIndex() const;
     virtual const String&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
-    virtual ScSingleRefData&          GetSingleRef();
-    virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
+    virtual ScSingleRefData&        GetSingleRef();
+    virtual void                    CalcAbsIfRel( const ScAddress& );
+    virtual void                    CalcRelFromAbs( const ScAddress& );
     virtual sal_Bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
+    virtual FormulaToken*           Clone() const { return new ScExternalSingleRefToken(*this); }
 };
 
 
@@ -220,20 +220,21 @@ private:
 public:
                                 ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r );
                                 ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
+    explicit                    ScExternalDoubleRefToken( const ScExternalSingleRefToken& r );
     virtual                     ~ScExternalDoubleRefToken();
 
-    virtual sal_uInt16                 GetIndex() const;
-    virtual const String&          GetString() const;
-    virtual const ScSingleRefData& GetSingleRef() const;
-    virtual ScSingleRefData&       GetSingleRef();
-    virtual const ScSingleRefData& GetSingleRef2() const;
-    virtual ScSingleRefData&       GetSingleRef2();
-    virtual const ScComplexRefData&    GetDoubleRef() const;
-    virtual ScComplexRefData&      GetDoubleRef();
-    virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
+    virtual sal_uInt16              GetIndex() const;
+    virtual const String&           GetString() const;
+    virtual const ScSingleRefData&  GetSingleRef() const;
+    virtual ScSingleRefData&        GetSingleRef();
+    virtual const ScSingleRefData&  GetSingleRef2() const;
+    virtual ScSingleRefData&        GetSingleRef2();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual void                    CalcAbsIfRel( const ScAddress& );
+    virtual void                    CalcRelFromAbs( const ScAddress& );
     virtual sal_Bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
+    virtual FormulaToken*           Clone() const { return new ScExternalDoubleRefToken(*this); }
 };
 
 

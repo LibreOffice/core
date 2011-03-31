@@ -152,6 +152,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             &&  pBegin->Name.compareToAscii( "Authentication" )
             &&  pBegin->Name.compareToAscii( "PreferDosLikeLineEnds" )
             &&  pBegin->Name.compareToAscii( "PrimaryKeySupport" )
+            &&  pBegin->Name.compareToAscii( "RespectDriverResultSetType" )
             )
         {
             ::rtl::OUString aStr;

@@ -28,15 +28,16 @@
 #include "precompiled_vcl.hxx"
 
 #include "vcl/print.hxx"
-#include "vcl/prndlg.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/salinst.hxx"
-#include "vcl/salprn.hxx"
-#include "vcl/svids.hrc"
 #include "vcl/metaact.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/configsettings.hxx"
+
+#include "printdlg.hxx"
+#include "svdata.hxx"
+#include "salinst.hxx"
+#include "salprn.hxx"
+#include "svids.hrc"
 
 #include "tools/urlobj.hxx"
 

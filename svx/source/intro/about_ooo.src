@@ -30,7 +30,7 @@
 
 String ABOUT_STR_COPYRIGHT
 {
-    Text[ en-US ] = "Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at\n http://www.openoffice.org/welcome/credits.html.";
+    Text[ en-US ] = "Copyright © 2000, 2011 Oracle and/or its affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at\n http://www.openoffice.org/welcome/credits.html.";
 };
 
 StringArray ABOUT_STR_DEVELOPER_ARY
