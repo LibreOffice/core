@@ -317,6 +317,18 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         aParam.nDestCol = aFilterOutputPosition.Column;
         aParam.nDestRow = aFilterOutputPosition.Row;
         ScFilterDescriptorBase::fillQueryParam(aParam, pDoc, aFilterFields);
+
+        // Convert from relative to absolute column IDs for the fields. Calc
+        // core expects the field positions to be absolute column IDs.
+        SCCOLROW nStartPos = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+        for (size_t i = 0; i < MAXQUERY; ++i)
+        {
+            ScQueryEntry& rEntry = aParam.GetEntry(i);
+            if (!rEntry.bDoQuery)
+                break;
+            rEntry.nField += nStartPos;
+        }
+
         pData->SetQueryParam(aParam);
     }
 
