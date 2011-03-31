@@ -147,6 +147,12 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.zip
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.oxt
+    @-$(RM) $@
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).oxt)
+    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @$(RENAME) $@.$(INPATH) $@
+
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.jar
     @-$(RM) $@
 .IF "$(OS)"=="SOLARIS"
