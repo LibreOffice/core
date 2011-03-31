@@ -63,7 +63,7 @@ static sal_uInt16 aFrmMgrRange[] = {
                             0};
 
 /*--------------------------------------------------------------------
-     Beschreibung: Rahmen-Attribute ueber Shell ermitteln
+     Description: determine frame attributes via Shell
  --------------------------------------------------------------------*/
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
     aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
@@ -75,7 +75,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
 {
     if ( bNewFrm )
     {
-        // Defaults einstellen:
+        // set Defaults:
         sal_uInt16 nId = 0;
         switch ( nType )
         {
@@ -113,7 +113,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, const SfxItemS
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Initialisieren
+     Description:   Initialise
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
 {
@@ -139,7 +139,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Bestehenden Fly-Frame aendern
+    Description: change existing Fly-Frame
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
@@ -172,7 +172,7 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Rahmen einfuegen
+     Description:   insert frame
  --------------------------------------------------------------------*/
 sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 {
@@ -180,7 +180,7 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 
     sal_Bool bRet = 0 != pOwnSh->NewFlyFrm( aSet );
 
-    // richtigen Mode an der Shell einschalten, Rahmen wurde aut. selektiert.
+    // turn on the right mode at the shell, frame got selected automatically.
     if ( bRet )
     {
         _UpdateFlyFrm();
@@ -192,10 +192,9 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Rahmen des Typs eAnchorType einfuegen. Position und
-                Groesse werden explizit angegeben.
-                Nicht erlaubte Werte des Aufzaehlungstypes werden
-                korrigiert.
+ Description:   insert frames of type eAnchorType. Position and size are
+                being set explicitely.
+                Not-allowed values of the enumeration type get corrected.
 ------------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Point  &rPos,
@@ -219,7 +218,7 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Anker setzen
+     Description:   set anchor
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 {
@@ -240,7 +239,7 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Setzen des Attributs fuer Spalten
+ Description:   set the attribute for columns
 ------------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 {
@@ -248,7 +247,7 @@ void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Absolute Position setzen
+     Description:   set absolute position
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
@@ -264,7 +263,7 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Metriken auf Korrektheit pruefen
+    Description: check metrics for correctness
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         const SwPosition* pToCharCntntPos,
@@ -413,7 +412,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos  = aBoundRect.Height() - rVal.nHeight;
         }
 
-        // Maximale Breite Hoehe
+        // maximum width height
         const SwTwips nH = ( rVal.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
@@ -507,7 +506,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Korrektur fuer Umrandung
+    Description: correction for border
  --------------------------------------------------------------------*/
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
@@ -538,7 +537,7 @@ SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Attribut aus dem Set loeschen
+    Description: erase attribute from the set
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::DelAttr( sal_uInt16 nId )
 {

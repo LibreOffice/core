@@ -55,7 +55,7 @@
 #include <svx/svxdlg.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    the dialog's carrier
  --------------------------------------------------------------------*/
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
@@ -77,7 +77,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
     m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
 
-    // BspFont fuer beide Bsp-TabPages
+    // example font for both example TabPages
     //
     if(pStr)
     {
@@ -114,7 +114,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                 if(0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
                     RemoveTabPage(TP_BORDER);
                 RemoveTabPage(TP_COLUMN);
-            // kein break
+            // no break
         case DLG_FRM_OLE:
                 RemoveTabPage(TP_FRM_URL);
                 RemoveTabPage(TP_MACRO_ASSIGN);
