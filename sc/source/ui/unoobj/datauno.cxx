@@ -1636,15 +1636,6 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
     ScDBData* pRet = NULL;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if (rtl::OUString(aName).match(ScGlobal::GetRscString(STR_DB_NONAME)))
-        {
-            rtl::OUString aDBNoName(aName);
-            aDBNoName = aDBNoName.replaceAt(0,rtl::OUString(ScGlobal::GetRscString(STR_DB_NONAME)).getLength(),rtl::OUString());
-            SCTAB nTab = aDBNoName.toInt32();
-            if (pDoc->GetAnonymousDBData(nTab))
-                return pDoc->GetAnonymousDBData(nTab);
-        }
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
         {
@@ -2193,29 +2184,9 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDBCollection* pNames = pDoc->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames && nIndex < pNames->GetCount())
             return new ScDatabaseRangeObj( pDocShell, (*pNames)[nIndex]->GetName() );
-        else
-        {
-            sal_uInt16 nCount = 0;
-            if (pNames)
-                nCount = pNames->GetCount();
-            for (SCTAB nTab = 0; nTab < pDoc->GetTableCount(); ++nTab)
-            {
-                if (pDoc->GetAnonymousDBData(nTab))
-                {
-                    if (nIndex==nCount)
-                    {
-                        rtl::OUStringBuffer aBuffer(ScGlobal::GetRscString( STR_DB_NONAME ));
-                        aBuffer.append(nTab);
-                        return new ScDatabaseRangeObj( pDocShell, aBuffer.makeStringAndClear());
-                    }
-                    ++nCount;
-                }
-            }
-        }
     }
     return NULL;
 }
@@ -2239,28 +2210,12 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
     sal_Bool bDone = false;
     if (pDocShell)
     {
-        //moggi
-        if (aName.match(ScGlobal::GetRscString( STR_DB_NONAME )))
-        {
-                rtl::OUString aDBNoName(aName);
-                aDBNoName = aDBNoName.replaceAt(0,rtl::OUString(ScGlobal::GetRscString(STR_DB_NONAME)).getLength(),rtl::OUString());
-                SCTAB nTab = aDBNoName.toInt32();
-                String aNewName = ScGlobal::GetRscString( STR_DB_NONAME );
-                ScDBData* pNoNameData = new ScDBData(aNewName , nTab,
-                                (SCCOL)aRange.StartColumn,(SCROW)aRange.StartRow,
-                                (SCCOL)aRange.EndColumn,(SCROW)aRange.EndRow,
-                                sal_True, true );//moggi
-                pDocShell->GetDocument()->SetAnonymousDBData(nTab,pNoNameData);
-                bDone = true;
-        }
-        else
-        {
-            ScDBDocFunc aFunc(*pDocShell);
-            String aString(aName);
-            ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
-                                (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
-            bDone = aFunc.AddDBRange( aString, aNameRange, sal_True );
-        }
+        ScDBDocFunc aFunc(*pDocShell);
+
+        String aString(aName);
+        ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
+                            (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
+        bDone = aFunc.AddDBRange( aString, aNameRange, sal_True );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2300,17 +2255,9 @@ sal_Int32 SAL_CALL ScDatabaseRangesObj::getCount() throw(uno::RuntimeException)
 
     if (pDocShell)
     {
-        sal_Int32 nCountAnonymousDBData;
-        ScDocument* pDoc = pDocShell->GetDocument();
-        for (SCTAB nTab=0; nTab<pDoc->GetTableCount();nTab++)
-        {
-            if (pDoc->GetAnonymousDBData(nTab))
-                ++nCountAnonymousDBData;
-        }
-        ScDBCollection* pNames = pDoc->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
-            return pNames->GetCount() + nCountAnonymousDBData ;
-        return nCountAnonymousDBData;
+            return pNames->GetCount();
     }
     return 0;
 }
@@ -2363,36 +2310,16 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
 
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        sal_uInt16 nCountAnonymousDBData=0;
-        for (SCTAB nTab=0; nTab<pDoc->GetTableCount();nTab++)
-        {
-            if (pDoc->GetAnonymousDBData(nTab))
-                nCountAnonymousDBData++;
-        }
-        ScDBCollection* pNames = pDoc->GetDBCollection();
-        sal_uInt16 nCountDBData = 0;
+        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
         {
-            nCountDBData = pNames->GetCount();
+            sal_uInt16 nCount = pNames->GetCount();
             String aName;
-            uno::Sequence<rtl::OUString> aSeq(nCountDBData + nCountAnonymousDBData);
+            uno::Sequence<rtl::OUString> aSeq(nCount);
             rtl::OUString* pAry = aSeq.getArray();
-            for (sal_uInt16 i=0; i<nCountDBData; i++)
-            {
+            for (sal_uInt16 i=0; i<nCount; i++)
                 pAry[i] = (*pNames)[i]->GetName();
-            }
-            for (SCTAB nTab=0;nTab<pDoc->GetTableCount();nTab++)
-            {
-                sal_uInt16 i =0;
-                if (pDoc->GetAnonymousDBData(nTab))
-                {
-                    rtl::OUStringBuffer aStrBuffer(ScGlobal::GetRscString( STR_DB_NONAME ));
-                    aStrBuffer.append(nTab);
-                    pAry[nCountDBData+i]=aStrBuffer.makeStringAndClear();
-                    i++;
-                }
-            }
+
             return aSeq;
         }
     }
@@ -2408,18 +2335,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
 
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if (aName.match(ScGlobal::GetRscString(STR_DB_NONAME)))
-        {
-            rtl::OUString aDBNoName(aName);
-            aDBNoName = aDBNoName.replaceAt(0,rtl::OUString(ScGlobal::GetRscString(STR_DB_NONAME)).getLength(),rtl::OUString());
-            SCTAB nTab = aDBNoName.toInt32();
-            if (pDoc->GetAnonymousDBData(nTab))
-                return sal_True;
-            else
-                return sal_False;
-        }
-        ScDBCollection* pNames = pDoc->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
         {
             String aString(aName);
