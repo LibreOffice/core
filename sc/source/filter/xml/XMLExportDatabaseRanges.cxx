@@ -663,7 +663,6 @@ private:
 
     OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp) const
     {
-
         switch (rEntry.eOp)
         {
             case SC_BEGINS_WITH:
@@ -717,9 +716,9 @@ private:
         return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
     }
 
-    void writeCondition(const ScQueryEntry& rEntry, bool bCaseSens, bool bRegExp)
+    void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField));
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nFieldStart - rEntry.nField));
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
         if (rEntry.bQueryByString)
@@ -785,21 +784,24 @@ private:
                 bOr = true;
         }
 
+        ScRange aRange;
+        rData.GetArea(aRange);
+        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Row() : aRange.aStart.Col();
         if (bOr && !bAnd)
         {
             SvXMLElementExport aElemOr(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
             for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), aParam.bCaseSens, aParam.bRegExp);
+                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
         }
         else if (bAnd && !bOr)
         {
             SvXMLElementExport aElemAnd(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
             for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), aParam.bCaseSens, aParam.bRegExp);
+                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
         }
         else if (nCount == 1)
         {
-            writeCondition(aParam.GetEntry(0), aParam.bCaseSens, aParam.bRegExp);
+            writeCondition(aParam.GetEntry(0), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
         }
         else
         {
@@ -827,18 +829,18 @@ private:
                     {
                         mrExport.StartElement(aName, true );
                         bOpenAndElement = true;
-                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                         aPrevEntry = rEntry;
                         if (i == nCount - 1)
                         {
-                            writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                             mrExport.EndElement(aName, true);
                             bOpenAndElement = false;
                         }
                     }
                     else
                     {
-                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                         aPrevEntry = rEntry;
                         if (bOpenAndElement)
                         {
@@ -846,15 +848,15 @@ private:
                             bOpenAndElement = false;
                         }
                         if (i == nCount - 1)
-                            writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                     }
                 }
                 else
                 {
-                    writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                    writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                     aPrevEntry = rEntry;
                     if (i == nCount - 1)
-                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
                 }
             }
             if(bOpenAndElement)
