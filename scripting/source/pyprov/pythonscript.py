@@ -453,7 +453,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
     def getIntrospection( self ):
         return None
 
-    def invoke( self, name ):
+    def invoke( self, name, params, outparamindex, outparams ):
         if name == "Editable":
             servicename = "com.sun.star.awt.DialogProvider"
             ctx = self.provCtx.scriptContext.getComponentContext()
@@ -786,7 +786,7 @@ class PythonScript( unohelper.Base, XScript ):
     def __init__( self, func, mod ):
         self.func = func
         self.mod = mod
-    def invoke(self, args ):
+    def invoke(self, args, out, outindex ):
         log.isDebugLevel() and log.debug( "PythonScript.invoke " + str( args ) )
         try:
             ret = self.func( *args )
