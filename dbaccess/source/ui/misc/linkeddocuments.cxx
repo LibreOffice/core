@@ -189,9 +189,8 @@ namespace dbaui
 
             xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
         }
-        catch(Exception& e)
+        catch(const Exception&)
         {
-            (void)e;
             throw;
         }
 
@@ -229,7 +228,7 @@ namespace dbaui
             xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
             ::comphelper::disposeComponent( xWizard );
         }
-        catch(const Exception& e)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -334,7 +333,7 @@ namespace dbaui
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
             }
         }
-        catch(const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -362,7 +361,7 @@ namespace dbaui
             }
             return xRet;
         }
-        catch (com::sun::star::io::WrongFormatException &e)
+        catch(const com::sun::star::io::WrongFormatException &e)
         {
             com::sun::star::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;
@@ -378,7 +377,7 @@ namespace dbaui
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
             aInfo.prepend(sMessage);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             Any aAny = ::cppu::getCaughtException();
             com::sun::star::sdbc::SQLException a;
