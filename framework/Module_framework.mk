@@ -40,6 +40,12 @@ $(eval $(call gb_Module_add_targets,framework,\
     Package_unotypes \
 ))
 
+ifeq ($(ENABLE_LOMENUBAR),TRUE)
+$(eval $(call gb_Module_add_targets,framework,\
+    Library_lomenubar \
+))
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,framework,\
     JunitTest_framework_complex \
     JunitTest_framework_unoapi \
