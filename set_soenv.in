@@ -1628,6 +1628,8 @@ ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
 ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
 ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
 ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
+ToFile( "GTHREAD_CFLAGS",        "@GTHREAD_CFLAGS@",       "e" );
+ToFile( "GTHREAD_LIBS",          "@GTHREAD_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_GSTREAMER",  "@ENABLE_GSTREAMER@", "e" );
