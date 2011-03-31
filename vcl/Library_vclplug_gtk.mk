@@ -40,7 +40,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
 $(eval $(call gb_Library_set_cxxflags,vclplug_gtk,\
     $$(CXXFLAGS) \
     $$(GTK_CFLAGS) \
-    $$(GSTREAMER_LIBS)\ 
 ))
 
 $(eval $(call gb_Library_set_defs,vclplug_gtk,\
@@ -62,7 +61,8 @@ endif
 
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
-    $$(GTK_LIBS)\
+    $$(GTK_LIBS) \
+    $$(GTHREAD_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
