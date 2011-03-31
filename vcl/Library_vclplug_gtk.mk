@@ -40,6 +40,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
 $(eval $(call gb_Library_set_cxxflags,vclplug_gtk,\
     $$(CXXFLAGS) \
     $$(GTK_CFLAGS) \
+    $$(GSTREAMER_LIBS)\ 
 ))
 
 $(eval $(call gb_Library_set_defs,vclplug_gtk,\
