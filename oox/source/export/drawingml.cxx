@@ -146,7 +146,7 @@ void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
     }
         else
             fprintf (stderr,"???           <unhandled type>\n");
-    } catch(const Exception &e) {
+    } catch(const Exception &) {
         fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
     }
     }
@@ -946,7 +946,7 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
         if( sText.getLength() < 1 )
             return;
         }
-        catch (const Exception &e) {
+        catch (const Exception &) {
             return;
         }
     }
