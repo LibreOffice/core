@@ -2885,7 +2885,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
     Init_Impl();
 }
 
-
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
     pImp(new SfxMedium_Impl(this))
 {
@@ -2944,6 +2943,24 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 {
     String aType = SfxFilter::GetTypeFromStorage( rStor );
     pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
+    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
+
+    Init_Impl();
+    pImp->xStorage = rStor;
+    pImp->bDisposeStorage = false;
+
+    // always take BaseURL first, could be overwritten by ItemSet
+    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    if ( p )
+        GetItemSet()->Put( *p );
+}
+
+//------------------------------------------------------------------
+
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String &rTypeName, const SfxItemSet* p ) :
+    pImp(new SfxMedium_Impl(this))
+{
+    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();

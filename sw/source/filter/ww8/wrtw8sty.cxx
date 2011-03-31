@@ -1,34 +1,27 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <algorithm>
 #include <functional>
+
+#include <boost/scoped_array.hpp>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/tencinfo.h>
@@ -79,6 +72,16 @@
 
 using namespace sw::util;
 using namespace nsHdFtFlags;
+
+/// For the output of sections.
+struct WW8_PdAttrDesc
+{
+    ::boost::scoped_array<sal_uInt8> m_pData;
+    sal_uInt16 m_nLen;
+    WW8_FC m_nSepxFcPos;
+    WW8_PdAttrDesc() : m_nLen(0), m_nSepxFcPos(0xffffffff) /*default: none*/
+        { }
+};
 
 struct WW8_SED
 {
@@ -488,18 +491,8 @@ void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
     {
         if ( m_rWW8Export.bWrtWW8 )
         {
-            static sal_uInt8 aDefCharSty[] = {
-                0x42, 0x00,
-                0x41, 0x40, 0xF2, 0xFF, 0xA1, 0x00, 0x42, 0x00,
-                0x00, 0x00, 0x19, 0x00, 0x41, 0x00, 0x62, 0x00,
-                0x73, 0x00, 0x61, 0x00, 0x74, 0x00, 0x7A, 0x00,
-                0x2D, 0x00, 0x53, 0x00, 0x74, 0x00, 0x61, 0x00,
-                0x6E, 0x00, 0x64, 0x00, 0x61, 0x00, 0x72, 0x00,
-                0x64, 0x00, 0x73, 0x00, 0x63, 0x00, 0x68, 0x00,
-                0x72, 0x00, 0x69, 0x00, 0x66, 0x00, 0x74, 0x00,
-                0x61, 0x00, 0x72, 0x00, 0x74, 0x00, 0x00, 0x00,
-                0x00, 0x00 };
-            m_rWW8Export.pTableStrm->Write( &aDefCharSty, sizeof( aDefCharSty ) );
+            sal_uInt16 n = 0;
+            m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
         }
         else
         {
@@ -516,7 +509,7 @@ void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
     else
     {
         sal_uInt16 n = 0;
-        m_rWW8Export.pTableStrm->Write( &n , 2 );   // leerer Style
+        m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
     }
 }
 
@@ -969,10 +962,9 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 }
 
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
-    : MSWordSections( rExport ),
-      pAttrs( 0 ),
-      pTxtPos( 0 ),
-      bNoMoreSections( false )
+    : MSWordSections( rExport )
+    , m_bHeaderFooterWritten( false )
+    , pTxtPos( 0 )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
@@ -985,14 +977,17 @@ MSWordSections::~MSWordSections()
 
 WW8_WrPlcSepx::~WW8_WrPlcSepx()
 {
-    sal_uInt16 nLen = aSects.size();
-    if( pAttrs )
-    {
-        while( nLen )
-            delete[] pAttrs[ --nLen ].pData;
-        delete[] pAttrs;
-    }
     delete pTxtPos;
+}
+
+bool MSWordSections::HeaderFooterWritten()
+{
+    return false; // only relevant for WW8
+}
+
+bool WW8_WrPlcSepx::HeaderFooterWritten()
+{
+    return m_bHeaderFooterWritten;
 }
 
 sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
@@ -1040,6 +1035,9 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     aSects.push_back( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ) );
     NeedsDocumentProtected( aSects.back() );
 }
@@ -1047,17 +1045,19 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
-    if ( !bNoMoreSections )
-    {
-        aCps.push_back( nStartCp );
-
-        AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
     }
+    aCps.push_back( nStartCp );
+    AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
 }
 
 void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
             rPD.GetNumOffset(), &rNd );
     aSects.push_back( aI );
@@ -1067,12 +1067,11 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
-    if ( !bNoMoreSections )
-    {
-        aCps.push_back( nStartCp );
-
-        AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
     }
+    aCps.push_back( nStartCp );
+    AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
 }
 
 // MSWordSections::SetNum() setzt in jeder Section beim 1. Aufruf den
@@ -1450,17 +1449,18 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
     if ( !pA )
         return;
 
-    if ( !pO->empty() )
-    {                   // waren Attrs vorhanden ?
-        pA->nLen = pO->size();
-        pA->pData = new sal_uInt8 [pO->size()];
-        memcpy( pA->pData, pO->data(), pO->size() );    // -> merken
-        pO->clear();       // leeren fuer HdFt-Text
+    if ( !pO->empty() ) // are there attributes ?
+    {
+        pA->m_nLen = pO->size();
+        pA->m_pData.reset(new sal_uInt8 [pO->size()]);
+        // store for later
+        memcpy( pA->m_pData.get(), pO->data(), pO->size() );
+        pO->clear(); // leeren fuer HdFt-Text
     }
-    else
-    {                               // keine Attrs da
-        pA->pData = 0;
-        pA->nLen = 0;
+    else // no attributes there
+    {
+        pA->m_pData.reset();
+        pA->m_nLen = 0;
     }
 }
 
@@ -1752,7 +1752,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
 bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 {
-    pAttrs = new WW8_PdAttrDesc[ aSects.size() ];
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
     OSL_ENSURE( !pTxtPos, "wer hat den Pointer gesetzt?" );
@@ -1763,17 +1762,19 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
+
     for ( sal_uInt16 i = 0; i < aSects.size(); ++i )
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        pA->pData = 0;
-        pA->nLen  = 0;
-        pA->nSepxFcPos = 0xffffffff;                // Default: none
+        ::boost::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
+        m_SectionAttributes.push_back(pAttrDesc);
 
         WW8_SepInfo& rSepInfo = aSects[i];
-        rWrt.SectionProperties( rSepInfo, pA );
+        rWrt.SectionProperties( rSepInfo, pAttrDesc.get() );
 
-        bNoMoreSections = true;
+        // FIXME: this writes the section properties, but not of all sections;
+        // it's possible that later in the document (e.g. in endnotes) sections
+        // are added, but they won't have their properties written here!
+        m_bHeaderFooterWritten = true;
     }
     rWrt.SetHdFtIndex( nOldIndex ); //0
 
@@ -1801,23 +1802,26 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
-    sal_uInt16 i;
-    for( i = 0; i < aSects.size(); i++ )
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+        , "WriteSepx(): arrays out of sync!");
+    for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        if( pA->nLen && pA->pData != NULL)
+        WW8_PdAttrDesc *const pA = m_SectionAttributes[i].get();
+        if (pA->m_nLen && pA->m_pData != NULL)
         {
             SVBT16 nL;
-            pA->nSepxFcPos = rStrm.Tell();
-            ShortToSVBT16( pA->nLen, nL );
+            pA->m_nSepxFcPos = rStrm.Tell();
+            ShortToSVBT16( pA->m_nLen, nL );
             rStrm.Write( nL, 2 );
-            rStrm.Write( pA->pData, pA->nLen );
+            rStrm.Write( pA->m_pData.get(), pA->m_nLen );
         }
     }
 }
 
 void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+        , "WritePlcSed(): arrays out of sync!");
     OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
 
@@ -1832,10 +1836,10 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 
     static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
-    for( i = 0; i < aSects.size(); i++ )
+    for (size_t j = 0; j < m_SectionAttributes.size(); j++ )
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        UInt32ToSVBT32( pA->nSepxFcPos, aSed.fcSepx );    // Sepx-Pos
+        // Sepx-Pos
+        UInt32ToSVBT32( m_SectionAttributes[j]->m_nSepxFcPos, aSed.fcSepx );
         rWrt.pTableStrm->Write( &aSed, sizeof( aSed ) );
     }
     rWrt.pFib->fcPlcfsed = nFcStart;
@@ -2274,6 +2278,13 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                             false, RTL_TEXTENCODING_MS_1252);
                     SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nNameLen);
                 }
+
+                // documents layout of WriteShort's below:
+                //
+                // SVBT16 ibst;      // index into GrpXstAtnOwners
+                // SVBT16 ak;        // not used
+                // SVBT16 grfbmc;    // not used
+                // SVBT32 ITagBkmk;  // when not -1, this tag identifies the
 
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, nFndPos );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );

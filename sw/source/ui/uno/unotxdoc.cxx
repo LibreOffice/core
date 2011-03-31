@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <osl/mutex.hxx>
@@ -35,6 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
@@ -386,7 +378,9 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pxXRedlines(0),
     m_pHiddenViewFrame(0),
     m_pPrintUIOptions( NULL ),
-    m_pRenderData( NULL )
+    m_pRenderData( NULL ),
+    // #i117783#
+    bApplyPagePrintSettingsFromXPagePrintable( sal_False )
 {
 }
 
@@ -1205,7 +1199,8 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
         }
 
-
+        // #i117783#
+        bApplyPagePrintSettingsFromXPagePrintable = sal_True;
         pFrame->GetViewShell()->ExecuteSlot(aReq);
         // Frame schliessen
         pFrame->DoClose();
@@ -2703,7 +2698,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     {
         // #i114210#
         // determine the correct page number from the renderer index
-        // --> OD 2010-10-01 #i114875
+        // #i114875
         // consider brochure print
         const sal_uInt16 nPage = bPrintProspect
                              ? nRenderer + 1
@@ -2799,6 +2794,62 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrinterPaperTray" ) );
             aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
+    }
+
+    // #i117783#
+    if ( bApplyPagePrintSettingsFromXPagePrintable )
+    {
+        const SwPagePreViewPrtData* pPagePrintSettings =
+                                        pDocShell->GetDoc()->GetPreViewPrtData();
+        if ( pPagePrintSettings &&
+             ( pPagePrintSettings->GetRow() > 1 ||
+               pPagePrintSettings->GetCol() > 1 ) )
+        {
+            // extend render data by page print settings attributes
+            sal_Int32 nLen = aRenderer.getLength();
+            const sal_Int32 nRenderDataIdxStart = nLen;
+            nLen += 9;
+            aRenderer.realloc( nLen );
+            // put page print settings attribute into render data
+            const sal_Int32 nRow = pPagePrintSettings->GetRow();
+            aRenderer[ nRenderDataIdxStart + 0 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) );
+            aRenderer[ nRenderDataIdxStart + 0 ].Value <<= ( nRow > 1 ? nRow : 1 );
+            const sal_Int32 nCol = pPagePrintSettings->GetCol();
+            aRenderer[ nRenderDataIdxStart + 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) );
+            aRenderer[ nRenderDataIdxStart + 1 ].Value <<= ( nCol > 1 ? nCol : 1 );
+            aRenderer[ nRenderDataIdxStart + 2 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) );
+            aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
+            aRenderer[ nRenderDataIdxStart + 3 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) );
+            aRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
+            aRenderer[ nRenderDataIdxStart + 4 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) );
+            aRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
+            aRenderer[ nRenderDataIdxStart + 5 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) );
+            aRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
+            aRenderer[ nRenderDataIdxStart + 6 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
+            aRenderer[ nRenderDataIdxStart + 7 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
+            {
+                Printer* pPrinter = pDocShell->GetDoc()->getPrinter( false );
+                if ( pPrinter )
+                {
+                    awt::Size aNewPageSize;
+                    const Size aPageSize = pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+                    aNewPageSize = awt::Size( aPageSize.Width(), aPageSize.Height() );
+                    if ( ( pPagePrintSettings->GetLandscape() &&
+                           aPageSize.Width() < aPageSize.Height() ) ||
+                         ( !pPagePrintSettings->GetLandscape() &&
+                           aPageSize.Width() > aPageSize.Height() ) )
+                    {
+                        aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
+                    }
+                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) );
+                    aRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
+                }
+            }
+        }
+
+        bApplyPagePrintSettingsFromXPagePrintable = sal_False;
     }
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );

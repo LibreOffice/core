@@ -99,6 +99,10 @@ public:
                         SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const String& rBaseURL,
                                     const SfxItemSet* pSet=0 );
+                        SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                    const String& rBaseURL,
+                                    const String& rTypeName,
+                                    const SfxItemSet* pSet=0 );
                         SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         ~SfxMedium();

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <hintids.hxx>
@@ -1907,6 +1898,9 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     // map start and end points onto the ConversionMap
     const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
     const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+    aExpandText = aExpandText.copy( nExpandBegin, nExpandEnd - nExpandBegin );
+#endif
 
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
@@ -1928,9 +1922,49 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     {
         if (pBreakIt->GetBreakIter().is())
         {
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+            // FIXME: check if in fact this is a (sadly) duplicated fix.
+
+            // split into different script languages
+            sal_Int32 nScriptBegin = 0;
+            while ( nScriptBegin < aExpandText.getLength() )
+            {
+                const sal_Int16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aExpandText, nScriptBegin );
+                const sal_Int32 nScriptEnd = pBreakIt->GetBreakIter()->endOfScript( aExpandText, nScriptBegin, nCurrScript );
+                rtl::OUString aScriptText = aExpandText.copy( nScriptBegin, nScriptEnd - nScriptBegin );
+
+                // Asian languages count words as characters
+                if ( nCurrScript == ::com::sun::star::i18n::ScriptType::ASIAN )
+                {
+                    // substract white spaces
+                    sal_Int32 nSpaceCount = 0;
+                    sal_Int32 nSpacePos = 0;
+
+                    // substract normal white spaces
+                    nSpacePos = -1;
+                    while ( ( nSpacePos = aScriptText.indexOf( ' ', nSpacePos + 1 ) ) != -1 )
+                    {
+                        nSpaceCount++;
+                    }
+                    // substract Asian full-width white spaces
+                    nSpacePos = -1;
+                    while ( ( nSpacePos = aScriptText.indexOf( 12288, nSpacePos + 1 ) ) != -1 )
+                    {
+                        nSpaceCount++;
+                    }
+                    nTmpWords += nScriptEnd - nScriptBegin - nSpaceCount;
+                }
+                else
+                {
+#endif
+
             // zero is NULL for pLanguage -----------v               last param = true for clipping
             SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+                                (xub_StrLen)0, (xub_StrLen)aScriptText.getLength() );
+#else
                                 nExpandBegin, nExpandEnd, true );
+#endif
 
             // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
             const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
@@ -1947,6 +1981,12 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                     nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
                 }
             }
+
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+nScriptBegin = nScriptEnd;
+}
+}
+#endif
 
             nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
         }

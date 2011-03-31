@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -83,9 +74,9 @@ SwXMLWriter::~SwXMLWriter()
 }
 
 
-sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
+sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
+                                const rtl::OUString& aDocHierarchicalName )
 {
-    OSL_ENSURE( pTargetMedium, "No medium is provided!" );
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -184,22 +175,9 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
     xInfoSet->setPropertyValue( sTargetStorage, Any( xStg ) );
 
-    // create XStatusIndicator
-    uno::Reference<task::XStatusIndicator> xStatusIndicator;
-
     uno::Any aAny;
     if (bShowProgress)
     {
-        // retrieve status indicator from the medium MediaDescriptor
-        if ( pTargetMedium )
-        {
-            const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
-               pTargetMedium->GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-
-            if ( pStatusBarItem )
-                pStatusBarItem->GetValue() >>= xStatusIndicator;
-        }
-
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
@@ -215,6 +193,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
         xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
+
     SvtSaveOptions aSaveOpt;
     OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
     sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
@@ -239,21 +218,13 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
         OUString aName;
-        if ( pTargetMedium && pTargetMedium->GetItemSet() )
-        {
-            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                pTargetMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
-            if ( pDocHierarchItem )
-                aName = pDocHierarchItem->GetValue();
-        }
+        if ( !aDocHierarchicalName.isEmpty() )
+            aName = aDocHierarchicalName;
         else
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ) );
 
-        if( !aName.isEmpty() )
-        {
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
-        }
+        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+        xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
     }
 
     if( bBlock )
@@ -502,12 +473,23 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
 sal_uLong SwXMLWriter::WriteStorage()
 {
-    return _Write();
+    return _Write( uno::Reference < task::XStatusIndicator >(), ::rtl::OUString() );
 }
 
 sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
-    return _Write( &aTargetMedium );
+    uno::Reference < task::XStatusIndicator > xStatusIndicator;
+    rtl::OUString aName;
+    const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
+       aTargetMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+    if ( pStatusBarItem )
+        pStatusBarItem->GetValue() >>= xStatusIndicator;
+    const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+        aTargetMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+    if ( pDocHierarchItem )
+        aName = pDocHierarchItem->GetValue();
+
+    return _Write( xStatusIndicator, aName );
 }
 
 sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
