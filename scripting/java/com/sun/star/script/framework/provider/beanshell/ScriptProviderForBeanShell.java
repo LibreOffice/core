@@ -123,6 +123,41 @@ public class ScriptProviderForBeanShell
 
         return xSingleServiceFactory;
     }
+
+
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     *
+     * @param  regKey  the registryKey
+     * @return         returns true if the operation succeeded
+     * @see            com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
+    {
+        String impl = "com.sun.star.script.framework.provider.beanshell." +
+            "ScriptProviderForBeanShell$_ScriptProviderForBeanShell";
+
+        String service1 = "com.sun.star.script.provider." +
+            "ScriptProvider";
+        String service2 = "com.sun.star.script.provider." +
+            "LanguageScriptProvider";
+        String service3 = "com.sun.star.script.provider." +
+            "ScriptProviderForBeanShell";
+        String service4 = "com.sun.star.script.browse." +
+            "BrowseNode";
+
+        if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service4, regKey) )
+        {
+                return true;
+        }
+        return false;
+    }
+
 }
 
 class ScriptImpl implements XScript
