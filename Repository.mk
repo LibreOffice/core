@@ -120,11 +120,12 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
     hatchwindowfactory \
+    lomenubar \
+    msforms \
     passwordcontainer \
     productregistration \
     vbaobj \
     vbaswobj \
-    msforms \
 ))
 
 
