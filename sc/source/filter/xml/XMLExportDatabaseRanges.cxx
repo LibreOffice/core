@@ -718,7 +718,7 @@ private:
 
     void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nFieldStart - rEntry.nField));
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField - nFieldStart));
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
         if (rEntry.bQueryByString)
@@ -784,9 +784,11 @@ private:
                 bOr = true;
         }
 
+        // Note that export field index values are relative to the first field.
         ScRange aRange;
         rData.GetArea(aRange);
-        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Row() : aRange.aStart.Col();
+        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+
         if (bOr && !bAnd)
         {
             SvXMLElementExport aElemOr(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
@@ -869,6 +871,16 @@ private:
         ScSubTotalParam aParam;
         rData.GetSubTotalParam(aParam);
 
+        size_t nCount = 0;
+        for (; nCount < MAXSUBTOTAL; ++nCount)
+        {
+            if (!aParam.bGroupActive[nCount])
+                break;
+        }
+
+        if (!nCount)
+            return;
+
         if (!aParam.bIncludePattern)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
 
@@ -905,8 +917,7 @@ private:
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, rtl::OUString::valueOf(nFieldCol));
             SvXMLElementExport aElemSTR(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, sal_True, sal_True);
 
-            SCCOL nCount = aParam.nSubTotals[i];
-            for (SCCOL j = 0; j < nCount; ++j)
+            for (SCCOL j = 0, n = aParam.nSubTotals[i]; j < n; ++j)
             {
                 sal_Int32 nCol = static_cast<sal_Int32>(aParam.pSubTotals[i][j]);
                 ScSubTotalFunc eFunc = aParam.pFunctions[i][j];
