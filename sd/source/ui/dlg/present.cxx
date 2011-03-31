@@ -286,7 +286,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 
     sal_uInt16 nPos = maLBMonitor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)maLBMonitor.GetEntryData(nPos)) );
+        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)(sal_IntPtr)maLBMonitor.GetEntryData(nPos)) );
 
     nPos = aLbCustomshow.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
