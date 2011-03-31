@@ -304,6 +304,33 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 
     // TODO: Properly import other paramters as well.
 
+    {
+        ScQueryParam aParam;
+        pData->GetQueryParam(aParam);
+        aParam.bByRow = (eOrientation == table::TableOrientation_ROWS);
+        aParam.bHasHeader = bContainsHeader;
+        aParam.bInplace = !bFilterCopyOutputData;
+        aParam.bCaseSens = bFilterIsCaseSensitive;
+        aParam.bDuplicate = !bFilterSkipDuplicates;
+        aParam.bRegExp = bFilterUseRegularExpressions;
+        aParam.nDestTab = aFilterOutputPosition.Sheet;
+        aParam.nDestCol = aFilterOutputPosition.Column;
+        aParam.nDestRow = aFilterOutputPosition.Row;
+        ScFilterDescriptorBase::fillQueryParam(aParam, pDoc, aFilterFields);
+        pData->SetQueryParam(aParam);
+    }
+
+    if (bFilterConditionSourceRange)
+    {
+        ScRange aAdvSource;
+        ScUnoConversion::FillScRange(aAdvSource, aFilterConditionSourceRangeAddress);
+        pData->SetAdvancedQuerySource(&aAdvSource);
+    }
+
+    if (bContainsSort)
+    {
+    }
+
     if (bContainsSubTotal)
     {
         ScSubTotalParam aParam;

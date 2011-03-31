@@ -1064,6 +1064,80 @@ void SAL_CALL ScConsolidationDescriptor::setInsertLinks( sal_Bool bInsertLinks )
 
 //------------------------------------------------------------------------
 
+void ScFilterDescriptorBase::fillQueryParam(
+    ScQueryParam& rParam, ScDocument* pDoc,
+    const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
+{
+    SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
+    DBG_ASSERT( nCount <= MAXQUERY, "setFilterFields: zu viele" );
+
+    rParam.Resize( nCount );
+
+    const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
+    SCSIZE i;
+    for (i=0; i<nCount; i++)
+    {
+        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        if (!rEntry.pStr)
+            rEntry.pStr = new String;       // sollte nicht sein (soll immer initialisiert sein)
+
+        rEntry.bDoQuery         = sal_True;
+        rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
+        rEntry.nField           = pAry[i].Field;
+        rEntry.bQueryByString   = !pAry[i].IsNumeric;
+        *rEntry.pStr            = String( pAry[i].StringValue );
+        rEntry.nVal             = pAry[i].NumericValue;
+
+        if (!rEntry.bQueryByString && pDoc)
+        {
+            pDoc->GetFormatTable()->GetInputLineString(rEntry.nVal, 0, *rEntry.pStr);
+        }
+
+        switch (pAry[i].Operator)           // FilterOperator
+        {
+        case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
+        case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
+        case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
+        case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
+        case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
+        case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
+        case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
+        case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
+        case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
+        case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
+        case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
+        case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
+        case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
+        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
+        case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
+        case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
+        case sheet::FilterOperator2::EMPTY:
+            {
+                rEntry.eOp = SC_EQUAL;
+                rEntry.nVal = SC_EMPTYFIELDS;
+                rEntry.bQueryByString = false;
+                *rEntry.pStr = EMPTY_STRING;
+            }
+            break;
+        case sheet::FilterOperator2::NOT_EMPTY:
+            {
+                rEntry.eOp = SC_EQUAL;
+                rEntry.nVal = SC_NONEMPTYFIELDS;
+                rEntry.bQueryByString = false;
+                *rEntry.pStr = EMPTY_STRING;
+            }
+            break;
+        default:
+            OSL_FAIL("Falscher Query-enum");
+            rEntry.eOp = SC_EQUAL;
+        }
+    }
+
+    SCSIZE nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    for (i=nCount; i<nParamCount; i++)
+        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+}
+
 ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
     aPropSet( lcl_GetFilterPropertyMap() ),
     pDocSh(pDocShell)
@@ -1316,76 +1390,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
     GetData(aParam);
-
-    SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    DBG_ASSERT( nCount <= MAXQUERY, "setFilterFields: zu viele" );
-
-    aParam.Resize( nCount );
-
-    const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
-    SCSIZE i;
-    for (i=0; i<nCount; i++)
-    {
-        ScQueryEntry& rEntry = aParam.GetEntry(i);
-        if (!rEntry.pStr)
-            rEntry.pStr = new String;       // sollte nicht sein (soll immer initialisiert sein)
-
-        rEntry.bDoQuery         = sal_True;
-        rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField           = pAry[i].Field;
-        rEntry.bQueryByString   = !pAry[i].IsNumeric;
-        *rEntry.pStr            = String( pAry[i].StringValue );
-        rEntry.nVal             = pAry[i].NumericValue;
-
-        if (!rEntry.bQueryByString && pDocSh)
-        {
-            pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rEntry.nVal, 0, *rEntry.pStr);
-        }
-
-        switch (pAry[i].Operator)           // FilterOperator
-        {
-        case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
-        case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
-        case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
-        case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
-        case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
-        case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
-        case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
-        case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
-        case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
-        case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
-        case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
-        case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
-        case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
-        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
-        case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
-        case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
-        case sheet::FilterOperator2::EMPTY:
-            {
-                rEntry.eOp = SC_EQUAL;
-                rEntry.nVal = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = false;
-                *rEntry.pStr = EMPTY_STRING;
-            }
-            break;
-        case sheet::FilterOperator2::NOT_EMPTY:
-            {
-                rEntry.eOp = SC_EQUAL;
-                rEntry.nVal = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = false;
-                *rEntry.pStr = EMPTY_STRING;
-            }
-            break;
-        default:
-            OSL_FAIL("Falscher Query-enum");
-            rEntry.eOp = SC_EQUAL;
-        }
-    }
-
-    SCSIZE nParamCount = aParam.GetEntryCount();    // Param wird nicht unter 8 resized
-    for (i=nCount; i<nParamCount; i++)
-        aParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
-
+    fillQueryParam(aParam, pDocSh->GetDocument(), aFilterFields);
     PutData(aParam);
 }
 

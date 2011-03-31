@@ -353,6 +353,10 @@ private:
     ScDocShell*             pDocSh;
 
 public:
+    static void fillQueryParam(
+        ScQueryParam& rParam, ScDocument* pDoc,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2>& aFilterFields);
+
                             ScFilterDescriptorBase(ScDocShell* pDocShell);
     virtual                 ~ScFilterDescriptorBase();
 
