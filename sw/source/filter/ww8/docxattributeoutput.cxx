@@ -545,6 +545,7 @@ void DocxAttributeOutput::EndRun()
         XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
+        m_pHyperlinkAttrList = NULL;
     }
 
     // Write the hyperlink and toc fields starts
@@ -574,16 +575,16 @@ void DocxAttributeOutput::EndRun()
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
-    if ( m_pHyperlinkAttrList )
-    {
-        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_pHyperlinkAttrList = NULL;
-    }
-
     while ( m_Fields.begin() != m_Fields.end() )
     {
         EndField_Impl( m_Fields.front( ) );
         m_Fields.erase( m_Fields.begin( ) );
+    }
+
+    if ( m_bCloseHyperlink )
+    {
+        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        m_bCloseHyperlink = false;
     }
 
     // if there is some redlining in the document, output it
@@ -1165,8 +1166,8 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
     else
     {
         // Output a hyperlink XML element
-
         m_pHyperlinkAttrList = m_pSerializer->createAttrList();
+
         if ( !bBookmarkOnly )
         {
             OUString osUrl( sUrl );
@@ -1193,6 +1194,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
 bool DocxAttributeOutput::EndURL()
 {
+    m_bCloseHyperlink = true;
     return true;
 }
 
@@ -4129,7 +4131,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
-      m_pParentFrame( NULL )
+      m_pParentFrame( NULL ),
+      m_bCloseHyperlink( false )
 {
 }
 
