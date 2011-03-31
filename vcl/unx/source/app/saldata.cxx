@@ -674,6 +674,8 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if (p_prioritize_timer != NULL)
         CheckTimeout();
 
+    const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+
     // first, check for already queued events.
     for ( int nFD = 0; nFD < nFDs_; nFD++ )
     {
@@ -681,20 +683,11 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if ( pEntry->fd )
         {
             DBG_ASSERT( nFD == pEntry->fd, "wrong fd in Yield()" );
-            if ( pEntry->HasPendingEvent() )
+            for( int i = 0; i < nMaxEvents && pEntry->HasPendingEvent(); i++ )
             {
                 pEntry->HandleNextEvent();
-                // #63862# da jetzt alle user-events ueber die interne
-                // queue kommen, wird die Kontrolle analog zum select
-                // gesteuerten Zweig einmal bei bWait abgegeben
-
-                /* #i9277# do not reschedule since performance gets down the
-                   the drain under heavy load
-                YieldMutexReleaser aReleaser;
-                if ( bWait ) osl_yieldThread();
-                */
-
-                return;
+                if( ! bHandleAllCurrentEvents )
+                    return;
             }
         }
     }
@@ -781,7 +774,6 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 }
                 if ( FD_ISSET( nFD, &ReadFDS ) )
                 {
-                    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
                     for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
                     {
                         pEntry->HandleNextEvent();
