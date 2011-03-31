@@ -647,13 +647,219 @@ private:
 
         SvXMLElementExport aElemDR(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGE, sal_True, sal_True);
 
-        writeSheetFilter(rData);
+        writeImport(rData);
+        writeFilter(rData);
+        writeSort(rData);
         writeSubtotals(rData);
     }
 
-    void writeSheetFilter(const ScDBData& rData)
+    void writeImport(const ScDBData& rData)
+    {
+    }
+
+    void writeSort(const ScDBData& rData)
+    {
+    }
+
+    OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp) const
     {
 
+        switch (rEntry.eOp)
+        {
+            case SC_BEGINS_WITH:
+                return GetXMLToken(XML_BEGINS_WITH);
+            case SC_BOTPERC:
+                return GetXMLToken(XML_BOTTOM_PERCENT);
+            case SC_BOTVAL:
+                return GetXMLToken(XML_BOTTOM_VALUES);
+            case SC_CONTAINS:
+                return GetXMLToken(XML_CONTAINS);
+            case SC_DOES_NOT_BEGIN_WITH:
+                return GetXMLToken(XML_DOES_NOT_BEGIN_WITH);
+            case SC_DOES_NOT_CONTAIN:
+                return GetXMLToken(XML_DOES_NOT_CONTAIN);
+            case SC_DOES_NOT_END_WITH:
+                return GetXMLToken(XML_DOES_NOT_END_WITH);
+            case SC_ENDS_WITH:
+                return GetXMLToken(XML_ENDS_WITH);
+            case SC_EQUAL:
+                if (!rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING)
+                {
+                    if (rEntry.nVal == SC_EMPTYFIELDS)
+                        return GetXMLToken(XML_EMPTY);
+                    else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                        return GetXMLToken(XML_NOEMPTY);
+                }
+                if (bRegExp)
+                    return GetXMLToken(XML_MATCH);
+                else
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+            case SC_GREATER:
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+            case SC_GREATER_EQUAL:
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+            case SC_LESS:
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+            case SC_LESS_EQUAL:
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+            case SC_NOT_EQUAL:
+                if (bRegExp)
+                    return GetXMLToken(XML_NOMATCH);
+                else
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+            case SC_TOPPERC:
+                return GetXMLToken(XML_TOP_PERCENT);
+            case SC_TOPVAL:
+                return GetXMLToken(XML_TOP_VALUES);
+            default:
+                ;
+        }
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+    }
+
+    void writeCondition(const ScQueryEntry& rEntry, bool bCaseSens, bool bRegExp)
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField));
+        if (bCaseSens)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+        if (rEntry.bQueryByString)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, *rEntry.pStr);
+        else
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
+            OUStringBuffer aBuf;
+            mrExport.GetMM100UnitConverter().convertDouble(aBuf, rEntry.nVal);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
+        }
+
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, bRegExp));
+        SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+    }
+
+    void writeFilter(const ScDBData& rData)
+    {
+        ScQueryParam aParam;
+        rData.GetQueryParam(aParam);
+        size_t nCount = 0;
+        for (size_t n = aParam.GetEntryCount(); nCount < n; ++nCount)
+        {
+            if (!aParam.GetEntry(nCount).bDoQuery)
+                break;
+        }
+
+        if (!nCount)
+            // No filter criteria to save. Bail out.
+            return;
+
+        if (!aParam.bInplace)
+        {
+            OUString aAddrStr;
+            ScRangeStringConverter::GetStringFromAddress(
+                aAddrStr, ScAddress(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab), mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aAddrStr);
+        }
+
+        ScRange aAdvSource;
+        if (rData.GetAdvancedQuerySource(aAdvSource))
+        {
+            OUString aAddrStr;
+            ScRangeStringConverter::GetStringFromRange(
+                aAddrStr, aAdvSource, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
+        }
+
+        if (!aParam.bDuplicate)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
+
+        SvXMLElementExport aElemF(mrExport, XML_NAMESPACE_TABLE, XML_FILTER, true, true);
+
+        bool bAnd = false;
+        bool bOr = false;
+
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            const ScQueryEntry& rEntry = aParam.GetEntry(i);
+            if (rEntry.eConnect == SC_AND)
+                bAnd = true;
+            else
+                bOr = true;
+        }
+
+        if (bOr && !bAnd)
+        {
+            SvXMLElementExport aElemOr(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+            for (size_t i = 0; i < nCount; ++i)
+                writeCondition(aParam.GetEntry(i), aParam.bCaseSens, aParam.bRegExp);
+        }
+        else if (bAnd && !bOr)
+        {
+            SvXMLElementExport aElemAnd(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
+            for (size_t i = 0; i < nCount; ++i)
+                writeCondition(aParam.GetEntry(i), aParam.bCaseSens, aParam.bRegExp);
+        }
+        else if (nCount == 1)
+        {
+            writeCondition(aParam.GetEntry(0), aParam.bCaseSens, aParam.bRegExp);
+        }
+        else
+        {
+            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+            ScQueryEntry aPrevEntry = aParam.GetEntry(0);
+            ScQueryConnect eConnect = aParam.GetEntry(1).eConnect;
+            bool bOpenAndElement = false;
+            OUString aName = mrExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
+
+            if (eConnect == SC_AND)
+            {
+                mrExport.StartElement(aName, true);
+                bOpenAndElement = true;
+            }
+            else
+                bOpenAndElement = false;
+
+            for (size_t i = 1; i < nCount; ++i)
+            {
+                const ScQueryEntry& rEntry = aParam.GetEntry(i);
+                if (eConnect != rEntry.eConnect)
+                {
+                    eConnect = rEntry.eConnect;
+                    if (rEntry.eConnect == SC_AND)
+                    {
+                        mrExport.StartElement(aName, true );
+                        bOpenAndElement = true;
+                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                        aPrevEntry = rEntry;
+                        if (i == nCount - 1)
+                        {
+                            writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                            mrExport.EndElement(aName, true);
+                            bOpenAndElement = false;
+                        }
+                    }
+                    else
+                    {
+                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                        aPrevEntry = rEntry;
+                        if (bOpenAndElement)
+                        {
+                            mrExport.EndElement(aName, true);
+                            bOpenAndElement = false;
+                        }
+                        if (i == nCount - 1)
+                            writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                    }
+                }
+                else
+                {
+                    writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                    aPrevEntry = rEntry;
+                    if (i == nCount - 1)
+                        writeCondition(aPrevEntry, aParam.bCaseSens, aParam.bRegExp);
+                }
+            }
+            if(bOpenAndElement)
+                mrExport.EndElement(aName, true);
+        }
     }
 
     void writeSubtotals(const ScDBData& rData)
