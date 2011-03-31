@@ -412,7 +412,7 @@ void ScXMLDatabaseRangeContext::EndElement()
             OUString aStrNum = sDatabaseRangeName.copy(aName.getLength());
             SCTAB nTab = static_cast<SCTAB>(aStrNum.toInt32());
 
-            if (bAutoFilter)
+            if (pData->HasAutoFilter())
             {
                 // Set autofilter flags so that the buttons get displayed.
                 ScRange aRange;
