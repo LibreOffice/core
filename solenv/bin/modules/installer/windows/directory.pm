@@ -133,6 +133,8 @@ sub make_short_dir_version
 # Adding unique directory names to the directory collection
 ##############################################################
 
+my $already_checked_the_frigging_directories_for_uniqueness = 0;
+
 sub create_unique_directorynames
 {
     my ($directoryref, $allvariables) = @_;
@@ -161,6 +163,7 @@ sub create_unique_directorynames
         $uniquename =~ s/\.//g;                 # removing dots in directoryname
         $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
         $uniquename =~ s/OpenOffice/OO/g;
+        $uniquename =~ s/LibreOffice/LO/g;
         $uniquename =~ s/_registry/_rgy/g;
         $uniquename =~ s/_registration/_rgn/g;
         $uniquename =~ s/_extension/_ext/g;
@@ -176,7 +179,8 @@ sub create_unique_directorynames
             $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
         }
 
-        if ( exists($installer::globals::alluniquedirectorynames{$uniquename}) )
+        if ( !$already_checked_the_frigging_directories_for_uniqueness &&
+         exists($installer::globals::alluniquedirectorynames{$uniquename}) )
         {
             # This is an error, that must stop the packaging process
             $errorcount++;
@@ -543,6 +547,7 @@ sub create_directory_table
     overwrite_programfilesfolder($allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_unique_directorynames($directoryref, $allvariableshashref);
+    $already_checked_the_frigging_directories_for_uniqueness++;
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
