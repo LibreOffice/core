@@ -43,6 +43,14 @@ ALL : ALLTAR \
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
+ALLTAR : $(MISC)/mailmerge.component
+
+$(MISC)/mailmerge.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        mailmerge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_PYTHON)mailmerge' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt mailmerge.component
+
 # scripting provider extension
 .IF "$(L10N_framework)"=="" && "$(ENABLE_SCRIPTING_PYTHON)" == "YES"
 
@@ -58,20 +66,6 @@ COMPONENT_FILES=$(EXTENSIONDIR)$/pythonscript.py
 .ELSE
 
 .INCLUDE : target.mk
-
-ALLTAR : $(MISC)/mailmerge.component $(MISC)/pythonscript.component
-
-$(MISC)/mailmerge.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        mailmerge.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_PYTHON)mailmerge' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt mailmerge.component
-
-$(MISC)/pythonscript.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_PYTHON)pythonscript' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
 
 .ENDIF
 
