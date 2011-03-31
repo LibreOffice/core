@@ -160,7 +160,7 @@ public:
      */
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rNoteType,
-                                 const rtl::OUString & rNoteId) = 0;
+                                 const sal_Int32 nNoteId) = 0;
     /**
        Resolves an endnote to a stream handler.
 
@@ -173,7 +173,7 @@ public:
      */
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rNoteType,
-                                const rtl::OUString & rNoteId) = 0;
+                                const sal_Int32 NoteId) = 0;
 
     /**
        Resolves a comment to a stream handler.
@@ -182,7 +182,7 @@ public:
        @param rComment      id of the comment to resolve
      */
     virtual void resolveComment(Stream & rStream,
-                                const rtl::OUString & rCommentId) = 0;
+                                const sal_Int32 nCommentId) = 0;
 
     /**
        Resolves a picture to a stream handler.
@@ -241,8 +241,8 @@ public:
     virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
     virtual uno::Reference<io::XInputStream> getInputStreamForId
     (const ::rtl::OUString & rId) = 0;
-    virtual void setXNoteId(const rtl::OUString & rId) = 0;
-    virtual const ::rtl::OUString & getXNoteId() const = 0;
+    virtual void setXNoteId(const sal_Int32 nId) = 0;
+    virtual sal_Int32 getXNoteId() const = 0;
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
     virtual const ::rtl::OUString & getTarget() const = 0;

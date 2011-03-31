@@ -1020,37 +1020,37 @@ bool OOXMLFastContextHandler::isForwardEvents() const
     return mpParserState->isForwardEvents();
 }
 
-void OOXMLFastContextHandler::setXNoteId(const ::rtl::OUString & rId)
+void OOXMLFastContextHandler::setXNoteId(const sal_Int32 nId)
 {
-    mpParserState->setXNoteId(rId);
+    mpParserState->setXNoteId(nId);
 }
 
 void OOXMLFastContextHandler::setXNoteId(OOXMLValue::Pointer_t pValue)
 {
-    mpParserState->setXNoteId(pValue->getString());
+    mpParserState->setXNoteId(sal_Int32(pValue->getInt()));
 }
 
-const rtl::OUString & OOXMLFastContextHandler::getXNoteId() const
+sal_Int32 OOXMLFastContextHandler::getXNoteId() const
 {
     return mpParserState->getXNoteId();
 }
 
 void OOXMLFastContextHandler::resolveFootnote
-(const rtl::OUString & rId)
+(const sal_Int32 nId)
 {
     mpParserState->getDocument()->resolveFootnote
-        (*mpStream, 0, rId);
+        (*mpStream, 0, nId);
 }
 
-void OOXMLFastContextHandler::resolveEndnote(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveEndnote(const sal_Int32 nId)
 {
     mpParserState->getDocument()->resolveEndnote
-        (*mpStream, 0, rId);
+        (*mpStream, 0, nId);
 }
 
-void OOXMLFastContextHandler::resolveComment(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveComment(const sal_Int32 nId)
 {
-    mpParserState->getDocument()->resolveComment(*mpStream, rId);
+    mpParserState->getDocument()->resolveComment(*mpStream, nId);
 }
 
 void OOXMLFastContextHandler::resolvePicture(const rtl::OUString & rId)
@@ -1634,7 +1634,7 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 {
     mbForwardEventsSaved = isForwardEvents();
 
-    if (msMyXNoteId.compareTo(getXNoteId()) == 0)
+    if (mnMyXNoteId == getXNoteId())
         setForwardEvents(true);
     else
         setForwardEvents(false);
@@ -1655,12 +1655,12 @@ void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("checkId");
-    debug_logger->attribute("myId", pValue->getString());
+    debug_logger->attribute("myId", sal_Int32(pValue->getInt()));
     debug_logger->attribute("id", getXNoteId());
     debug_logger->endElement();
 #endif
 
-    msMyXNoteId = pValue->getString();
+    mnMyXNoteId = sal_Int32(pValue->getInt());
 }
 
 /*

@@ -128,12 +128,12 @@ OOXMLDocument * OOXMLParserState::getDocument() const
     return mpDocument;
 }
 
-void OOXMLParserState::setXNoteId(const rtl::OUString & rId)
+void OOXMLParserState::setXNoteId(const sal_Int32 nId)
 {
-    mpDocument->setXNoteId(rId);
+    mpDocument->setXNoteId(nId);
 }
 
-const rtl::OUString & OOXMLParserState::getXNoteId() const
+sal_Int32 OOXMLParserState::getXNoteId() const
 {
     return mpDocument->getXNoteId();
 }

@@ -18155,13 +18155,13 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID Reference</xs:documentation>
         </attribute>
       </define>
       <define name="CT_FtnEdnSepRef">
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -18176,7 +18176,7 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -20433,9 +20433,9 @@
       </define>
       <define name="CT_Charset">
         <optional>
-            <attribute name="val">
-              <ref name="CT_UcharHexNumber"/>
-            </attribute>
+          <attribute name="val">
+            <ref name="CT_UcharHexNumber"/>
+          </attribute>
         </optional>
         <optional>
           <attribute name="characterSet">
@@ -21152,7 +21152,7 @@
     <resource name="ST_EighthPointMeasure" resource="Integer"/>
     <resource name="ST_PointMeasure" resource="Integer"/>
     <resource name="ST_String" resource="String"/>
-    <resource name="CT_String" resource="Value" tag="attribute" >
+    <resource name="CT_String" resource="Value" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -22625,7 +22625,7 @@
       <element name="sdtContent" tokenid="ooxml:CT_SdtContentBlock"/>
     </resource>
     <resource name="CT_SdtContentBlock" resource="Properties"/>
-    <resource name="EG_PContent" resource="Properties" tag ="content">
+    <resource name="EG_PContent" resource="Properties" tag="content">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
