@@ -75,7 +75,7 @@ namespace comp_DialogModelProvider
 
     ::rtl::OUString SAL_CALL _getImplementationName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogModelProvider"));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.scripting.DialogModelProvider"));
     }
 
     uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
