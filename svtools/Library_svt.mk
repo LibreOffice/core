@@ -76,12 +76,6 @@ ifeq ($(SYSTEM_JPEG),YES)
 $(eval $(call gb_Library_add_linked_libs,svt,\
     jpeg \
 ))
-$(eval $(call gb_Library_set_ldflags,svt,\
-    $$(filter-out -L/usr/lib/jvm%,$$(LDFLAGS)) \
-))
-$(eval $(call gb_Library_set_ldflags,svt,\
-    $$(filter-out -L/usr/lib64/jvm%,$$(LDFLAGS)) \
-))
 else
 $(eval $(call gb_Library_add_linked_static_libs,svt,\
     jpeglib \
