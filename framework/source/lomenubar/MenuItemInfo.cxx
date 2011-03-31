@@ -21,7 +21,7 @@
  *
  */
 
-#include "MenuItemInfo.h"
+#include "MenuItemInfo.hxx"
 #include <libdbusmenu-gtk/menuitem.h>
 
 MenuItemInfo::MenuItemInfo ()

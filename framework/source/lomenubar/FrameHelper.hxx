@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __FRAME_HELPER_H__
-#define __FRAME_HELPER_H__
+#ifndef __FRAME_HELPER_HXX__
+#define __FRAME_HELPER_HXX__
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/XMenu.hpp>
@@ -136,4 +136,4 @@ class FrameHelper : public cppu::WeakImplHelper1 < XFrameActionListener >
     void rebuildMenuFromRoot ();
     void populateWindowList  (DbusmenuMenuitem *);
 };
-#endif // __FRAME_HELPER_H__
+#endif // __FRAME_HELPER_HXX__

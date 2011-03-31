@@ -21,9 +21,9 @@
  *
  */
 
-#include "FrameJob.h"
-#include "DesktopJob.h"
-#include "FrameHelper.h"
+#include "FrameJob.hxx"
+#include "DesktopJob.hxx"
+#include "FrameHelper.hxx"
 
 #define OBJ_PATH_PREFIX "/com/canonical/menu/"
 

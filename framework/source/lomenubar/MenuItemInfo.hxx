@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __MENU_ITEM_INFO_H__
-#define __MENU_ITEM_INFO_H__
+#ifndef __MENU_ITEM_INFO_HXX__
+#define __MENU_ITEM_INFO_HXX__
 #include <glib.h>
 
 // This is used in a hash table with commandurls as keys
@@ -51,4 +51,4 @@ class MenuItemInfo {
     const gchar* getCheckType ();
     gboolean     getVisible ();
 };
-#endif // __MENU_ITEM_INFO_H__
+#endif // __MENU_ITEM_INFO_HXX__

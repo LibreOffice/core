@@ -34,8 +34,8 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
-#include "DesktopJob.h"
-#include "FrameJob.h"
+#include "DesktopJob.hxx"
+#include "FrameJob.hxx"
 
 namespace css = ::com::sun::star;
 

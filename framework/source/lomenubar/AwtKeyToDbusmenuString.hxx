@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __AWT_KEY_TO_DBUSMENU_STRING_H__
-#define __AWT_KEY_TO_DBUSMENU_STRING_H__
+#ifndef __AWT_KEY_TO_DBUSMENU_STRING_HXX__
+#define __AWT_KEY_TO_DBUSMENU_STRING_HXX__
 #include <X11/X.h>
 #include <glib.h>
 
@@ -30,4 +30,4 @@ gchar*
 AwtKeyToDbusmenuString (guint16 aKeyCode);
 
 
-#endif //__AWT_KEY_TO_DBUSMENU_STRING_H__
+#endif //__AWT_KEY_TO_DBUSMENU_STRING_HXX__

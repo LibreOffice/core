@@ -1,5 +1,5 @@
-#include "MenuItemStatusListener.h"
-#include "MenuItemInfo.h"
+#include "MenuItemStatusListener.hxx"
+#include "MenuItemInfo.hxx"
 
 #include <com/sun/star/frame/status/Visibility.hpp>
 

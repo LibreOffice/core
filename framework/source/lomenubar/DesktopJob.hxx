@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __DESKTOP_JOB_H__
-#define __DESKTOP_JOB_H__
+#ifndef __DESKTOP_JOB_HXX__
+#define __DESKTOP_JOB_HXX__
 
 #include <glib.h>
 #include <libdbusmenu-glib/menuitem.h>
@@ -86,5 +86,5 @@ Reference< css::uno::XInterface >
 SAL_CALL DesktopJob_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
     throw ( Exception );
 
-#endif //__DESKTOP_JOB_H__
+#endif //__DESKTOP_JOB_HXX__
 

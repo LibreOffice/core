@@ -21,10 +21,10 @@
  *
  */
 
-#include "FrameHelper.h"
-#include "AwtKeyToDbusmenuString.h"
-#include "MenuItemInfo.h"
-#include "MenuItemStatusListener.h"
+#include "FrameHelper.hxx"
+#include "AwtKeyToDbusmenuString.hxx"
+#include "MenuItemInfo.hxx"
+#include "MenuItemStatusListener.hxx"
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>

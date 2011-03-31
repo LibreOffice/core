@@ -21,8 +21,8 @@
  *
  */
 
-#include "DesktopJob.h"
-#include "FrameJob.h"
+#include "DesktopJob.hxx"
+#include "FrameJob.hxx"
 
 #include <gio/gio.h>
 #include <libdbusmenu-glib/server.h>

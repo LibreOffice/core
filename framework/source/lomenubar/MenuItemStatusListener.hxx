@@ -1,7 +1,7 @@
-#ifndef __MENU_ITEM_STATUS_LISTENER_H__
-#define __MENU_ITEM_STATUS_LISTENER_H__
+#ifndef __MENU_ITEM_STATUS_LISTENER_HXX__
+#define __MENU_ITEM_STATUS_LISTENER_HXX__
 
-#include "FrameHelper.h"
+#include "FrameHelper.hxx"
 
 #include <glib.h>
 
