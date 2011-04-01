@@ -100,7 +100,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool /*bShrinkToData*/ )
+ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
@@ -363,7 +363,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false);
+    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
 
     pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
     pDBData->GetQueryParam( aParam );
