@@ -341,6 +341,24 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 
     if (bContainsSort)
     {
+        size_t nOldSize = aSortSequence.getLength();
+        aSortSequence.realloc(nOldSize + 1);
+        beans::PropertyValue aProperty;
+        aProperty.Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT));
+        aProperty.Value <<= eOrientation;
+        aSortSequence[nOldSize] = aProperty;
+        ScSortParam aParam;
+        ScSortDescriptor::FillSortParam(aParam, aSortSequence);
+
+        SCCOLROW nStartPos = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+        for (size_t i = 0; i < MAXSORT; ++i)
+        {
+            if (!aParam.bDoSort[i])
+                break;
+            aParam.nField[i] += nStartPos;
+        }
+
+        pData->SetSortParam(aParam);
     }
 
     if (bContainsSubTotal)
