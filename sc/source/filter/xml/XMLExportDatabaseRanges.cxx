@@ -699,10 +699,15 @@ private:
 
         SvXMLElementExport aElemS(mrExport, XML_NAMESPACE_TABLE, XML_SORT, true, true);
 
+        ScRange aRange;
+        rData.GetArea(aRange);
+        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+
         for (size_t i = 0; i < nSortCount; ++i)
         {
-            // TODO: Convert field value.
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aParam.nField[i]));
+            // Convert field value from absolute to relative.
+            SCCOLROW nField = aParam.nField[i] - nFieldStart;
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nField));
 
             if (!aParam.bAscending[i])
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
