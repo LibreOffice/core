@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,linguistic_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,linguistic_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,linguistic_unoapi,\
 	$$(DEFS) \

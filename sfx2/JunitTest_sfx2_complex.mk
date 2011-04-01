@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,sfx2_complex))
+$(eval $(call gb_JunitTest_JunitTest,sfx2_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
     $$(DEFS) \

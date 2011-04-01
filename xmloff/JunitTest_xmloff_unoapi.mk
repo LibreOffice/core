@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,xmloff_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,xmloff_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,xmloff_unoapi,\
     $$(DEFS) \
