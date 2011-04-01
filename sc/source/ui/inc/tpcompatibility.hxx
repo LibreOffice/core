@@ -40,6 +40,8 @@ class ScDocOptions;
 class ScTpCompatOptions : public SfxTabPage
 {
 public:
+    using SfxTabPage::DeactivatePage;
+
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreAttrs);
 
     virtual sal_Bool FillItemSet(SfxItemSet& rCoreAttrs);

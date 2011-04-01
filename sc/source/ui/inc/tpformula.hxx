@@ -44,6 +44,8 @@ class Window;
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
+    using SfxTabPage::DeactivatePage;
+
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
 
 //  static  USHORT*     GetRanges();
