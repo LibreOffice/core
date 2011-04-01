@@ -119,6 +119,11 @@ String STR_SVT_MIMETYPE_AUDIO_WAV
     Text [ en-US ] = "Audio file" ;
 };
 
+String STR_SVT_MIMETYPE_AUDIO_WEBM
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
 String STR_SVT_MIMETYPE_IMAGE_GIF
 {
     Text [ en-US ] = "Graphics" ;
@@ -159,6 +164,11 @@ String STR_SVT_MIMETYPE_TEXT_VCARD
     Text [ en-US ] = "vCard file" ;
 };
 
+String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
+{
+    Text [ en-US ] = "Video file" ;
+};
+
 String STR_SVT_MIMETYPE_VIDEO_THEORA
 {
     Text [ en-US ] = "Video file" ;
@@ -169,7 +179,7 @@ String STR_SVT_MIMETYPE_VIDEO_VDO
     Text [ en-US ] = "Video file" ;
 };
 
-String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
+String STR_SVT_MIMETYPE_VIDEO_WEBM
 {
     Text [ en-US ] = "Video file" ;
 };
