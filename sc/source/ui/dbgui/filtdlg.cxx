@@ -516,7 +516,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                 sal_uInt16 nOffset = GetSliderPos();
                 SCTAB nTab       = nSrcTab;
                 SCROW nFirstRow = theQueryData.nRow1;
-                SCROW nLastRow   = theQueryData.bUseDynamicRange ? theQueryData.nDynamicEndRow : theQueryData.nRow2;
+                SCROW nLastRow   = theQueryData.nRow2;
                 mbHasDates[nOffset+nList-1] = false;
 
                 // first without the first line

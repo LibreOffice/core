@@ -100,7 +100,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool /*bShrinkToData*/, bool bExpandRows )
+ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool /*bShrinkToData*/ )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
@@ -181,16 +181,10 @@ ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelecti
     if (!pData)
         return NULL;
 
-    if (bExpandRows)
-    {
-        // Dynamically expand rows to include any new data rows that are
-        // immediately below the original range.
-        GetViewData()->GetDocument()->UpdateDynamicEndRow(*pData);
-    }
     if (bMark)
     {
         ScRange aFound;
-        pData->GetArea(aFound, bExpandRows);
+        pData->GetArea(aFound);
         MarkRange( aFound, false );
     }
     return pData;
@@ -369,7 +363,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false, true);
+    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false);
 
     pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
     pDBData->GetQueryParam( aParam );

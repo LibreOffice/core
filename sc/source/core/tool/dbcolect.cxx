@@ -315,19 +315,18 @@ String ScDBData::GetOperations() const
     return aVal;
 }
 
-void ScDBData::GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2,
-                       bool bUseDynamicRange) const
+void ScDBData::GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const
 {
     rTab  = nTable;
     rCol1 = nStartCol;
     rRow1 = nStartRow;
     rCol2 = nEndCol;
-    rRow2 = bUseDynamicRange ? nDynamicEndRow : nEndRow;
+    rRow2 = nEndRow;
 }
 
-void ScDBData::GetArea(ScRange& rRange, bool bUseDynamicRange) const
+void ScDBData::GetArea(ScRange& rRange) const
 {
-    SCROW nNewEndRow = bUseDynamicRange ? nDynamicEndRow : nEndRow;
+    SCROW nNewEndRow = nEndRow;
     rRange = ScRange( nStartCol, nStartRow, nTable, nEndCol, nNewEndRow, nTable );
 }
 
@@ -338,11 +337,6 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     nStartRow = nRow1;
     nEndCol   = nCol2;
     nEndRow   = nRow2;
-}
-
-void ScDBData::SetDynamicEndRow(SCROW nRow)
-{
-    nDynamicEndRow = nRow;
 }
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -452,7 +446,6 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
     rQueryParam.nDestTab = nQueryDestTab;
     rQueryParam.nDestCol = nQueryDestCol;
     rQueryParam.nDestRow = nQueryDestRow;
-    rQueryParam.nDynamicEndRow = nDynamicEndRow;
 
     rQueryParam.Resize( MAXQUERY );
     for (SCSIZE i=0; i<MAXQUERY; i++)

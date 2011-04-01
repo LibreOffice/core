@@ -90,7 +90,6 @@ private:
     ScQueryConnect  eQueryConnect[MAXQUERY];
     bool            bIsAdvanced;        // sal_True if created by advanced filter
     ScRange         aAdvSource;         // source range
-    SCROW           nDynamicEndRow;
 
     ScSubTotalParam maSubTotal;
 
@@ -126,17 +125,16 @@ public:
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
-            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, bool bUseDynamicRange = false) const;
-            SC_DLLPUBLIC void       GetArea(ScRange& rRange, bool bUseDynamicRange = false) const;
+            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
+            SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            void        SetDynamicEndRow(SCROW nRow);
             void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             bool        IsByRow() const                 { return bByRow; }
             void        SetByRow(bool bByR)             { bByRow = bByR; }
             bool        HasHeader() const               { return bHasHeader; }
             void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
             void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
-            sal_uInt16      GetIndex() const                { return nIndex; }
+            sal_uInt16  GetIndex() const                { return nIndex; }
             bool        IsDoSize() const                { return bDoSize; }
             void        SetDoSize(bool bSet)            { bDoSize = bSet; }
             bool        IsKeepFmt() const               { return bKeepFmt; }

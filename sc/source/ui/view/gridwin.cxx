@@ -1300,7 +1300,6 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     pViewData->GetViewShell()->UpdateInputHandler();
                 }
 
-                aParam.bUseDynamicRange = true;
                 pViewData->GetView()->Query( aParam, NULL, true );
                 pDBData->SetQueryParam( aParam );                           // speichern
             }

@@ -1336,18 +1336,6 @@ sal_Bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndC
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-void ScDocument::UpdateDynamicEndRow(ScDBData& rDBData) const
-{
-    SCCOL nCol1, nCol2;
-    SCROW nRow1, nRow2;
-    SCTAB nTab;
-    rDBData.GetArea(nTab, nCol1, nRow1, nCol2, nRow2);
-    SCCOL nCol1a = nCol1, nCol2a = nCol2;
-    SCROW nRow1a = nRow1, nRow2a = nRow2;
-    GetDataArea(nTab, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
-    rDBData.SetDynamicEndRow(nRow2a);
-}
-
 //
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
@@ -1360,7 +1348,6 @@ sal_Bool ScDocument::GetFilterEntries(
         ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, false);  //!??
         if (pDBData)
         {
-            UpdateDynamicEndRow(*pDBData);
             SCTAB nAreaTab;
             SCCOL nStartCol;
             SCROW nStartRow;
@@ -1372,7 +1359,6 @@ sal_Bool ScDocument::GetFilterEntries(
 
             ScQueryParam aParam;
             pDBData->GetQueryParam( aParam );
-            nEndRow = aParam.nDynamicEndRow;
             rStrings.SetCaseSensitive( aParam.bCaseSens );
 
             // return all filter entries, if a filter condition is connected with a boolean OR

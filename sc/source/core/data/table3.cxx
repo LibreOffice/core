@@ -1644,7 +1644,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
     if (aParam.bInplace)
         InitializeNoteCaptions();
 
-    SCROW nRealRow2 = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
+    SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
         sal_Bool bResult;                                   // Filterergebnis
