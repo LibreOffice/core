@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Jar_Jar,agenda))
+$(eval $(call gb_Jar_Jar,agenda,SRCDIR))
 
 $(eval $(call gb_Jar_add_jars,agenda,\
 	$(OUTDIR)/bin/ridl.jar \

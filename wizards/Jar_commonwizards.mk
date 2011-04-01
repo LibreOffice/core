@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Jar_Jar,commonwizards))
+$(eval $(call gb_Jar_Jar,commonwizards,SRCDIR))
 
 $(eval $(call gb_Jar_add_jars,commonwizards,\
 	$(OUTDIR)/bin/ridl.jar \
