@@ -196,6 +196,32 @@ ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelecti
     return pData;
 }
 
+ScDBData* ScDBFunc::GetAnonymousDBData()
+{
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScRange aRange;
+    ScMarkType eMarkType = GetViewData()->GetSimpleArea(aRange);
+    if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+        return NULL;
+
+    // Expand to used data area if not explicitly marked.
+    const ScMarkData& rMarkData = GetViewData()->GetMarkData();
+    if (!rMarkData.IsMarked() && !rMarkData.IsMultiMarked())
+    {
+        SCCOL nCol1 = aRange.aStart.Col();
+        SCCOL nCol2 = aRange.aEnd.Col();
+        SCROW nRow1 = aRange.aStart.Row();
+        SCROW nRow2 = aRange.aEnd.Row();
+        pDocSh->GetDocument()->GetDataArea(aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2, false, false);
+        aRange.aStart.SetCol(nCol1);
+        aRange.aStart.SetRow(nRow1);
+        aRange.aEnd.SetCol(nCol2);
+        aRange.aEnd.SetRow(nRow2);
+    }
+
+    return pDocSh->GetAnonymousDBData(aRange);
+}
+
 //  Datenbankbereiche aendern (Dialog)
 
 void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList )

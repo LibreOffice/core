@@ -319,6 +319,7 @@ public:
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel );
+    ScDBData*       GetAnonymousDBData(const ScRange& rRange);
     ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
     void            CancelAutoDBRange();    // called when dialog is cancelled
 

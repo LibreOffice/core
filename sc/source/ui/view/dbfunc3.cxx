@@ -496,7 +496,16 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
 
         ScOutlineTable* pOut = pDoc->GetOutlineTable( nTab );
         if (pOut)
-            pOut->GetRowArray()->RemoveAll();       // nur Zeilen-Outlines loeschen
+        {
+            // Remove all existing outlines in the specified range.
+            ScOutlineArray* pRowArray = pOut->GetRowArray();
+            sal_uInt16 nDepth = pRowArray->GetDepth();
+            for (sal_uInt16 i = 0; i < nDepth; ++i)
+            {
+                sal_Bool bSize;
+                pRowArray->Remove(aNewParam.nRow1, aNewParam.nRow2, bSize);
+            }
+        }
 
         if (rParam.bReplace)
             pDoc->RemoveSubTotals( nTab, aNewParam );

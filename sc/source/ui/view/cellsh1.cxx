@@ -2322,7 +2322,20 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     ScSubTotalParam aSubTotalParam;
     SfxItemSet aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
 
-    ScDBData* pDBData = pTabViewShell->GetDBData();
+    // Only get existing named database range.
+    ScDBData* pDBData = pTabViewShell->GetDBData(true, SC_DB_OLD);
+    if (!pDBData)
+    {
+        // No existing DB data at this position.  Create an
+        // anonymous DB.
+        pDBData = pTabViewShell->GetAnonymousDBData();
+        ScRange aDataRange;
+        pDBData->GetArea(aDataRange);
+        pTabViewShell->MarkRange(aDataRange, false);
+    }
+    if (!pDBData)
+        return;
+
     pDBData->GetSubTotalParam( aSubTotalParam );
     aSubTotalParam.bRemoveOnly = false;
 

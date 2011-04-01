@@ -79,6 +79,7 @@ public:
 
                     // DB-Bereich vom Cursor
     ScDBData*       GetDBData( sal_Bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP, bool bShrinkToData = false, bool bExpandRows = false );
+    ScDBData*       GetAnonymousDBData();
 
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
