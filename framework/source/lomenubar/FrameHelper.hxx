@@ -44,8 +44,9 @@
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 //#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include <libdbusmenu-glib/server.h>
+#pragma GCC diagnostic error "-Wignored-qualifiers"
 //#pragma GCC diagnostic pop
 #include <libdbusmenu-glib/menuitem.h>
 

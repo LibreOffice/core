@@ -62,8 +62,12 @@
 #include <fstream>
 
 #include <gio/gio.h>
+//#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include <libdbusmenu-glib/server.h>
 #include <libdbusmenu-glib/client.h>
+#pragma GCC diagnostic error "-Wignored-qualifiers"
+//#pragma GCC diagnostic pop
 
 #include <rtl/process.h>
 #include <osl/diagnose.h>

@@ -63,8 +63,9 @@
 
 #include <gio/gio.h>
 //#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #include <libdbusmenu-glib/client.h>
+#pragma GCC diagnostic error "-Wignored-qualifiers"
 //#pragma GCC diagnostic pop
 #include <libdbusmenu-gtk/menuitem.h>
 
