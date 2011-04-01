@@ -123,9 +123,11 @@ my_components = \
     lnth \
     localebe1 \
     log \
+    lwpfilter \
     mcnttype \
     migrationoo2 \
     msfilter \
+    msworksfilter \
     mysql \
     odbc \
     odfflatxml \
@@ -181,6 +183,7 @@ my_components = \
     vcl \
     vclcanvas \
     wpft \
+    wpgfilter \
     writerfilter \
     xcr \
     xmlfa \
