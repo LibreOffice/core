@@ -46,12 +46,12 @@ struct SC_DLLPUBLIC ScSortParam
     SCROW       nRow1;
     SCCOL       nCol2;
     SCROW       nRow2;
+    sal_uInt16  nUserIndex;
     bool        bHasHeader;
     bool        bByRow;
     bool        bCaseSens;
     bool        bNaturalSort;
     bool        bUserDef;
-    sal_uInt16  nUserIndex;
     bool        bIncludePattern;
     bool        bInplace;
     SCTAB       nDestTab;
