@@ -7657,6 +7657,11 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         else
             OOO_JUNIT_JAR=/usr/share/java/junit.jar
         fi
+        # hamcrest is a dependency of junit, add it to the classpath if
+        # found
+        if test -e /usr/share/java/hamcrest-core.jar; then
+            OOO_JUNIT_JAR=$OOO_JUNIT_JAR:/usr/share/java/hamcrest-core.jar
+        fi
     else
         OOO_JUNIT_JAR=$with_junit
     fi
