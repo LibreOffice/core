@@ -44,8 +44,8 @@ TARGET=wpd
 TARFILE_NAME=libwpd-0.9.1
 TARFILE_MD5=5ff846847dab351604ad859e2fd4ed3c
 PATCH_FILES=libwpd.gcc460.patch \
-    libwpd.corruptedprefix.patch \
     libwpd.warnings.patch
+#   libwpd.corruptedprefix.patch \ - disabled ...
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
