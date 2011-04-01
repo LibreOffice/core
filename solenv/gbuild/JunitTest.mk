@@ -40,6 +40,8 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $@ $@.log)
 
+ifneq (,$(strip $(OOO_JUNIT_JAR)))
+
 .PHONY : $(call gb_JunitTest_get_target,$(1))
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
@@ -99,4 +101,90 @@ define gb_JunitTest_add_jars
 $(foreach jar,$(2),$(call gb_JunitTest_add_jar,$(1),$(jar)))
 
 endef
+.PHONY : $(call gb_JunitTest_get_clean_target,%)
+$(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,%))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $@ $@.log)
+
+.PHONY : $(call gb_JunitTest_get_target,$(1))
+$(call gb_JunitTest_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),JUT,2)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
+		$(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(if $(strip $(gb_JunitTest_HEADLESS)),-Dorg.openoffice.test.arg.headless=$(gb_JunitTest_HEADLESS)) $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
+	$(CLEAN_CMD)
+
+define gb_JunitTest_JunitTest
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+$(call gb_JunitTest_get_target,$(1)) : CLASSES :=
+$(call gb_JunitTest_JunitTest_platform,$(1))
+
+$(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
+$(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))
+$(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
+endef
+
+define gb_JunitTest_set_defs
+$(call gb_JunitTest_get_target,$(1)) : DEFS := $(2)
+
+endef
+
+define gb_JunitTest_add_classes
+$(call gb_JunitTest_get_target,$(1)) : CLASSES += $(2)
+
+endef
+
+define gb_JunitTest_add_class
+$(call gb_JunitTest_add_classes,$(1),$(2))
+
+endef
+
+
+define gb_JunitTest_add_sourcefile
+$(call gb_JavaClassSet_add_sourcefile,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_JunitTest_add_sourcefiles
+$(foreach sourcefile,$(2),$(call gb_JunitTest_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_JunitTest_set_classpath
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(2)
+
+endef
+
+define gb_JunitTest_add_jar
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2)
+$(call gb_JunitTest_get_target,$(1)) : $(2)
+
+endef
+
+define gb_JunitTest_add_jars
+$(foreach jar,$(2),$(call gb_JunitTest_add_jar,$(1),$(jar)))
+
+endef
+
+else # OOO_JUNIT_JAR
+
+.PHONY : $(call gb_JunitTest_get_target,$(1))
+$(call gb_JunitTest_get_target,%) :
+	$(call gb_Output_announce,$* (skipped - no Junit),$(true),JUT,2)
+	@true
+
+define gb_JunitTest_JunitTest
+$(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
+endef
+
+gb_JunitTest_set_defs :=
+gb_JunitTest_add_classes :=
+gb_JunitTest_add_class :=
+gb_JunitTest_add_sourcefile :=
+gb_JunitTest_add_sourcefiles :=
+gb_JunitTest_set_classpath :=
+gb_JunitTest_add_jar :=
+gb_JunitTest_add_jars :=
+
+endif # OOO_JUNIT_JAR
 # vim: set noet sw=4:
