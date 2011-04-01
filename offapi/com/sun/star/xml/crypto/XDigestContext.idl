@@ -24,44 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource2_idl__
-#define __com_sun_star_embed_XEncryptionProtectedSource2_idl__
+#ifndef __com_sun_star_xml_crypto_xdigestcontext_idl_
+#define __com_sun_star_xml_crypto_xdigestcontext_idl_
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
-#include <com/sun/star/embed/XEncryptionProtectedSource.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_beans_NamedValue_idl__
-#include <com/sun/star/beans/NamedValue.idl>
+#ifndef __com_sun_star_lang_DisposedException_idl__
+#include <com/sun/star/lang/DisposedException.idl>
 #endif
 
 //============================================================================
 
-module com {  module sun {  module star {  module embed {
+ module com {  module sun {  module star {  module xml { module crypto {
 
 //============================================================================
-/** This interface allows to set a password for an object.
+/** This interface allows to generate the digest.
+    <p>
+    The algorithm to generate the digest is specified on object creation.
+    </p>
 
+    @see <type>XDigestContextSupplier</type>
     @since OOo 3.4
  */
-interface XEncryptionProtectedSource2: XEncryptionProtectedSource
+interface XDigestContext : com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
-    /** sets an encryption data for the object.
+    //------------------------------------------------------------------------
+    /** update the digest with the given data.
 
-        @param aEncryptionData
-            the new encryption data
-
-        @throws ::com::sun::star::io::IOException
-            in case the data could not be set
+        @param aData
+            data that should be used to update the digest
      */
-    void setEncryptionData( [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
-        raises( ::com::sun::star::io::IOException );
+    void updateDigest( [in] sequence< byte > aData )
+        raises( ::com::sun::star::lang::DisposedException );
+
+    //------------------------------------------------------------------------
+    /** finalizes digest and disposes context.
+     */
+    sequence<byte> finalizeDigestAndDispose()
+        raises( ::com::sun::star::lang::DisposedException );
 };
 
 //============================================================================
 
-}; }; }; };
+}; }; }; }; };
 
 #endif
 

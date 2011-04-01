@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_crypto_xciphercontextsupplier_idl_
+#define __com_sun_star_xml_crypto_xciphercontextsupplier_idl_
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
+#ifndef __com_sun_star_xml_crypto_XCipherContext_idl__
+#include <com/sun/star/xml/crypto/XCipherContext.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//============================================================================
+
+ module com {  module sun {  module star {  module xml { module crypto {
+
+//============================================================================
+/** This interface allows to get an object that allows to encrypt/decrypt data
+    using the specified algorithm.
+
+    @since OOo 3.4
+ */
+interface XCipherContextSupplier : com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** returns an object that allows to encrypt/decrypt data.
+
+        @param nCipherID
+            the internal ID specifying the algorithm,
+            should take value from <type>CipherID</type>
+
+        @param aKey
+            the key that should be used for the encryption
+
+        @param aInitializationVector
+            the initialization vector that should be used for the encryption
+
+        @param bEncryption
+            whether an encryption or decryption cipher should be created
+            <TRUE/> - Encryption
+            <FALSE/> - Decryption
+
+        @param aParams
+            optional parameters that could be used to initialize the cipher,
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+     */
+
+    XCipherContext getCipherContext( [in] long nCipherID, [in] sequence< byte > aKey, [in] sequence< byte > aInitializationVector, [in] boolean bEncryption, [in] sequence< ::com::sun::star::beans::NamedValue > aParams )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -24,44 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource2_idl__
-#define __com_sun_star_embed_XEncryptionProtectedSource2_idl__
+#ifndef __com_sun_star_xml_crypto_DigestID_idl__
+#define __com_sun_star_xml_crypto_DigestID_idl__
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
-#include <com/sun/star/embed/XEncryptionProtectedSource.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
-#include <com/sun/star/beans/NamedValue.idl>
-#endif
 
 //============================================================================
 
-module com {  module sun {  module star {  module embed {
+module com { module sun { module star { module xml { module crypto {
 
 //============================================================================
-/** This interface allows to set a password for an object.
+/** The constant set contains identifiers of supported digest-creation
+    algorithms.
 
+    @see <type>XDigestContextSupplier</type>
     @since OOo 3.4
- */
-interface XEncryptionProtectedSource2: XEncryptionProtectedSource
+*/
+constants DigestID
 {
-    // -----------------------------------------------------------------------
-    /** sets an encryption data for the object.
-
-        @param aEncryptionData
-            the new encryption data
-
-        @throws ::com::sun::star::io::IOException
-            in case the data could not be set
+    //------------------------------------------------------------------------
+    /** identifier of SHA-1 algorithm
      */
-    void setEncryptionData( [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
-        raises( ::com::sun::star::io::IOException );
+    const long SHA1 = 1;
+
+    //------------------------------------------------------------------------
+    /** identifier of SHA-256 algorithm
+     */
+    const long SHA256 = 2;
+
+    //------------------------------------------------------------------------
+    /** identifier of SHA-1 algorithm that is applied to the first kilobyte
+        of data.
+     */
+    const long SHA1_1K = 3;
+
+    //------------------------------------------------------------------------
+    /** identifier of SHA-256 algorithm that is applied to the first kilobyte
+        of data.
+     */
+    const long SHA256_1K = 4;
 };
 
 //============================================================================
 
-}; }; }; };
+}; }; }; }; };
 
 #endif
 

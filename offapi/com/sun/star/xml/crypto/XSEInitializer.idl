@@ -41,13 +41,14 @@ published interface XXMLSecurityContext;
 published interface XSEInitializer : com::sun::star::uno::XInterface
 {
     /**
-     * Creates a security context.
-     *
-     * @param certificateDatabase      the file or directory of the key materials
-     * @return            the security context created
+       Creates a security context.
+
+       @param aString
+            reserved for internal use.
+
+       @return            the security context created
      */
-    com::sun::star::xml::crypto::XXMLSecurityContext createSecurityContext(
-        [in] string certificateDatabase);
+    ::com::sun::star::xml::crypto::XXMLSecurityContext createSecurityContext( [in] string aString );
 
     /**
      * Frees a security context.
