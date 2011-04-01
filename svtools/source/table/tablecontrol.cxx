@@ -61,14 +61,14 @@ namespace svt { namespace table
         ,m_pImpl( new TableControl_Impl( *this ) )
     {
         TableDataWindow& rDataWindow = m_pImpl->getDataWindow();
-        rDataWindow.SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
-        rDataWindow.SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
         rDataWindow.SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
 
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
         SetBackground( Wallpaper( aWindowColor ) );
         SetFillColor( aWindowColor );
+
+        SetCompoundControl( true );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -678,20 +678,6 @@ namespace svt { namespace table
     IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
     {
         Select();
-        return 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    IMPL_LINK( TableControl, ImplMouseButtonDownHdl, MouseEvent*, pData )
-    {
-        CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pData );
-        return 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    IMPL_LINK( TableControl, ImplMouseButtonUpHdl, MouseEvent*, pData )
-    {
-         CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, pData );
         return 1;
     }
 
