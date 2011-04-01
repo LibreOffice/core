@@ -39,13 +39,6 @@ $(eval $(call gb_Library_set_defs,expwrap,\
 	$$(DEFS) \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_set_defs,expwrap,\
-	$$(DEFS) \
-	-DSYSTEM_ZLIB \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,expwrap,\
 	sal \
 	cppu \
@@ -54,24 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,expwrap,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(SYSTEM_EXPAT),YES)
-$(eval $(call gb_Library_set_defs,expwrap,\
-	$$(DEFS) \
-	-DSYSTEM_EXPAT \
-))
-$(eval $(call gb_Library_add_linked_libs,expwrap,\
-	expat \
-))
-else
-$(eval $(call gb_Library_set_defs,expwrap,\
-	$$(DEFS) \
-	-DXML_UNICODE \
-))
-$(eval $(call gb_Library_add_linked_static_libs,expwrap,\
-	expat_xmlparse \
-	expat_xmltok \
-))
-endif
+$(call gb_Library_use_external,expwrap,expat_utf16)
 
 $(eval $(call gb_Library_add_exception_objects,expwrap,\
 	sax/source/expatwrap/attrlistimpl \

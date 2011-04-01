@@ -126,19 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 ))
 endif
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_set_cxxflags,tl,\
-    $$(CXXFLAGS) \
-    -DSYSTEM_ZLIB \
-))
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    z \
-))
-else
-$(eval $(call gb_Library_add_linked_static_libs,tl,\
-    zlib \
-))
-endif
+$(call gb_Library_use_external,tl,zlib)
 
 ifeq ($(OS),WNT)
 

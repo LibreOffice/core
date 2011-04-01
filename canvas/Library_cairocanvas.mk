@@ -47,22 +47,6 @@ $(eval $(call gb_Library_set_defs,cairocanvas,\
 ))
 endif
 
-ifeq ($(SYSTEM_CAIRO),YES)
-# FREETYPE_CLAGS from environment if ENABLE_CAIRO is used
-# $(CAIRO_CFLAGS) currently not set; taking usr/include directly
-$(eval $(call gb_Library_set_include,cairocanvas,\
-	$$(INCLUDE) \
-	$(FREETYPE_CFLAGS) \
-	-I/usr/include \
-))
-else
-$(eval $(call gb_Library_set_include,cairocanvas,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/cairo \
-	$(FREETYPE_CFLAGS) \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	sal \
 	stl \
@@ -96,6 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_textlayout \
 ))
 
+$(call gb_Library_use_external,cairocanvas,cairo)
 
 ifeq ($(OS),WNT)
 
@@ -103,17 +88,11 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_win32_cairo \
 ))
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
-	cairo \
 	gdi32 \
 	user32 \
 ))
 
 else
-
-$(eval $(call gb_Library_add_linked_libs,cairocanvas,\
-	cairo \
-	pixman-1 \
-))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
