@@ -75,7 +75,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
 {
     if ( bNewFrm )
     {
-        // set Defaults:
+        // set defaults:
         sal_uInt16 nId = 0;
         switch ( nType )
         {
@@ -192,7 +192,7 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 }
 
 /*------------------------------------------------------------------------
- Description:   insert frames of type eAnchorType. Position and size are
+ Description:   Insert frames of type eAnchorType. Position and size are
                 being set explicitely.
                 Not-allowed values of the enumeration type get corrected.
 ------------------------------------------------------------------------*/

@@ -889,7 +889,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aHeightED.SetRefValue( nSpace );
     }
 
-    // General Initialisation part
+    // general initialisation part
     switch(rAnchor.GetAnchorId())
     {
         case FLY_AT_PAGE: aAnchorAtPageRB.Check(); break;
@@ -1146,7 +1146,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
                 (aSz.GetWidth() > 0 || aSz.GetWidthPercent() > 0) &&
                     (aSz.GetHeight() > 0 || aSz.GetHeightPercent() > 0)))
     {
-        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // VAR_SIZE gibts nicht bei Rahmen
+        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // there is no VAR_SIZE in frames
             aSz.SetHeightSizeType(ATT_MIN_SIZE);
 
         bRet |= 0 != rSet.Put( aSz );
@@ -1247,7 +1247,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     sal_uInt16 nMapPos = FillPosLB(pHMap, nH, nHRel, aHorizontalDLB);
     FillRelLB(pHMap, nMapPos, nH, nHRel, aHoriRelationLB, aHoriRelationFT);
 
-    // Vertikal
+    // vertical
     if ( nV == USHRT_MAX )
     {
         nV    = nOldV;
@@ -1412,7 +1412,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                     for (sal_uInt16 i = 0; i < _rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
-                        if (pEntry->nLBRelation == LB_REL_CHAR) // Default
+                        if (pEntry->nLBRelation == LB_REL_CHAR) // default
                         {
                             _rLB.SelectEntryPos(i);
                             break;
@@ -2062,7 +2062,7 @@ void SwFrmPage::UpdateExample()
         aExampleWN.SetVertRel(nRel);
     }
 
-    // Size
+    // size
     long nXPos = static_cast< long >(aAtHorzPosED.Denormalize(aAtHorzPosED.GetValue(FUNIT_TWIP)));
     long nYPos = static_cast< long >(aAtVertPosED.Denormalize(aAtVertPosED.GetValue(FUNIT_TWIP)));
     aExampleWN.SetRelPos(Point(nXPos, nYPos));
@@ -2077,7 +2077,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
     {
         SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
 
-        // Size
+        // size
         const sal_Bool bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
 
         aWidthED .Enable( !bSizeFixed );
@@ -2231,7 +2231,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
                 rVert.GetPos());
     }
 
-    // Transparent for example
+    // transparent for example
     // circulation for example
     const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet.Get(RES_SURROUND);
     aExampleWN.SetWrap ( static_cast< sal_uInt16 >(rSurround.GetSurround()) );

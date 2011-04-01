@@ -117,7 +117,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
     // tinker TabPages together
     switch( nRegion )
     {
-        // character templates
+        // character styles
         case SFX_STYLE_FAMILY_CHAR:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
@@ -145,7 +145,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 RemoveTabPage(TP_CHAR_TWOLN);
         }
         break;
-        // paragraph templates
+        // paragraph styles
         case SFX_STYLE_FAMILY_PARA:
         {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
@@ -230,7 +230,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             }
         }
         break;
-        // frame templates
+        // frame styles
         case SFX_STYLE_FAMILY_FRAME:
         {
             AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
@@ -253,7 +253,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         break;
         }
-        // page templates
+        // page styles
         case SFX_STYLE_FAMILY_PAGE:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
@@ -298,7 +298,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         }
         break;
-        // numbering templates
+        // numbering styles
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
@@ -370,7 +370,7 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    // set template's and metric's names
+    // set style's and metric's names
     String sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
@@ -551,7 +551,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // collect character templates
+            // collect character styles
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );

@@ -178,7 +178,7 @@ SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 {
-    //Contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
+    // contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
     if( bDrawMode )
     {
         aWrapOutlineCB.Show();
@@ -415,7 +415,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    // Anchor
+    // anchor
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
     sal_Bool bEnable = (nAnchorId != FLY_AS_CHAR);
@@ -426,11 +426,11 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
         SvxSwFrameValidation aVal;
 
-        // Size
+        // size
         const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
         Size aSize = rFrmSize.GetSize();
 
-        // Margin
+        // margin
         const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
         nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
@@ -438,7 +438,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nOldUpperMargin = static_cast< sal_uInt16 >(rUL.GetUpper());
         nOldLowerMargin = static_cast< sal_uInt16 >(rUL.GetLower());
 
-        // Position
+        // position
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)rSet.Get(RES_VERT_ORIENT);
 

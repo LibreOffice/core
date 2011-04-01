@@ -39,7 +39,7 @@
 #include "colmgr.hxx"
 
 
-// PRIVATE METHODES ------------------------------------------------------
+// private methods
 /*------------------------------------------------------------------------
  Description:   set column width to current width
 ------------------------------------------------------------------------*/
@@ -54,7 +54,7 @@ void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
     rCol.SetWishWidth(nWidth);
 }
 
-// PUBLIC METHODES -------------------------------------------------------
+// public methods
 /*------------------------------------------------------------------------
  Description:   set column quantity and Gutterwidth
 ------------------------------------------------------------------------*/

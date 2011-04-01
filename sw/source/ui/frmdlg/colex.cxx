@@ -52,7 +52,7 @@
 #include "colmgr.hxx"
 
 /*-----------------------------------------------------------------------
-    Description: acquisition of the updates values from the set
+    Description: Taking the updated values from the set
  -----------------------------------------------------------------------*/
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
@@ -73,7 +73,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // Orientation and Size from PageItem
+        // orientation and size from PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
