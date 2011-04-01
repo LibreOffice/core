@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     editeng \
     i18nisolang1 \
     i18nutil \
-    icuuc \
     msfilter \
     sal \
     sfx \
@@ -73,6 +72,8 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     vcl \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,msword,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/rtf/rtffld \

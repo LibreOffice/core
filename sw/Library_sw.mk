@@ -61,7 +61,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     editeng \
     i18nisolang1 \
     i18nutil \
-    icuuc \
     lng \
     sal \
     salhelper \
@@ -83,6 +82,8 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     xo \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,sw,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/SwNumberTree/SwNodeNum \
