@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,sm_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,sm_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,sm_unoapi,\
 	$$(DEFS) \
