@@ -5480,6 +5480,9 @@ dnl ===================================================================
 if test -z "$ZIP" -o -z "$UNZIP"; then
     AC_MSG_ERROR([Zip/Unzip are required to build, please install or use --with-zip-home],,)
 fi
+if "$ZIP" -FS < /dev/null 2>&1 | $EGREP "no such option: S" > /dev/null; then
+    AC_MSG_ERROR([Zip version 3.0 or newer is required to build, please install or use --with-zip-home],,)
+fi
 
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
