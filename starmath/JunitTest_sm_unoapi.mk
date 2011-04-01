@@ -45,8 +45,8 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sm_unoapi,\
 	starmath/qa/unoapi/Test \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,sw_unoapi,\
-	org.openoffice.sw.qa.unoapi.Test \
+$(eval $(call gb_JunitTest_add_classes,sm_unoapi,\
+	org.openoffice.starmath.qa.unoapi.Test \
 ))
 
 # vim: set noet sw=4 ts=4:
