@@ -367,22 +367,22 @@ Window* MediaWindow::getWindow() const
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
-    static const char* pFilters[] = {   "AIF Audio", "aif;aiff",
-                                        "AU Audio", "au",
-                                        "AVI", "avi",
-                                        "CD Audio", "cda",
-                                        "FLAC Audio", "flac",
-                                        "Matroska Media", "mkv",
-                                        "MIDI Audio", "mid;midi",
-                                        "MPEG Audio", "mp2;mp3;mpa",
-                                        "MPEG Video", "mpg;mpeg;mpv;mp4",
-                                        "Ogg bitstream", "ogg",
-                                        "Quicktime Video", "mov",
-                                        "Vivo Video", "viv",
-                                        "WAVE Audio", "wav" };
+    static const char* pFilters[] = { "AIF Audio", "aif;aiff",
+                                      "AU Audio", "au",
+                                      "AVI", "avi",
+                                      "CD Audio", "cda",
+                                      "FLAC Audio", "flac",
+                                      "Matroska Media", "mkv",
+                                      "MIDI Audio", "mid;midi",
+                                      "MPEG Audio", "mp2;mp3;mpa",
+                                      "MPEG Video", "mpg;mpeg;mpv;mp4",
+                                      "Ogg bitstream", "ogg",
+                                      "Quicktime Video", "mov",
+                                      "Vivo Video", "viv",
+                                      "WAVE Audio", "wav",
+                                      "WebM Video", "webm" };
 
-    unsigned int i;
-    for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
+    for( size_t i = 0; i < SAL_N_ELEMENT(pFIlters); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
                                         ::rtl::OUString::createFromAscii(pFilters[i]),
