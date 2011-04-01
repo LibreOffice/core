@@ -88,8 +88,8 @@ private:
 /** A wrapper that holds a com.sun.star.container.XEnumeration or a
     com.sun.star.container.XIndexAccess and provides an enumeration of VBA objects.
 
-    The method nextElement() needs to be implemented by the derived class. This
-    class can be used to convert an enumeration or an index container
+    The method createCollectionObject() needs to be implemented by the derived
+    class. This class can be used to convert an enumeration or an index container
     containing UNO objects to an enumeration providing the related VBA objects.
  */
 class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE

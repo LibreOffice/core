@@ -50,17 +50,17 @@ $(eval $(call gb_Library_add_linked_libs,msforms,\
     comphelper \
     cppu \
     cppuhelper \
+    sal \
+    sb \
+    sfx \
     svl \
     svt \
-    tl \
-    sal \
-    vbahelper \
-    sfx \
     svx \
-    vcl \
-    tk \
-    sb \
     stl \
+    tk \
+    tl \
+    vbahelper \
+    vcl \
     $(gb_STDLIBS) \
 ))
 
@@ -79,6 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,msforms,\
     vbahelper/source/msforms/vbalistbox \
     vbahelper/source/msforms/vbalistcontrolhelper \
     vbahelper/source/msforms/vbamultipage \
+    vbahelper/source/msforms/vbanewfont \
     vbahelper/source/msforms/vbapages \
     vbahelper/source/msforms/vbaprogressbar \
     vbahelper/source/msforms/vbaradiobutton \

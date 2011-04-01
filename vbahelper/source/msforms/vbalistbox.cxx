@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 
 #include "vbalistbox.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
 #include <comphelper/anytostring.hxx>
 #include <com/sun/star/script/ArrayWrapper.hpp>
+#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -265,6 +265,11 @@ uno::Any SAL_CALL
 ScVbaListBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
 {
     return mpListHelper->List( pvargIndex, pvarColumn );
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaListBox::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 rtl::OUString&

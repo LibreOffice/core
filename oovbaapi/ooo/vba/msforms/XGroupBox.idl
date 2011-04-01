@@ -24,19 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_msforms_XGroupBox_idl__
 #define __ooo_vba_msforms_XGroupBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
+
 //=============================================================================
+
 interface XGroupBox
 {
     [attribute] string Caption;
+    [attribute, readonly] XNewFont Font;
 };
 
 //=============================================================================

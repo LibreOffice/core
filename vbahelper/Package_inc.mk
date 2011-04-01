@@ -26,6 +26,7 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,vbahelper_inc,$(SRCDIR)/vbahelper/inc))
+$(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/collectionbase.hxx,vbahelper/collectionbase.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/helperdecl.hxx,vbahelper/helperdecl.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbaaccesshelper.hxx,vbahelper/vbaaccesshelper.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbaapplicationbase.hxx,vbahelper/vbaapplicationbase.hxx))
@@ -47,5 +48,6 @@ $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashaperange.hxx,
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashapes.hxx,vbahelper/vbashapes.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbatextframe.hxx,vbahelper/vbatextframe.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbawindowbase.hxx,vbahelper/vbawindowbase.hxx))
+$(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/weakreference.hxx,vbahelper/weakreference.hxx))
 
 # vim: set noet sw=4 ts=4:

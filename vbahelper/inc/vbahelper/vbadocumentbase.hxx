@@ -37,6 +37,7 @@ class VBAHELPER_DLLPUBLIC VbaDocumentBase : public VbaDocumentBase_BASE
 {
 protected:
     css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference< css::uno::XInterface > mxVBProject;
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
     VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);

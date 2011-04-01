@@ -648,6 +648,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             // Methoden sind immer byval!
             sal_Bool bByVal = v->IsA( TYPE(SbxMethod) );
             SbxDataType t = v->GetType();
+            bool bTargetTypeIsArray = false;
             if( p )
             {
                 bByVal |= sal_Bool( ( p->eType & SbxBYREF ) == 0 );
@@ -656,9 +657,13 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
                         bByVal = sal_True;
+
+                bTargetTypeIsArray = (p->nUserData & PARAM_INFO_WITHBRACKETS) != 0;
             }
             if( bByVal )
             {
+                if( bTargetTypeIsArray )
+                    t = SbxOBJECT;
                 SbxVariable* v2 = new SbxVariable( t );
                 v2->SetFlag( SBX_READWRITE );
                 *v2 = *v;
@@ -1236,6 +1241,26 @@ void SbiRuntime::ClearForStack()
     while( pForStk )
         PopFor();
 }
+
+SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* pCollection )
+{
+    SbiForStack* pRet = NULL;
+
+    SbiForStack* p = pForStk;
+    while( p )
+    {
+        SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
+        if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
+            (pCollection = PTR_CAST(BasicCollection,pVar)) == pCollection )
+        {
+            pRet = p;
+            break;
+        }
+    }
+
+    return pRet;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //

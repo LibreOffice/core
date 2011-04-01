@@ -38,19 +38,17 @@ typedef CollTestImplHelper< ov::msforms::XControls > ControlsImpl_BASE;
 
 class ScVbaControls : public ControlsImpl_BASE
 {
-    css::uno::Reference< css::awt::XControl > mxDialog;
-
-protected:
-    virtual rtl::OUString& getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-
 public:
-    ScVbaControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::awt::XControl >& xDialog );
+    ScVbaControls(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::awt::XControl >& xDialog,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        double fOffsetX, double fOffsetY );
     // XControls
     virtual void SAL_CALL Move( double cx, double cy ) throw (css::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL Add( const ::com::sun::star::uno::Any& Object, const ::com::sun::star::uno::Any& StringKey, const ::com::sun::star::uno::Any& Before, const ::com::sun::star::uno::Any& After ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL Remove( const ::com::sun::star::uno::Any& StringKeyOrIndex ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Object, const css::uno::Any& StringKey, const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Remove( const css::uno::Any& StringKeyOrIndex ) throw (css::uno::RuntimeException);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
@@ -59,6 +57,15 @@ public:
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
+    // XHelperInterface
+    VBAHELPER_DECL_XHELPERINTERFACE
+
+private:
+    css::uno::Reference< css::awt::XControl > mxDialog;
+    css::uno::Reference< css::frame::XModel > mxModel;
+    double mfOffsetX;
+    double mfOffsetY;
 };
+
 #endif //SC_VBA_OLEOBJECTS_HXX
 

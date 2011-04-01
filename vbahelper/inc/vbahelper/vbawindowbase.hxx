@@ -24,24 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef VBA_WINDOWBASE_HXX
 #define VBA_WINDOWBASE_HXX
-#include <cppuhelper/implbase1.hxx>
-#include <ooo/vba/XWindowBase.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 
+#include <ooo/vba/XWindowBase.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1<ov::XWindowBase > WindowBaseImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::XWindowBase > WindowBaseImpl_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaWindowBase : public WindowBaseImpl_BASE
 {
-protected:
-    css::uno::Reference< css::frame::XModel > m_xModel;
 public:
-    VbaWindowBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
-    VbaWindowBase( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext );
+    VbaWindowBase(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::frame::XController >& xController )
+        throw (css::uno::RuntimeException);
+    VbaWindowBase(
+        css::uno::Sequence< css::uno::Any > const& aArgs,
+        css::uno::Reference< css::uno::XComponentContext > const& xContext )
+        throw (css::uno::RuntimeException);
 
     // XWindowBase
     virtual sal_Int32 SAL_CALL getHeight() throw (css::uno::RuntimeException) ;
@@ -58,6 +64,19 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+
+protected:
+    css::uno::Reference< css::frame::XController > getController() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XWindow > getWindow() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XWindow2 > getWindow2() throw (css::uno::RuntimeException);
+
+    css::uno::Reference< css::frame::XModel > m_xModel;
+
+private:
+    void construct( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException);
+
+    css::uno::WeakReference< css::frame::XController > m_xController;
+    css::uno::WeakReference< css::awt::XWindow > m_xWindow;
 };
 
 #endif //VBA_WINDOWBASE_HXX

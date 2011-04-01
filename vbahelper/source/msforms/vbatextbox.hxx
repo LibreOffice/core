@@ -47,6 +47,12 @@ public:
     virtual void SAL_CALL setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getMultiline() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getTextLength() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
     // XDefaultProperty
     rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
     //XHelperInterface

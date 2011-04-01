@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ * Copyright 2010, Oracle and/or its affiliates. All rights reserved.
+ *
+ ************************************************************************/
+
+#ifndef OOO_VBA_XOLLECTIONBASE_IDL
+#define OOO_VBA_XOLLECTIONBASE_IDL
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/script/XDefaultMethod.idl>
+
+//=============================================================================
+
+module ooo { module vba {
+
+//=============================================================================
+
+/** Base interface for VBA collections.
+
+    Every VBA collection provides the number of items, an enumeration access of
+    all collection items (e.g. for the "For Each" loop), and a way to access
+    single items, usually via the method "Item".
+
+    The various VBA collection objects expect a specific number of arguments in
+    the "Item" method, therefore this method is not part of this base interface
+    but has to be specified seperately in every derived interface.
+ */
+interface XCollectionBase
+{
+    //-------------------------------------------------------------------------
+    /** Provides an enumeration of all items in this collection.
+     */
+    interface ::com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** Provides the name of the default item access method.
+
+        Usually this method is called "Item". The access method has to be
+        specified and implemented separately by every derived class.
+     */
+    interface ::com::sun::star::script::XDefaultMethod;
+
+    //-------------------------------------------------------------------------
+    /** Returns the number of items contained in this collection.
+     */
+    [attribute, readonly] long Count;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; };
+
+#endif

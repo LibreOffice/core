@@ -624,7 +624,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             else if( bVBAEnabled )  // !pObj
             {
                 SbxArray* pParam = pElem->GetParameters();
-                if( pParam != NULL )
+                if( pParam != NULL && !pElem->IsSet( SBX_VAR_TO_DIM ) )
                     Error( SbERR_NO_OBJECT );
             }
         }
@@ -1141,6 +1141,10 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
         aStr.Fill( nCount, 0 );
         pVar->PutString( aStr );
     }
+
+    bool bVarToDim = ((nOp2 & SBX_TYPE_VAR_TO_DIM_FLAG) != 0);
+    if( bVarToDim )
+        pVar->SetFlag( SBX_VAR_TO_DIM );
 }
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
