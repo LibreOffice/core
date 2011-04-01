@@ -1,3 +1,4 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\bin\*.dll %_DEST%\lib%_EXT%\*.dll
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\misc\*.component %_DEST%\xml%_EXT%\*.component
