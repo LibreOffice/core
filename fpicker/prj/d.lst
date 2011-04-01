@@ -10,10 +10,4 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 
 ..\source\win32\filepicker\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\win32\folderpicker\*.xml %_DEST%\xml%_EXT%\*.xml
-..\%__SRC%\misc\fop.component %_DEST%\xml%_EXT%\fop.component
-..\%__SRC%\misc\fpicker.component %_DEST%\xml%_EXT%\fpicker.component
-..\%__SRC%\misc\fps.component %_DEST%\xml%_EXT%\fps.component
-..\%__SRC%\misc\fps_aqua.component %_DEST%\xml%_EXT%\fps_aqua.component
-..\%__SRC%\misc\fps_gnome.component %_DEST%\xml%_EXT%\fps_gnome.component
-..\%__SRC%\misc\fps_kde4.component %_DEST%\xml%_EXT%\fps_kde4.component
-..\%__SRC%\misc\fps_office.component %_DEST%\xml%_EXT%\fps_office.component
+..\%__SRC%\misc\*.component %_DEST%\xml%_EXT%\*.component

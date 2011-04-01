@@ -53,37 +53,12 @@ static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& 
 
 extern "C"
 {
-//==================================================================================================
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char**        ppEnvTypeName,
                                                                                  uno_Environment** /*ppEnv*/        )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-
-//==================================================================================================
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* /*pServiceManager*/,
-                                                            void* pRegistryKey   )
-{
-    if (!pRegistryKey)
-        return sal_False;
-
-    try
-    {
-        css::uno::Reference< css::registry::XRegistryKey > xKey(reinterpret_cast< css::registry::XRegistryKey* >(pRegistryKey), css::uno::UNO_QUERY);
-
-        writeInfo( xKey, DESKTOPJOB_IMPLEMENTATION_NAME, DESKTOPJOB_SERVICE_NAME);
-        writeInfo( xKey, FRAMEJOB_IMPLEMENTATION_NAME, FRAMEJOB_SERVICE_NAME);
-
-        return sal_True;
-    }
-    catch(const css::registry::InvalidRegistryException&)
-        { OSL_ENSURE( sal_False, "### InvalidRegistryException!" ); }
-
-    return sal_False;
-}
-
-//==================================================================================================
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName      ,
                                                                 void*     pServiceManager,
                                                                 void*     /*pRegistryKey*/  )
