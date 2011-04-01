@@ -43,6 +43,13 @@
 #include "globstr.hrc"
 #include "subtotalparam.hxx"
 
+#include <memory>
+
+using ::std::unary_function;
+using ::std::for_each;
+using ::std::find_if;
+using ::std::remove_if;
+
 //---------------------------------------------------------------------------------------
 
 ScDBData::ScDBData( const String& rName,
@@ -612,11 +619,10 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 
 }
 
-void ScDBData::UpdateReference(UpdateRefMode eUpdateRefMode,
+void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ScDocument* pDoc )
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
 {
     SCCOL theCol1;
     SCROW theRow1;
@@ -653,8 +659,99 @@ void ScDBData::UpdateReference(UpdateRefMode eUpdateRefMode,
 
     //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
 }
-//---------------------------------------------------------------------------------------
-//  Compare zum Sortieren
+
+namespace {
+
+class FindByTable : public ::std::unary_function<ScDBData, bool>
+{
+    SCTAB mnTab;
+public:
+    FindByTable(SCTAB nTab) : mnTab(nTab) {}
+
+    bool operator() (const ScDBData& r) const
+    {
+        ScRange aRange;
+        r.GetArea(aRange);
+        return aRange.aStart.Tab() == mnTab;
+    }
+};
+
+class UpdateRefFunc : public unary_function<ScDBData, void>
+{
+    ScDocument* mpDoc;
+    UpdateRefMode meMode;
+    SCCOL mnCol1;
+    SCROW mnRow1;
+    SCTAB mnTab1;
+    SCCOL mnCol2;
+    SCROW mnRow2;
+    SCTAB mnTab2;
+    SCsCOL mnDx;
+    SCsROW mnDy;
+    SCsTAB mnDz;
+
+public:
+    UpdateRefFunc(ScDocument* pDoc, UpdateRefMode eMode,
+                    SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz) :
+        mpDoc(pDoc), meMode(eMode),
+        mnCol1(nCol1), mnRow1(nRow1), mnTab1(nTab1),
+        mnCol2(nCol2), mnRow2(nRow2), mnTab2(nTab2),
+        mnDx(nDx), mnDy(nDy), mnDz(nDz) {}
+
+    void operator() (ScDBData& r)
+    {
+        r.UpdateReference(mpDoc, meMode, mnCol1, mnRow1, mnTab1, mnCol2, mnRow2, mnTab2, mnDx, mnDy, mnDz);
+    }
+};
+
+class UpdateMoveTabFunc : public unary_function<ScDBData, void>
+{
+    SCTAB mnOldTab;
+    SCTAB mnNewTab;
+public:
+    UpdateMoveTabFunc(SCTAB nOld, SCTAB nNew) : mnOldTab(nOld), mnNewTab(nNew) {}
+    void operator() (ScDBData& r)
+    {
+        r.UpdateMoveTab(mnOldTab, mnNewTab);
+    }
+};
+
+class FindByCursor : public unary_function<ScDBData, bool>
+{
+    SCCOL mnCol;
+    SCROW mnRow;
+    SCTAB mnTab;
+    bool mbStartOnly;
+public:
+    FindByCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) :
+        mnCol(nCol), mnRow(nRow), mnTab(nTab), mbStartOnly(bStartOnly) {}
+
+    bool operator() (const ScDBData& r)
+    {
+        return r.IsDBAtCursor(mnCol, mnRow, mnTab, mbStartOnly);
+    }
+};
+
+class FindByRange : public unary_function<ScDBData, bool>
+{
+    const ScRange& mrRange;
+public:
+    FindByRange(const ScRange& rRange) : mrRange(rRange) {}
+
+    bool operator() (const ScDBData& r)
+    {
+        return r.IsDBAtArea(
+            mrRange.aStart.Tab(), mrRange.aStart.Col(), mrRange.aStart.Row(), mrRange.aEnd.Col(), mrRange.aEnd.Row());
+    }
+};
+
+}
+
+ScDBCollection::ScDBCollection(const ScDBCollection& r) :
+    ScSortedCollection(r), pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maAnonDBs(r.maAnonDBs)
+{}
 
 short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
@@ -687,6 +784,12 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
     if (pNoNameData)
         if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
             return pNoNameData;
+
+    // Check the anonymous db ranges.
+    const ScDBData* pData = findAnonAtCursor(nCol, nRow, nTab, bStartOnly);
+    if (pData)
+        return const_cast<ScDBData*>(pData);
+
     return NULL;
 }
 
@@ -705,6 +808,13 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
+
+    // Check the anonymous db ranges.
+    ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    const ScDBData* pData = findAnonByRange(aRange);
+    if (pData)
+        return const_cast<ScDBData*>(pData);
+
     return NULL;
 }
 
@@ -732,6 +842,8 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
         else
             ++nPos;
     }
+
+    remove_if(maAnonDBs.begin(), maAnonDBs.end(), FindByTable(nTab));
 }
 
 void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
@@ -741,26 +853,27 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
 {
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ((ScDBData*)pItems[i])->UpdateReference(eUpdateRefMode,
-                                                nCol1, nRow1, nTab1,
-                                                nCol2, nRow2, nTab2,
-                                                nDx, nDy, nDz, pDoc);
+        ((ScDBData*)pItems[i])->UpdateReference(
+            pDoc, eUpdateRefMode,
+            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
     }
     ScDBData* pData = pDoc->GetAnonymousDBData(nTab1);
     if (pData)
     {
-        if (nTab1==nTab2&&nDz==0)
+        if (nTab1 == nTab2 && nDz == 0)
         {
-            pData->UpdateReference(eUpdateRefMode,
-                                                nCol1, nRow1, nTab1,
-                                                nCol2, nRow2, nTab2,
-                                                nDx, nDy, nDz, pDoc);
+            pData->UpdateReference(
+                pDoc, eUpdateRefMode,
+                nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
         }
         else
         {
             //this will perhabs break undo
         }
     }
+
+    UpdateRefFunc func(pDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
+    for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
 }
 
 
@@ -773,6 +886,9 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
         ScDBData* pData = (ScDBData*)pItems[i];
         pData->UpdateMoveTab(nOldPos, nNewPos);
     }
+
+    UpdateMoveTabFunc func(nOldPos, nNewPos);
+    for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
 }
 
 
@@ -829,5 +945,46 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
     return pDoc->GetAnonymousDBData(nTab);                  // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
+const ScDBData* ScDBCollection::findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+{
+    AnonDBsType::const_iterator itr = find_if(
+        maAnonDBs.begin(), maAnonDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+    return itr == maAnonDBs.end() ? NULL : &(*itr);
+}
+
+const ScDBData* ScDBCollection::findAnonByRange(const ScRange& rRange) const
+{
+    AnonDBsType::const_iterator itr = find_if(
+        maAnonDBs.begin(), maAnonDBs.end(), FindByRange(rRange));
+    return itr == maAnonDBs.end() ? NULL : &(*itr);
+}
+
+ScDBData* ScDBCollection::getAnonByRange(const ScRange& rRange)
+{
+    const ScDBData* pData = findAnonByRange(rRange);
+    if (!pData)
+    {
+        // Insert a new db data.  They all have identical names.
+        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        ::std::auto_ptr<ScDBData> pNew(new ScDBData(
+            aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
+            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
+        pData = pNew.get();
+        maAnonDBs.push_back(pNew);
+    }
+    return const_cast<ScDBData*>(pData);
+}
+
+void ScDBCollection::insertAnonRange(ScDBData* pData)
+{
+    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+    ::std::auto_ptr<ScDBData> pNew(pData);
+    maAnonDBs.push_back(pNew);
+}
+
+const ScDBCollection::AnonDBsType& ScDBCollection::getAnonRanges() const
+{
+    return maAnonDBs;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

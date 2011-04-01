@@ -224,6 +224,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
 
     if (sDatabaseRangeName.matchAsciiL(STR_DB_LOCAL_NONAME, strlen(STR_DB_LOCAL_NONAME)))
         meRangeType = SheetAnonymous;
+    else if (sDatabaseRangeName.matchAsciiL(STR_DB_GLOBAL_NONAME, strlen(STR_DB_GLOBAL_NONAME)))
+        meRangeType = GlobalAnonymous;
 }
 
 ScXMLDatabaseRangeContext::~ScXMLDatabaseRangeContext()
@@ -479,6 +481,27 @@ void ScXMLDatabaseRangeContext::EndElement()
             }
 
             pDoc->SetAnonymousDBData(nTab, pData.release());
+        }
+        return;
+    }
+    else if (meRangeType == GlobalAnonymous)
+    {
+        OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
+
+        if (pData.get())
+        {
+            if (pData->HasAutoFilter())
+            {
+                // Set autofilter flags so that the buttons get displayed.
+                ScRange aRange;
+                pData->GetArea(aRange);
+                pDoc->ApplyFlagsTab(
+                    aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
+                    aRange.aStart.Tab(), SC_MF_AUTO);
+            }
+
+            pDoc->GetDBCollection()->insertAnonRange(pData.release());
         }
         return;
     }

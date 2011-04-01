@@ -38,6 +38,8 @@
 #include "scdllapi.h"
 #include "subtotalparam.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class ScDocument;
 
 class ScDBData : public ScDataObject, public ScRefreshTimer
@@ -178,22 +180,25 @@ public:
             void        SetModified(sal_Bool bMod)      { bModified = bMod; }
 
             void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-            void    UpdateReference(UpdateRefMode eUpdateRefMode,
+            void    UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ScDocument* pDoc  );
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 };
 
 
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScDBCollection : public ScSortedCollection
 {
+    typedef ::boost::ptr_vector<ScDBData> DBRangesType;
+public:
+    typedef DBRangesType AnonDBsType;
 
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
     sal_uInt16 nEntryIndex;         // counter for unique indices
+    AnonDBsType maAnonDBs;
 
 public:
     ScDBCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false, ScDocument* pDocument = NULL) :
@@ -201,11 +206,8 @@ public:
                     pDoc                ( pDocument ),
                     nEntryIndex         ( SC_START_INDEX_DB_COLL )  // see above for the names
                     {}
-    ScDBCollection(const ScDBCollection& rScDBCollection) :
-                    ScSortedCollection  ( rScDBCollection ),
-                    pDoc                ( rScDBCollection.pDoc ),
-                    nEntryIndex         ( rScDBCollection.nEntryIndex)
-                    {}
+
+    ScDBCollection(const ScDBCollection& r);
 
     virtual ScDataObject*   Clone() const { return new ScDBCollection(*this); }
             ScDBData*   operator[]( const sal_uInt16 nIndex) const {return (ScDBData*)At(nIndex);}
@@ -232,6 +234,13 @@ public:
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }
     const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
+
+    const ScDBData* findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+    const ScDBData* findAnonByRange(const ScRange& rRange) const;
+    ScDBData* getAnonByRange(const ScRange& rRange);
+    void insertAnonRange(ScDBData* pData);
+
+    const AnonDBsType& getAnonRanges() const;
 };
 
 #endif

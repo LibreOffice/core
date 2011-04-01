@@ -1109,8 +1109,9 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
 
         // See if we have global ranges.
         ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-        if (pDBCollection && pDBCollection->GetCount() > 0)
-            bHasRanges = true;
+        if (pDBCollection)
+            if (pDBCollection->GetCount() > 0 || !pDBCollection->getAnonRanges().empty())
+                bHasRanges = true;
 
         if (!bHasRanges)
             // No ranges to export. Bail out.
@@ -1209,8 +1210,13 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
         }
 
         WriteDatabaseRange func(rExport, pDoc);
+
         // Write sheet-local ranges.
         ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
+
+        // Add global anonymous DB ranges.
+        const ScDBCollection::AnonDBsType& rAnonDBs = pDBCollection->getAnonRanges();
+        ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
 }
 
