@@ -30,7 +30,6 @@
 #define __ooo_vba_excel_XFileDialog_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
-
 #include <ooo/vba/XFileDialogSelectedItems.idl>
 
 //=============================================================================

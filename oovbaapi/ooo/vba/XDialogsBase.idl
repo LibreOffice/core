@@ -29,7 +29,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/XCollection.idl>
-
 #include <ooo/vba/XHelperInterface.idl>
 
 //=============================================================================
