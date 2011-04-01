@@ -209,7 +209,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsCustomFtnMark( false ),
         m_bIsParaChange( false ),
         m_bParaChanged( false ),
-        m_bIsLastParaInSection( false )
+        m_bIsLastParaInSection( false ),
+        m_bUsingEnhancedFields( false )
 {
     appendTableManager( );
     GetBodyText();
