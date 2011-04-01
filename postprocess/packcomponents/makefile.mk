@@ -242,6 +242,10 @@ my_components += ogltrans
 my_components += productregistration.jar
 .END
 
+.IF "$(ENABLE_LOMENUBAR)" == "TRUE"
+my_components += component/framework/util/lomenubar
+.END
+
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     LuceneHelpWrapper \
