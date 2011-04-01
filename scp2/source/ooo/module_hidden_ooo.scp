@@ -431,6 +431,9 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
 	gid_File_Lib_Lngpckinsthlp,
+#ifdef ENABLE_LOMENUBAR
+	gid_File_Lib_Lomenubar,
+#endif
     gid_File_Lib_sn_tools,
     gid_File_Lib_relnotes,
     GID_FILE_LIB_WPD,
@@ -874,5 +877,4 @@ End
 //    Styles = (HIDDEN_ROOT);
 // End
 // #endif
-
 
