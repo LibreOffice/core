@@ -182,7 +182,8 @@ static bool isLDAP( EBook *pBook )
 
 static bool isLocal( EBook *pBook )
 {
-    return pBook && !strncmp( "file://", e_book_get_uri( pBook ), 6 );
+    return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
+                      !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
 }
 
 static bool isAuthRequired( EBook *pBook )

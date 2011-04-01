@@ -1147,17 +1147,18 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
         switch (m_pConnection->getSDBCAddressType()) {
         case SDBCAddress::EVO_GWISE:
-                    if (0==strncmp( "groupwise://", p, 11 ))
+                    if ( !strncmp( "groupwise://", p, 11 ))
                         break;
                     else
                         continue;
         case SDBCAddress::EVO_LOCAL:
-                    if (0==strncmp( "file://", p, 6 ))
+                    if ( !strncmp( "file://", p, 6 ) ||
+                         !strncmp( "local://", p, 6 ) )
                         break;
                     else
                         continue;
         case SDBCAddress::EVO_LDAP:
-                    if (0==strncmp( "ldap://", p, 6 ))
+                    if ( !strncmp( "ldap://", p, 6 ))
                         break;
                     else
                         continue;
