@@ -40,7 +40,7 @@
 #include <glib.h>
 #include <libdbusmenu-glib/menuitem.h>
 
-#define FRAMEJOB_IMPLEMENTATION_NAME "com.sun.star.comp.Office.MyJob"
+#define FRAMEJOB_IMPLEMENTATION_NAME "org.libreoffice.comp.framework.lomenubar.FrameJob"
 #define FRAMEJOB_SERVICE_NAME "com.sun.star.task.Job"
 
 namespace css = ::com::sun::star;

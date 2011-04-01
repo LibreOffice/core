@@ -32,8 +32,8 @@
 #include <cppuhelper/implbase2.hxx>
 
 #define LIBREOFFICE_BUSNAME            "org.libreoffice.dbusmenu"
-#define DESKTOPJOB_IMPLEMENTATION_NAME "org.libreoffice.desktop.AppMenuJob"
-#define DESKTOPJOB_SERVICE_NAME        "org.libreoffice.desktop.AppMenuJob"
+#define DESKTOPJOB_IMPLEMENTATION_NAME "org.libreoffice.comp.framework.lomenubar.DesktopJob"
+#define DESKTOPJOB_SERVICE_NAME        "com.sun.star.task.Job"
 
 namespace css = ::com::sun::star;
 using css::uno::Reference;
