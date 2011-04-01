@@ -34,7 +34,7 @@
 class OutlinerView;
 class SwView;
 class SwPostItMgr;
-class SpellCallbackInfo;
+struct SpellCallbackInfo;
 
 namespace sw { namespace sidebarwindows {
 
