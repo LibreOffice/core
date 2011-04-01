@@ -1238,7 +1238,7 @@ X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
-    if( nLevel >= MAX_FALLBACK )
+    if( nLevel < 0 || nLevel >= MAX_FALLBACK )
         return sal_False;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
