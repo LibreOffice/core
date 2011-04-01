@@ -25,40 +25,24 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_script_vba_XVBACompatibility_idl__
-#define __com_sun_star_script_vba_XVBACompatibility_idl__
+#ifndef __com_sun_star_script_vba_XVBAScriptListener_idl__
+#define __com_sun_star_script_vba_XVBAScriptListener_idl__
 
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/script/vba/XVBAScriptListener.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/script/vba/VBAScriptEvent.idl>
 
 //=============================================================================
 
-module com {  module sun {  module star {  module script { module vba {
+module com {  module sun {  module star { module script { module vba {
 
-interface XVBACompatibility
+//=============================================================================
+
+interface XVBAScriptListener : ::com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
-
-    [attribute] boolean VBACompatibilityMode;
-
-    //-------------------------------------------------------------------------
-
-    [attribute, readonly] long RunningVBAScripts;
-
-    //-------------------------------------------------------------------------
-
-    [oneway] void addVBAScriptListener( [in] XVBAScriptListener Listener );
-
-    //-------------------------------------------------------------------------
-
-    [oneway] void removeVBAScriptListener( [in] XVBAScriptListener Listener );
-
-    //-------------------------------------------------------------------------
-
-    void broadcastVBAScriptEvent( [in] long Identifier, [in] string ModuleName );
-
-    //-------------------------------------------------------------------------
+    void notifyVBAScriptEvent( [in] VBAScriptEvent Event );
 };
+
+//=============================================================================
 
 }; }; }; }; };
 
