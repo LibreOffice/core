@@ -68,23 +68,6 @@ typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
 // #FIXME #TODO the implementation of the Sheets collections sucks,
 // e.g. there is no support for tracking sheets added/removed from the collection
 
-uno::Reference< uno::XInterface >
-lcl_getModulAsUnoObject( const uno::Reference< sheet::XSpreadsheet >& xSheet, const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
-{
-    uno::Reference< uno::XInterface > xRet;
-    if ( !xSheet.is() )
-        throw uno::RuntimeException();
-    uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
-    rtl::OUString sName;
-    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= sName;
-
-    ScDocShell* pShell = excel::getDocShell( xModel );
-
-    if ( pShell )
-        xRet = getUnoDocModule(  sName, pShell );
-    return xRet;
-}
-
 class WorkSheetsEnumeration : public SheetEnumeration_BASE
 {
     SheetMap mSheetMap;
@@ -173,16 +156,16 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Reference< sheet::XSpreadsheet > xSheet( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        uno::Reference< uno::XInterface > xIf = lcl_getModulAsUnoObject( xSheet, m_xModel );
+        uno::Reference< XHelperInterface > xIf = excel::getUnoSheetModuleObj( xSheet );
         uno::Any aRet;
         if ( !xIf.is() )
-                {
+        {
             // if the Sheet is in a document created by the api unfortunately ( at the
             // moment, it actually wont have the special Document modules
             uno::Reference< excel::XWorksheet > xNewSheet( new ScVbaWorksheet( m_xParent, m_xContext, xSheet, m_xModel ) );
             aRet <<= xNewSheet;
-                }
-                else
+        }
+        else
             aRet <<= xIf;
         return aRet;
     }
@@ -220,7 +203,7 @@ uno::Any
 ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheet > xSheet( aSource, uno::UNO_QUERY );
-    uno::Reference< XInterface > xIf = lcl_getModulAsUnoObject( xSheet, mxModel );
+    uno::Reference< XHelperInterface > xIf = excel::getUnoSheetModuleObj( xSheet );
     uno::Any aRet;
     if ( !xIf.is() )
     {

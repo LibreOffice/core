@@ -62,10 +62,10 @@ ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xPar
 {
     try
     {
-        mxServiceInfo.set( mxPropertySet, uno::UNO_QUERY_THROW );
         if ( !mxModel.is() )
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved") ) );
-        mxNumberFormatsSupplier.set( mxModel, uno::UNO_QUERY_THROW );
+        // mxServiceInfo is unused,
+        // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }
     catch (uno::Exception& )
     {

@@ -25,15 +25,15 @@
  *
  ************************************************************************/
 
-#ifndef SC_VBAEVENTS_HXX
-#define SC_VBAEVENTS_HXX
+#ifndef SC_VBAEVENTSHELPER_HXX
+#define SC_VBAEVENTSHELPER_HXX
 
 #include <rtl/ref.hxx>
 #include <vbahelper/vbaeventshelperbase.hxx>
 #include "excelvbahelper.hxx"
 #include "rangelst.hxx"
 
-class ScVbaEventsListener;
+class ScVbaEventListener;
 
 // ============================================================================
 
@@ -45,13 +45,12 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ScVbaEventsHelper();
 
-    // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& rEvent ) throw (css::uno::RuntimeException);
 
 protected:
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Any > implBuildArgumentList( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException);
-    virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bSuccess, bool bCancel ) throw (css::uno::RuntimeException);
+    virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bCancel ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException);
 
 private:
@@ -65,11 +64,11 @@ private:
     css::uno::Any createRange( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     /** Creates a VBA Hyperlink object (the argument must contain a UNO cell). */
     css::uno::Any createHyperlink( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    /** Creates a VBA Window object. */
-    css::uno::Any createWindow() const throw (css::uno::RuntimeException);
+    /** Creates a VBA Window object (the argument must contain a model controller). */
+    css::uno::Any createWindow( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
 private:
-    ::rtl::Reference< ScVbaEventsListener > mxListener;
+    ::rtl::Reference< ScVbaEventListener > mxListener;
     css::uno::Any maOldSelection;
     ScDocShell* mpDocShell;
     ScDocument* mpDoc;
