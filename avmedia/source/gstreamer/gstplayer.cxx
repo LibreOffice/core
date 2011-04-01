@@ -43,7 +43,7 @@
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME "com.sun.star.media.Player_GStreamer"
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
 #define DBG OSL_TRACE
 #else
 #define DBG(...)
@@ -159,13 +159,14 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
     DBG( "%p processSyncMessage: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
 
-#if DEBUG
-    if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
+#if OSL_DEBUG_LEVEL > 0
+    if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR )
+    {
         GError* error;
         gchar* error_debug;
 
         gst_message_parse_error( message, &error, &error_debug );
-        DBG("error: '%s' debug: '%s'", error->message, error_debug);
+        OSL_TRACE("gstreamer error: '%s' debug: '%s'", error->message, error_debug);
     }
 #endif
 
@@ -230,7 +231,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         }
                     }
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
                     sal_Bool aSuccess =
 #endif
                                           osl_setCondition( maSizeCondition );
@@ -241,7 +242,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
             sal_Bool aSuccess =
 #endif
                                 osl_setCondition( maSizeCondition );
@@ -536,7 +537,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     DBG( "%p Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
     TimeValue aTimeout = { 10, 0 };
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
     oslConditionResult aResult =
 #endif
                                  osl_waitCondition( maSizeCondition, &aTimeout );
