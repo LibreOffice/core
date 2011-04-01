@@ -233,6 +233,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
         -Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		$(LIBS) \
         -o $(1))
 endef
 
