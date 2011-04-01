@@ -41,7 +41,7 @@ public class LocaleCodes extends Resource
     public LocaleCodes(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
-        allLanguageStrings = getStringList(16635);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
+        allLanguageStrings = getStringList(16633);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
     }
 
     public String getLanguageString(String MSID)
