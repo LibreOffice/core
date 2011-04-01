@@ -97,6 +97,7 @@
 /cppunit
 /cpputools
 /crashrep
+/ct2n
 /cui
 /curl
 /dbaccess
@@ -232,6 +233,7 @@
 /toolkit
 /tools
 /translate_toolkit
+/translations
 /twain
 /ucb
 /ucbhelper
