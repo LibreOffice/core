@@ -42,9 +42,6 @@
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/salbtype.hxx>
-#ifdef GSTREAMER
-#include <vcl/sysdata.hxx>
-#endif
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -457,19 +454,11 @@ namespace slideshow
 
                             if( mxPlayer.is() )
                             {
-#ifndef GSTREAMER
                                 aArgs[ 0 ] = uno::makeAny(
                                     sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() ) );
-#else
-                                                                aArgs[ 0 ] = uno::makeAny ( (sal_Int32) 0 );
-#endif
+
                                 aAWTRect.X = aAWTRect.Y = 0;
                                 aArgs[ 1 ] = uno::makeAny( aAWTRect );
-#ifdef GSTREAMER
-                                                                const SystemEnvData *pSystemData = mpMediaWindow->GetSystemData();
-                                                                OSL_TRACE( "xwindow id: %ld", pSystemData->aWindow );
-                                aArgs[ 2 ] = uno::makeAny( pSystemData->aWindow );
-#endif
 
                                 aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() ) );
 
