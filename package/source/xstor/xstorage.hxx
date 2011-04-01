@@ -36,7 +36,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -298,7 +298,7 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::util::XModifiable
                 // , public ::com::sun::star::container::XNameAccess
                 // , public ::com::sun::star::lang::XComponent
-                , public ::com::sun::star::embed::XEncryptionProtectedSource2
+                , public ::com::sun::star::embed::XEncryptionProtectedStorage
                 , public ::com::sun::star::beans::XPropertySet
                 , public ::com::sun::star::embed::XOptimizedStorage
                 , public ::com::sun::star::embed::XRelationshipAccess
@@ -648,6 +648,13 @@ public:
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException );
 
+    //____________________________________________________________________________________________________
+    //  XEncryptionProtectedStorage
+    //____________________________________________________________________________________________________
+
+    virtual void SAL_CALL setEncryptionAlgorithms( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aAlgorithms ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XPropertySet

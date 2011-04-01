@@ -24,29 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SHA1CONTEXT_HXX
+#define _SHA1CONTEXT_HXX
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
-#include <XMemoryStream.hxx>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
-XMemoryStream::XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer )
-: ZipPackageBuffer ( rNewBuffer )
+class SHA1DigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
 {
-}
-XMemoryStream::~XMemoryStream(void)
-{
-}
-::com::sun::star::uno::Any SAL_CALL XMemoryStream::queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                    // OWeakObject interfaces
-                                    reinterpret_cast< XInterface*       > ( this )  ,
-                                    static_cast< XWeak*         > ( this )  ,
-                                    // my interfaces
-                                    static_cast< XInputStream*      > ( this )  ,
-                                    static_cast< XSeekable*     > ( this ) );
-}
+    ::osl::Mutex m_aMutex;
+    void* m_pDigest;
+
+    SHA1DigestContext()
+    : m_pDigest( NULL )
+    {}
+
+public:
+
+    virtual ~SHA1DigestContext();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext >
+        Create();
+
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+
+};
+
+#endif // _SHA1CONTEXT_HXX
+

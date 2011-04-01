@@ -27,19 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
-#include <ZipOutputStream.hxx>
+
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <comphelper/storagehelper.hxx>
+
 #include <osl/time.h>
+
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#include <vos/ref.hxx>
-#include <com/sun/star/io/XOutputStream.hpp>
-
-#include <comphelper/storagehelper.hxx>
+#include <ZipPackageStream.hxx>
+#include <ZipOutputStream.hxx>
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages;
@@ -48,17 +51,18 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream )
-: xStream(xOStream)
-, aBuffer(n_ConstBufferSize)
+ZipOutputStream::ZipOutputStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                                  const uno::Reference < XOutputStream > &xOStream )
+: m_xFactory( xFactory )
+, xStream(xOStream)
+, m_aDeflateBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
 , aChucker(xOStream)
 , pCurrentEntry(NULL)
 , nMethod(DEFLATED)
 , bFinished(sal_False)
 , bEncryptCurrentEntry(sal_False)
-
-
+, m_pCurrentStream(NULL)
 {
 }
 
@@ -80,7 +84,7 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 }
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
-                        vos::ORef < EncryptionData > &xEncryptData,
+                        ZipPackageStream* pStream,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
 {
@@ -94,18 +98,20 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     rEntry.nFlag = 1 << 11;
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
         rEntry.nCrc == -1)
+    {
+        rEntry.nSize = rEntry.nCompressedSize = 0;
         rEntry.nFlag |= 8;
+    }
 
     if (bEncrypt)
     {
         bEncryptCurrentEntry = sal_True;
 
-        ZipFile::StaticGetCipher( xEncryptData, aCipher, sal_False );
-
-        aDigest = rtl_digest_createSHA1();
+        m_xCipherContext = ZipFile::StaticGetCipher( m_xFactory, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xFactory, pStream->GetEncryptionData() );
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
-        pCurrentEncryptData = xEncryptData.getBodyPtr();
+        m_pCurrentStream = pStream;
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.GetPosition()) - nLOCLength;
@@ -145,11 +151,12 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 }
                 else
                 {
-                    pEntry->nSize = aDeflater.getTotalIn();
-                    pEntry->nCompressedSize = aDeflater.getTotalOut();
+                    if ( !bEncryptCurrentEntry )
+                    {
+                        pEntry->nSize = aDeflater.getTotalIn();
+                        pEntry->nCompressedSize = aDeflater.getTotalOut();
+                    }
                     pEntry->nCrc = aCRC.getValue();
-                    if ( bEncryptCurrentEntry )
-                        pEntry->nSize = pEntry->nCompressedSize;
                     writeEXT(*pEntry);
                 }
                 aDeflater.reset();
@@ -166,18 +173,22 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 
         if (bEncryptCurrentEntry)
         {
-            rtlDigestError aDigestResult;
-            aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
-            rtl_cipher_destroy ( aCipher );
-            pCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
-            aDigestResult = rtl_digest_getSHA1 ( aDigest,
-                                                 reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
-                                                 RTL_DIGEST_LENGTH_SHA1 );
-            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
-            rtl_digest_destroySHA1 ( aDigest );
+
+            m_xCipherContext.clear();
+
+            uno::Sequence< sal_Int8 > aDigestSeq;
+            if ( m_xDigestContext.is() )
+            {
+                aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
+                m_xDigestContext.clear();
+            }
+
+            if ( m_pCurrentStream )
+                m_pCurrentStream->setDigest( aDigestSeq );
         }
         pCurrentEntry = NULL;
+        m_pCurrentStream = NULL;
     }
 }
 
@@ -242,41 +253,53 @@ void SAL_CALL ZipOutputStream::finish(  )
 
 void ZipOutputStream::doDeflate()
 {
-    sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
-    sal_Int32 nOldLength = aBuffer.getLength();
+    sal_Int32 nLength = aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
 
     if ( nLength > 0 )
     {
-        Sequence < sal_Int8 > aTmpBuffer ( aBuffer.getConstArray(), nLength );
-        const void *pTmpBuffer = static_cast < const void * > ( aTmpBuffer.getConstArray() );
-        if (bEncryptCurrentEntry)
+        uno::Sequence< sal_Int8 > aTmpBuffer( m_aDeflateBuffer.getConstArray(), nLength );
+        if ( bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
             // Need to update our digest before encryption...
-            rtlDigestError aDigestResult = rtl_Digest_E_None;
-            sal_Int16 nDiff = n_ConstDigestLength - mnDigested;
+            sal_Int32 nDiff = n_ConstDigestLength - mnDigested;
             if ( nDiff )
             {
-                sal_Int16 nEat = static_cast < sal_Int16 > ( nDiff > nLength ? nLength : nDiff );
-                aDigestResult = rtl_digest_updateSHA1 ( aDigest, pTmpBuffer, nEat );
-                mnDigested = mnDigested + nEat;
+                sal_Int32 nEat = ::std::min( nLength, nDiff );
+                uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
+                m_xDigestContext->updateDigest( aTmpSeq );
+                mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
             }
-            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
 
-            aEncryptionBuffer.realloc ( nLength );
-
-            rtlCipherError aCipherResult;
-            aCipherResult = rtl_cipher_encode ( aCipher, pTmpBuffer,
-                                            nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
-            OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
+            uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             aChucker.WriteBytes( aEncryptionBuffer );
-            aCRC.update ( aEncryptionBuffer );
-            aEncryptionBuffer.realloc ( nOldLength );
+
+            // the sizes as well as checksum for encrypted streams is calculated here
+            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
+            aCRC.update( aEncryptionBuffer );
         }
         else
+        {
             aChucker.WriteBytes ( aTmpBuffer );
+        }
+    }
+
+    if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+    {
+        uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
+        if ( aEncryptionBuffer.getLength() )
+        {
+            aChucker.WriteBytes( aEncryptionBuffer );
+
+            // the sizes as well as checksum for encrypted streams is calculated hier
+            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
+            aCRC.update( aEncryptionBuffer );
+        }
     }
 }
+
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {
@@ -293,7 +316,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
-        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
@@ -342,7 +365,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
-        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );

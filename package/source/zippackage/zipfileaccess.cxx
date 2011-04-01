@@ -42,6 +42,7 @@
 #include <EncryptionData.hxx>
 
 #include <ucbhelper/content.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -253,7 +254,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const ::rtl::OUString& aName )
         throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
-                                                                                new EncryptionData(),
+                                                                                ::rtl::Reference< EncryptionData >(),
                                                                                 sal_False,
                                                                                 m_aMutexHolder ) );
 
@@ -368,7 +369,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
         if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
             uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
-                                                                                        new EncryptionData(),
+                                                                                        ::rtl::Reference< EncryptionData >(),
                                                                                         sal_False,
                                                                                         m_aMutexHolder ) );
 

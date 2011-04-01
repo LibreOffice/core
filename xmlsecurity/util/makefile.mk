@@ -83,10 +83,10 @@ SHL2LIBS= \
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2LIBS += \
     $(SLB)$/xs_mscrypt.lib
-.ELSE
+.ENDIF
+
 SHL2LIBS += \
     $(SLB)$/xs_nss.lib
-.ENDIF
 
 .ENDIF
 
@@ -117,18 +117,21 @@ SHL2STDLIBS += $(NSS_LIB)
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2STDLIBS+= $(MSCRYPTOLIBS)
+# SHL2STDLIBS+= $(XMLSECLIB) $(LIBXML2LIB) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+SHL2STDLIBS+= $(NSS3LIB) $(NSPR4LIB)
 .ELSE
 SHL2STDLIBS+= $(NSSCRYPTOLIBS)
 .ENDIF
+
 
 SHL2IMPLIB = $(SHL2TARGET)
 SHL2DEF = $(MISC)$/$(SHL2TARGET).def
 DEF2NAME = $(SHL2TARGET)
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 DEF2EXPORTFILE = exports_xsmscrypt.dxp
-.ELSE
-DEF2EXPORTFILE = exports_xsnss.dxp
 .ENDIF
+
+DEF2EXPORTFILE = exports_xsnss.dxp
 
 SRSFILELIST=	\
                 $(SRS)$/component.srs   \

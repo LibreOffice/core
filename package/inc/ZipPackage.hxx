@@ -35,11 +35,12 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#include <HashMaps.hxx>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+#include <HashMaps.hxx>
 #include <osl/file.h>
 #include <mutexholder.hxx>
 
@@ -83,18 +84,24 @@ class ZipPackage : public cppu::WeakImplHelper7
 protected:
     SotMutexHolderRef m_aMutexHolder;
 
-    ::com::sun::star::uno::Sequence < sal_Int8 > m_aEncryptionKey;
-    FolderHash       m_aRecent;
-    ::rtl::OUString  m_aURL;
-    sal_Bool         m_bHasEncryptedEntries;
-    sal_Bool         m_bHasNonEncryptedEntries;
-    sal_Bool         m_bInconsistent;
-    sal_Bool         m_bUseManifest;
-    sal_Bool         m_bForceRecovery;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aStorageEncryptionKeys;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aEncryptionKey;
 
-    sal_Bool        m_bMediaTypeFallbackUsed;
-    sal_Int32       m_nFormat;
-    sal_Bool        m_bAllowRemoveOnInsert;
+    FolderHash        m_aRecent;
+    ::rtl::OUString   m_aURL;
+
+    sal_Int32         m_nStartKeyGenerationID;
+    sal_Int32         m_nChecksumDigestID;
+    sal_Int32         m_nCommonEncryptionID;
+    sal_Bool          m_bHasEncryptedEntries;
+    sal_Bool          m_bHasNonEncryptedEntries;
+
+    sal_Bool          m_bInconsistent;
+    sal_Bool          m_bForceRecovery;
+
+    sal_Bool          m_bMediaTypeFallbackUsed;
+    sal_Int32         m_nFormat;
+    sal_Bool          m_bAllowRemoveOnInsert;
 
     InitialisationMode m_eMode;
 
@@ -121,15 +128,20 @@ protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xTempStream );
 
 public:
-    ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
+    ZipPackage( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory );
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *m_pZipFile;}
-    const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return m_aEncryptionKey;}
     sal_Int32 getFormat() const { return m_nFormat; }
+
+    sal_Int32 GetStartKeyGenID() const { return m_nStartKeyGenerationID; }
+    sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
+    sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
+    sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }
 
     SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }
 
     void ConnectTo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
+    const ::com::sun::star::uno::Sequence< sal_Int8 > GetEncryptionKey();
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )

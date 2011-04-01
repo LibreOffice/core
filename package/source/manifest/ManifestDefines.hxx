@@ -53,15 +53,28 @@
 
 #define ELEMENT_START_KEY_GENERATION "manifest:start-key-generation"
 #define ATTRIBUTE_START_KEY_GENERATION_NAME "manifest:start-key-generation-name"
-#define ALGORITHM_SHA1 "SHA1"
 #define ATTRIBUTE_KEY_SIZE "manifest:key-size"
-#define START_KEY_SIZE "20"
 
 #define ELEMENT_KEY_DERIVATION "manifest:key-derivation"
 #define ATTRIBUTE_KEY_DERIVATION_NAME "manifest:key-derivation-name"
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
-#define CHECKSUM_TYPE "SHA1/1K"
-#define DERIVED_KEY_SIZE "16"
+
+#define SHA256_URL "http://www.w3.org/2000/09/xmldsig#sha256"
+#define SHA1_NAME "SHA1"
+#define SHA1_URL "http://www.w3.org/2000/09/xmldsig#sha1"
+
+#define SHA1_1K_NAME "SHA1/1K"
+#define SHA1_1K_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha1-1k"
+#define SHA256_1K_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k"
+
+#define BLOWFISH_NAME "Blowfish CFB"
+#define BLOWFISH_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#blowfish"
+#define AES128_URL "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+#define AES192_URL "http://www.w3.org/2001/04/xmlenc#aes192-cbc"
+#define AES256_URL "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+
+#define PBKDF2_NAME "PBKDF2"
+#define PBKDF2_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"
 
 #endif

@@ -46,15 +46,17 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
-#include "selfterminatefilestream.hxx"
-#include "owriteablestream.hxx"
-#include "oseekinstream.hxx"
-#include "mutexholder.hxx"
-#include "xstorage.hxx"
-
 #include <rtl/digest.h>
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
+
+#include <PackageConstants.hxx>
+#include <mutexholder.hxx>
+
+#include "selfterminatefilestream.hxx"
+#include "owriteablestream.hxx"
+#include "oseekinstream.hxx"
+#include "xstorage.hxx"
 
 // since the copying uses 32000 blocks usually, it makes sense to have a smaller size
 #define MAX_STORCACHE_SIZE 30000
@@ -110,15 +112,14 @@ namespace
 {
 //-----------------------------------------------
 void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet,
-                                    const uno::Sequence< sal_Int8 >& aKey )
+                                    const uno::Sequence< beans::NamedValue >& aKey )
 {
     OSL_ENSURE( xPropertySet.is(), "No property set is provided!\n" );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aString_EncryptionKey = ::rtl::OUString::createFromAscii( "EncryptionKey" );
     try {
-        xPropertySet->setPropertyValue( aString_EncryptionKey, uno::makeAny( aKey ) );
+        xPropertySet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ), uno::makeAny( aKey ) );
     }
     catch ( uno::Exception& aException )
     {
@@ -136,9 +137,8 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aString_EncryptionKey = ::rtl::OUString::createFromAscii( "EncryptionKey" );
     try {
-        return xPropertySet->getPropertyValue( aString_EncryptionKey );
+        return xPropertySet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) );
     }
     catch ( uno::Exception& aException )
     {
@@ -151,16 +151,65 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
 }
 
 //-----------------------------------------------
-sal_Bool SequencesEqual( uno::Sequence< sal_Int8 > aSequence1, uno::Sequence< sal_Int8 > aSequence2 )
+bool SequencesEqual( const uno::Sequence< sal_Int8 >& aSequence1, const uno::Sequence< sal_Int8 >& aSequence2 )
 {
     if ( aSequence1.getLength() != aSequence2.getLength() )
-        return sal_False;
+        return false;
 
     for ( sal_Int32 nInd = 0; nInd < aSequence1.getLength(); nInd++ )
         if ( aSequence1[nInd] != aSequence2[nInd] )
-            return sal_False;
+            return false;
 
-    return sal_True;
+    return true;
+}
+
+//-----------------------------------------------
+bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const uno::Sequence< beans::NamedValue >& aSequence2 )
+{
+    if ( aSequence1.getLength() != aSequence2.getLength() )
+        return false;
+
+    for ( sal_Int32 nInd = 0; nInd < aSequence1.getLength(); nInd++ )
+    {
+        bool bHasMember = false;
+        uno::Sequence< sal_Int8 > aMember1;
+        sal_Int32 nMember1 = 0;
+        if ( ( aSequence1[nInd].Value >>= aMember1 ) )
+        {
+            for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
+            {
+                if ( aSequence1[nInd].Name.equals( aSequence2[nInd2].Name ) )
+                {
+                    bHasMember = true;
+
+                    uno::Sequence< sal_Int8 > aMember2;
+                    if ( !( aSequence2[nInd2].Value >>= aMember2 ) || !SequencesEqual( aMember1, aMember2 ) )
+                        return false;
+                }
+            }
+        }
+        else if ( ( aSequence1[nInd].Value >>= nMember1 ) )
+        {
+            for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
+            {
+                if ( aSequence1[nInd].Name.equals( aSequence2[nInd2].Name ) )
+                {
+                    bHasMember = true;
+
+                    sal_Int32 nMember2 = 0;
+                    if ( !( aSequence2[nInd2].Value >>= nMember2 ) || nMember1 != nMember2 )
+                        return false;
+                }
+            }
+        }
+        else
+            return false;
+
+        if ( !bHasMember )
+            return false;
+    }
+
+    return true;
 }
 
 //-----------------------------------------------
@@ -394,7 +443,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
 
     // since a new key set to the package stream it should not be removed except the case when
     // the stream becomes nonencrypted
-    uno::Sequence< sal_Int8 > aKey;
+    uno::Sequence< beans::NamedValue > aKey;
     if ( bToBeEncr )
         GetEncryptionKeyProperty_Impl( xPropSet ) >>= aKey;
 
@@ -821,8 +870,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
-        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
-                                        uno::makeAny( uno::Sequence< sal_Int8 >() ) );
+        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( STORAGE_ENCRYPTION_KEYS_PROPERTY ),
+                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "Encrypted" ),
                                         uno::makeAny( sal_True ) );
     }
@@ -920,8 +969,8 @@ void OWriteStream_Impl::Commit()
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
-        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
-                                        uno::makeAny( uno::Sequence< sal_Int8 >() ) );
+        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( STORAGE_ENCRYPTION_KEYS_PROPERTY ),
+                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "Encrypted" ),
                                         uno::makeAny( sal_True ) );
     }
@@ -930,8 +979,8 @@ void OWriteStream_Impl::Commit()
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
-        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
-                                        uno::makeAny( m_aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) ) );
+        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( STORAGE_ENCRYPTION_KEYS_PROPERTY ),
+                                        uno::makeAny( m_aEncryptionData.getAsConstNamedValueList() ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -1264,7 +1313,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     }
     else
     {
-        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getAsConstNamedValueList() );
 
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
@@ -1273,55 +1322,22 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             m_bHasCachedEncryptionData = sal_True;
             m_aEncryptionData = aEncryptionData;
         }
-        catch( packages::WrongPasswordException& )
+        catch( packages::WrongPasswordException& aWrongPasswordException )
         {
-            // retry with different encoding
-            SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
-            try {
-                // the stream must be cashed to be resaved
-                xResultStream = GetStream_Impl( nStreamMode | embed::ElementModes::SEEKABLE, bHierarchyAccess );
-
-                m_bUseCommonEncryption = sal_False; // very important to set it to false
-                m_bHasCachedEncryptionData = sal_True;
-                m_aEncryptionData = aEncryptionData;
-
-                // the stream must be resaved with new password encryption
-                if ( nStreamMode & embed::ElementModes::WRITE )
-                {
-                    FillTempGetFileName();
-                    m_bHasDataToFlush = sal_True;
-
-                    // TODO/LATER: should the notification be done?
-                    if ( m_pParent )
-                        m_pParent->m_bIsModified = sal_True;
-                }
-            }
-            catch( packages::WrongPasswordException& aWrongPasswordException )
-            {
-                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                AddLog( aWrongPasswordException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-                throw;
-            }
-            catch ( uno::Exception& aException )
-            {
-                AddLog( aException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-
-                OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
-                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                throw io::IOException(); // TODO:
-            }
-        }
-        catch( uno::Exception& aException )
-        {
-            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-
-            AddLog( aException.Message );
+            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+            AddLog( aWrongPasswordException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
+        catch ( uno::Exception& aException )
+        {
+            AddLog( aException.Message );
+            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
+            OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
+            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+            throw io::IOException(); // TODO:
+        }
     }
 
     OSL_ENSURE( xResultStream.is(), "In case stream can not be retrieved an exception must be thrown!\n" );
@@ -1624,8 +1640,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     {
         // TODO: introduce last commited cashed password information and use it here
         // that means "use common pass" also should be remembered on flash
-        uno::Sequence< sal_Int8 > aNewKey = aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() );
-        uno::Sequence< sal_Int8 > aOldKey = aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() );
+        uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
 
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY );
         if ( !xProps.is() )
@@ -1636,9 +1651,9 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         if ( !bEncr )
             throw packages::NoEncryptionException();
 
-        uno::Sequence< sal_Int8 > aEncrKey;
-        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ) ) >>= aEncrKey;
-        if ( !SequencesEqual( aNewKey, aEncrKey ) && !SequencesEqual( aOldKey, aEncrKey ) )
+        uno::Sequence< beans::NamedValue > aPackKey;
+        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) >>= aPackKey;
+        if ( !SequencesEqual( aKey, aPackKey ) )
             throw packages::WrongPasswordException();
 
         // the correct key must be set already
@@ -1647,7 +1662,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     else
     {
         uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getAsConstNamedValueList() );
 
         try {
             xDataToCopy = m_xPackageStream->getDataStream();
@@ -1655,42 +1670,19 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             if ( !xDataToCopy.is() )
             {
                 OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
-                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-            }
-        }
-        catch( packages::WrongPasswordException& aWrongPasswordException )
-        {
-            SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
-            try {
-                xDataToCopy = m_xPackageStream->getDataStream();
-
-                if ( !xDataToCopy.is() )
-                {
-                    OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
-                    SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                    AddLog( aWrongPasswordException.Message );
-                    AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-                    throw;
-                }
-            }
-            catch( uno::Exception& aException )
-            {
-                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                AddLog( aException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-                throw;
+                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             }
         }
         catch( uno::Exception& aException )
         {
             OSL_ENSURE( sal_False, "Can't open encrypted stream!\n" );
-            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
+            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( aException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
 
-        SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
+        SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
     }
 
     // in case of new inserted package stream it is possible that input stream still was not set

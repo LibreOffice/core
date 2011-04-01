@@ -132,8 +132,8 @@ public:
         sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature);
     ~DigitalSignaturesDialog();
 
-            // Initialize the dialog and the security environment, returns sal_True on success
-    sal_Bool    Init( const rtl::OUString& rTokenName );
+    // Initialize the dialog and the security environment, returns TRUE on success
+    sal_Bool    Init();
 
             // Set the storage which should be signed or verified
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );

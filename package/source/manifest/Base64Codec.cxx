@@ -129,11 +129,11 @@ void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, cons
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
-void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence < sal_uInt8 >& aPass)
+void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence < sal_Int8 >& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
-    const sal_uInt8* pBuffer = aPass.getConstArray();
+    const sal_uInt8* pBuffer = reinterpret_cast< const sal_uInt8* >( aPass.getConstArray() );
     while (i < nBufferLength)
     {
         rtl::OUStringBuffer sBuffer;
@@ -183,7 +183,7 @@ void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int3
     pBuffer[nStart + 2] = OneByte;
 }
 
-void Base64Codec::decodeBase64(uno::Sequence< sal_uInt8 >& aBuffer, const rtl::OUString& sBuffer)
+void Base64Codec::decodeBase64(uno::Sequence< sal_Int8 >& aBuffer, const rtl::OUString& sBuffer)
 {
     sal_Int32 nFirstLength((sBuffer.getLength() / 4) * 3);
     sal_uInt8* pBuffer = new sal_uInt8[nFirstLength];
@@ -199,6 +199,6 @@ void Base64Codec::decodeBase64(uno::Sequence< sal_uInt8 >& aBuffer, const rtl::O
         i += 4;
         k += 3;
     }
-    aBuffer = uno::Sequence<sal_uInt8>(pBuffer, nSecondLength);
+    aBuffer = uno::Sequence<sal_Int8>( reinterpret_cast< sal_Int8* >( pBuffer ), nSecondLength );
     delete[] pBuffer;
 }

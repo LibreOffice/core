@@ -24,19 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMEMORY_STREAM_HXX
-#define _XMEMORY_STREAM_HXX
 
-#include <ZipPackageBuffer.hxx>
+#ifndef _DIGESTCONTEXT_HXX
+#define _DIGESTCONTEXT_HXX
 
-class ZipPackage;
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-class XMemoryStream: public ZipPackageBuffer
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
+
+class ODigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
 {
+private:
+    ::osl::Mutex m_aMutex;
+
+    PK11Context* m_pContext;
+    sal_Int32 m_nDigestLength;
+    bool m_b1KData;
+    sal_Int32 m_nDigested;
+
+    bool m_bDisposed;
+    bool m_bBroken;
+
 public:
-    XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer );
-    virtual ~XMemoryStream(void);
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
+    ODigestContext( PK11Context* pContext, sal_Int32 nDigestLength, bool b1KData )
+    : m_pContext( pContext )
+    , m_nDigestLength( nDigestLength )
+    , m_b1KData( b1KData )
+    , m_nDigested( 0 )
+    , m_bDisposed( false )
+    , m_bBroken( false )
+    {}
+
+    virtual ~ODigestContext();
+
+
+    // XDigestContext
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
 };
+
 #endif
+
