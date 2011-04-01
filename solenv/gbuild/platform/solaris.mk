@@ -260,13 +260,11 @@ gb_Library_PLAINLIBS_NONE += \
     $(gb_STDLIBS) \
     dl \
     freetype \
-    jpeg \
     pthread \
     X11 \
     Xext \
     SM \
     ICE \
-    z
 
 gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \

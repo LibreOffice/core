@@ -100,18 +100,14 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    xml2 \
 	xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     cppunit \
-    icuuc \
     icule \
     graphite_dll \
     cppunit \
-    rdf \
-    xslt \
 ))
 
 
@@ -161,23 +157,11 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	basegfx_s \
-    jpeglib \
+	graphite \
     ooopathutils \
     salcpprt \
+	vclmain \
     zlib \
-    graphite \
-    vclmain \
 ))
-
-ifeq ($(SYSTEM_EXPAT),YES)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	expat \
-))
-else
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	expat_xmlparse \
-	expat_xmltok \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

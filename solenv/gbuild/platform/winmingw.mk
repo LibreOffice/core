@@ -471,7 +471,6 @@ gb_Library_PLAINLIBS_NONE += \
     $(gb_MINGW_LIBSTDCPP) \
     $(gb_MINGW_LIBGCC) \
     advapi32 \
-	cairo \
 	d3d9 \
 	d3dx \
 	ddraw \
@@ -489,7 +488,6 @@ gb_Library_PLAINLIBS_NONE += \
     uuid \
     uwinapi \
 	winmm \
-    z \
 
 gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

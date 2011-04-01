@@ -277,20 +277,16 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS_NONE += \
-	cairo \
 	fontconfig \
 	Xrender \
-	pixman-1 \
     dl \
     freetype \
-    jpeg \
     m \
     pthread \
     X11 \
     Xext \
     SM \
     ICE \
-    z
 
 gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \

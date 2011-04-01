@@ -449,7 +449,6 @@ gb_Library_PLAINEXT := .lib
 
 gb_Library_PLAINLIBS_NONE += \
     advapi32 \
-	cairo \
 	d3d9 \
 	d3dx \
 	ddraw \
@@ -471,7 +470,6 @@ gb_Library_PLAINLIBS_NONE += \
     uwinapi \
 	winmm \
     winspool \
-    z \
 
 gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

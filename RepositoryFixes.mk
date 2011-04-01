@@ -184,25 +184,4 @@ ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
 endif
 
-ifeq ($(SYSTEM_LIBXML),YES)
-gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_LIBXSLT),YES)
-gb_Library_TARGETS := $(filter-out xslt,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_REDLAND),YES)
-gb_Library_TARGETS := $(filter-out rdf,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_ICU),YES)
-gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_CAIRO),YES)
-gb_Library_TARGETS := $(filter-out cairo,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out pixman-1,$(gb_Library_TARGETS))
-endif
-
 # vim: set noet sw=4 ts=4:
