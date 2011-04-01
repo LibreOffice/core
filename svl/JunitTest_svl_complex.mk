@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,svl_complex))
+$(eval $(call gb_JunitTest_JunitTest,svl_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,svl_complex,\
     $$(DEFS) \

@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,comphelper_complex))
+$(eval $(call gb_JunitTest_JunitTest,comphelper_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,comphelper_complex,\
     comphelper/qa/complex/comphelper/Map \

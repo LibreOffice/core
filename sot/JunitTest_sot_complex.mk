@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,sot_complex))
+$(eval $(call gb_JunitTest_JunitTest,sot_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sot_complex,\
     sot/qa/complex/olesimplestorage/OLESimpleStorageTest \
