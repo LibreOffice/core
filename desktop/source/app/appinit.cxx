@@ -232,16 +232,16 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         sal_Bool        bHeadlessMode = sal_False;
 
         // interpret command line arguments
-        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+        CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
         // read accept string from configuration
         conDcp = SvtStartOptions().GetConnectionURL();
 
-        if ( pCmdLine->GetAcceptString( aTmpString ))
+        if ( rCmdLine.GetAcceptString( aTmpString ))
             conDcp = aTmpString;
 
         // Headless mode for FAT Office
-        bHeadlessMode   = pCmdLine->IsHeadless();
+        bHeadlessMode   = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode();
 
@@ -254,7 +254,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 
         // improves parallel processing on Sun ONE Webtop
         // servicemanager up -> copy user installation
-        if ( pCmdLine->IsServer() )
+        if ( rCmdLine.IsServer() )
         {
             // Check some mandatory environment states if "-server" is possible. Otherwise ignore
             // this parameter.
@@ -266,15 +266,15 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
                 if ( !rEnum.is() )
                 {
                     // Reset server parameter so it is ignored in the furthermore startup process
-                    pCmdLine->SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+                    rCmdLine.SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
                 }
             }
         }
 
         ::rtl::OUString aPortalConnect;
-        bool bServer = (bool)pCmdLine->IsServer();
+        bool bServer = (bool)rCmdLine.IsServer();
 
-        pCmdLine->GetPortalConnectString( aPortalConnect );
+        rCmdLine.GetPortalConnectString( aPortalConnect );
         if ( !configureUcb( bServer, aPortalConnect ) )
         {
             OSL_FAIL( "Can't configure UCB" );

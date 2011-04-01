@@ -710,7 +710,7 @@ void SAL_CALL OfficeIPCThread::run()
 #endif
                 continue;
             }
-            CommandLineArgs *pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
+            const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs->IsQuickstart() )
             {
@@ -760,7 +760,7 @@ void SAL_CALL OfficeIPCThread::run()
             bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
                                     aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )      );
 
-            if ( !pCurrentCmdLineArgs->IsInvisible() )
+            if ( !rCurrentCmdLineArgs.IsInvisible() )
             {
                 // Read cmdline args that can open/create documents. As they would open a window
                 // they are only allowed if the "-invisible" is currently not used!

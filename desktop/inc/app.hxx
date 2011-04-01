@@ -104,7 +104,7 @@ class Desktop : public Application
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();
-        static CommandLineArgs* GetCommandLineArgs();
+        static CommandLineArgs& GetCommandLineArgs();
 
         void                    HandleBootstrapErrors( BootstrapError );
         void                    SetBootstrapError( BootstrapError nError )
@@ -169,7 +169,7 @@ class Desktop : public Application
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const ::rtl::OUString& aFileURL );
 
-        static void             PreloadModuleData( CommandLineArgs* );
+        static void             PreloadModuleData( const CommandLineArgs& );
         static void             PreloadConfigurationData();
 
         Reference<XStatusIndicator> m_rSplashScreen;

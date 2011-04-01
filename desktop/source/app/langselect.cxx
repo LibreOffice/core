@@ -178,24 +178,22 @@ bool LanguageSelection::prepareLanguage()
     // get the selected UI language as string
     bool     bCmdLanguage( false );
     bool     bIniLanguage( false );
-    OUString aEmpty;
     OUString aLocaleString = getUserUILanguage();
 
     if ( aLocaleString.getLength() == 0 )
     {
-        CommandLineArgs* pCmdLineArgs = Desktop::GetCommandLineArgs();
-        if ( pCmdLineArgs )
+        OUString aEmpty;
+
+        const CommandLineArgs& rCmdLineArgs = Desktop::GetCommandLineArgs();
+        rCmdLineArgs.GetLanguage(aLocaleString);
+        if (isInstalledLanguage(aLocaleString, sal_False))
         {
-            pCmdLineArgs->GetLanguage(aLocaleString);
-            if (isInstalledLanguage(aLocaleString, sal_False))
-            {
-                bCmdLanguage   = true;
-                bFoundLanguage = true;
-                aFoundLanguage = aLocaleString;
-            }
-            else
-                aLocaleString = aEmpty;
+            bCmdLanguage   = true;
+            bFoundLanguage = true;
+            aFoundLanguage = aLocaleString;
         }
+        else
+            aLocaleString = aEmpty;
 
         if ( !bCmdLanguage )
         {

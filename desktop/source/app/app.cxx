@@ -308,24 +308,21 @@ void FatalError(const ::rtl::OUString& sMessage)
     _exit(ExitHelper::E_FATAL_ERROR);
 }
 
-static bool ShouldSuppressUI(CommandLineArgs* pCmdLine)
+static bool ShouldSuppressUI(const CommandLineArgs& rCmdLine)
 {
-    return  pCmdLine->IsInvisible() ||
-            pCmdLine->IsHeadless() ||
-            pCmdLine->IsQuickstart();
+    return  rCmdLine.IsInvisible() ||
+            rCmdLine.IsHeadless() ||
+            rCmdLine.IsQuickstart();
 }
 
-CommandLineArgs* Desktop::GetCommandLineArgs()
+namespace
 {
-    static CommandLineArgs* pArgs = 0;
-    if ( !pArgs )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pArgs )
-            pArgs = new CommandLineArgs;
-    }
+    struct theCommandLineArgs : public rtl::Static< CommandLineArgs, theCommandLineArgs > {};
+}
 
-    return pArgs;
+CommandLineArgs& Desktop::GetCommandLineArgs()
+{
+    return theCommandLineArgs::get();
 }
 
 sal_Bool InitConfiguration()
@@ -733,7 +730,7 @@ void Desktop::Init()
 
     if ( GetBootstrapError() == BE_OK )
     {
-        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+        const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
@@ -746,7 +743,7 @@ void Desktop::Init()
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             SetBootstrapStatus(BS_TERMINATE);
         }
-        else if ( pCmdLineArgs->IsHelp() )
+        else if ( rCmdLineArgs.IsHelp() )
         {
             // disable IPC thread in an instance that is just showing a help message
             OfficeIPCThread::DisableOfficeIPCThread();
@@ -1435,14 +1432,14 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     }
 
     bInException = sal_True;
-    CommandLineArgs* pArgs = GetCommandLineArgs();
+    const CommandLineArgs& rArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
     sal_Bool bRestart                           = sal_False;
     sal_Bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !pArgs->IsNoRestore()                    ) && // some use cases of office must work without recovery
-                                                    ( !pArgs->IsHeadless()                     ) &&
-                                                    ( !pArgs->IsServer()                       ) &&
+                                                    ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
+                                                    ( !rArgs.IsHeadless()                     ) &&
+                                                    ( !rArgs.IsServer()                       ) &&
                                                     (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery cant work without UI ... but UI layer seams to be the reason for this crash
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
@@ -1562,11 +1559,11 @@ int Desktop::Main()
     com::sun::star::uno::setCurrentContext(
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
-    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+    CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
     // setup configuration error handling
     ConfigurationErrorHandler aConfigErrHandler;
-    if (!ShouldSuppressUI(pCmdLineArgs))
+    if (!ShouldSuppressUI(rCmdLineArgs))
         aConfigErrHandler.activate();
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
@@ -1607,7 +1604,8 @@ int Desktop::Main()
         SetSplashScreenProgress(25);
 
 #ifndef UNX
-        if ( pCmdLineArgs->IsHelp() ) {
+        if ( rCmdLineArgs.IsHelp() )
+        {
             displayCmdlineHelp();
             return EXIT_SUCCESS;
         }
@@ -1617,8 +1615,9 @@ int Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_pLockfile = new Lockfile;
-        if ( !pCmdLineArgs->IsHeadless() && !pCmdLineArgs->IsInvisible() &&
-             !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
+        if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
+             !rCmdLineArgs.IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning ))
+        {
             // Lockfile exists, and user clicked 'no'
             return EXIT_FAILURE;
         }
@@ -1637,7 +1636,7 @@ int Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
 
         // terminate if requested...
-        if( pCmdLineArgs->IsTerminateAfterInit() )
+        if( rCmdLineArgs.IsTerminateAfterInit() )
             return EXIT_SUCCESS;
 
 
@@ -1755,7 +1754,7 @@ int Desktop::Main()
         // check whether the shutdown is caused by restart
         pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
-        if ( pCmdLineArgs->IsHeadless() )
+        if ( rCmdLineArgs.IsHeadless() )
         {
             // Ensure that we use not the system file dialogs as
             // headless mode relies on Application::EnableHeadlessMode()
@@ -1767,7 +1766,7 @@ int Desktop::Main()
 
         if ( !pExecGlobals->bRestartRequested )
         {
-            if ((!pCmdLineArgs->WantsToLoadDocument() && !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsHeadless() ) &&
+            if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
@@ -1847,8 +1846,8 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
 
-        if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
-             !pCmdLineArgs->IsNoQuickstart() )
+        if ( !bTerminateRequested && !rCmdLineArgs.IsInvisible() &&
+             !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xSMgr );
 
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
@@ -1897,7 +1896,7 @@ int Desktop::Main()
             if ( !pExecGlobals->bRestartRequested )
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
-                DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
+                DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
                 Execute();
             }
@@ -1935,8 +1934,8 @@ int Desktop::doShutdown()
 
     delete pResMgr, pResMgr = NULL;
     // Restore old value
-    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
-    if ( pCmdLineArgs->IsHeadless() )
+    const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
+    if ( rCmdLineArgs.IsHeadless() )
         SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
 
     // remove temp directory
@@ -2063,7 +2062,7 @@ void Desktop::FlushConfiguration()
 
 sal_Bool Desktop::shouldLaunchQuickstart()
 {
-    sal_Bool bQuickstart = GetCommandLineArgs()->IsQuickstart();
+    sal_Bool bQuickstart = GetCommandLineArgs().IsQuickstart();
     if (!bQuickstart)
     {
         const SfxPoolItem* pItem=0;
@@ -2231,7 +2230,7 @@ sal_Bool Desktop::CheckOEM()
     }
 }
 
-void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
+void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
 
@@ -2244,7 +2243,7 @@ void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
     if ( !xLoader.is() )
         return;
 
-    if ( pArgs->IsWriter() )
+    if ( rArgs.IsWriter() )
     {
         try
         {
@@ -2256,7 +2255,7 @@ void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
         {
         }
     }
-    if ( pArgs->IsCalc() )
+    if ( rArgs.IsCalc() )
     {
         try
         {
@@ -2268,7 +2267,7 @@ void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
         {
         }
     }
-    if ( pArgs->IsDraw() )
+    if ( rArgs.IsDraw() )
     {
         try
         {
@@ -2280,7 +2279,7 @@ void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
         {
         }
     }
-    if ( pArgs->IsImpress() )
+    if ( rArgs.IsImpress() )
     {
         try
         {
@@ -2582,33 +2581,34 @@ void Desktop::OpenClients()
     Reference < XComponent > xFirst;
     sal_Bool bLoaded = sal_False;
 
-    CommandLineArgs* pArgs = GetCommandLineArgs();
+    const CommandLineArgs& rArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
 
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
 
-    if (!pArgs->IsQuickstart()) {
+    if (!rArgs.IsQuickstart())
+    {
         sal_Bool bShowHelp = sal_False;
         ::rtl::OUStringBuffer aHelpURLBuffer;
-        if (pArgs->IsHelpWriter()) {
+        if (rArgs.IsHelpWriter()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
-        } else if (pArgs->IsHelpCalc()) {
+        } else if (rArgs.IsHelpCalc()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
-        } else if (pArgs->IsHelpDraw()) {
+        } else if (rArgs.IsHelpDraw()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
-        } else if (pArgs->IsHelpImpress()) {
+        } else if (rArgs.IsHelpImpress()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
-        } else if (pArgs->IsHelpBase()) {
+        } else if (rArgs.IsHelpBase()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
-        } else if (pArgs->IsHelpBasic()) {
+        } else if (rArgs.IsHelpBasic()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
-        } else if (pArgs->IsHelpMath()) {
+        } else if (rArgs.IsHelpMath()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
         }
@@ -2656,12 +2656,12 @@ void Desktop::OpenClients()
         aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "QuickstartPreloadConfiguration" )), aPreloadData, aDefault );
         if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
         {
-            if ( pArgs->IsWriter()  ||
-                 pArgs->IsCalc()    ||
-                 pArgs->IsDraw()    ||
-                 pArgs->IsImpress()    )
+            if ( rArgs.IsWriter()  ||
+                 rArgs.IsCalc()    ||
+                 rArgs.IsDraw()    ||
+                 rArgs.IsImpress()    )
             {
-                PreloadModuleData( pArgs );
+                PreloadModuleData( rArgs );
             }
 
             PreloadConfigurationData();
@@ -2676,9 +2676,9 @@ void Desktop::OpenClients()
     // Furter it's not acceptable to recover such documents without any UI. It can
     // need some time, where the user wont see any results and wait for finishing the office startup ...
     sal_Bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !pArgs->IsNoRestore() ) &&
-                                                    ( !pArgs->IsHeadless()  ) &&
-                                                    ( !pArgs->IsServer()    )
+                                                    ( !rArgs.IsNoRestore() ) &&
+                                                    ( !rArgs.IsHeadless()  ) &&
+                                                    ( !rArgs.IsServer()    )
                                                   );
 
     if ( ! bAllowRecoveryAndSessionManagement )
@@ -2794,23 +2794,23 @@ void Desktop::OpenClients()
     OfficeIPCThread::EnableRequests();
 
     sal_Bool bShutdown( sal_False );
-    if ( !pArgs->IsServer() )
+    if ( !rArgs.IsServer() )
     {
-        ProcessDocumentsRequest aRequest(pArgs->getCwdUrl());
+        ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
         aRequest.pcProcessed = NULL;
 
-        pArgs->GetOpenList( aRequest.aOpenList );
-        pArgs->GetViewList( aRequest.aViewList );
-        pArgs->GetStartList( aRequest.aStartList );
-        pArgs->GetPrintList( aRequest.aPrintList );
-        pArgs->GetPrintToList( aRequest.aPrintToList );
-        pArgs->GetPrinterName( aRequest.aPrinterName );
-        pArgs->GetForceOpenList( aRequest.aForceOpenList );
-        pArgs->GetForceNewList( aRequest.aForceNewList );
-        pArgs->GetConversionList( aRequest.aConversionList );
-        pArgs->GetConversionParams( aRequest.aConversionParams );
-        pArgs->GetConversionOut( aRequest.aConversionOut );
-        pArgs->GetInFilter( aRequest.aInFilter );
+        rArgs.GetOpenList( aRequest.aOpenList );
+        rArgs.GetViewList( aRequest.aViewList );
+        rArgs.GetStartList( aRequest.aStartList );
+        rArgs.GetPrintList( aRequest.aPrintList );
+        rArgs.GetPrintToList( aRequest.aPrintToList );
+        rArgs.GetPrinterName( aRequest.aPrinterName );
+        rArgs.GetForceOpenList( aRequest.aForceOpenList );
+        rArgs.GetForceNewList( aRequest.aForceNewList );
+        rArgs.GetConversionList( aRequest.aConversionList );
+        rArgs.GetConversionParams( aRequest.aConversionParams );
+        rArgs.GetConversionOut( aRequest.aConversionOut );
+        rArgs.GetInFilter( aRequest.aInFilter );
 
         if ( aRequest.aOpenList.getLength() > 0 ||
              aRequest.aViewList.getLength() > 0 ||
@@ -2823,18 +2823,18 @@ void Desktop::OpenClients()
         {
             bLoaded = sal_True;
 
-            if ( pArgs->HasModuleParam() )
+            if ( rArgs.HasModuleParam() )
             {
                 SvtModuleOptions    aOpt;
 
                 // Support command line parameters to start a module (as preselection)
-                if ( pArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
                     aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
-                else if ( pArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
                     aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
-                else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
                     aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
-                else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
                     aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
             }
 
@@ -2866,10 +2866,10 @@ void Desktop::OpenClients()
             ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY_THROW );
     Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
-    if ( xList->hasElements() || pArgs->IsServer() )
+    if ( xList->hasElements() || rArgs.IsServer() )
         return;
 
-    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean() || Application::AnyInput( INPUT_APPEVENT ) )
+    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || rArgs.IsBean() || Application::AnyInput( INPUT_APPEVENT ) )
         // soffice was started as tray icon ...
         return;
     {
@@ -2885,26 +2885,26 @@ void Desktop::OpenDefault()
     ::rtl::OUString        aName;
     SvtModuleOptions    aOpt;
 
-    CommandLineArgs* pArgs = GetCommandLineArgs();
-    if ( pArgs->IsNoDefault() ) return;
-    if ( pArgs->HasModuleParam() )
+    const CommandLineArgs& rArgs = GetCommandLineArgs();
+    if ( rArgs.IsNoDefault() ) return;
+    if ( rArgs.HasModuleParam() )
     {
         // Support new command line parameters to start a module
-        if ( pArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITER );
-        else if ( pArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+        else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_CALC );
-        else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+        else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
-        else if ( pArgs->IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+        else if ( rArgs.IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
-        else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+        else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
-        else if ( pArgs->IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+        else if ( rArgs.IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_MATH );
-        else if ( pArgs->IsGlobal() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        else if ( rArgs.IsGlobal() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITERGLOBAL );
-        else if ( pArgs->IsWeb() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        else if ( rArgs.IsWeb() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITERWEB );
     }
 
@@ -2925,7 +2925,7 @@ void Desktop::OpenDefault()
             return;
     }
 
-    ProcessDocumentsRequest aRequest(pArgs->getCwdUrl());
+    ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
     aRequest.pcProcessed = NULL;
     aRequest.aOpenList   = aName;
     OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
@@ -2983,7 +2983,7 @@ String GetURL_Impl(
 
 void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
-    if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs()->IsInvisible() )
+    if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs().IsInvisible() )
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -3039,7 +3039,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
     }
-    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs()->IsInvisible()  )
+    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs().IsInvisible()  )
     {
         // If the office has been started the second time its command line arguments are sent through a pipe
         // connection to the first office. We want to reuse the quickstart option for the first office.
@@ -3085,11 +3085,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     {
         OUString aOpenURL(rAppEvent.GetData().GetBuffer());
 
-        CommandLineArgs* pCmdLine = GetCommandLineArgs();
-        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
+        const CommandLineArgs& rCmdLine = GetCommandLineArgs();
+        if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
         {
             ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                pCmdLine->getCwdUrl());
+                rCmdLine.getCwdUrl());
             pDocsRequest->aOpenList = aOpenURL;
             pDocsRequest->pcProcessed = NULL;
 
@@ -3101,11 +3101,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     {
         OUString aPrintURL(rAppEvent.GetData().GetBuffer());
 
-        CommandLineArgs* pCmdLine = GetCommandLineArgs();
-        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
+        const CommandLineArgs& rCmdLine = GetCommandLineArgs();
+        if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
         {
             ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                pCmdLine->getCwdUrl());
+                rCmdLine.getCwdUrl());
             pDocsRequest->aPrintList = aPrintURL;
             pDocsRequest->pcProcessed = NULL;
 
@@ -3166,41 +3166,41 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 void Desktop::OpenSplashScreen()
 {
     ::rtl::OUString     aTmpString;
-    CommandLineArgs*    pCmdLine = GetCommandLineArgs();
+    const CommandLineArgs &rCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
-    if ( !pCmdLine->IsInvisible() &&
-         !pCmdLine->IsHeadless() &&
-         !pCmdLine->IsQuickstart() &&
-         !pCmdLine->IsMinimized() &&
-         !pCmdLine->IsNoLogo() &&
-         !pCmdLine->IsTerminateAfterInit() &&
-         !pCmdLine->GetPrintList( aTmpString ) &&
-         !pCmdLine->GetPrintToList( aTmpString ) &&
-         !pCmdLine->GetConversionList( aTmpString ))
+    if ( !rCmdLine.IsInvisible() &&
+         !rCmdLine.IsHeadless() &&
+         !rCmdLine.IsQuickstart() &&
+         !rCmdLine.IsMinimized() &&
+         !rCmdLine.IsNoLogo() &&
+         !rCmdLine.IsTerminateAfterInit() &&
+         !rCmdLine.GetPrintList( aTmpString ) &&
+         !rCmdLine.GetPrintToList( aTmpString ) &&
+         !rCmdLine.GetConversionList( aTmpString ))
     {
         // Determine application name from command line parameters
         OUString aAppName;
-        if ( pCmdLine->IsWriter() )
+        if ( rCmdLine.IsWriter() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer" ));
-        else if ( pCmdLine->IsCalc() )
+        else if ( rCmdLine.IsCalc() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc" ));
-        else if ( pCmdLine->IsDraw() )
+        else if ( rCmdLine.IsDraw() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw" ));
-        else if ( pCmdLine->IsImpress() )
+        else if ( rCmdLine.IsImpress() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress" ));
-        else if ( pCmdLine->IsBase() )
+        else if ( rCmdLine.IsBase() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "base" ));
-        else if ( pCmdLine->IsGlobal() )
+        else if ( rCmdLine.IsGlobal() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "global" ));
-        else if ( pCmdLine->IsMath() )
+        else if ( rCmdLine.IsMath() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "math" ));
-        else if ( pCmdLine->IsWeb() )
+        else if ( rCmdLine.IsWeb() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "web" ));
 
         // Which splash to use
         OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
-        if ( pCmdLine->GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).getLength() )
+        if ( rCmdLine.GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).getLength() )
             aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
 
         bVisible = sal_True;

@@ -53,13 +53,13 @@ extern "C" int soffice_main()
 #ifdef UNX
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
-    desktop::CommandLineArgs* pCmdLineArgs = aDesktop.GetCommandLineArgs();
-    if ( pCmdLineArgs->IsHelp() )
+    const desktop::CommandLineArgs& rCmdLineArgs = aDesktop.GetCommandLineArgs();
+    if ( rCmdLineArgs.IsHelp() )
     {
         desktop::displayCmdlineHelp();
         return EXIT_SUCCESS;
     }
-    else if ( pCmdLineArgs->IsVersion() )
+    else if ( rCmdLineArgs.IsVersion() )
     {
         desktop::displayVersion();
         return EXIT_SUCCESS;
