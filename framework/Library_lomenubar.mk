@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,lomenubar))
 
-#$(eval $(call gb_Library_set_componentfile,lomenubar,MODULE/COMPONENT_FILE))
+$(eval $(call gb_Library_set_componentfile,lomenubar,framework/util/lomenubar))
 
 # FIXME pkg-config call belong in ./configure obviously
 
