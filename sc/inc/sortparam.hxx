@@ -62,7 +62,7 @@ struct SC_DLLPUBLIC ScSortParam
     SCCOLROW    nField[MAXSORT];
     sal_Bool        bAscending[MAXSORT];
     ::com::sun::star::lang::Locale      aCollatorLocale;
-    String      aCollatorAlgorithm;
+    ::rtl::OUString aCollatorAlgorithm;
     sal_uInt16      nCompatHeader;
 
     ScSortParam();

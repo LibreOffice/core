@@ -346,7 +346,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
             pFieldArray[i].FieldType     = table::TableSortFieldType_AUTOMATIC;     // immer Automatic
             pFieldArray[i].IsCaseSensitive = rParam.bCaseSens;
             pFieldArray[i].CollatorLocale = rParam.aCollatorLocale;
-            pFieldArray[i].CollatorAlgorithm = rtl::OUString( rParam.aCollatorAlgorithm );
+            pFieldArray[i].CollatorAlgorithm = rParam.aCollatorAlgorithm;
         }
     }
 

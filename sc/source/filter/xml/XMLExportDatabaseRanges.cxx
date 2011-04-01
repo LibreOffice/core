@@ -659,6 +659,70 @@ private:
 
     void writeSort(const ScDBData& rData)
     {
+        ScSortParam aParam;
+        rData.GetSortParam(aParam);
+
+        // Count sort items first.
+        size_t nSortCount = 0;
+        for (; nSortCount < MAXSORT; ++nSortCount)
+        {
+            if (!aParam.bDoSort[nSortCount])
+                break;
+        }
+
+        if (!nSortCount)
+            // Nothing to export.
+            return;
+
+        ScAddress aOutPos(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab);
+
+        if (!aParam.bIncludePattern)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
+
+        if (!aParam.bInplace)
+        {
+            OUString aStr;
+            ScRangeStringConverter::GetStringFromAddress(
+                aStr, aOutPos, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aStr);
+        }
+
+        if (aParam.bCaseSens)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
+        if (!aParam.aCollatorLocale.Language.isEmpty())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aParam.aCollatorLocale.Language);
+        if (!aParam.aCollatorLocale.Country.isEmpty())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aParam.aCollatorLocale.Country);
+        if (!aParam.aCollatorAlgorithm.isEmpty())
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aParam.aCollatorAlgorithm);
+
+        SvXMLElementExport aElemS(mrExport, XML_NAMESPACE_TABLE, XML_SORT, true, true);
+
+        for (size_t i = 0; i < nSortCount; ++i)
+        {
+            // TODO: Convert field value.
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aParam.nField[i]));
+
+            if (!aParam.bAscending[i])
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
+
+            if (aParam.bUserDef)
+            {
+                OUStringBuffer aBuf;
+                aBuf.appendAscii(SC_USERLIST);
+                aBuf.append(aParam.nUserIndex);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
+            }
+            else
+            {
+                // Right now we only support automatic field type.  In the
+                // future we may support numeric or alphanumeric field type.
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
+            }
+
+            SvXMLElementExport aElemSb(mrExport, XML_NAMESPACE_TABLE, XML_SORT_BY, true, true);
+        }
     }
 
     OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp) const

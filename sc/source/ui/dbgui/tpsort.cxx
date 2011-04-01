@@ -766,7 +766,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
         eLang = LANGUAGE_SYSTEM;
     aLbLanguage.SelectLanguage( eLang );
     FillAlgorHdl( &aLbLanguage );               // get algorithms, select default
-    if ( rSortData.aCollatorAlgorithm.Len() )
+    if ( !rSortData.aCollatorAlgorithm.isEmpty() )
         aLbAlgorithm.SelectEntry( pColRes->GetTranslation( rSortData.aCollatorAlgorithm ) );
 
     if ( pDoc && !rSortData.bInplace )

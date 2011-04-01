@@ -78,7 +78,7 @@ void ScSortParam::Clear()
     bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
     bByRow=bIncludePattern=bInplace = true;
     aCollatorLocale = ::com::sun::star::lang::Locale();
-    aCollatorAlgorithm.Erase();
+    aCollatorAlgorithm = ::rtl::OUString();
 
     for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
