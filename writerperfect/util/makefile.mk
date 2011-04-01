@@ -120,10 +120,22 @@ DEF3NAME = $(SHL3TARGET)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/wpft.component
+ALLTAR : $(MISC)/wpft.component $(MISC)/wpgfilter.component $(MISC)/msworksfilter.component
 
 $(MISC)/wpft.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         wpft.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt wpft.component
+
+$(MISC)/wpgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        wpgfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt wpgfilter.component
+
+$(MISC)/msworksfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        msworksfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt msworksfilter.component
