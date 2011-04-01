@@ -906,7 +906,9 @@ public:
 
 public:
 #if OSL_DEBUG_LEVEL > 1
-    virtual void dumpAsXml(xmlTextWriterPtr writer);
+    /** if writer is NULL, dumps the layout structure as XML in layout.xml
+      */
+    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL );
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
     void dumpChildrenAsXml(xmlTextWriterPtr writer);
 #endif

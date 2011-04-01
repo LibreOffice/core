@@ -130,80 +130,28 @@ class XmlPortionDumper:public SwPortionHandler
 
 #if OSL_DEBUG_LEVEL > 1
 
-void SwTxtPortion::dumpPortionAsXml( xub_StrLen ofs, XubString & /*aText */,
-                                     xmlTextWriterPtr writer )
+namespace
 {
-    xmlTextWriterStartElement( writer, BAD_CAST( "SwTxtPortion" ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ofs" ), "%i", ofs );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "len" ), "%i",
-                                       ( int ) this->GetLen(  ) );
-
-    xmlTextWriterEndElement( writer );
-}
-
-void SwLinePortion::dumpPortionAsXml( xub_StrLen ofs, XubString & /*aText */,
-                                      xmlTextWriterPtr writer )
-{
-    xmlTextWriterStartElement( writer, BAD_CAST( "SwLinePortion" ) );
-    xmlTextWriterWriteFormatAttribute( writer,
-                                       BAD_CAST( "nWhichPor" ),
-                                       "%04X",
-                                       ( int ) this->GetWhichPor(  ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ofs" ), "%i", ofs );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "len" ), "%i",
-                                       ( int ) this->GetLen(  ) );
-    xmlTextWriterEndElement( writer );
-}
-
-void SwLineLayout::dumpLineAsXml( xmlTextWriterPtr writer,
-                                  xub_StrLen & ofs, XubString & aText )
-{                               // not used any longer...
-    xmlTextWriterStartElement( writer, BAD_CAST( "SwLineLayout" ) );
-    SwLinePortion *portion = this;
-    while ( portion != NULL )
+    xmlTextWriterPtr lcl_createDefaultWriter()
     {
-        portion->dumpPortionAsXml( ofs, aText, writer );
-        ofs += portion->GetLen(  );
-        portion = portion->GetPortion(  );
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
+        xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
+        return writer;
     }
-    xmlTextWriterEndElement( writer );
-}
 
-
-void SwParaPortion::dumpAsXml( xmlTextWriterPtr writer, SwTxtFrm * pTxtFrm )
-{
-    xmlTextWriterStartElement( writer, BAD_CAST( "SwParaPortion" ) );
-    SwParaPortion *pPara = this;
-
-    if ( pPara && pTxtFrm )
+    void lcl_freeWriter( xmlTextWriterPtr writer )
     {
-        xub_StrLen ofs = 0;
-        XubString & aText = ( String & ) pTxtFrm->GetTxt(  );
-        if ( pTxtFrm->IsFollow(  ) )
-            ofs += pTxtFrm->GetOfst(  );
-
-        SwLineLayout *pLine = pPara;
-        while ( pLine )
-        {
-            xmlTextWriterStartElement( writer, BAD_CAST( "line" ) );
-            SwLinePortion *pPor = pLine->GetFirstPortion(  );
-            while ( pPor )
-            {
-                pPor->dumpPortionAsXml( ofs, aText, writer );
-                ofs += pPor->GetLen(  );
-                pPor = pPor->GetPortion(  );
-            }
-
-            xmlTextWriterEndElement( writer );  // line
-            pLine = pLine->GetNext(  );
-        }
+       xmlTextWriterEndDocument(writer);
+       xmlFreeTextWriter( writer );
     }
-    xmlTextWriterEndElement( writer );
 }
-
 
 void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 {
+    bool bCreateWriter = ( NULL == writer );
+    if ( bCreateWriter )
+        writer = lcl_createDefaultWriter();
+
     const char *name = NULL;
 
     switch ( GetType(  ) )
@@ -286,6 +234,9 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         }
         xmlTextWriterEndElement( writer );
     }
+
+    if ( bCreateWriter )
+        lcl_freeWriter( writer );
 }
 
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )

@@ -1284,15 +1284,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
     {
         SwRootFrm* pLayout = GetView().GetDocShell()->GetWrtShell()->GetLayout();
-        xmlTextWriterPtr writer = xmlNewTextWriterFilename("layout.xml", 0);
-        if (writer!=NULL)
-        {
-            printf("dumping layout in \"layout.xml\"\n");
-            xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
-            pLayout->dumpAsXml(writer);
-            xmlTextWriterEndDocument(writer);
-            xmlFreeTextWriter(writer);
-        }
+        pLayout->dumpAsXml( );
         return;
     }
 #endif

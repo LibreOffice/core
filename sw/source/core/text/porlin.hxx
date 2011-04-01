@@ -200,9 +200,6 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
-#if OSL_DEBUG_LEVEL > 1
-    void dumpPortionAsXml(sal_uInt16 ofs, String& aText, xmlTextWriter* writer);
-#endif
     OUTPUT_OPERATOR
 };
 
