@@ -158,7 +158,6 @@ namespace svt { namespace table
 
             if ( m_nTipWindowHandle )
             {
-                OSL_TRACE( ::rtl::OUStringToOString( sHelpText, RTL_TEXTENCODING_ASCII_US ) );
                 Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
             }
             else
