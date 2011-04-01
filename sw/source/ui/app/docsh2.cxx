@@ -1113,6 +1113,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_OUTLINE_TO_CLIPBOARD:
         case FN_OUTLINE_TO_IMPRESS:
             {
+                sal_Bool bEnable = IsEnableSetModified();
+                EnableSetModified( sal_False );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
                 ::GetRTFWriter( 'O', String(), xWrt );
@@ -1120,6 +1122,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );
                 ErrCode eErr = aWrt.Write( xWrt );
+                EnableSetModified( bEnable );
                 if( !ERRCODE_TOERROR( eErr ) )
                 {
                     pStrm->Seek( STREAM_SEEK_TO_END );
