@@ -382,7 +382,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "WAVE Audio", "wav",
                                       "WebM Video", "webm" };
 
-    for( size_t i = 0; i < SAL_N_ELEMENT(pFIlters); i += 2 )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
                                         ::rtl::OUString::createFromAscii(pFilters[i]),
