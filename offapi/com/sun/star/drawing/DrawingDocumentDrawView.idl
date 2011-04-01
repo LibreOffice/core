@@ -27,37 +27,18 @@
 #ifndef __com_sun_star_drawing_DrawingDocumentDrawView_idl__
 #define __com_sun_star_drawing_DrawingDocumentDrawView_idl__
 
-#ifndef __com_sun_star_drawing_XDrawView_idl__
 #include <com/sun/star/drawing/XDrawView.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_frame_Controller_idl__
 #include <com/sun/star/frame/Controller.idl>
-#endif
 
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module view {

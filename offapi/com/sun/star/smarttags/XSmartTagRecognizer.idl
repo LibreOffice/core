@@ -28,33 +28,13 @@
 #ifndef __com_sun_star_smarttags_XSmartTagRecognizer_idl__
 #define __com_sun_star_smarttags_XSmartTagRecognizer_idl__
 
-#ifndef __com_sun_star_uno_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_XBreakIterator_idl__
 #include <com/sun/star/i18n/XBreakIterator.idl>
-#endif
-
-#ifndef __com_sun_star_smarttags_SmartTagRecognizerMode_idl__
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextMarkup_idl__
 #include <com/sun/star/text/XTextMarkup.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
 
 //=============================================================================
 

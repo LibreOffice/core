@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_document_XEmbeddedObjectSupplier2_idl__
 #define __com_sun_star_document_XEmbeddedObjectSupplier2_idl__
 
-#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
 #include <com/sun/star/embed/XEmbeddedObject.idl>
-#endif
 
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-
-#ifndef __com_sun_star_document_XEmbeddedObjectSupplier_idl__
 #include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
-#endif
 
 
 //=============================================================================

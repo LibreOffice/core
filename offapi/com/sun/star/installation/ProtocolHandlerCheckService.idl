@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_installation_ProtocolHandlerCheckService_idl__
 #define __com_sun_star_installation_ProtocolHandlerCheckService_idl__
 
-#ifndef __com_sun_star_installation_XProtocolHandlerCheck_idl__
 #include <com/sun/star/installation/XProtocolHandlerCheck.idl>
-#endif
 
 
 //=============================================================================

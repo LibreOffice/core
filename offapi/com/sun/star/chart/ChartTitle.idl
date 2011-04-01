@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_chart_ChartTitle_idl__
 #define __com_sun_star_chart_ChartTitle_idl__
 
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
-
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 

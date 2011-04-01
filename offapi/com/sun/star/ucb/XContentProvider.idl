@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XContentProvider_idl__
 #define __com_sun_star_ucb_XContentProvider_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifier_idl__
 #include <com/sun/star/ucb/XContentIdentifier.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_IllegalIdentifierException_idl__
 #include <com/sun/star/ucb/IllegalIdentifierException.idl>
-#endif
 
 //=============================================================================
 

@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_XDocumentTemplates_idl__
 #define __com_sun_star_frame_XDocumentTemplates_idl__
 
-#ifndef __com_sun_star_frame_XStorable_idl__
 #include <com/sun/star/frame/XStorable.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
 
 //=============================================================================
 

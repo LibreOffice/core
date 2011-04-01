@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_report_inspection__DefaultComponentInspectorModel_idl__
 #define __com_sun_star_report_inspection_DefaultComponentInspectorModel_idl__
 
-#ifndef __com_sun_star_inspection_XObjectInspectorModel_idl__
 #include <com/sun/star/inspection/XObjectInspectorModel.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

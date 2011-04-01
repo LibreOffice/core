@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_UnoComboBoxControl_idl__
 #define __com_sun_star_awt_UnoComboBoxControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlEdit_idl__
 #include <com/sun/star/awt/UnoControlEdit.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XComboBox_idl__
 #include <com/sun/star/awt/XComboBox.idl>
-#endif
 
 
 //=============================================================================

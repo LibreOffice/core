@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_UnoSpinButtonControl_idl__
 #define __com_sun_star_awt_UnoSpinButtonControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XSpinValue_idl__
 #include <com/sun/star/awt/XSpinValue.idl>
-#endif
 
 
 //=============================================================================

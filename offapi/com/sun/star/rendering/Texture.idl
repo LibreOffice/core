@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_rendering_Texture_idl__
 #define __com_sun_star_rendering_Texture_idl__
 
-#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
 #include <com/sun/star/geometry/AffineMatrix2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_StrokeAttributes_idl__
 #include <com/sun/star/rendering/StrokeAttributes.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

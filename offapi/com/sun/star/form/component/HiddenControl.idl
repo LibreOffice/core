@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_form_component_HiddenControl_idl__
 #define __com_sun_star_form_component_HiddenControl_idl__
 
-#ifndef __com_sun_star_form_FormComponent_idl__
 #include <com/sun/star/form/FormComponent.idl>
-#endif
 
 
 //=============================================================================

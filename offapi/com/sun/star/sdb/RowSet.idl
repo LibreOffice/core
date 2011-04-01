@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_sdb_RowSet_idl__
 #define __com_sun_star_sdb_RowSet_idl__
 
-#ifndef __com_sun_star_sdbc_RowSet_idl__
 #include <com/sun/star/sdbc/RowSet.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;
 };};};};
-
-#ifndef __com_sun_star_sdb_ResultSet_idl__
 #include <com/sun/star/sdb/ResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XCompletedExecution_idl__
 #include <com/sun/star/sdb/XCompletedExecution.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 published interface XDeleteRows;

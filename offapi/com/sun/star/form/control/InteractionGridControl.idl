@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_form_component_InteractionGridControl_idl__
 #define __com_sun_star_form_component_InteractionGridControl_idl__
 
-#ifndef __com_sun_star_form_control_GridControl_idl__
 #include <com/sun/star/form/control/GridControl.idl>
-#endif
-#ifndef __com_sun_star_frame_XDispatch_idl__
 #include <com/sun/star/frame/XDispatch.idl>
-#endif
 
 //=============================================================================
 

@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_xml_sax_XExtendedDocumentHandler_idl__
 #define __com_sun_star_xml_sax_XExtendedDocumentHandler_idl__
 
-#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
 
 //=============================================================================

@@ -28,19 +28,10 @@
 #ifndef __com_sun_star_xml_dom_XSAXDocumentBuilder_idl__
 #define __com_sun_star_xml_dom_XSAXDocumentBuilder_idl__
 
-#ifndef __com_sun_star_uno__XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_xml_dom_XDocument_idl__
 #include <com/sun/star/xml/dom/XDocument.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XDocumentFragment_idl__
 #include <com/sun/star/xml/dom/XDocumentFragment.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_SAXDocumentBuilderState_idl__
 #include <com/sun/star/xml/dom/SAXDocumentBuilderState.idl>
-#endif
 
 module com { module sun { module star { module xml { module dom {
 

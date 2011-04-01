@@ -27,41 +27,15 @@
 #ifndef __com_sun_star_ucb_PackageStreamContent_idl__
 #define __com_sun_star_ucb_PackageStreamContent_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
 #include <com/sun/star/ucb/XCommandProcessor.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
 #include <com/sun/star/ucb/XCommandProcessor2.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertiesChangeNotifier_idl__
 #include <com/sun/star/beans/XPropertiesChangeNotifier.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyContainer_idl__
 #include <com/sun/star/beans/XPropertyContainer.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySetInfoChangeNotifier_idl__
 #include <com/sun/star/beans/XPropertySetInfoChangeNotifier.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandInfoChangeNotifier_idl__
 #include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
-#endif
-
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 
 //=============================================================================
 

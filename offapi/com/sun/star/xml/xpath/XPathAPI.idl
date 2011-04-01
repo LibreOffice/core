@@ -1,8 +1,6 @@
 #ifndef __com_sun_star_xml_xpath_XPathExtension_idl__
 #define __com_sun_star_xml_xpath_XPathExtension_idl__
-#ifndef __com_sun_star_xml_xpath_XXPathAPI_idl
 #include <com/sun/star/xml/xpath/XXPathAPI.idl>
-#endif
 module com {  module sun {  module star {  module xml { module xpath {
 
     service XPathExtension

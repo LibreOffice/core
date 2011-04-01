@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_CachedContentResultSetStub_idl__
 #define __com_sun_star_ucb_CachedContentResultSetStub_idl__
 
-#ifndef __com_sun_star_ucb_ContentResultSet_idl__
 #include <com/sun/star/ucb/ContentResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XFetchProvider_idl__
 #include <com/sun/star/ucb/XFetchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XFetchProviderForContentAccess_idl__
 #include <com/sun/star/ucb/XFetchProviderForContentAccess.idl>
-#endif
 
 //=============================================================================
 

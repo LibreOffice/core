@@ -27,17 +27,9 @@
 #ifndef com_sun_star_chart2_XLabeled_idl
 #define com_sun_star_chart2_XLabeled_idl
 
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-
-#ifndef com_sun_star_chart2_XTitle_idl
 #include <com/sun/star/chart2/XTitle.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_RectanglePoint_idl__
 #include <com/sun/star/drawing/RectanglePoint.idl>
-#endif
 
 module com
 {

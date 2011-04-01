@@ -27,41 +27,23 @@
 #ifndef __com_sun_star_xml_sax_XParser_idl__
 #define __com_sun_star_xml_sax_XParser_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_InputSource_idl__
 #include <com/sun/star/xml/sax/InputSource.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
 #include <com/sun/star/xml/sax/XErrorHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
 #include <com/sun/star/xml/sax/XDTDHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
 #include <com/sun/star/xml/sax/XEntityResolver.idl>
-#endif
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 
 //=============================================================================

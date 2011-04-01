@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_ui_UIElement_idl__
 #define __com_sun_star_ui_UIElement_idl__
 
-#ifndef __com_sun_star_ui_XUIElement_idl__
 #include <com/sun/star/ui/XUIElement.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_util_XUpdatable_idl__
 #include <com/sun/star/util/XUpdatable.idl>
-#endif
 
 //=============================================================================
 

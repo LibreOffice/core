@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sdb_tools_XObjectNames_idl__
 #define __com_sun_star_sdb_tools_XObjectNames_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {

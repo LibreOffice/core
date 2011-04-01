@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_util_XChangesNotifier_idl__
 #define __com_sun_star_util_XChangesNotifier_idl__
 
-#ifndef __com_sun_star_util_XChangesListener_idl__
 #include <com/sun/star/util/XChangesListener.idl>
-#endif
 
 //=============================================================================
 

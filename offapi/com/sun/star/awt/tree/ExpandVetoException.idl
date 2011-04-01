@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_tree_ExpandVetoException_idl__
 #define __com_sun_star_awt_tree_ExpandVetoException_idl__
 
-#ifndef __com_sun_star_util_VetoException_idl__
 #include <com/sun/star/util/VetoException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_tree_TreeExpansionEvent_idl__
 #include <com/sun/star/awt/tree/TreeExpansionEvent.idl>
-#endif
 
 //=============================================================================
 

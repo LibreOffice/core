@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_OnlineBackend_idl__
 #define __com_sun_star_configuration_backend_OnlineBackend_idl__
 
-#ifndef __com_sun_star_configuration_backend_BackendAdapter_idl__
 #include <com/sun/star/configuration/backend/BackendAdapter.idl>
-#endif
 
 //=============================================================================
 

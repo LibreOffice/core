@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_ui_XAcceleratorConfiguration_idl__
 #define __com_sun_star_ui_XAcceleratorConfiguration_idl__
 
-#ifndef __com_sun_star_ui_XUIConfiguration_idl__
 #include <com/sun/star/ui/XUIConfiguration.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
 #include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
 #include <com/sun/star/ui/XUIConfigurationStorage.idl>
-#endif
-
-#ifndef __com_sun_star_awt_KeyEvent_idl__
 #include <com/sun/star/awt/KeyEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 

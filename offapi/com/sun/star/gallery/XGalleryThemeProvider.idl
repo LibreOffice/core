@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_gallery_XGalleryThemeProvider_idl__
 #define __com_sun_star_gallery_XGalleryThemeProvider_idl__
 
-#ifndef __com_sun_star_gallery_XGalleryTheme_idl__
 #include <com/sun/star/gallery/XGalleryTheme.idl>
-#endif
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 //=============================================================================
 

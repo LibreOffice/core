@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_rendering_XSimpleCanvas_idl__
 #define __com_sun_star_rendering_XSimpleCanvas_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
 #include <com/sun/star/geometry/AffineMatrix2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_StringContext_idl__
 #include <com/sun/star/rendering/StringContext.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
-#ifndef __com_sun_star_rendering_FontMetrics_idl__
 #include <com/sun/star/rendering/FontMetrics.idl>
-#endif
 
 //=============================================================================
 

@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_scanner_XScannerManager_idl__
 #define __com_sun_star_scanner_XScannerManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_scanner_ScannerContext_idl__
 #include <com/sun/star/scanner/ScannerContext.idl>
-#endif
-
-#ifndef __com_sun_star_scanner_ScannerException_idl__
 #include <com/sun/star/scanner/ScannerException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_scanner_ScanError_idl__
 #include <com/sun/star/scanner/ScanError.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XBitmap_idl__
 #include <com/sun/star/awt/XBitmap.idl>
-#endif
 
 
 //=============================================================================

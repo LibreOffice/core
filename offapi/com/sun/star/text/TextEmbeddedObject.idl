@@ -27,16 +27,9 @@
 #ifndef __com_sun_star_text_TextEmbeddedObject_idl__
 #define __com_sun_star_text_TextEmbeddedObject_idl__
 
-#ifndef __com_sun_star_document_XEmbeddedObjectSupplier_idl__
 #include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_BaseFrame_idl__
 #include <com/sun/star/text/BaseFrame.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 
 //=============================================================================

@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_drawing_XCustomShapeEngine_idl__
 #define __com_sun_star_drawing_XCustomShapeEngine_idl__
 
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
-#endif
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
-#ifndef __com_sun_star_drawing_XCustomShapeHandle_idl__
 #include <com/sun/star/drawing/XCustomShapeHandle.idl>
-#endif
 
 //=============================================================================
 

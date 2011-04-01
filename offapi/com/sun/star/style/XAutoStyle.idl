@@ -27,25 +27,12 @@
 #ifndef __com_sun_star_style_XAutoStyle_idl__
 #define __com_sun_star_style_XAutoStyle_idl__
 
-#ifndef __com_sun_star_style_XStyle_idl__
 #include <com/sun/star/style/XStyle.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
 #include <com/sun/star/beans/XMultiPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_XMultiPropertyStates_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
-#endif
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
 
 
 

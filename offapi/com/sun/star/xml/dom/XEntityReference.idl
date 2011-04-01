@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_xml_dom_XEntetyReference_idl__
 #define __com_sun_star_xml_dom_XEntetyReference_idl__
 
-#ifndef __com_sun_star_xml_dom_XNode_idl__
 #include <com/sun/star/xml/dom/XNode.idl>
-#endif
 
 module com { module sun { module star { module xml { module dom {
 

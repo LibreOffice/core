@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_SingleLayerStratum_idl__
 #define __com_sun_star_configuration_backend_SingleLayerStratum_idl__
 
-#ifndef __com_sun_star_configuration_backend_XBackendEntities_idl__
 #include <com/sun/star/configuration/backend/XBackendEntities.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XMultiLayerStratum_idl__
 #include <com/sun/star/configuration/backend/XMultiLayerStratum.idl>
-#endif
 
 
 //=============================================================================

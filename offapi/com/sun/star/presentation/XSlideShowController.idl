@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_presentation_XSlideShowController_idl__
 #define __com_sun_star_presentation_XSlideShowController_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XSlideShow_idl__
 #include <com/sun/star/presentation/XSlideShow.idl>
-#endif
 
 //=============================================================================
 

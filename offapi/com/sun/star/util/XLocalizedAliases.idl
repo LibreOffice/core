@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_util_XLocalizedAliases_idl__
 #define __com_sun_star_util_XLocalizedAliases_idl__
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
 
-#ifndef __com_sun_star_util_AliasProgrammaticPair_idl__
 #include <com/sun/star/util/AliasProgrammaticPair.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module util {

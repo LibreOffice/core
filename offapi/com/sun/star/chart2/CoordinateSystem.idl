@@ -1,21 +1,10 @@
 #ifndef com_sun_star_chart2_CoordinateSystem_idl
 #define com_sun_star_chart2_CoordinateSystem_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef com_sun_star_chart2_XScale_idl
 #include <com/sun/star/chart2/XScale.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCloneable_idl__
 #include <com/sun/star/util/XCloneable.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
 
 module com
 {

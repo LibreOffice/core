@@ -27,26 +27,11 @@
 #ifndef __com_sun_star_xml_sax_XFastSerializer_idl__
 #define __com_sun_star_xml_sax_XFastSerializer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XFastDocumentHanlder_idl__
 #include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
-#endif
-
-#ifndef __com_sun_star_io_XOutputStream_idl__
 #include <com/sun/star/io/XOutputStream.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XFastTokenHandler_idl__
 #include <com/sun/star/xml/sax/XFastTokenHandler.idl>
-#endif
-
 
 //=============================================================================
 

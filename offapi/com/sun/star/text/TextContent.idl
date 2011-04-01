@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_text_TextContent_idl__
 #define __com_sun_star_text_TextContent_idl__
 
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextContentAnchorType_idl__
 #include <com/sun/star/text/TextContentAnchorType.idl>
-#endif
-
-#ifndef __com_sun_star_text_WrapTextMode_idl__
 #include <com/sun/star/text/WrapTextMode.idl>
-#endif
 
 
 //=============================================================================

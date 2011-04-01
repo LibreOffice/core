@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_auth_XSSOManager_idl__
 #define __com_sun_star_auth_XSSOManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_auth_InvalidArgumentException_idl__
 #include <com/sun/star/auth/InvalidArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_auth_SSOExceptions_idl__
 #include <com/sun/star/auth/SSOExceptions.idl>
-#endif
-
-#ifndef __com_sun_star_auth_XSSOAcceptorContext_idl__
 #include <com/sun/star/auth/XSSOAcceptorContext.idl>
-#endif
-
-#ifndef __com_sun_star_auth_XSSOInitiatorContext_idl__
 #include <com/sun/star/auth/XSSOInitiatorContext.idl>
-#endif
 
 module com { module sun { module star { module auth {
 

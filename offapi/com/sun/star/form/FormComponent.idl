@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_form_FormComponent_idl__
 #define __com_sun_star_form_FormComponent_idl__
 
-#ifndef __com_sun_star_form_XFormComponent_idl__
 #include <com/sun/star/form/XFormComponent.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyBag_idl__
 #include <com/sun/star/beans/PropertyBag.idl>
-#endif
 
 
 //=============================================================================

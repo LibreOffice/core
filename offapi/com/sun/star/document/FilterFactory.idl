@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_document_FilterFactory_idl__
 #define __com_sun_star_document_FilterFactory_idl__
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainerQuery_idl__
 #include <com/sun/star/container/XContainerQuery.idl>
-#endif
-
-#ifndef __com_sun_star_util_XFlushable_idl__
 #include <com/sun/star/util/XFlushable.idl>
-#endif
 
 //=============================================================================
 

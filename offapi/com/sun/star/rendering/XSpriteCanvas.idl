@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
 #define __com_sun_star_rendering_XSpriteCanvas_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmapCanvas_idl__
 #include <com/sun/star/rendering/XBitmapCanvas.idl>
-#endif
-#ifndef __com_sun_star_rendering_XAnimation_idl__
 #include <com/sun/star/rendering/XAnimation.idl>
-#endif
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

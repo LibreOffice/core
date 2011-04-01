@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_inspection_XPropertyHandler_idl__
 #define __com_sun_star_inspection_XPropertyHandler_idl__
 
-#ifndef __com_sun_star_beans_PropertyState_idl__
 #include <com/sun/star/beans/PropertyState.idl>
-#endif
-#ifndef __com_sun_star_beans_Property_idl__
 #include <com/sun/star/beans/Property.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
-#ifndef __com_sun_star_inspection_LineDescriptor_idl__
 #include <com/sun/star/inspection/LineDescriptor.idl>
-#endif
-#ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_inspection_InteractiveSelectionResult_idl__
 #include <com/sun/star/inspection/InteractiveSelectionResult.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {

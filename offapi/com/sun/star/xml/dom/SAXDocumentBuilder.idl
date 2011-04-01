@@ -1,11 +1,7 @@
 #ifndef __com_sun_star_xml_dom_documentbuilder_idl
 #define __com_sun_star_xml_dom_documentbuilder_idl
-#ifndef __com_sun_star_xml_sax_xdocumenthandler_idl
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XSAXDocumentBuilder_idl
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder.idl>
-#endif
 
 module com {  module sun {  module star {  module xml { module dom {
 

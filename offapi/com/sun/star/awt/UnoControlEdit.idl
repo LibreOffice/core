@@ -27,21 +27,12 @@
 #ifndef __com_sun_star_awt_UnoControlEdit_idl__
 #define __com_sun_star_awt_UnoControlEdit_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XTextComponent_idl__
 #include <com/sun/star/awt/XTextComponent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XTextLayoutConstrains_idl__
 #include <com/sun/star/awt/XTextLayoutConstrains.idl>
-#endif
 
 
 //=============================================================================

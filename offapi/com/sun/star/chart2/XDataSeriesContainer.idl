@@ -28,17 +28,9 @@
 #define com_sun_star_chart2_XDataSeriesContainer_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-
-#ifndef com_sun_star_chart_XDataSeries_idl
 #include <com/sun/star/chart2/XDataSeries.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 module com
 {

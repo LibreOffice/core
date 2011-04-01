@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_task_UnsupportedOverwriteRequest_idl__
 #define __com_sun_star_task_UnsupportedOverwriteRequest_idl__
 
-#ifndef __com_sun_star_task_ClassifiedInteractionRequest_idl__
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
-#endif
 
 
 //=============================================================================

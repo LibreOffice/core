@@ -27,37 +27,14 @@
 #ifndef __com_sun_star_ucb_ContentResultSet_idl__
 #define __com_sun_star_ucb_ContentResultSet_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSetMetaDataSupplier_idl__
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XRow_idl__
 #include <com/sun/star/sdbc/XRow.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XCloseable_idl__
 #include <com/sun/star/sdbc/XCloseable.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentAccess_idl__
 #include <com/sun/star/ucb/XContentAccess.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
-#endif
 
 //=============================================================================
 

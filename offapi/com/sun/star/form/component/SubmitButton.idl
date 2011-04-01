@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_form_component_SubmitButton_idl__
 #define __com_sun_star_form_component_SubmitButton_idl__
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_awt_UnoControlButtonModel_idl__
 #include <com/sun/star/awt/UnoControlButtonModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_submission_XSubmissionSupplier_idl__
 #include <com/sun/star/form/submission/XSubmissionSupplier.idl>
-#endif
 
 //=============================================================================
 

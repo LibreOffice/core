@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_style_PageStyle_idl__
 #define __com_sun_star_style_PageStyle_idl__
 
-#ifndef __com_sun_star_style_Style_idl__
 #include <com/sun/star/style/Style.idl>
-#endif
-
-#ifndef __com_sun_star_style_PageProperties_idl__
 #include <com/sun/star/style/PageProperties.idl>
-#endif
 
 
 //=============================================================================

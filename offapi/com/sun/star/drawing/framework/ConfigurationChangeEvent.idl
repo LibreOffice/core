@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 #define __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 module com { module sun { module star { module uno { interface XInterface; }; }; }; };
 

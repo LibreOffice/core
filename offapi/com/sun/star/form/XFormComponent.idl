@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_form_XFormComponent_idl__
 #define __com_sun_star_form_XFormComponent_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 
 
 //=============================================================================

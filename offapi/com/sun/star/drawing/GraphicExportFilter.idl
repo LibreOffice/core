@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_drawing_GraphicExportFilter_idl__
 #define __com_sun_star_drawing_GraphicExportFilter_idl__
 
-#ifndef __com_sun_star_document_XFilter_idl__
 #include <com/sun/star/document/XFilter.idl>
-#endif
-
-#ifndef __com_sun_star_document_XExporter_idl__
 #include <com/sun/star/document/XExporter.idl>
-#endif
-
-#ifndef __com_sun_star_document_XMimeTypeInfo_idl__
 #include <com/sun/star/document/XMimeTypeInfo.idl>
-#endif
 
 //=============================================================================
 

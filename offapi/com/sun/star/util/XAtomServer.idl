@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_util_XAtomServer_idl__
 #define __com_sun_star_util_XAtomServer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_util_AtomDescription_idl__
 #include <com/sun/star/util/AtomDescription.idl>
-#endif
-
-#ifndef __com_sun_star_util_AtomClassRequest_idl__
 #include <com/sun/star/util/AtomClassRequest.idl>
-#endif
 
 
 module com

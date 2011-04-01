@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 #define __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 
-#ifndef __com_sun_star_rendering_FloatingPointBitmapFormat_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapFormat.idl>
-#endif
-#ifndef __com_sun_star_rendering_XColorSpace_idl__
 #include <com/sun/star/rendering/XColorSpace.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

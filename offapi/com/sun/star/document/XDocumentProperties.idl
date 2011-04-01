@@ -27,41 +27,15 @@
 #ifndef __com_sun_star_document_XDocumentProperties_idl__
 #define __com_sun_star_document_XDocumentProperties_idl__
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XStorage_idl__
 #include <com/sun/star/embed/XStorage.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_io_WrongFormatException_idl__
 #include <com/sun/star/io/WrongFormatException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyContainer_idl__
 #include <com/sun/star/beans/XPropertyContainer.idl>
-#endif
 
 
 //=============================================================================

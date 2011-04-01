@@ -27,63 +27,25 @@
 #ifndef __com_sun_star_report_XReportDefinition_idl__
 #define __com_sun_star_report_XReportDefinition_idl__
 
-#ifndef __com_sun_star_report_XReportComponent_idl__
 #include <com/sun/star/report/XReportComponent.idl>
-#endif
-#ifndef __com_sun_star_report_XFunctionsSupplier_idl__
 #include <com/sun/star/report/XFunctionsSupplier.idl>
-#endif
-#ifndef __com_sun_star_view_PaperOrientation_idl__
 #include <com/sun/star/view/PaperOrientation.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_view_PaperFormat_idl__
 #include <com/sun/star/view/PaperFormat.idl>
-#endif
-#ifndef __com_sun_star_util_XClosable_idl__
 #include <com/sun/star/util/XCloseable.idl>
-#endif
-#ifndef __com_sun_star_ui_XUIConfigurationManagerSupplier_idl__
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.idl>
-#endif
-#ifndef __com_sun_star_document_XDocumentSubStorageSupplier_idl__
 #include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_document_XViewDataSupplier_idl__
 #include <com/sun/star/document/XViewDataSupplier.idl>
-#endif
-#ifndef __com_sun_star_frame_XLoadable_idl__
 #include <com/sun/star/frame/XLoadable.idl>
-#endif
-#ifndef __com_sun_star_embed_XVisualObject_idl__
 #include <com/sun/star/embed/XVisualObject.idl>
-#endif
-#ifndef __com_sun_star_embed_XStorageBasedDocument_idl__
 #include <com/sun/star/document/XStorageBasedDocument.idl>
-#endif
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_util_XModifiable2_idl__
 #include <com/sun/star/util/XModifiable2.idl>
-#endif
-#ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_lang_DisposedException_idl__
 #include <com/sun/star/lang/DisposedException.idl>
-#endif
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;

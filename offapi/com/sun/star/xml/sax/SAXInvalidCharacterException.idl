@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_xml_sax_SAXInvalidCharacterException_idl__
 #define __com_sun_star_xml_sax_SAXInvalidCharacterException_idl__
 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
 
 //=============================================================================

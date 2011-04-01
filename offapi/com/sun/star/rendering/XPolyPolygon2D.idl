@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
 #define __com_sun_star_rendering_XPolyPolygon2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_FillRule_idl__
 #include <com/sun/star/rendering/FillRule.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

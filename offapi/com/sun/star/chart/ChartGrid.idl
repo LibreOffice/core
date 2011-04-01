@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_chart_ChartGrid_idl__
 #define __com_sun_star_chart_ChartGrid_idl__
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
 #include <com/sun/star/drawing/LineProperties.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 

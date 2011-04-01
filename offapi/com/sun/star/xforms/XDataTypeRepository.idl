@@ -28,24 +28,12 @@
 #ifndef __com_sun_star_xsd_XDataTypeRepository_idl__
 #define __com_sun_star_xsd_XDataTypeRepository_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-#ifndef __com_sun_star_xsd_XDataType_idl__
 #include <com/sun/star/xsd/XDataType.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-#ifndef __com_sun_star_util_VetoException_idl__
 #include <com/sun/star/util/VetoException.idl>
-#endif
 
 
 //=============================================================================

@@ -27,37 +27,14 @@
 #ifndef __com_sun_star_document_MediaDescriptor_idl__
 #define __com_sun_star_document_MediaDescriptor_idl__
 
-#ifndef __com_sun_star_io_XOutputStream_idl__
 #include <com/sun/star/io/XOutputStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
-
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
-#endif
-
-#ifndef __com_sun_star_task_XStatusIndicator_idl__
 #include <com/sun/star/task/XStatusIndicator.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
 
 //=============================================================================
 

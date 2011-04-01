@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XCachedDynamicResultSetStubFactory_idl__
 #define __com_sun_star_ucb_XCachedDynamicResultSetStubFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_NumberedSortingInfo_idl__
 #include <com/sun/star/ucb/NumberedSortingInfo.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XAnyCompareFactory_idl__
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
-#endif
 
 //=============================================================================
 

@@ -28,7 +28,6 @@
 #define com_sun_star_chart2_XRegressionCurveCalculator_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/geometry/RealPoint2D.idl>

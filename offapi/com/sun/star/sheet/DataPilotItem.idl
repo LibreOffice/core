@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_DataPilotItem_idl__
 #define __com_sun_star_sheet_DataPilotItem_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

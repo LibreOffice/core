@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_report_XGroup_idl__
 #define __com_sun_star_report_XGroup_idl__
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-#ifndef __com_sun_star_report_XSection_idl__
 #include <com/sun/star/report/XSection.idl>
-#endif
-#ifndef __com_sun_star_report_XGroups_idl__
 #include <com/sun/star/report/XGroups.idl>
-#endif
 #include <com/sun/star/report/XFunctions.idl>
 //=============================================================================
 

@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_frame_Controller_idl__
 #define __com_sun_star_frame_Controller_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XContextMenuInterception_idl__
 #include <com/sun/star/ui/XContextMenuInterception.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XUserInputInterception_idl__
 #include <com/sun/star/awt/XUserInputInterception.idl>
-#endif
-
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_XTransferableSupplier_idl__
 #include <com/sun/star/datatransfer/XTransferableSupplier.idl>
-#endif
 
 //=============================================================================
 

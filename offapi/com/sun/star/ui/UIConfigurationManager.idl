@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_ui_UIConfigurationManager_idl__
 #define __com_sun_star_ui_UIConfigurationManager_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfiguration_idl__
 #include <com/sun/star/ui/XUIConfiguration.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
 #include <com/sun/star/ui/XUIConfigurationManager.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
 #include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
 #include <com/sun/star/ui/XUIConfigurationStorage.idl>
-#endif
 
 module com { module sun { module star { module ui {
 

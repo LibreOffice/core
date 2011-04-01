@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #define __com_sun_star_accessibility_XAccessibleContext_idl__
 
-#ifndef __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 

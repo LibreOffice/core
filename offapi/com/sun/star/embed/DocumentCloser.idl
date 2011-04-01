@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_embed_DocumentCloser_idl__
 #define __com_sun_star_embed_DocumentCloser_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_frame_DoubleInitializationException_idl__
 #include <com/sun/star/frame/DoubleInitializationException.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module embed {

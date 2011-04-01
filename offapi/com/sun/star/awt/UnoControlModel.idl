@@ -27,33 +27,18 @@
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #define __com_sun_star_awt_UnoControlModel_idl__
 
-#ifndef __com_sun_star_awt_UnoControlDialogElement_idl__
 #include <com/sun/star/awt/UnoControlDialogElement.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XControlModel_idl__
 #include <com/sun/star/awt/XControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
 #include <com/sun/star/beans/XMultiPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
 
-#ifndef __com_sun_star_util_XCloneable_idl__
 #include <com/sun/star/util/XCloneable.idl>
-#endif
 
 
 //=============================================================================

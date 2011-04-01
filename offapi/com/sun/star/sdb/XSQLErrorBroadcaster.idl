@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_sdb_XSQLErrorBroadcaster_idl__
 #define __com_sun_star_sdb_XSQLErrorBroadcaster_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_sdb_XSQLErrorListener_idl__
 #include <com/sun/star/sdb/XSQLErrorListener.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

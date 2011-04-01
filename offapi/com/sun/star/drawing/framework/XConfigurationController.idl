@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
 #define __com_sun_star_drawing_framework_XConfigurationController_idl__
 
-#ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
 #include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
 #include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XResourceFactoryManager_idl__
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_ResourceActivationMode_idl__
 #include <com/sun/star/drawing/framework/ResourceActivationMode.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 

@@ -29,29 +29,13 @@
 #ifndef __com_sun_star_text_BaseIndex_idl__
 #define __com_sun_star_text_BaseIndex_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_text_XDocumentIndex_idl__
 #include <com/sun/star/text/XDocumentIndex.idl>
-#endif
-#ifndef _com_sun_star_container_XIndexReplace_idl__
 #include <com/sun/star/container/XIndexReplace.idl>
-#endif
-#ifndef _com_sun_star_text_XTextColumns_idl__
 #include <com/sun/star/text/XTextColumns.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef _com_sun_star_text_XTextSection_idl__
 #include <com/sun/star/text/XTextSection.idl>
-#endif
-
 
 //=============================================================================
 

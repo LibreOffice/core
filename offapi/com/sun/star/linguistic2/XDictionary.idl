@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_linguistic2_XDictionary_idl__
 #define __com_sun_star_linguistic2_XDictionary_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_DictionaryType_idl__
 #include <com/sun/star/linguistic2/DictionaryType.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryEntry_idl__
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryEventListener_idl__
 #include <com/sun/star/linguistic2/XDictionaryEventListener.idl>
-#endif
 
 //=============================================================================
 

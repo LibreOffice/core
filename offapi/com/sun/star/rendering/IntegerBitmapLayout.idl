@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_rendering_IntegerBitmapLayout_idl__
 #define __com_sun_star_rendering_IntegerBitmapLayout_idl__
 
-#ifndef __com_sun_star_rendering_XIntegerBitmapColorSpace_idl__
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmapPalette_idl__
 #include <com/sun/star/rendering/XBitmapPalette.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

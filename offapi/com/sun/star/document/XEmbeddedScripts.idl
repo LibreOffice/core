@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #define __com_sun_star_document_XEmbeddedScripts_idl__
 
-#ifndef __com_sun_star_script_XStorageBasedLibraryContainer_idl__
 #include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_DataColumn_idl__
 #define __com_sun_star_sdb_DataColumn_idl__
 
-#ifndef __com_sun_star_sdb_ResultColumn_idl__
 #include <com/sun/star/sdb/ResultColumn.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

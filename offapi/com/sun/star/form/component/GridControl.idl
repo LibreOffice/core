@@ -27,53 +27,27 @@
 #ifndef __com_sun_star_form_component_GridControl_idl__
 #define __com_sun_star_form_component_GridControl_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_XGridColumnFactory_idl__
 #include <com/sun/star/form/XGridColumnFactory.idl>
-#endif
 
-#ifndef __com_sun_star_form_FormComponents_idl__
 #include <com/sun/star/form/FormComponents.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
 
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
 
-#ifndef __com_sun_star_script_XEventAttacherManager_idl__
 #include <com/sun/star/script/XEventAttacherManager.idl>
-#endif
 
-#ifndef __com_sun_star_form_XReset_idl__
 #include <com/sun/star/form/XReset.idl>
-#endif
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
 
 
 //=============================================================================

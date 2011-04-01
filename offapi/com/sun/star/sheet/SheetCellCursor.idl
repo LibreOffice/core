@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_SheetCellCursor_idl__
 #define __com_sun_star_sheet_SheetCellCursor_idl__
 
-#ifndef __com_sun_star_table_CellCursor_idl__
 #include <com/sun/star/table/CellCursor.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_SheetCellRange_idl__
 #include <com/sun/star/sheet/SheetCellRange.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetCellCursor_idl__
 #include <com/sun/star/sheet/XSheetCellCursor.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XUsedAreaCursor_idl__
 #include <com/sun/star/sheet/XUsedAreaCursor.idl>
-#endif
 
 //=============================================================================
 

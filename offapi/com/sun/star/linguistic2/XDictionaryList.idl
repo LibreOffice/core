@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
 #define __com_sun_star_linguistic2_XDictionaryList_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionary_idl__
 #include <com/sun/star/linguistic2/XDictionary.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryListEventListener_idl__
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.idl>
-#endif
 
 //=============================================================================
 

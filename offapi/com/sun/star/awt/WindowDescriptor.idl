@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_awt_WindowDescriptor_idl__
 #define __com_sun_star_awt_WindowDescriptor_idl__
 
-#ifndef __com_sun_star_awt_WindowClass_idl__
 #include <com/sun/star/awt/WindowClass.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XWindowPeer_idl__
 #include <com/sun/star/awt/XWindowPeer.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
 
 
 //=============================================================================

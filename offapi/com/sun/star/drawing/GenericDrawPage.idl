@@ -27,41 +27,23 @@
 #ifndef __com_sun_star_drawing_GenericDrawPage_idl__
 #define __com_sun_star_drawing_GenericDrawPage_idl__
 
-#ifndef __com_sun_star_drawing_XShapes_idl__
 #include <com/sun/star/drawing/XShapes.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapeGrouper_idl__
 #include <com/sun/star/drawing/XShapeGrouper.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapeCombiner_idl__
 #include <com/sun/star/drawing/XShapeCombiner.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapeBinder_idl__
 #include <com/sun/star/drawing/XShapeBinder.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_view_PaperOrientation_idl__
 #include <com/sun/star/view/PaperOrientation.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 

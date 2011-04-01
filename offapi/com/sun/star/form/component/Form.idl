@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_form_component_Form_idl__
 #define __com_sun_star_form_component_Form_idl__
 
-#ifndef __com_sun_star_form_FormComponent_idl__
 #include <com/sun/star/form/FormComponent.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormComponents_idl__
 #include <com/sun/star/form/FormComponents.idl>
-#endif
-
-#ifndef __com_sun_star_form_XForm_idl__
 #include <com/sun/star/form/XForm.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XTabControllerModel_idl__
 #include <com/sun/star/awt/XTabControllerModel.idl>
-#endif
-
-#ifndef __com_sun_star_script_XEventAttacherManager_idl__
 #include <com/sun/star/script/XEventAttacherManager.idl>
-#endif
 
 
 //=============================================================================

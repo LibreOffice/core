@@ -30,9 +30,7 @@
 #define __com_sun_star_text_DocumentIndex_idl__
 
 #include <com/sun/star/text/BaseIndex.idl>
-#ifndef __com_sun_star_text_XDocumentIndexMark_idl__
 #include <com/sun/star/text/XDocumentIndexMark.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef com_sun_star_chart2_RelativePosition_idl
 #define com_sun_star_chart2_RelativePosition_idl
 
-#ifndef __com_sun_star_drawing_Alignment_idl__
 #include <com/sun/star/drawing/Alignment.idl>
-#endif
 
 module com
 {

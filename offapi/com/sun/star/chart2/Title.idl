@@ -29,9 +29,7 @@
 
 #include <com/sun/star/style/ParagraphProperties.idl>
 #include <com/sun/star/layout/LayoutElement.idl>
-
 #include <com/sun/star/chart2/XTitle.idl>
-
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/drawing/FillProperties.idl>

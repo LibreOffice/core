@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
 #define __com_sun_star_ui_XUIConfigurationStorage_idl__
 
-#ifndef __com_sun_star_embed_XStorage_idl__
 #include <com/sun/star/embed/XStorage.idl>
-#endif
 
 //=============================================================================
 

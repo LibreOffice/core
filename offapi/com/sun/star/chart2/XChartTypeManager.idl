@@ -3,7 +3,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/chart2/XChartTypeTemplate.idl>
 
 module com

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_accessibility_AccessibleTextField_idl__
 #define __com_sun_star_accessibility_AccessibleTextField_idl__
 
-#ifndef __com_sun_star_accessibility_AccessibleContext_idl__
 #include <com/sun/star/accessibility/AccessibleContext.idl>
-#endif
 
 
 module com { module sun { module star { module accessibility {

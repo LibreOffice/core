@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_xml_sax_XSAXSerializable_idl__
 #define __com_sun_star_xml_sax_XSAXSerializable_idl__
 
-#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
-#endif
-
-#ifndef __com_sun_star_beans_StringPair_idl__
 #include <com/sun/star/beans/StringPair.idl>
-#endif
 
 module com { module sun { module star { module xml { module sax {
 

@@ -27,9 +27,7 @@
 #ifndef _com_sun_star_xml_ParaUserDefinedAttributesSupplier_idl_
 #define _com_sun_star_xml_ParaUserDefinedAttributesSupplier_idl_
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 module com { module sun { module star { module xml {
 

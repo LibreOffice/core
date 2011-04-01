@@ -28,49 +28,17 @@
 #ifndef __com_sun_star_form_control_GridControl_idl__
 #define __com_sun_star_form_control_GridControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_form_XGrid_idl__
 #include <com/sun/star/form/XGrid.idl>
-#endif
-
-#ifndef __com_sun_star_form_XBoundComponent_idl__
 #include <com/sun/star/form/XBoundComponent.idl>
-#endif
-
-#ifndef __com_sun_star_form_XGridFieldDataSupplier_idl__
 #include <com/sun/star/form/XGridFieldDataSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModeSelector_idl__
 #include <com/sun/star/util/XModeSelector.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
-#endif
-
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
 //=============================================================================
 

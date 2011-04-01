@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_embed_XLinkCreator_idl__
 #define __com_sun_star_embed_XLinkCreator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XStorage_idl__
 #include <com/sun/star/embed/XStorage.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_WrongStateException_idl__
 #include <com/sun/star/embed/WrongStateException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 //=============================================================================
 

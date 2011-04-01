@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_awt_XUserInputInterception_idl__
 #define __com_sun_star_awt_XUserInputInterception_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XKeyHandler_idl__
 #include <com/sun/star/awt/XKeyHandler.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMouseClickHandler_idl__
 #include <com/sun/star/awt/XMouseClickHandler.idl>
-#endif
 
 module com {  module sun {  module star {  module awt {
 

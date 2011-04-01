@@ -27,37 +27,20 @@
 #ifndef __com_sun_star_chart_LineDiagram_idl__
 #define __com_sun_star_chart_LineDiagram_idl__
 
-#ifndef __com_sun_star_chart_Diagram_idl__
 #include <com/sun/star/chart/Diagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartStatistics_idl__
 #include <com/sun/star/chart/ChartStatistics.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__
 #include <com/sun/star/chart/ChartAxisXSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartTwoAxisYSupplier_idl__
 #include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisZSupplier_idl__
 #include <com/sun/star/chart/ChartAxisZSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_chart_Dim3DDiagram_idl__
 #include <com/sun/star/chart/Dim3DDiagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_StackableDiagram_idl__
 #include <com/sun/star/chart/StackableDiagram.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
 
 //=============================================================================
 

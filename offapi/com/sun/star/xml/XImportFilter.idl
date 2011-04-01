@@ -28,10 +28,7 @@
 #ifndef _COM_SUN_STAR_XML_XIMPORTFILTER_IDL__
 #define _COM_SUN_STAR_XML_XIMPORTFILTER_IDL__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>

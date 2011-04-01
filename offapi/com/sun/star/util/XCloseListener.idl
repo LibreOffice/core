@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_util_XCloseListener_idl__
 #define __com_sun_star_util_XCloseListener_idl__
 
-#ifndef __com_sun_star_util_CloseVetoException_idl__
 #include <com/sun/star/util/CloseVetoException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 //=============================================================================
 

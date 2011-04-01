@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_DocumentTemplates_idl__
 #define __com_sun_star_frame_DocumentTemplates_idl__
 
-#ifndef __com_sun_star_frame_XDocumentTemplates_idl__
 #include <com/sun/star/frame/XDocumentTemplates.idl>
-#endif
 
 //=============================================================================
 

@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_embed_XVisualObject_idl__
 #define __com_sun_star_embed_XVisualObject_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_embed_VisualRepresentation_idl__
 #include <com/sun/star/embed/VisualRepresentation.idl>
-#endif
-
-#ifndef __com_sun_star_embed_WrongStateException_idl__
 #include <com/sun/star/embed/WrongStateException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 
 //=============================================================================

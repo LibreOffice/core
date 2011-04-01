@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_form_XFormController_idl__
 #define __com_sun_star_form_XFormController_idl__
 
-#ifndef __com_sun_star_awt_XTabController_idl__
 #include <com/sun/star/awt/XTabController.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XControl_idl__
 #include <com/sun/star/awt/XControl.idl>
-#endif
 
-#ifndef __com_sun_star_form_XFormControllerListener_idl__
 #include <com/sun/star/form/XFormControllerListener.idl>
-#endif
 
 
 //=============================================================================

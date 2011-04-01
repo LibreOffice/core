@@ -28,31 +28,14 @@
 #ifndef __com_sun_star_accessibility_XAccessibleText_idl__
 #define __com_sun_star_accessibility_XAccessibleText_idl__
 
-#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
 #include <com/sun/star/accessibility/AccessibleTextType.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_accessibility_TextSegment_idl__
 #include <com/sun/star/accessibility/TextSegment.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 

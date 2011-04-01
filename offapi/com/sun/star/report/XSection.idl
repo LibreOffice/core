@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_report_XSection_idl__
 #define __com_sun_star_report_XSection_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShapes_idl__
 #include <com/sun/star/drawing/XShapes.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_report_XReportDefinition_idl__
 #include <com/sun/star/report/XReportDefinition.idl>
-#endif
-#ifndef __com_sun_star_report_XReportComponent_idl__
 #include <com/sun/star/report/XReportComponent.idl>
-#endif
 //=============================================================================
 
  module com {  module sun {  module star {  module report {

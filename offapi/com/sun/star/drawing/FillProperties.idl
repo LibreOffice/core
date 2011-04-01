@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_drawing_FillProperties_idl__
 #define __com_sun_star_drawing_FillProperties_idl__
 
-#ifndef __com_sun_star_drawing_FillStyle_idl__
 #include <com/sun/star/drawing/FillStyle.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Gradient_idl__
 #include <com/sun/star/awt/Gradient.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Hatch_idl__
 #include <com/sun/star/drawing/Hatch.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_BitmapMode_idl__
 #include <com/sun/star/drawing/BitmapMode.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XBitmap_idl__
 #include <com/sun/star/awt/XBitmap.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_RectanglePoint_idl__
 #include <com/sun/star/drawing/RectanglePoint.idl>
-#endif
 
 
 //=============================================================================

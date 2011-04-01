@@ -34,9 +34,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
-
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.idl>
-
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 

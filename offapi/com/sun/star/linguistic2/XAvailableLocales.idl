@@ -28,9 +28,7 @@
 #define __com_sun_star_linguistic2_XAvailableLocales_idl__
 
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 
 //=============================================================================

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ucb_CachedContentResultSetStubFactory_idl__
 #define __com_sun_star_ucb_CachedContentResultSetStubFactory_idl__
 
-#ifndef __com_sun_star_ucb_XCachedContentResultSetStubFactory_idl__
 #include <com/sun/star/ucb/XCachedContentResultSetStubFactory.idl>
-#endif
 
 //=============================================================================
 

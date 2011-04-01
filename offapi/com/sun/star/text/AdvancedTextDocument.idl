@@ -27,45 +27,25 @@
 #ifndef __com_sun_star_text_AdvancedTextDocument_idl__
 #define __com_sun_star_text_AdvancedTextDocument_idl__
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
-#ifndef __com_sun_star_text_HypertextDocument_idl__
 #include <com/sun/star/text/HypertextDocument.idl>
-#endif
 
-#ifndef __com_sun_star_text_XFootnotesSupplier_idl__
 #include <com/sun/star/text/XFootnotesSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_text_XEndnotesSupplier_idl__
 #include <com/sun/star/text/XEndnotesSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_util_XReplaceable_idl__
 #include <com/sun/star/util/XReplaceable.idl>
-#endif
 
-#ifndef __com_sun_star_text_XPagePrintable_idl__
 #include <com/sun/star/text/XPagePrintable.idl>
-#endif
 
-#ifndef __com_sun_star_text_XReferenceMarksSupplier_idl__
 #include <com/sun/star/text/XReferenceMarksSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_text_XLineNumberingSupplier_idl__
 #include <com/sun/star/text/XLineNumberingSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_text_XChapterNumberingSupplier_idl__
 #include <com/sun/star/text/XChapterNumberingSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 
 //=============================================================================

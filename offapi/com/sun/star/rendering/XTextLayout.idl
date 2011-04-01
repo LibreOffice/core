@@ -27,39 +27,17 @@
 #ifndef __com_sun_star_rendering_XTextLayout_idl__
 #define __com_sun_star_rendering_XTextLayout_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealBezierSegment2D_idl__
 #include <com/sun/star/geometry/RealBezierSegment2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
-#ifndef __com_sun_star_rendering_StringContext_idl__
 #include <com/sun/star/rendering/StringContext.idl>
-#endif
-#ifndef __com_sun_star_rendering_TextHit_idl__
 #include <com/sun/star/rendering/TextHit.idl>
-#endif
-#ifndef __com_sun_star_rendering_Caret_idl__
 #include <com/sun/star/rendering/Caret.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

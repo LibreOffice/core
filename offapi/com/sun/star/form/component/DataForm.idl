@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_form_component_DataForm_idl__
 #define __com_sun_star_form_component_DataForm_idl__
 
-#ifndef __com_sun_star_form_component_Form_idl__
 #include <com/sun/star/form/component/Form.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_RowSet_idl__
 #include <com/sun/star/sdb/RowSet.idl>
-#endif
-
-#ifndef __com_sun_star_form_TabulatorCycle_idl__
 #include <com/sun/star/form/TabulatorCycle.idl>
-#endif
-
-#ifndef __com_sun_star_form_NavigationBarMode_idl__
 #include <com/sun/star/form/NavigationBarMode.idl>
-#endif
-
-#ifndef __com_sun_star_form_XLoadable_idl__
 #include <com/sun/star/form/XLoadable.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XCompletedExecution_idl__
 #include <com/sun/star/sdb/XCompletedExecution.idl>
-#endif
-
-#ifndef __com_sun_star_awt_TabControllerModel_idl__
 #include <com/sun/star/awt/TabControllerModel.idl>
-#endif
 
 //=============================================================================
 

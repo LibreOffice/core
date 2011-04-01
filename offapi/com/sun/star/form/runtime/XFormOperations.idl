@@ -28,31 +28,14 @@
 #ifndef __com_sun_star_form_runtime_XFormOperations_idl__
 #define __com_sun_star_form_runtime_XFormOperations_idl__
 
-#ifndef __com_sun_star_form_runtime_FeatureState_idl__
 #include <com/sun/star/form/runtime/FeatureState.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XRowSet_idl__
 #include <com/sun/star/sdbc/XRowSet.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XResultSetUpdate_idl__
 #include <com/sun/star/sdbc/XResultSetUpdate.idl>
-#endif
-#ifndef __com_sun_star_form_runtime_XFormController_idl__
 #include <com/sun/star/form/runtime/XFormController.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
 
 //=============================================================================
 

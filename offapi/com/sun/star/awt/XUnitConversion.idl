@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_XUnitConversion_idl__
 #define __com_sun_star_awt_XUnitConversion_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

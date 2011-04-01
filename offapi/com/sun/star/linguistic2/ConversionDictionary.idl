@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_linguistic2_ConversionDictionary_idl__
 #define __com_sun_star_linguistic2_ConversionDictionary_idl__
 
-#ifndef __com_sun_star_linguistic2_XConversionDictionary_idl__
 #include <com/sun/star/linguistic2/XConversionDictionary.idl>
-#endif
-
-#ifndef __com_sun_star_util_XFlushable_idl__
 #include <com/sun/star/util/XFlushable.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XConversionPropertyType_idl__
 #include <com/sun/star/linguistic2/XConversionPropertyType.idl>
-#endif
 
 //=============================================================================
 

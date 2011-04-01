@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_table_ListPositionCellBinding_idl__
 #define __com_sun_star_table_ListPositionCellBinding_idl__
 
-#ifndef __com_sun_star_table_CellValueBinding_idl__
 #include <com/sun/star/table/CellValueBinding.idl>
-#endif
 
 //=============================================================================
 

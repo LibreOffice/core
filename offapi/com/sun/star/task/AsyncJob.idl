@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_task_AsyncJob_idl__
 #define __com_sun_star_task_AsyncJob_idl__
 
-#ifndef __com_sun_star_task_XAsyncJob_idl__
 #include <com/sun/star/task/XAsyncJob.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCloseable_idl__
 #include <com/sun/star/util/XCloseable.idl>
-#endif
 
 //============================================================================
 

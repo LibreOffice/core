@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_binding_BindableDatabaseTimeField_idl__
 #define __com_sun_star_form_binding_BindableDatabaseTimeField_idl__
 
-#ifndef __com_sun_star_form_component_DatabaseTimeField_idl__
 #include <com/sun/star/form/component/DatabaseTimeField.idl>
-#endif
-
-#ifndef __com_sun_star_form_binding_BindableDataAwareControlModel_idl__
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
-#endif
 
 //=============================================================================
 

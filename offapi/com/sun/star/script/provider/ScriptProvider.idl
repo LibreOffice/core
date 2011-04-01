@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_script_provider_ScriptProvider_idl__
 #define __com_sun_star_script_provider_ScriptProvider_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_script_provider_XScriptProvider_idl__
 #include <com/sun/star/script/provider/XScriptProvider.idl>
-#endif
-
-#ifndef __com_sun_star_script_browse_BrowseNode_idl__
 #include <com/sun/star/script/browse/BrowseNode.idl>
-#endif
 
 //===========================================================================
 

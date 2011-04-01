@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_embed_XEmbeddedClient_idl__
 #define __com_sun_star_embed_XEmbeddedClient_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_embed_WrongStateException_idl__
 #include <com/sun/star/embed/WrongStateException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XComponentSupplier_idl__
 #include <com/sun/star/embed/XComponentSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_embed_ObjectSaveVetoException_idl__
 #include <com/sun/star/embed/ObjectSaveVetoException.idl>
-#endif
 
 
 

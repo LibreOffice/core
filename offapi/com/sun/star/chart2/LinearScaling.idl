@@ -27,9 +27,7 @@
 #ifndef com_sun_star_chart2_LinearScaling_idl
 #define com_sun_star_chart2_LinearScaling_idl
 
-#ifndef com_sun_star_chart2_XScaling_idl
 #include <com/sun/star/chart2/XScaling.idl>
-#endif
 
 //=============================================================================
 

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_xforms_Binding_idl__
 #define __com_sun_star_xforms_Binding_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_form_binding_ValueBinding_idl__
 #include <com/sun/star/form/binding/ValueBinding.idl>
-#endif
-
-#ifndef __com_sun_star_form_binding_ListEntrySource_idl__
 #include <com/sun/star/form/binding/ListEntrySource.idl>
-#endif
-
-#ifndef __com_sun_star_form_validation_XValidator_idl__
 #include <com/sun/star/form/validation/XValidator.idl>
-#endif
 
 //=============================================================================
 

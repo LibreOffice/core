@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_form_component_DatabaseListBox_idl__
 #define __com_sun_star_form_component_DatabaseListBox_idl__
 
-#ifndef __com_sun_star_form_component_ListBox_idl__
 #include <com/sun/star/form/component/ListBox.idl>
-#endif
 
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
 #include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_ListSourceType_idl__
 #include <com/sun/star/form/ListSourceType.idl>
-#endif
 
 
 //=============================================================================

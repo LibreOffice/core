@@ -27,25 +27,13 @@
 #ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__
 #define __com_sun_star_xml_sax_XFastDocumentHandler_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XFastAttributeList_idl__
 #include <com/sun/star/xml/sax/XFastAttributeList.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XFastContextHandler_idl__
 #include <com/sun/star/xml/sax/XFastContextHandler.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XLocator_idl__
 #include <com/sun/star/xml/sax/XLocator.idl>
-#endif
 
 
 //=============================================================================

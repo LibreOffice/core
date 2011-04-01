@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_XSessionManagerClient_idl__
 #define __com_sun_star_frame_XSessionManagerClient_idl__
 
-#ifndef __com_sun_star_frame_XSessionManagerListener_idl__
 #include <com/sun/star/frame/XSessionManagerListener.idl>
-#endif
 
 //=============================================================================
 

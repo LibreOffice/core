@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_XCachedContentResultSetFactory_idl__
 #define __com_sun_star_ucb_XCachedContentResultSetFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifierMapping_idl__
 #include <com/sun/star/ucb/XContentIdentifierMapping.idl>
-#endif
 
 //=============================================================================
 

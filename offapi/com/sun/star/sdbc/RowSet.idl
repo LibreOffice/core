@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_sdbc_RowSet_idl__
 #define __com_sun_star_sdbc_RowSet_idl__
 
-#ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XColumnLocate_idl__
 #include <com/sun/star/sdbc/XColumnLocate.idl>
-#endif
 
  module com {  module sun {  module star {  module container {
  published interface XNameAccess;

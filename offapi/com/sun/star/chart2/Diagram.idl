@@ -27,10 +27,7 @@
 #ifndef com_sun_star_chart_Diagram_idl
 #define com_sun_star_chart_Diagram_idl
 
-#ifndef com_sun_star_chart2_XDiagram_idl__
 #include <com/sun/star/chart2/XDiagram.idl>
-#endif
-
 #include <com/sun/star/chart2/XCoordinateSystemContainer.idl>
 #include <com/sun/star/chart2/XTitled.idl>
 #include <com/sun/star/chart2/RelativePosition.idl>

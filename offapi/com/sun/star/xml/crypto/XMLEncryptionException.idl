@@ -32,9 +32,7 @@
 #ifndef __com_sun_star_xml_crypto_XMLEncryptionException_idl__
 #define __com_sun_star_xml_crypto_XMLEncryptionException_idl__
 
-#ifndef __com_sun_star_security_EncryptionException_idl__
 #include <com/sun/star/security/EncryptionException.idl>
-#endif
 
 
 //=============================================================================

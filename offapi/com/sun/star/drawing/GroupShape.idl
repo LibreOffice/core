@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_drawing_GroupShape_idl__
 #define __com_sun_star_drawing_GroupShape_idl__
 
-#ifndef __com_sun_star_drawing_XShapeGroup_idl__
 #include <com/sun/star/drawing/XShapeGroup.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapes_idl__
 #include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
 
 
 //=============================================================================

@@ -27,30 +27,12 @@
 #ifndef __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
 #define __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
-
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
-#endif
-
-#ifndef __com_sun_star_task_XStatusIndicator_idl__
 #include <com/sun/star/task/XStatusIndicator.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterceptor_idl__
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
-#endif
-
 #include <com/sun/star/embed/XStorage.idl>
 
 //============================================================================

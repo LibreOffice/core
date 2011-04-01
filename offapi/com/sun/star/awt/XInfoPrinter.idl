@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_XInfoPrinter_idl__
 #define __com_sun_star_awt_XInfoPrinter_idl__
 
-#ifndef __com_sun_star_awt_XPrinterPropertySet_idl__
 #include <com/sun/star/awt/XPrinterPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XDevice_idl__
 #include <com/sun/star/awt/XDevice.idl>
-#endif
 
 
 //=============================================================================

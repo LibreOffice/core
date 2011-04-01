@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_presentation_XShapeEventListener_idl__
 #define __com_sun_star_presentation_XShapeEventListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-#ifndef __com_sun_star_awt_XMouseListener_idl__
 #include <com/sun/star/awt/XMouseListener.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
 module com {  module sun {  module star {  module presentation {
 

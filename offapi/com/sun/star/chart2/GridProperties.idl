@@ -28,9 +28,7 @@
 #define com_sun_star_chart_GridProperties_idl
 
 #include <com/sun/star/beans/XPropertySet.idl>
-
 #include <com/sun/star/chart2/XGrid.idl>
-
 #include <com/sun/star/drawing/LineProperties.idl>
 
 module com

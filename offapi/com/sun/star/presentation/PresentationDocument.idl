@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_presentation_PresentationDocument_idl__
 #define __com_sun_star_presentation_PresentationDocument_idl__
 
-#ifndef __com_sun_star_drawing_GenericDrawingDocument_idl__
 #include <com/sun/star/drawing/GenericDrawingDocument.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XPresentationSupplier_idl__
 #include <com/sun/star/presentation/XPresentationSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XCustomPresentationSupplier_idl__
 #include <com/sun/star/presentation/XCustomPresentationSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_document_XLinkTargetSupplier_idl__
 #include <com/sun/star/document/XLinkTargetSupplier.idl>
-#endif
 
 
 //=============================================================================

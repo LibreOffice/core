@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_form_DataAwareControlModel_idl__
 #define __com_sun_star_form_DataAwareControlModel_idl__
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_XBoundComponent_idl__
 #include <com/sun/star/form/XBoundComponent.idl>
-#endif
 
-#ifndef __com_sun_star_form_XLoadListener_idl__
 #include <com/sun/star/form/XLoadListener.idl>
-#endif
 
-#ifndef __com_sun_star_form_XReset_idl__
 #include <com/sun/star/form/XReset.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 
 //=============================================================================

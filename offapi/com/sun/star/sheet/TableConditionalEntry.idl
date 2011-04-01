@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_TableConditionalEntry_idl__
 #define __com_sun_star_sheet_TableConditionalEntry_idl__
 
-#ifndef __com_sun_star_sheet_XSheetCondition_idl__
 #include <com/sun/star/sheet/XSheetCondition.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetConditionalEntry_idl__
 #include <com/sun/star/sheet/XSheetConditionalEntry.idl>
-#endif
 
 //=============================================================================
 

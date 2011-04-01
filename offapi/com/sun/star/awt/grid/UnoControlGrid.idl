@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_UnoControlGrid_idl__
 #define __com_sun_star_awt_UnoControlGrid_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
 
-#ifndef __com_sun_star_awt_grid_XGridControl_idl__
 #include <com/sun/star/awt/grid/XGridControl.idl>
-#endif
 
 //=============================================================================
 

@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_sdb_application_XCopyTableWizard_idl__
 #define __com_sun_star_sdb_application_XCopyTableWizard_idl__
 
-#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_beans_Optional_idl__
 #include <com/sun/star/beans/Optional.idl>
-#endif
 
 //=============================================================================
 

@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_Text_idl__
 #define __com_sun_star_drawing_Text_idl__
 
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_TextProperties_idl__
 #include <com/sun/star/drawing/TextProperties.idl>
-#endif
 
 //=============================================================================
 

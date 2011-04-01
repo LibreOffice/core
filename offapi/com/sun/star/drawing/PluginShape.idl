@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_drawing_PluginShape_idl__
 #define __com_sun_star_drawing_PluginShape_idl__
 
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 //=============================================================================
 

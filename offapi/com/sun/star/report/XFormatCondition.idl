@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_report_XFormatCondition_idl__
 #define __com_sun_star_report_XFormatCondition_idl__
 
-#ifndef __com_sun_star_report_XReportControlFormat_idl__
 #include <com/sun/star/report/XReportControlFormat.idl>
-#endif
 
 //=============================================================================
  module com {  module sun {  module star {  module report {

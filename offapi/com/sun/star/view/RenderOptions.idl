@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_view_RenderOptions_idl__
 #define __com_sun_star_view_RenderOptions_idl__
 
-#ifndef __com_sun_star_awt_XDevice_idl__
 #include <com/sun/star/awt/XDevice.idl>
-#endif
 
 //=============================================================================
 

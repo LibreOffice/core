@@ -26,16 +26,10 @@
  ************************************************************************/
 #ifndef __com_sun_star_style_XAutoStyleFamily_idl__
 #define __com_sun_star_style_XAutoStyleFamily_idl__
-#ifndef __com_sun_star_style_XAutoStyle_idl__
 #include <com/sun/star/style/XAutoStyle.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
 
 //=============================================================================
 

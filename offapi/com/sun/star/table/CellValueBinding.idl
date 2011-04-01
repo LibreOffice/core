@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_table_CellValueBinding_idl__
 #define __com_sun_star_table_CellValueBinding_idl__
 
-#ifndef __com_sun_star_form_binding_ValueBinding_idl__
 #include <com/sun/star/form/binding/ValueBinding.idl>
-#endif
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

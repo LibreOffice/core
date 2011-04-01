@@ -28,26 +28,11 @@
 #ifndef __com_sun_star_frame_PopupMenuController_idl__
 #define __com_sun_star_frame_PopupMenuController_idl__
 
-#ifndef __com_sun_star_frame_XPopupMenuController_idl__
 #include <com/sun/star/frame/XPopupMenuController.idl>
-#endif
-
-#ifndef _com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStatusListener_idl__
 #include <com/sun/star/frame/XStatusListener.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
 
 //=============================================================================
 

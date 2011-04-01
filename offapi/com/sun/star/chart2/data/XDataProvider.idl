@@ -29,11 +29,8 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/chart2/data/XDataSource.idl>
-
 #include <com/sun/star/beans/PropertyValue.idl>
-
 #include <com/sun/star/sheet/XRangeSelection.idl>
 
 module com

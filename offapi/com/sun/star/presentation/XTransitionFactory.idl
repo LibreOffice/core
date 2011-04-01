@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_presentation_XTransitionFactory_idl__
 #define __com_sun_star_presentation_XTransitionFactory_idl__
 
-#ifndef __com_sun_star_presentation_XTransition_idl__
 #include <com/sun/star/presentation/XTransition.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
 
 
 module com {  module sun {  module star {

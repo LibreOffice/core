@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_util_XModifiable_idl__
 #define __com_sun_star_util_XModifiable_idl__
 
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
 #include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
 
 
 //=============================================================================

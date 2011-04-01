@@ -29,9 +29,7 @@
 #ifndef __com_sun_star_mozilla_MozillaBootstrap_idl__
 #define __com_sun_star_mozilla_MozillaBootstrap_idl__
 
-#ifndef __com_sun_star_mozilla_XMozillaBootstrap_idl__
 #include <com/sun/star/mozilla/XMozillaBootstrap.idl>
-#endif
 
 //=============================================================================
 

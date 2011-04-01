@@ -27,30 +27,13 @@
 #ifndef __com_sun_star_configuration_backend_XLayerImporter_idl__
 #define __com_sun_star_configuration_backend_XLayerImporter_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XBackend_idl__
 #include <com/sun/star/configuration/backend/XBackend.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
-#endif
-#ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
 
 //=============================================================================
 

@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_CellAnnotation_idl__
 #define __com_sun_star_sheet_CellAnnotation_idl__
 
-#ifndef __com_sun_star_sheet_XSheetAnnotation_idl__
 #include <com/sun/star/sheet/XSheetAnnotation.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetAnnotationShapeSupplier_idl__
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
-
-#ifndef __com_sun_star_text_XSimpleText_idl__
 #include <com/sun/star/text/XSimpleText.idl>
-#endif
 
 //=============================================================================
 

@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_script_XPersistentLibraryContainer_idl__
 #define __com_sun_star_script_XPersistentLibraryContainer_idl__
 
-#ifndef __com_sun_star_util_XModifiable_idl__
 #include <com/sun/star/util/XModifiable.idl>
-#endif
-#ifndef __com_sun_star_script_XLibraryContainer2_idl__
 #include <com/sun/star/script/XLibraryContainer2.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
 
 //=============================================================================
 

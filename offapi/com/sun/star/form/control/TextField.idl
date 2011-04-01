@@ -28,16 +28,9 @@
 #ifndef __com_sun_star_form_control_TextField_idl__
 #define __com_sun_star_form_control_TextField_idl__
 
-#ifndef __com_sun_star_awt_UnoControlEdit_idl__
 #include <com/sun/star/awt/UnoControlEdit.idl>
-#endif
-
-#ifndef __com_sun_star_form_XBoundControl_idl__
 #include <com/sun/star/form/XBoundControl.idl>
-#endif
-#ifndef __com_sun_star_form_XChangeBroadcaster_idl__
 #include <com/sun/star/form/XChangeBroadcaster.idl>
-#endif
 
 //=============================================================================
 

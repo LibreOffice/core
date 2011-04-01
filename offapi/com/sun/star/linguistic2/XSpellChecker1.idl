@@ -27,26 +27,11 @@
 #ifndef __com_sun_star_linguistic2_XSpellChecker1_idl__
 #define __com_sun_star_linguistic2_XSpellChecker1_idl__
 
-#ifndef __com_sun_star_linguistic2_XSupportedLanguages_idl__
 #include <com/sun/star/linguistic2/XSupportedLanguages.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
 #include <com/sun/star/linguistic2/XDictionaryList.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XSpellAlternatives_idl__
 #include <com/sun/star/linguistic2/XSpellAlternatives.idl>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_idl_
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
-
 
 //=============================================================================
 

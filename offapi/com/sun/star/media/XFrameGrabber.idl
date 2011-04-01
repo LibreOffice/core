@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_media_XFrameGrabber_idl__
 #define __com_sun_star_media_XFrameGrabber_idl__
 
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 module com {  module sun {  module star {  module media {
 

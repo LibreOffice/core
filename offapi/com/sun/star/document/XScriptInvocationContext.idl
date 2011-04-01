@@ -29,9 +29,7 @@
 #define __com_sun_star_document_XScriptInvocationContext_idl__
 
 
-#ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #include <com/sun/star/document/XEmbeddedScripts.idl>
-#endif
 
 //=============================================================================
 

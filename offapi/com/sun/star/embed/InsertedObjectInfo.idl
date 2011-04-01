@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_embed_InsertedObjectInfo_idl__
 #define __com_sun_star_embed_InsertedObjectInfo_idl__
 
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
 #include <com/sun/star/embed/XEmbeddedObject.idl>
-#endif
 
 //=============================================================================
 

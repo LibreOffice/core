@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XAnimation_idl__
 #define __com_sun_star_rendering_XAnimation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_AnimationAttributes_idl__
 #include <com/sun/star/rendering/AnimationAttributes.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

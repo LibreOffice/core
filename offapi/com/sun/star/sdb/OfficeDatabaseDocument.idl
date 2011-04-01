@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 #define __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 
-#ifndef __com_sun_star_document_OfficeDocument_idl__
 #include <com/sun/star/document/OfficeDocument.idl>
-#endif
-#ifndef __com_sun_star_sdb_XOfficeDatabaseDocument_idl__
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.idl>
-#endif
-#ifndef __com_sun_star_document_XDocumentEventBroadcaster_idl__
 #include <com/sun/star/document/XDocumentEventBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_script_provider_XScriptProviderSupplier_idl__
 #include <com/sun/star/script/provider/XScriptProviderSupplier.idl>
-#endif
-#ifndef __com_sun_star_frame_XLoadable_idl__
 #include <com/sun/star/frame/XLoadable.idl>
-#endif
-#ifndef __com_sun_star_util_XCloseable_idl__
 #include <com/sun/star/util/XCloseable.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 

@@ -32,7 +32,6 @@
 #include <com/sun/star/xml/dom/events/XEvent.idl>
 #include <com/sun/star/xml/dom/events/XEventTarget.idl>
 #include <com/sun/star/xml/dom/events/XEventListener.idl>
-
 #include <com/sun/star/xml/dom/XNode.idl>
 
 module com { module sun { module star { module xml { module dom { module events {

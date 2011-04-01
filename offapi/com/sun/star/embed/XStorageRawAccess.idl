@@ -27,49 +27,17 @@
 #ifndef __com_sun_star_embed_XStorageRawAccess_idl__
 #define __com_sun_star_embed_XStorageRawAccess_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_XStream_idl__
 #include <com/sun/star/io/XStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_StorageWrappedTargetException_idl__
 #include <com/sun/star/embed/StorageWrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_InvalidStorageException_idl__
 #include <com/sun/star/embed/InvalidStorageException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoEncryptionException_idl__
 #include <com/sun/star/packages/NoEncryptionException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoRawFormatException_idl__
 #include <com/sun/star/packages/NoRawFormatException.idl>
-#endif
 
 
 //============================================================================

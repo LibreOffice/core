@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_backend_xml_SchemaParser_idl__
 #define __com_sun_star_configuration_backend_xml_SchemaParser_idl__
 
-#ifndef __com_sun_star_configuration_backend_XSchema_idl__
 #include <com/sun/star/configuration/backend/XSchema.idl>
-#endif
-
-#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

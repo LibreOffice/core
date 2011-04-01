@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_chart_Dim3DDiagram_idl__
 #define __com_sun_star_chart_Dim3DDiagram_idl__
 
-#ifndef __com_sun_star_chart_X3DDisplay_idl__
 #include <com/sun/star/chart/X3DDisplay.idl>
-#endif
-#ifndef __com_sun_star_chart_X3DDefaultSetter_idl__
 #include <com/sun/star/chart/X3DDefaultSetter.idl>
-#endif
 
 
 //=============================================================================

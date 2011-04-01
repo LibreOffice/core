@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_Endnote_idl__
 #define __com_sun_star_text_Endnote_idl__
 
-#ifndef __com_sun_star_text_Footnote_idl__
 #include <com/sun/star/text/Footnote.idl>
-#endif
 
 
 //=============================================================================

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ui_GlobalAcceleratorConfiguration_idl__
 #define __com_sun_star_ui_GlobalAcceleratorConfiguration_idl__
 
-#ifndef __com_sun_star_ui_XAcceleratorConfiguration_idl__
 #include <com/sun/star/ui/XAcceleratorConfiguration.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 

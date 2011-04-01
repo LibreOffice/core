@@ -27,37 +27,15 @@
 #ifndef __com_sun_star_xforms_XModel_idl__
 #define __com_sun_star_xforms_XModel_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XSet.idl>
-#endif
-
-#ifndef __com_sun_star_xforms_XDataTypeRepository_idl__
 #include <com/sun/star/xforms/XDataTypeRepository.idl>
-#endif
-
-#ifndef __com_sun_star_xml_dom_XDocument_idl__
 #include <com/sun/star/xml/dom/XDocument.idl>
-#endif
-
-#ifndef __com_sun_star_util_VetoException_idl__
 #include <com/sun/star/util/VetoException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
-#endif
 
 //=============================================================================
 

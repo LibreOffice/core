@@ -1,15 +1,11 @@
 #ifndef com_sun_star_chart_XFormattedString_idl
 #define com_sun_star_chart_XFormattedString_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/style/CharacterProperties.idl>
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
-
 #include <com/sun/star/chart2/XFormattedString.idl>
 
 module com

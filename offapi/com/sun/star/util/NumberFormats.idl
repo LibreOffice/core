@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_util_NumberFormats_idl__
 #define __com_sun_star_util_NumberFormats_idl__
 
-#ifndef __com_sun_star_util_XNumberFormats_idl__
 #include <com/sun/star/util/XNumberFormats.idl>
-#endif
 
-#ifndef __com_sun_star_util_XNumberFormatTypes_idl__
 #include <com/sun/star/util/XNumberFormatTypes.idl>
-#endif
 
 
 //=============================================================================

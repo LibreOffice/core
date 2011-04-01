@@ -28,12 +28,8 @@
 #define __com_sun_star_text_XMailMergeBroadcaster_idl__
 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_text_XMailMergeListener_idl__
 #include <com/sun/star/text/XMailMergeListener.idl>
-#endif
 
 //module com { module sun { module star { module text {
 //     published interface XMailMergeListener;

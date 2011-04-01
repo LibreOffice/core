@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_XBackendChangesNotifier_idl__
 #define __com_sun_star_configuration_backend_XBackendChangesNotifier_idl__
 
-#ifndef __com_sun_star_configuration_backend_XBackendChangesListener_idl__
 #include <com/sun/star/configuration/backend/XBackendChangesListener.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 

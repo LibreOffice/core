@@ -28,16 +28,10 @@
 #ifndef __com_sun_star_sdb_tools_XTableRename_idl__
 #define __com_sun_star_sdb_tools_XTableRename_idl__
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 #include <com/sun/star/sdb/tools/XConnectionSupplier.idl>
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {

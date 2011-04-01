@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_xml_sax_XFastAttributeList_idl__
 #define __com_sun_star_xml_sax_XFastAttributeList_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_xml_Attribute_idl__
 #include <com/sun/star/xml/Attribute.idl>
-#endif
-
-#ifndef __com_sun_star_xml_FastAttribute_idl__
 #include <com/sun/star/xml/FastAttribute.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
 //=============================================================================
 

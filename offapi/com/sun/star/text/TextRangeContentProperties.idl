@@ -28,37 +28,14 @@
 #ifndef __com_sun_star_text_TextRangeContentProperties_idl__
 #define __com_sun_star_text_TextRangeContentProperties_idl__
 
-#ifndef __com_sun_star_table_XCell_idl__
 #include <com/sun/star/table/XCell.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
-
-#ifndef __com_sun_star_text_XDocumentIndex_idl__
 #include <com/sun/star/text/XDocumentIndex.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextTable_idl__
 #include <com/sun/star/text/XTextTable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextFrame_idl__
 #include <com/sun/star/text/XTextFrame.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextSection_idl__
 #include <com/sun/star/text/XTextSection.idl>
-#endif
-
-#ifndef __com_sun_star_text_XDocumentIndexMark_idl__
 #include <com/sun/star/text/XDocumentIndexMark.idl>
-#endif
-
-#ifndef __com_sun_star_text_XFootnote_idl__
 #include <com/sun/star/text/XFootnote.idl>
-#endif
 
 
 //=============================================================================

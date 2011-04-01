@@ -28,7 +28,6 @@
 #define com_sun_star_chart2_data_XDataSource_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-
 #include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
 
 module com

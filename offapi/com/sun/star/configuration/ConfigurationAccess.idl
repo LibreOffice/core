@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_configuration_ConfigurationAccess_idl__
 #define __com_sun_star_configuration_ConfigurationAccess_idl__
 
-#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
 #include <com/sun/star/configuration/HierarchyAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_HierarchyElement_idl__
 #include <com/sun/star/configuration/HierarchyElement.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_SetAccess_idl__
 #include <com/sun/star/configuration/SetAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_GroupAccess_idl__
 #include <com/sun/star/configuration/GroupAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_AccessRootElement_idl__
 #include <com/sun/star/configuration/AccessRootElement.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_SetElement_idl__
 #include <com/sun/star/configuration/SetElement.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_GroupElement_idl__
 #include <com/sun/star/configuration/GroupElement.idl>
-#endif
 
 //=============================================================================
 

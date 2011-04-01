@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sdb_DataAccessDescriptor_idl__
 #define __com_sun_star_sdb_DataAccessDescriptor_idl__
 
-#ifndef __com_sun_star_sdbc_Connection_idl__
 #include <com/sun/star/sdbc/Connection.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 

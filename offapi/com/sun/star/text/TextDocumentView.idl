@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_text_TextDocumentView_idl__
 #define __com_sun_star_text_TextDocumentView_idl__
 
-#ifndef __com_sun_star_view_OfficeDocumentView_idl__
 #include <com/sun/star/view/OfficeDocumentView.idl>
-#endif
 
-#ifndef __com_sun_star_view_XViewSettingsSupplier_idl__
 #include <com/sun/star/view/XViewSettingsSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_text_XTextViewCursorSupplier_idl__
 #include <com/sun/star/text/XTextViewCursorSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

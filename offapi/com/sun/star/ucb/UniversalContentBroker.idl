@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_ucb_UniversalContentBroker_idl__
 #define __com_sun_star_ucb_UniversalContentBroker_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
 #include <com/sun/star/ucb/XCommandProcessor.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
 #include <com/sun/star/ucb/XCommandProcessor2.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #include <com/sun/star/ucb/XContentProviderManager.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProvider_idl__
 #include <com/sun/star/ucb/XContentProvider.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifierFactory_idl__
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

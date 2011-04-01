@@ -28,37 +28,14 @@
 #ifndef __com_sun_star_embed_Storage_idl__
 #define __com_sun_star_embed_Storage_idl__
 
-#ifndef __com_sun_star_embed_BaseStorage_idl__
 #include <com/sun/star/embed/BaseStorage.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XTransactedObject_idl__
 #include <com/sun/star/embed/XTransactedObject.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XTransactionBroadcaster_idl__
 #include <com/sun/star/embed/XTransactionBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifiable_idl__
 #include <com/sun/star/util/XModifiable.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 
 //============================================================================

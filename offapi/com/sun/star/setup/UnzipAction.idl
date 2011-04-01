@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_setup_UnzipAction_idl__
 #define __com_sun_star_setup_UnzipAction_idl__
 
-#ifndef __com_sun_star_setup_BaseAction_idl__
 #include <com/sun/star/setup/BaseAction.idl>
-#endif
-
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
 
 module com {  module sun {  module star {  module setup {
 

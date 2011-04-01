@@ -27,27 +27,13 @@
 #ifndef __com_sun_star_text_MailMerge_idl__
 #define __com_sun_star_text_MailMerge_idl__
 
-#ifndef __com_sun_star_task_XJob_idl__
 #include <com/sun/star/task/XJob.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XConnection_idl__
 #include <com/sun/star/sdbc/XConnection.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_text_XMailMergeBroadcaster_idl__
 #include <com/sun/star/text/XMailMergeBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_sdb_DataAccessDescriptor_idl__
 #include <com/sun/star/sdb/DataAccessDescriptor.idl>
-#endif
 
 //=============================================================================
 

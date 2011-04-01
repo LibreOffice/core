@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_configuration_GroupAccess_idl__
 #define __com_sun_star_configuration_GroupAccess_idl__
 
-#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
 #include <com/sun/star/configuration/HierarchyAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_PropertyHierarchy_idl__
 #include <com/sun/star/configuration/PropertyHierarchy.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
-#endif
 
 //=============================================================================
 

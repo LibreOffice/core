@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_auth_XSSOInitiatorContext_idl__
 #define __com_sun_star_auth_XSSOInitiatorContext_idl__
 
-#ifndef __com_sun_star_auth_XSSOContext_idl__
 #include <com/sun/star/auth/XSSOContext.idl>
-#endif
-
-#ifndef __com_sun_star_auth_SSOExceptions_idl__
 #include <com/sun/star/auth/SSOExceptions.idl>
-#endif
 
 module com { module sun { module star { module auth {
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_chart_ChartAxisYSupplier_idl__
 #define __com_sun_star_chart_ChartAxisYSupplier_idl__
 
-#ifndef __com_sun_star_chart_XAxisYSupplier_idl__
 #include <com/sun/star/chart/XAxisYSupplier.idl>
-#endif
 
 
 //=============================================================================

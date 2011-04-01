@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_sync_XSyncCollector_idl__
 #define __com_sun_star_sync_XSyncCollector_idl__
 
-#ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #include <com/sun/star/ucb/XContentProviderManager.idl>
-#endif
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
-#ifndef __com_sun_star_sync_SyncScheme_idl__
 #include <com/sun/star/sync/SyncScheme.idl>
-#endif
-#ifndef __com_sun_star_sync_SyncInfo_idl__
 #include <com/sun/star/sync/SyncInfo.idl>
-#endif
-#ifndef __com_sun_star_sync_SyncElement_idl__
 #include <com/sun/star/sync/SyncElement.idl>
-#endif
 
 //=============================================================================
 

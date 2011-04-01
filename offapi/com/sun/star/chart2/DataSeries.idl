@@ -31,7 +31,6 @@
 #include <com/sun/star/container/XIndexContainer.idl>
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/style/XStyle.idl>
-
 #include <com/sun/star/chart2/CoordinateSystemSupplier.idl>
 #include <com/sun/star/chart2/data/XDataSink.idl>
 #include <com/sun/star/chart2/data/XDataSource.idl>

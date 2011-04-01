@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_xsd_DateTime_idl__
 #define __com_sun_star_xsd_DateTime_idl__
 
-#ifndef __com_sun_star_xsd_XDataType_idl__
 #include <com/sun/star/xsd/XDataType.idl>
-#endif
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module xsd {

@@ -28,49 +28,17 @@
 #ifndef __com_sun_star_sheet_DataPilotField_idl__
 #define __com_sun_star_sheet_DataPilotField_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotField_idl__
 #include <com/sun/star/sheet/XDataPilotField.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotFieldGrouping_idl__
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldOrientation_idl__
 #include <com/sun/star/sheet/DataPilotFieldOrientation.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_GeneralFunction_idl__
 #include <com/sun/star/sheet/GeneralFunction.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldReference_idl__
 #include <com/sun/star/sheet/DataPilotFieldReference.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldLayoutInfo_idl__
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldAutoShowInfo_idl__
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldSortInfo_idl__
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
-#endif
 
 //=============================================================================
 

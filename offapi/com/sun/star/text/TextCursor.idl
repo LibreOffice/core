@@ -27,45 +27,16 @@
 #ifndef __com_sun_star_text_TextCursor_idl__
 #define __com_sun_star_text_TextCursor_idl__
 
-#ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextCursor_idl__
 #include <com/sun/star/text/XTextCursor.idl>
-#endif
-
-#ifndef __com_sun_star_text_XWordCursor_idl__
 #include <com/sun/star/text/XWordCursor.idl>
-#endif
-
-#ifndef __com_sun_star_text_XSentenceCursor_idl__
 #include <com/sun/star/text/XSentenceCursor.idl>
-#endif
-
-#ifndef __com_sun_star_text_XParagraphCursor_idl__
 #include <com/sun/star/text/XParagraphCursor.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertyStates_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
-#endif
-
-#ifndef __com_sun_star_document_XDocumentInsertable_idl__
 #include <com/sun/star/document/XDocumentInsertable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSortable_idl__
 #include <com/sun/star/util/XSortable.idl>
-#endif
 
 
 //=============================================================================

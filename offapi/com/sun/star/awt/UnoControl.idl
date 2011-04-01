@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_awt_UnoControl_idl__
 #define __com_sun_star_awt_UnoControl_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XControl_idl__
 #include <com/sun/star/awt/XControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XView_idl__
 #include <com/sun/star/awt/XView.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessible_idl__
 #include <com/sun/star/accessibility/XAccessible.idl>
-#endif
 
 
 //=============================================================================

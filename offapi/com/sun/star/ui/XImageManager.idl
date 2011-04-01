@@ -28,41 +28,15 @@
 #ifndef __com_sun_star_ui_XImageManager_idl__
 #define __com_sun_star_ui_XImageManager_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationListener_idl__
 #include <com/sun/star/ui/XUIConfigurationListener.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
 #include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfiguration_idl__
 #include <com/sun/star/ui/XUIConfiguration.idl>
-#endif
-
-#ifndef __com_sun_star_ui_ImageType_idl__
 #include <com/sun/star/ui/ImageType.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalAccessException_idl__
 #include <com/sun/star/lang/IllegalAccessException.idl>
-#endif
 
 module com { module sun { module star { module ui {
 

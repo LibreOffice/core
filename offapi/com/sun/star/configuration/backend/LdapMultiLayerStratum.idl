@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_LdapMultiLayerStratum_idl__
 #define __com_sun_star_configuration_backend_LdapMultiLayerStratum_idl__
 
-#ifndef __com_sun_star_configuration_backend_MultiLayerStratum_idl__
 #include <com/sun/star/configuration/backend/MultiLayerStratum.idl>
-#endif
 
 //=============================================================================
 

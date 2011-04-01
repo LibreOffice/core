@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_animations_XAnimationListener_idl__
 #define __com_sun_star_animations_XAnimationListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
-#endif
 
 //=============================================================================
 

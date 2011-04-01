@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_mail_MailMessage_idl__
 #define __com_sun_star_mail_MailMessage_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailAttachment_idl__
 #include <com/sun/star/mail/MailAttachment.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
 
 module com { module sun { module star { module mail {
 

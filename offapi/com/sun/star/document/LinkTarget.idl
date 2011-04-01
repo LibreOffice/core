@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_document_LinkTarget_idl__
 #define __com_sun_star_document_LinkTarget_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_document_XLinkTargetSupplier_idl__
 #include <com/sun/star/document/XLinkTargetSupplier.idl>
-#endif
 
 
 //=============================================================================

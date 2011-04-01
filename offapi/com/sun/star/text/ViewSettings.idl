@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_text_ViewSettings_idl__
 #define __com_sun_star_text_ViewSettings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_view_DocumentZoomType_idl__
 #include <com/sun/star/view/DocumentZoomType.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_XInteractionCookieHandling_idl__
 #define __com_sun_star_ucb_XInteractionCookieHandling_idl__
 
-#ifndef __com_sun_star_task_XInteractionContinuation_idl__
 #include <com/sun/star/task/XInteractionContinuation.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_CookiePolicy_idl__
 #include <com/sun/star/ucb/CookiePolicy.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_Cookie_idl__
 #include <com/sun/star/ucb/Cookie.idl>
-#endif
 
 
 //=============================================================================

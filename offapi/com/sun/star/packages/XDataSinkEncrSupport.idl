@@ -27,33 +27,16 @@
 #ifndef __com_sun_star_packages_XDataSinkEncrSupport_idl__
 #define __com_sun_star_packages_XDataSinkEncrSupport_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_WrongPasswordException_idl__
 #include <com/sun/star/packages/WrongPasswordException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoEncryptionException_idl__
 #include <com/sun/star/packages/NoEncryptionException.idl>
-#endif
 
-#ifndef __com_sun_star_packages_EncryptionNotAllowedException_idl__
 #include <com/sun/star/packages/EncryptionNotAllowedException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoRawFormatException_idl__
 #include <com/sun/star/packages/NoRawFormatException.idl>
-#endif
 
 
 //=============================================================================

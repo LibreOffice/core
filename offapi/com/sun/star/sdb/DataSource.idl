@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_sdb_DataSource_idl__
 #define __com_sun_star_sdb_DataSource_idl__
 
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
-#ifndef __com_sun_star_util_XFlushable_idl__
 #include <com/sun/star/util/XFlushable.idl>
-#endif
 
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
 
 
  module com {  module sun {  module star {  module sdbc {

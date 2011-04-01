@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_system_XSimpleMailClientSupplier_idl__
 #define __com_sun_star_system_XSimpleMailClientSupplier_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_system_XSimpleMailClient_idl__
 #include <com/sun/star/system/XSimpleMailClient.idl>
-#endif
 
 //=============================================================================
 

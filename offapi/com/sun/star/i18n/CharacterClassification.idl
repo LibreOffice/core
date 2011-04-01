@@ -29,7 +29,6 @@
 #define __com_sun_star_i18n_CharacterClassification_idl__
 
 #include <com/sun/star/lang/XServiceInfo.idl>
-
 #include <com/sun/star/i18n/XCharacterClassification.idl>
 
 //=============================================================================

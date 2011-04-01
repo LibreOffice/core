@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_drawing_LineProperties_idl__
 #define __com_sun_star_drawing_LineProperties_idl__
 
-#ifndef __com_sun_star_drawing_LineStyle_idl__
 #include <com/sun/star/drawing/LineStyle.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineDash_idl__
 #include <com/sun/star/drawing/LineDash.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineJoint_idl__
 #include <com/sun/star/drawing/LineJoint.idl>
-#endif
 
 
 //=============================================================================

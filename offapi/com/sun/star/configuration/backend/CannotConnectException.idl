@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_configuration_backend_CannotConnectException_idl__
 #define __com_sun_star_configuration_backend_CannotConnectException_idl__
 
-#ifndef __com_sun_star_configuration_backend_BackendSetupException_idl__
 #include <com/sun/star/configuration/backend/BackendSetupException.idl>
-#endif
 
 module com { module sun { module star { module configuration {
 module backend {

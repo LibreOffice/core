@@ -27,28 +27,12 @@
 #ifndef com_sun_star_chart2_data_XDataReceiver_idl
 #define com_sun_star_chart2_data_XDataReceiver_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef com_sun_star_chart2_data_XDataProvider_idl
 #include <com/sun/star/chart2/data/XDataProvider.idl>
-#endif
-
-#ifndef com_sun_star_chart2_data_XRangeHighlighter_idl
 #include <com/sun/star/chart2/data/XRangeHighlighter.idl>
-#endif
-
-#ifndef com_sun_star_beans_PropertyValue_idl
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
 
 module com
 {

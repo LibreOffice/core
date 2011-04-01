@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_XDDELinks_idl__
 #define __com_sun_star_sheet_XDDELinks_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDDELink_idl__
 #include <com/sun/star/sheet/XDDELink.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DDELinkMode_idl__
 #include <com/sun/star/sheet/DDELinkMode.idl>
-#endif
 
 //=============================================================================
 

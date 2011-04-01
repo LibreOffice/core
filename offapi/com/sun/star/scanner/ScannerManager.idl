@@ -29,9 +29,7 @@
 #ifndef __com_sun_star_scanner_ScannerManager_idl__
 #define __com_sun_star_scanner_ScannerManager_idl__
 
-#ifndef __com_sun_star_scanner_XScannerManager_idl__
 #include <com/sun/star/scanner/XScannerManager.idl>
-#endif
 
 
 //=============================================================================

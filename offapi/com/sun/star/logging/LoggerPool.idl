@@ -1,9 +1,7 @@
 #ifndef __com_sun_star_logging_LoggerPool_idl__
 #define __com_sun_star_logging_LoggerPool_idl__
 
-#ifndef __com_sun_star_logging_XLoggerPool_idl__
 #include <com/sun/star/logging/XLoggerPool.idl>
-#endif
 
 //=============================================================================
 

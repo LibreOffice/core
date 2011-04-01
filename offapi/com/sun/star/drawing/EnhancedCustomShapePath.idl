@@ -27,25 +27,12 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapePath_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapePath_idl__
 
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_idl__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
-#endif
-#ifndef __sun_star_drawing_EnhancedCustomShapeSegment_idl__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.idl>
-#endif
-#ifndef __sun_star_drawing_EnhancedCustomShapeTextFrame_idl__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.idl>
-#endif
-
 
 //=============================================================================
 

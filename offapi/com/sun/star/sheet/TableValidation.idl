@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_TableValidation_idl__
 #define __com_sun_star_sheet_TableValidation_idl__
 
-#ifndef __com_sun_star_sheet_XSheetCondition_idl__
 #include <com/sun/star/sheet/XSheetCondition.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_ValidationType_idl__
 #include <com/sun/star/sheet/ValidationType.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_ValidationAlertStyle_idl__
 #include <com/sun/star/sheet/ValidationAlertStyle.idl>
-#endif
 
 //=============================================================================
 

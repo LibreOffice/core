@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_sheet_SheetSortDescriptor_idl__
 #define __com_sun_star_sheet_SheetSortDescriptor_idl__
 
-#ifndef __com_sun_star_table_TableSortDescriptor_idl__
 #include <com/sun/star/table/TableSortDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
 
 //=============================================================================
 

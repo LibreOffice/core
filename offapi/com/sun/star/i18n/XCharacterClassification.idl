@@ -29,13 +29,8 @@
 #define __com_sun_star_i18n_XCharacterClassification_idl__
 
 #include <com/sun/star/i18n/ParseResult.idl>
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //============================================================================
 

@@ -27,34 +27,15 @@
 #ifndef __com_sun_star_rendering_XCanvasFont_idl__
 #define __com_sun_star_rendering_XCanvasFont_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_FontRequest_idl__
 #include <com/sun/star/rendering/FontRequest.idl>
-#endif
-#ifndef __com_sun_star_rendering_FontMetrics_idl__
 #include <com/sun/star/rendering/FontMetrics.idl>
-#endif
-#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_StringContext_idl__
 #include <com/sun/star/rendering/StringContext.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

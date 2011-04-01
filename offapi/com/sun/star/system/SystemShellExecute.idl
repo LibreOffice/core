@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_system_SystemShellExecute_idl__
 #define __com_sun_star_system_SystemShellExecute_idl__
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XTypeProvider_idl__
 #include <com/sun/star/lang/XTypeProvider.idl>
-#endif
 
 //=============================================================================
 

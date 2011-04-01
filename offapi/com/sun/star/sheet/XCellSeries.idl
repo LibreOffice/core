@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_XCellSeries_idl__
 #define __com_sun_star_sheet_XCellSeries_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_FillDirection_idl__
 #include <com/sun/star/sheet/FillDirection.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_FillMode_idl__
 #include <com/sun/star/sheet/FillMode.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_FillDateMode_idl__
 #include <com/sun/star/sheet/FillDateMode.idl>
-#endif
 
 //=============================================================================
 

@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_text_XTextTable_idl__
 #define __com_sun_star_text_XTextTable_idl__
 
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
 
-#ifndef __com_sun_star_table_XTableRows_idl__
 #include <com/sun/star/table/XTableRows.idl>
-#endif
 
-#ifndef __com_sun_star_table_XTableColumns_idl__
 #include <com/sun/star/table/XTableColumns.idl>
-#endif
 
-#ifndef __com_sun_star_table_XCell_idl__
 #include <com/sun/star/table/XCell.idl>
-#endif
 
-#ifndef __com_sun_star_text_XTextTableCursor_idl__
 #include <com/sun/star/text/XTextTableCursor.idl>
-#endif
 
 
 //=============================================================================

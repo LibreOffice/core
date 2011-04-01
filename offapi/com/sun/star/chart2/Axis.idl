@@ -28,15 +28,12 @@
 #define com_sun_star_chart_Axis_idl
 
 #include <com/sun/star/beans/PropertySet.idl>
-
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
 #include <com/sun/star/chart/ChartAxisPosition.idl>
 #include <com/sun/star/chart/ChartAxisLabelPosition.idl>
 #include <com/sun/star/chart/ChartAxisMarkPosition.idl>
-
 #include <com/sun/star/chart2/XAxis.idl>
 #include <com/sun/star/chart2/XTitled.idl>
-
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/style/CharacterProperties.idl>
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>

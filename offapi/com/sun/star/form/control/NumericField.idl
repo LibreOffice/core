@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_control_NumericField_idl__
 #define __com_sun_star_form_control_NumericField_idl__
 
-#ifndef __com_sun_star_awt_UnoControlNumericField_idl__
 #include <com/sun/star/awt/UnoControlNumericField.idl>
-#endif
-
-#ifndef __com_sun_star_form_XBoundControl_idl__
 #include <com/sun/star/form/XBoundControl.idl>
-#endif
 
 //=============================================================================
 

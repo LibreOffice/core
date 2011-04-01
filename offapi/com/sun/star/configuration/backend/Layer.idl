@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_configuration_backend_Layer_idl__
 #define __com_sun_star_configuration_backend_Layer_idl__
 
-#ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XCompositeLayer_idl__
 #include <com/sun/star/configuration/backend/XCompositeLayer.idl>
-#endif
-
-#ifndef __com_sun_star_util_XTimeStamped_idl__
 #include <com/sun/star/util/XTimeStamped.idl>
-#endif
 
 //==============================================================================
 

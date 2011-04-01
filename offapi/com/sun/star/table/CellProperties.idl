@@ -28,45 +28,16 @@
 #ifndef __com_sun_star_table_CellProperties_idl__
 #define __com_sun_star_table_CellProperties_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellHoriJustify_idl__
 #include <com/sun/star/table/CellHoriJustify.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellVertJustify_idl__
 #include <com/sun/star/table/CellVertJustify.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellOrientation_idl__
 #include <com/sun/star/table/CellOrientation.idl>
-#endif
-
-#ifndef __com_sun_star_util_CellProtection_idl__
 #include <com/sun/star/util/CellProtection.idl>
-#endif
-
-#ifndef __com_sun_star_table_TableBorder_idl__
 #include <com/sun/star/table/TableBorder.idl>
-#endif
-
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 

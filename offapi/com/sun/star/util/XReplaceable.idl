@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_util_XReplaceable_idl__
 #define __com_sun_star_util_XReplaceable_idl__
 
-#ifndef __com_sun_star_util_XSearchable_idl__
 #include <com/sun/star/util/XSearchable.idl>
-#endif
 
-#ifndef __com_sun_star_util_XReplaceDescriptor_idl__
 #include <com/sun/star/util/XReplaceDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_util_XSearchDescriptor_idl__
 #include <com/sun/star/util/XSearchDescriptor.idl>
-#endif
 
 
 //=============================================================================

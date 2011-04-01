@@ -1,9 +1,7 @@
 #ifndef com_sun_star_chart2_XScaling_idl
 #define com_sun_star_chart2_XScaling_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 

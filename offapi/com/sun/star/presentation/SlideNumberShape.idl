@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_presentation_SlideNumberShape_idl__
 #define __com_sun_star_presentation_SlideNumberShape_idl__
 
-#ifndef __com_sun_star_presentation_Shape_idl__
 #include <com/sun/star/presentation/Shape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_TextShape_idl__
 #include <com/sun/star/drawing/TextShape.idl>
-#endif
 
 
 //=============================================================================

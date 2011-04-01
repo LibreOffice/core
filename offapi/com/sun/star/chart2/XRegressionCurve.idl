@@ -29,7 +29,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-
 #include <com/sun/star/chart2/XRegressionCurveCalculator.idl>
 
 module com

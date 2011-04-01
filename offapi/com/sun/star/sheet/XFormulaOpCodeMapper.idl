@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
 #define __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
 
-#ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

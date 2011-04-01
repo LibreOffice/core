@@ -29,9 +29,7 @@
 #define __com_sun_star_script_provider_MasterScriptProviderFactory_idl__
 
 
-#ifndef __com_sun_star_script_provider_XScriptProviderFactory_idl__
 #include <com/sun/star/script/provider/XScriptProviderFactory.idl>
-#endif
 
 module com { module sun { module star { module script { module provider {
 

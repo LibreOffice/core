@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_packages_zip_ZipEntry_idl__
 #define __com_sun_star_packages_zip_ZipEntry_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_InputSource_idl__
 #include <com/sun/star/xml/sax/InputSource.idl>
-#endif
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
 
 //=============================================================================

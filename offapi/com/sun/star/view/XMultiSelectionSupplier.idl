@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_view_XMultiSelectionSupplier_idl__
 #define __com_sun_star_view_XMultiSelectionSupplier_idl__
 
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumeration_idl__
 #include <com/sun/star/container/XEnumeration.idl>
-#endif
 
 //=============================================================================
 

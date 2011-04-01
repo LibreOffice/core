@@ -27,41 +27,15 @@
 #ifndef __com_sun_star_frame_Frame_idl__
 #define __com_sun_star_frame_Frame_idl__
 
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchRecorderSupplier_idl__
 #include <com/sun/star/frame/XDispatchRecorderSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFramesSupplier_idl__
 #include <com/sun/star/frame/XFramesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_task_XStatusIndicatorFactory_idl__
 #include <com/sun/star/task/XStatusIndicatorFactory.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchInformationProvider_idl__
 #include <com/sun/star/frame/XDispatchInformationProvider.idl>
-#endif
-
-#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#endif
 
 //=============================================================================
 

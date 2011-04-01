@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_text_AutoTextGroup_idl__
 #define __com_sun_star_text_AutoTextGroup_idl__
 
-#ifndef __com_sun_star_text_XAutoTextGroup_idl__
 #include <com/sun/star/text/XAutoTextGroup.idl>
-#endif
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
 
 
 //=============================================================================

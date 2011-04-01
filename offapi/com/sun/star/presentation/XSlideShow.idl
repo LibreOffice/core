@@ -27,42 +27,18 @@
 #ifndef _com_sun_star_presentation_XSlideShow_idl
 #define _com_sun_star_presentation_XSlideShow_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
 #include <com/sun/star/rendering/XSpriteCanvas.idl>
-#endif
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
-#endif
-#endif
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
 #include <com/sun/star/drawing/XDrawPagesSupplier.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
-#ifndef __com_sun_star_presentation_XSlideShowView_idl__
 #include <com/sun/star/presentation/XSlideShowView.idl>
-#endif
-#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
 #include <com/sun/star/presentation/XSlideShowListener.idl>
-#endif
-#ifndef __com_sun_star_presentation_XShapeEventListener_idl__
 #include <com/sun/star/presentation/XShapeEventListener.idl>
-#endif
 
 module com {  module sun {  module star {  module presentation {
 

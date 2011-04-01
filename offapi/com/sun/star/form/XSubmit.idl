@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_form_XSubmit_idl__
 #define __com_sun_star_form_XSubmit_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XControl_idl__
 #include <com/sun/star/awt/XControl.idl>
-#endif
 
-#ifndef __com_sun_star_awt_MouseEvent_idl__
 #include <com/sun/star/awt/MouseEvent.idl>
-#endif
 
-#ifndef __com_sun_star_form_XSubmitListener_idl__
 #include <com/sun/star/form/XSubmitListener.idl>
-#endif
 
 
 //=============================================================================

@@ -27,9 +27,7 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_FILTERADAPTOR_IDL__
 #define _COM_SUN_STAR_DOCUMENT_FILTERADAPTOR_IDL__
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTERADAPTOR_IDL__
 #include <com/sun/star/document/XFilterAdapter.idl>
-#endif
 
 //=============================================================================
 

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_XSimpleTabController_idl__
 #define __com_sun_star_awt_XSimpleTabController_idl__
 
-#ifndef __com_sun_star_awt_XTabListener_idl__
 #include <com/sun/star/awt/XTabListener.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
 
 //=============================================================================
 

@@ -27,33 +27,16 @@
 #ifndef __com_sun_star_chart_Diagram_idl__
 #define __com_sun_star_chart_Diagram_idl__
 
-#ifndef __com_sun_star_chart_XDiagram_idl__
 #include <com/sun/star/chart/XDiagram.idl>
-#endif
-
-#ifndef __com_sun_star_chart_XAxisSupplier_idl__
 #include <com/sun/star/chart/XAxisSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_XDiagramPositioning_idl__
 #include <com/sun/star/chart/XDiagramPositioning.idl>
-#endif
 
-#ifndef __com_sun_star_chart_XSecondAxisTitleSupplier_idl__
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartDataRowSource_idl__
 #include <com/sun/star/chart/ChartDataRowSource.idl>
-#endif
 
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 

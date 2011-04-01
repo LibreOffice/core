@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_drawing_framework_XConfiguration_idl__
 #define __com_sun_star_drawing_framework_XConfiguration_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_util_XCloneable_idl__
 #include <com/sun/star/util/XCloneable.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_AnchorBindingMode_idl__
 #include <com/sun/star/drawing/framework/AnchorBindingMode.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 

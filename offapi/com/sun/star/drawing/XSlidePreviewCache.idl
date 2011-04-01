@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_drawing_XSlidePreviewCache_idl__
 #define __com_sun_star_drawing_XSlidePreviewCache_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
 #include <com/sun/star/geometry/IntegerSize2D.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
 #include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module drawing {

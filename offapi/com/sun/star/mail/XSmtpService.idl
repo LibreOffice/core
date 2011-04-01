@@ -28,33 +28,13 @@
 #ifndef __com_sun_star_mail_XSmtpService_idl__
 #define __com_sun_star_mail_XSmtpService_idl__
 
-#ifndef __com_sun_star_mail_XMailService_idl__
 #include <com/sun/star/mail/XMailService.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XMailMessage_idl__
 #include <com/sun/star/mail/XMailMessage.idl>
-#endif
-
-#ifndef __com_sun_star_io_NotConnectedException_idl__
 #include <com/sun/star/io/NotConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_ConnectException_idl__
 #include <com/sun/star/io/ConnectException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailException_idl__
 #include <com/sun/star/mail/MailException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_SendMailMessageFailedException_idl__
 #include <com/sun/star/mail/SendMailMessageFailedException.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_UnsupportedFlavorException_idl__
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
-#endif
 
 module com { module sun { module star { module mail {
 

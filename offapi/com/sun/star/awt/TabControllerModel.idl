@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_TabControllerModel_idl__
 #define __com_sun_star_awt_TabControllerModel_idl__
 
-#ifndef __com_sun_star_awt_XTabControllerModel_idl__
 #include <com/sun/star/awt/XTabControllerModel.idl>
-#endif
-
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
 
 
 //=============================================================================

@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_FunctionAccess_idl__
 #define __com_sun_star_sheet_FunctionAccess_idl__
 
-#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
 #include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XFunctionAccess_idl__
 #include <com/sun/star/sheet/XFunctionAccess.idl>
-#endif
 
 //=============================================================================
 

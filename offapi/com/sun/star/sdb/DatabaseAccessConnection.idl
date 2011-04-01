@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_sdb_DatabaseAccessConnection_idl__
 #define __com_sun_star_sdb_DatabaseAccessConnection_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
 #include <com/sun/star/sdbcx/DatabaseDefinition.idl>
-#endif
 
-#ifndef __com_sun_star_sdbc_Connection_idl__
 #include <com/sun/star/sdbc/Connection.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

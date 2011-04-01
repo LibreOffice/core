@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_awt_UnoControlDialog_idl__
 #define __com_sun_star_awt_UnoControlDialog_idl__
 
-#ifndef __com_sun_star_awt_UnoControlContainer_idl__
 #include <com/sun/star/awt/UnoControlContainer.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XTopWindow_idl__
 #include <com/sun/star/awt/XTopWindow.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XDialog2_idl__
 #include <com/sun/star/awt/XDialog2.idl>
-#endif
 
 
 //=============================================================================

@@ -27,21 +27,12 @@
 #ifndef __com_sun_star_presentation_Shape_idl__
 #define __com_sun_star_presentation_Shape_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_AnimationEffect_idl__
 #include <com/sun/star/presentation/AnimationEffect.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_ClickAction_idl__
 #include <com/sun/star/presentation/ClickAction.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
 #include <com/sun/star/presentation/AnimationSpeed.idl>
-#endif
 
 
 //=============================================================================

@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_XModuleUIConfigurationManagerSupplier_idl__
 #define __com_sun_star_ui_XModuleUIConfigurationManagerSupplier_idl__
 
-#ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
 #include <com/sun/star/ui/XUIConfigurationManager.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 module com { module sun { module star { module ui {
 

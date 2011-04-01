@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_DispatchHelper_idl__
 #define __com_sun_star_frame_DispatchHelper_idl__
 
-#ifndef __com_sun_star_frame_XDispatchHelper_idl__
 #include <com/sun/star/frame/XDispatchHelper.idl>
-#endif
 
 //=============================================================================
 

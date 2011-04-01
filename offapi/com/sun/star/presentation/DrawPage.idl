@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_presentation_DrawPage_idl__
 #define __com_sun_star_presentation_DrawPage_idl__
 
-#ifndef __com_sun_star_drawing_DrawPage_idl__
 #include <com/sun/star/drawing/DrawPage.idl>
-#endif
 
-#ifndef __com_sun_star_document_LinkTarget_idl__
 #include <com/sun/star/document/LinkTarget.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_FadeEffect_idl__
 #include <com/sun/star/presentation/FadeEffect.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
 #include <com/sun/star/presentation/AnimationSpeed.idl>
-#endif
 
 
 //=============================================================================

@@ -27,9 +27,7 @@
 #ifndef com_sun_star_chart_XAxis_idl
 #define com_sun_star_chart_XAxis_idl
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 module com {  module sun {  module star {  module chart {
 

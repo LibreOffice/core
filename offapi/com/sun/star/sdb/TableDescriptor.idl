@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_sdb_TableDescriptor_idl__
 #define __com_sun_star_sdb_TableDescriptor_idl__
 
-#ifndef __com_sun_star_sdbcx_TableDescriptor_idl__
 #include <com/sun/star/sdbcx/TableDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_sdb_DataSettings_idl__
 #include <com/sun/star/sdb/DataSettings.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

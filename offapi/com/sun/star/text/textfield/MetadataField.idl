@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_text_textfield_MetadataField_idl__
 #define __com_sun_star_text_textfield_MetadataField_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextField_idl__
 #include <com/sun/star/text/TextField.idl>
-#endif
-
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XMetadatable_idl__
 #include <com/sun/star/rdf/XMetadatable.idl>
-#endif
 
 
 //=============================================================================

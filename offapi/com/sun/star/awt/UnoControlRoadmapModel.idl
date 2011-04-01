@@ -28,18 +28,10 @@
 #define __com_sun_star_awt_UnoControlRoadmapModel_idl__
 
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 

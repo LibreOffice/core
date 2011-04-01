@@ -28,34 +28,15 @@
 #ifndef __com_sun_star_text_TextPageStyle_idl__
 #define __com_sun_star_text_TextPageStyle_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-#ifndef __com_sun_star_style_PageStyleLayout_idl__
 #include <com/sun/star/style/PageStyleLayout.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
-#ifndef __com_sun_star_text_XTextColumns_idl__
 #include <com/sun/star/text/XTextColumns.idl>
-#endif
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 

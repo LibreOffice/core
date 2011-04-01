@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_embed_FileSystemStorage_idl__
 #define __com_sun_star_embed_FileSystemStorage_idl__
 
-#ifndef __com_sun_star_embed_BaseStorage_idl__
 #include <com/sun/star/embed/BaseStorage.idl>
-#endif
 
 //============================================================================
 

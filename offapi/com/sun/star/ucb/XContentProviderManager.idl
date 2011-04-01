@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #define __com_sun_star_ucb_XContentProviderManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProvider_idl__
 #include <com/sun/star/ucb/XContentProvider.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_DuplicateProviderException_idl__
 #include <com/sun/star/ucb/DuplicateProviderException.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ContentProviderInfo_idl__
 #include <com/sun/star/ucb/ContentProviderInfo.idl>
-#endif
 
 
 //=============================================================================

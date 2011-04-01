@@ -32,9 +32,7 @@
 #ifndef __com_sun_star_security_SecurityInfrastructureException_idl__
 #define __com_sun_star_security_SecurityInfrastructureException_idl__
 
-#ifndef __com_sun_star_uno_SecurityException_idl__
 #include <com/sun/star/uno/SecurityException.idl>
-#endif
 
 
 //=============================================================================

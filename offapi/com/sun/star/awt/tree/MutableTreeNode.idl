@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_tree_MutableTreeNode_idl__
 #define __com_sun_star_awt_tree_MutableTreeNode_idl__
 
-#ifndef __com_sun_star_awt_tree_XMutableTreeNode_idl__
 #include <com/sun/star/awt/tree/XMutableTreeNode.idl>
-#endif
 
 //=============================================================================
 

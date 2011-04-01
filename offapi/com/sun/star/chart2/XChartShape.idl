@@ -1,34 +1,14 @@
 #ifndef com_sun_star_chart2_XChartShape_idl
 #define com_sun_star_chart2_XChartShape_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef com_sun_star_chart2_XTransformation_idl
 #include <com/sun/star/chart2/XTransformation.idl>
-#endif
-
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
 #include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
 
 
 //=============================================================================

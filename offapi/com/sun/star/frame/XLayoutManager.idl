@@ -28,37 +28,14 @@
 #ifndef __com_sun_star_frame_XLayoutManager_idl__
 #define __com_sun_star_frame_XLayoutManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIElement_idl__
 #include <com/sun/star/ui/XUIElement.idl>
-#endif
-
-#ifndef __com_sun_star_ui_DockingArea_idl__
 #include <com/sun/star/ui/DockingArea.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XDockingAreaAcceptor_idl__
 #include <com/sun/star/ui/XDockingAreaAcceptor.idl>
-#endif
 
 //=============================================================================
 

@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_xml_XPath_XXPathObject_idl__
 #define __com_sun_star_xml_XPath_XXPathObject_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XNode_idl__
 #include <com/sun/star/xml/dom/XNode.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XNodeList_idl__
 #include <com/sun/star/xml/dom/XNodeList.idl>
-#endif
-#ifndef __com_sun_star_xml_XPath_XObjectType_idl__
 #include <com/sun/star/xml/xpath/XPathObjectType.idl>
-#endif
 
 module com { module sun { module star { module xml { module xpath {
 

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_style_ParagraphStyle_idl__
 #define __com_sun_star_style_ParagraphStyle_idl__
 
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-
-#ifndef __com_sun_star_style_Style_idl__
 #include <com/sun/star/style/Style.idl>
-#endif
-
-#ifndef _com_sun_star_xml_ParaUserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/ParaUserDefinedAttributesSupplier.idl>
-#endif
 
 //=============================================================================
 

@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_rendering_XIntegerBitmap_idl__
 #define __com_sun_star_rendering_XIntegerBitmap_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerPoint2D_idl__
 #include <com/sun/star/geometry/IntegerPoint2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerRectangle2D_idl__
 #include <com/sun/star/geometry/IntegerRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_IntegerBitmapLayout_idl__
 #include <com/sun/star/rendering/IntegerBitmapLayout.idl>
-#endif
-#ifndef __com_sun_star_rendering_XIntegerReadOnlyBitmap_idl__
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

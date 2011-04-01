@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_util_DataEditorEvent_idl__
 #define __com_sun_star_util_DataEditorEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
-#ifndef __com_sun_star_util_DataEditorEventType_idl__
 #include <com/sun/star/util/DataEditorEventType.idl>
-#endif
 
 //=============================================================================
 

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_UnoControlContainer_idl__
 #define __com_sun_star_awt_UnoControlContainer_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XUnoControlContainer_idl__
 #include <com/sun/star/awt/XUnoControlContainer.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XControlContainer_idl__
 #include <com/sun/star/awt/XControlContainer.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
 
 
 //=============================================================================

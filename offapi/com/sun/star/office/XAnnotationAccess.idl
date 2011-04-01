@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_office_XAnnotationAccess_idl__
 #define __com_sun_star_office_XAnnotationAccess_idl__
 
-#ifndef __com_sun_star_office_XAnnotationEnumeration_idl__
 #include <com/sun/star/office/XAnnotationEnumeration.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/office/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_office_XAnnotation_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/office/XAnnotation.idl>
-#endif
 
 //=============================================================================
 

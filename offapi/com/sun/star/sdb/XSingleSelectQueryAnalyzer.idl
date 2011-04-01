@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
 #define __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
 module com {  module sun {  module star {  module container {
 interface XIndexAccess;

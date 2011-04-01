@@ -34,7 +34,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
 #include <com/sun/star/xml/crypto/XUriBinding.idl>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.idl>

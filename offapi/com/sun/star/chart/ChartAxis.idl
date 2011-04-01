@@ -27,49 +27,20 @@
 #ifndef __com_sun_star_chart_ChartAxis_idl__
 #define __com_sun_star_chart_ChartAxis_idl__
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
 #include <com/sun/star/drawing/LineProperties.idl>
-#endif
 
-#ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisArrangeOrderType_idl__
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisPosition_idl__
 #include <com/sun/star/chart/ChartAxisPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisLabelPosition_idl__
 #include <com/sun/star/chart/ChartAxisLabelPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisMarkPosition_idl__
 #include <com/sun/star/chart/ChartAxisMarkPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisType_idl__
 #include <com/sun/star/chart/ChartAxisType.idl>
-#endif
-
-#ifndef __com_sun_star_chart_TimeIncrement_idl__
 #include <com/sun/star/chart/TimeIncrement.idl>
-#endif
-
-#ifndef __com_sun_star_chart_XAxis_idl__
 #include <com/sun/star/chart/XAxis.idl>
-#endif
-
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 

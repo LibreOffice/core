@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_drawing_MeasureProperties_idl__
 #define __com_sun_star_drawing_MeasureProperties_idl__
 
-#ifndef __com_sun_star_drawing_MeasureKind_idl__
 #include <com/sun/star/drawing/MeasureKind.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_MeasureTextHorzPos_idl__
 #include <com/sun/star/drawing/MeasureTextHorzPos.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_MeasureTextVertPos_idl__
 #include <com/sun/star/drawing/MeasureTextVertPos.idl>
-#endif
 
 
 //=============================================================================

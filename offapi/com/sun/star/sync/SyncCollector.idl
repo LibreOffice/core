@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sync_SyncCollector_idl__
 #define __com_sun_star_sync_SyncCollector_idl__
 
-#ifndef __com_sun_star_sync_XSyncCollector_idl__
 #include <com/sun/star/sync/XSyncCollector.idl>
-#endif
 
 //=============================================================================
 

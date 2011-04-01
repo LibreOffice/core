@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
 #define __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
 
-#ifndef __com_sun_star_task_XInteractionContinuation_idl__
 #include <com/sun/star/task/XInteractionContinuation.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_RememberAuthentication_idl__
 #include <com/sun/star/ucb/RememberAuthentication.idl>
-#endif
 
 
 //=============================================================================

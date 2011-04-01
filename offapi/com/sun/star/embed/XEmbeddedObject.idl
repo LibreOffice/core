@@ -27,61 +27,20 @@
 #ifndef __com_sun_star_embed_XEmbeddedObject_idl__
 #define __com_sun_star_embed_XEmbeddedObject_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XEmbeddedClient_idl__
 #include <com/sun/star/embed/XEmbeddedClient.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XVisualObject_idl__
 #include <com/sun/star/embed/XVisualObject.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XClassifiedObject_idl__
 #include <com/sun/star/embed/XClassifiedObject.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XComponentSupplier_idl__
 #include <com/sun/star/embed/XComponentSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XStateChangeBroadcaster_idl__
 #include <com/sun/star/embed/XStateChangeBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
-
-#ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_embed_VerbDescriptor_idl__
 #include <com/sun/star/embed/VerbDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_embed_UnreachableStateException_idl__
 #include <com/sun/star/embed/UnreachableStateException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_WrongStateException_idl__
 #include <com/sun/star/embed/WrongStateException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_NeedsRunningStateException_idl__
 #include <com/sun/star/embed/NeedsRunningStateException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCloseable_idl__
 #include <com/sun/star/util/XCloseable.idl>
-#endif
 
 
 

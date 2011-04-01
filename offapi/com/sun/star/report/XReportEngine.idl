@@ -27,39 +27,17 @@
 #ifndef __com_sun_star_report_XReportEngine_idl__
 #define __com_sun_star_report_XReportEngine_idl__
 
-#ifndef __com_sun_star_report_XReportDefinition_idl__
 #include <com/sun/star/report/XReportDefinition.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_task_XStatusIndicator_idl__
 #include <com/sun/star/task/XStatusIndicator.idl>
-#endif
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XConnection_idl__
 #include <com/sun/star/sdbc/XConnection.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_DisposedException_idl__
 #include <com/sun/star/lang/DisposedException.idl>
-#endif
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module report {

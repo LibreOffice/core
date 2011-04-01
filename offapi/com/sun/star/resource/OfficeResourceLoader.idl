@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_resource_OfficeResourceLoader_idl__
 #define __com_sun_star_resource_OfficeResourceLoader_idl__
 
-#ifndef __com_sun_star_resource_XResourceBundleLoader_idl__
 #include <com/sun/star/resource/XResourceBundleLoader.idl>
-#endif
 
 //=============================================================================
 module com { module sun { module star { module resource {

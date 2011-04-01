@@ -27,21 +27,12 @@
 #ifndef __com_sun_star_chart_BubbleDiagram_idl__
 #define __com_sun_star_chart_BubbleDiagram_idl__
 
-#ifndef __com_sun_star_chart_Diagram_idl__
 #include <com/sun/star/chart/Diagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__
 #include <com/sun/star/chart/ChartAxisXSupplier.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartTwoAxisYSupplier_idl__
 #include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartStatistics_idl__
 #include <com/sun/star/chart/ChartStatistics.idl>
-#endif
 
 //=============================================================================
 

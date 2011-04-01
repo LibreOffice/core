@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_animations_XAudio_idl__
 #define __com_sun_star_animations_XAudio_idl__
 
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
-#endif
 
 //=============================================================================
 

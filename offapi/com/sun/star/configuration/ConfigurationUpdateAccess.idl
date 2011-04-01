@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_configuration_ConfigurationUpdateAccess_idl__
 #define __com_sun_star_configuration_ConfigurationUpdateAccess_idl__
 
-#ifndef __com_sun_star_configuration_ConfigurationAccess_idl__
 #include <com/sun/star/configuration/ConfigurationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_SetUpdate_idl__
 #include <com/sun/star/configuration/SetUpdate.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_GroupUpdate_idl__
 #include <com/sun/star/configuration/GroupUpdate.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_UpdateRootElement_idl__
 #include <com/sun/star/configuration/UpdateRootElement.idl>
-#endif
 
 //=============================================================================
 

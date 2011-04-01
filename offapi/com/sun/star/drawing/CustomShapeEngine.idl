@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_CustomShapeEngine_idl__
 #define __com_sun_star_drawing_CustomShapeEngine_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XCustomShapeEngine_idl__
 #include <com/sun/star/drawing/XCustomShapeEngine.idl>
-#endif
 
 //=============================================================================
 

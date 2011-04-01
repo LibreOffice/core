@@ -28,53 +28,18 @@
 #ifndef __com_sun_star_mail_XMailService_idl__
 #define __com_sun_star_mail_XMailService_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XAuthenticator_idl__
 #include <com/sun/star/mail/XAuthenticator.idl>
-#endif
-
-#ifndef __com_sun_star_auth_AuthenticationFailedException_idl__
 #include <com/sun/star/auth/AuthenticationFailedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_AlreadyConnectedException_idl__
 #include <com/sun/star/io/AlreadyConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NotConnectedException_idl__
 #include <com/sun/star/io/NotConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_UnknownHostException_idl__
 #include <com/sun/star/io/UnknownHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NoRouteToHostException_idl__
 #include <com/sun/star/io/NoRouteToHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_ConnectException_idl__
 #include <com/sun/star/io/ConnectException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XConnectionListener_idl__
 #include <com/sun/star/mail/XConnectionListener.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailException_idl__
 #include <com/sun/star/mail/MailException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XCurrentContext_idl__
 #include <com/sun/star/uno/XCurrentContext.idl>
-#endif
 
 
 module com { module sun { module star { module mail {

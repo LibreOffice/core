@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_drawing_OLE2Shape_idl__
 #define __com_sun_star_drawing_OLE2Shape_idl__
 
-#ifndef __com_sun_star_drawing_XShapeDescriptor_idl__
 #include <com/sun/star/drawing/XShapeDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 //=============================================================================
 

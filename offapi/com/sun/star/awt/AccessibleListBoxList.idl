@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_awt_AccessibleListBoxList_idl__
 #define __com_sun_star_awt_AccessibleListBoxList_idl__
 
-#ifndef __com_sun_star_awt_AccessibleList_idl__
 #include <com/sun/star/awt/AccessibleList.idl>
-#endif
 
 
 module com { module sun { module star { module awt {

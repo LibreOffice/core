@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_rendering_FontInfo_idl__
 #define __com_sun_star_rendering_FontInfo_idl__
 
-#ifndef __com_sun_star_util_TriState_idl__
 #include <com/sun/star/util/TriState.idl>
-#endif
-
-#ifndef __com_sun_star_rendering_Panose_idl__
 #include <com/sun/star/rendering/Panose.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {

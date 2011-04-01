@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_sheet_CellRangeListSource_idl__
 #define __com_sun_star_sheet_CellRangeListSource_idl__
 
-#ifndef __com_sun_star_form_binding_ListEntrySource_idl__
 #include <com/sun/star/form/binding/ListEntrySource.idl>
-#endif
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_linguistic2_XProofreader_idl__
 #define __com_sun_star_linguistic2_XProofreader_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XSupportedLocales_idl__
 #include <com/sun/star/linguistic2/XSupportedLocales.idl>
-#endif
-
-#ifndef __com_sun_star_text_XFlatParagraph_idl__
 #include <com/sun/star/text/XFlatParagraph.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_ProofreadingResult_idl__
 #include <com/sun/star/linguistic2/ProofreadingResult.idl>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_idl_
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 //=============================================================================
 

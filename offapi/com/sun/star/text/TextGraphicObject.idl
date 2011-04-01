@@ -27,26 +27,12 @@
 #ifndef __com_sun_star_text_TextGraphicObject_idl__
 #define __com_sun_star_text_TextGraphicObject_idl__
 
-#ifndef __com_sun_star_text_BaseFrame_idl__
 #include <com/sun/star/text/BaseFrame.idl>
-#endif
-
-#ifndef __com_sun_star_text_GraphicCrop_idl__
 #include <com/sun/star/text/GraphicCrop.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_PointSequenceSequence_idl__
 #include <com/sun/star/drawing/PointSequenceSequence.idl>
-#endif
-#ifndef __com_sun_star_drawing_ColorMode_idl__
 #include <com/sun/star/drawing/ColorMode.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 

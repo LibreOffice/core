@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_inspection_XStringListControl_idl__
 #define __com_sun_star_inspection_XStringListControl_idl__
 
-#ifndef __com_sun_star_inspection_XPropertyControl_idl__
 #include <com/sun/star/inspection/XPropertyControl.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {

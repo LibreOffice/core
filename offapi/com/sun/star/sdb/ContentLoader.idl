@@ -29,9 +29,7 @@
 #ifndef __com_sun_star_sdb_ContentLoader_idl__
 #define __com_sun_star_sdb_ContentLoader_idl__
 
-#ifndef __com_sun_star_frame_Frame_idl__
 #include <com/sun/star/frame/FrameLoader.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 

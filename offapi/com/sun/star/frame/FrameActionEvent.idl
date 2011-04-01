@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_frame_FrameActionEvent_idl__
 #define __com_sun_star_frame_FrameActionEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_frame_FrameAction_idl__
 #include <com/sun/star/frame/FrameAction.idl>
-#endif
 
 //=============================================================================
 

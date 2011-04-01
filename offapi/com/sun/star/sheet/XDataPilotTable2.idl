@@ -28,30 +28,12 @@
 #ifndef __com_sun_star_sheet_XDataPilotTable2_idl__
 #define __com_sun_star_sheet_XDataPilotTable2_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotTable_idl__
 #include <com/sun/star/sheet/XDataPilotTable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotOutputRangeType_idl__
 #include <com/sun/star/sheet/DataPilotOutputRangeType.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_DataPilotFieldFilter_idl__
 #include <com/sun/star/sheet/DataPilotFieldFilter.idl>
-#endif
-
 #include <com/sun/star/sheet/DataPilotTablePositionData.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 

@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_linguistic2_LinguProperties_idl__
 #define __com_sun_star_linguistic2_LinguProperties_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 //=============================================================================
 

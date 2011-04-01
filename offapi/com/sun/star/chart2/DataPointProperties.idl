@@ -28,12 +28,10 @@
 #define com_sun_star_chart2_DataPointProperties_idl
 
 #include <com/sun/star/beans/PropertySet.idl>
-
 #include <com/sun/star/awt/Gradient.idl>
 #include <com/sun/star/drawing/Hatch.idl>
 #include <com/sun/star/drawing/LineDash.idl>
 #include <com/sun/star/style/XStyle.idl>
-
 #include <com/sun/star/chart2/BitmapProperty.idl>
 #include <com/sun/star/chart2/TransparencyStyle.idl>
 #include <com/sun/star/chart2/DataCaptionStyle.idl>

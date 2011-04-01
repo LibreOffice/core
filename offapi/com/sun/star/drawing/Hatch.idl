@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_Hatch_idl__
 #define __com_sun_star_drawing_Hatch_idl__
 
-#ifndef __com_sun_star_drawing_HatchStyle_idl__
 #include <com/sun/star/drawing/HatchStyle.idl>
-#endif
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 
 //=============================================================================

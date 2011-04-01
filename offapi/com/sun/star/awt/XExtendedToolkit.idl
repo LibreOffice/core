@@ -28,29 +28,12 @@
 #ifndef __com_sun_star_awt_XExtendedToolkit_idl__
 #define __com_sun_star_awt_XExtendedToolkit_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XTopWindow_idl__
 #include <com/sun/star/awt/XTopWindow.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XTopWindowListener_idl__
 #include <com/sun/star/awt/XTopWindowListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XKeyHandler_idl__
 #include <com/sun/star/awt/XKeyHandler.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XFocusListener_idl__
 #include <com/sun/star/awt/XFocusListener.idl>
-#endif
 
 
 //=============================================================================

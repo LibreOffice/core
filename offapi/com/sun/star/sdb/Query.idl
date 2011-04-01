@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_Query_idl__
 #define __com_sun_star_sdb_Query_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
  published interface XDataDescriptorFactory;
@@ -37,13 +35,9 @@
  published interface XRename;
 };};};};
 
-#ifndef __com_sun_star_sdb_DataSettings_idl__
 #include <com/sun/star/sdb/DataSettings.idl>
-#endif
 
-#ifndef __com_sun_star_sdb_QueryDefinition_idl__
 #include <com/sun/star/sdb/QueryDefinition.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

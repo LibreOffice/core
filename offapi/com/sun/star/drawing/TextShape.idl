@@ -27,29 +27,15 @@
 #ifndef __com_sun_star_drawing_TextShape_idl__
 #define __com_sun_star_drawing_TextShape_idl__
 
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_Text_idl__
 #include <com/sun/star/drawing/Text.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_FillProperties_idl__
 #include <com/sun/star/drawing/FillProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineProperties_idl__
 #include <com/sun/star/drawing/LineProperties.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_ShadowProperties_idl__
 #include <com/sun/star/drawing/ShadowProperties.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
 #include <com/sun/star/drawing/RotationDescriptor.idl>
-#endif
 
 
 //=============================================================================

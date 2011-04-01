@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_drawing_framework_XPane_idl__
 #define __com_sun_star_drawing_framework_XPane_idl__
 
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCcanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XResource_idl__
 #include <com/sun/star/drawing/framework/XResource.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XRelocatableResource_idl__
 #include <com/sun/star/drawing/framework/XRelocatableResource.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 

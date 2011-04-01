@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_sheet_AccessiblePageHeaderFooterAreasView_idl__
 #define __com_sun_star_sheet_AccessiblePageHeaderFooterAreasView_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
 
 //=============================================================================
 

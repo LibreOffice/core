@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_rendering_ViewState_idl__
 #define __com_sun_star_rendering_ViewState_idl__
 
-#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
 #include <com/sun/star/geometry/AffineMatrix2D.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

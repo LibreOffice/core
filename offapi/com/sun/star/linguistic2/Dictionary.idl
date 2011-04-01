@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_linguistic2_Dictionary_idl__
 #define __com_sun_star_linguistic2_Dictionary_idl__
 
-#ifndef __com_sun_star_linguistic2_XDictionary_idl__
 #include <com/sun/star/linguistic2/XDictionary.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XSearchableDictionary_idl__
 #include <com/sun/star/linguistic2/XSearchableDictionary.idl>
-#endif
-
-#ifndef __com_sun_star_util_XFlushable_idl__
 #include <com/sun/star/util/XFlushable.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStorable_idl__
 #include <com/sun/star/frame/XStorable.idl>
-#endif
 
 //=============================================================================
 

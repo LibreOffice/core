@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_linguistic2_XLanguageGuessing_idl__
 #define __com_sun_star_linguistic2_XLanguageGuessing_idl__
 
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_idl_
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_idl_
 #include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_IDL_
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 module com { module sun { module star { module linguistic2 {
 

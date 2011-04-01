@@ -28,21 +28,10 @@
 #define __com_sun_star_linguistic2_XLinguServiceManager_idl__
 
 
-#ifndef __com_sun_star_linguistic2_XSpellChecker_idl__
 #include <com/sun/star/linguistic2/XSpellChecker.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
 #include <com/sun/star/linguistic2/XHyphenator.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XThesaurus_idl__
 #include <com/sun/star/linguistic2/XThesaurus.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
 //=============================================================================
 

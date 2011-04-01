@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_presentation_DocumentSettings_idl__
 #define __com_sun_star_presentation_DocumentSettings_idl__
 
-#ifndef __com_sun_star_document_HeaderFooterSettings_idl__
 #include <com/sun/star/document/HeaderFooterSettings.idl>
-#endif
-
-#ifndef __com_sun_star_document_Settings_idl__
 #include <com/sun/star/document/Settings.idl>
-#endif
 
 //=============================================================================
 

@@ -27,45 +27,17 @@
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #define __com_sun_star_style_ParagraphProperties_idl__
 
-#ifndef __com_sun_star_style_ParagraphAdjust_idl__
 #include <com/sun/star/style/ParagraphAdjust.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_style_LineSpacing_idl__
 #include <com/sun/star/style/LineSpacing.idl>
-#endif
-
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-
-#ifndef __com_sun_star_style_TabStop_idl__
 #include <com/sun/star/style/TabStop.idl>
-#endif
-
-#ifndef __com_sun_star_style_DropCapFormat_idl__
 #include <com/sun/star/style/DropCapFormat.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexReplace_idl__
 #include <com/sun/star/container/XIndexReplace.idl>
-#endif
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-#ifndef __com_sun_star_style_BreakType_idl__
 #include <com/sun/star/style/BreakType.idl>
-#endif
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeAdjustmentValue_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeAdjustmentValue_idl__
 
-#ifndef __com_sun_star_beans_PropertyState_idl__
 #include <com/sun/star/beans/PropertyState.idl>
-#endif
 
 //=============================================================================
 

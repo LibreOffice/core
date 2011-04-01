@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_PlatformBackend_idl__
 #define __com_sun_star_configuration_backend_PlatformBackend_idl__
 
-#ifndef __com_sun_star_configuration_backend_SingleLayerStratum_idl__
 #include <com/sun/star/configuration/backend/SingleLayerStratum.idl>
-#endif
 
 //=============================================================================
 

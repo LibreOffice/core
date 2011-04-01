@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_drawing_AccessibleGraphicShape_idl__
 #define __com_sun_star_drawing_AccessibleGraphicShape_idl__
 
-#ifndef __com_sun_star_drawing_AccessibleShape_idl__
 #include <com/sun/star/drawing/AccessibleShape.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleAction_idl__
 #include <com/sun/star/accessibility/XAccessibleAction.idl>
-#endif
 
 module com {  module sun {  module star {  module drawing {
 

@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_form_PropertyBrowserController_idl__
 #define __com_sun_star_form_PropertyBrowserController_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
 #include <com/sun/star/beans/XMultiPropertySet.idl>
-#endif
 
 //=============================================================================
 

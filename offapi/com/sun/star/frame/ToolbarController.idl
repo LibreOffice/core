@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_frame_ToolbarController_idl__
 #define __com_sun_star_frame_ToolbarController_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_util_XUpdatable_idl__
 #include <com/sun/star/util/XUpdatable.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStatusListener_idl__
 #include <com/sun/star/frame/XStatusListener.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XToolbarController_idl__
 #include <com/sun/star/frame/XToolbarController.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XSubToolbarController_idl__
 #include <com/sun/star/frame/XSubToolbarController.idl>
-#endif
 
 //=============================================================================
 

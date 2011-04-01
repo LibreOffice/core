@@ -29,12 +29,8 @@
 
 //=============================================================================
 
-#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
 #include <com/sun/star/registry/XSimpleRegistry.idl>
-#endif
-#ifndef __com_sun_star_util_XFlushable_idl__
 #include <com/sun/star/util/XFlushable.idl>
-#endif
 
 module com { module sun { module star { module configuration {
 

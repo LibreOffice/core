@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_datatransfer_clipboard_XClipboardListener_idl__
 #define __com_sun_star_datatransfer_clipboard_XClipboardListener_idl__
 
-#ifndef __com_sun_star_datatransfer_clipboard_ClipboardEvent_idl__
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
 //=============================================================================
 

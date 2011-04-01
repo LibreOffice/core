@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_gallery_GalleryTheme_idl__
 #define __com_sun_star_gallery_GalleryTheme_idl__
 
-#ifndef __com_sun_star_gallery_XGalleryTheme_idl__
 #include <com/sun/star/gallery/XGalleryTheme.idl>
-#endif
 
 //=============================================================================
 

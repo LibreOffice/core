@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_VolatileResult_idl__
 #define __com_sun_star_sheet_VolatileResult_idl__
 
-#ifndef __com_sun_star_sheet_XVolatileResult_idl__
 #include <com/sun/star/sheet/XVolatileResult.idl>
-#endif
 
 //=============================================================================
 

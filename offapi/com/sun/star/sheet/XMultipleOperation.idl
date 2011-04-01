@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_XMultipleOperation_idl__
 #define __com_sun_star_sheet_XMultipleOperation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_TableOperationMode_idl__
 #include <com/sun/star/sheet/TableOperationMode.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
 
 //=============================================================================
 

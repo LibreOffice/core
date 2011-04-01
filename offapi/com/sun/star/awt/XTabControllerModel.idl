@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_XTabControllerModel_idl__
 #define __com_sun_star_awt_XTabControllerModel_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XControlModel_idl__
 #include <com/sun/star/awt/XControlModel.idl>
-#endif
 
 
 //=============================================================================

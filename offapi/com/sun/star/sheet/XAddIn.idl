@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_XAddIn_idl__
 #define __com_sun_star_sheet_XAddIn_idl__
 
-#ifndef __com_sun_star_lang_XLocalizable_idl__
 #include <com/sun/star/lang/XLocalizable.idl>
-#endif
 
 //=============================================================================
 

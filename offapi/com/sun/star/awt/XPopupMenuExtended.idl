@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_awt_XPopupMenuExtended_idl__
 #define __com_sun_star_awt_XPopupMenuExtended_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XPopupMenu_idl__
 #include <com/sun/star/awt/XPopupMenu.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMenuExtended2_idl__
 #include <com/sun/star/awt/XMenuExtended2.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MenuLogo_idl__
 #include <com/sun/star/awt/MenuLogo.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_KeyEvent_idl__
 #include <com/sun/star/awt/KeyEvent.idl>
-#endif
-
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 

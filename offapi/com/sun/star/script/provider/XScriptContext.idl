@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_script_provider_XScriptContext_idl__
 #define __com_sun_star_script_provider_XScriptContext_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDesktop_idl__
 #include <com/sun/star/frame/XDesktop.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XComponentContext_idl__
 #include <com/sun/star/uno/XComponentContext.idl>
-#endif
 
 
 module com { module sun { module star { module document {

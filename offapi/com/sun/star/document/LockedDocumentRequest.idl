@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_document_LockedDocumentRequest_idl__
 #define __com_sun_star_document_LockedDocumentRequest_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 //=============================================================================
 

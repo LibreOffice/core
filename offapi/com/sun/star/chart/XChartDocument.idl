@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_chart_XChartDocument_idl__
 #define __com_sun_star_chart_XChartDocument_idl__
 
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_chart_XDiagram_idl__
 #include <com/sun/star/chart/XDiagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_XChartData_idl__
 #include <com/sun/star/chart/XChartData.idl>
-#endif
 
 
 //=============================================================================

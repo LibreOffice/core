@@ -27,27 +27,13 @@
 #ifndef __com_sun_star_presentation_XSlideShowView_idl__
 #define __com_sun_star_presentation_XSlideShowView_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
 #include <com/sun/star/rendering/XSpriteCanvas.idl>
-#endif
-#ifndef __com_sun_star_util_XModifyListener_idl__
 #include <com/sun/star/util/XModifyListener.idl>
-#endif
-#ifndef __com_sun_star_awt_XPaintListener_idl__
 #include <com/sun/star/awt/XPaintListener.idl>
-#endif
-#ifndef __com_sun_star_awt_XMouseListener_idl__
 #include <com/sun/star/awt/XMouseListener.idl>
-#endif
-#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
 #include <com/sun/star/awt/XMouseMotionListener.idl>
-#endif
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
 
 module com {  module sun {  module star {  module presentation {
 

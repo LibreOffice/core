@@ -27,97 +27,29 @@
 #ifndef __com_sun_star_text_GenericTextDocument_idl__
 #define __com_sun_star_text_GenericTextDocument_idl__
 
-#ifndef __com_sun_star_document_OfficeDocument_idl__
 #include <com/sun/star/document/OfficeDocument.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextDocument_idl__
 #include <com/sun/star/text/XTextDocument.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSearchable_idl__
 #include <com/sun/star/util/XSearchable.idl>
-#endif
-
-#ifndef _com_sun_star_util_XRefreshable_idl_
 #include <com/sun/star/util/XRefreshable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XFootnotesSupplier_idl__
 #include <com/sun/star/text/XFootnotesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XEndnotesSupplier_idl__
 #include <com/sun/star/text/XEndnotesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XReplaceable_idl__
 #include <com/sun/star/util/XReplaceable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XPagePrintable_idl__
 #include <com/sun/star/text/XPagePrintable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XReferenceMarksSupplier_idl__
 #include <com/sun/star/text/XReferenceMarksSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XLineNumberingSupplier_idl__
 #include <com/sun/star/text/XLineNumberingSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XChapterNumberingSupplier_idl__
 #include <com/sun/star/text/XChapterNumberingSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextGraphicObjectsSupplier_idl__
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextEmbeddedObjectsSupplier_idl__
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextTablesSupplier_idl__
 #include <com/sun/star/text/XTextTablesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XBookmarksSupplier_idl__
 #include <com/sun/star/text/XBookmarksSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XDocumentIndexesSupplier_idl__
 #include <com/sun/star/text/XDocumentIndexesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextFieldsSupplier_idl__
 #include <com/sun/star/text/XTextFieldsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextFramesSupplier_idl__
 #include <com/sun/star/text/XTextFramesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextSectionsSupplier_idl__
 #include <com/sun/star/text/XTextSectionsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 //=============================================================================
 

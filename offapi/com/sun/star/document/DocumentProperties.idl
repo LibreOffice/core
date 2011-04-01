@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_document_DocumentProperties_idl__
 #define __com_sun_star_document_DocumentProperties_idl__
 
-#ifndef __com_sun_star_document_XDocumentProperties_idl__
 #include <com/sun/star/document/XDocumentProperties.idl>
-#endif
 
 //=============================================================================
 

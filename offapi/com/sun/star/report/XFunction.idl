@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_report_XFunction_idl__
 #define __com_sun_star_report_XFunction_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_Optional_idl__
 #include <com/sun/star/beans/Optional.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 //=============================================================================
  module com {  module sun {  module star {  module report {
 //=============================================================================

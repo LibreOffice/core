@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbcx_KeyColumn_idl__
 #define __com_sun_star_sdbcx_KeyColumn_idl__
 
-#ifndef __com_sun_star_sdbcx_Column_idl__
 #include <com/sun/star/sdbcx/Column.idl>
-#endif
 
 module com { module sun { module star { module sdbcx {
 

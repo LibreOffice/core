@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
 #define __com_sun_star_drawing_HomogenMatrix3_idl__
 
-#ifndef __com_sun_star_drawing_HomogenMatrixLine3_idl__
 #include <com/sun/star/drawing/HomogenMatrixLine3.idl>
-#endif
 
 
 //=============================================================================

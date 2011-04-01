@@ -29,135 +29,42 @@
 #define __com_sun_star_sheet_SheetCellRange_idl__
 
 
-#ifndef __com_sun_star_table_CellRange_idl__
 #include <com/sun/star/table/CellRange.idl>
-#endif
-
-#ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
-#endif
-
-#ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#endif
-
-#ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#endif
-
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_SheetRangesQuery_idl__
 #include <com/sun/star/sheet/SheetRangesQuery.idl>
-#endif
 
 
-#ifndef __com_sun_star_util_XReplaceable_idl__
 #include <com/sun/star/util/XReplaceable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XMergeable_idl__
 #include <com/sun/star/util/XMergeable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XIndent_idl__
 #include <com/sun/star/util/XIndent.idl>
-#endif
-
-#ifndef __com_sun_star_table_XColumnRowRange_idl__
 #include <com/sun/star/table/XColumnRowRange.idl>
-#endif
-
-#ifndef __com_sun_star_table_XAutoFormattable_idl__
 #include <com/sun/star/table/XAutoFormattable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetCellRange_idl__
 #include <com/sun/star/sheet/XSheetCellRange.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeData_idl__
 #include <com/sun/star/sheet/XCellRangeData.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeFormula_idl__
 #include <com/sun/star/sheet/XCellRangeFormula.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeAddressable_idl__
 #include <com/sun/star/sheet/XCellRangeAddressable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetOperation_idl__
 #include <com/sun/star/sheet/XSheetOperation.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellSeries_idl__
 #include <com/sun/star/sheet/XCellSeries.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XArrayFormulaRange_idl__
 #include <com/sun/star/sheet/XArrayFormulaRange.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XMultipleOperation_idl__
 #include <com/sun/star/sheet/XMultipleOperation.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSortable_idl__
 #include <com/sun/star/util/XSortable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XImportable_idl__
 #include <com/sun/star/util/XImportable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSubTotalCalculatable_idl__
 #include <com/sun/star/sheet/XSubTotalCalculatable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetFilterableEx_idl__
 #include <com/sun/star/sheet/XSheetFilterableEx.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellFormatRangesSupplier_idl__
 #include <com/sun/star/sheet/XCellFormatRangesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XUniqueCellFormatRangesSupplier_idl__
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_XChartDataArray_idl__
 #include <com/sun/star/chart/XChartDataArray.idl>
-#endif
 
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetConditionalEntries_idl__
 #include <com/sun/star/sheet/XSheetConditionalEntries.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
 
 //=============================================================================
 

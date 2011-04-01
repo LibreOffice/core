@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_backend_XVersionedSchemaSupplier_idl__
 #define __com_sun_star_configuration_backend_XVersionedSchemaSupplier_idl__
 
-#ifndef __com_sun_star_configuration_backend_XSchemaSupplier_idl__
 #include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

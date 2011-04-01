@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_style_NumberingStyle_idl__
 #define __com_sun_star_style_NumberingStyle_idl__
 
-#ifndef __com_sun_star_style_Style_idl__
 #include <com/sun/star/style/Style.idl>
-#endif
-#ifndef __com_sun_star_text_NumberingRules_idl__
 #include <com/sun/star/text/NumberingRules.idl>
-#endif
 
 //=============================================================================
 

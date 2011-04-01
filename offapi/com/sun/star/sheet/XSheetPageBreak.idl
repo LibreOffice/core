@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XSheetPageBreak_idl__
 #define __com_sun_star_sheet_XSheetPageBreak_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_TablePageBreakData_idl__
 #include <com/sun/star/sheet/TablePageBreakData.idl>
-#endif
 
 //=============================================================================
 

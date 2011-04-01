@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_drawing_GluePoint2_idl__
 #define __com_sun_star_drawing_GluePoint2_idl__
 
-#ifndef __com_sun_star_drawing_Alignment_idl__
 #include <com/sun/star/drawing/Alignment.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_EscapeDirection_idl__
 #include <com/sun/star/drawing/EscapeDirection.idl>
-#endif
 
 //=============================================================================
 

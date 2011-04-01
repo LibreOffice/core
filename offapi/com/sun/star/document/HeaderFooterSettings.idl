@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_document_HeaderFooterSettings_idl__
 #define __com_sun_star_document_HeaderFooterSettings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

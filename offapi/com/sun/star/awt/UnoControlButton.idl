@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_awt_UnoButtonControl_idl__
 #define __com_sun_star_awt_UnoButtonControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XButton_idl__
 #include <com/sun/star/awt/XButton.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
-#endif
 
 
 //=============================================================================

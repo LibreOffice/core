@@ -34,7 +34,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/security/SecurityInfrastructureException.idl>
-
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
 
 module com { module sun { module star { module xml { module crypto {

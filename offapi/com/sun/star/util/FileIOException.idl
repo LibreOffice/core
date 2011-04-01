@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_util_FileIOException_idl__
 #define __com_sun_star_util_FileIOException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //=============================================================================
 

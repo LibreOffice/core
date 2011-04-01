@@ -29,21 +29,11 @@
 #ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
 #define __com_sun_star_sdb_DataSourceBrowser_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-#ifndef __com_sun_star_form_FormController_idl__
 #include <com/sun/star/form/FormController.idl>
-#endif
-#ifndef __com_sun_star_ui_XContextMenuInterception_idl__
 #include <com/sun/star/ui/XContextMenuInterception.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 

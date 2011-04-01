@@ -27,59 +27,22 @@
 #ifndef __com_sun_star_text_TextTable_idl__
 #define __com_sun_star_text_TextTable_idl__
 
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextTable_idl__
 #include <com/sun/star/text/XTextTable.idl>
-#endif
-#ifndef __com_sun_star_text_TableColumnSeparator_idl__
 #include <com/sun/star/text/TableColumnSeparator.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_style_BreakType_idl__
 #include <com/sun/star/style/BreakType.idl>
-#endif
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-#ifndef __com_sun_star_table_TableBorder_idl__
 #include <com/sun/star/table/TableBorder.idl>
-#endif
-#ifndef __com_sun_star_table_XCellRange_idl__
 #include <com/sun/star/table/XCellRange.idl>
-#endif
-#ifndef __com_sun_star_table_XAutoFormattable_idl__
 #include <com/sun/star/table/XAutoFormattable.idl>
-#endif
-#ifndef __com_sun_star_chart_XChartDataArray_idl__
 #include <com/sun/star/chart/XChartDataArray.idl>
-#endif
-#ifndef __com_sun_star_util_XSortable_idl__
 #include <com/sun/star/util/XSortable.idl>
-#endif
-#ifndef __com_sun_star_sheet_XCellRangeData_idl__
 #include <com/sun/star/sheet/XCellRangeData.idl>
-#endif
-#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#endif
 
 
 //=============================================================================

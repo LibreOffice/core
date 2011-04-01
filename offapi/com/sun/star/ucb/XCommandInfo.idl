@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_XCommandInfo_idl__
 #define __com_sun_star_ucb_XCommandInfo_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_CommandInfo_idl__
 #include <com/sun/star/ucb/CommandInfo.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_UnsupportedCommandException_idl__
 #include <com/sun/star/ucb/UnsupportedCommandException.idl>
-#endif
 
 
 //=============================================================================

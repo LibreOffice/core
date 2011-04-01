@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
 #define __com_sun_star_sheet_XCellRangeMovement_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_CellInsertMode_idl__
 #include <com/sun/star/sheet/CellInsertMode.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_CellDeleteMode_idl__
 #include <com/sun/star/sheet/CellDeleteMode.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
 
 //=============================================================================
 

@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_chart_NetDiagram_idl__
 #define __com_sun_star_chart_NetDiagram_idl__
 
-#ifndef __com_sun_star_chart_Diagram_idl__
 #include <com/sun/star/chart/Diagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_StackableDiagram_idl__
 #include <com/sun/star/chart/StackableDiagram.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisYSupplier_idl__
 #include <com/sun/star/chart/ChartAxisYSupplier.idl>
-#endif
 
 
 //=============================================================================

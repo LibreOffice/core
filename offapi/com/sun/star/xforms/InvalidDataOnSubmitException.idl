@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_xforms_InvalidDataOnSubmitException_idl__
 #define __com_sun_star_xforms_InvalidDataOnSubmitException_idl__
 
-#ifndef __com_sun_star_util_VetoException_idl__
 #include <com/sun/star/util/VetoException.idl>
-#endif
 
 //=============================================================================
 

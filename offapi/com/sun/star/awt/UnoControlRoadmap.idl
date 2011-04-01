@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_UnoControlRoadmap_idl__
 #define __com_sun_star_awt_UnoControlRoadmap_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XItemEventBroadcaster_idl__
 #include <com/sun/star/awt/XItemEventBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
 
 
 

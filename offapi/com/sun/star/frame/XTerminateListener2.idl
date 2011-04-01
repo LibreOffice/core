@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_XTerminateListener2_idl__
 #define __com_sun_star_frame_XTerminateListener2_idl__
 
-#ifndef __com_sun_star_frame_XTerminateListener_idl__
 #include <com/sun/star/frame/XTerminateListener.idl>
-#endif
 
 //=============================================================================
 

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_frame_XStatusbarController_idl__
 #define __com_sun_star_frame_XStatusbarController_idl__
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MouseEvent_idl__
 #include <com/sun/star/awt/MouseEvent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XGraphics_idl__
 #include <com/sun/star/awt/XGraphics.idl>
-#endif
 
 //=============================================================================
 

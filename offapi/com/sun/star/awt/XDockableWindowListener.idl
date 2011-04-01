@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_awt_XDockableWindowListener_idl__
 #define __com_sun_star_awt_XDockableWindowListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-#ifndef __com_sun_star_awt_DockingData_idl__
 #include <com/sun/star/awt/DockingData.idl>
-#endif
-#ifndef __com_sun_star_awt_EndDockingEvent_idl__
 #include <com/sun/star/awt/EndDockingEvent.idl>
-#endif
-#ifndef __com_sun_star_awt_DockingEvent_idl__
 #include <com/sun/star/awt/DockingEvent.idl>
-#endif
-#ifndef __com_sun_star_awt_EndPopupModeEvent_idl__
 #include <com/sun/star/awt/EndPopupModeEvent.idl>
-#endif
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 //=============================================================================
 

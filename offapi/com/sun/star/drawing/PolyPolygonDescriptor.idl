@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_PolyPolygonDescriptor_idl__
 #define __com_sun_star_drawing_PolyPolygonDescriptor_idl__
 
-#ifndef __com_sun_star_drawing_PolygonKind_idl__
 #include <com/sun/star/drawing/PolygonKind.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_PointSequenceSequence_idl__
 #include <com/sun/star/drawing/PointSequenceSequence.idl>
-#endif
 
 
 //=============================================================================

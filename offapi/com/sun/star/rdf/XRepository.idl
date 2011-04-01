@@ -28,73 +28,23 @@
 #ifndef __com_sun_star_rdf_XRepository_idl__
 #define __com_sun_star_rdf_XRepository_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumeration_idl__
 #include <com/sun/star/container/XEnumeration.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XOutputStream_idl__
 #include <com/sun/star/io/XOutputStream.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_UnsupportedFlavorException_idl__
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_FileFormat_idl__
 #include <com/sun/star/rdf/FileFormat.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_ParseException_idl__
 #include <com/sun/star/rdf/ParseException.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_QueryException_idl__
 #include <com/sun/star/rdf/QueryException.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_RepositoryException_idl__
 #include <com/sun/star/rdf/RepositoryException.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XBlankNode_idl__
 #include <com/sun/star/rdf/XBlankNode.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XURI_idl__
 #include <com/sun/star/rdf/XURI.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_Statement_idl__
 #include <com/sun/star/rdf/Statement.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XQuerySelectResult_idl__
 #include <com/sun/star/rdf/XQuerySelectResult.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XNamedGraph_idl__
 #include <com/sun/star/rdf/XNamedGraph.idl>
-#endif
 
 
 //=============================================================================

@@ -27,38 +27,15 @@
 #ifndef __com_sun_star_text_TextSection_idl__
 #define __com_sun_star_text_TextSection_idl__
 
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextSection_idl__
 #include <com/sun/star/text/XTextSection.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_text_SectionFileLink_idl__
 #include <com/sun/star/text/SectionFileLink.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_text_XTextColumns_idl__
 #include <com/sun/star/text/XTextColumns.idl>
-#endif
-#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#endif
 
 
 //=============================================================================

@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_GridSelectionEvent_idl__
 #define __com_sun_star_awt_GridSelectionEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
-#ifndef __com_sun_star_awt_grid_SelectionEventType_idl__
 #include <com/sun/star/awt/grid/SelectionEventType.idl>
-#endif
 
 //=============================================================================
 

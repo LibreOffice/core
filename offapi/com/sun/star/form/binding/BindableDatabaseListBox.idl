@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_binding_BindableDatabaseListBox_idl__
 #define __com_sun_star_form_binding_BindableDatabaseListBox_idl__
 
-#ifndef __com_sun_star_form_component_DatabaseListBox_idl__
 #include <com/sun/star/form/component/DatabaseListBox.idl>
-#endif
-
-#ifndef __com_sun_star_form_binding_BindableDataAwareControlModel_idl__
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
-#endif
 
 //=============================================================================
 

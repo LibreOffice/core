@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_util_SearchDescriptor_idl__
 #define __com_sun_star_util_SearchDescriptor_idl__
 
-#ifndef __com_sun_star_util_XSearchDescriptor_idl__
 #include <com/sun/star/util/XSearchDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 
 //=============================================================================

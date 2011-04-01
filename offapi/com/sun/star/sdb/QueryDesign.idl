@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_sdb_QueryDesign_idl__
 #define __com_sun_star_sdb_QueryDesign_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-#ifndef __com_sun_star_form_FormController_idl__
 #include <com/sun/star/form/FormController.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 

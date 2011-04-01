@@ -27,27 +27,13 @@
 #ifndef __com_sun_star_rendering_XHalfFloatReadOnlyBitmap_idl__
 #define __com_sun_star_rendering_XHalfFloatReadOnlyBitmap_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapLayout.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerPoint2D_idl__
 #include <com/sun/star/geometry/IntegerPoint2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerRectangle2D_idl__
 #include <com/sun/star/geometry/IntegerRectangle2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
 #include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

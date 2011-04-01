@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_auth_SSOManagerFactory_idl__
 #define __com_sun_star_auth_SSOManagerFactory_idl__
 
-#ifndef __com_sun_star_auth_XSSOManagerFactory_idl_
 #include <com/sun/star/auth/XSSOManagerFactory.idl>
-#endif
 
 module com { module sun { module star { module auth {
 
