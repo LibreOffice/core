@@ -44,6 +44,7 @@
 #define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
 #define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
 
+#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA256UTF8EncryptionKey" ) )
 #define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1UTF8EncryptionKey" ) )
 #define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1MS1252EncryptionKey" ) )
 
@@ -164,7 +165,10 @@ public:
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        CreatePackageEncryptionData( const ::rtl::OUString& aPassword );
+        CreatePackageEncryptionData(
+            const ::rtl::OUString& aPassword,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSF
+                = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
 
     static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
