@@ -380,7 +380,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
         if( !isPlaying() )
             gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
-        DBG( "seek to: %lld ns original: %lf s", gst_position, fTime );
+        DBG( "seek to: %"SAL_PRIdINT64" ns original: %lf s", gst_position, fTime );
     }
 }
 
