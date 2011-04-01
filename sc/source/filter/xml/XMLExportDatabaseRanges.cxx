@@ -50,6 +50,8 @@
 #include "subtotalparam.hxx"
 #include "queryparam.hxx"
 
+#include "svx/dataaccessdescriptor.hxx"
+
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/table/TableSortFieldType.hpp>
@@ -655,6 +657,83 @@ private:
 
     void writeImport(const ScDBData& rData)
     {
+        ScImportParam aParam;
+        rData.GetImportParam(aParam);
+
+        OUString sDatabaseName;
+        OUString sConRes;
+
+        ::svx::ODataAccessDescriptor aDescriptor;
+        aDescriptor.setDataSource(aParam.aDBName);
+        if (aDescriptor.has(::svx::daDataSource))
+        {
+            sDatabaseName = aParam.aDBName;
+        }
+        else if (aDescriptor.has(::svx::daConnectionResource))
+        {
+            sConRes = aParam.aDBName;
+        }
+
+        sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
+        if (aParam.bImport)
+        {
+            if (aParam.bSql)
+                nSourceType = sheet::DataImportMode_SQL;
+            else if (aParam.nType == ScDbQuery)
+                nSourceType = sheet::DataImportMode_QUERY;
+            else
+                nSourceType = sheet::DataImportMode_TABLE;
+        }
+
+        switch (nSourceType)
+        {
+            case sheet::DataImportMode_NONE : break;
+            case sheet::DataImportMode_QUERY :
+            {
+                if (sDatabaseName.getLength())
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_QUERY_NAME, aParam.aStatement);
+                SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY, true, true);
+                if (sConRes.getLength())
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                    SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);
+                }
+            }
+            break;
+            case sheet::DataImportMode_TABLE :
+            {
+                if (sDatabaseName.getLength())
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, aParam.aStatement);
+                SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, true, true);
+                if (sConRes.getLength())
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                    SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);
+                }
+            }
+            break;
+            case sheet::DataImportMode_SQL :
+            {
+                if (sDatabaseName.getLength())
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SQL_STATEMENT, aParam.aStatement);
+                if (!aParam.bNative)
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TRUE);
+                SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, true, true);
+                if (sConRes.getLength())
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                    SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);
+                }
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
     }
 
     void writeSort(const ScDBData& rData)
