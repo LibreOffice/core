@@ -84,7 +84,7 @@ void ScSortParam::Clear()
     {
         bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
@@ -123,9 +123,9 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
+bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {
-    sal_Bool bEqual = false;
+    bool bEqual = false;
     // Anzahl der Sorts gleich?
     sal_uInt16 nLast      = 0;
     sal_uInt16 nOtherLast = 0;
@@ -155,7 +155,7 @@ sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (aCollatorAlgorithm          == rOther.aCollatorAlgorithm)
         )
     {
-        bEqual = sal_True;
+        bEqual = true;
         for ( sal_uInt16 i=0; i<=nLast && bEqual; i++ )
         {
             bEqual = (nField[i] == rOther.nField[i]) && (bAscending[i]  == rOther.bAscending[i]);
@@ -170,7 +170,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),
         bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
         bUserDef(rSub.bUserDef),nUserIndex(rSub.nUserIndex),bIncludePattern(rSub.bIncludePattern),
-        bInplace(sal_True),
+        bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0),
         aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
         nCompatHeader( rOld.nCompatHeader )
@@ -185,7 +185,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = sal_True;
+                    bDoSort[nNewCount]    = true;
                     nField[nNewCount]     = rSub.nField[i];
                     bAscending[nNewCount] = rSub.bAscending;
                     ++nNewCount;
@@ -197,15 +197,15 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         if (rOld.bDoSort[i])
         {
             SCCOLROW nThisField = rOld.nField[i];
-            sal_Bool bDouble = false;
+            bool bDouble = false;
             for (sal_uInt16 j=0; j<nNewCount; j++)
                 if ( nField[j] == nThisField )
-                    bDouble = sal_True;
+                    bDouble = true;
             if (!bDouble)               // ein Feld nicht zweimal eintragen
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = sal_True;
+                    bDoSort[nNewCount]    = true;
                     nField[nNewCount]     = nThisField;
                     bAscending[nNewCount] = rOld.bAscending[i];
                     ++nNewCount;
@@ -217,7 +217,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
     {
         bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
@@ -232,14 +232,14 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
-    bDoSort[0] = sal_True;
+    bDoSort[0] = true;
     nField[0] = nCol;
-    bAscending[0] = sal_True;
+    bAscending[0] = true;
     for (sal_uInt16 i=1; i<MAXSORT; i++)
     {
         bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
@@ -262,7 +262,7 @@ void ScSortParam::MoveToDest()
             else
                 nField[i] += nDifY;
 
-        bInplace = sal_True;
+        bInplace = true;
     }
     else
     {
