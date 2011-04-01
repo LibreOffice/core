@@ -1196,30 +1196,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
-{
-    sal_Bool bRet = false;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey1(
-                    static_cast< XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME "/UNO/SERVICES/" )) ) );
-            xNewKey1->createKey( XlsxExport_getSupportedServiceNames().getConstArray()[0] );
-
-            bRet = sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE( false, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------
