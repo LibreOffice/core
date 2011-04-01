@@ -27,10 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include <rtl/logfile.hxx>
 #include <uiconfiguration/moduleimagemanager.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <framework/imagesconfiguration.hxx>
+#include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 #include "imagemanagerimpl.hxx"
