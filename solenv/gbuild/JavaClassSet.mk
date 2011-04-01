@@ -38,37 +38,32 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-define gb_JavaClassSet__rules
-$$(call gb_JavaClassSet_get_repo_target,$(1),%) :
-	$$(call gb_JavaClassSet__command,$$@,$$*,$$?,$$^)
+$(call gb_JavaClassSet_get_clean_target,%) : vaClassSet_get_target,%) :
+   $(call gb_Output_announce,$*,$(true),JCS,3)
+   $(call gb_JavaClassSet__command,$@,$*,$?,$^)
 
-$$(call gb_JavaClassSet_get_target,%) : $$(call gb_JavaClassSet_get_repo_target,$(1),%)
-    $$(call gb_Output_announce,$$*,$$(true),JCS,3)
-    $$(call gb_Helper_abbreviate_dirs,\
-        touch $$@)
-
-endef
-
-$(call gb_JavaClassSet_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),JCS,3)
+$(call gb_Output_announce,$*,$(false),JCS,3)
     $(call gb_Helper_abbreviate_dirs,\
         rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
-$(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),$(eval $(call gb_JavaClassSet__rules,$(reponame))))
-
 # no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
+# UGLY: cannot use target local variable for REPO because it's needed in prereq
 define gb_JavaClassSet_JavaClassSet
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
+$(if $(filter $(2),$(gb_JavaClassSet_REPOSITORYNAMES)),,\
+  $(error JavaClassSet: no or invalid repository given; known repositories: \
+  $(gb_JavaClassSet_REPOSITORYNAMES)))
+gb_JavaClassSet_REPO_$(1) := $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 endef
 
 define gb_JavaClassSet__get_sourcefile
-$(1)/$(2).java
+$($(1))/$(2).java
 endef
 
 define gb_JavaClassSet_add_sourcefile
-$(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
-    $(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(call gb_JavaClassSet__get_sourcefile,$($(reponame)),$(2))))
-
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : \
+   $(call gb_JavaClassSet__get_sourcefile,$(gb_JavaClassSet_REPO_$(1)),$(2)))
 endef
 
 define gb_JavaClassSet_add_sourcefiles
@@ -84,9 +79,8 @@ endef
 # problem: currently we can't get these dependencies to work
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
-$(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
-$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(2)) 
-$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : JARDEPS += $(2)))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : $(2))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
 
 endef
 # vim: set noet sw=4 ts=4:

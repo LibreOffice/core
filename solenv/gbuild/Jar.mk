@@ -81,7 +81,7 @@ $(call gb_Jar_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
-$(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
+$(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)),$(2))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_final_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
