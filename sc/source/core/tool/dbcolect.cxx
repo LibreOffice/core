@@ -55,7 +55,7 @@ using ::std::remove_if;
 ScDBData::ScDBData( const String& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_Bool bByR, sal_Bool bHasH) :
+                    bool bByR, bool bHasH) :
     aName       (rName),
     nTable      (nTab),
     nStartCol   (nCol1),
@@ -222,7 +222,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
-sal_Bool ScDBData::operator== (const ScDBData& rData) const
+bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
 
@@ -264,7 +264,7 @@ sal_Bool ScDBData::operator== (const ScDBData& rData) const
     if (!(aImport1 == aImport2))
         return false;
 
-    return sal_True;
+    return true;
 }
 
 ScDBData::~ScDBData()
@@ -476,7 +476,7 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
                 !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
                 "zuviele Eintraege bei ScDBData::SetQueryParam" );
 
-    //  set bIsAdvanced to sal_False for everything that is not from the
+    //  set bIsAdvanced to false for everything that is not from the
     //  advanced filter dialog
     bIsAdvanced = false;
 
@@ -507,13 +507,13 @@ void ScDBData::SetAdvancedQuerySource(const ScRange* pSource)
     if (pSource)
     {
         aAdvSource = *pSource;
-        bIsAdvanced = sal_True;
+        bIsAdvanced = true;
     }
     else
         bIsAdvanced = false;
 }
 
-sal_Bool ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
+bool ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
 {
     rSource = aAdvSource;
     return bIsAdvanced;
@@ -561,7 +561,7 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
     nDBType         = rImportParam.nType;
 }
 
-sal_Bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
+bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
     if (nTab == nTable)
     {
@@ -575,9 +575,9 @@ sal_Bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bSt
     return false;
 }
 
-sal_Bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    return (sal_Bool)((nTab == nTable)
+    return (bool)((nTab == nTable)
                     && (nCol1 == nStartCol) && (nRow1 == nStartRow)
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
@@ -608,7 +608,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
                 ++nTab;
         }
 
-        sal_Bool bChanged = ( nTab != aRange.aStart.Tab() );
+        bool bChanged = ( nTab != aRange.aStart.Tab() );
         if (bChanged)
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(),aRange.aEnd .Row() );
@@ -633,7 +633,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
     GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
     theTab2 = theTab1;
 
-    sal_Bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
+    bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                             nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                                             theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
     if (bDoUpdate)
@@ -651,7 +651,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
             aRangeAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
             SetAdvancedQuerySource( &aRangeAdvSource );
 
-            bDoUpdate = sal_True;       // DBData is modified
+            bDoUpdate = true;       // DBData is modified
         }
     }
 
