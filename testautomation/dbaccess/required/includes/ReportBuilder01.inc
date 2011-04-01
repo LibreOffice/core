@@ -116,13 +116,13 @@ testcase tMainMenuBar
 
  'edit menu        
         
-        '/// check if there are 11 items in the edit menu.
-        printlog "check if there are 11 items in the edit menu."
+        '/// check if there are 14 items in the edit menu.
+        printlog "check if there are 14 items in the edit menu."
         ReportDesign.UseMenu 
         hMenuSelectNr(2)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 11) then
-            warnlog "There should 11 items in the edit menu but there are " + iCount + " items."
+        if (iCount <> 14) then
+            warnlog "There should 14 items in the edit menu but there are " + iCount + " items."
         end if
         call hMenuClose()
 
@@ -140,13 +140,13 @@ testcase tMainMenuBar
 
  'insert menu        
         
-        '/// check if there are 3 items in the insert menu.
-        printlog "check if there are 3 items in the insert menu."
+        '/// check if there are 5 items in the insert menu.
+        printlog "check if there are 5 items in the insert menu."
         ReportDesign.UseMenu 
         hMenuSelectNr(4)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 3) then
-            warnlog "There should 3 items in the insert menu but there are " + iCount + " items."
+        if (iCount <> 5) then
+            warnlog "There should 5 items in the insert menu but there are " + iCount + " items."
         end if
         call hMenuClose()
 
@@ -336,7 +336,7 @@ testcase tExecuteReport
     Kontext "ReportDesign"
         ReportDesign.UseMenu            
         hMenuSelectNr(2)
-        hMenuSelectNr(11)
+        hMenuSelectNr(14)
        
     sleep(10)
     
