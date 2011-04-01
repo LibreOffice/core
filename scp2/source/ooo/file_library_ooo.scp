@@ -1806,3 +1806,7 @@ File gid_File_Lib_sellangmsi
     Name = "sellangmsi.dll";
 End
 #endif
+
+#ifdef ENABLE_LOMENUBAR
+SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Lomenubar, lomenubar.uno )
+#endif
