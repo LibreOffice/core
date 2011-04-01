@@ -241,7 +241,7 @@ void TestApplication::Main()
 //  Execute();
 //    xFrame->dispose();
 //    delete pMainWindow;
-    if( bState = sal_True )
+    if( bState == sal_True )
     {
         LOG_ERROR( "TestApplication::Main()", "Test successful ..." )
     }
