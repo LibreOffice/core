@@ -1260,7 +1260,7 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
         // set API opcode from ODF function name
         bIsValid &= initFuncOpCode( *xFuncInfo, xFuncInfo->mbExternal ? rExtFuncTokenMap : rIntFuncTokenMap );
         // insert the function info into the maps
-        if( xFuncInfo->mnApiOpCode != OPCODE_NONAME )
+        if( (xFuncInfo->mnApiOpCode != OPCODE_NONAME) && (xFuncInfo->mnApiOpCode != OPCODE_BAD) )
         {
             if( (xFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && !xFuncInfo->maExtProgName.isEmpty() )
                 maExtProgFuncs[ xFuncInfo->maExtProgName ] = xFuncInfo;
