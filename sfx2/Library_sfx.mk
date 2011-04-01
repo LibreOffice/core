@@ -48,7 +48,6 @@ $(eval $(call gb_Library_set_include,sfx,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
-    $(LIBXML_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_set_defs,sfx,\
@@ -75,9 +74,10 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     utl \
     vcl \
     vos3 \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,sfx,libxml2)
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \

@@ -157,11 +157,12 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     cppu \
     vos3 \
     sal \
-    icuuc \
     i18nisolang1 \
     i18npaper \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,editeng,icuuc)
 
 # vim: set noet sw=4 ts=4:
 

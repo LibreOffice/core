@@ -58,9 +58,10 @@ $(eval $(call gb_Library_add_linked_libs,lng,\
 	xo \
 	ucbhelper \
 	utl \
-	icuuc \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,lng,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,lng,\
 	linguistic/source/convdic \

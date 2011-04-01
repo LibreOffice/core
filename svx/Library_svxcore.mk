@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     editeng \
     fwe \
     i18nisolang1 \
-    icuuc \
     lng \
     sal \
     sfx \
@@ -85,6 +84,8 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     xo \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,svxcore,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \
