@@ -284,6 +284,8 @@
 // String array to match UI language names to LanguageType values and vice versa
 #define STR_ARR_SVT_LANGUAGE_TABLE_START    (STR_SVT_JAVAERROR_END + 1)
 #define STR_ARR_SVT_LANGUAGE_TABLE          (STR_ARR_SVT_LANGUAGE_TABLE_START + 0)
+//due to some horror wizards/com/sun/star/wizards/letter/LocaleCodes.java needs to be kept
+//manually in sync with STR_ARR_SVT_LANGUAGE_TABLE
 #define STR_ARR_SVT_LANGUAGE_TABLE_END      (STR_ARR_SVT_LANGUAGE_TABLE)
 
 //.............................................................................
