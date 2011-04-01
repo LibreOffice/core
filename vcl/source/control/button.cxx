@@ -180,8 +180,16 @@ XubString Button::GetStandardText( StandardButtonType eButton )
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
     {
-        ResId aResId( aResIdAry[(sal_uInt16)eButton].nResId, *pResMgr );
+        sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
+        ResId aResId( nResId, *pResMgr );
         aText = String( aResId );
+
+        // Windows (apparently) has some magic auto-accelerator evil around
+        // ok / cancel so add this only for Unix
+#ifdef UNX
+        if( nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL )
+            aText.Insert( String::CreateFromAscii("~"), 0 );
+#endif
     }
     else
     {
