@@ -3042,16 +3042,18 @@ _ACEOF
     if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-
-         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
+         javac_link_f=`readlink -f "$JAVACOMPILER" 2>/dev/null`
+         if test $? == 0 && test "$JAVACOMPILER" != "$javac_link_f"; then
           # try to recover first by looking whether we have a alternatives 
           # system as in Debian or newer SuSEs where following /usr/bin/javac
           # over /etc/alternatives/javac leads to the right bindir where we
           # just need to strip a bit away to get a valid JAVA_HOME
-            JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
+          # Solaris 11 is even worse, because target is relative, so use -f
+            JAVA_HOME="$javac_link_f"
          elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
-            # maybe only one level of symlink (e.g. on Mac)
-            JAVA_HOME=$(readlink $JAVACOMPILER)
+          # Darwin readlink(1) is so primitive it doesn't even support -f
+          # maybe only one level of symlink (e.g. on Mac)
+            JAVA_HOME=`readlink $JAVACOMPILER`
          else
           # else warn
           AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
@@ -5475,7 +5477,12 @@ fi
 dnl We also need to check for --with-gnu-cp
 
 if test -z "$with_gnu_cp"; then
-   AC_PATH_PROGS(GNUCP, gnucp cp)
+   # check the place where the good stuff is hidden on Solaris...
+   if test -x /usr/gnu/bin/cp; then
+      GNUCP=/usr/gnu/bin/cp
+   else
+      AC_PATH_PROGS(GNUCP, gnucp cp)
+   fi
    if test -z $GNUCP; then
       AC_MSG_ERROR([Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it])
    fi
@@ -7016,7 +7023,11 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
                 if test -f $ANT_HOME/lib/ant/ant.jar; then
                     ANT_LIB="$ANT_HOME/lib/ant"
                 else
-                    AC_MSG_ERROR([Ant libraries not found!])
+                   if test -f /usr/share/lib/ant/ant.jar; then
+                       ANT_LIB=/usr/share/lib/ant
+                   else
+                       AC_MSG_ERROR([Ant libraries not found!])
+                   fi
                 fi  
              fi
           fi
@@ -7103,7 +7114,11 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
-            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           if test -e /usr/share/lib/java/junit.jar; then
+              OOO_JUNIT_JAR=/usr/share/lib/java/junit.jar
+           else
+              OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           fi
         fi
     else
         OOO_JUNIT_JAR=$with_junit
