@@ -55,6 +55,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -302,7 +303,37 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     pData->SetDoSize(bMoveCells);
     pData->SetStripData(bStripData);
 
-    // TODO: Properly import other paramters as well.
+    {
+        ScImportParam aParam;
+        aParam.bNative = bNative;
+        aParam.aDBName = sDatabaseName.isEmpty() ? sConnectionRessource : sDatabaseName;
+        aParam.aStatement = sSourceObject;
+        sheet::DataImportMode eMode = static_cast<sheet::DataImportMode>(nSourceType);
+        switch (eMode)
+        {
+            case sheet::DataImportMode_NONE:
+                aParam.bImport = false;
+                break;
+            case sheet::DataImportMode_SQL:
+                aParam.bImport = true;
+                aParam.bSql    = true;
+                break;
+            case sheet::DataImportMode_TABLE:
+                aParam.bImport = true;
+                aParam.bSql    = false;
+                aParam.nType   = ScDbTable;
+                break;
+            case sheet::DataImportMode_QUERY:
+                aParam.bImport = true;
+                aParam.bSql    = false;
+                aParam.nType   = ScDbQuery;
+                break;
+            default:
+                OSL_FAIL("Unknown data import mode");
+                aParam.bImport = false;
+        }
+        pData->SetImportParam(aParam);
+    }
 
     {
         ScQueryParam aParam;
@@ -408,6 +439,13 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         }
 
         pData->SetSubTotalParam(aParam);
+    }
+
+    if (pData->HasImportParam() && !pData->HasImportSelection())
+    {
+        pData->SetRefreshDelay(nRefresh);
+        pData->SetRefreshHandler(pDoc->GetDBCollection()->GetRefreshHandler());
+        pData->SetRefreshControl(pDoc->GetRefreshTimerControlAddress());
     }
 
     return pData.release();
