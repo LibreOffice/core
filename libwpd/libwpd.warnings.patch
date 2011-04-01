@@ -1,0 +1,32 @@
+--- misc/libwpd-0.9.1/src/lib/libwpd_internal.cpp
++++ misc/build/libwpd-0.9.1/src/lib/libwpd_internal.cpp
+@@ -998,21 +998,25 @@ _WPXColumnProperties::_WPXColumnProperties()
+ // HACK: this function is really cheesey
+ int _extractNumericValueFromRoman(const char romanChar)
+ {
++	int retValue = 0;
+ 	switch (romanChar)
+ 	{
+ 	case 'I':
+ 	case 'i':
+-		return 1;
++		retValue = 1;
++		break;
+ 	case 'V':
+ 	case 'v':
+-		return 5;
++		retValue = 5;
++		break;
+ 	case 'X':
+ 	case 'x':
+-		return 10;
++		retValue = 10;
++		break;
+ 	default:
+ 		throw ParseException();
+ 	}
+-	return 1;
++	return retValue;
+ }
+ 
+ // _extractDisplayReferenceNumberFromBuf: given a nuWP6_DEFAULT_FONT_SIZEmber string in UCS2 represented
