@@ -28,9 +28,11 @@
 
 #include <math.h>
 
-#ifndef __RTL_USTRING_
 #include <rtl/string.hxx>
-#endif
+
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+
 
 #include "gstplayer.hxx"
 #include "gstframegrabber.hxx"
@@ -573,9 +575,15 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
         xRet = pWindow;
 
-        if( rArguments.getLength() > 2 ) {
-            rArguments[ 2 ] >>= mnWindowID;
-            DBG( "window ID: %ld", mnWindowID );
+        if( rArguments.getLength() > 2 )
+        {
+            sal_IntPtr pIntPtr = 0;
+            rArguments[ 2 ] >>= pIntPtr;
+            SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
+            OSL_ASSERT(pEnvData);
+            if (pEnvData)
+                mnWindowID = pEnvData->aWindow;
         }
     }
 
