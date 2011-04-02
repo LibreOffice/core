@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
 #include <osl/diagnose.h>
+#include <rtl/instance.hxx>
 
 //_______________________________________________
 // namespace
@@ -52,9 +53,11 @@ namespace filter{
 //_______________________________________________
 // definitions
 
-::salhelper::SingletonRef< FilterCache >* BaseContainer::m_pPerformanceOptimizer = 0;
-
-
+typedef ::salhelper::SingletonRef< FilterCache > FilterCacheRefHold;
+/** @short  hold at least one filter cache instance alive and
+            prevent the office from unloading this cache if no filter
+            is currently used.*/
+struct thePerformanceOptimizer : public rtl::Static<FilterCacheRefHold, thePerformanceOptimizer> {};
 
 BaseContainer::BaseContainer()
     : BaseLock     (       )
@@ -64,13 +67,7 @@ BaseContainer::BaseContainer()
 {
     m_rCache->load(FilterCache::E_CONTAINS_STANDARD);
 
-    // GLOBAL SAFE (!) -> -----------------------
-    // TODO use rtl pattern to create it realy threadsafe!
-    ::osl::ResettableMutexGuard aGlobalLock(::osl::Mutex::getGlobalMutex());
-    if (!m_pPerformanceOptimizer)
-        m_pPerformanceOptimizer = new ::salhelper::SingletonRef< FilterCache >();
-    aGlobalLock.clear();
-    // <- GLOBAL SAFE (!) -----------------------
+    thePerformanceOptimizer::get();
 }
 
 

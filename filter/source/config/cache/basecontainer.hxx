@@ -123,11 +123,6 @@ class BaseContainer : public BaseLock
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
 
-        /** @short  hold at least on filter cache instance alive and
-                    prevent he office from unloading this cache if no filter
-                    is currently used.*/
-        static ::salhelper::SingletonRef< FilterCache >* m_pPerformanceOptimizer;
-
     //-------------------------------------------
     // native interface
 
