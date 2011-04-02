@@ -918,27 +918,6 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
     return (cppu::OWeakObject*) new T602ImportFilter( rSMgr );
 }
 
-/* Reference < XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceFactory > &r)
-throw ( Exception )
-{
-    return Reference< XInterface > (( OWeakObject *) new T602ImportFilter(r));
-}
-
-Sequence < OUString > getSupportedServiceNames()
-throw ( RuntimeException )
-{
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames ) {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames ) {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
-}*/
-
 T602ImportFilterDialog::T602ImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
     mxMSF( r ), mpResMgr( NULL ) {}
 
