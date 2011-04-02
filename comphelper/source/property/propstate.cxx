@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/instance.hxx>
 
 //.........................................................................
 namespace comphelper
@@ -217,20 +218,13 @@ namespace comphelper
         );
     }
 
+    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
     //---------------------------------------------------------------------
     Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId() throw(RuntimeException)
     {
-        static ::cppu::OImplementationId * pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        ::cppu::OImplementationId &rID = lcl_ImplId::get();
+        return rID.getImplementationId();
     }
 
     //---------------------------------------------------------------------

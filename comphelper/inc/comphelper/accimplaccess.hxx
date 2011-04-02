@@ -154,7 +154,7 @@ namespace comphelper
 
 
     private:
-        COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+        COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
 //.........................................................................

@@ -30,6 +30,8 @@
 
 #include "comphelper_module.hxx"
 
+#include <rtl/instance.hxx>
+
 //--------------------------------------------------------------------
 extern void createRegistryInfo_OPropertyBag();
 extern void createRegistryInfo_SequenceOutputStream();
@@ -49,13 +51,12 @@ namespace comphelper { namespace module
 {
 //........................................................................
 
-    static void initializeModule()
+    namespace
     {
-        static bool bInitialized( false );
-        if ( !bInitialized )
+        class doInitialize
         {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !bInitialized )
+        public:
+            doInitialize()
             {
                 createRegistryInfo_OPropertyBag();
                 createRegistryInfo_SequenceOutputStream();
@@ -70,7 +71,14 @@ namespace comphelper { namespace module
                 createRegistryInfo_OSimpleLogRing();
                 createRegistryInfo_OOfficeRestartManager();
             }
-        }
+        };
+
+        struct theInitializer : public rtl::Static< doInitialize, theInitializer > {};
+    }
+
+    static void initializeModule()
+    {
+        theInitializer::get();
     }
 
 //........................................................................

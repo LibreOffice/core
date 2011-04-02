@@ -121,21 +121,13 @@ namespace comphelper
         return ( NULL != pImplementation );
     }
 
+    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
     //---------------------------------------------------------------------
-    const Sequence< sal_Int8 >& OAccessibleImplementationAccess::getUnoTunnelImplementationId()
+    const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
-        static Sequence< sal_Int8 > aId;
-        if ( !aId.getLength() )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !aId.getLength() )
-            {
-                static ::cppu::OImplementationId aImplId;
-                // unfortunately, the OImplementationId::getImplementationId returns a copy, not a static reference ...
-                aId = aImplId.getImplementationId();
-            }
-        }
-        return aId;
+        ::cppu::OImplementationId &rID = lcl_ImplId::get();
+        return rID.getImplementationId();
     }
 
     //---------------------------------------------------------------------
