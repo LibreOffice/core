@@ -49,6 +49,7 @@
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 
 
 using namespace com::sun::star::beans;
@@ -143,7 +144,6 @@ namespace comphelper
 
             // static methods and data
             static ptr getInstance();
-            static void prepareMutex();
             static bool shouldActivate();
             static bool getEnabledFromCoreController();
             static bool getEnabledFromCfg();
@@ -152,7 +152,6 @@ namespace comphelper
             static sal_Int32 findIdx(const Sequence<PropertyValue>& args, const OUString& key);
 
             static ptr instance;
-            static Mutex * singleton_mutex;
             static const sal_Int32 COLUMNS;
             static const OUString CFG_ENABLED;
             static const OUString CFG_IDLETIMEOUT;
@@ -214,6 +213,10 @@ namespace comphelper
     const OUString UiEventsLogger_Impl::URL_SPECIAL(RTL_CONSTASCII_USTRINGPARAM(".special:"));
     const OUString UiEventsLogger_Impl::URL_FILE(RTL_CONSTASCII_USTRINGPARAM("file:"));
 
+    namespace
+    {
+        struct theSingletonMutex : public rtl::Static< Mutex, theSingletonMutex > {};
+    }
 
     // public UiEventsLogger interface
     sal_Bool UiEventsLogger::isEnabled()
@@ -221,8 +224,7 @@ namespace comphelper
         if ( UiEventsLogger_Impl::getEnabledFromCfg() )
         {
             try {
-                UiEventsLogger_Impl::prepareMutex();
-                Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+                Guard<Mutex> singleton_guard(theSingletonMutex::get());
                 return UiEventsLogger_Impl::getInstance()->m_Active;
             } catch(...) { return false; } // never throws
         } // if ( )
@@ -232,8 +234,7 @@ namespace comphelper
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
     {
         try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            Guard<Mutex> singleton_guard(theSingletonMutex::get());
             return UiEventsLogger_Impl::getInstance()->m_SessionLogEventCount;
         } catch(...) { return 0; } // never throws
     }
@@ -269,8 +270,7 @@ namespace comphelper
         const Sequence<PropertyValue>& args)
     {
         try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            Guard<Mutex> singleton_guard(theSingletonMutex::get());
             UiEventsLogger_Impl::getInstance()->logDispatch(url, args);
         } catch(...) { } // never throws
     }
@@ -283,8 +283,7 @@ namespace comphelper
         const OUString& param)
     {
         try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            Guard<Mutex> singleton_guard(theSingletonMutex::get());
             UiEventsLogger_Impl::getInstance()->logVcl(parent_id, window_type, id, method, param);
         } catch(...) { } // never throws
     }
@@ -313,16 +312,14 @@ namespace comphelper
     void UiEventsLogger::disposing()
     {
         // we dont want to create an instance just to dispose it
-        UiEventsLogger_Impl::prepareMutex();
-        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+        Guard<Mutex> singleton_guard(theSingletonMutex::get());
         if(UiEventsLogger_Impl::instance!=UiEventsLogger_Impl::ptr())
             UiEventsLogger_Impl::getInstance()->disposing();
     }
 
     void UiEventsLogger::reinit()
     {
-        UiEventsLogger_Impl::prepareMutex();
-        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+        Guard<Mutex> singleton_guard(theSingletonMutex::get());
         if(UiEventsLogger_Impl::instance)
         {
             UiEventsLogger_Impl::instance->disposing();
@@ -663,17 +660,6 @@ namespace comphelper
         if(instance == NULL)
             instance = UiEventsLogger_Impl::ptr(new UiEventsLogger_Impl());
         return instance;
-    }
-
-    Mutex * UiEventsLogger_Impl::singleton_mutex = NULL;
-    void UiEventsLogger_Impl::prepareMutex()
-    {
-        if(singleton_mutex == NULL)
-        {
-            Guard<Mutex> global_guard(Mutex::getGlobalMutex());
-            if(singleton_mutex == NULL)
-                singleton_mutex = new Mutex();
-        }
     }
 
     sal_Int32 UiEventsLogger_Impl::findIdx(const Sequence<PropertyValue>& args, const OUString& key)
