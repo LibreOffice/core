@@ -1,0 +1,2 @@
+fa     fileaccess      :       unotools rdbmaker tools ucbhelper LIBXSLT:libxslt NULL
+fa     fileaccess\prj                                                  nmake   -       all     fa_prj NULL
