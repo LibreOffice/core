@@ -53,11 +53,17 @@ namespace filter{
 //_______________________________________________
 // definitions
 
-typedef ::salhelper::SingletonRef< FilterCache > FilterCacheRefHold;
-/** @short  hold at least one filter cache instance alive and
-            prevent the office from unloading this cache if no filter
-            is currently used.*/
-struct thePerformanceOptimizer : public rtl::Static<FilterCacheRefHold, thePerformanceOptimizer> {};
+namespace
+{
+    typedef ::salhelper::SingletonRef< FilterCache > FilterCacheRefHold;
+    /** @short  hold at least one filter cache instance alive and
+                prevent the office from unloading this cache if no filter
+                is currently used.*/
+    struct thePerformanceOptimizer :
+        public rtl::Static<FilterCacheRefHold, thePerformanceOptimizer>
+    {
+    };
+}
 
 BaseContainer::BaseContainer()
     : BaseLock     (       )
