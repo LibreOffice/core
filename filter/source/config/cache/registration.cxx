@@ -31,6 +31,8 @@
 
 #include "registration.hxx"
 
+#include <rtl/instance.hxx>
+
 //_______________________________________________
 // includes
 
@@ -59,14 +61,13 @@ namespace css = ::com::sun::star;
 // definitions
 
 rtl::OUString pFilterStrings[19];
-static bool bInitialized = false;
 
-static void InitConstants()
+namespace
 {
-    if (!bInitialized)
+    class doInitConstants
     {
-        ::osl::MutexGuard aGuard(::osl::Mutex::getGlobalMutex());
-        if (!bInitialized)
+    public:
+        doInitConstants()
         {
             PROPNAME_NAME;
             PROPNAME_UINAME;
@@ -87,9 +88,15 @@ static void InitConstants()
             PROPNAME_TEMPLATENAME;
             PROPNAME_FILEFORMATVERSION;
             PROPNAME_TYPES;
-            bInitialized = true;
         }
-    }
+    };
+
+    struct theConstantsInitializer : public rtl::Static< doInitConstants, theConstantsInitializer > {};
+}
+
+static void InitConstants()
+{
+    theConstantsInitializer::get();
 }
 
 // extern "C" component_getImplementationEnvironment()

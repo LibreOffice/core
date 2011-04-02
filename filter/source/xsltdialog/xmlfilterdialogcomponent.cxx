@@ -48,6 +48,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/instance.hxx>
 
 #include <svl/solar.hrc>
 
@@ -236,32 +237,25 @@ Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const 
 
 //-------------------------------------------------------------------------
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId( void ) throw( RuntimeException )
 {
-    static OImplementationId* pId = 0;
-    if( !pId )
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if( !pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    ::cppu::OImplementationId &rID = lcl_ImplId::get();
+    return rID.getImplementationId();
 }
 
 //-------------------------------------------------------------------------
 
-Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
+namespace
 {
-    static OTypeCollection * s_pTypes = 0;
-    if (! s_pTypes)
+    class DialogComponentTypes
     {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pTypes)
-        {
-            static OTypeCollection s_aTypes(
+    private:
+        OTypeCollection m_aTypes;
+    public:
+        DialogComponentTypes() :
+            m_aTypes(
                 ::getCppuType( (const Reference< XComponent > *)0 ),
                 ::getCppuType( (const Reference< XTypeProvider > *)0 ),
                 ::getCppuType( (const Reference< XAggregation > *)0 ),
@@ -269,11 +263,18 @@ Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
                 ::getCppuType( (const Reference< XServiceInfo > *)0 ),
                 ::getCppuType( (const Reference< XInitialization > *)0 ),
                 ::getCppuType( (const Reference< XTerminateListener > *)0 ),
-                ::getCppuType( (const Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > *)0 ));
-            s_pTypes = &s_aTypes;
+                ::getCppuType( (const Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > *)0 ))
+        {
         }
-    }
-    return s_pTypes->getTypes();
+        OTypeCollection& getTypeCollection() { return m_aTypes; }
+    };
+
+    struct theDialogComponentTypes : rtl::Static<DialogComponentTypes, theDialogComponentTypes> {};
+}
+
+Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
+{
+    return theDialogComponentTypes::get().getTypeCollection().getTypes();
 }
 
 //-------------------------------------------------------------------------
