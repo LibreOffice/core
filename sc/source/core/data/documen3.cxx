@@ -1354,6 +1354,15 @@ sal_Bool ScDocument::GetFilterEntries(
             SCCOL nEndCol;
             SCROW nEndRow;
             pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
+            // Extend the DB area to include data rows immediately below.
+            // Note that the change is stored back to the DB.
+            SCCOL nCol1a = nStartCol, nCol2a = nEndCol;
+            SCROW nRow1a = nStartRow, nRow2a = nEndRow;
+            GetDataArea(nTab, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
+            nEndRow = nRow2a;
+            pDBData->SetArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow);
+
             if (pDBData->HasHeader())
                 ++nStartRow;
 
