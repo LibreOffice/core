@@ -73,22 +73,30 @@ rtl::OUString expandMacros(rtl::OUString const & text) {
 
 namespace
 {
-inline OUString s_impl_name() { return OUSTR(IMPL_NAME); }
-static Sequence< OUString > const & s_get_service_names()
+
+class ImplNames
 {
-    static Sequence< OUString > const * s_pnames = 0;
-    if (! s_pnames)
+private:
+    Sequence<OUString> m_aNames;
+public:
+    ImplNames() : m_aNames(2)
     {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if (! s_pnames)
-        {
-            static Sequence< OUString > s_names( 2 );
-            s_names[ 0 ] = OUSTR(SERVICE_NAME_A);
-            s_names[ 1 ] = OUSTR(SERVICE_NAME_B);
-            s_pnames = &s_names;
-        }
+        m_aNames[0] = OUSTR(SERVICE_NAME_A);
+        m_aNames[1] = OUSTR(SERVICE_NAME_B);
     }
-    return *s_pnames;
+    const Sequence<OUString>& getNames() const { return m_aNames; }
+};
+
+class theImplNames : public rtl::Static<ImplNames, theImplNames> {};
+
+inline OUString s_impl_name()
+{
+    return OUSTR(IMPL_NAME);
+}
+
+inline Sequence< OUString > const & s_get_service_names()
+{
+    return theImplNames::get().getNames();
 }
 
 typedef ::cppu::WeakComponentImplHelper2<
@@ -98,6 +106,7 @@ struct mutex_holder
 {
     Mutex m_mutex;
 };
+
 class Bootstrap_MacroExpander : public mutex_holder, public t_uno_impl
 {
 protected:
