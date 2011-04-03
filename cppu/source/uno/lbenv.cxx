@@ -825,14 +825,14 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     }
 }
 
-//------------------------------------------------------------------------------
-inline static const OUString & unoenv_getStaticOIdPart()
+namespace
 {
-    static OUString * s_pStaticOidPart = 0;
-    if (! s_pStaticOidPart)
+    class makeOIdPart
     {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pStaticOidPart)
+    private:
+        OUString m_sOidPart;
+    public:
+        makeOIdPart()
         {
             ::rtl::OUStringBuffer aRet( 64 );
             aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
@@ -856,11 +856,18 @@ inline static const OUString & unoenv_getStaticOIdPart()
             for ( sal_Int32 i = 0; i < 16; ++i )
                 aRet.append( (sal_Int32)ar[i], 16 );
 
-            static OUString s_aStaticOidPart( aRet.makeStringAndClear() );
-            s_pStaticOidPart = &s_aStaticOidPart;
+            m_sOidPart = aRet.makeStringAndClear();
         }
-    }
-    return *s_pStaticOidPart;
+        const OUString& getOIdPart() const { return m_sOidPart; }
+    };
+
+    class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
+}
+
+//------------------------------------------------------------------------------
+inline static const OUString & unoenv_getStaticOIdPart()
+{
+    return theStaticOIdPart::get().getOIdPart();
 }
 
 extern "C"
