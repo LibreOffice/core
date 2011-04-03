@@ -102,6 +102,10 @@ gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror
 endif
 
+ifeq ($(HAVE_CXX0X),TRUE)
+gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
