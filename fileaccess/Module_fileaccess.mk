@@ -30,3 +30,5 @@ $(eval $(call gb_Module_Module,fileaccess))
 $(eval $(call gb_Module_add_targets,fileaccess,\
     Library_fileacc \
 ))
+
+# vim: set noet sw=4 ts=4:

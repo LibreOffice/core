@@ -47,3 +47,5 @@ $(eval $(call gb_Library_add_linked_libs,fileacc,\
 $(eval $(call gb_Library_set_componentfile,fileacc,fileaccess/source/fileacc))
 
 $(eval $(call gb_Library_add_exception_objects,fileacc,fileaccess/source/FileAccess))
+
+# vim: set noet sw=4 ts=4:
