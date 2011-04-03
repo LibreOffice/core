@@ -46,10 +46,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
     cui \
+    dbtools \
     drawinglayer \
     editeng \
     for \
     forui \
+    frm \
     fwe \
     fwi \
     fwk \
@@ -100,6 +102,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	test \
     cppunit \
     fileacc \
+    icui18n \
     icuuc \
     rdf \
     xslt \
