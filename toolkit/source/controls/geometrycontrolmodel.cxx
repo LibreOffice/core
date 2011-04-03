@@ -593,20 +593,16 @@
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
 
+    namespace
+    {
+        class theOCommonGeometryControlModelImplementationId :
+            public rtl::Static< ::cppu::OImplementationId, theOCommonGeometryControlModelImplementationId > {};
+    }
+
     //--------------------------------------------------------------------
     Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException)
     {
-        static ::cppu::OImplementationId * pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId s_aId;
-                pId = &s_aId;
-            }
-        }
-        return pId->getImplementationId();
+        return theOCommonGeometryControlModelImplementationId::get().getImplementationId();
     }
 
     //--------------------------------------------------------------------
