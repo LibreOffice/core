@@ -36,19 +36,19 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
     -I$(OUTDIR)/inc \
     -I$(OUTDIR)/inc/offuh \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
+    $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_set_defs,frm,\
-	$$(DEFS) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),-DSYSTEM_LIBXML $(filter-out -I%,$(LIBXML_CFLAGS))) \
+    $$(DEFS) \
+    $(if $(filter YES,$(SYSTEM_LIBXML)),-DSYSTEM_LIBXML $(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,frm,\
     comphelper \
     cppu \
     cppuhelper \
-	dbtools \
+    dbtools \
     editeng \
     i18nisolang1 \
     icui18n \
@@ -63,7 +63,7 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     ucbhelper \
     utl \
     vcl \
-	xml2 \
+    xml2 \
     $(gb_STDLIBS) \
 ))
 
@@ -142,8 +142,8 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/richtext/rtattributehandler \
     forms/source/richtext/specialdispatchers \
     forms/source/runtime/formoperations \
-	forms/source/solar/component/navbarcontrol \
-	forms/source/solar/control/navtoolbar \
+    forms/source/solar/component/navbarcontrol \
+    forms/source/solar/control/navtoolbar \
     forms/source/xforms/binding \
     forms/source/xforms/boolexpression \
     forms/source/xforms/computedexpression \
@@ -168,8 +168,8 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/xforms/xformsevent \
     forms/source/xforms/xforms_services \
     forms/source/xforms/xmlhelper \
-	forms/source/xforms/xpathlib/extension \
-	forms/source/xforms/xpathlib/xpathlib \
+    forms/source/xforms/xpathlib/extension \
+    forms/source/xforms/xpathlib/xpathlib \
 ))
 
 # vim: set noet ts=4 sw=4:

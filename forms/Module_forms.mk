@@ -28,9 +28,9 @@
 $(eval $(call gb_Module_Module,forms))
 
 $(eval $(call gb_Module_add_targets,forms,\
-	AllLangResTarget_frm \
-	Library_frm \
-	Package_unotypes \
+    AllLangResTarget_frm \
+    Library_frm \
+    Package_unotypes \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,forms,\
