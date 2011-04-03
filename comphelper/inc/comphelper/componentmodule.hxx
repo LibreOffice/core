@@ -305,7 +305,7 @@ namespace comphelper
     /* -------------------------------------------------------------------- */ \
     class ModuleClass : public ::comphelper::OModule \
     { \
-        friend struct CreateModuleClass; \
+        friend struct ModuleClass##Creator; \
         typedef ::comphelper::OModule BaseClass; \
     \
     public: \
@@ -368,14 +368,14 @@ namespace comphelper
     //= implementing a OModule for a component library
 
 #define IMPLEMENT_COMPONENT_MODULE( ModuleClass ) \
-    struct CreateModuleClass \
+    struct ModuleClass##Creator \
     { \
-        ModuleClass* operator()() \
-        { \
-            static ModuleClass* pModule = new ModuleClass; \
-            return pModule; \
-        } \
+        ModuleClass m_aModuleClass; \
     }; \
+    namespace \
+    { \
+        class the##ModuleClass##Instance : public rtl::Static<ModuleClass##Creator, the##ModuleClass##Instance> {}; \
+    } \
     \
     ModuleClass::ModuleClass() \
         :BaseClass() \
@@ -384,8 +384,7 @@ namespace comphelper
     \
     ModuleClass& ModuleClass::getInstance() \
     { \
-        return *rtl_Instance< ModuleClass, CreateModuleClass, ::osl::MutexGuard, ::osl::GetGlobalMutex >:: \
-            create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
+        return the##ModuleClass##Instance::get().m_aModuleClass; \
     } \
 
     //==========================================================================
