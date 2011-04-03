@@ -86,6 +86,7 @@ my_components = \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
     component/toolkit/util/tk \
+    component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/xmloff/source/transform/xof \
@@ -175,7 +176,6 @@ my_components = \
     updatefeed \
     updchk \
     updchk.uno \
-    utl \
     uui \
     vbaevents \
     vcl \
