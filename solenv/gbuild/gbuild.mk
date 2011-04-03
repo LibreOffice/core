@@ -153,11 +153,11 @@ else
 include $(GBUILDDIR)/platform/windows.mk
 endif
 else ifeq ($(OS),OPENBSD)
-include $(GBUILDDIR)/platform/openbsd-$(CPUNAME).mk
+include $(GBUILDDIR)/platform/openbsd.mk
 else ifeq ($(OS),FREEBSD)
-include $(GBUILDDIR)/platform/freebsd-$(CPUNAME).mk
+include $(GBUILDDIR)/platform/freebsd.mk
 else ifeq ($(OS),NETBSD)
-include $(GBUILDDIR)/platform/netbsd-$(CPUNAME).mk
+include $(GBUILDDIR)/platform/netbsd.mk
 else ifeq ($(OS),DRAGONFLY)
 include $(GBUILDDIR)/platform/dragonfly.mk
 else ifeq ($(OS),SOLARIS)
