@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,frm))
 
-$(eval $(call gb_Library_add_precompiled_header,frm,$(SRCDIR)/unotools/inc/pch/precompiled_forms))
+$(eval $(call gb_Library_add_precompiled_header,frm,$(SRCDIR)/forms/inc/pch/precompiled_forms))
 
 $(eval $(call gb_Library_set_include,frm,\
     $$(INCLUDE) \
