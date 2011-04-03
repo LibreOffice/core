@@ -61,6 +61,7 @@ my_components = \
     charttools \
     chartview \
     component/comphelper/util/comphelp \
+    component/fileaccess/source/fileacc \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -106,7 +107,6 @@ my_components = \
     embobj \
     evtatt \
     fastsax \
-    fileacc \
     filterconfig1 \
     flash \
     flat \
