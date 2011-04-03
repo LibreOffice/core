@@ -62,6 +62,7 @@ my_components = \
     chartview \
     component/comphelper/util/comphelp \
     component/fileaccess/source/fileacc \
+    component/forms/util/frm \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -114,7 +115,6 @@ my_components = \
     for \
     fpicker \
     fps_office \
-    frm \
     guesslang \
     hwp \
     hyphen \
