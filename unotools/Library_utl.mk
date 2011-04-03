@@ -137,3 +137,5 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/ucbhelper/ucbstreamhelper \
     unotools/source/ucbhelper/xtempfile \
 ))
+
+# vim: set noet sw=4 ts=4:

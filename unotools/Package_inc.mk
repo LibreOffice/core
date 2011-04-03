@@ -114,3 +114,5 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions.hxx,unot
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/viewoptions.hxx,unotools/viewoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/workingsetoptions.hxx,unotools/workingsetoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/xmlaccelcfg.hxx,unotools/xmlaccelcfg.hxx))
+
+# vim: set noet sw=4 ts=4:
