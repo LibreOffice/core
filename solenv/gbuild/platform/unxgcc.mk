@@ -105,6 +105,8 @@ endif
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
+gb_LinkTarget_LDFLAGS += \
+	-Wl,--sysroot=$(SYSBASE)
 endif
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
@@ -116,7 +118,6 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS += \
-	-Wl,--sysroot=$(SYSBASE) \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
 	-Wl,-z,combreloc \
 	$(subst -L../lib , ,$(SOLARLIB)) \
