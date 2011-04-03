@@ -1,0 +1,4 @@
+fm	forms	:    TRANSLATIONS:translations oovbaapi svx sfx2 qadevOOo LIBXSLT:libxslt NULL
+fm  forms                                   usr1    -   all fm_mkofrm NULL
+fm  forms\prj				    nmake   -	all fm_prj NULL
+
