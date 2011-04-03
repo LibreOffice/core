@@ -54,7 +54,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	chart2 \
 	configmgr \
 	dbaccess \
-	forms \
 	linguistic \
 	qadevOOo \
 	sal \
