@@ -423,28 +423,14 @@ sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException)
     return m_pImpl->hasElements( );
 }
 
+namespace
+{
+    class theGlobalEventConfigMutex : public rtl::Static<osl::Mutex, theGlobalEventConfigMutex>{};
+}
+
 Mutex& GlobalEventConfig::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect following code with
-        // the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that
-        // another instance of our class will be faster then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theGlobalEventConfigMutex::get();
 }
 
 ::rtl::OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )

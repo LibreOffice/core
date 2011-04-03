@@ -42,6 +42,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 
 #include <itemholder1.hxx>
 
@@ -593,29 +594,17 @@ void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Refer
     m_pDataContainer->EstablisFrameCallback(xFrame);
 }
 
+namespace
+{
+    class theCommandOptionsMutex : public rtl::Static<osl::Mutex, theCommandOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtCommandOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theCommandOptionsMutex::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

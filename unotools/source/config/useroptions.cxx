@@ -985,27 +985,14 @@ SvtUserOptions::~SvtUserOptions()
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+    class theUserOptionsMutex : public rtl::Static<osl::Mutex, theUserOptionsMutex>{};
+}
+
 ::osl::Mutex& SvtUserOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static ::osl::Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if ( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again -
-        // because another instance of our class will be faster then this instance!
-        if ( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theUserOptionsMutex::get();
 }
 
 // -----------------------------------------------------------------------

@@ -35,6 +35,7 @@
 #include <osl/mutex.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
 
 //........................................................................
 namespace utl
@@ -196,20 +197,15 @@ namespace utl
     sal_Bool        RegOptionsImpl::s_bThisSessionDone = sal_False;
     sal_Int32       RegOptionsImpl::s_nInstanceCount = 0;
 
+    namespace
+    {
+        class theRegOptionsImplMutex : public rtl::Static<osl::Mutex, theRegOptionsImplMutex>{};
+    }
+
     //--------------------------------------------------------------------
     ::osl::Mutex& RegOptionsImpl::getStaticMutex()
     {
-        static ::osl::Mutex* s_pStaticMutex = NULL;
-        if ( !s_pStaticMutex )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !s_pStaticMutex )
-            {
-                static ::osl::Mutex s_aStaticMutex;
-                s_pStaticMutex = &s_aStaticMutex;
-            }
-        }
-        return *s_pStaticMutex;
+        return theRegOptionsImplMutex::get();
     }
 
     //--------------------------------------------------------------------

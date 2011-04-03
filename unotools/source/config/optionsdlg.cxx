@@ -92,20 +92,14 @@ public:
                                         const OUString& _rGroup ) const;
 };
 
+namespace
+{
+    class theOptionsDlgOptions_ImplMutex : public rtl::Static<osl::Mutex, theOptionsDlgOptions_ImplMutex>{};
+}
+
 ::osl::Mutex & SvtOptionsDlgOptions_Impl::getInitMutex()
 {
-    static ::osl::Mutex *pMutex = 0;
-
-    if( ! pMutex )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pMutex )
-        {
-            static ::osl::Mutex mutex;
-            pMutex = &mutex;
-        }
-    }
-    return *pMutex;
+    return theOptionsDlgOptions_ImplMutex::get();
 }
 
 // -----------------------------------------------------------------------
