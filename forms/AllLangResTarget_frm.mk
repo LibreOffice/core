@@ -11,12 +11,12 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
-# Major Contributor(s): 
-# 
+# Major Contributor(s):
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -25,17 +25,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,forms))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,frm))
 
-$(eval $(call gb_Module_add_targets,forms,\
-	AllLangResTarget_frm \
-	Library_frm \
-	Package_unotypes \
+$(eval $(call gb_AllLangResTarget_set_reslocation,frm,forms))
+
+$(eval $(call gb_AllLangResTarget_add_srs,frm,\
+    frm/res \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,forms,\
-    JunitTest_forms_unoapi \
-    JunitTest_forms_complex \
+$(eval $(call gb_SrsTarget_SrsTarget,frm/res))
+
+$(eval $(call gb_SrsTarget_set_include,frm/res,\
+    $$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/forms/source/inc) \
+    -I$(OUTDIR)/inc \
+    -I$(WORKDIR)/inc \
+))
+
+$(eval $(call gb_SrsTarget_add_files,frm/res,\
+    forms/source/resource/strings.src \
+    forms/source/resource/xforms.src \
 ))
 
 # vim: set noet ts=4 sw=4:
