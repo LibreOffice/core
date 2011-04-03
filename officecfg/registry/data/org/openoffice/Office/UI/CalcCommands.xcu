@@ -28,7 +28,7 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Clear Direct Formatting</value>
+                    <value xml:lang="en-US">Clear ~Direct Formatting</value>
                 </prop>
             </node>
             <node oor:name=".uno:ClearArrowPrecedents" oor:op="replace">
