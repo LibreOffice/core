@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <boost/utility.hpp>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
@@ -83,7 +85,7 @@ namespace drawinglayer
 
             That's all for 3D!
          */
-        class BasePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC BasePrimitive3D
         :   private boost::noncopyable,
             protected comphelper::OBaseMutex,
             public BasePrimitive3DImplBase
@@ -148,7 +150,7 @@ namespace drawinglayer
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information
          */
-        class BufferedDecompositionPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionPrimitive3D
         :   public BasePrimitive3D
         {
         private:
@@ -191,24 +193,24 @@ namespace drawinglayer
     namespace primitive3d
     {
         /// get B3DRange from a given Primitive3DReference
-        basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
+        basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
         /// get range3D from a given Primitive3DSequence
-        basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
+        basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
         /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
             and using compare operator
          */
-        bool arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
+        bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
 
         /// compare two Primitive3DReferences for equality, uses arePrimitive3DReferencesEqual internally
-        bool arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
+        bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
 
         /// concatenate sequence
-        void appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource);
 
         /// concatenate single Primitive3D
-        void appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

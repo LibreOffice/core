@@ -31,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSCENEATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSCENEATTRIBUTE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
@@ -48,7 +50,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrSceneAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrSceneAttribute
         {
         private:
             ImpSdrSceneAttribute*               mpSdrSceneAttribute;

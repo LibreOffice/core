@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTENUMSPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTENUMSPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -65,8 +67,8 @@ namespace drawinglayer
         };
 
         /** helper to convert LineStyle */
-        TextLine mapFontUnderlineToTextLine(FontUnderline eLineStyle);
-        FontUnderline mapTextLineToFontUnderline(TextLine eLineStyle);
+        TextLine DRAWINGLAYER_DLLPUBLIC mapFontUnderlineToTextLine(FontUnderline eLineStyle);
+        FontUnderline DRAWINGLAYER_DLLPUBLIC mapTextLineToFontUnderline(TextLine eLineStyle);
 
         /** FontStrikeout definition */
         enum TextStrikeout
@@ -80,8 +82,8 @@ namespace drawinglayer
         };
 
         /** helper to convert FontStrikeout */
-        TextStrikeout mapFontStrikeoutToTextStrikeout(::FontStrikeout eFontStrikeout);
-        ::FontStrikeout mapTextStrikeoutToFontStrikeout(TextStrikeout eFontStrikeout);
+        TextStrikeout DRAWINGLAYER_DLLPUBLIC mapFontStrikeoutToTextStrikeout(::FontStrikeout eFontStrikeout);
+        ::FontStrikeout DRAWINGLAYER_DLLPUBLIC mapTextStrikeoutToFontStrikeout(TextStrikeout eFontStrikeout);
 
         /** TextEmphasisMark definition */
         enum TextEmphasisMark

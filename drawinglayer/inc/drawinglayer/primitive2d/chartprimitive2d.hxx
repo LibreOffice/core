@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -45,7 +47,7 @@ namespace drawinglayer
             visualisation. It is used to allow specific renderers to do something
             direct for visualising the chart.
          */
-        class ChartPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ChartPrimitive2D : public GroupPrimitive2D
         {
         private:
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     mxChartModel;

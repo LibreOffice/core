@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 #define INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 #include <vector>
 
@@ -40,7 +42,7 @@ namespace drawinglayer
     {
         //////////////////////////////////////////////////////////////////////////////
 
-        class AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntry
         {
         private:
             AnimationEntry(const AnimationEntry&);
@@ -59,7 +61,7 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class AnimationEntryFixed : public AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryFixed : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
@@ -78,7 +80,7 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class AnimationEntryLinear : public AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLinear : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
@@ -99,7 +101,7 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class AnimationEntryList : public AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryList : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
@@ -122,7 +124,7 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class AnimationEntryLoop : public AnimationEntryList
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLoop : public AnimationEntryList
         {
         protected:
             sal_uInt32                                  mnRepeat;

@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GROUPPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GROUPPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -70,7 +72,7 @@ namespace drawinglayer
             - ModifiedColorPrimitive2D (for a stack of color modifications)
             - TransformPrimitive2D (for a transformation stack)
          */
-        class GroupPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC GroupPrimitive2D : public BasePrimitive2D
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction

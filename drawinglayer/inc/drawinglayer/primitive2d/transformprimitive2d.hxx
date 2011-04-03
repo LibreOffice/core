@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -57,7 +59,7 @@ namespace drawinglayer
             different, transformed states without the need to create those
             thousand primitive contents.
          */
-        class TransformPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive2D : public GroupPrimitive2D
         {
         private:
             // the transformation to apply to the child geometry

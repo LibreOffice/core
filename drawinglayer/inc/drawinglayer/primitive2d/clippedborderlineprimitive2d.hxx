@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CLIPPEDBORDERLINEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CLIPPEDBORDERLINEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -41,7 +43,7 @@ namespace drawinglayer
         /** BorderLinePrimitive2D clipped by the intersection with a provided
             polygon.
          */
-        class ClippedBorderLinePrimitive2D : public BorderLinePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ClippedBorderLinePrimitive2D : public BorderLinePrimitive2D
         {
         private:
             const basegfx::B2DPolygon maIntersection;

@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
@@ -49,7 +51,7 @@ namespace drawinglayer
             This is one of the non-decomposable 3D primitives, so a renderer
             should proccess it.
          */
-        class PolygonHairlinePrimitive3D : public BasePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive3D : public BasePrimitive3D
         {
         private:
             /// the hairline geometry
@@ -92,7 +94,7 @@ namespace drawinglayer
             and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled Tubes for fat lines.
          */
-        class PolygonStrokePrimitive3D : public BufferedDecompositionPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             /// the line geometry

@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <boost/utility.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
@@ -142,7 +144,7 @@ namespace drawinglayer
             for view-independent primitives which are defined by not using ViewInformation2D
             in their get2DDecomposition/getB2DRange implementations.
          */
-        class BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D
         :   private boost::noncopyable,
             protected comphelper::OBaseMutex,
             public BasePrimitive2DImplBase
@@ -227,7 +229,7 @@ namespace drawinglayer
                 to identify if a new decomposition is needed at the next call
             (f) return maBuffered2DDecomposition
          */
-        class BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionPrimitive2D
         :   public BasePrimitive2D
         {
         private:
@@ -270,24 +272,24 @@ namespace drawinglayer
     namespace primitive2d
     {
         /// get B2DRange from a given Primitive2DReference
-        basegfx::B2DRange getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
+        basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
         /// get B2DRange from a given Primitive2DSequence
-        basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
+        basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
         /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
             and using compare operator
          */
-        bool arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
+        bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
 
         /// compare two Primitive2DReferences for equality, uses arePrimitive2DReferencesEqual internally
-        bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB);
+        bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB);
 
         /// concatenate sequence
-        void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);
 
         /// concatenate single Primitive2D
-        void appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_LINEGEOMETRYEXTRACTOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_LINEGEOMETRYEXTRACTOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -43,7 +45,7 @@ namespace drawinglayer
             This processor can extract the line geometry from feeded primpitives. The
             hairlines and the fille geometry from fat lines are separated.
          */
-        class LineGeometryExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC LineGeometryExtractor2D : public BaseProcessor2D
         {
         private:
             std::vector< basegfx::B2DPolygon >      maExtractedHairlines;

@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTSTRIKEOUTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTSTRIKEOUTPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -42,7 +44,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BaseTextStrikeoutPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BaseTextStrikeoutPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// geometric definitions
@@ -76,7 +78,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class TextCharacterStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextCharacterStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
         {
         private:
             sal_Unicode                             maStrikeoutChar;
@@ -117,7 +119,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class TextGeometryStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextGeometryStrikeoutPrimitive2D : public BaseTextStrikeoutPrimitive2D
         {
         private:
             double                                  mfHeight;

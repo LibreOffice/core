@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -48,7 +50,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class LineStartEndAttribute
+        class DRAWINGLAYER_DLLPUBLIC LineStartEndAttribute
         {
         private:
             ImpLineStartEndAttribute*               mpLineStartEndAttribute;

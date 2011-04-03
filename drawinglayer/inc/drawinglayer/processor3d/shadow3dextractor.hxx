@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -52,7 +54,7 @@ namespace drawinglayer
             some data to do so since we do not only offer flat projected 2D shadow, but also projections
             dependent on the light source
          */
-        class Shadow3DExtractingProcessor : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC Shadow3DExtractingProcessor : public BaseProcessor3D
         {
         private:
             /// typedef for data handling

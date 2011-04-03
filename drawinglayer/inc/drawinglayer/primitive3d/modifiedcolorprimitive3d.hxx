@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
@@ -45,7 +47,7 @@ namespace drawinglayer
             visualisation. Please see the ModifiedColorPrimitive2D
             description for more info.
          */
-        class ModifiedColorPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive3D : public GroupPrimitive3D
         {
         private:
             /// The ColorModifier to use

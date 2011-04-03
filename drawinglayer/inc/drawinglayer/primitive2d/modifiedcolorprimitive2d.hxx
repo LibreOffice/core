@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
@@ -55,7 +57,7 @@ namespace drawinglayer
             If a renderer does not handle this primitive, the content will
             be visualized unchanged.
          */
-        class ModifiedColorPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ModifiedColorPrimitive2D : public GroupPrimitive2D
         {
         private:
             /// The ColorModifier to use

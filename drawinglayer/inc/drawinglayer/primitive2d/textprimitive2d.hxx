@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
@@ -101,7 +103,7 @@ namespace drawinglayer
             @param rFontColor
             The font color to use
          */
-        class TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// text transformation (FontCoordinateSystem)
@@ -180,7 +182,7 @@ namespace drawinglayer
         };
 
         /// small helper to have a compare operator for Locale
-        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB);
+        bool DRAWINGLAYER_DLLPUBLIC LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

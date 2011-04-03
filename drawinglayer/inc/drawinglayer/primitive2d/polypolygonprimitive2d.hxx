@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -52,7 +54,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonHairlinePrimitive2Ds.
          */
-        class PolyPolygonHairlinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the hairline geometry
@@ -98,7 +100,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonMarkerPrimitive2Ds.
          */
-        class PolyPolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the marker hairline geometry
@@ -154,7 +156,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonStrokePrimitive2Ds.
          */
-        class PolyPolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line geometry
@@ -212,7 +214,7 @@ namespace drawinglayer
             just for convenience. The definition is not different from the single
             defined PolygonStrokeArrowPrimitive2Ds.
          */
-        class PolyPolygonStrokeArrowPrimitive2D : public PolyPolygonStrokePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokeArrowPrimitive2D : public PolyPolygonStrokePrimitive2D
         {
         private:
             /// geometric definitions for line start and end
@@ -268,7 +270,7 @@ namespace drawinglayer
             This is one of the non-decomposable primitives, so a renderer
             should proccess it.
          */
-        class PolyPolygonColorPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D : public BasePrimitive2D
         {
         private:
             /// the PolyPolygon geometry
@@ -312,7 +314,7 @@ namespace drawinglayer
             decomosition will create a MaskPrimitive2D containing a
             FillGradientPrimitive2D.
          */
-        class PolyPolygonGradientPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the PolyPolygon geometry
@@ -357,7 +359,7 @@ namespace drawinglayer
             decomosition will create a MaskPrimitive2D containing a
             FillHatchPrimitive2D.
          */
-        class PolyPolygonHatchPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the PolyPolygon geometry
@@ -407,7 +409,7 @@ namespace drawinglayer
             (including transparence). The decomosition will create a MaskPrimitive2D
             containing a FillBitmapPrimitive2D.
          */
-        class PolyPolygonBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the PolyPolygon geometry

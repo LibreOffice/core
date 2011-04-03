@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
@@ -45,7 +47,7 @@ namespace drawinglayer
 
             Please have a look at baseprocessor2d.hxx for more comments.
          */
-        class BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC BaseProcessor3D
         {
         private:
             geometry::ViewInformation3D                     maViewInformation3D;
@@ -88,7 +90,7 @@ namespace drawinglayer
             hand around as instance over various methods where every called
             method can add graphic content to it.
          */
-        class CollectingProcessor3D : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC CollectingProcessor3D : public BaseProcessor3D
         {
         private:
             primitive3d::Primitive3DSequence                        maPrimitive3DSequence;

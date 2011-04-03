@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ANIMATEDPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ANIMATEDPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -58,7 +60,7 @@ namespace drawinglayer
             for values of [0.0 .. 0.5] the first, else the last entry will be used.
             This mechanism is not limited to two entries, though.
          */
-        class AnimatedSwitchPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC AnimatedSwitchPrimitive2D : public GroupPrimitive2D
         {
         private:
             /**
@@ -115,7 +117,7 @@ namespace drawinglayer
             decomposition is specialized in delivering the children in the
             range [0.0.. 0.5] and an empty sequence else
          */
-        class AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
         {
         protected:
         public:
@@ -147,7 +149,7 @@ namespace drawinglayer
             will be linearly combined from the decomposed values and the animation value
             to allow a smooth animation.
          */
-        class AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
         {
         private:
             /// the transformations

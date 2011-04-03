@@ -31,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +55,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrFillAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrFillAttribute
         {
         private:
             ImpSdrFillAttribute*            mpSdrFillAttribute;

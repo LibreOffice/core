@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
@@ -47,7 +49,7 @@ namespace drawinglayer
 
             It is assumed here that the PolyPolgon is a single plane in 3D.
          */
-        class PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
         {
         private:
             /// the PolyPolygon geometry

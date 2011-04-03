@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MASKPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MASKPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -52,7 +54,7 @@ namespace drawinglayer
             The geometrc range of this primitive is completely defined by the Mask
             PolyPolygon since by definition nothing outside of the mask is visible.
          */
-        class MaskPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC MaskPrimitive2D : public GroupPrimitive2D
         {
         private:
             /// the mask PolyPolygon

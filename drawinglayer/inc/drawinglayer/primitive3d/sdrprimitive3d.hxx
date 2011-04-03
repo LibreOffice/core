@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -48,7 +50,7 @@ namespace drawinglayer
      */
     namespace primitive3d
     {
-        class SdrPrimitive3D : public BufferedDecompositionPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrPrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             /// object surface attributes

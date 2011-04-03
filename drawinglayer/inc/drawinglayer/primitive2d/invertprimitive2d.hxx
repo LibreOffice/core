@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_INVERTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_INVERTPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,7 @@ namespace drawinglayer
             systems. XOR painting needs read access to the target, so modern
             graphic systems tend to not support it anymore.
          */
-        class InvertPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC InvertPrimitive2D : public GroupPrimitive2D
         {
         public:
             /// constructor

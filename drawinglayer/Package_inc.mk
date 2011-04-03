@@ -46,6 +46,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/sd
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/sdrsceneattribute3d.hxx,drawinglayer/attribute/sdrsceneattribute3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/sdrshadowattribute.hxx,drawinglayer/attribute/sdrshadowattribute.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/strokeattribute.hxx,drawinglayer/attribute/strokeattribute.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/drawinglayerdllapi.h,drawinglayer/drawinglayerdllapi.h))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/geometry/viewinformation2d.hxx,drawinglayer/geometry/viewinformation2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/geometry/viewinformation3d.hxx,drawinglayer/geometry/viewinformation3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/animatedprimitive2d.hxx,drawinglayer/primitive2d/animatedprimitive2d.hxx))

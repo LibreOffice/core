@@ -29,6 +29,8 @@
 #ifndef _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 #define _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -74,7 +76,7 @@ namespace drawinglayer
             A basic implementation of a renderer for com::sun::star::rendering::XCanvas
             as a target
          */
-        class canvasProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC canvasProcessor2D : public BaseProcessor2D
         {
         private:
             // The Pixel renderer resets the original MapMode from the OutputDevice.

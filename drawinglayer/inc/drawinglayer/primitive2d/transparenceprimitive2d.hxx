@@ -31,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSPARENCEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSPARENCEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -56,7 +58,7 @@ namespace drawinglayer
             rendering, not the transparent one. The transparent one should/will be clipped
             accordingly.
          */
-        class TransparencePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TransparencePrimitive2D : public GroupPrimitive2D
         {
         private:
             /// The transparence-Mask who's RGB-Values are interpreted as Luminance

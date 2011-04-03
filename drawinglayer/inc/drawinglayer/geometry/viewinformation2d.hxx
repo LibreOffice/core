@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #define INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 // the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
 // pre-declarations of com/sun/star namespace), include sal/config.h here
 // where sun is redefined as 'sun' (so i guess the problem is known).
@@ -63,7 +65,7 @@ namespace drawinglayer
             It is an implementation to support the sequence of PropertyValues used in a
             ::com::sun::star::graphic::XPrimitive2D for C++ implementations working with those
         */
-        class ViewInformation2D
+        class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
         {
         private:
             /// pointer to private implementation class

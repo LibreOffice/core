@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SCENEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SCENEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
@@ -60,7 +62,7 @@ namespace drawinglayer
             This is the class a renderer may process directly when he wants to implement
             an own (e.g. system-specific) 3D renderer.
          */
-        class ScenePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ScenePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the 3D geometry definition

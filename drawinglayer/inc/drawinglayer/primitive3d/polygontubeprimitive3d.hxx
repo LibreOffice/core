@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,7 +54,7 @@ namespace drawinglayer
             3D objects needed for the line tubes and the edge roundings
             in full 3D.
          */
-        class PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
         {
         private:
             /// hold the last decompositon since it's expensive

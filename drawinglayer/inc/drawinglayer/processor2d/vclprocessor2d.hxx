@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -71,7 +73,7 @@ namespace drawinglayer
             This processor is the base class for VCL-Based processors. It has no
             processBasePrimitive2D implementation and thus is not usable directly.
          */
-        class VclProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC VclProcessor2D : public BaseProcessor2D
         {
         protected:
             // the destination OutDev

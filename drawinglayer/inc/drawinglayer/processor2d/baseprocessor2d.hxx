@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
@@ -160,7 +162,7 @@ namespace drawinglayer
             be helpful to add many for the purpose not interesting higher level primitives
             to not force their decomposition to be created and/or parsed.
          */
-        class BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC BaseProcessor2D
         {
         private:
             /// The ViewInformation2D itself. It's private to isolate accesses to it
@@ -209,7 +211,7 @@ namespace drawinglayer
             hand around as instance over various methods where every called
             method can add graphic content to it.
          */
-        class CollectingProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC CollectingProcessor2D : public BaseProcessor2D
         {
         private:
             primitive2d::Primitive2DSequence                        maPrimitive2DSequence;

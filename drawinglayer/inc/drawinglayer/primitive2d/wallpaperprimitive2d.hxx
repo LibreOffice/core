@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WALLPAPERPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WALLPAPERPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/wall.hxx>
@@ -52,7 +54,7 @@ namespace drawinglayer
             layouting which is dependent from WallpaperStyle; thus it does not need
             to be handled anywhere else in the future.
          */
-        class WallpaperBitmapPrimitive2D : public ViewTransformationDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC WallpaperBitmapPrimitive2D : public ViewTransformationDependentPrimitive2D
         {
         private:
             basegfx::B2DRange                   maObjectRange;

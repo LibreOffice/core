@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -65,7 +67,7 @@ namespace drawinglayer
             raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
             transparent content.
          */
-        class ZBufferProcessor3D : public DefaultProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
             /// the raster target, a Z-Buffer

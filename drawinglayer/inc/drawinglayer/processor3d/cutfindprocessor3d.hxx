@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_CUTFINDPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_CUTFINDPROCESSOR3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -42,7 +44,7 @@ namespace drawinglayer
             This processor extracts all cuts of 3D plane geometries in the feeded primitives
             with the given cut vector, based on the ViewInformation3D given.
          */
-        class CutFindProcessor : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC CutFindProcessor : public BaseProcessor3D
         {
         private:
             /// the start and stop point for the cut vector

@@ -31,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +71,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class FillGradientAttribute
+        class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
         {
         private:
             ImpFillGradientAttribute*           mpFillGradientAttribute;

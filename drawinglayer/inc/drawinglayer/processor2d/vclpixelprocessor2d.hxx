@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <vcl/outdev.hxx>
 
@@ -44,7 +46,7 @@ namespace drawinglayer
             all feeded primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
-        class VclPixelProcessor2D : public VclProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
         {
         private:
             /*  The Pixel renderer resets the original MapMode from the OutputDevice.

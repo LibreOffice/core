@@ -31,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HIDDENGEOMETRYPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HIDDENGEOMETRYPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -49,7 +51,7 @@ namespace drawinglayer
         // decomposes to nothing, so no one not knowing it will be influenced. Only
         // helper processors for hit test (and maybe BoundRect extractors) will
         // use it and it's children subcontent.
-        class HiddenGeometryPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive3D : public GroupPrimitive3D
         {
         public:
             HiddenGeometryPrimitive3D(const Primitive3DSequence& rChildren);

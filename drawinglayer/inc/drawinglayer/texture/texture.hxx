@@ -29,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -40,7 +42,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvx
         {
         public:
             GeoTexSvx();
@@ -64,7 +66,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradient : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradient : public GeoTexSvx
         {
         protected:
             basegfx::ODFGradientInfo            maGradientInfo;
@@ -100,7 +102,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientLinear : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientLinear : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientLinear(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle);
@@ -119,7 +121,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientAxial : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientAxial : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle);
@@ -138,7 +140,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientRadial : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRadial : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRadial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY);
@@ -157,7 +159,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientElliptical : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientElliptical : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientElliptical(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle);
@@ -176,7 +178,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientSquare : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientSquare : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientSquare(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle);
@@ -195,7 +197,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxGradientRect : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientRect : public GeoTexSvxGradient
         {
         public:
             GeoTexSvxGradientRect(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle);
@@ -214,7 +216,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxHatch : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxHatch : public GeoTexSvx
         {
         protected:
             basegfx::B2DHomMatrix               maTextureTransform;
@@ -242,7 +244,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxTiled : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxTiled : public GeoTexSvx
         {
         protected:
             basegfx::B2DPoint                           maTopLeft;
