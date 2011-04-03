@@ -361,6 +361,22 @@ namespace rtl {
               using the outer class
               (the one that derives from this base class)
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename Unique>
+class Static {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get() {
+        static T instance;
+        return instance;
+    }
+};
+#else
 template<typename T, typename Unique>
 class Static {
 public:
@@ -384,6 +400,7 @@ private:
         }
     };
 };
+#endif
 
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
@@ -393,6 +410,23 @@ private:
     @tplparam InitAggregate
               initializer functor class
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename InitAggregate>
+class StaticAggregate {
+public:
+    /** Gets the static aggregate, late-initializing.
+        Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                aggregate
+    */
+    static T * get() {
+        static T *instance = InitAggregate()();
+        return instance;
+    }
+};
+#else
 template<typename T, typename InitAggregate>
 class StaticAggregate {
 public:
@@ -409,7 +443,7 @@ public:
                 InitAggregate(), ::osl::GetGlobalMutex() );
     }
 };
-
+#endif
 /** Helper base class for a late-initialized static variable,
     implementing the double-checked locking pattern correctly.
 
@@ -441,6 +475,23 @@ public:
               Initializer functor's return type.
               Default is T (common practice).
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename InitData,
+         typename Unique = InitData, typename Data = T>
+class StaticWithInit {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get() {
+        static T instance = InitData()();
+        return instance;
+    }
+};
+#else
 template<typename T, typename InitData,
          typename Unique = InitData, typename Data = T>
 class StaticWithInit {
@@ -467,7 +518,7 @@ private:
         }
     };
 };
-
+#endif
 } // namespace rtl
 
 #endif // INCLUDED_RTL_INSTANCE_HXX
