@@ -31,6 +31,7 @@
 #include <rtl/unload.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include <boost/unordered_map.hpp>
 #include "rtl/allocator.hxx"
@@ -109,19 +110,14 @@ static sal_Bool hasEnoughTimePassed( const TimeValue* unusedSince, const TimeVal
     return retval;
 }
 
-static osl::Mutex* getUnloadingMutex()
+namespace
 {
-    static osl::Mutex * g_pMutex= NULL;
-    if (!g_pMutex)
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if (!g_pMutex)
-        {
-            static osl::Mutex g_aMutex;
-            g_pMutex= &g_aMutex;
-        }
-    }
-    return g_pMutex;
+    class theUnloadingMutex : public rtl::Static<osl::Mutex, theUnloadingMutex>{};
+}
+
+static osl::Mutex& getUnloadingMutex()
+{
+    return theUnloadingMutex::get();
 }
 
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )

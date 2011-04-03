@@ -42,6 +42,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
+#include <rtl/instance.hxx>
 #include "osl/thread.h"
 
 #include <algorithm>
@@ -90,19 +91,14 @@ LoggerGuard::~LoggerGuard()
 // g_buffer in init():
 LoggerGuard loggerGuard;
 
-Mutex & getLogMutex()
+namespace
 {
-    static Mutex *pMutex = 0;
-    if( !pMutex )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pMutex )
-        {
-            static Mutex mutex;
-            pMutex = &mutex;
-        }
-    }
-    return *pMutex;
+    class theLogMutex : public rtl::Static<osl::Mutex, theLogMutex>{};
+}
+
+static Mutex & getLogMutex()
+{
+    return theLogMutex::get();
 }
 
 OUString getFileUrl( const OUString &name )
