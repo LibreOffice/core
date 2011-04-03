@@ -82,9 +82,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textconversiondlgs \
     tk \
     tl \
-    utl \
     unordf \
     unoxml \
+    utl \
     vbahelper \
     vcl \
     xcr \
