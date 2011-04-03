@@ -25,37 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=drawinglayer
-TARGET=attribute
-ENABLE_EXCEPTIONS=TRUE
+PRJ=..
+TARGET=prj
 
-# --- Settings ----------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  	settings.mk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Files -------------------------------------
-
-SLOFILES= \
-        $(SLO)$/fillgradientattribute.obj		\
-        $(SLO)$/fillhatchattribute.obj			\
-        $(SLO)$/fillbitmapattribute.obj			\
-        $(SLO)$/fontattribute.obj				\
-        $(SLO)$/materialattribute3d.obj			\
-        $(SLO)$/sdrallattribute3d.obj			\
-        $(SLO)$/sdrlineattribute.obj			\
-        $(SLO)$/sdrlinestartendattribute.obj	\
-        $(SLO)$/sdrshadowattribute.obj			\
-        $(SLO)$/sdrfillattribute.obj			\
-        $(SLO)$/sdrobjectattribute3d.obj		\
-        $(SLO)$/sdrlightattribute3d.obj			\
-        $(SLO)$/sdrlightingattribute3d.obj		\
-        $(SLO)$/sdrsceneattribute3d.obj			\
-        $(SLO)$/sdrfillbitmapattribute.obj		\
-        $(SLO)$/lineattribute.obj				\
-        $(SLO)$/linestartendattribute.obj		\
-        $(SLO)$/strokeattribute.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
