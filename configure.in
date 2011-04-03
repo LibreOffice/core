@@ -1513,7 +1513,7 @@ case "$host_os" in
         test_gtk=yes
         test_kde=yes
         test_freetype=yes
-        PTHREAD_CFLAGS="-pthread -D_THREAD_SAFE"
+        PTHREAD_CFLAGS="-D_THREAD_SAFE"
         PTHREAD_LIBS="-pthread"
         _os=OpenBSD
         ;;
