@@ -28,8 +28,8 @@
 $(eval $(call gb_Module_Module,unotools))
 
 $(eval $(call gb_Module_add_targets,unotools,\
-	Library_utl \
-	Package_inc \
+    Library_utl \
+    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,unotools,\
