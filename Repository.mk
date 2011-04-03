@@ -45,6 +45,8 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
+    canvastools \
+    cppcanvas \
     cui \
     dbtools \
     drawinglayer \
