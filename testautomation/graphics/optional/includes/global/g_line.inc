@@ -363,6 +363,7 @@ testcase tLineConnect
     Dim i as integer
     Dim cname as string
     Dim cfirst as integer
+    Dim CornerStyles as integer
     
     if bAsianLan then 
      QaErrorLog "tLineConnect ends because Asian languages are not fully supported."
@@ -517,10 +518,11 @@ testcase tLineConnect
     else
         sleep 1
     endif
+
+    For i = 1 to CornerStyles
+    Kontext "TabLinie"
+    if (i > 1) AND (cname <> CornerStyle.GetSelText) then
     
-    For i = 1 to CornerStyle.GetItemCount
-      Kontext "TabLinie"
-      if (i > 1) AND (cname <> CornerStyle.GetSelText) then
          warnlog "Cornerstylename wasnt saved. Should have been: " + cname + ". But was: " + CornerStyle.GetSelText
       endif
       CornerStyle.Select i
