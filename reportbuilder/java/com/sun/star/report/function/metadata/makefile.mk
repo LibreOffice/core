@@ -61,5 +61,6 @@ ALLTAR : $(COPYFILES)
 .INCLUDE :  target.mk
 
 $(COPYFILES): $$(@:f)
+    +$(MKDIRHIER) $(CLASSDIR)$/$(PACKAGE)
     +$(COPY) $< $@
     
