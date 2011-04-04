@@ -378,7 +378,7 @@ sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 
 static SvtCJKOptions_Impl*  pCJKOptions = NULL;
 static sal_Int32            nCJKRefCount = 0;
-namespace { struct CJKMutex : public rtl::Static< ::osl::Mutex , CJKMutex >{}; }
+namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{}; }
 
 
 // class SvtCJKOptions --------------------------------------------------
@@ -386,7 +386,7 @@ namespace { struct CJKMutex : public rtl::Static< ::osl::Mutex , CJKMutex >{}; }
 SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( CJKMutex::get() );
+    ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
     if ( !pCJKOptions )
     {
         pCJKOptions = new SvtCJKOptions_Impl;
@@ -404,7 +404,7 @@ SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
 SvtCJKOptions::~SvtCJKOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( CJKMutex::get() );
+    ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
     if ( !--nCJKRefCount )
         DELETEZ( pCJKOptions );
 }
