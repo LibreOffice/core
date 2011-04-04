@@ -61,6 +61,13 @@ namespace osl_test_file
 class oldtestfile : public CppUnit::TestFixture
 {
 public:
+    oldtestfile()
+    {
+        //SAL_ALLOW_LINKOO_SYMLINKS for the make dev-install hack breaks this test
+        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("SAL_ALLOW_LINKOO_SYMLINKS"));
+        osl_clearEnvironment(envVar.pData);
+    }
+
     void test_file_001();
     void test_file_002();
     void test_file_003();
@@ -126,7 +133,7 @@ void oldtestfile::test_file_001()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
-        // printf("%d : %s -- %s -- %s\n", i, aSource1[i], aSource1[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
+        //fprintf(stderr, "%d : %s -- %s -- %s\n", i, aSource1[i], aSource1[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #1",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
@@ -156,7 +163,7 @@ void oldtestfile::test_file_002()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
-        // printf("%d : %s -- %s -- %s\n", i, aSource2[i], aSource2[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
+        //fprintf(stderr, "%d : %s -- %s -- %s\n", i, aSource2[i], aSource2[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #2",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
