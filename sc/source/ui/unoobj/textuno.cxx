@@ -200,20 +200,14 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScHeaderFooterContentObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScHeaderFooterContentObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScHeaderFooterContentObjUnoTunnelId::get().getSeq();
 }
 
 ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
@@ -692,20 +686,14 @@ sal_Int64 SAL_CALL ScCellTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
+namespace
+{
+    class theScCellTextCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellTextCursorUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScCellTextCursor::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScCellTextCursorUnoTunnelId::get().getSeq();
 }
 
 ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
@@ -794,20 +782,14 @@ sal_Int64 SAL_CALL ScHeaderFooterTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
+namespace
+{
+    class theScHeaderFooterTextCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScHeaderFooterTextCursorUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScHeaderFooterTextCursor::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScHeaderFooterTextCursorUnoTunnelId::get().getSeq();
 }
 
 ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
@@ -896,20 +878,14 @@ sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
+namespace
+{
+    class theScDrawTextCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDrawTextCursorUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScDrawTextCursorUnoTunnelId::get().getSeq();
 }
 
 ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )

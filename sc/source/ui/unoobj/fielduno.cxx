@@ -801,20 +801,14 @@ sal_Int64 SAL_CALL ScCellFieldObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScCellFieldObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellFieldObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScCellFieldObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScCellFieldObjUnoTunnelId::get().getSeq();
 }
 
 ScCellFieldObj* ScCellFieldObj::getImplementation(
@@ -1455,20 +1449,14 @@ sal_Int64 SAL_CALL ScHeaderFieldObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScHeaderFieldObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScHeaderFieldObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScHeaderFieldObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScHeaderFieldObjUnoTunnelId::get().getSeq();
 }
 
 ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(

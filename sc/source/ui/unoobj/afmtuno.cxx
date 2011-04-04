@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/unomid.hxx>
 #include "unowids.hxx"
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
@@ -470,20 +470,14 @@ sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScAutoFormatObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScAutoFormatObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScAutoFormatObjUnoTunnelId::get().getSeq();
 }
 
 ScAutoFormatObj* ScAutoFormatObj::getImplementation(

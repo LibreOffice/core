@@ -64,6 +64,7 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
@@ -1093,20 +1094,14 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScDataPilotDescriptorBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseUnoTunnelId> {};
+}
+
 const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
 {
-    static Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScDataPilotDescriptorBaseUnoTunnelId::get().getSeq();
 }
 
 ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(

@@ -34,6 +34,7 @@
 #include <tools/debug.hxx>
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
@@ -521,20 +522,14 @@ sal_Int64 SAL_CALL ScTableConditionalFormat::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScTableConditionalFormatUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTableConditionalFormatUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScTableConditionalFormatUnoTunnelId::get().getSeq();
 }
 
 ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
@@ -1057,20 +1052,14 @@ sal_Int64 SAL_CALL ScTableValidationObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScTableValidationObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTableValidationObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScTableValidationObjUnoTunnelId::get().getSeq();
 }
 
 ScTableValidationObj* ScTableValidationObj::getImplementation(

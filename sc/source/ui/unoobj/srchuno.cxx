@@ -35,7 +35,7 @@
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include "srchuno.hxx"
 #include "docsh.hxx"
@@ -242,20 +242,14 @@ sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScCellSearchObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellSearchObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScCellSearchObjUnoTunnelId::get().getSeq();
 }
 
 ScCellSearchObj* ScCellSearchObj::getImplementation(

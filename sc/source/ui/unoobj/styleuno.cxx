@@ -1130,20 +1130,14 @@ sal_Int64 SAL_CALL ScStyleObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScStyleObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScStyleObjUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScStyleObjUnoTunnelId::get().getSeq();
 }
 
 ScStyleObj* ScStyleObj::getImplementation(

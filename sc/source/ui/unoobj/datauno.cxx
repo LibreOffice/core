@@ -63,6 +63,7 @@
 #include "attrib.hxx"
 #include "dpshttab.hxx"
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 using namespace com::sun::star;
@@ -842,20 +843,14 @@ sal_Int64 SAL_CALL ScSubTotalDescriptorBase::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theScSubTotalDescriptorBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScSubTotalDescriptorBaseUnoTunnelId> {};
+}
+
 const uno::Sequence<sal_Int8>& ScSubTotalDescriptorBase::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theScSubTotalDescriptorBaseUnoTunnelId::get().getSeq();
 }
 
 ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(
