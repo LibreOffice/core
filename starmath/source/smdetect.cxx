@@ -455,7 +455,6 @@ UNOSEQUENCE< UNOOUSTRING > SAL_CALL SmFilterDetect::getSupportedServiceNames() t
 /* Helper for XServiceInfo */
 UNOSEQUENCE< UNOOUSTRING > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
     return seqServiceNames ;
