@@ -71,7 +71,6 @@ SHL1STDLIBS=       \
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1LIBS=$(SLB)$/scalc3.lib $(SLB)$/scalc3c.lib 
 DEF1NAME = $(SHL1TARGET)
-SHL1VERSIONMAP=version.map
 
 .INCLUDE: target.mk
 
