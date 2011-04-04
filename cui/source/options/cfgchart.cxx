@@ -92,6 +92,11 @@ void SvxChartColorTable::remove( size_t _nIndex )
 {
     if (m_aColorEntries.size() > 0)
         m_aColorEntries.erase( m_aColorEntries.begin() + _nIndex);
+
+    for (size_t i=0 ; i<m_aColorEntries.size(); i++)
+    {
+        m_aColorEntries[ i ].SetName( getDefaultName( i ) );
+    }
 }
 
 void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
@@ -123,11 +128,11 @@ void SvxChartColorTable::useDefault()
 
     for( sal_Int32 i=0; i<ROW_COLOR_COUNT; i++ )
     {
-        append( XColorEntry( aColors[ i % sizeof( aColors ) ], getNextDefaultName() ));
+        append( XColorEntry( aColors[ i % sizeof( aColors ) ], getDefaultName( i ) ));
     }
 }
 
-String SvxChartColorTable::getNextDefaultName()
+String SvxChartColorTable::getDefaultName( size_t _nIndex )
 {
     String aName;
 
@@ -147,7 +152,7 @@ String SvxChartColorTable::getNextDefaultName()
     }
 
     aName = sDefaultNamePrefix;
-    aName.Append( String::CreateFromInt32 ( nNextElementNumber ) );
+    aName.Append( String::CreateFromInt32 ( _nIndex + 1 ) );
     aName.Append( sDefaultNamePostfix );
     nNextElementNumber++;
 
