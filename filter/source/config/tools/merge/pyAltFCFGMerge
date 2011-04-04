@@ -9,7 +9,7 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, string, os.path 
+import sys, string, os.path, codecs 
 
 CFGFILE             = os.environ["SOLARVER"] + "/" + os.environ["INPATH"] + "/inc/l10ntools/FCFGMerge.cfg"
 
@@ -66,18 +66,18 @@ Example Usage:
 >>> props = Properties()
 >>> props['one'] = '1'
 >>> props['your name'] = "I don't know"
->>> print '\n'.join(props.keys())
+>>> print('\n'.join(list(props.keys())))
 your name
 one
 >>> from StringIO import StringIO
 >>> buff = StringIO()
 >>> props.store(buff, "a little example...")
 >>> buff.seek(0)
->>> print buff.read()
+>>> print(buff.read())
 # a little example...
 your\ name=I\ don\'t\ know
 one=1
->>> print props['your name']
+>>> print(props['your name'])
 I don't know
 
 $Id: pyAltFCFGMerge,v 1.3 2007-12-07 10:57:44 vg Exp $
@@ -88,13 +88,11 @@ __all__ = ['Properties']
 
 
 def dec2hex(n):
-
     h = hex(n)[2:].upper()
     return '\\u' + '0' * (4 - len(h)) + h
 
 
 def escapestr(s):
-
     buff = []
     # QUESTION: escape leading or trailing spaces?
     for c in s:
@@ -128,7 +126,6 @@ def escapestr(s):
 
 # TODO: add support for \uXXXX?
 def unescapestr(line):
-
     buff = []
     escape = 0
     for i in range(len(line)):
@@ -175,12 +172,10 @@ def unescapestr(line):
     return ''.join(buff)
 
 
-
 class Properties(dict):
-
     def __init__(self, defaults={}):
         dict.__init__(self)
-        for n,v in defaults.items():
+        for n,v in list(defaults.items()):
             self[n] = v
 
     def __getittem__(self,key):
@@ -207,11 +202,10 @@ class Properties(dict):
         Reads properties from a stream (StringIO, file, etc...)
         """
         props = readprops(buff)
-        for n,v in props.iteritems():
+        for n,v in list(props.items()):
             self[n] = v
 
 def readprops(buff):
-
     name,value = None,''
     props = {}
     continued = 0
@@ -258,7 +252,7 @@ def readprops(buff):
             name = unescapestr(line.lstrip())
 
         # skip delimiter
-        while line[i:i+1] in ('\t', ' ', ':', '='):
+        while line[i:i + 1] in ('\t', ' ', ':', '='):
             i += 1
 
         value = unescapestr(line[i:].strip())
@@ -269,7 +263,6 @@ def readprops(buff):
                 break
             value += unescapestr(line.strip())
 
-        #print 'value:',value    ##
         props[name] = value
 
     return props
@@ -299,41 +292,41 @@ def run(sCmdLine):
 
 #prints out a copyright message on stdout.
 def printCopyright():
-    print "FCFGMerge"
-    print "Copyright: 2003 by Red Hat, Inc., based on FCFGMerge.java` by Sun"
-    print "All Rights Reserved."
+    print("FCFGMerge")
+    print("Copyright: 2003 by Red Hat, Inc., based on FCFGMerge.java` by Sun")
+    print("All Rights Reserved.")
 
-#prints out a help message on stdout.
+# Prints out a help message on stdout.
 def printHelp():
-    print "____________________________________________________________"
-    print "usage: FCFGMerge cfg=<file name>"                            
-    print "parameters:"                                                 
-    print "\tcfg=<file name>"                                           
-    print "\t\tmust point to a system file, which contains"             
-    print "\t\tall neccessary configuration data for the merge process."
-    print "\tFurther cou can specify every parameter allowed in the"  
-    print "\tconfig file as command line parameter too, to overwrite" 
-    print "\tthe value from the file."                                
+    print("____________________________________________________________")
+    print("usage: FCFGMerge cfg=<file name>"                            )
+    print("parameters:"                                                 )
+    print("\tcfg=<file name>"                                           )
+    print("\t\tmust point to a system file, which contains"             )
+    print("\t\tall neccessary configuration data for the merge process.")
+    print("\tFurther cou can specify every parameter allowed in the"    )
+    print("\tconfig file as command line parameter too, to overwrite"   )
+    print("\tthe value from the file."                                  )
 
-def StringTokenizer(mstring, separators, isSepIncluded=0):
-#Return a list of tokens given a base string and a string of
-#separators, optionally including the separators if asked for"""
-    token=''
-    tokenList=[]
+# Return a list of tokens given a base string and a string of
+# separators, optionally including the separators if asked for"""
+def StringTokenizer(mstring, separators, isSepIncluded = 0):
+    token = ''
+    tokenList = []
     for c in mstring:
         if c in separators:
             if token != '':
                 tokenList.append(token)
-                token=''
+                token = ''
                 if isSepIncluded:
                     tokenList.append(c)
         else:
-            token+=c
+            token += c
     if token:
         tokenList.append(token)
     return tokenList
 
-# can be used to analyze command line parameters
+# Can be used to analyze command line parameters
 # and merge it together with might existing config
 # files. That provides the possibility to overwrite
 # config values via command line parameter.
@@ -356,55 +349,48 @@ class ConfigHelper:
             count = len(lCommandLineArgs)
         self.m_bEmpty = (count < 1)
 
-        print lCommandLineArgs, "and len is", count
+        print(lCommandLineArgs, "and len is", count)
         for arg in range(count):
             # is it a named-value argument?
             # Note: We ignores double "=" signs! => search from left to right
             pos = lCommandLineArgs[arg].find('=')
             if pos != -1:
                 sArg   = lCommandLineArgs[arg][0:pos]
-                sValue = lCommandLineArgs[arg][pos+1:]
+                sValue = lCommandLineArgs[arg][pos + 1:]
                 self.props[sArg] = sValue
                 continue
 
             # is it a boolean argument?
             # Note: Because "--" and "-" will be interpreted as the same
             # we search from right to left!
-            pos = string.rfind(lCommandLineArgs[arg], '-')
+            pos = lCommandLineArgs[arg].rfind('-')
             if pos == -1:
                 pos = lCommandLineArgs[arg].rfind('/')
             if pos != -1:
-                sArg = lCommandLineArgs[arg][pos+1:]
+                sArg = lCommandLineArgs[arg][pos + 1:]
                 self.props[sArg] = 1
                 continue
             
-            raise Exception("Invalid command line detected. The argument \""+\
-                lCommandLineArgs[arg]+"\" use an unsupported format.")
-
-#        for item in self.props:
-#            print item, '->', self.props[item]
+            raise Exception("Invalid command line detected. The argument \"" + \
+                lCommandLineArgs[arg] + "\" use an unsupported format.")
 
     def isHelp(self):
-        return (
-                (self.props.has_key("help")) or
-                (self.props.has_key("?")   ) or
-                (self.props.has_key("h")   )
-               )
+        return ("help" in self.props) or ("?" in self.props) or ("?" in self.props)
 
     def getValue(self, sProp):
-        if not self.props.has_key(sProp):
-            raise Exception("The requested config value \""+sProp+"\" "\
+        if sProp not in self.props:
+            raise Exception("The requested config value \"" + sProp + "\" "\
                 "does not exists!");
         return self.props[sProp];
 
     def getValueWithDefault(self, sProp, default):
-        if not self.props.has_key(sProp):
+        if sProp not in self.props:
             return default;
         return self.props[sProp];
 
     def getStringList(self, sProp, sDelimiter, bTrim, bDecode):
-        if not self.props.has_key(sProp):
-            raise Exception("The requested config value \""+sProp+"\" does "\
+        if sProp not in self.props:
+            raise Exception("The requested config value \"" + sProp + "\" does "\
                 "not exists!");
         sValue = self.props[sProp]
 
@@ -412,11 +398,11 @@ class ConfigHelper:
         lTokens = StringTokenizer(sValue, sDelimiter)
         for sToken in lTokens:
             if bTrim:
-                sToken = string.strip(sToken)
+                sToken = sToken.strip()
             # remove ""
             if ((bDecode) and (sToken.find("\"") == 0) and \
-                (sToken.rfind("\"") == len(sToken)-1)):
-                sToken = sToken[1, len(sToken)-1]
+                (sToken.rfind("\"") == len(sToken) - 1)):
+                sToken = sToken[1, len(sToken) - 1]
             lValue.append(sToken)
 
         return lValue
@@ -448,10 +434,8 @@ def generateHeader(sVersion, sEncoding, sPath, sPackage, bLanguagePack):
 def generateFooter():
     return "</oor:component-data>\n"
 
-# can merge different xml fragments together.
-# 
+# Can merge different xml fragments together.
 #   @author Caolan McNamara converted from the original java by Andreas Schluens
-# 
 class Merger:
     def __init__(self, aCfg):
         self.m_aCfg = aCfg
@@ -486,11 +470,13 @@ class Merger:
         except:
             self.m_lHandlers = []
 
+    # Merges the xml sets returned by getFragments(...), adds an xml header
+    # and footer and writes the result to a file.
     def merge(self):
         sPackage = self.m_aCfg.getValue(PROP_PKG)
 
-        print "create package \""+sPackage+"\" ..."
-        print "generate package header ... "
+        print("create package \"" + sPackage + "\" ...")
+        print("generate package header ... ")
 
         sBuffer = generateHeader(\
                 self.m_aCfg.getValue(PROP_XMLVERSION ),\
@@ -510,25 +496,25 @@ class Merger:
             lFragments = None
 
             try:
-                if i == 0: #types
-                    print "generate set for types ... "
+                if i == 0: # types
+                    print("generate set for types ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_TYPES)
-                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_TYPES )
+                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_TYPES)
                     lFragments = self.m_lTypes
                 elif i == 1: # filters
-                    print "generate set for filter ... "
+                    print("generate set for filter ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_FILTERS)
-                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_FILTERS )
+                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_FILTERS)
                     lFragments = self.m_lFilters
                 elif i == 2: # loaders
-                    print "generate set for frame loader ... "
+                    print("generate set for frame loader ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_LOADERS)
-                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_LOADERS )
+                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_LOADERS)
                     lFragments = self.m_lLoaders
                 elif i == 3: # handlers
-                    print "generate set for content handler ... "
+                    print("generate set for content handler ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_HANDLERS)
-                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_HANDLERS )
+                    sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_HANDLERS)
                     lFragments = self.m_lHandlers
             except:
                 continue
@@ -539,7 +525,7 @@ class Merger:
                 os.path.join(self.m_aFragmentsDir, sSubDir), \
                 sSetName, lFragments, 1)
 
-        print "generate package footer ... "
+        print("generate package footer ... ")
         sBuffer = sBuffer + generateFooter()
 
         # Attention!
@@ -547,38 +533,38 @@ class Merger:
         # corresponding xml file. We should suppress writing of this file on 
         # disk completly ...
         if nItemCount < 1:
-            print "Package is empty and will not result into a xml file on "\
-                "disk!? Please check configuration file."
+            print("Package is empty and will not result into a xml file on "\
+                "disk!? Please check configuration file.")
             return
-        print "package contains "+str(nItemCount)+" items"
+        print("package contains " + str(nItemCount) + " items")
 
-        aPackage = open(sPackage, 'w')
-        print "write temp package \""+sPackage
+        aPackage = codecs.open(sPackage, 'w', "utf-8")
+        print("write temp package \"" + sPackage)
         aPackage.write(sBuffer)
 
+    # Reads the fragment files with the file names lFragments in directory aDir,
+    # formats them and returns a string that contains the merged fragments.
     def getFragments(self, aDir, sSetName, lFragments, nPrettyTabs):
         sBuffer = '' 
         sExtXcu = self.m_aCfg.getValue(PROP_EXTENSION_XCU);
 
         if len(lFragments) < 1:
             return sBuffer
-        
+
         for tabs in range(nPrettyTabs):
             sBuffer = sBuffer + "\t"
-        sBuffer = sBuffer + "<node oor:name=\""+sSetName+"\">\n"
+        sBuffer = sBuffer + "<node oor:name=\"" + sSetName + "\">\n"
         nPrettyTabs = nPrettyTabs + 1
 
         for sFragment in lFragments:
-            sFragPath = os.path.join(aDir, sFragment+"."+sExtXcu)
+            sFragPath = os.path.join(aDir, sFragment + "." + sExtXcu)
             try:
-                aFragmentFile = open(sFragPath)
+                aFragmentFile = codecs.open(sFragPath, "r", "utf-8")
             except:
                 # handle simple files only and check for existence!
-                raise Exception("fragment \""+sFragPath+"\" does not exists.")
-
-            print "merge fragment \""+sFragPath+"\" ..."
+                raise Exception("fragment \"" + sFragPath + "\" does not exists.")
+            print("merge fragment \"" + sFragPath + "\" ...")
             sBuffer = sBuffer + aFragmentFile.read()
-            
             sBuffer = sBuffer + "\n"
 
         nPrettyTabs = nPrettyTabs - 1
