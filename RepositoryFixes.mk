@@ -144,6 +144,7 @@ gb_Library_FILENAMES := $(patsubst vos3:ivos3%,vos3:ivos%,$(gb_Library_FILENAMES
 gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
+gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
 else
@@ -152,8 +153,7 @@ endif
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
-gb_Library_NOILIBFILENAMES += icuuc
-    graphite_dll \
+gb_Library_NOILIBFILENAMES += icuuc \
     icule \
     imm32\
     msimg32 \
