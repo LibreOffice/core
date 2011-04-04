@@ -10233,9 +10233,6 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
 
     updateGraphicsState();
 
-    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
-        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
-        return;
     if( rPolyPoly.Count() )
     {
         PolyPolygon     aPolyPoly( rPolyPoly );
