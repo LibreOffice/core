@@ -39,7 +39,6 @@
 #  gb_Library_Library_platform
 #  gb_Library_TARGETS
 
-gb_Library__get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
@@ -60,7 +59,7 @@ $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
-$(call gb_Library__Library_impl,$(1),$(call gb_Library__get_linktargetname,$(1)))
+$(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 
 endef
 
@@ -97,7 +96,7 @@ gb_Library__get_layer_componentprefix = \
 
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library__get_linktargetname,$$(1)),$$(2),$$(3))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
 
