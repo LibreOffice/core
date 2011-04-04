@@ -135,7 +135,6 @@ SLOFILES += \
     $(SLO)$/xmlsecuritycontext_nssimpl.obj \
     $(SLO)$/xmlsignature_nssimpl.obj \
     $(SLO)$/x509certificate_nssimpl.obj \
-    $(SLO)$/seinitializer_nssimpl.obj \
     $(SLO)$/sanextension_nssimpl.obj \
     $(SLO)$/secerror.obj
 
