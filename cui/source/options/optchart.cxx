@@ -234,7 +234,7 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 
     if( pColorConfig )
     {
-        DBG_ASSERT(pColorConfig.size() > 1, "don't delete the last chart color");
+        OSL_ENSURE(pColorConfig->GetColorTable().size() > 1, "don't delete the last chart color");
         QueryBox aQuery(pButton, CUI_RES(RID_OPTQB_COLOR_CHART_DELETE));
         aQuery.SetText(String(CUI_RES(RID_OPTSTR_COLOR_CHART_DELETE)));
         if(RET_YES == aQuery.Execute())
