@@ -9,7 +9,7 @@ my $main_repo="bootstrap";
 my @pieces=("artwork", "base", "calc", "components",
             "extensions", "extras", "filters", "help", "impress",
             "libs-core", "libs-extern", "libs-extern-sys", "libs-gui",
-            "l10n", "postprocess", "sdk", "testing", "ure", "writer");
+            "translations", "postprocess", "sdk", "testing", "ure", "writer");
 
 sub search_bugs($$$$)
 {
