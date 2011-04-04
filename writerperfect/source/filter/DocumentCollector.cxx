@@ -460,7 +460,7 @@ void DocumentCollector::openHeader(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
 
-    if (propList["libwpd:occurrence"]->getStr() == "even")
+    if (propList["libwpd:occurence"]->getStr() == "even")
                 mpCurrentPageSpan->setHeaderLeftContent(pHeaderFooterContentElements);
         else
                 mpCurrentPageSpan->setHeaderContent(pHeaderFooterContentElements);
@@ -477,7 +477,7 @@ void DocumentCollector::openFooter(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
 
-    if (propList["libwpd:occurrence"]->getStr() == "even")
+    if (propList["libwpd:occurence"]->getStr() == "even")
                 mpCurrentPageSpan->setFooterLeftContent(pHeaderFooterContentElements);
         else
                 mpCurrentPageSpan->setFooterContent(pHeaderFooterContentElements);
