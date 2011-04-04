@@ -796,20 +796,16 @@ elsif ( $platform =~ m/dragonfly/ )
 {
    if ($platform =~ m/^i386/)
    {  print "Setting DragonFly i386 specific values... ";
-      $outfile        = "DragonFlyX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      $OUTPATH        = "unxdflyi";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting DragonFly x86-64 specific values... ";
-      $outfile        = "DragonFlyX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $OUTPATH        = "unxdflyx";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
@@ -820,16 +816,17 @@ elsif ( $platform =~ m/dragonfly/ )
    }
    # General DragonFly settings:
       $CVER           = "C341";
-      $OUTPATH        = $OUTPATH."3";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
       $OS             = "DRAGONFLY";
       $PATH_SEPERATOR = $ps;
+      $OUTPATH        = "unxdfly";
+      $outfile        = "DragonFlyEnv.Set.sh";
+      $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/aix/ )
 {
