@@ -70,7 +70,7 @@ namespace \
 } \
 const ::com::sun::star::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 { \
-    return the##classname##UnoTunnelId::get()::getSeq(); \
+    return the##classname##UnoTunnelId::get().getSeq(); \
 } \
 \
 classname* classname::getImplementation( const uno::Reference< uno::XInterface >& xInt ) \
