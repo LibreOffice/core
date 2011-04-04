@@ -51,11 +51,7 @@
 
 class SvStream;
 
-///////////////////////////////////////////////////////////////////////////
-
 sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
-
-///////////////////////////////////////////////////////////////////////////
 
 struct StrLT
 {
@@ -81,7 +77,6 @@ typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 typedef boost::unordered_multimap< const rtl::OUString, sal_Int16,
                        rtl::OUStringHash, StrEQ > PropTypeMap;
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDic :
     public ::cppu::WeakImplHelper4
@@ -174,7 +169,6 @@ inline ::rtl::OUString ConvDic::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.ConvDic" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

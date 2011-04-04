@@ -51,7 +51,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 // PropertyChgHelper
 // Base class for all XPropertyChangeListener members of the
 // various lingu services.
@@ -60,7 +59,6 @@ namespace linguistic
 // Flags for type of events allowed to be launched
 #define AE_SPELLCHECKER 1
 #define AE_HYPHENATOR   2
-//#define   AE_THESAURUS    4
 
 typedef cppu::WeakImplHelper2
 <
@@ -161,8 +159,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-
 class PropertyHelper_Thes :
     public PropertyChgHelper
 {
@@ -183,8 +179,6 @@ public:
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException);
 };
-
-///////////////////////////////////////////////////////////////////////////
 
 class PropertyHelper_Spell :
     public PropertyChgHelper
@@ -235,7 +229,6 @@ public:
     sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class PropertyHelper_Hyphen :
     public PropertyChgHelper
@@ -280,8 +273,6 @@ public:
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
 };
-
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

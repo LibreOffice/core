@@ -85,7 +85,6 @@ using ::rtl::OUString;
 #define SN_HCD_CONV_DICTIONARY  "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
 
-///////////////////////////////////////////////////////////////////////////
 void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.Len() == 0)
@@ -130,8 +129,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     if (!xParser.is())
         return;
 
-    // get filter
-    //ConvDicXMLImport *pImport = new ConvDicXMLImport( this, rMainURL );
     //!! keep a reference until everything is done to
     //!! ensure the proper lifetime of the object
     uno::Reference < xml::sax::XDocumentHandler > xFilter(
@@ -195,7 +192,6 @@ sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvTy
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 ConvDic::ConvDic(
         const String &rName,
@@ -733,7 +729,6 @@ uno::Sequence< OUString > ConvDic::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

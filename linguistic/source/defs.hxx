@@ -39,13 +39,11 @@
 class SvStream;
 
 
-///////////////////////////////////////////////////////////////////////////
 
 typedef boost::shared_ptr< SvStream > SvStreamPtr;
 
 namespace css = ::com::sun::star;
 
-///////////////////////////////////////////////////////////////////////////
 
 struct LangSvcEntries
 {
@@ -116,7 +114,6 @@ struct LangSvcEntries_Thes : public LangSvcEntries
     LangSvcEntries_Thes( const css::uno::Sequence< ::rtl::OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 // virtual base class for the different dispatchers
 class LinguDispatcher
@@ -129,7 +126,6 @@ public:
     virtual DspType GetDspType() const = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

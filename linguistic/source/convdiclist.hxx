@@ -43,7 +43,6 @@
 
 class ConvDicNameContainer;
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDicList :
     public cppu::WeakImplHelper3
@@ -117,7 +116,6 @@ inline ::rtl::OUString ConvDicList::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.ConvDicList" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

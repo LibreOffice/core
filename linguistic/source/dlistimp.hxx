@@ -47,7 +47,6 @@
 
 class DicEvtListenerHelper;
 
-///////////////////////////////////////////////////////////////////////////
 
 class DicList :
     public cppu::WeakImplHelper3
@@ -146,7 +145,6 @@ inline ::rtl::OUString DicList::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.DicList" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

@@ -48,7 +48,6 @@ using ::rtl::OUString;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 
 ThesaurusMeaning::ThesaurusMeaning(const OUString &rText,
@@ -77,7 +76,6 @@ uno::Sequence< OUString > SAL_CALL ThesaurusMeaning::querySynonyms()
 }
 */
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

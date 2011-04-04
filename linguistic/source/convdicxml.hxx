@@ -45,15 +45,11 @@
 
 class ConvDic;
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDicXMLExport : public SvXMLExport
 {
     ConvDic     &rDic;
     sal_Bool    bSuccess;
-
-protected:
-    //void ExportNodes(const SmNode *pIn, int nLevel);
 
 public:
     ConvDicXMLExport( ConvDic &rConvDic,
@@ -129,7 +125,6 @@ public:
     void        SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

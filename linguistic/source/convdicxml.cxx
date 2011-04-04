@@ -75,7 +75,6 @@ using ::rtl::OUString;
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
 #define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
 
-///////////////////////////////////////////////////////////////////////////
 
 static const OUString ConversionTypeToText( sal_Int16 nConversionType )
 {
@@ -97,7 +96,6 @@ static sal_Int16 GetConversionTypeFromText( const String &rText )
     return nRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDicXMLImportContext :
     public SvXMLImportContext
@@ -204,7 +202,6 @@ public:
     ConvDic *           GetDic()                { return GetConvDicImport().GetDic(); }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
 {
@@ -216,8 +213,6 @@ void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
     */
     //collapsing not done yet!
 
-    // warning-free code: since the result is not used there is no need for trimming...
-    //const OUString &rChars2 = rChars.trim();
 }
 
 SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
@@ -232,7 +227,6 @@ SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
     return pContext;
 }
 
-////////////////////////////////////////
 
 void ConvDicXMLDictionaryContext_Impl::StartElement(
     const uno::Reference< xml::sax::XAttributeList > &rxAttrList )
@@ -254,10 +248,6 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
     GetConvDicImport().SetLanguage( nLanguage );
     GetConvDicImport().SetConversionType( nConversionType );
 
-    //!! hack to stop the parser from reading the rest of the file  !!
-    //!! when only the header (language, conversion type) is needed !!
-//   if (GetConvDicImport().GetDic() == 0)
-//        throw uno::RuntimeException();
 }
 
 SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
@@ -272,7 +262,6 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
     return pContext;
 }
 
-////////////////////////////////////////
 
 SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -305,7 +294,6 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
     }
 }
 
-////////////////////////////////////////
 
 SvXMLImportContext * ConvDicXMLRightTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -329,7 +317,6 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool ConvDicXMLExport::Export()
 {
@@ -421,7 +408,6 @@ void ConvDicXMLExport::_ExportContent()
     return A2OU( "com.sun.star.lingu2.ConvDicXMLExport" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 void SAL_CALL ConvDicXMLImport::startDocument(void)
     throw( xml::sax::SAXException, uno::RuntimeException )
@@ -458,6 +444,5 @@ OUString SAL_CALL ConvDicXMLImport::getImplementationName()
     return A2OU( "com.sun.star.lingu2.ConvDicXMLImport" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

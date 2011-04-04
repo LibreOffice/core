@@ -60,7 +60,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class LocaleDataWrapper;
 
-///////////////////////////////////////////////////////////////////////////
+
 #define SN_GRAMMARCHECKER           "com.sun.star.linguistic2.Proofreader"
 #define SN_GRAMMARCHECKINGITERATOR  "com.sun.star.linguistic2.ProofreadingIterator"
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
@@ -94,13 +94,10 @@ namespace linguistic
 #define DIC_ERR_UNKNOWN     3
 #define DIC_ERR_NOT_EXISTS  4
 
-///////////////////////////////////////////////////////////////////////////
 
 ::osl::Mutex &  GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
-
-///////////////////////////////////////////////////////////////////////////
 
 rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage );
 
@@ -116,11 +113,7 @@ inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
 
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar );
 
-///////////////////////////////////////////////////////////////////////////
-
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
-
-///////////////////////////////////////////////////////////////////////////
 
 ::com::sun::star::lang::Locale
     CreateLocale( LanguageType eLang );
@@ -138,8 +131,6 @@ LanguageType
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );
 
-///////////////////////////////////////////////////////////////////////////
-
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
 sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
@@ -147,7 +138,6 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
 // checks if a file with the given URL exists
 sal_Bool    FileExists( const String &rURL );
 
-///////////////////////////////////////////////////////////////////////////
 
 ::rtl::OUString     GetDictionaryWriteablePath();
 ::com::sun::star::uno::Sequence< ::rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
@@ -162,8 +152,6 @@ String  GetWritableDictionaryURL( const String &rDicName );
 String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rPaths );
 
 
-///////////////////////////////////////////////////////////////////////////
-
 sal_Int32       GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
 
 ::com::sun::star::uno::Reference<
@@ -172,7 +160,6 @@ sal_Int32       GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos )
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
@@ -188,7 +175,6 @@ sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage );
 sal_Bool        HasDigits( const ::rtl::OUString &rText );
 sal_Bool        IsNumeric( const String &rText );
 
-///////////////////////////////////////////////////////////////////////////
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
@@ -196,7 +182,6 @@ sal_Bool        IsNumeric( const String &rText );
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
@@ -221,12 +206,9 @@ sal_uInt8 AddEntryToDic(
 
 sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
 
-///////////////////////////////////////////////////////////////////////////
-//
 // AppExitLstnr:
 // virtual base class that calls it AtExit function when the application
 // (ie the Desktop) is about to terminate
-//
 
 class AppExitListener :
     public cppu::WeakImplHelper1
@@ -253,8 +235,6 @@ public:
     virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
-
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

@@ -62,7 +62,6 @@ using ::rtl::OUString;
 
 #define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
-///////////////////////////////////////////////////////////////////////////
 
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
@@ -100,7 +99,6 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
     ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
@@ -165,6 +163,5 @@ uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

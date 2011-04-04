@@ -52,7 +52,6 @@ using namespace com::sun::star;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool FileExists( const String &rMainURL )
 {
@@ -72,7 +71,6 @@ sal_Bool FileExists( const String &rMainURL )
     return bExists;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
 {
@@ -87,7 +85,6 @@ rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
     return aRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     const rtl::OUString &rPathPrefix,

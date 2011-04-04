@@ -50,7 +50,6 @@ using ::rtl::OUString;
 
 namespace linguistic
 {
-///////////////////////////////////////////////////////////////////////////
 
 
 HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHPos,
@@ -133,7 +132,6 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
@@ -183,7 +181,6 @@ Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
     return aOrigHyphenPos;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

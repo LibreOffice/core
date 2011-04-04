@@ -54,7 +54,6 @@ using ::rtl::OUString;
 
 #define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -177,7 +176,6 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aSP[] =
 {
@@ -369,6 +367,5 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

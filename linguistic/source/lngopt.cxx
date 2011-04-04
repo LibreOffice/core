@@ -62,7 +62,6 @@ using namespace com::sun::star::registry;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 
 // static member intialization
@@ -193,8 +192,6 @@ sal_Bool LinguOptions::SetValue( Any &rOld, const Any &rVal, sal_Int32 nWID )
         }
     }
 
-//  if (bRes)
-//      pData->SetModified();
 
     return bRes;
 }
@@ -310,7 +307,6 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 //! map must be sorted by first entry in alphabetical increasing order.
 const SfxItemPropertyMapEntry* lcl_GetLinguProps()
@@ -498,7 +494,6 @@ void SAL_CALL LinguProps::addVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 void SAL_CALL LinguProps::removeVetoableChangeListener(
@@ -506,7 +501,6 @@ void SAL_CALL LinguProps::removeVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 
@@ -617,9 +611,7 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 // XServiceInfo
 OUString SAL_CALL LinguProps::getImplementationName()
@@ -681,6 +673,5 @@ void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XThesaurus;
 } } } }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class LngSvcMgr :
@@ -190,7 +189,6 @@ inline ::rtl::OUString LngSvcMgr::getImplementationName_Static()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

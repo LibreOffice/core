@@ -49,7 +49,6 @@
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 class Flushable
 {
@@ -57,7 +56,6 @@ public:
     virtual void    Flush() = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class FlushListener :
     public cppu::WeakImplHelper2
@@ -95,7 +93,6 @@ public:
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class SpellCache :
     public Flushable
@@ -124,7 +121,6 @@ public:
     bool    CheckWord( const ::rtl::OUString& rWord, LanguageType nLang );
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

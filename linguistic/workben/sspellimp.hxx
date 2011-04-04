@@ -52,7 +52,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class SpellChecker :
@@ -141,9 +140,7 @@ public:
         removeEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
 
-    ////////////////////////////////////////////////////////////
     // Service specific part
-    //
 
     // XServiceInfo
     virtual OUString SAL_CALL
@@ -169,7 +166,6 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

@@ -59,7 +59,6 @@ using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////
 
 GrammarChecker::GrammarChecker( /*uno::Reference< uno::XComponentContext > const & context*/ )
     /*m_xContext(context)*/
@@ -258,7 +257,6 @@ sal_Bool SAL_CALL GrammarChecker::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > GrammarChecker::getSupportedServiceNames_Static(  ) throw()
 {
-    //osl::Guard< osl::Mutex > aGuard(GetMutex());
 
     uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
     aSNS.getArray()[0] = A2OU( "com.sun.star.linguistic2.GrammarChecker" );//SN_LINGU_SERVCICE_MANAGER

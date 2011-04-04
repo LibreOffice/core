@@ -53,7 +53,6 @@ using ::rtl::OUString;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 #define NUM_FLUSH_PROPS     6
 
@@ -214,7 +213,6 @@ void SAL_CALL FlushListener::propertyChange(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 SpellCache::SpellCache()
 {
@@ -259,7 +257,6 @@ void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
         rList.clear();
     rList.insert( rWord );
 }
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

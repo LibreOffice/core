@@ -42,8 +42,6 @@
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
-
 class HyphenatedWord :
     public cppu::WeakImplHelper1
     <
@@ -95,8 +93,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-
 class PossibleHyphens :
     public cppu::WeakImplHelper1
     <
@@ -137,10 +133,6 @@ public:
     void            SetWord( ::rtl::OUString &rTxt )    { aWord = rTxt; }
     void            SetLanguage( sal_Int16 nLang )          { nLanguage = nLang; }
 };
-
-
-///////////////////////////////////////////////////////////////////////////
-
 } // namespace linguistic
 
 #endif

@@ -54,7 +54,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 BOOL operator == ( const Locale &rL1, const Locale &rL2 )
 {
@@ -63,7 +62,6 @@ BOOL operator == ( const Locale &rL1, const Locale &rL2 )
             rL1.Variant  ==  rL2.Variant;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 SpellChecker::SpellChecker() :
@@ -365,7 +363,6 @@ void SAL_CALL
         {
             Reference< XPropertySet >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
-            //rArguments.getConstArray()[1] >>= xDicList;
 
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
@@ -418,9 +415,7 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 OUString SAL_CALL SpellChecker::getImplementationName()
         throw(RuntimeException)
@@ -507,6 +502,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

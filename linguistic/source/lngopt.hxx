@@ -60,10 +60,8 @@ namespace com { namespace sun { namespace star {
 
 
 
-///////////////////////////////////////////////////////////////////////////
 // LinguOptions
 // This class represents all Linguistik relevant options.
-//
 
 class LinguOptions
 {
@@ -95,7 +93,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 // uses templates from <cppuhelper/interfacecontainer.h>
 
@@ -113,7 +110,6 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
         std::equal_to< sal_Int32 >
     > OPropertyListenerContainerHelper;
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class LinguProps :
@@ -180,7 +176,6 @@ inline ::rtl::OUString LinguProps::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.LinguProps" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

@@ -68,7 +68,6 @@ using ::rtl::OUString;
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
 
-///////////////////////////////////////////////////////////////////////////
 
 bool operator == ( const Locale &r1, const Locale &r2 )
 {
@@ -77,7 +76,6 @@ bool operator == ( const Locale &r1, const Locale &r2 )
             r1.Variant  == r2.Variant;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
 {
@@ -97,7 +95,6 @@ String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
         return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDicNameContainer :
     public cppu::WeakImplHelper1
@@ -393,7 +390,6 @@ void ConvDicNameContainer::AddConvDics(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -426,9 +422,6 @@ ConvDicList::ConvDicList() :
 
 ConvDicList::~ConvDicList()
 {
-    // NameContainer will deleted when the reference xNameContainer
-    // is destroyed.
-    // delete pNameContainer;
 
     if (!bDisposing && pNameContainer)
         pNameContainer->FlushDics();
@@ -680,7 +673,6 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
@@ -709,6 +701,5 @@ void * SAL_CALL ConvDicList_getFactory(
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

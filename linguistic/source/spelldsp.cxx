@@ -60,7 +60,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 // ProposalList: list of proposals for misspelled words
 //   The order of strings in the array should be left unchanged because the
 // spellchecker should have put the more likely suggestions at the top.
@@ -68,7 +67,6 @@ using ::rtl::OUString;
 // Removing entries is done by assigning the empty string.
 // The sequence is constructed from all non empty strings in the original
 // while maintaining the order.
-//
 class ProposalList
 {
     std::vector< OUString > aVec;
@@ -82,7 +80,6 @@ class ProposalList
 public:
     ProposalList()  {}
 
-    //size_t  Size() const   { return aVec.size(); }
     size_t  Count() const;
     void    Prepend( const OUString &rText );
     void    Append( const OUString &rNew );
@@ -185,9 +182,6 @@ void ProposalList::Remove( const OUString &rText )
     }
 }
 
-
-///////////////////////////////////////////////////////////////////////////
-
 sal_Bool SvcListHasLanguage(
         const LangSvcEntries_Spell &rEntry,
         LanguageType nLanguage )
@@ -209,9 +203,6 @@ sal_Bool SvcListHasLanguage(
 
     return bHasLanguage;
 }
-
-///////////////////////////////////////////////////////////////////////////
-
 
 SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
     rMgr    (rLngSvcMgr)
@@ -408,9 +399,6 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                 // build service initialization argument
                 Sequence< Any > aArgs(2);
                 aArgs.getArray()[0] <<= GetPropSet();
-                //! The dispatcher searches the dictionary-list
-                //! thus the service needs not to now about it
-                //aArgs.getArray()[1] <<= GetDicList();
 
                 while (i < nLen  &&  (!bTmpResValid  ||  sal_False == bTmpRes))
                 {
@@ -594,9 +582,6 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 // build service initialization argument
                 Sequence< Any > aArgs(2);
                 aArgs.getArray()[0] <<= GetPropSet();
-                //! The dispatcher searches the dictionary-list
-                //! thus the service needs not to now about it
-                //aArgs.getArray()[1] <<= GetDicList();
 
                 sal_Int32 nNumSugestions = -1;
                 while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
@@ -681,12 +666,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         // list of proposals found (to be checked against entries of
         // neagtive dictionaries)
         ProposalList aProposalList;
-//        Sequence< OUString > aProposals;
         sal_Int16 eFailureType = -1;    // no failure
         if (xRes.is())
         {
             aProposalList.Append( xRes->getAlternatives() );
-//            aProposals = xRes->getAlternatives();
             eFailureType = xRes->getFailureType();
         }
         Reference< XDictionaryList > xDList;
@@ -868,7 +851,5 @@ void SpellCheckerDispatcher::FlushSpellCache()
     if (pCache)
         pCache->Flush();
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

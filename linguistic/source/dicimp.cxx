@@ -63,7 +63,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 #define BUFSIZE             4096
 #define VERS2_NOLANGUAGE    1024
@@ -203,7 +202,6 @@ const String GetDicExtension()
     return String::CreateFromAscii( pDicExt );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 DictionaryNeo::DictionaryNeo() :
     aDicEvtListeners( GetLinguMutex() ),
@@ -1078,7 +1076,6 @@ void SAL_CALL DictionaryNeo::storeToURL(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 DicEntry::DicEntry()
 {
@@ -1152,6 +1149,5 @@ OUString SAL_CALL DicEntry::getReplacementText(  )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

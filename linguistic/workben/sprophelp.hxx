@@ -54,7 +54,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-///////////////////////////////////////////////////////////////////////////
 // PropertyChgHelper
 // virtual base class for all XPropertyChangeListener members of the
 // various lingu services.
@@ -117,7 +116,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class PropertyHelper_Spell :
@@ -167,7 +165,6 @@ public:
     BOOL    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

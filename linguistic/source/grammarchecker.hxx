@@ -50,7 +50,6 @@ class GrammarChecker:
         ::com::sun::star::lang::XServiceInfo
     >
 {
-//    com::sun::star::uno::Reference< uno::XComponentContext > m_xContext;
 
     // disallow use of copy c-tor and assignment operator
     GrammarChecker( const GrammarChecker & );

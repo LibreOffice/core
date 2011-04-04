@@ -55,7 +55,6 @@ using ::rtl::OUString;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 
 #define MAX_PROPOSALS   40
@@ -236,14 +235,12 @@ Sequence< OUString > MergeProposalSeqs(
                     pMerged[ nIndex++ ] = pAlt[ i ];
             }
         }
-        //DBG_ASSERT(nIndex == nCountNew, "wrong number of proposals");
         aMerged.realloc( nIndex );
     }
 
     return aMerged;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 SpellAlternatives::SpellAlternatives()
@@ -362,7 +359,6 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

@@ -56,7 +56,6 @@ using ::rtl::OUString;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aCH[] =
 {
@@ -170,7 +169,7 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
     // temporary value
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
-    //
+
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -186,7 +185,6 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
                         pbResVal = &bResIsUseDictionaryList; break;
                 default:
                         ;
-                    //DBG_ASSERT( 0, "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;
@@ -224,7 +222,6 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
             default:
             {
                 bRes = sal_False;
-                //DBG_ASSERT( 0, "unknown property" );
             }
         }
         if (pbVal)
@@ -346,7 +343,6 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PropertyHelper_Thes::PropertyHelper_Thes(
@@ -373,7 +369,6 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 // list of properties from the property set to be used
 // and listened to
@@ -563,7 +558,6 @@ sal_Int16 PropertyHelper_Spell::GetDefaultNumberOfSuggestions() const
     return 16;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aHP[] =
 {
@@ -713,7 +707,6 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

@@ -63,7 +63,6 @@ using ::rtl::OUString;
 uno::Sequence< OUString > static GetLangSvcList( const uno::Any &rVal );
 uno::Sequence< OUString > static GetLangSvc( const uno::Any &rVal );
 
-///////////////////////////////////////////////////////////////////////////
 
 static sal_Bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const OUString &rText )
 {
@@ -82,7 +81,6 @@ static sal_Bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const O
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static uno::Sequence< lang::Locale > GetAvailLocales(
         const uno::Sequence< OUString > &rSvcImplNames )
@@ -153,7 +151,6 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
     return aRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 struct SvcInfo
 {
@@ -186,7 +183,6 @@ sal_Bool SvcInfo::HasLanguage( sal_Int16 nLanguage ) const
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 void LngSvcMgr::SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
@@ -275,7 +271,6 @@ void LngSvcMgr::SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class LngSvcMgrListenerHelper :
@@ -286,9 +281,7 @@ class LngSvcMgrListenerHelper :
     >
 {
     LngSvcMgr  &rMyManager;
-//    Timer       aLaunchTimer;
 
-    //cppu::OMultiTypeInterfaceContainerHelper  aListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
     uno::Reference< linguistic2::XDictionaryList >               xDicList;
@@ -302,7 +295,6 @@ class LngSvcMgrListenerHelper :
 
     void    LaunchEvent( sal_Int16 nLngSvcEvtFlags );
 
-//  DECL_LINK( TimeOut, Timer* );
     long Timeout();
 
 public:
@@ -356,14 +348,6 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
             (linguistic2::XDictionaryListEventListener *) this, sal_False );
     }
 
-    //! The timer is used to 'sum up' different events in order to reduce the
-    //! number of events forwarded.
-    //! (This may happen already if a property was changed that has several
-    //! listeners, and each of them is launching an event of it's own!)
-    //! Thus this behaviour is necessary to avoid unecessary actions of
-    //! this objects listeners!
-//  aLaunchTimer.SetTimeout( 2000 );
-//  aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
     nCombinedLngSvcEvt = 0;
 }
 
@@ -389,7 +373,6 @@ long LngSvcMgrListenerHelper::Timeout()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-//  if (&aLaunchTimer == pTimer)
     {
         // change event source to LinguServiceManager since the listeners
         // probably do not know (and need not to know) about the specific
@@ -416,7 +399,6 @@ long LngSvcMgrListenerHelper::Timeout()
 void LngSvcMgrListenerHelper::AddLngSvcEvt( sal_Int16 nLngSvcEvt )
 {
     nCombinedLngSvcEvt |= nLngSvcEvt;
-//  aLaunchTimer.Start();
     Timeout();
 }
 
@@ -453,11 +435,8 @@ void SAL_CALL
             xRef->processDictionaryListEvent( rDicListEvent );
     }
 
-    //
     // "translate" DictionaryList event into linguistic2::LinguServiceEvent
-    //
     sal_Int16 nLngSvcEvt = 0;
-    //
     sal_Int16 nSpellCorrectFlags =
             linguistic2::DictionaryListEventFlags::ADD_NEG_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_POS_ENTRY        |
@@ -465,7 +444,7 @@ void SAL_CALL
             linguistic2::DictionaryListEventFlags::DEACTIVATE_POS_DIC;
     if (0 != (nDlEvt & nSpellCorrectFlags))
         nLngSvcEvt |= linguistic2::LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
-    //
+
     sal_Int16 nSpellWrongFlags =
             linguistic2::DictionaryListEventFlags::ADD_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_NEG_ENTRY        |
@@ -473,7 +452,7 @@ void SAL_CALL
             linguistic2::DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
     if (0 != (nDlEvt & nSpellWrongFlags))
         nLngSvcEvt |= linguistic2::LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN;
-    //
+
     sal_Int16 nHyphenateFlags =
             linguistic2::DictionaryListEventFlags::ADD_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_POS_ENTRY        |
@@ -572,7 +551,6 @@ sal_Bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 LngSvcMgr::LngSvcMgr() :
@@ -1135,10 +1113,6 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
             uno::Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-#if OSL_DEBUG_LEVEL > 1
-//                sal_Int32 nSvcs = aSvcImplNames.getLength();
-//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
-#endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
@@ -1182,10 +1156,6 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
                 if (aSvcImplNames.getLength() > 1)
                     aSvcImplNames.realloc(1);
 
-#if OSL_DEBUG_LEVEL > 1
-//                sal_Int32 nSvcs = aSvcImplNames.getLength();
-//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
-#endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
@@ -1229,10 +1199,6 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                 if (aSvcImplNames.getLength() > 1)
                     aSvcImplNames.realloc(1);
 
-#if OSL_DEBUG_LEVEL > 1
-//                sal_Int32 nSvcs = aSvcImplNames.getLength();
-//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
-#endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
@@ -1272,10 +1238,6 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
             uno::Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-#if OSL_DEBUG_LEVEL > 1
-//                sal_Int32 nSvcs = aSvcImplNames.getLength();
-//                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
-#endif
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
@@ -1521,7 +1483,6 @@ void SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
 #if OSL_DEBUG_LEVEL > 1
-//    const OUString *pImplNames = rServiceImplNames.getConstArray();
 #endif
 
     LanguageType nLanguage = LocaleToLanguage( rLocale );
@@ -1753,7 +1714,6 @@ static uno::Sequence< OUString > GetLangSvc( const uno::Any &rVal )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getConfiguredServices(
@@ -1992,6 +1952,5 @@ void * SAL_CALL LngSvcMgr_getFactory(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

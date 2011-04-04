@@ -69,7 +69,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
 
@@ -77,7 +76,6 @@ static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const rtl::OUString& rNew );
 static void AddUserData( const uno::Reference< XDictionary > &rDic );
 
-///////////////////////////////////////////////////////////////////////////
 
 class DicEvtListenerHelper :
     public cppu::WeakImplHelper1
@@ -184,9 +182,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
-    //
     DictionaryType eDicType = xDic->getDictionaryType();
     DBG_ASSERT(eDicType != DictionaryType_MIXED,
         "lng : unexpected dictionary type");
@@ -296,7 +292,6 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 void DicList::MyAppExitListener::AtExit()
@@ -695,12 +690,10 @@ void DicList::_CreateDicList()
 
 
     // evaluate list of dictionaries to be activated from configuration
-    //
     //! to suppress overwriting the list of active dictionaries in the
     //! configuration with incorrect arguments during the following
     //! activation of the dictionaries
     pDicEvtLstnrHelper->BeginCollectEvents();
-    //
     const uno::Sequence< rtl::OUString > aActiveDics( aOpt.GetActiveDics() );
     const rtl::OUString *pActiveDic = aActiveDics.getConstArray();
     sal_Int32 nLen = aActiveDics.getLength();
@@ -753,9 +746,7 @@ void DicList::SaveDics()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 rtl::OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 {
@@ -814,7 +805,6 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 xub_StrLen lcl_GetToken( String &rToken,
             const String &rText, xub_StrLen nPos, const String &rDelim )
@@ -890,7 +880,6 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #if defined _MSC_VER
 #pragma optimize("g",off)
@@ -939,6 +928,5 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
     return sal_False;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,9 +38,7 @@
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-////////////////////////////////////////
 // declaration of external RegEntry-functions defined by the service objects
-//
 
 extern sal_Bool SAL_CALL SpellChecker_writeInfo(
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey );
@@ -50,9 +48,7 @@ extern void * SAL_CALL SpellChecker_getFactory(
     XMultiServiceFactory * pServiceManager,
     void * /*pRegistryKey*/ );
 
-////////////////////////////////////////
 // definition of the two functions that are used to provide the services
-//
 
 extern "C"
 {
@@ -82,6 +78,5 @@ void * SAL_CALL component_getFactory(
 
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

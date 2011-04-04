@@ -52,7 +52,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 static sal_Bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
@@ -71,7 +70,6 @@ static sal_Bool SvcListHasLanguage(
     return bHasLanguage;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 ThesaurusDispatcher::ThesaurusDispatcher()
@@ -280,6 +278,5 @@ LinguDispatcher::DspType ThesaurusDispatcher::GetDspType() const
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

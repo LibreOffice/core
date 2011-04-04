@@ -40,7 +40,6 @@
 #include "defs.hxx"
 #include "convdic.hxx"
 
-///////////////////////////////////////////////////////////////////////////
 
 class HHConvDic :
     public ConvDic
@@ -73,7 +72,6 @@ inline ::rtl::OUString HHConvDic::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.HHConvDic" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
