@@ -55,6 +55,7 @@ public:
 
 class SvxDefaultColorOptPage : public SfxTabPage
 {
+
 private:
     FixedLine                           aGbChartColors;
     ChartColorLB                        aLbChartColors;
@@ -70,7 +71,7 @@ private:
 
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( AddChartColor, void * );
-    DECL_LINK( RemoveChartColor, void * );
+    DECL_LINK( RemoveChartColor, PushButton * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );
     DECL_LINK( BoxClickedHdl, ValueSet * );
 

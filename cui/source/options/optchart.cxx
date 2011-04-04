@@ -31,6 +31,7 @@
 #include "optchart.hxx"
 #include "optchart.hrc"
 #include <dialmgr.hxx>
+#include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc> // for SID_SCH_EDITOPTIONS
 
 // ====================
@@ -194,6 +195,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
         aLbChartColors.FillBox( pColorConfig->GetColorTable() );
 
         aLbChartColors.GetFocus();
+        aLbChartColors.SelectEntryPos( 0 );
     }
 
     return 0L;
@@ -208,12 +210,13 @@ IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
     {
         ColorData black = RGB_COLORDATA( 0x00, 0x00, 0x00 );
 
-        pColorConfig->GetColorTable().append (XColorEntry ( black, pColorConfig->GetColorTable().getNextDefaultName()));
+        pColorConfig->GetColorTable().append (XColorEntry ( black, pColorConfig->GetColorTable().getDefaultName(pColorConfig->GetColorTable().size())));
 
         aLbChartColors.Clear();
         aLbChartColors.FillBox( pColorConfig->GetColorTable() );
 
         aLbChartColors.GetFocus();
+        aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
     }
 
     return 0L;
@@ -222,16 +225,33 @@ IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
 // RemoveChartColor
 // ----------------
 
-IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, void *, EMPTYARG )
+IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 {
+    size_t nIndex = aLbChartColors.GetSelectEntryPos();
+
+    if (aLbChartColors.GetSelectEntryCount() == 0)
+        return 0L;
+
     if( pColorConfig )
     {
-        pColorConfig->GetColorTable().remove( aLbChartColors.GetSelectEntryPos()  );
+        DBG_ASSERT(pColorConfig.size() > 1, "don't delete the last chart color");
+        QueryBox aQuery(pButton, CUI_RES(RID_OPTQB_COLOR_CHART_DELETE));
+        aQuery.SetText(String(CUI_RES(RID_OPTSTR_COLOR_CHART_DELETE)));
+        if(RET_YES == aQuery.Execute())
+        {
 
-        aLbChartColors.Clear();
-        aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+            pColorConfig->GetColorTable().remove( nIndex  );
 
-        aLbChartColors.GetFocus();
+            aLbChartColors.Clear();
+            aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+
+            aLbChartColors.GetFocus();
+
+            if (nIndex == aLbChartColors.GetEntryCount() && aLbChartColors.GetEntryCount() > 0)
+                aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
+            else if (aLbChartColors.GetEntryCount() > 0)
+                aLbChartColors.SelectEntryPos( nIndex );
+        }
     }
 
     return 0L;
