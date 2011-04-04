@@ -2229,8 +2229,8 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
-    rInfo.m_nAscent     = +aTTInfo.winAscent;
-    rInfo.m_nDescent    = -aTTInfo.winDescent;
+    rInfo.m_nAscent     = aTTInfo.winAscent;
+    rInfo.m_nDescent    = aTTInfo.winDescent;
     // mac fonts usually do not have an OS2-table
     // => get valid ascent/descent values from other tables
     if( !rInfo.m_nAscent )

@@ -2788,8 +2788,8 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
     rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
-    rInfo.m_nAscent     = +aTTInfo.winAscent;
-    rInfo.m_nDescent    = -aTTInfo.winDescent;
+    rInfo.m_nAscent     = aTTInfo.winAscent;
+    rInfo.m_nDescent    = aTTInfo.winDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
