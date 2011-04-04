@@ -225,7 +225,6 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
             &aImplPT154TextEncodingData }; /* PT154 */
     return
         nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : NULL;
-    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
