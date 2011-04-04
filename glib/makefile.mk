@@ -289,21 +289,24 @@ OUT2INC+=gobject/gvaluearray.h
 .ELIF "$(OS)"=="WNT"
 CONVERTFILES=gobject/gmarshal.c
 
-PATCH_FILES=glib-2.28.1-win32.patch
+PATCH_FILES=glib-2.28.1-win32.patch glib-2.28.1-win32-2.patch
 CONFIGURE_ACTION=
 ADDITIONAL_FILES= config.h \
     gio/gvdb/makefile.msc \
     gio/win32/makefile.msc \
     glib/glibconfig.h \
-    gmodule/gmoduleconf.h
+    gmodule/gmoduleconf.h \
+    gobject/glib-mkenums
 
 BUILD_ACTION=nmake -f makefile.msc
 
-OUT2BIN+=gio/libgio-2.0-0.dll
-OUT2BIN+=glib/libglib-2.0-0.dll
-OUT2BIN+=gmodule/libgmodule-2.0-0.dll
-OUT2BIN+=gobject/libgobject-2.0-0.dll
-OUT2BIN+=gthread/libgthread-2.0-0.dll
+OUT2BIN+=gio$/libgio-2.0-0.dll
+OUT2BIN+=glib$/libglib-2.0-0.dll
+OUT2BIN+=gmodule$/libgmodule-2.0-0.dll
+OUT2BIN+=gobject$/libgobject-2.0-0.dll
+OUT2BIN+=gthread$/libgthread-2.0-0.dll
+OUT2BIN+=gobject$/glib-mkenums
+OUT2BIN+=gobject$/glib-genmarshal.exe
 
 OUT2LIB+=build/win32/dirent/dirent.lib
 OUT2LIB+=gio/gio-2.0.lib
@@ -318,6 +321,8 @@ OUT2LIB+=gobject/glib-genmarshal.lib
 OUT2LIB+=gobject/gobject-2.0.lib
 OUT2LIB+=gthread/gthread-2.0.lib
 
+OUT2INC+=build$/win32$/make.msc
+OUT2INC+=build$/win32$/module.defs
 
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
