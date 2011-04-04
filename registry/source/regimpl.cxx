@@ -468,6 +468,7 @@ ORegistry::~ORegistry()
 //
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode)
 {
+    RegError eRet = REG_INVALID_REGISTRY;
     OStoreFile      rRegFile;
     storeAccessMode sAccessMode = REG_MODE_OPEN;
     storeError      errCode;
@@ -475,8 +476,8 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     if (accessMode & REG_CREATE)
     {
         sAccessMode = REG_MODE_CREATE;
-    } else
-    if (accessMode & REG_READONLY)
+    }
+    else if (accessMode & REG_READONLY)
     {
         sAccessMode = REG_MODE_OPENREAD;
         m_readOnly = sal_True;
@@ -496,17 +497,21 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     {
         switch (errCode)
         {
-            case  store_E_NotExists:
-                return REG_REGISTRY_NOT_EXISTS;
+            case store_E_NotExists:
+                eRet = REG_REGISTRY_NOT_EXISTS;
+                break;
             case store_E_LockingViolation:
-                return REG_CANNOT_OPEN_FOR_READWRITE;
+                eRet = REG_CANNOT_OPEN_FOR_READWRITE;
+                break;
             default:
-                return REG_INVALID_REGISTRY;
+                eRet = REG_INVALID_REGISTRY;
+                break;
         }
-    } else
+    }
+    else
     {
         OStoreDirectory rStoreDir;
-        storeError      _err = rStoreDir.create(rRegFile, OUString(), OUString(), sAccessMode);
+        storeError _err = rStoreDir.create(rRegFile, OUString(), OUString(), sAccessMode);
 
         if ( _err == store_E_None )
         {
@@ -515,14 +520,13 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
             m_isOpen = sal_True;
 
             m_openKeyTable[ROOT] = new ORegKey(ROOT, this);
-            return REG_NO_ERROR;
-        } else
-            return REG_INVALID_REGISTRY;
+            eRet = REG_NO_ERROR;
+        }
+        else
+            eRet = REG_INVALID_REGISTRY;
     }
 
-    // this line is never accessed
-    // just workaround to avoid warning: control reaches end of non-void function
-    return REG_INVALID_REGISTRY;
+    return eRet;
 }
 
 
