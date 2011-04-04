@@ -232,6 +232,16 @@ public:
 
             /* rtlCipherError */ aError = rtl_cipher_decode(aCipher, pCipherBuffer, nCipherLen, pPlainText2Buffer, nPlainText2Len);
             CPPUNIT_ASSERT_MESSAGE("decode should not work", aError != rtl_Cipher_E_None);
+
+            delete [] pPlainText2Buffer;
+
+            delete [] pCipherBuffer;
+            delete [] pPlainTextBuffer;
+
+            delete [] pArgBuffer;
+            delete [] pKeyBuffer;
+
+            rtl_cipher_destroy(aCipher);
         }
 
     void test_encode_and_decode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
