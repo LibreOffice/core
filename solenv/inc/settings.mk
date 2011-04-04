@@ -1042,7 +1042,10 @@ GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
 #hunspell will aslo run its own unit tests under valgrind when this variable is
 #set.
 .IF "$(VALGRIND)" != ""
-VALGRINDTOOL=valgrind --tool=$(VALGRIND) --leak-check=yes --num-callers=50
+VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50
+.IF "$(VALGRIND)" == "memcheck"
+VALGRINDTOOL+=--leak-check=yes
+.ENDIF
 G_SLICE*:=always-malloc
 .EXPORT : G_SLICE
 .ENDIF
