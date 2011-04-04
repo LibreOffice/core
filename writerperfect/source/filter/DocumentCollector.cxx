@@ -456,14 +456,20 @@ void DocumentCollector::openPageSpan(const WPXPropertyList &propList)
     mWriterDocumentStates.top().mbFirstParagraphInPageSpan = true;
 }
 
+static bool
+isOccurrenceEven (const WPXPropertyList &propList)
+{
+    const WPXProperty *occurance = propList["libwpd:occurrence"];
+    return occurance && occurance->getStr() == "even";
+}
+
 void DocumentCollector::openHeader(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
-
-    if (propList["libwpd:occurrence"]->getStr() == "even")
-                mpCurrentPageSpan->setHeaderLeftContent(pHeaderFooterContentElements);
-        else
-                mpCurrentPageSpan->setHeaderContent(pHeaderFooterContentElements);
+    if (isOccurrenceEven (propList))
+        mpCurrentPageSpan->setHeaderLeftContent(pHeaderFooterContentElements);
+    else
+        mpCurrentPageSpan->setHeaderContent(pHeaderFooterContentElements);
 
     mpCurrentContentElements = pHeaderFooterContentElements;
 }
@@ -477,10 +483,10 @@ void DocumentCollector::openFooter(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
 
-    if (propList["libwpd:occurrence"]->getStr() == "even")
-                mpCurrentPageSpan->setFooterLeftContent(pHeaderFooterContentElements);
-        else
-                mpCurrentPageSpan->setFooterContent(pHeaderFooterContentElements);
+    if (isOccurrenceEven (propList))
+        mpCurrentPageSpan->setFooterLeftContent(pHeaderFooterContentElements);
+    else
+        mpCurrentPageSpan->setFooterContent(pHeaderFooterContentElements);
 
     mpCurrentContentElements = pHeaderFooterContentElements;
 }
