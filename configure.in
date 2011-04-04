@@ -7681,6 +7681,17 @@ dnl Dealing with l10n options
 dnl ===================================================================
 GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
 AC_MSG_CHECKING([which languages to be built])
+# get list of all languages
+# generate shell variable from completelangiso= from solenv/inc/postset.mk
+# the sed command does the following:
+#   + if a line ends with a backslash, append the next line to it
+#   + adds " on the beginning of the value (after =)
+#   + adds " at the end of the value
+#   + removes en-US; we want to put it on the beginning
+#   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
+[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/postset.mk)]
+ALL_LANGS="en-US $completelangiso"
+# check the configured localizations
 WITH_LANG="$with_lang"
 if test -z "$WITH_LANG"; then
    AC_MSG_RESULT([en-US])
@@ -7688,6 +7699,15 @@ else
    AC_MSG_RESULT([$WITH_LANG])
    GIT_REPO_NAMES="$GIT_REPO_NAMES translations"
 fi
+# check that the list is valid
+for lang in $WITH_LANG ; do
+   test "$lang" = "ALL" && continue;
+   # need to check for the exact string, so add space before and after the list of all languages
+   all_langs=" $ALL_LANGS "
+   test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
+   AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
+done
+AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(GIT_REPO_NAMES)
 
