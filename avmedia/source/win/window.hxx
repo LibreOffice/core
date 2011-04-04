@@ -114,8 +114,6 @@ private:
     int                                         mnParentWnd;
     int                                         mnPointerType;
 
-    static WNDCLASS*                            mpWndClass;
-
     void                                        ImplLayoutVideoWindow();
 };
 
