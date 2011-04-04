@@ -152,6 +152,9 @@ define gb_StaticLibrary_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
+gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
+gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
+gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 
 # static members declared here because they are used globally
 
