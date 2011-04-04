@@ -387,6 +387,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTS := 
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
@@ -408,6 +409,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTS := 
 endif
 
 endef
@@ -518,6 +520,11 @@ endif
 
 endef
 
+define gb_LinkTarget_add_extra_object
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTS += $(2)
+
+endef
+
 define gb_LinkTarget_add_cxxobject
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
@@ -573,6 +580,27 @@ endef
 
 define gb_LinkTarget_add_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
+endef
+
+define gb_LinkTarget_export_objects_list
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_LinkTarget_get_objects_list,$(1))
+
+$(call gb_LinkTarget_get_objects_list,$(1)):
+	echo "foobar $(1)" && \
+	RESPONSEFILE=$$(call var2file,$$(call gb_LinkTarget_get_objects_list,$(1)),200,\
+		$$(foreach object,$$(COBJECTS),$$(call gb_CObject_get_target,$$(object))) \
+		$$(foreach object,$$(CXXOBJECTS),$$(call gb_CxxObject_get_target,$$(object))) \
+		$$(foreach object,$$(OBJCXXOBJECTS),$$(call gb_ObjCxxObject_get_target,$$(object))) \
+		$$(foreach object,$$(GENCXXOBJECTS),$$(call gb_GenCxxObject_get_target,$$(object))))
+endef
+
+define gb_LinkTarget_add_extra_objects
+ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+endif
+$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_Library_get_target,$$(lib)))
+$(foreach lib,$(2),$(foreach obj,$(shell cat $(call gb_LinkTarget_get_objects_list,Library/$(notdir $(call gb_Library_get_target,$(lib))))),$(call gb_LinkTarget_add_extra_object,$(1),$(obj))))
 endef
 
 define gb_LinkTarget_add_cxxobjects

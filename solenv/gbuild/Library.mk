@@ -126,6 +126,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \
+	export_objects_list \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

@@ -98,6 +98,8 @@ $(eval $(foreach method,\
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \
+	add_extra_object \
+	add_extra_objects \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))
