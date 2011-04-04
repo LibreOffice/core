@@ -49,21 +49,17 @@ JAVAFILES       :=	AuthorFunction.java \
                     TitleFunctionDescription.java \
                     MetaDataFunctionCategory.java
 
-# PROPERTYFILES := $(shell @$(FIND) . -name "*.properties")
-PROPERTYFILES:=$(CLASSDIR)$/$(PACKAGE)$/category.properties \
+COPYFILES := $(CLASSDIR)$/$(PACKAGE)$/category.properties \
                  $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties\
                 $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
                  
-L10NPROPERTYFILES = $(PROPERTYFILES)
-ALLTAR : $(PROPERTYFILES)
+ALLTAR : $(COPYFILES)
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-.IF "$(WITH_LANG)"==""
-$(CLASSDIR)/$(PACKAGE)/%.properties : %.properties
-    @@-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)$(COPY) $< $@
-.ENDIF
+$(COPYFILES): $$(@:f)
+    +$(COPY) $< $@
+    
