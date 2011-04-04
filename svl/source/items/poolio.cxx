@@ -404,7 +404,7 @@ void SfxItemPool::readTheItems (
         nLastSurrogate = nSurrogate;
 
         // Ref-Count und Item laden
-        sal_uInt16 nRef;
+        sal_uInt16 nRef(0);
         rStream >> nRef;
 
         pItem = pDefItem->Create(rStream, nVersion);
@@ -607,7 +607,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         for ( sal_uInt16 nVerNo = 0; aVerRec.GetContent(); ++nVerNo )
         {
             // Header f"ur einzelne Version einlesen
-            sal_uInt16 nVersion, nHStart, nHEnd;
+            sal_uInt16 nVersion(0), nHStart(0), nHEnd(0);
             rStream >> nVersion >> nHStart >> nHEnd;
             sal_uInt16 nCount = nHEnd - nHStart + 1;
 
@@ -616,6 +616,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             {
                 // Add new Version
                 sal_uInt16 *pMap = new sal_uInt16[nCount];
+                memset(pMap, 0, nCount * sizeof(sal_uInt16));
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
                 SetVersionMap( nVersion, nHStart, nHEnd, pMap );
@@ -632,8 +633,8 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         while ( aWhichIdsRec.GetContent() )
         {
             // SlotId, Which-Id und Item-Version besorgen
-            sal_uInt32 nCount;
-            sal_uInt16 nVersion, nWhich;
+            sal_uInt32 nCount(0);
+            sal_uInt16 nVersion(0), nWhich(0);
             //!sal_uInt16 nSlotId = aWhichIdsRec.GetContentTag();
             rStream >> nWhich;
             if ( pImp->nLoadingVersion != pImp->nVersion )
@@ -686,7 +687,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         while ( aDefsRec.GetContent() )
         {
             // SlotId, Which-Id und Item-Version besorgen
-            sal_uInt16 nVersion, nWhich;
+            sal_uInt16 nVersion(0), nWhich(0);
             //!sal_uInt16 nSlotId = aDefsRec.GetContentTag();
             rStream >> nWhich;
             if ( pImp->nLoadingVersion != pImp->nVersion )
@@ -739,7 +740,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_STARTPOOL_4 );
         rStream >> pImp->nMajorVer >> pImp->nMinorVer;
     }
-    sal_uInt32 nAttribSize;
+    sal_uInt32 nAttribSize(0);
     int bOwnPool = sal_True;
     UniString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
@@ -772,7 +773,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     sal_uLong nStartPos = rStream.Tell();
     rStream.SeekRel( nAttribSize );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_SIZES );
-    sal_uInt32 nSizeTableLen;
+    sal_uInt32 nSizeTableLen(0);
     rStream >> nSizeTableLen;
     sal_Char *pBuf = new sal_Char[nSizeTableLen];
     rStream.Read( pBuf, nSizeTableLen );
@@ -784,18 +785,18 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     {
         // Version-Map finden (letztes sal_uLong der Size-Table gibt Pos an)
         rStream.Seek( nEndOfSizes - sizeof(sal_uInt32) );
-        sal_uInt32 nVersionMapPos;
+        sal_uInt32 nVersionMapPos(0);
         rStream >> nVersionMapPos;
         rStream.Seek( nVersionMapPos );
 
         // Versions-Maps einlesen
         CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_VERSIONMAP );
-        sal_uInt16 nVerCount;
+        sal_uInt16 nVerCount(0);
         rStream >> nVerCount;
         for ( sal_uInt16 nVerNo = 0; nVerNo < nVerCount; ++nVerNo )
         {
             // Header f"ur einzelne Version einlesen
-            sal_uInt16 nVersion, nHStart, nHEnd;
+            sal_uInt16 nVersion(0), nHStart(0), nHEnd(0);
             rStream >> nVersion >> nHStart >> nHEnd;
             sal_uInt16 nCount = nHEnd - nHStart + 1;
             sal_uInt16 nBytes = (nCount)*sizeof(sal_uInt16);
@@ -805,6 +806,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             {
                 // Add new Version
                 sal_uInt16 *pMap = new sal_uInt16[nCount];
+                memset(pMap, 0, nCount * sizeof(sal_uInt16));
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
                 SetVersionMap( nVersion, nHStart, nHEnd, pMap );
@@ -820,7 +822,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ITEMS );
     bool bSecondaryLoaded = false;
     long nSecondaryEnd = 0;
-    sal_uInt16 nWhich, nSlot;
+    sal_uInt16 nWhich(0), nSlot(0);
     while ( rStream >> nWhich, nWhich )
     {
         // ggf. Which-Id aus alter Version verschieben?
@@ -831,8 +833,8 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         sal_uInt16 nMappedWhich = GetWhich(nSlot, sal_False);
         int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
-        sal_uInt16 nRef, nCount, nVersion;
-        sal_uInt32 nAttrSize;
+        sal_uInt16 nRef(0), nCount(0), nVersion(0);
+        sal_uInt32 nAttrSize(0);
         rStream >> nVersion >> nCount;
 
         SfxPoolItemArray_Impl **ppArr = 0;
@@ -981,8 +983,8 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         sal_uLong nPos = nLastPos;
-        sal_uInt32 nSize;
-        sal_uInt16 nVersion;
+        sal_uInt32 nSize(0);
+        sal_uInt16 nVersion(0);
         rStream >> nVersion;
 
         if ( bKnownItem )
@@ -1072,7 +1074,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 
 {
     // Read the first surrogate
-    sal_uInt32 nSurrogat;
+    sal_uInt32 nSurrogat(0);
     rStream >> nSurrogat;
 
     // Is item stored directly?
@@ -1622,7 +1624,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
 // pRefPool==-1 => nicht putten!
 
 {
-    sal_uInt16 nWhich, nSlot; // nSurrogate;
+    sal_uInt16 nWhich(0), nSlot(0); // nSurrogate;
     rStream >> nWhich >> nSlot;
 
     sal_Bool bDontPut = (SfxItemPool*)-1 == pRefPool;
@@ -1637,8 +1639,8 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
         else
         {
             // WID in der Version nicht vorhanden => ueberspringen
-            sal_uInt32 nSurro;
-            sal_uInt16 nVersion, nLen;
+            sal_uInt32 nSurro(0);
+            sal_uInt16 nVersion(0), nLen(0);
             rStream >> nSurro;
             if ( SFX_ITEMS_DIRECT == nSurro )
             {
@@ -1676,8 +1678,8 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
     if ( bDirect || ( nWhich && !pItem ) )
     {
         // bDirekt bzw. nicht IsPoolable() => Item direkt laden
-        sal_uInt16 nVersion;
-        sal_uInt32 nLen;
+        sal_uInt16 nVersion(0);
+        sal_uInt32 nLen(0);
         rStream >> nVersion >> nLen;
         sal_uLong nIStart = rStream.Tell();
 

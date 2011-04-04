@@ -88,6 +88,16 @@ struct SfxItemPool_Impl
 
     SfxItemPool_Impl( sal_uInt16 nStart, sal_uInt16 nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
+        , nLoadingVersion(0)
+        , nInitRefCount(0)
+        , nVerStart(0)
+        , nVerEnd(0)
+        , nStoringStart(0)
+        , nStoringEnd(0)
+        , nMajorVer(0)
+        , nMinorVer(0)
+        , bInSetItem(false)
+        , bStreaming(false)
     {
         memset( ppPoolItems, 0, sizeof( SfxPoolItemArray_Impl* ) * ( nEnd - nStart + 1) );
     }
