@@ -133,6 +133,7 @@ protected:
     sal_Bool       bGlobal  : 1;        // sal_True: Global-Variable
     sal_Bool       bParamArray : 1;     // sal_True: ParamArray parameter
     sal_Bool       bWithEvents : 1;     // sal_True: Declared WithEvents
+    sal_Bool       bWithBrackets : 1;   // sal_True: Followed by ()
     sal_uInt16     nDefaultId;          // Symbol number of default value
     short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
@@ -159,6 +160,7 @@ public:
     void       SetOptional()    { bOpt = sal_True;      }
     void       SetParamArray()  { bParamArray = sal_True;       }
     void       SetWithEvents()  { bWithEvents = sal_True;       }
+    void       SetWithBrackets(){ bWithBrackets = sal_True;     }
     void       SetByVal( sal_Bool bByVal_ = sal_True )
                 { bByVal = bByVal_; }
     void       SetStatic( sal_Bool bAsStatic = sal_True )       { bStatic = bAsStatic;  }
@@ -170,6 +172,7 @@ public:
     sal_Bool       IsOptional() const{ return bOpt;     }
     sal_Bool       IsParamArray() const{ return bParamArray; }
     sal_Bool       IsWithEvents() const{ return bWithEvents; }
+    sal_Bool       IsWithBrackets() const{ return bWithBrackets; }
     sal_Bool       IsByVal() const  { return bByVal;    }
     sal_Bool       IsStatic() const { return bStatic;   }
     sal_Bool       IsNew() const    { return bNew;      }

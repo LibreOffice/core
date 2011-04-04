@@ -1177,7 +1177,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
 
     switch (result) {
     case GNOME_VFS_OK:
-        g_error ("VFS_OK mapped to exception.");
+        g_warning("VFS_OK mapped to exception.");
         break;
     case GNOME_VFS_ERROR_EOF:
         g_warning ("VFS_EOF not handled somewhere.");

@@ -84,8 +84,6 @@ bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 
 extern "C" {
 
-struct uno_Environment;
-
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {

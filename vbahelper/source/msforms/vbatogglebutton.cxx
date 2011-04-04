@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbatogglebutton.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -77,6 +78,56 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
     nState = ( nState == -1 ) ?  1 : 0;
         OSL_TRACE( "nState - %d", nState );
     m_xProps->setPropertyValue( STATE, uno::makeAny(  nState ) );
+}
+
+sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL ScVbaToggleButton::getCancel() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL ScVbaToggleButton::getDefault() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaToggleButton::getBackColor() throw (uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 /*nBackColor*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaToggleButton::getForeColor() throw (uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
+{
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 rtl::OUString&

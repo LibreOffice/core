@@ -1075,6 +1075,10 @@ sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
                 {
                 sal_uInt8 aByte;
                 *pStrm >> aByte;
+
+                if( bBinary && SbiRuntime::isVBAEnabled() && aByte == 1 && pStrm->IsEof() )
+                    aByte = 0;
+
                 rVar.PutByte( aByte );
                 }
                 break;
@@ -1185,7 +1189,8 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
     }
     sal_Int16 nFileNo = rPar.Get(1)->GetInteger();
     SbxVariable* pVar2 = rPar.Get(2);
-    sal_Bool bHasRecordNo = (sal_Bool)(pVar2->GetType() != SbxEMPTY);
+    SbxDataType eType2 = pVar2->GetType();
+    sal_Bool bHasRecordNo = (sal_Bool)(eType2 != SbxEMPTY && eType2 != SbxERROR);
     long nRecordNo = pVar2->GetLong();
     if ( nFileNo < 1 || ( bHasRecordNo && nRecordNo < 1 ) )
     {

@@ -87,7 +87,29 @@ extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 struct UsageDescription
 {
     SECCertificateUsage usage;
-    char const * const description;
+    char const* description;
+
+    UsageDescription()
+    : usage( certificateUsageCheckAllUsages )
+    , description( NULL )
+    {}
+
+    UsageDescription( SECCertificateUsage i_usage, char const* i_description )
+    : usage( i_usage )
+    , description( i_description )
+    {}
+
+    UsageDescription( const UsageDescription& aDescription )
+    : usage( aDescription.usage )
+    , description( aDescription.description )
+    {}
+
+    UsageDescription& operator =( const UsageDescription& aDescription )
+    {
+        usage = aDescription.usage;
+        description = aDescription.description;
+        return *this;
+    }
 };
 
 
@@ -906,14 +928,12 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         // certificateUsageAnyCA
         // certificateUsageProtectedObjectSigner
 
-        UsageDescription arUsages[] =
-        {
-           {certificateUsageSSLClient, "certificateUsageSSLClient" },
-           {certificateUsageSSLServer, "certificateUsageSSLServer" },
-           {certificateUsageSSLCA, "certificateUsageSSLCA" },
-           {certificateUsageEmailSigner, "certificateUsageEmailSigner"}, //only usable for end certs
-           {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"}
-        };
+        UsageDescription arUsages[5];
+        arUsages[0] = UsageDescription( certificateUsageSSLClient, "certificateUsageSSLClient"  );
+        arUsages[1] = UsageDescription( certificateUsageSSLServer, "certificateUsageSSLServer"  );
+        arUsages[2] = UsageDescription( certificateUsageSSLCA, "certificateUsageSSLCA"  );
+        arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
+        arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
 
         int numUsages = sizeof(arUsages) / sizeof(UsageDescription);
         for (int i = 0; i < numUsages; i++)

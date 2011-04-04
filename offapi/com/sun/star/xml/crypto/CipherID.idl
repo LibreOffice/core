@@ -24,19 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMEMORY_STREAM_HXX
-#define _XMEMORY_STREAM_HXX
+#ifndef __com_sun_star_xml_crypto_CipherID_idl__
+#define __com_sun_star_xml_crypto_CipherID_idl__
 
-#include <ZipPackageBuffer.hxx>
 
-class ZipPackage;
+//============================================================================
 
-class XMemoryStream: public ZipPackageBuffer
+module com { module sun { module star { module xml { module crypto {
+
+//============================================================================
+/** The constant set contains identifiers of supported cipher-creation
+    algorithms.
+
+    @see <type>XCipherContextSupplier</type>
+    @since OOo 3.4
+*/
+constants CipherID
 {
-public:
-    XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer );
-    virtual ~XMemoryStream(void);
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
+    //------------------------------------------------------------------------
+    /** identifier of AES algorithm in CBC mode with W3C padding
+     */
+    const long AES_CBC_W3C_PADDING = 1;
+
+    //------------------------------------------------------------------------
+    /** identifier of the Blowfish algorithm in 8-bit CFB mode
+     */
+    const long BLOWFISH_CFB_8 = 2;
 };
+
+//============================================================================
+
+}; }; }; }; };
+
 #endif
+

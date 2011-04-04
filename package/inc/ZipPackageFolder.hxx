@@ -90,10 +90,10 @@ public:
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
-    bool saveChild(const rtl::OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool);
+    bool saveChild(const rtl::OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool & rRandomPool);
 
     // Recursive functions
-    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
+    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 

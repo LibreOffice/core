@@ -345,7 +345,6 @@ rtl_arena_hash_rescale (
         );
 
 #if 0  /* DBG */
-        int i;
         for (i = 0; i < arena->m_hash_size; i++)
         {
             sal_Size k = 0; rtl_arena_segment_type ** segpp = &(arena->m_hash_table[i]);

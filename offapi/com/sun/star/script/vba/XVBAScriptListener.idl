@@ -25,28 +25,27 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
-#include <XMemoryStream.hxx>
+#ifndef __com_sun_star_script_vba_XVBAScriptListener_idl__
+#define __com_sun_star_script_vba_XVBAScriptListener_idl__
 
-using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/script/vba/VBAScriptEvent.idl>
 
-XMemoryStream::XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer )
-: ZipPackageBuffer ( rNewBuffer )
+//=============================================================================
+
+module com {  module sun {  module star { module script { module vba {
+
+//=============================================================================
+
+interface XVBAScriptListener : ::com::sun::star::lang::XEventListener
 {
-}
-XMemoryStream::~XMemoryStream(void)
-{
-}
-::com::sun::star::uno::Any SAL_CALL XMemoryStream::queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                    // OWeakObject interfaces
-                                    reinterpret_cast< XInterface*       > ( this )  ,
-                                    static_cast< XWeak*         > ( this )  ,
-                                    // my interfaces
-                                    static_cast< XInputStream*      > ( this )  ,
-                                    static_cast< XSeekable*     > ( this ) );
-}
+    void notifyVBAScriptEvent( [in] VBAScriptEvent Event );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

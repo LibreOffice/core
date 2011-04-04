@@ -132,10 +132,9 @@ public:
     XMLSignatureHelper(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
-                // Initialize the security context with given crypto token.
-                // Empty string means default crypto token.
-                // Returns true for success.
-    bool        Init( const rtl::OUString& rTokenPath );
+    // Initialize the security context with default crypto token.
+    // Returns true for success.
+    bool        Init();
 
                 // Set UriBinding to create input streams to open files.
                 // Default implementation is capable to open files from disk.

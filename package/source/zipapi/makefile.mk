@@ -45,8 +45,10 @@ SLOFILES= \
         $(SLO)$/CRC32.obj			\
         $(SLO)$/ByteChucker.obj		\
         $(SLO)$/ByteGrabber.obj		\
+        $(SLO)$/blowfishcontext.obj	\
         $(SLO)$/Inflater.obj		\
         $(SLO)$/Deflater.obj		\
+        $(SLO)$/sha1context.obj		\
         $(SLO)$/ZipEnumeration.obj	\
         $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\

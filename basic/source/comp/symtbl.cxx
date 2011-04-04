@@ -302,6 +302,7 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bOpt     =
     bParamArray =
     bWithEvents =
+    bWithBrackets =
     bByVal   =
     bChained =
     bGlobal  = sal_False;

@@ -35,7 +35,12 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-SwVbaWindow::SwVbaWindow( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : WindowImpl_BASE( xParent, xContext, xModel )
+SwVbaWindow::SwVbaWindow(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< frame::XController >& xController ) throw (uno::RuntimeException) :
+    WindowImpl_BASE( xParent, xContext, xModel, xController )
 {
 }
 

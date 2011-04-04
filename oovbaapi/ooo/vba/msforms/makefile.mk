@@ -38,10 +38,13 @@ PACKAGE=ooo$/vba$/msforms
 
 IDLFILES=\
     MSFormReturnTypes.idl \
+    XCheckBox.idl \
     XComboBox.idl \
-    XButton.idl \
+    XCommandButton.idl \
     XControl.idl \
+    XFrame.idl \
     XLabel.idl \
+    XNewFont.idl \
     XTextBox.idl \
     XRadioButton.idl \
     XShape.idl \

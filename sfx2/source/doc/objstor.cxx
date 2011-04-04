@@ -67,9 +67,12 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -357,24 +360,51 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     const_cast<SfxObjectShell*>( this )->SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
 
-                ::rtl::OUString aVersion;
                 SvtSaveOptions aSaveOpt;
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
-                // older versions can not have this property set, it exists only starting from ODF1.2
-                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
-                    aVersion = ODFVER_012_TEXT;
+                uno::Sequence< beans::NamedValue > aEncryptionAlgs( 3 );
+                aEncryptionAlgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartKeyGenerationAlgorithm" ) );
+                aEncryptionAlgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionAlgorithm" ) );
+                aEncryptionAlgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChecksumAlgorithm" ) );
+                // the default values, that should be used for ODF1.1 and older formats
+                aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA1;
+                aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
+                aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA1_1K;
 
-                if ( aVersion.getLength() )
+                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
                 {
                     try
                     {
-                        xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Version" ), uno::makeAny( aVersion ) );
+                        // older versions can not have this property set, it exists only starting from ODF1.2
+                        xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Version" ), uno::makeAny( ODFVER_012_TEXT ) );
                     }
                     catch( uno::Exception& )
                     {
                     }
+
+                    if ( !aSaveOpt.IsUseSHA1InODF12() )
+                    {
+                        aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+                        aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+                    }
+                    if ( !aSaveOpt.IsUseBlowfishInODF12() )
+                        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                 }
+
+                try
+                {
+                    // set the encryption algorithms accordingly;
+                    // the setting does not trigger encryption,
+                    // it just provides the format for the case that contents should be encrypted
+                    uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
+                    xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
+                }
+                catch( uno::Exception& )
+                {
+                    const_cast<SfxObjectShell*>( this )->SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                }
+
             }
         }
     }

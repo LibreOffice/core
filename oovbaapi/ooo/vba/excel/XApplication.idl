@@ -64,15 +64,12 @@ interface XApplication
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
     [attribute] long Cursor;
-        [attribute] boolean EnableEvents;
+    [attribute] boolean EnableEvents;
+    [attribute] string DefaultFilePath;
+    [attribute, readonly] string LibraryPath;
+    [attribute, readonly] string TemplatesPath;
+    [attribute, readonly] string PathSeparator;
 
-    void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
-
-    string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
-
-    string LibraryPath() raises(com::sun::star::script::BasicErrorException);
-    string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
-    string PathSeparator() raises(com::sun::star::script::BasicErrorException);
     //any CommandBars( [in] any Index );
     any Workbooks( [in] any Index );
     any Worksheets( [in] any Index );
@@ -93,10 +90,10 @@ interface XApplication
     void Volatile([in] any Volatile);
     void DoEvents();
     any Caller( [in] any Index );
+    any GetOpenFilename( [in] any FileFilter, [in] any FilterIndex, [in] any Title, [in] any ButtonText, [in] any MultiSelect );
+    any GetSaveAsFilename( [in] any InitialFileName, [in] any FileFilter, [in] any FilterIndex, [in] any Title, [in] any ButtonText );
 };
 
 }; }; };
 
 #endif
-
-

@@ -50,25 +50,27 @@ $(eval $(call gb_Library_set_defs,vbahelper,\
 # add libraries to be linked to vbahelper; again these names need to be given as
 # specified in Repository.mk
 $(eval $(call gb_Library_add_linked_libs,vbahelper,\
+    comphelper \
     cppu \
     cppuhelper \
-    comphelper \
-    sb \
-    tl \
+    msfilter \
     sal \
+    sb \
     sfx \
     stl \
-    svt \
-    vcl \
     svl \
-    msfilter \
+    svt \
     tk \
+    tl \
+    utl \
+    vcl \
     $(gb_STDLIBS) \
 ))
 
 # add all source files that shall be compiled with exceptions enabled
 # the name is relative to $(SRCROOT) and must not contain an extension
 $(eval $(call gb_Library_add_exception_objects,vbahelper,\
+    vbahelper/source/vbahelper/collectionbase \
     vbahelper/source/vbahelper/vbaapplicationbase \
     vbahelper/source/vbahelper/vbacolorformat \
     vbahelper/source/vbahelper/vbacommandbar \

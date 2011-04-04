@@ -24,20 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_msforms_XButton_idl__
-#define __ooo_vba_msforms_XButton_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __ooo_vba_msforms_XCommandButton_idl__
+#define __ooo_vba_msforms_XCommandButton_idl__
+
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
 
 //=============================================================================
-interface XButton: com::sun::star::uno::XInterface
+
+interface XCommandButton
 {
     [attribute] string Caption;
+    [attribute] boolean AutoSize;
+    [attribute] boolean Cancel;
+    [attribute] boolean Default;
+    [attribute] long BackColor;
+    [attribute] long ForeColor;
+    [attribute, readonly] XNewFont Font;
 };
 
 //=============================================================================

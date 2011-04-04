@@ -27,12 +27,12 @@
 #ifndef SC_VBA_CHECKBOX_HXX
 #define SC_VBA_CHECKBOX_HXX
 #include <cppuhelper/implbase2.hxx>
-#include <ooo/vba/msforms/XRadioButton.hpp>
+#include <ooo/vba/msforms/XCheckBox.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XRadioButton, css::script::XDefaultProperty > CheckBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XCheckBox, css::script::XDefaultProperty > CheckBoxImpl_BASE;
 
 class ScVbaCheckbox : public CheckBoxImpl_BASE
 {
@@ -43,6 +43,7 @@ public:
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
     // XDefaultProperty
     rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
     //XHelperInterface

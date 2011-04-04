@@ -183,6 +183,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uifactory/windowcontentfactorymanager \
     framework/source/xml/acceleratorconfigurationreader \
     framework/source/xml/acceleratorconfigurationwriter \
+    framework/source/xml/imagesconfiguration \
+    framework/source/xml/imagesdocumenthandler \
 ))
 
 # vim: set noet sw=4 ts=4:

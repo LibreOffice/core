@@ -47,6 +47,7 @@ static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
 static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
 static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+static const char ITEM_DESCRIPTOR_ENABLED[]     = "Enabled";
 
 static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
 static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";

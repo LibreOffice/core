@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <ooo/vba/XApplicationBase.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>
@@ -265,20 +266,21 @@ VbaDocumentBase::Activate() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
 {
-    try // return empty object on error
+    if( !mxVBProject.is() ) try
     {
+        uno::Reference< XApplicationBase > xApp( Application(), uno::UNO_QUERY_THROW );
+        uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
-        aArgs[ 1 ] <<= getModel();
+        aArgs[ 0 ] <<= xVBE;          // the VBE
+        aArgs[ 1 ] <<= getModel();    // document model for script container access
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );
-        return uno::Any( xVBProjects );
+        mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBProject" ) ), aArgs, mxContext );
     }
     catch( uno::Exception& )
     {
     }
-    return uno::Any();
+    return uno::Any( mxVBProject );
 }
 
 rtl::OUString&

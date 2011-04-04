@@ -38,8 +38,7 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 
-bool checkUnoObjectType( SbUnoObject* refVal,
-    const String& aClass );
+bool checkUnoObjectType( SbUnoObject* refVal, const ::rtl::OUString& aClass );
 
 // Laden einer numerischen Konstanten (+ID)
 

@@ -51,7 +51,11 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, sal_Bool bStatic, sal_Bool bC
     SbiDimList* pDim = NULL;
     // Klammern?
     if( Peek() == LPAREN )
+    {
         pDim = new SbiDimList( this );
+        if( !pDim->GetDims() )
+            pDef->SetWithBrackets();
+    }
     pDef->SetType( t );
     if( bStatic )
         pDef->SetStatic();
@@ -381,6 +385,9 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
             short nFixedStringLength = pDef->GetFixedStringLength();
             if( nFixedStringLength >= 0 )
                 nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (sal_uInt32(nFixedStringLength) << 17));     // len = all bits above 0x10000
+
+            if( pDim != NULL && pDim->GetDims() > 0 )
+                nOpnd2 |= SBX_TYPE_VAR_TO_DIM_FLAG;
 
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }

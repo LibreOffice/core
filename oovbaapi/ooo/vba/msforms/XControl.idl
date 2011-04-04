@@ -63,6 +63,7 @@ interface XControl
     [attribute] string Name;
     [attribute] string ControlTipText;
     [attribute] string Tag;
+    [attribute] long TabIndex;
 };
 
 //=============================================================================

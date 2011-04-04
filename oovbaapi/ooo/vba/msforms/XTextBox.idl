@@ -24,23 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_msforms_XTextBox_idl__
 #define __ooo_vba_msforms_XTextBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
 
 //=============================================================================
-interface XTextBox: com::sun::star::uno::XInterface
+
+interface XTextBox
 {
     [attribute] string  Text;
     [attribute] any    Value;
     [attribute] long    MaxLength;
     [attribute] boolean Multiline;
+    [attribute] long SpecialEffect;
+    [attribute] long BorderStyle;
+    [attribute, readonly] long TextLength;
+    [attribute, readonly] XNewFont Font;
 };
 
 //=============================================================================

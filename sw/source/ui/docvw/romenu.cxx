@@ -424,7 +424,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
 
-    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
+    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
@@ -512,7 +512,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
                 nFilter = GRFILTER_FORMAT_DONTKNOW;
             String aFilter( rGF.GetExportFormatShortName( nFilter ) );
             XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
-                                        XOUTBMP_DONT_EXPAND_FILENAME );
+                                        XOUTBMP_DONT_EXPAND_FILENAME|XOUTBMP_DONT_ADD_EXTENSION );
             return sPath;
         }
     }

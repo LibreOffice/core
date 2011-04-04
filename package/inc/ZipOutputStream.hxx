@@ -27,43 +27,48 @@
 #ifndef _ZIP_OUTPUT_STREAM_HXX
 #define _ZIP_OUTPUT_STREAM_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/crypto/XCipherContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
+
 #include <ByteChucker.hxx>
-#ifndef _DEFLATER_HXX
 #include <Deflater.hxx>
-#endif
 #include <CRC32.hxx>
-#include <rtl/cipher.h>
-#ifndef RTL_DIGEST_H_
-#include <rtl/digest.h>
-#endif
 
 #include <vector>
 
 struct ZipEntry;
-class EncryptionData;
-namespace vos
-{
-    template < class T > class ORef;
-}
+class ZipPackageStream;
+
 class ZipOutputStream
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream;
+
     ::std::vector < ZipEntry * >            aZipList;
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer, aEncryptionBuffer;
+
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
+
     ::rtl::OUString     sComment;
     Deflater            aDeflater;
-    rtlCipher           aCipher;
-    rtlDigest           aDigest;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
+
     CRC32               aCRC;
     ByteChucker         aChucker;
     ZipEntry            *pCurrentEntry;
     sal_Int16           nMethod, nLevel, mnDigested;
     sal_Bool            bFinished, bEncryptCurrentEntry;
-    EncryptionData      *pCurrentEncryptData;
+    ZipPackageStream*   m_pCurrentStream;
 
 public:
-    ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream );
+    ZipOutputStream(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
     // rawWrite to support a direct write to the output stream
@@ -78,7 +83,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
-            vos::ORef < EncryptionData > &rData,
+            ZipPackageStream* pStream,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )

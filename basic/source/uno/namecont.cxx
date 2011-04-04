@@ -34,17 +34,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <vos/diagnose.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 #include <comphelper/anytostring.hxx>
-#endif
 
 #include "namecont.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -65,11 +61,9 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/LibraryNotLoadedException.hpp>
-#include "com/sun/star/deployment/ExtensionManager.hpp"
+#include <com/sun/star/script/vba/VBAScriptEventId.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
-#ifndef _RTL_USTRING_HXX_
-#include <comphelper/anytostring.hxx>
-#endif
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 
@@ -165,25 +159,29 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 
 
     // Fire event
-    ContainerEvent aEvent;
-    aEvent.Source = mpxEventSource;
-    aEvent.Accessor <<= aName;
-    aEvent.Element = aElement;
-    aEvent.ReplacedElement = aOldElement;
-
-    OInterfaceIteratorHelper aIterator( maListenerContainer );
-    while( aIterator.hasMoreElements() )
+    if( maContainerListeners.getLength() > 0 )
     {
-        Reference< XInterface > xIface = aIterator.next();
-        Reference< XContainerListener > xListener( xIface, UNO_QUERY );
-        try
-        {
-            xListener->elementReplaced( aEvent );
-        }
-        catch(RuntimeException&)
-        {
-            aIterator.remove();
-        }
+        ContainerEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Accessor <<= aName;
+        aEvent.Element = aElement;
+        aEvent.ReplacedElement = aOldElement;
+        maContainerListeners.notifyEach( &XContainerListener::elementReplaced, aEvent );
+    }
+
+    /*  After the container event has been fired (one listener will update the
+        core Basic manager), fire change event. Listeners can rely that the
+        Basic source code of the core Basic manager is up-to-date. */
+    if( maChangesListeners.getLength() > 0 )
+    {
+        ChangesEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Base <<= aEvent.Source;
+        aEvent.Changes.realloc( 1 );
+        aEvent.Changes[ 0 ].Accessor <<= aName;
+        aEvent.Changes[ 0 ].Element <<= aElement;
+        aEvent.Changes[ 0 ].ReplacedElement = aOldElement;
+        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }
 
@@ -211,33 +209,35 @@ void NameContainer::insertByName( const OUString& aName, const Any& aElement )
     mHashMap[ aName ] = nCount;
     mnElementCount++;
 
-
     // Fire event
-    ContainerEvent aEvent;
-    aEvent.Source = mpxEventSource;
-    aEvent.Accessor <<= aName;
-    aEvent.Element = aElement;
-
-    OInterfaceIteratorHelper aIterator( maListenerContainer );
-    while( aIterator.hasMoreElements() )
+    if( maContainerListeners.getLength() > 0 )
     {
-        Reference< XInterface > xIface = aIterator.next();
-        Reference< XContainerListener > xListener( xIface, UNO_QUERY );
-        try
-        {
-            xListener->elementInserted( aEvent );
-        }
-        catch(RuntimeException&)
-        {
-            aIterator.remove();
-        }
+        ContainerEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Accessor <<= aName;
+        aEvent.Element = aElement;
+        maContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
+    }
+
+    /*  After the container event has been fired (one listener will update the
+        core Basic manager), fire change event. Listeners can rely that the
+        Basic source code of the core Basic manager is up-to-date. */
+    if( maChangesListeners.getLength() > 0 )
+    {
+        ChangesEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Base <<= aEvent.Source;
+        aEvent.Changes.realloc( 1 );
+        aEvent.Changes[ 0 ].Accessor <<= aName;
+        aEvent.Changes[ 0 ].Element <<= aElement;
+        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }
 
-void NameContainer::removeByName( const OUString& Name )
+void NameContainer::removeByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    NameContainerNameMap::iterator aIt = mHashMap.find( Name );
+    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
         throw NoSuchElementException();
@@ -259,26 +259,29 @@ void NameContainer::removeByName( const OUString& Name )
     mValues.realloc( iLast );
     mnElementCount--;
 
-
     // Fire event
-    ContainerEvent aEvent;
-    aEvent.Source = mpxEventSource;
-    aEvent.Accessor <<= Name;
-    aEvent.Element = aOldElement;
-
-    OInterfaceIteratorHelper aIterator( maListenerContainer );
-    while( aIterator.hasMoreElements() )
+    if( maContainerListeners.getLength() > 0 )
     {
-        Reference< XInterface > xIface = aIterator.next();
-        Reference< XContainerListener > xListener( xIface, UNO_QUERY );
-        try
-        {
-            xListener->elementRemoved( aEvent );
-        }
-        catch(RuntimeException&)
-        {
-            aIterator.remove();
-        }
+        ContainerEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Accessor <<= aName;
+        aEvent.Element = aOldElement;
+        maContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
+    }
+
+    /*  After the container event has been fired (one listener will update the
+        core Basic manager), fire change event. Listeners can rely that the
+        Basic source code of the core Basic manager is up-to-date. */
+    if( maChangesListeners.getLength() > 0 )
+    {
+        ChangesEvent aEvent;
+        aEvent.Source = mpxEventSource;
+        aEvent.Base <<= aEvent.Source;
+        aEvent.Changes.realloc( 1 );
+        aEvent.Changes[ 0 ].Accessor <<= aName;
+        // aEvent.Changes[ 0 ].Element remains empty (meaning "replaced with nothing")
+        aEvent.Changes[ 0 ].ReplacedElement = aOldElement;
+        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }
 
@@ -290,7 +293,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     if( !xListener.is() )
         throw RuntimeException();
     Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maListenerContainer.addInterface( xIface );
+    maContainerListeners.addInterface( xIface );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -299,7 +302,26 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     if( !xListener.is() )
         throw RuntimeException();
     Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maListenerContainer.removeInterface( xIface );
+    maContainerListeners.removeInterface( xIface );
+}
+
+// Methods XChangesNotifier
+void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListener >& xListener )
+    throw (RuntimeException)
+{
+    if( !xListener.is() )
+        throw RuntimeException();
+    Reference< XInterface > xIface( xListener, UNO_QUERY );
+    maChangesListeners.addInterface( xIface );
+}
+
+void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
+    throw (RuntimeException)
+{
+    if( !xListener.is() )
+        throw RuntimeException();
+    Reference< XInterface > xIface( xListener, UNO_QUERY );
+    maChangesListeners.removeInterface( xIface );
 }
 
 //============================================================================
@@ -320,12 +342,28 @@ void ModifiableHelper::setModified( sal_Bool _bModified )
 
 //============================================================================
 
+VBAScriptListenerContainer::VBAScriptListenerContainer( ::osl::Mutex& rMutex ) :
+    VBAScriptListenerContainer_BASE( rMutex )
+{
+}
+
+bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScriptListener >& rxListener, const vba::VBAScriptEvent& rEvent ) throw (Exception)
+{
+    rxListener->notifyVBAScriptEvent( rEvent );
+    return true;    // notify all other listeners too
+}
+
+//============================================================================
+
 // Implementation class SfxLibraryContainer
 DBG_NAME( SfxLibraryContainer )
 
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer( void )
-    : LibraryContainerHelper( maMutex )
+    : SfxLibraryContainer_BASE( maMutex )
+
+    , maVBAScriptListeners( maMutex )
+    , mnRunningVBAScripts( 0 )
     , mbVBACompat( sal_False )
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
@@ -2649,6 +2687,9 @@ void SfxLibraryContainer::_disposing( const EventObject& _rSource )
 // OComponentHelper
 void SAL_CALL SfxLibraryContainer::disposing()
 {
+    Reference< XModel > xModel = mxOwnerDocument;
+    EventObject aEvent( xModel.get() );
+    maVBAScriptListeners.disposing( aEvent );
     stopAllComponentListening();
     mxOwnerDocument = WeakReference< XModel >();
 }
@@ -2838,7 +2879,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
          */
         if( mbVBACompat ) try
         {
-            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
             xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
         }
@@ -2846,6 +2887,43 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
         {
         }
     }
+}
+
+sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts() throw (RuntimeException)
+{
+    LibraryContainerMethodGuard aGuard( *this );
+    return mnRunningVBAScripts;
+}
+
+void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener ) throw (RuntimeException)
+{
+    maVBAScriptListeners.addTypedListener( rxListener );
+}
+
+void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener ) throw (RuntimeException)
+{
+    maVBAScriptListeners.removeTypedListener( rxListener );
+}
+
+void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const ::rtl::OUString& rModuleName ) throw (RuntimeException)
+{
+    // own lock for accessing the number of running scripts
+    enterMethod();
+    switch( nIdentifier )
+    {
+        case vba::VBAScriptEventId::SCRIPT_STARTED:
+            ++mnRunningVBAScripts;
+        break;
+        case vba::VBAScriptEventId::SCRIPT_STOPPED:
+            --mnRunningVBAScripts;
+        break;
+    }
+    leaveMethod();
+
+    Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
+    Reference< XInterface > xSender( xModel, UNO_QUERY_THROW );
+    vba::VBAScriptEvent aEvent( xSender, nIdentifier, rModuleName );
+    maVBAScriptListeners.notify( aEvent );
 }
 
 // Methods XServiceInfo
@@ -2941,7 +3019,9 @@ Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
         aRet = Any( ::cppu::queryInterface( rType,
             static_cast< XContainer * >( this ),
             static_cast< XNameContainer * >( this ),
-            static_cast< XNameAccess * >( this ) ) );
+            static_cast< XNameAccess * >( this ),
+            static_cast< XElementAccess * >( this ),
+            static_cast< XChangesNotifier * >( this ) ) );
     //}
     if( !aRet.hasValue() )
         aRet = OComponentHelper::queryInterface( rType );
@@ -3083,6 +3163,7 @@ Sequence< Type > SfxLibrary::getTypes()
                 static OTypeCollection s_aTypes_NameContainer(
                     ::getCppuType( (const Reference< XNameContainer > *)0 ),
                     ::getCppuType( (const Reference< XContainer > *)0 ),
+                    ::getCppuType( (const Reference< XChangesNotifier > *)0 ),
                     OComponentHelper::getTypes() );
                 s_pTypes_NameContainer = &s_aTypes_NameContainer;
             }
@@ -3110,9 +3191,6 @@ Sequence< sal_Int8 > SfxLibrary::getImplementationId()
     }
 }
 
-
-//============================================================================
-
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
     throw (RuntimeException)
@@ -3127,6 +3205,19 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
     maNameContainer.removeContainerListener( xListener );
 }
 
+// Methods XChangesNotifier
+void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
+    throw (RuntimeException)
+{
+    maNameContainer.setEventSource( static_cast< XInterface* >( (OWeakObject*)this ) );
+    maNameContainer.addChangesListener( xListener );
+}
+
+void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
+    throw (RuntimeException)
+{
+    maNameContainer.removeChangesListener( xListener );
+}
 
 //============================================================================
 // Implementation class ScriptExtensionIterator

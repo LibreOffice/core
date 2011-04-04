@@ -55,14 +55,20 @@ public:
     }
 };
 
-ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const rtl::OUString& sResourceUrl, const uno::Reference< awt::XMenu >& xMenu  ) throw (uno::RuntimeException) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_xMenu( xMenu )
+ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const rtl::OUString& sResourceUrl ) throw (uno::RuntimeException) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
 {
     m_bIsMenu = sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) ? sal_True : sal_False;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const rtl::OUString& sCommandURL, const rtl::OUString& sHelpURL, const rtl::OUString& sLabel, sal_uInt16 nType, const uno::Any& aSubMenu )
+uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const rtl::OUString& sCommandURL,
+                                                                                   const rtl::OUString& sHelpURL,
+                                                                                   const rtl::OUString& sLabel,
+                                                                                   sal_uInt16 nType,
+                                                                                   const uno::Any& aSubMenu,
+                                                                                   sal_Bool isVisible,
+                                                                                   sal_Bool isEnabled )
 {
-    uno::Sequence< beans::PropertyValue > aProps(5);
+    uno::Sequence< beans::PropertyValue > aProps(7);
 
     aProps[0].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_COMMANDURL );
     aProps[0].Value <<= sCommandURL;
@@ -74,6 +80,10 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
     aProps[3].Value <<= nType;
     aProps[4].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER );
     aProps[4].Value = aSubMenu;
+    aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
+    aProps[5].Value <<= isVisible;
+    aProps[6].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ENABLED );
+    aProps[6].Value <<= isEnabled;
 
     return aProps;
 }
@@ -124,9 +134,9 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     getPropertyValue( aProps, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
-        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True, m_xMenu );
+        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
     else
-        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True, m_xMenu );
+        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
 
     return uno::makeAny( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
 }
@@ -202,7 +212,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     sal_uInt16 nItemType = 0;
     if( IsMenu() )
     {
-        aProps = CreateMenuItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu );
+        aProps = CreateMenuItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, true, true );
     }
     else
     {
@@ -217,12 +227,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 
-    // sometimes it would crash if passing m_xMenu instead of uno::Reference< awt::XMenu >() in Linux.
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( nType == office::MsoControlType::msoControlPopup )
-        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary, uno::Reference< awt::XMenu >() );
+        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary );
     else
-        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary, uno::Reference< awt::XMenu >() );
+        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary );
 
     return uno::Reference< XCommandBarControl >( pNewCommandBarControl );
 }

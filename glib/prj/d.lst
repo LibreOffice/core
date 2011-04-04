@@ -12,6 +12,7 @@ symlink: %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\glib-mkenums %_DEST%\bin%_EXT%\glib-mkenums
 ..\%__SRC%\bin\glib-genmarshal %_DEST%\bin%_EXT%\glib-genmarshal
+..\%__SRC%\bin\glib-genmarshal.exe %_DEST%\bin%_EXT%\glib-genmarshal.exe
 ..\%__SRC%\lib\gio-2.0.lib %_DEST%\lib%_EXT%\gio-2.0.lib
 ..\%__SRC%\lib\gmodule-2.0.lib %_DEST%\lib%_EXT%\gmodule-2.0.lib
 ..\%__SRC%\lib\gthread-2.0.lib %_DEST%\lib%_EXT%\gthread-2.0.lib
@@ -36,6 +37,8 @@ mkdir: %_DEST%\inc%_EXT%\external\glib-2.0
 ..\%__SRC%\inc\glib.h %_DEST%\inc%_EXT%\external\glib-2.0\glib.h
 ..\%__SRC%\inc\glibconfig.h %_DEST%\inc%_EXT%\external\glib-2.0\glibconfig.h
 ..\%__SRC%\inc\gmodule.h %_DEST%\inc%_EXT%\external\glib-2.0\gmodule.h
+..\%__SRC%\inc\make.msc %_DEST%\inc%_EXT%\external\glib-2.0\make.msc
+..\%__SRC%\inc\module.defs %_DEST%\inc%_EXT%\external\glib-2.0\module.defs
 
 mkdir: %_DEST%\inc%_EXT%\external\glib-2.0\gio
 ..\%__SRC%\inc\gaction.h %_DEST%\inc%_EXT%\external\glib-2.0\gio\gaction.h

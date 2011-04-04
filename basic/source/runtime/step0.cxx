@@ -797,6 +797,8 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         // AB 2.4.1996, auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
         if( pDims )
         {
+            refVar->ResetFlag( SBX_VAR_TO_DIM );
+
             for( sal_uInt16 i = 1; i < pDims->Count(); )
             {
                 sal_Int32 lb = pDims->Get( i++ )->GetLong();

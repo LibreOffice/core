@@ -303,6 +303,8 @@ void SbiCodeGen::Save()
                             nUserData |= nDefaultId;
                         if( pPar->IsParamArray() )
                             nUserData |= PARAM_INFO_PARAMARRAY;
+                        if( pPar->IsWithBrackets() )
+                            nUserData |= PARAM_INFO_WITHBRACKETS;
                         if( nUserData )
                         {
                             SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );

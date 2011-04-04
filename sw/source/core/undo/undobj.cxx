@@ -134,7 +134,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, sal_Bool bCorrToCntnt ) const
 }
 
 SwPaM & SwUndRng::AddUndoRedoPaM(
-        ::sw::UndoRedoContext & rContext, bool bCorrToCntnt) const
+        ::sw::UndoRedoContext & rContext, bool const bCorrToCntnt) const
 {
     SwPaM & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
     SetPaM( rPaM, bCorrToCntnt );

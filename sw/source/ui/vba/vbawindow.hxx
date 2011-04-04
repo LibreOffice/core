@@ -38,8 +38,12 @@ typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::word::XWindow > WindowI
 class SwVbaWindow : public WindowImpl_BASE
 {
 public:
-    SwVbaWindow( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
-
+    SwVbaWindow(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::frame::XController >& xController )
+        throw (css::uno::RuntimeException);
 
     // Attributes
     virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException);

@@ -134,18 +134,6 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 }
             }
         }
-
-        /*  Trigger the Workbook_Open event, event processor will register
-            itself as listener for specific events. */
-        try
-        {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument()->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs;
-            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
     }
 }
 
@@ -157,19 +145,14 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     if( !xModel.is() )
         return uno::Any();
 
-    ScDocShell* pShell = excel::getDocShell( xModel );
-    if ( pShell )
+    uno::Reference< excel::XWorkbook > xWb( getVBADocument( xModel ), uno::UNO_QUERY );
+    if ( xWb.is() )
     {
-        String sCodeName = pShell->GetDocument()->GetCodeName();
-        uno::Reference< uno::XInterface > xIf = getUnoDocModule( sCodeName, pShell );
-                if ( xIf.is() )
-                {
-                    OSL_TRACE(" *** Returning Module uno Object *** ");
-                    return  uno::makeAny( xIf );
-                }
+        OSL_TRACE(" *** Returning Module uno Object *** ");
+        return uno::Any( xWb );
     }
 
-    ScVbaWorkbook *pWb = new ScVbaWorkbook(  xParent, xContext, xModel );
+    ScVbaWorkbook *pWb = new ScVbaWorkbook( xParent, xContext, xModel );
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 

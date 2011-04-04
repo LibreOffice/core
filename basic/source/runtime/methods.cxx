@@ -82,6 +82,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
+using namespace com::sun::star::frame;
 
 #endif /* _USE_UNO */
 
@@ -96,6 +97,7 @@ using namespace com::sun::star::io;
 #include "iosys.hxx"
 #include "ddectrl.hxx"
 #include <sbintern.hxx>
+#include <basic/vbahelper.hxx>
 
 #include <list>
 #include <math.h>
@@ -117,6 +119,9 @@ using namespace com::sun::star::io;
 #endif
 
 #include <basic/sbobjmod.hxx>
+
+// from source/classes/sbxmod.cxx
+Reference< XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -382,20 +387,46 @@ RTLFUNC(Asc)
     }
 }
 
-RTLFUNC(Chr)
+void implChr( SbxArray& rPar, bool bChrW )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         SbxVariableRef pArg = rPar.Get( 1 );
-        sal_Unicode aCh = (sal_Unicode)pArg->GetUShort();
-        String aStr( aCh );
+
+        String aStr;
+        if( !bChrW && SbiRuntime::isVBAEnabled() )
+        {
+            sal_Char c = (sal_Char)pArg->GetByte();
+            ByteString s( c );
+            aStr = String( s, gsl_getSystemTextEncoding() );
+        }
+        else
+        {
+            sal_Unicode aCh = (sal_Unicode)pArg->GetUShort();
+            aStr = String( aCh );
+        }
         rPar.Get(0)->PutString( aStr );
     }
+}
+
+RTLFUNC(Chr)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    bool bChrW = false;
+    implChr( rPar, bChrW );
+}
+
+RTLFUNC(ChrW)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    bool bChrW = true;
+    implChr( rPar, bChrW );
 }
 
 
@@ -481,7 +512,6 @@ RTLFUNC(CurDir)
 
 RTLFUNC(ChDir) // JSM
 {
-    (void)pBasic;
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
@@ -504,6 +534,9 @@ RTLFUNC(ChDir) // JSM
         if( bError )
             StarBASIC::Error( SbERR_PATH_NOT_FOUND );
 #endif
+        // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
+        if( SbiRuntime::isVBAEnabled() )
+            ::basic::vba::registerCurrentDirectory( getDocumentModel( pBasic ), rPar.Get(1)->GetString() );
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );

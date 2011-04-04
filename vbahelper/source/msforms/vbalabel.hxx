@@ -44,6 +44,7 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

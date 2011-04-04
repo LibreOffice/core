@@ -26,34 +26,40 @@
  ************************************************************************/
 
 #include "vbahelper/vbaeventshelperbase.hxx"
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
+#include <unotools/eventcfg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
     mpShell( 0 ),
-    mbDisposed( false )
+    mbDisposed( true )
 {
     try
     {
         mxModel = getXSomethingFromArgs< frame::XModel >( rArgs, 0, false );
         mpShell = getSfxObjShell( mxModel );
-
-        // add dispose listener
-        uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY_THROW );
-        xComponent->addEventListener( this );
     }
     catch( uno::Exception& )
     {
     }
+    mbDisposed = mpShell == 0;
+    startListening();
 }
 
 VbaEventsHelperBase::~VbaEventsHelperBase()
 {
-    stopListening();
+    OSL_ENSURE( mbDisposed, "VbaEventsHelperBase::~VbaEventsHelperBase - missing disposing notification" );
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
@@ -65,8 +71,8 @@ sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, c
     return getEventHandlerPath( rInfo, rArgs ).getLength() > 0;
 }
 
-void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
-        throw (lang::IllegalArgumentException, script::provider::ScriptFrameworkErrorException, util::VetoException, uno::RuntimeException)
+sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+        throw (lang::IllegalArgumentException, util::VetoException, uno::RuntimeException)
 {
     /*  Derived classes may add new event identifiers to be processed while
         processing the original event. All unprocessed events are collected in
@@ -79,9 +85,9 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
         handler receives the Cancel value of the previous event handler. */
     bool bCancel = false;
 
-    /*  bSuccess will change to true if at least one event handler has been
-        executed successfully. */
-    bool bSuccess = false;
+    /*  bExecuted will change to true if at least one event handler has been
+        found and executed. */
+    bool bExecuted = false;
 
     /*  Loop as long as there are more events to be processed. Derived classes
         may add new events to be processed in the virtual implPrepareEvent()
@@ -98,15 +104,15 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
         const EventHandlerInfo& rInfo = getEventHandlerInfo( aEventQueue.front().mnEventId );
         uno::Sequence< uno::Any > aEventArgs = aEventQueue.front().maArgs;
         aEventQueue.pop_front();
+        OSL_TRACE( "VbaEventsHelperBase::processVbaEvent( \"%s\" )", ::rtl::OUStringToOString( rInfo.maMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         /*  Let derived classes prepare the event, they may add new events for
             next iteration. If false is returned, the event handler must not be
             called. */
-        bool bEventSuccess = false;
         if( implPrepareEvent( aEventQueue, rInfo, aEventArgs ) )
         {
             // search the event handler macro in the document
-            ::rtl::OUString aMacroPath = getEventHandlerPath( rInfo, aEventArgs );
+            OUString aMacroPath = getEventHandlerPath( rInfo, aEventArgs );
             if( aMacroPath.getLength() > 0 )
             {
                 // build the argument list
@@ -120,96 +126,225 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
                 }
                 // execute the event handler
                 uno::Any aRet, aCaller;
-                bEventSuccess = executeMacro( mpShell, aMacroPath, aVbaArgs, aRet, aCaller );
-                // extract new cancel value
+                executeMacro( mpShell, aMacroPath, aVbaArgs, aRet, aCaller );
+                // extract new cancel value (may be boolean or any integer type)
                 if( rInfo.mnCancelIndex >= 0 )
                 {
-                    if( rInfo.mnCancelIndex >= aVbaArgs.getLength() )
-                        throw lang::IllegalArgumentException();
-                    // cancel value may be boolean or any integer type, Any(bool) does not extract to sal_Int32
-                    bool bNewCancel = false;
-                    sal_Int32 nNewCancel = 0;
-                    if( aVbaArgs[ rInfo.mnCancelIndex ] >>= bNewCancel )
-                        bCancel = bNewCancel;
-                    else if( aVbaArgs[ rInfo.mnCancelIndex ] >>= nNewCancel )
-                        bCancel = nNewCancel != 0;
+                    checkArgument( aVbaArgs, rInfo.mnCancelIndex );
+                    bCancel = extractBoolFromAny( aVbaArgs[ rInfo.mnCancelIndex ] );
                 }
+                // event handler has been found
+                bExecuted = true;
             }
-            // global success, if at least one event handler succeeded
-            bSuccess |= bEventSuccess;
         }
         // post processing (also, if event handler does not exist, or disabled, or on error
-        implPostProcessEvent( aEventQueue, rInfo, bEventSuccess, bCancel );
+        implPostProcessEvent( aEventQueue, rInfo, bCancel );
     }
 
     // if event handlers want to cancel the event, do so regardless of any errors
     if( bCancel )
         throw util::VetoException();
 
-    // if no event handler finished successfully, throw
-    if( !bSuccess )
-        throw script::provider::ScriptFrameworkErrorException();
+    // return true, if at least one event handler has been found
+    return bExecuted;
 }
 
-void SAL_CALL VbaEventsHelperBase::disposing( const lang::EventObject& /*aSource*/ ) throw (uno::RuntimeException)
+void SAL_CALL VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    OSL_TRACE( "VbaEventsHelperBase::disposing" );
-    stopListening();
-    mbDisposed = true;
+    OSL_TRACE( "VbaEventsHelperBase::notifyEvent( \"%s\" )", ::rtl::OUStringToOString( rEvent.EventName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
+        stopListening();
+}
+
+void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rEvent ) throw (uno::RuntimeException)
+{
+    // make sure the VBA library exists
+    try
+    {
+        ensureVBALibrary();
+    }
+    catch( uno::Exception& )
+    {
+        return;
+    }
+
+    // check that the sender of the event is the VBA library
+    uno::Reference< script::vba::XVBAModuleInfo > xSender( rEvent.Base, uno::UNO_QUERY );
+    if( mxModuleInfos.get() != xSender.get() )
+        return;
+
+    // process all changed modules
+    for( sal_Int32 nIndex = 0, nLength = rEvent.Changes.getLength(); nIndex < nLength; ++nIndex )
+    {
+        const util::ElementChange& rChange = rEvent.Changes[ nIndex ];
+        OUString aModuleName;
+        if( (rChange.Accessor >>= aModuleName) && (aModuleName.getLength() > 0) ) try
+        {
+            // invalidate event handler path map depending on module type
+            if( getModuleType( aModuleName ) == script::ModuleType::NORMAL )
+                // paths to global event handlers are stored with empty key (will be searched in all normal code modules)
+                maEventPaths.erase( OUString() );
+            else
+                // paths to class/form/document event handlers are keyed by module name
+                maEventPaths.erase( aModuleName );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
+
+void SAL_CALL VbaEventsHelperBase::disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException)
+{
+    uno::Reference< frame::XModel > xSender( rEvent.Source, uno::UNO_QUERY );
+    if( xSender.is() )
+        stopListening();
+}
+
+void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+{
+    try
+    {
+        processVbaEvent( nEventId, rArgs );
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 // protected ------------------------------------------------------------------
 
-void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId,
-        const sal_Char* pcMacroName, EventHandlerType eType, sal_Int32 nCancelIndex, const uno::Any& rUserData )
+void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId, sal_Int32 nModuleType,
+        const sal_Char* pcMacroName, sal_Int32 nCancelIndex, const uno::Any& rUserData )
 {
-    EventHandlerInfo& rInfo = maEvents[ nEventId ];
+    EventHandlerInfo& rInfo = maEventInfos[ nEventId ];
     rInfo.mnEventId = nEventId;
-    rInfo.maMacroName = ::rtl::OUString::createFromAscii( pcMacroName );
-    rInfo.meType = eType;
+    rInfo.mnModuleType = nModuleType;
+    rInfo.maMacroName = OUString::createFromAscii( pcMacroName );
     rInfo.mnCancelIndex = nCancelIndex;
     rInfo.maUserData = rUserData;
 }
 
 // private --------------------------------------------------------------------
 
-const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandlerInfo(
-        sal_Int32 nEventId ) const throw (lang::IllegalArgumentException)
+void VbaEventsHelperBase::startListening()
 {
-    EventHandlerMap::const_iterator aIt = maEvents.find( nEventId );
-    if( aIt == maEvents.end() )
-        throw lang::IllegalArgumentException();
-    return aIt->second;
-}
+    if( mbDisposed )
+        return;
 
-::rtl::OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs ) const throw (lang::IllegalArgumentException)
-{
-    ::rtl::OUString aMacroName;
-    switch( rInfo.meType )
-    {
-        case EVENTHANDLER_GLOBAL:
-            aMacroName = rInfo.maMacroName;
-        break;
-        case EVENTHANDLER_DOCUMENT:
-            aMacroName = ::rtl::OUStringBuffer( implGetDocumentModuleName( rInfo, rArgs ) ).
-                append( sal_Unicode( '.' ) ).append( rInfo.maMacroName ).makeStringAndClear();
-        break;
-    }
-    MacroResolvedInfo aMacroInfo = resolveVBAMacro( mpShell, aMacroName, false );
-    return aMacroInfo.mbFound ? ::rtl::OUString( aMacroInfo.msResolvedMacro ) : ::rtl::OUString();
+    uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
+    if( xEventBroadcaster.is() )
+        try { xEventBroadcaster->addEventListener( this ); } catch( uno::Exception& ) {}
 }
 
 void VbaEventsHelperBase::stopListening()
 {
-    if( !mbDisposed ) try
+    if( mbDisposed )
+        return;
+
+    uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
+    if( xEventBroadcaster.is() )
+        try { xEventBroadcaster->removeEventListener( this ); } catch( uno::Exception& ) {}
+
+    mxModel.clear();
+    mpShell = 0;
+    maEventInfos.clear();
+    mbDisposed = true;
+}
+
+const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandlerInfo(
+        sal_Int32 nEventId ) const throw (lang::IllegalArgumentException)
+{
+    EventHandlerInfoMap::const_iterator aIt = maEventInfos.find( nEventId );
+    if( aIt == maEventInfos.end() )
+        throw lang::IllegalArgumentException();
+    return aIt->second;
+}
+
+OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo,
+        const uno::Sequence< uno::Any >& rArgs ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    OUString aModuleName;
+    switch( rInfo.mnModuleType )
     {
-        uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY_THROW );
-        xComponent->removeEventListener( this );
+        // global event handlers may exist in any standard code module
+        case script::ModuleType::NORMAL:
+        break;
+
+        // document event: get name of the code module associated to the event sender
+        case script::ModuleType::DOCUMENT:
+            aModuleName = implGetDocumentModuleName( rInfo, rArgs );
+            if( aModuleName.getLength() == 0 )
+                throw lang::IllegalArgumentException();
+        break;
+
+        default:
+            throw uno::RuntimeException(); // unsupported module type
+    }
+
+    /*  Performance improvement: Check the list of existing event handlers
+        instead of searching in Basic source code every time. */
+    EventHandlerPathMap::iterator aIt = maEventPaths.find( aModuleName );
+    ModulePathMap& rPathMap = (aIt == maEventPaths.end()) ? updateModulePathMap( aModuleName ) : aIt->second;
+    return rPathMap[ rInfo.mnEventId ];
+}
+
+void VbaEventsHelperBase::ensureVBALibrary() throw (uno::RuntimeException)
+{
+    if( !mxModuleInfos.is() ) try
+    {
+        maLibraryName = getDefaultProjectName( mpShell );
+        if( maLibraryName.getLength() == 0 )
+            throw uno::RuntimeException();
+        uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW );
+        mxModuleInfos.set( xBasicLibs->getByName( maLibraryName ), uno::UNO_QUERY_THROW );
+        // listen to changes in the VBA source code
+        uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModuleInfos, uno::UNO_QUERY_THROW );
+        xChangesNotifier->addChangesListener( this );
+    }
+    catch( uno::Exception& )
+    {
+        // error accessing the Basic library, so this object is useless
+        stopListening();
+        throw uno::RuntimeException();
+    }
+}
+
+sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName ) throw (uno::RuntimeException)
+{
+    // make sure the VBA library exists
+    ensureVBALibrary();
+
+    // no module specified: global event handler in standard code modules
+    if( rModuleName.getLength() == 0 )
+        return script::ModuleType::NORMAL;
+
+    // get module type from module info
+    try
+    {
+        return mxModuleInfos->getModuleInfo( rModuleName ).ModuleType;
     }
     catch( uno::Exception& )
     {
     }
+    throw uno::RuntimeException();
+}
+
+VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const ::rtl::OUString& rModuleName ) throw (uno::RuntimeException)
+{
+    // get type of the specified module (throws on error)
+    sal_Int32 nModuleType = getModuleType( rModuleName );
+    // search for all event handlers
+    ModulePathMap& rPathMap = maEventPaths[ rModuleName ];
+    for( EventHandlerInfoMap::iterator aIt = maEventInfos.begin(), aEnd = maEventInfos.end(); aIt != aEnd; ++aIt )
+    {
+        const EventHandlerInfo& rInfo = aIt->second;
+        if( rInfo.mnModuleType == nModuleType )
+            rPathMap[ rInfo.mnEventId ] = resolveVBAMacro( mpShell, maLibraryName, rModuleName, rInfo.maMacroName );
+    }
+    return rPathMap;
 }
 
 // ============================================================================

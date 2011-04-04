@@ -628,82 +628,87 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     dispatchExecute( pViewShell, SID_VIEWSHELL1 );
 }
 
-bool extractBoolFromAny( bool& rbValue, const uno::Any& rAny )
+sal_Int32 extractIntFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
 {
-    if( rAny >>= rbValue ) return true;
+    switch( rAny.getValueType().getTypeClass() )
+    {
+        case uno::TypeClass_FLOAT:
+            return static_cast< sal_Int32 >( rAny.get< float >() );
+        case uno::TypeClass_DOUBLE:
+            return static_cast< sal_Int32 >( rAny.get< double >() );
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+            return rAny.get< sal_Int32 >();
+        default:;
+    }
+    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to integer." ) ), 0 );
+}
 
-    sal_Int64 nSigned = 0;
-    if( rAny >>= nSigned ) { rbValue = nSigned != 0; return true; }
-
-    sal_uInt64 nUnsigned = 0;
-    if( rAny >>= nUnsigned ) { rbValue = nUnsigned > 0; return true; }
-
-    double fDouble = 0.0;
-    if( rAny >>= fDouble ) { rbValue = fDouble != 0.0; return true; }
-
-    return false;
+sal_Int32 extractIntFromAny( const uno::Any& rAny, sal_Int32 nDefault ) throw (uno::RuntimeException)
+{
+    return rAny.hasValue() ? extractIntFromAny( rAny ) : nDefault;
 }
 
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
 {
-    bool bValue = false;
-    if( extractBoolFromAny( bValue, rAny ) )
-        return bValue;
-    throw uno::RuntimeException();
+    switch( rAny.getValueType().getTypeClass() )
+    {
+        case uno::TypeClass_BOOLEAN:
+            return rAny.get< bool >();
+        case uno::TypeClass_FLOAT:
+            return rAny.get< float >() != 0.0;
+        case uno::TypeClass_DOUBLE:
+            return rAny.get< double >() != 0.0;
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+            return rAny.get< sal_Int32 >() != 0;
+        case uno::TypeClass_HYPER:
+            return rAny.get< sal_Int64 >() != 0;
+        default:;
+    }
+    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to boolean." ) ), 0 );
+}
+
+bool extractBoolFromAny( const uno::Any& rAny, bool bDefault ) throw (uno::RuntimeException)
+{
+    return rAny.hasValue() ? extractBoolFromAny( rAny ) : bDefault;
+}
+
+::rtl::OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
+{
+    switch( rAny.getValueType().getTypeClass() )
+    {
+        case uno::TypeClass_STRING:
+            return rAny.get< ::rtl::OUString >();
+        case uno::TypeClass_BOOLEAN:
+            return bUppercaseBool ?
+                (rAny.get< bool >() ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TRUE" ) ) : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FALSE" ) )) :
+                ::rtl::OUString::valueOf( (sal_Bool)rAny.get< bool >() );
+        case uno::TypeClass_FLOAT:
+            return ::rtl::OUString::valueOf( rAny.get< float >() );
+        case uno::TypeClass_DOUBLE:
+            return ::rtl::OUString::valueOf( rAny.get< double >() );
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+            return ::rtl::OUString::valueOf( rAny.get< sal_Int32 >() );
+        case uno::TypeClass_HYPER:
+            return ::rtl::OUString::valueOf( rAny.get< sal_Int64 >() );
+        default:;
+    }
+    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to string." ) ), 0 );
+}
+
+::rtl::OUString extractStringFromAny( const uno::Any& rAny, const ::rtl::OUString& rDefault, bool bUppercaseBool ) throw (uno::RuntimeException)
+{
+    return rAny.hasValue() ? extractStringFromAny( rAny, bUppercaseBool ) : rDefault;
 }
 
 rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
 {
-    uno::Type aType = pvargItem.getValueType();
-    uno::TypeClass eTypeClass = aType.getTypeClass();
-    rtl::OUString sString;
-    switch ( eTypeClass )
-    {
-        case uno::TypeClass_BOOLEAN:
-        {
-            sal_Bool bBool = sal_False;
-            pvargItem >>= bBool;
-            sString = rtl::OUString::valueOf( bBool );
-            break;
-        }
-        case uno::TypeClass_STRING:
-            pvargItem >>= sString;
-            break;
-        case uno::TypeClass_FLOAT:
-            {
-                float aFloat = 0;
-                pvargItem >>= aFloat;
-                sString = rtl::OUString::valueOf( aFloat );
-                break;
-            }
-        case uno::TypeClass_DOUBLE:
-            {
-                double aDouble = 0;
-                pvargItem >>= aDouble;
-                sString = rtl::OUString::valueOf( aDouble );
-                break;
-            }
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_LONG:
-        case uno::TypeClass_BYTE:
-            {
-                sal_Int32 aNum = 0;
-                pvargItem >>= aNum;
-                sString = rtl::OUString::valueOf( aNum );
-                break;
-            }
-
-        case uno::TypeClass_HYPER:
-            {
-                sal_Int64 aHyper = 0;
-                pvargItem >>= aHyper;
-                sString = rtl::OUString::valueOf( aHyper );
-                break;
-            }
-        default:
-                   throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid type, can't convert" ), uno::Reference< uno::XInterface >() );
-    }
-    return sString;
+    return extractStringFromAny( pvargItem );
 }
 
 
@@ -840,7 +845,7 @@ rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
     return sResult.makeStringAndClear( );
 }
 
-double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical)
+double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical)
 {
     double fConvertFactor = 1.0;
     if( bVertical )
@@ -854,12 +859,12 @@ double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt:
     return fConvertFactor;
 }
 
-double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical)
+double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
     return PointsToHmm( fPoints ) * fConvertFactor;
 }
-double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
+double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
     return HmmToPoints( fPixels/fConvertFactor );
@@ -994,128 +999,176 @@ sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const r
 
 // ====UserFormGeomentryHelper====
 //---------------------------------------------
-UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComponentContext >& /*xContext*/, const uno::Reference< awt::XControl >& xControl )
-: mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
+UserFormGeometryHelper::UserFormGeometryHelper(
+        const uno::Reference< uno::XComponentContext >& /*xContext*/,
+        const uno::Reference< awt::XControl >& xControl,
+        double fOffsetX, double fOffsetY ) :
+    mfOffsetX( fOffsetX ),
+    mfOffsetY( fOffsetY ),
+    mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No control is provided!" ) ),
                                      uno::Reference< uno::XInterface >() );
 
     mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
+    mxModelProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
+    mxUnitConv.set( mxWindow, uno::UNO_QUERY_THROW );
 }
 
-//---------------------------------------------
-double UserFormGeometryHelper::getLeft()
+double UserFormGeometryHelper::getLeft() const
 {
-    return mxWindow->getPosSize().X;
+    return implGetPos( false );
 }
 
-//---------------------------------------------
-void UserFormGeometryHelper::setLeft( double nLeft )
+void UserFormGeometryHelper::setLeft( double fLeft )
 {
-    mxWindow->setPosSize( nLeft, mxWindow->getPosSize().Y, 0, 0, awt::PosSize::POS );
+    implSetPos( fLeft, false );
 }
 
-//---------------------------------------------
-double UserFormGeometryHelper::getTop()
+double UserFormGeometryHelper::getTop() const
 {
-    return mxWindow->getPosSize().Y;
+    return implGetPos( true );
 }
 
-//---------------------------------------------
-void UserFormGeometryHelper::setTop( double nTop )
+void UserFormGeometryHelper::setTop( double fTop )
 {
-    mxWindow->setPosSize( mxWindow->getPosSize().X, nTop, 0, 0, awt::PosSize::POS );
+    implSetPos( fTop, true );
 }
 
-//---------------------------------------------
-double UserFormGeometryHelper::getWidth()
+double UserFormGeometryHelper::getWidth() const
 {
-    if ( mbDialog )
+    return implGetSize( false, true );
+}
+
+void UserFormGeometryHelper::setWidth( double fWidth )
+{
+    implSetSize( fWidth, false, true );
+}
+
+double UserFormGeometryHelper::getHeight() const
+{
+    return implGetSize( true, true );
+}
+
+void UserFormGeometryHelper::setHeight( double fHeight )
+{
+    implSetSize( fHeight, true, true );
+}
+
+double UserFormGeometryHelper::getInnerWidth() const
+{
+    return implGetSize( false, false );
+}
+
+void UserFormGeometryHelper::setInnerWidth( double fWidth )
+{
+    implSetSize( fWidth, false, false );
+}
+
+double UserFormGeometryHelper::getInnerHeight() const
+{
+    return implGetSize( true, false );
+}
+
+void UserFormGeometryHelper::setInnerHeight( double fHeight )
+{
+    implSetSize( fHeight, true, false );
+}
+
+double UserFormGeometryHelper::getOffsetX() const
+{
+    return mfOffsetX;
+}
+
+double UserFormGeometryHelper::getOffsetY() const
+{
+    return mfOffsetY;
+}
+
+// ----------------------------------------------------------------------------
+
+static const ::rtl::OUString saPosXName( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
+static const ::rtl::OUString saPosYName( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
+static const ::rtl::OUString saWidthName( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+static const ::rtl::OUString saHeightName( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+
+double UserFormGeometryHelper::implGetPos( bool bPosY ) const
+{
+    sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? saPosYName : saPosXName ).get< sal_Int32 >();
+    // appfont to pixel
+    awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosAppFont, nPosAppFont ), util::MeasureUnit::APPFONT );
+    // pixel to VBA points
+    awt::Point aPosPoint = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::POINT );
+    return bPosY ? (aPosPoint.Y - mfOffsetY) : (aPosPoint.X - mfOffsetX);
+}
+
+void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
+{
+    // convert passed VBA points to pixels
+    sal_Int32 nPosPixel = static_cast< sal_Int32 >( fPos + (bPosY ? mfOffsetY : mfOffsetX) );
+    awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosPixel, nPosPixel ), util::MeasureUnit::POINT );
+    // pixel to appfont
+    awt::Point aPosAppFont = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::APPFONT );
+    mxModelProps->setPropertyValue( bPosY ? saPosYName : saPosXName, uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
+}
+
+double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
+{
+    sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? saHeightName : saWidthName ).get< sal_Int32 >();
+    // appfont to pixel
+    awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSizeAppFont, nSizeAppFont ), util::MeasureUnit::APPFONT );
+
+    /*  The VBA symbols 'Width' and 'Height' return the outer size including
+        window decoration (in difference to the symbols 'InnerWidth' and
+        'InnerHeight'), but the window API returns the inner size. */
+    if( mbDialog && bOuter )
     {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
+        if( const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
-            // get the size with decoration
-            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
-            return aResult.getWidth();
+            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
+            aSizePixel = awt::Size( aOuterRect.getWidth(), aOuterRect.getHeight() );
         }
     }
 
-    return mxWindow->getPosSize().Width;
+    // pixel to VBA points
+    awt::Size aSizePoint = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::POINT );
+    return bHeight ? aSizePoint.Height : aSizePoint.Width;
 }
 
-//---------------------------------------------
-void UserFormGeometryHelper::setWidth( double nWidth )
+void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOuter )
 {
-    sal_Int64 nNewWidth = nWidth;
+    // convert passed VBA points to pixels
+    sal_Int32 nSize = static_cast< sal_Int32 >( fSize );
+    awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSize, nSize ), util::MeasureUnit::POINT );
 
-    if ( mbDialog )
+    /*  The VBA symbols 'Width' and 'Height' set the outer size (in difference
+        to the symbols 'InnerWidth' and 'InnerHeight'), but the dialog model
+        expects the inner size. We have to remove the window extents from the
+        pixel height to get the same result. */
+    if ( mbDialog && bOuter )
     {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
+        if( const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
-            // set the size with decoration
-            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
-            if ( !aRDecor.IsEmpty() )
+            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
+            if( !aOuterRect.IsEmpty() )
             {
-                sal_Int64 nDecor = aRDecor.getWidth();
-                sal_Int64 nUnDecor = mxWindow->getPosSize().Width;
-                if ( nWidth < nDecor - nUnDecor )
-                    nUnDecor = nDecor - nWidth; // avoid negative size
-                nNewWidth = nWidth + nUnDecor - nDecor;
+                awt::Rectangle aInnerRect = mxWindow->getPosSize();
+                sal_Int32 nDecorWidth = aOuterRect.getWidth() - aInnerRect.Width;
+                sal_Int32 nDecorHeight = aOuterRect.getHeight() - aInnerRect.Height;
+                aSizePixel.Width = ::std::max< sal_Int32 >( aSizePixel.Width - nDecorWidth, 1 );
+                aSizePixel.Height = ::std::max< sal_Int32 >( aSizePixel.Height - nDecorHeight, 1 );
             }
         }
     }
 
-    mxWindow->setPosSize( 0, 0, nNewWidth, 0, awt::PosSize::WIDTH );
+    awt::Size aSizeAppFont = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::APPFONT );
+    mxModelProps->setPropertyValue( bHeight ? saHeightName : saWidthName, uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
-//---------------------------------------------
-double UserFormGeometryHelper::getHeight()
-{
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // get the size with decoration
-            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
-            return aResult.getHeight();
-        }
-    }
+// ============================================================================
 
-    return mxWindow->getPosSize().Height;
-}
-
-//---------------------------------------------
-void UserFormGeometryHelper::setHeight( double nHeight )
-{
-    sal_Int64 nNewHeight = nHeight;
-    if ( mbDialog )
-    {
-        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
-        if ( pWindow )
-        {
-            // set the size with decoration
-            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
-            if ( !aRDecor.IsEmpty() )
-            {
-                sal_Int64 nDecor = aRDecor.getHeight();
-                sal_Int64 nUnDecor = mxWindow->getPosSize().Height;
-                if ( nHeight < nDecor - nUnDecor )
-                    nUnDecor = nDecor - nHeight; // avoid negative size
-                nNewHeight = nHeight + nUnDecor - nDecor;
-            }
-        }
-    }
-
-    mxWindow->setPosSize( 0, 0, 0, nNewHeight, awt::PosSize::HEIGHT );
-}
-
-// ============
-
-    double ConcreteXShapeGeometryAttributes::getLeft()
+    double ConcreteXShapeGeometryAttributes::getLeft() const
     {
         return m_pShapeHelper->getLeft();
     }
@@ -1123,7 +1176,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     {
         m_pShapeHelper->setLeft( nLeft );
     }
-    double ConcreteXShapeGeometryAttributes::getTop()
+    double ConcreteXShapeGeometryAttributes::getTop() const
     {
         return m_pShapeHelper->getTop();
     }
@@ -1132,7 +1185,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
         m_pShapeHelper->setTop( nTop );
     }
 
-    double ConcreteXShapeGeometryAttributes::getHeight()
+    double ConcreteXShapeGeometryAttributes::getHeight() const
     {
         return m_pShapeHelper->getHeight();
     }
@@ -1140,7 +1193,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     {
         m_pShapeHelper->setHeight( nHeight );
     }
-    double ConcreteXShapeGeometryAttributes::getWidth()
+    double ConcreteXShapeGeometryAttributes::getWidth() const
     {
         return m_pShapeHelper->getWidth();
     }
@@ -1156,7 +1209,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
             throw css::uno::RuntimeException( rtl::OUString::createFromAscii("No valid shape for helper"), css::uno::Reference< css::uno::XInterface >() );
     }
 
-    double ShapeHelper::getHeight()
+    double ShapeHelper::getHeight() const
     {
             return  Millimeter::getInPoints(xShape->getSize().Height);
         }
@@ -1177,7 +1230,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     }
 
 
-    double ShapeHelper::getWidth()
+    double ShapeHelper::getWidth() const
     {
         return Millimeter::getInPoints(xShape->getSize().Width);
         }
@@ -1197,7 +1250,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     }
 
 
-    double ShapeHelper::getLeft()
+    double ShapeHelper::getLeft() const
     {
         return Millimeter::getInPoints(xShape->getPosition().X);
     }
@@ -1211,7 +1264,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     }
 
 
-    double ShapeHelper::getTop()
+    double ShapeHelper::getTop() const
     {
             return Millimeter::getInPoints(xShape->getPosition().Y);
     }
@@ -1279,38 +1332,50 @@ void UserFormGeometryHelper::setHeight( double nHeight )
         return points;
     }
 
-        uno::Reference< uno::XInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell )
-        {
-            uno::Reference<  uno::XInterface > xIf;
-            if ( pShell )
-            {
-                rtl::OUString sProj( RTL_CONSTASCII_USTRINGPARAM("Standard") );
-                BasicManager* pBasMgr = pShell->GetBasicManager();
-                if ( pBasMgr && pBasMgr->GetName().Len() )
-                    sProj = pShell->GetBasicManager()->GetName();
-                StarBASIC* pBasic = pShell->GetBasicManager()->GetLib( sProj );
-                if ( pBasic )
-                {
-                    SbModule* pMod = pBasic->FindModule( aModName );
-                    if ( pMod )
-                        xIf = pMod->GetUnoModule();
-                }
-            }
-            return xIf;
-        }
+uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< XHelperInterface > xIf;
+    try
+    {
+        uno::Reference< beans::XPropertySet > xDocProps( xModel, uno::UNO_QUERY_THROW );
+        ::rtl::OUString aCodeName;
+        xDocProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ) >>= aCodeName;
+        xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return xIf;
+}
 
-        SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
-        {
-            SfxObjectShell* pFoundShell = NULL;
-            if ( xModel.is() )
-            {
-                uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );
-                pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
-            }
-            if ( !pFoundShell )
-                throw uno::RuntimeException();
-            return pFoundShell;
-        }
+uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell )
+{
+    uno::Reference< XHelperInterface > xIf;
+    if ( pShell )
+    {
+        rtl::OUString sProj( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+        BasicManager* pBasMgr = pShell->GetBasicManager();
+        if ( pBasMgr && pBasMgr->GetName().Len() )
+            sProj = pBasMgr->GetName();
+        if( StarBASIC* pBasic = pShell->GetBasicManager()->GetLib( sProj ) )
+            if( SbModule* pMod = pBasic->FindModule( aModName ) )
+                xIf.set( pMod->GetUnoModule(), uno::UNO_QUERY );
+    }
+    return xIf;
+}
+
+SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+{
+    SfxObjectShell* pFoundShell = NULL;
+    if ( xModel.is() )
+    {
+        uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );
+        pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+    }
+    if ( !pFoundShell )
+        throw uno::RuntimeException();
+    return pFoundShell;
+}
 
 } // openoffice
 } //org

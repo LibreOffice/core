@@ -465,6 +465,8 @@ public:
     SbxArray* GetLocals();
     SbxArray* GetParams();
 
+    SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
+
     SbxBase* FindElementExtern( const String& rName );
     static bool isVBAEnabled();
 

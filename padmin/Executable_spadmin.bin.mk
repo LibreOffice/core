@@ -53,6 +53,7 @@ $(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
     cppu \
     sal \
     stl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\

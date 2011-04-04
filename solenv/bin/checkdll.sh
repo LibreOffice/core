@@ -42,7 +42,7 @@ if [ -x $checkdll ]; then
         -L) shift; option=$1;;
         --) break;;
     esac
-    case "${libpath+X}" in
+    case "${libpath:+X}" in
         X) libpath=$libpath:$option;;
         *) libpath=$option;;
     esac

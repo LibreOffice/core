@@ -60,7 +60,6 @@ public:
     virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getVersion() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getVBE() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getVBProjects() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL Run( const ::rtl::OUString& MacroName, const css::uno::Any& varg1, const css::uno::Any& varg2, const css::uno::Any& varg3, const css::uno::Any& varg4, const css::uno::Any& varg5, const css::uno::Any& varg6, const css::uno::Any& varg7, const css::uno::Any& varg8, const css::uno::Any& varg9, const css::uno::Any& varg10, const css::uno::Any& varg11, const css::uno::Any& varg12, const css::uno::Any& varg13, const css::uno::Any& varg14, const css::uno::Any& varg15, const css::uno::Any& varg16, const css::uno::Any& varg17, const css::uno::Any& varg18, const css::uno::Any& varg19, const css::uno::Any& varg20, const css::uno::Any& varg21, const css::uno::Any& varg22, const css::uno::Any& varg23, const css::uno::Any& varg24, const css::uno::Any& varg25, const css::uno::Any& varg26, const css::uno::Any& varg27, const css::uno::Any& varg28, const css::uno::Any& varg29, const css::uno::Any& varg30 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL OnTime( const css::uno::Any& aEarliestTime, const ::rtl::OUString& aFunction, const css::uno::Any& aLatestTime, const css::uno::Any& aSchedule ) throw (css::uno::RuntimeException);

@@ -30,14 +30,52 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 
-class EncryptionData : public cppu::OWeakObject
+class BaseEncryptionData : public cppu::OWeakObject
 {
 public:
-    // On export aKey holds the derived key
-    // On import aKey holds the hash of the user enterred key
-    com::sun::star::uno::Sequence < sal_Int8 > aKey;
-    com::sun::star::uno::Sequence < sal_uInt8 > aSalt, aInitVector, aDigest;
-    sal_Int32 nIterationCount;
-    EncryptionData(): nIterationCount ( 0 ){}
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aSalt;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aInitVector;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDigest;
+    sal_Int32 m_nIterationCount;
+
+    BaseEncryptionData()
+    : m_nIterationCount ( 0 ){}
+
+    BaseEncryptionData( const BaseEncryptionData& aData )
+    : cppu::OWeakObject()
+    , m_aSalt( aData.m_aSalt )
+    , m_aInitVector( aData.m_aInitVector )
+    , m_aDigest( aData.m_aDigest )
+    , m_nIterationCount( aData.m_nIterationCount )
+    {}
 };
+
+class EncryptionData : public BaseEncryptionData
+{
+public:
+    ::com::sun::star::uno::Sequence < sal_Int8 > m_aKey;
+    sal_Int32 m_nEncAlg;
+    sal_Int32 m_nCheckAlg;
+    sal_Int32 m_nDerivedKeySize;
+    sal_Int32 m_nStartKeyGenID;
+
+    EncryptionData( const BaseEncryptionData& aData, const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey, sal_Int32 nEncAlg, sal_Int32 nCheckAlg, sal_Int32 nDerivedKeySize, sal_Int32 nStartKeyGenID )
+    : BaseEncryptionData( aData )
+    , m_aKey( aKey )
+    , m_nEncAlg( nEncAlg )
+    , m_nCheckAlg( nCheckAlg )
+    , m_nDerivedKeySize( nDerivedKeySize )
+    , m_nStartKeyGenID( nStartKeyGenID )
+    {}
+
+    EncryptionData( const EncryptionData& aData )
+    : BaseEncryptionData( aData )
+    , m_aKey( aData.m_aKey )
+    , m_nEncAlg( aData.m_nEncAlg )
+    , m_nCheckAlg( aData.m_nCheckAlg )
+    , m_nDerivedKeySize( aData.m_nDerivedKeySize )
+    , m_nStartKeyGenID( aData.m_nStartKeyGenID )
+    {}
+};
+
 #endif

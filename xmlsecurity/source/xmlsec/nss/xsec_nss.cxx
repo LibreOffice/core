@@ -51,106 +51,46 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRegistryKey )
-{
-    sal_Bool result = sal_False;
-    sal_Int32 i ;
-    OUString sKeyName ;
-    Reference< XRegistryKey > xNewKey ;
-    Sequence< OUString > seqServices ;
-    Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
-
-    if( xKey.is() ) {
-        //  try {
-        // XMLSignature_NssImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += XMLSignature_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = XMLSignature_NssImpl::impl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // XMLEncryption_NssImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += XMLEncryption_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = XMLEncryption_NssImpl::impl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // XMLSecurityContext_NssImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += XMLSecurityContext_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = XMLSecurityContext_NssImpl::impl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // SecurityEnvironment_NssImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += SecurityEnvironment_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = SecurityEnvironment_NssImpl::impl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // SEInitializer_NssImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += SEInitializer_NssImpl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = SEInitializer_NssImpl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        return sal_True;
-        //} catch( InvalidRegistryException & ) {
-        //  //we should not ignore exceptions
-        //  return sal_False ;
-        //}
-    }
-    return result;
-}
-
 void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = 0;
     Reference< XSingleServiceFactory > xFactory ;
 
-    if( pImplName != NULL && pServiceManager != NULL ) {
-        if( XMLSignature_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
-            xFactory = XMLSignature_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLSecurityContext_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
-            xFactory = XMLSecurityContext_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( SecurityEnvironment_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
-            xFactory = SecurityEnvironment_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLEncryption_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
-            xFactory = XMLEncryption_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( SEInitializer_NssImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+    if( pImplName != NULL && pServiceManager != NULL )
+    {
+#ifdef XMLSEC_CRYPTO_NSS
+        if( SEInitializer_NssImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
             xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SEInitializer_NssImpl_createInstance, SEInitializer_NssImpl_getSupportedServiceNames() ) );
         }
+        else if( XMLSignature_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
+            xFactory = XMLSignature_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        }
+        else if( XMLSecurityContext_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
+            xFactory = XMLSecurityContext_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        }
+        else if( SecurityEnvironment_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
+            xFactory = SecurityEnvironment_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        }
+        else if( XMLEncryption_NssImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
+            xFactory = XMLEncryption_NssImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        }
+#else
+        if( ONSSInitializer_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        {
+            xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                OUString::createFromAscii( pImplName ),
+                ONSSInitializer_createInstance, ONSSInitializer_getSupportedServiceNames() ) );
+        }
+#endif
     }
 
     if( xFactory.is() ) {

@@ -66,12 +66,14 @@ protected:
     sal_Int16       nNumProperty;
     ManifestStack aStack;
     sal_Bool bIgnoreEncryptData;
+    sal_Int32 nDerivedKeySize;
     ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
 
     const ::rtl::OUString sFileEntryElement;
     const ::rtl::OUString sManifestElement;
     const ::rtl::OUString sEncryptionDataElement;
     const ::rtl::OUString sAlgorithmElement;
+    const ::rtl::OUString sStartKeyAlgElement;
     const ::rtl::OUString sKeyDerivationElement;
 
     const ::rtl::OUString sCdataAttribute;
@@ -82,7 +84,9 @@ protected:
     const ::rtl::OUString sSaltAttribute;
     const ::rtl::OUString sInitialisationVectorAttribute;
     const ::rtl::OUString sIterationCountAttribute;
+    const ::rtl::OUString sKeySizeAttribute;
     const ::rtl::OUString sAlgorithmNameAttribute;
+    const ::rtl::OUString sStartKeyAlgNameAttribute;
     const ::rtl::OUString sKeyDerivationNameAttribute;
     const ::rtl::OUString sChecksumAttribute;
     const ::rtl::OUString sChecksumTypeAttribute;
@@ -91,15 +95,33 @@ protected:
     const ::rtl::OUString sMediaTypeProperty;
     const ::rtl::OUString sVersionProperty;
     const ::rtl::OUString sIterationCountProperty;
+    const ::rtl::OUString sDerivedKeySizeProperty;
     const ::rtl::OUString sSaltProperty;
     const ::rtl::OUString sInitialisationVectorProperty;
     const ::rtl::OUString sSizeProperty;
     const ::rtl::OUString sDigestProperty;
+    const ::rtl::OUString sEncryptionAlgProperty;
+    const ::rtl::OUString sStartKeyAlgProperty;
+    const ::rtl::OUString sDigestAlgProperty;
 
     const ::rtl::OUString sWhiteSpace;
-    const ::rtl::OUString sBlowfish;
-    const ::rtl::OUString sPBKDF2;
-    const ::rtl::OUString sChecksumType;
+
+    const ::rtl::OUString sSHA256_URL;
+    const ::rtl::OUString sSHA1_Name;
+    const ::rtl::OUString sSHA1_URL;
+
+    const ::rtl::OUString sSHA256_1k_URL;
+    const ::rtl::OUString sSHA1_1k_Name;
+    const ::rtl::OUString sSHA1_1k_URL;
+
+    const ::rtl::OUString sBlowfish_Name;
+    const ::rtl::OUString sBlowfish_URL;
+    const ::rtl::OUString sAES128_URL;
+    const ::rtl::OUString sAES192_URL;
+    const ::rtl::OUString sAES256_URL;
+
+    const ::rtl::OUString sPBKDF2_Name;
+    const ::rtl::OUString sPBKDF2_URL;
 
 
     ::rtl::OUString PushNameAndNamespaces( const ::rtl::OUString& aName,

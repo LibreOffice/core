@@ -45,14 +45,13 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <vbahelper/vbaaccesshelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -175,19 +174,17 @@ namespace dlgprov
         // handler for Script & ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" )
         listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
         listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
-        // Note: in a future cws ( npower13_ObjectModule ) it will be possible
-        // to determine the vba mode from the basiclibrary container, the tunnel hack
-        // below can then be replaced
-        SfxObjectShell* pFoundShell = NULL;
-        if ( rxModel.is() )
+
+        // determine the VBA compatibility mode from the Basic library container
+        try
         {
-            uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY );
-            if ( xObjShellTunnel.is() )
-            {
-                pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
-                if ( pFoundShell )
-                    mbUseFakeVBAEvents = ooo::vba::isAlienExcelDoc( *pFoundShell );
-            }
+            uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
+            uno::Reference< script::vba::XVBACompatibility > xVBACompat(
+                xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW );
+            mbUseFakeVBAEvents = xVBACompat->getVBACompatibilityMode();
+        }
+        catch( uno::Exception& )
+        {
         }
         if ( mbUseFakeVBAEvents )
             listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );

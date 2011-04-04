@@ -61,7 +61,8 @@ endif
 
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
-    $$(GTK_LIBS)\
+    $$(GTK_LIBS) \
+    $$(GTHREAD_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
@@ -88,6 +89,7 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     Xext \
     SM \
     ICE \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\

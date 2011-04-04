@@ -53,7 +53,9 @@ uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Refere
 uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext,xModel ) );
+    // !! TODO !! iterate over all controllers
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext, xModel, xController ) );
     return uno::makeAny( xWin );
 }
 
@@ -138,8 +140,10 @@ public:
             {
                 m_windows.push_back( xNext );
                 uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
+                // !! TODO !! iterate over all controllers
+                uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
                 uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
-                ScVbaWindow window( xTemp,  m_xContext, xModel );
+                ScVbaWindow window( xTemp, m_xContext, xModel, xController );
                 rtl::OUString sCaption;
                 window.getCaption() >>= sCaption;
                 namesToIndices[ sCaption ] = nIndex++;

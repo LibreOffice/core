@@ -51,8 +51,6 @@ module ooo {  module vba {
 interface XControlProvider
 {
    ::ooo::vba::msforms::XControl createControl( [in] ::com::sun::star::drawing::XControlShape xControl, [in] ::com::sun::star::frame::XModel xDocOwner );
-   ::ooo::vba::msforms::XControl createUserformControl( [in] ::com::sun::star::awt::XControl xControl, [in] ::com::sun::star::awt::XControl xDialog, [in] ::com::sun::star::frame::XModel xDocOwner );
-
 };
 
 }; };

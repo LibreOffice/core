@@ -149,11 +149,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
      throw( ::com::sun::star::uno::RuntimeException );
 
-
-protected:
-
-    Player( GString* pURI = NULL );
-
+// these are public because the C callbacks call them
     virtual gboolean busCallback( GstBus* pBus,
                                   GstMessage* pMsg );
 
@@ -163,6 +159,10 @@ protected:
 
     virtual GstBusSyncReply handleCreateWindow( GstBus* pBus,
                                                 GstMessage* pMsg );
+
+protected:
+
+    Player( GString* pURI = NULL );
 
     void implQuitThread();
 
@@ -179,25 +179,6 @@ private:
     Player( const Player& );
 
     Player& operator=( const Player& );
-
-    static gboolean implBusPrepare( GSource* pSource,
-                                    gint* pTimeout );
-
-    static gboolean implBusCheck( GSource* pSource );
-
-    static gboolean implBusDispatch( GSource* pSource,
-                                     GSourceFunc aCallback,
-                                     gpointer pData );
-
-    static void implBusFinalize( GSource* pSource );
-
-    static gboolean implIdleFunc( gpointer pData );
-
-    static gpointer implThreadFunc( gpointer pData );
-
-    static GstBusSyncReply implHandleCreateWindowFunc( GstBus* pBus,
-                                                       GstMessage* pMsg,
-                                                       gpointer pDData );
 
     static void implHandleNewElementFunc( GstBin* pBin,
                                           GstElement* pElement,

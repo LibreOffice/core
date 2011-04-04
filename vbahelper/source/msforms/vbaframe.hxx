@@ -27,24 +27,39 @@
 #ifndef SC_VBA_FRAME_HXX
 #define SC_VBA_FRAME_HXX
 #include <cppuhelper/implbase1.hxx>
-#include <ooo/vba/msforms/XLabel.hpp>
+#include <ooo/vba/msforms/XFrame.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XLabel > FrameImpl_BASE;
+typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XFrame > FrameImpl_BASE;
 
 class ScVbaFrame : public FrameImpl_BASE
 {
 public:
-    ScVbaFrame(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
-   // Attributes
-    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
+    ScVbaFrame(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XInterface >& xControl,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        ov::AbstractGeometryAttributes* pGeomHelper,
+        const css::uno::Reference< css::awt::XControl >& xDialog );
+
+    // XFrame attributes
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
+    // XFrame methods
+    css::uno::Any SAL_CALL Controls( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+
+private:
+    css::uno::Reference< css::awt::XControl > mxDialog;
 };
 #endif //SC_VBA_LABEL_HXX

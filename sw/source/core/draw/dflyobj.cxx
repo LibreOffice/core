@@ -473,6 +473,52 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 |*
 *************************************************************************/
 
+// --> OD #i102707#
+namespace
+{
+    class RestoreMapMode
+    {
+        public:
+            explicit RestoreMapMode( ViewShell* pViewShell )
+                : mbMapModeRestored( false )
+                , mpOutDev( pViewShell->GetOut() )
+            {
+                if ( pViewShell->getPrePostMapMode() != mpOutDev->GetMapMode() )
+                {
+                    mpOutDev->Push(PUSH_MAPMODE);
+
+                    GDIMetaFile* pMetaFile = mpOutDev->GetConnectMetaFile();
+                    if ( pMetaFile &&
+                         pMetaFile->IsRecord() && !pMetaFile->IsPause() )
+                    {
+                        ASSERT( false,
+                                "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." )
+                        mpOutDev->SetRelativeMapMode( pViewShell->getPrePostMapMode() );
+                    }
+                    else
+                    {
+                        mpOutDev->SetMapMode( pViewShell->getPrePostMapMode() );
+                    }
+
+                    mbMapModeRestored = true;
+                }
+            };
+
+            ~RestoreMapMode()
+            {
+                if ( mbMapModeRestored )
+                {
+                    mpOutDev->Pop();
+                }
+            };
+
+        private:
+            bool mbMapModeRestored;
+            OutputDevice* mpOutDev;
+    };
+}
+// <--
+
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
     ViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
@@ -482,31 +528,29 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
     // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
     // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
     // be correct
-    if(pShell && pShell->IsDrawingLayerPaintInProgress())
+    if ( pShell && pShell->IsDrawingLayerPaintInProgress() )
     {
         sal_Bool bDrawObject(sal_True);
 
-        if(!SwFlyFrm::IsPaint((SdrObject*)this, pShell))
+        if ( !SwFlyFrm::IsPaint( (SdrObject*)this, pShell ) )
         {
             bDrawObject = sal_False;
         }
 
-        if(bDrawObject)
+        if ( bDrawObject )
         {
-            if(!pFlyFrm->IsFlyInCntFrm())
+            if ( !pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
                 // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
                 // excludes shears and rotates which are not expressable in MapMode.
-                OutputDevice* pOut = pShell->GetOut();
-
-                pOut->Push(PUSH_MAPMODE);
-                pOut->SetMapMode(pShell->getPrePostMapMode());
+                // OD #i102707#
+                // new helper class to restore MapMode - restoration, only if
+                // needed and consideration of paint for meta file creation .
+                RestoreMapMode aRestoreMapModeIfNeeded( pShell );
 
                 // paint the FlyFrame (use standard VCL-Paint)
-                pFlyFrm->Paint(GetFlyFrm()->Frm());
-
-                pOut->Pop();
+                pFlyFrm->Paint( GetFlyFrm()->Frm() );
             }
         }
     }

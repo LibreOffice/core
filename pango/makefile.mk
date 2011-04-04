@@ -108,7 +108,7 @@ OUT2INC+=pango/pango-utils.h
 .ELIF "$(OS)"=="WNT"
 
 PATCH_FILES=pango-1.28.3-win32.patch
-ADDITIONAL_FILES=config.h module.defs make.msc glib-mkenums.pl msvc_recommended_pragmas.h
+ADDITIONAL_FILES=config.h msvc_recommended_pragmas.h
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 BUILD_DIR=./pango																																																																																																																										

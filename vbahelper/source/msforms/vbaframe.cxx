@@ -24,62 +24,83 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbaframe.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
+#include "vbacontrols.hxx"
+#include <ooo/vba/msforms/fmBorderStyle.hpp>
+#include <ooo/vba/msforms/fmSpecialEffect.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
 
 const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
-ScVbaFrame::ScVbaFrame( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : FrameImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+
+ScVbaFrame::ScVbaFrame(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< uno::XInterface >& xControl,
+        const uno::Reference< frame::XModel >& xModel,
+        ov::AbstractGeometryAttributes* pGeomHelper,
+        const css::uno::Reference< css::awt::XControl >& xDialog ) :
+    FrameImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper ),
+    mxDialog( xDialog )
 {
 }
 
-// Attributes
-rtl::OUString SAL_CALL
-ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
+// XFrame attributes
+
+rtl::OUString SAL_CALL ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
     return Label;
 }
 
-void SAL_CALL
-ScVbaFrame::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScVbaFrame::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-uno::Any SAL_CALL
-ScVbaFrame::getValue() throw (css::uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException)
 {
-    return uno::makeAny( getCaption() );
+    return msforms::fmSpecialEffect::fmSpecialEffectEtched;
 }
 
-void SAL_CALL
-ScVbaFrame::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScVbaFrame::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
 {
-    rtl::OUString sCaption;
-    _value >>= sCaption;
-    setCaption( sCaption );
 }
 
-rtl::OUString&
-ScVbaFrame::getServiceImplName()
+sal_Int32 SAL_CALL ScVbaFrame::getBorderStyle() throw (uno::RuntimeException)
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFrame") );
-    return sImplName;
+    return msforms::fmBorderStyle::fmBorderStyleNone;
 }
 
-uno::Sequence< rtl::OUString >
-ScVbaFrame::getServiceNames()
+void SAL_CALL ScVbaFrame::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
-    {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Frame" ) );
-    }
-    return aServiceNames;
 }
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaFrame::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
+}
+
+// XFrame methods
+
+uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex ) throw (uno::RuntimeException)
+{
+    // horizontal anchor of frame children is inside border line (add one unit to compensate border line width)
+    double fOffsetX = mpGeometryHelper->getOffsetX() + getLeft() + 1.0;
+    // vertical anchor of frame children is inside border line (add half of text height and one unit to compensate border line width)
+    double fOffsetY = mpGeometryHelper->getOffsetY() + getTop() + (getFont()->getSize() / 2.0) + 1.0;
+
+    uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, mxDialog, m_xModel, fOffsetX, fOffsetY ) );
+    if( rIndex.hasValue() )
+        return uno::Any( xControls->Item( rIndex, uno::Any() ) );
+    return uno::Any( xControls );
+}
+
+// XHelperInterface
+
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaFrame, "ooo.vba.msforms.Frame" )

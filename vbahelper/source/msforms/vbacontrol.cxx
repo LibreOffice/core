@@ -43,8 +43,8 @@
 #ifdef VBA_OOBUILD_HACK
 #include <svtools/bindablecontrolhelper.hxx>
 #endif
-#include"vbacontrol.hxx"
-#include"vbacombobox.hxx"
+#include "vbacontrol.hxx"
+#include "vbacombobox.hxx"
 #include "vbabutton.hxx"
 #include "vbalabel.hxx"
 #include "vbatextbox.hxx"
@@ -397,99 +397,104 @@ void SAL_CALL ScVbaControl::setTag( const ::rtl::OUString& aTag )
     m_aControlTag = aTag;
 }
 
+sal_Int32 SAL_CALL ScVbaControl::getTabIndex() throw (uno::RuntimeException)
+{
+    return 1;
+}
+
+void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::RuntimeException)
+{
+}
 
 //ScVbaControlFactory
 
-ScVbaControlFactory::ScVbaControlFactory( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel ): m_xContext( xContext ), m_xControl( xControl ), m_xModel( xModel )
-{
-}
-
-ScVbaControl* ScVbaControlFactory::createControl( const uno::Reference< uno::XInterface >& xParent )  throw (uno::RuntimeException)
-{
-    uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
-    if ( xControlShape.is() ) // form controls
-        return createControl( xControlShape, xParent );
-    uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY );
-    if ( !xControl.is() )
-        throw uno::RuntimeException(); // really we should be more informative
-    return createControl( xControl, xParent );
-}
-
-ScVbaControl* ScVbaControlFactory::createControl(const uno::Reference< drawing::XControlShape >& xControlShape,  const uno::Reference< uno::XInterface >& /*xParent*/ )  throw (uno::RuntimeException)
+/*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createShapeControl(
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< drawing::XControlShape >& xControlShape,
+        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( xControlShape->getControl(), uno::UNO_QUERY_THROW );
     sal_Int32 nClassId = -1;
     const static rtl::OUString sClassId( RTL_CONSTASCII_USTRINGPARAM("ClassId") );
     xProps->getPropertyValue( sClassId ) >>= nClassId;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
+    uno::Reference< drawing::XShape > xShape( xControlShape, uno::UNO_QUERY_THROW );
+    ::std::auto_ptr< ConcreteXShapeGeometryAttributes > xGeoHelper( new ConcreteXShapeGeometryAttributes( xContext, xShape ) );
+
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
-            return new ScVbaComboBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaComboBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::COMMANDBUTTON:
-            return new ScVbaButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::FIXEDTEXT:
-            return new ScVbaLabel( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::TEXTFIELD:
-            return new ScVbaTextBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaTextBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::RADIOBUTTON:
-            return new ScVbaRadioButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaRadioButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::LISTBOX:
-            return new ScVbaListBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaListBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::SPINBUTTON:
-            return new ScVbaSpinButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            return new ScVbaSpinButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::IMAGECONTROL:
-            return new ScVbaImage( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
-        default:
-            throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Donot support this Control Type." ), uno::Reference< uno::XInterface >() );
+            return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
     }
+    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
 }
 
-ScVbaControl* ScVbaControlFactory::createControl( const uno::Reference< awt::XControl >& xControl,  const uno::Reference< uno::XInterface >& xParent  )  throw (uno::RuntimeException)
+/*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createUserformControl(
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< awt::XControl >& xControl,
+        const uno::Reference< awt::XControl >& xDialog,
+        const uno::Reference< frame::XModel >& xModel,
+        double fOffsetX, double fOffsetY ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( xControl->getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< lang::XServiceInfo > xServiceInfo( xProps, uno::UNO_QUERY_THROW );
-    ScVbaControl* pControl = NULL;
+    uno::Reference< msforms::XControl > xVBAControl;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
+    ::std::auto_ptr< UserFormGeometryHelper > xGeoHelper( new UserFormGeometryHelper( xContext, xControl, fOffsetX, fOffsetY ) );
+
     if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ) )
-    pControl = new ScVbaCheckbox( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaCheckbox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ) )
-    pControl = new ScVbaRadioButton( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaRadioButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlEditModel") ) ) )
-        pControl = new ScVbaTextBox( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ), true );
+        xVBAControl.set( new ScVbaTextBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), true ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ) )
     {
         sal_Bool bToggle = sal_False;
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toggle") ) ) >>= bToggle;
         if ( bToggle )
-            pControl = new ScVbaToggleButton( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+            xVBAControl.set( new ScVbaToggleButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
         else
-            pControl = new ScVbaButton( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+            xVBAControl.set( new ScVbaButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     }
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ) ) )
-        pControl = new ScVbaComboBox( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ), true );
+        xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), true ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) ) )
-    pControl = new ScVbaListBox( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaListBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) ) )
-    pControl = new ScVbaLabel( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaLabel( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ) ) )
-    pControl = new ScVbaImage( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaImage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ) ) )
-    pControl = new ScVbaProgressBar( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaProgressBar( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ) )
-    pControl = new ScVbaFrame( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ) ) )
-    pControl = new ScVbaScrollBar( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaScrollBar( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) ) )
-    pControl = new ScVbaMultiPage( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ), xParent );
+        xVBAControl.set( new ScVbaMultiPage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ) ) )
-    pControl = new ScVbaSpinButton( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+        xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.awt.UnoControlSystemAXContainerModel") ) ) )
-    pControl = new VbaSystemAXControl( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
-    else
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control " ), uno::Reference< uno::XInterface >() );
-    return pControl;
+        xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+
+    if( xVBAControl.is() )
+        return xVBAControl;
+    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString&
@@ -520,7 +525,6 @@ class ControlProviderImpl : public ControlProvider_BASE
 public:
     ControlProviderImpl( const uno::Reference< uno::XComponentContext >& xCtx ) : m_xCtx( xCtx ) {}
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) throw (uno::RuntimeException);
-    virtual uno::Reference< msforms::XControl > SAL_CALL createUserformControl( const uno::Reference< awt::XControl >& xControl, const uno::Reference< awt::XControl >& xDialog, const uno::Reference< frame::XModel >& xDocOwner ) throw (uno::RuntimeException);
 };
 
 uno::Reference< msforms::XControl > SAL_CALL
@@ -528,26 +532,9 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 {
     uno::Reference< msforms::XControl > xControlToReturn;
     if ( xControlShape.is() )
-    {
-        ScVbaControlFactory controlFactory( m_xCtx, xControlShape, xDocOwner );
-        xControlToReturn.set( controlFactory.createControl( xDocOwner ) );
-    }
+        xControlToReturn = ScVbaControlFactory::createShapeControl( m_xCtx, xControlShape, xDocOwner );
     return xControlToReturn;
 
-}
-uno::Reference< msforms::XControl > SAL_CALL
-ControlProviderImpl::createUserformControl( const uno::Reference< awt::XControl >& xControl, const uno::Reference< awt::XControl >& xDialog, const uno::Reference< frame::XModel >& xDocOwner ) throw (uno::RuntimeException)
-{
-    uno::Reference< msforms::XControl > xControlToReturn;
-    if ( xControl.is() && xDialog.is() )
-    {
-
-        ScVbaControlFactory controlFactory( m_xCtx, xControl, xDocOwner );
-        xControlToReturn.set( controlFactory.createControl( xDialog->getModel() ) );
-        ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xControlToReturn.get() );
-        pControl->setGeometryHelper( new UserFormGeometryHelper( m_xCtx, xControl ) );
-    }
-    return xControlToReturn;
 }
 
 namespace controlprovider

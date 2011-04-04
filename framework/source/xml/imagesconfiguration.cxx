@@ -27,12 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-#include <framework/imagesconfiguration.hxx>
+
+#include <xml/imagesconfiguration.hxx>
 #include <services.h>
 
-#ifndef __FRAMEWORK_CLASSES_IMAGESDOCUMENTHANDLER_HXX_
 #include <xml/imagesdocumenthandler.hxx>
-#endif
 #include <xml/saxnamespacefilter.hxx>
 
 //_________________________________________________________________________________________________________________

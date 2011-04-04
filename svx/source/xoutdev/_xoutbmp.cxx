@@ -367,7 +367,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
             if( aExt.Len() )
             {
-                aURL.setExtension( aExt );
+                if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+                    aURL.setExtension( aExt );
                 rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
                 SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, sal_True );
@@ -472,7 +473,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
                 if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
                 {
-                    aURL.setExtension( aExt );
+                    if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+                        aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
                     nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, NULL );
                 }

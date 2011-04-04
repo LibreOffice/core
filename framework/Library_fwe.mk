@@ -83,8 +83,6 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/interaction/preventduplicateinteraction \
     framework/source/fwe/xml/eventsconfiguration \
     framework/source/fwe/xml/eventsdocumenthandler \
-    framework/source/fwe/xml/imagesconfiguration \
-    framework/source/fwe/xml/imagesdocumenthandler \
     framework/source/fwe/xml/menuconfiguration \
     framework/source/fwe/xml/menudocumenthandler \
     framework/source/fwe/xml/saxnamespacefilter \

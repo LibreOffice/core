@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     cppu \
     sal \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 ifneq ($(ENABLE_GRAPHITE),)

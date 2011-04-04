@@ -93,6 +93,8 @@ public:
     virtual void SAL_CALL setControlTipText( const rtl::OUString& ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTag() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTag( const ::rtl::OUString& aTag ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException);
     //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
     //XHelperInterface
@@ -104,15 +106,21 @@ public:
 class ScVbaControlFactory
 {
 public:
-    ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel );
-    ScVbaControl* createControl( const css::uno::Reference< css::uno::XInterface >& xParent )  throw ( css::uno::RuntimeException );
+    static css::uno::Reference< ov::msforms::XControl > createShapeControl(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
+        const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+
+    static css::uno::Reference< ov::msforms::XControl > createUserformControl(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::awt::XControl >& xControl,
+        const css::uno::Reference< css::awt::XControl >& xDialog,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        double fOffsetX, double fOffsetY ) throw (css::uno::RuntimeException);
+
 private:
-    ScVbaControl* createControl( const css::uno::Reference< css::awt::XControl >&, const css::uno::Reference< css::uno::XInterface >&  )  throw ( css::uno::RuntimeException );
-    ScVbaControl* createControl( const css::uno::Reference< css::drawing::XControlShape >&, const css::uno::Reference< css::uno::XInterface >& )  throw ( css::uno::RuntimeException );
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::uno::XInterface > m_xControl;
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    ScVbaControlFactory();
+    ~ScVbaControlFactory();
 };
 
 #endif//SC_VBA_CONTROL_HXX

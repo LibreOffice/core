@@ -29,6 +29,7 @@
 #define BASIC_NAMECONTAINER_HXX
 
 #include <hash_map>
+
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -46,71 +47,41 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAScriptListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+
 #include <osl/mutex.hxx>
 #include <unotools/eventlisteneradapter.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <sot/storage.hxx>
+#include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <com/sun/star/deployment/XPackage.hpp>
-
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase8.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 class BasicManager;
 
 namespace basic
 {
 
-typedef ::cppu::WeakComponentImplHelper8<
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::script::XStorageBasedLibraryContainer,
-    ::com::sun::star::script::XLibraryContainerPassword,
-    ::com::sun::star::script::XLibraryContainerExport,
-    ::com::sun::star::script::XLibraryContainer3,
-    ::com::sun::star::container::XContainer,
-    ::com::sun::star::script::vba::XVBACompatibility,
-    ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
-
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
-    ::com::sun::star::container::XContainer > NameContainerHelper;
-
-
-struct hashName_Impl
-{
-    size_t operator()(const ::rtl::OUString Str) const
-    {
-        return (size_t)Str.hashCode();
-    }
-};
-
-struct eqName_Impl
-{
-    sal_Bool operator()(const ::rtl::OUString Str1, const ::rtl::OUString Str2) const
-    {
-        return ( Str1 == Str2 );
-    }
-};
-
-typedef std::hash_map
-<
-    ::rtl::OUString,
-    sal_Int32,
-    hashName_Impl,
-    eqName_Impl
->
-NameContainerNameMap;
-
-
 //============================================================================
 
-class NameContainer : public ::cppu::BaseMutex, public NameContainerHelper
+typedef ::cppu::WeakImplHelper3<
+    ::com::sun::star::container::XNameContainer,
+    ::com::sun::star::container::XContainer,
+    ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
+
+class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
+    typedef std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
+
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
@@ -119,14 +90,16 @@ class NameContainer : public ::cppu::BaseMutex, public NameContainerHelper
     ::com::sun::star::uno::Type mType;
     ::com::sun::star::uno::XInterface* mpxEventSource;
 
-    ::cppu::OInterfaceContainerHelper maListenerContainer;
+    ::cppu::OInterfaceContainerHelper maContainerListeners;
+    ::cppu::OInterfaceContainerHelper maChangesListeners;
 
 public:
     NameContainer( const ::com::sun::star::uno::Type& rType )
         : mnElementCount( 0 )
         , mType( rType )
         , mpxEventSource( NULL )
-        , maListenerContainer( m_aMutex )
+        , maContainerListeners( m_aMutex )
+        , maChangesListeners( m_aMutex )
     {}
 
     void setEventSource( ::com::sun::star::uno::XInterface* pxEventSource )
@@ -173,20 +146,17 @@ public:
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
             throw (::com::sun::star::uno::RuntimeException);
+
+    // Methods XChangesNotifier
+    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::util::XChangesListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::util::XChangesListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException);
 };
 
 //============================================================================
-
-class SfxLibrary;
-
-enum InitMode
-{
-    DEFAULT,
-    CONTAINER_INIT_FILE,
-    LIBRARY_INIT_FILE,
-    OFFICE_DOCUMENT,
-    OLD_BASIC_STORAGE
-};
 
 class ModifiableHelper
 {
@@ -217,9 +187,42 @@ public:
     }
 };
 
-class SfxLibraryContainer   :public LibraryContainerHelper
-                            ,public ::utl::OEventListenerAdapter
+//============================================================================
+
+typedef ::comphelper::OListenerContainerBase<
+    ::com::sun::star::script::vba::XVBAScriptListener,
+    ::com::sun::star::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
+
+class VBAScriptListenerContainer : public VBAScriptListenerContainer_BASE
 {
+public:
+    explicit VBAScriptListenerContainer( ::osl::Mutex& rMutex );
+
+private:
+    virtual bool implTypedNotify(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& rxListener,
+        const ::com::sun::star::script::vba::VBAScriptEvent& rEvent )
+        throw (::com::sun::star::uno::Exception);
+};
+
+//============================================================================
+
+class SfxLibrary;
+
+typedef ::cppu::WeakComponentImplHelper8<
+    ::com::sun::star::lang::XInitialization,
+    ::com::sun::star::script::XStorageBasedLibraryContainer,
+    ::com::sun::star::script::XLibraryContainerPassword,
+    ::com::sun::star::script::XLibraryContainerExport,
+    ::com::sun::star::script::XLibraryContainer3,
+    ::com::sun::star::container::XContainer,
+    ::com::sun::star::script::vba::XVBACompatibility,
+    ::com::sun::star::lang::XServiceInfo > SfxLibraryContainer_BASE;
+
+class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEventListenerAdapter
+{
+    VBAScriptListenerContainer maVBAScriptListeners;
+    sal_Int32 mnRunningVBAScripts;
     sal_Bool mbVBACompat;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
@@ -246,7 +249,14 @@ protected:
     BasicManager*   mpBasMgr;
     sal_Bool        mbOwnBasMgr;
 
-    InitMode meInitMode;
+    enum InitMode
+    {
+        DEFAULT,
+        CONTAINER_INIT_FILE,
+        LIBRARY_INIT_FILE,
+        OFFICE_DOCUMENT,
+        OLD_BASIC_STORAGE
+    } meInitMode;
 
     void implStoreLibrary( SfxLibrary* pLib,
                             const ::rtl::OUString& aName,
@@ -508,9 +518,23 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException) = 0;
     // Methods XVBACompatibility
-    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode()
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getRunningVBAScripts()
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVBAScriptListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVBAScriptListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const ::rtl::OUString& rModuleName )
+            throw (::com::sun::star::uno::RuntimeException);
 };
+
+//============================================================================
 
 class LibraryContainerMethodGuard
 {
@@ -529,12 +553,12 @@ public:
     }
 };
 
-
 //============================================================================
 
 class SfxLibrary
     : public ::com::sun::star::container::XNameContainer
     , public ::com::sun::star::container::XContainer
+    , public ::com::sun::star::util::XChangesNotifier
     , public ::cppu::BaseMutex
     , public ::cppu::OComponentHelper
 {
@@ -670,6 +694,14 @@ public:
         ::com::sun::star::container::XContainerListener >& xListener )
             throw (::com::sun::star::uno::RuntimeException);
 
+    // Methods XChangesNotifier
+    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::util::XChangesListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::util::XChangesListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException);
+
 public:
     struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };
     void    removeElementWithoutChecks( const ::rtl::OUString& _rElementName, LibraryContainerAccess )
@@ -681,18 +713,19 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
 };
 
-//===================================================================
+//============================================================================
+
 class ScriptSubPackageIterator
 {
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >      m_xMainPackage;
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > m_xMainPackage;
 
-    bool                                                                        m_bIsValid;
-    bool                                                                        m_bIsBundle;
+    bool m_bIsValid;
+    bool m_bIsBundle;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aSubPkgSeq;
-    sal_Int32                                                                   m_nSubPkgCount;
-    sal_Int32                                                                   m_iNextSubPkg;
+        < com::sun::star::deployment::XPackage > > m_aSubPkgSeq;
+    sal_Int32 m_nSubPkgCount;
+    sal_Int32 m_iNextSubPkg;
 
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implDetectScriptPackage( const com::sun::star::uno::Reference
@@ -704,13 +737,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
 };
 
-enum IteratorState
-{
-    USER_EXTENSIONS,
-    SHARED_EXTENSIONS,
-    BUNDLED_EXTENSIONS,
-    END_REACHED
-};
+//============================================================================
 
 class ScriptExtensionIterator
 {
@@ -731,34 +758,37 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
 
-    IteratorState                                                               m_eState;
+    enum IteratorState
+    {
+        USER_EXTENSIONS,
+        SHARED_EXTENSIONS,
+        BUNDLED_EXTENSIONS,
+        END_REACHED
+    } m_eState;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
-    bool                                                                        m_bUserPackagesLoaded;
+        < com::sun::star::deployment::XPackage > > m_aUserPackagesSeq;
+    bool m_bUserPackagesLoaded;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
-    bool                                                                        m_bSharedPackagesLoaded;
+        < com::sun::star::deployment::XPackage > > m_aSharedPackagesSeq;
+    bool m_bSharedPackagesLoaded;
 
       com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
-    bool                                                                        m_bBundledPackagesLoaded;
+        < com::sun::star::deployment::XPackage > > m_aBundledPackagesSeq;
+    bool m_bBundledPackagesLoaded;
 
+    int m_iUserPackage;
+    int m_iSharedPackage;
+       int m_iBundledPackage;
 
-    int                                                                         m_iUserPackage;
-    int                                                                         m_iSharedPackage;
-       int                                                                          m_iBundledPackage;
-
-
-
-    ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
+    ScriptSubPackageIterator* m_pScriptSubPackageIterator;
 
 }; // end class ScriptExtensionIterator
 
-
+//============================================================================
 
 }   // namespace basic
 

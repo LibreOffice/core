@@ -34,6 +34,7 @@ $(eval $(call gb_Library_add_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/pr
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
 $(eval $(call gb_Library_set_include,svt,\
+    -I$(OUTDIR)/inc/external/jpeg \
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \

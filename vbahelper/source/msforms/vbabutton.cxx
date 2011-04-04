@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbabutton.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -49,6 +50,56 @@ void SAL_CALL
 ScVbaButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+}
+
+sal_Bool SAL_CALL ScVbaButton::getAutoSize() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaButton::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL ScVbaButton::getCancel() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL ScVbaButton::getDefault() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaButton::getBackColor() throw (uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaButton::setBackColor( sal_Int32 /*nBackColor*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaButton::getForeColor() throw (uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
+{
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaButton::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 rtl::OUString&

@@ -62,6 +62,8 @@ SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+# on Solaris checkdll does not work: LD_LIBRARY_PATH breaks the 2 libxml2.so.2
+SHL1NOCHECK=t
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp

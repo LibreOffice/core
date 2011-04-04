@@ -24,26 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_msforms_XComboBox_idl__
 #define __ooo_vba_msforms_XComboBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
+#include <ooo/vba/msforms/XNewFont.idl>
 
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
 
-
 //=============================================================================
-interface XComboBox: ::com::sun::star::uno::XInterface
+
+interface XComboBox
 {
     [attribute] any Value;
     [attribute] any ListIndex;
-    [attribute, readonly ] long ListCount;
+    [attribute, readonly] long ListCount;
     [attribute] string Text;
+    [attribute] long Style;
+    [attribute] long DropButtonStyle;
+    [attribute] long DragBehavior;
+    [attribute] long EnterFieldBehavior;
+    [attribute] long ListStyle;
+    [attribute] long TextAlign;
+    [attribute, readonly] long TextLength;
+    [attribute, readonly] XNewFont Font;
+
     void AddItem( [in] any pvargItem, [in] any pvargIndex );
     void removeItem( [in] any index );
     void Clear();

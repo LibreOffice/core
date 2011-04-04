@@ -1722,8 +1722,7 @@ String getBasicObjectTypeName( SbxObject* pObj )
     return aName;
 }
 
-bool checkUnoObjectType( SbUnoObject* pUnoObj,
-    const String& aClass )
+bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
 {
     Any aToInspectObj = pUnoObj->getUnoAny();
     TypeClass eType = aToInspectObj.getValueType().getTypeClass();
@@ -1740,6 +1739,21 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
     Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
     if( xTypeProvider.is() )
     {
+        /*  Although interfaces in the ooo.vba namespace obey the IDL rules and
+            have a leading 'X', in Basic we want to be able to do something
+            like 'Dim wb As Workbooks' or 'Dim lb As MSForms.Label'. Here we
+            add a leading 'X' to the class name and a leading dot to the entire
+            type name. This results e.g. in '.XWorkbooks' or '.MSForms.XLabel'
+            which matches the interface names 'ooo.vba.excel.XWorkbooks' or
+            'ooo.vba.msforms.XLabel'.
+         */
+        ::rtl::OUString aClassName( sal_Unicode( '.' ) );
+        sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
+        if( nClassNameDot >= 0 )
+            aClassName += rClass.copy( 0, nClassNameDot + 1 ) + ::rtl::OUString( sal_Unicode( 'X' ) ) + rClass.copy( nClassNameDot + 1 );
+        else
+            aClassName += ::rtl::OUString( sal_Unicode( 'X' ) ) + rClass;
+
         Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
         const Type* pTypeArray = aTypeSeq.getConstArray();
         sal_uInt32 nIfaceCount = aTypeSeq.getLength();
@@ -1753,8 +1767,8 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
                 DBG_ERROR("failed to get XIdlClass for type");
                 break;
             }
-            ::rtl::OUString sClassName = xClass->getName();
-            if ( sClassName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.XAutomationObject" ) ) ) )
+            ::rtl::OUString aInterfaceName = xClass->getName();
+            if ( aInterfaceName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.XAutomationObject" ) ) ) )
             {
                 // there is a hack in the extensions/source/ole/oleobj.cxx  to return the typename of the automation object, lets check if it
                 // matches
@@ -1767,20 +1781,15 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
                         // can't check type, leave it pass
                         result = true;
                     else
-                        result = sTypeName.equals( aClass );
+                        result = sTypeName.equals( rClass );
                 }
                 break; // finished checking automation object
             }
-            OSL_TRACE("Checking if object implements %s",
-                OUStringToOString( defaultNameSpace + aClass,
-                    RTL_TEXTENCODING_UTF8 ).getStr() );
-            // although interfaces in the ooo.vba.vba namespace
-            // obey the idl rules and have a leading X, in basic we
-            // want to be able to do something like
-            // 'dim wrkbooks as WorkBooks'
-            // so test assumes the 'X' has been dropped
-            sal_Int32 indexLastDot = sClassName.lastIndexOf('.');
-            if ( indexLastDot > -1 && sClassName.copy( indexLastDot + 1).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("X") ) + aClass ) )
+
+            // match interface name with passed class name
+            OSL_TRACE("Checking if object implements %s", OUStringToOString( aClassName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            if ( (aClassName.getLength() < aInterfaceName.getLength()) &&
+                    aInterfaceName.matchIgnoreAsciiCase( aClassName, aInterfaceName.getLength() - aClassName.getLength() ) )
             {
                 result = true;
                 break;

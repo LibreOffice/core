@@ -387,32 +387,13 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
 {
     try // return empty object on error
     {
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
-        aArgs[ 1 ] <<= getCurrentDocument();
+        // "VBE" object does not have a parent, but pass document model to be able to determine application type
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= getCurrentDocument();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBE" ) ), aArgs, mxContext );
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBE" ) ), aArgs, mxContext );
         return uno::Any( xVBE );
-    }
-    catch( uno::Exception& )
-    {
-    }
-    return uno::Any();
-}
-
-uno::Any SAL_CALL
-VbaApplicationBase::getVBProjects() throw (uno::RuntimeException)
-{
-    try // return empty object on error
-    {
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
-        aArgs[ 1 ] <<= getCurrentDocument();
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProjects" ) ), aArgs, mxContext );
-        return uno::Any( xVBProjects );
     }
     catch( uno::Exception& )
     {

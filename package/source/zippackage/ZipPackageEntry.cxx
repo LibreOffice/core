@@ -73,18 +73,18 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_True ) )
-        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
 
     msName = aName;
 
     if ( pParent )
         pParent->doInsertByName ( this, sal_False );
 }
-Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
+uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException)
 {
-    // return Reference< XInterface >( xParent, UNO_QUERY );
-    return Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( pParent ), UNO_QUERY );
+    // return uno::Reference< XInterface >( xParent, UNO_QUERY );
+    return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( pParent ), UNO_QUERY );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert )
@@ -95,11 +95,11 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
         pNewParent->doInsertByName ( this, sal_False );
 }
 
-void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewParent )
+void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xNewParent )
         throw(NoSupportException, RuntimeException)
 {
     sal_Int64 nTest(0);
-    Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
+    uno::Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
     if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
         throw NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
@@ -113,24 +113,24 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
     }
 }
     //XPropertySet
-Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
         throw(RuntimeException)
 {
-    return Reference < beans::XPropertySetInfo > ();
+    return uno::Reference < beans::XPropertySetInfo > ();
 }
-void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }

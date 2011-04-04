@@ -66,6 +66,9 @@ SHL1STDLIBS= \
             $(VOSLIB) \
             $(XMLSCRIPTLIB)
 
+# Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
+# SHL1STDLIBS+=$(CANVASTOOLSLIB)
+
 .IF "$(SOLAR_JAVA)" != "TRUE"
 SHL1STDLIBS+=$(SJLIB)
 .ENDIF

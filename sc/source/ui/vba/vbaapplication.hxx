@@ -73,11 +73,11 @@ public:
     virtual sal_Bool  SAL_CALL hasProperty(const rtl::OUString& Name)  throw(css::uno::RuntimeException);
 
     // XApplication
-    virtual ::rtl::OUString SAL_CALL PathSeparator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual void SAL_CALL setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDefaultFilePath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL LibraryPath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL TemplatesPath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getDefaultFilePath() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getPathSeparator() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLibraryPath() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTemplatesPath() throw (css::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getDisplayAlerts() throw (css::uno::RuntimeException);
@@ -120,6 +120,8 @@ public:
     virtual void SAL_CALL Volatile( const css::uno::Any& Volatile ) throw (css::uno::RuntimeException );
     virtual void SAL_CALL DoEvents() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL GetOpenFilename( const css::uno::Any& rFileFilter, const css::uno::Any& rFilterIndex, const css::uno::Any& rTitle, const css::uno::Any& rButtonText, const css::uno::Any& rMultiSelect ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL GetSaveAsFilename( const css::uno::Any& rInitialFileName, const css::uno::Any& rFileFilter, const css::uno::Any& rFilterIndex, const css::uno::Any& rTitle, const css::uno::Any& rButtonText ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

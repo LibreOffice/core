@@ -29,6 +29,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "arrdecl.hxx"
+#include <map>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -41,15 +42,9 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <vos/mutex.hxx>
 
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
@@ -64,15 +59,11 @@
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/printwarningoptions.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -132,7 +123,36 @@ DBG_NAME(SfxObjectShell)
 #define DocumentInfo
 #include "sfxslots.hxx"
 
+namespace {
+
 static WeakReference< XInterface > s_xCurrentComponent;
+
+// remember all registered components for VBA compatibility, to be able to remove them on disposing the model
+typedef ::std::map< XInterface*, ::rtl::OString > VBAConstantNameMap;
+static VBAConstantNameMap s_aRegisteredVBAConstants;
+
+::rtl::OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
+{
+    OSL_ENSURE( rxComponent.is(), "lclGetVBAGlobalConstName - missing component" );
+
+    VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( rxComponent.get() );
+    if( aIt != s_aRegisteredVBAConstants.end() )
+        return aIt->second;
+
+    uno::Reference< beans::XPropertySet > xProps( rxComponent, uno::UNO_QUERY );
+    if( xProps.is() ) try
+    {
+        ::rtl::OUString aConstName;
+        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobalConstantName" ) ) ) >>= aConstName;
+        return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
+    }
+    catch( uno::Exception& ) // not supported
+    {
+    }
+    return ::rtl::OString();
+}
+
+} // namespace
 
 //=========================================================================
 
@@ -164,12 +184,27 @@ void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
-    // am I ThisComponent in AppBasic?
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // am I ThisComponent in AppBasic?
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
         // remove ThisComponent reference from AppBasic
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
+    }
+
+    /*  Remove VBA component from AppBasic. As every application registers its
+        own current component, the disposed component may not be the "current
+        component" of the SfxObjectShell. */
+    if ( _rEvent.Source.is() )
+    {
+        VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( _rEvent.Source.get() );
+        if ( aIt != s_aRegisteredVBAConstants.end() )
+        {
+            if ( BasicManager* pAppMgr = SFX_APP()->GetBasicManager() )
+                pAppMgr->SetGlobalUNOConstant( aIt->second.getStr(), Any( Reference< XInterface >() ) );
+            s_aRegisteredVBAConstants.erase( aIt );
+        }
     }
 
     if ( !mpDoc->Get_Impl()->bClosing )
@@ -908,8 +943,8 @@ sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    Reference< XInterface > xTest(s_xCurrentComponent);
-    if ( _rxComponent == xTest )
+    Reference< XInterface > xOldCurrentComp(s_xCurrentComponent);
+    if ( _rxComponent == xOldCurrentComp )
         // nothing to do
         return;
     // note that "_rxComponent.get() == s_xCurrentComponent.get().get()" is /sufficient/, but not
@@ -920,7 +955,31 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
-        pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
+    {
+        // set "ThisComponent" for Basic
+        pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( _rxComponent ) );
+
+        // set new current component for VBA compatibility
+        if ( _rxComponent.is() )
+        {
+            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
+            if ( aVBAConstName.getLength() > 0 )
+            {
+                pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( _rxComponent ) );
+                s_aRegisteredVBAConstants[ _rxComponent.get() ] = aVBAConstName;
+            }
+        }
+        // no new component passed -> remove last registered VBA component
+        else if ( xOldCurrentComp.is() )
+        {
+            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
+            if ( aVBAConstName.getLength() > 0 )
+            {
+                pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( Reference< XInterface >() ) );
+                s_aRegisteredVBAConstants.erase( xOldCurrentComp.get() );
+            }
+        }
+    }
 }
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()

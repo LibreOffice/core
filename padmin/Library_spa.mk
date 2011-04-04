@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,spa,\
     cppu \
     sal \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 

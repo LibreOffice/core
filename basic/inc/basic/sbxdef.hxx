@@ -108,6 +108,7 @@ enum SbxDataType {
 const sal_uInt32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
 const sal_uInt32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
 const sal_uInt32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
+const sal_uInt32 SBX_TYPE_VAR_TO_DIM_FLAG  = 0x40000;
 
 #endif
 
@@ -320,6 +321,8 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBX_WITH_EVENTS 0x0080  // Same value as unused SBX_HIDDEN
 #define SBX_DIM_AS_NEW  0x0800  // Same value as SBX_GBLSEARCH, cannot conflict as one
                                 // is used for objects, the other for variables only
+#define SBX_VAR_TO_DIM  0x2000  // Same value as SBX_NO_BROADCAST, cannot conflict as
+                                // used for variables without broadcaster only
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING

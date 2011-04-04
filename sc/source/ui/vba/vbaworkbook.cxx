@@ -218,14 +218,9 @@ ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
     uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xSheetProps( xView->getActiveSheet(), uno::UNO_QUERY_THROW );
-    // #162503# return the original document module wrapper object, instead of a new instance
-    ::rtl::OUString aCodeName;
-    xSheetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= aCodeName;
-    ScDocShell* pShell = excel::getDocShell( xModel );
-    if( !pShell )
-        throw uno::RuntimeException();
-    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xView->getActiveSheet(), uno::UNO_SET_THROW );
+    // #162503# return the original sheet module wrapper object, instead of a new instance
+    return uno::Reference< excel::XWorksheet >( excel::getUnoSheetModuleObj( xSheet ), uno::UNO_QUERY_THROW );
 }
 
 uno::Any SAL_CALL

@@ -406,7 +406,7 @@ ScDocShell*
 getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
     // need the ScCellRangesBase to get docshell
-    uno::Reference< uno::XInterface > xIf( xRange, uno::UNO_QUERY_THROW );
+    uno::Reference< uno::XInterface > xIf( xRange );
     return getDocShellFromIf(xIf );
 }
 
@@ -414,7 +414,7 @@ ScDocShell*
 getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
 {
     // need the ScCellRangesBase to get docshell
-    uno::Reference< uno::XInterface > xIf( xRanges, uno::UNO_QUERY_THROW );
+    uno::Reference< uno::XInterface > xIf( xRanges );
     return getDocShellFromIf(xIf );
 }
 
@@ -426,7 +426,8 @@ uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInt
 
 uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
-    uno::Reference< uno::XInterface > xIf( xRange, uno::UNO_QUERY_THROW );
+    // the XInterface for getImplementation can be any derived interface, no need for queryInterface
+    uno::Reference< uno::XInterface > xIf( xRange );
     return getModelFromXIf( xIf );
 }
 
@@ -1469,9 +1470,9 @@ uno::Reference< XCollection >& ScVbaRange::getBorders()
 void
 ScVbaRange::visitArray( ArrayVisitor& visitor )
 {
-    uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY_THROW );
-    sal_Int32 nRowCount = xColumnRowRange->getRows()->getCount();
-    sal_Int32 nColCount = xColumnRowRange->getColumns()->getCount();
+    table::CellRangeAddress aRangeAddr = lclGetRangeAddress( mxRange );
+    sal_Int32 nRowCount = aRangeAddr.EndRow - aRangeAddr.StartRow + 1;
+    sal_Int32 nColCount = aRangeAddr.EndColumn - aRangeAddr.StartColumn + 1;
     for ( sal_Int32 i=0; i<nRowCount; ++i )
     {
         for ( sal_Int32 j=0; j<nColCount; ++j )
@@ -3572,9 +3573,12 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
 bool
 ScVbaRange::isSingleCellRange()
 {
-    uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY);
-    if ( xColumnRowRange.is() && xColumnRowRange->getRows()->getCount() == 1 && xColumnRowRange->getColumns()->getCount() == 1 )
-        return true;
+    uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxRange, uno::UNO_QUERY );
+    if ( xAddressable.is() )
+    {
+        table::CellRangeAddress aRangeAddr = xAddressable->getRangeAddress();
+        return ( aRangeAddr.EndColumn == aRangeAddr.StartColumn && aRangeAddr.EndRow == aRangeAddr.StartRow );
+    }
     return false;
 }
 

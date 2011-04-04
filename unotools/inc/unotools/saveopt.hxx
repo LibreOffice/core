@@ -53,7 +53,9 @@ public:
         E_DOPRETTYPRINTING,
         E_WARNALIENFORMAT,
         E_LOADDOCPRINTER,
-        E_ODFDEFAULTVERSION
+        E_ODFDEFAULTVERSION,
+        E_USESHA1INODF12,
+        E_USEBLOWFISHINODF12
     };
 
     // keep enum values sorted that a less or greater compare maps to older and newer versions!
@@ -118,6 +120,12 @@ public:
 
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
+
+    void                    SetUseSHA1InODF12( sal_Bool bUse );
+    sal_Bool                IsUseSHA1InODF12() const;
+
+    void                    SetUseBlowfishInODF12( sal_Bool bUse );
+    sal_Bool                IsUseBlowfishInODF12() const;
 
     sal_Bool                IsReadOnly( EOption eOption ) const;
 };

@@ -24,15 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <com/sun/star/text/XTextRange.hpp>
 
 #include "vbatextbox.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
+#include <com/sun/star/text/XTextRange.hpp>
+#include <ooo/vba/msforms/fmBorderStyle.hpp>
+#include <ooo/vba/msforms/fmSpecialEffect.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
-
-
 
 ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper, bool bDialog ) : TextBoxImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper ), mbDialog( bDialog )
 {
@@ -48,7 +48,8 @@ ScVbaTextBox::getValue() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sVal = getAnyAsString( _value );
+    // booleans are converted to uppercase strings
+    rtl::OUString sVal = extractStringFromAny( _value, true );
     setText( sVal );
 }
 
@@ -112,6 +113,34 @@ ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeExcept
     uno::Any aValue( _multiline );
     m_xProps->setPropertyValue
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), aValue);
+}
+
+sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException)
+{
+    return msforms::fmSpecialEffect::fmSpecialEffectSunken;
+}
+
+void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
+{
+    return msforms::fmBorderStyle::fmBorderStyleNone;
+}
+
+void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException)
+{
+    return getText().getLength();
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 rtl::OUString&
