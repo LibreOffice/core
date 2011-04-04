@@ -35,6 +35,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/unload.h>
 
 #include "cppuhelper/propshlp.hxx"
@@ -421,20 +422,16 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
     return Sequence< Type >( ar, m_fptr ? 4 : 3 );
 }
 
+namespace
+{
+    class theOFactoryComponentHelperImplementationId :
+        public rtl::Static<OImplementationId, theOFactoryComponentHelperImplementationId>{};
+}
+
 Sequence< sal_Int8 > OFactoryComponentHelper::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return theOFactoryComponentHelperImplementationId::get().getImplementationId();
 }
 
 // XSingleServiceFactory

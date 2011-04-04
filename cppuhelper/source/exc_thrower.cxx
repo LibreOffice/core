@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
+#include "rtl/instance.hxx"
 #include "osl/diagnose.h"
 #include "osl/doublecheckedlocking.h"
 #include "osl/mutex.hxx"
@@ -58,8 +59,6 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 {
     inline ExceptionThrower();
 
-public:
-    static ExceptionThrower * get();
     static inline Type const & getCppuType()
     {
         return ::getCppuType(
@@ -188,23 +187,7 @@ inline ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
-//______________________________________________________________________________
-ExceptionThrower * ExceptionThrower::get()
-{
-    ExceptionThrower * s_pThrower = 0;
-    if (s_pThrower == 0)
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        static ExceptionThrower s_thrower;
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        s_pThrower = &s_thrower;
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return s_pThrower;
-}
+class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
 } // anonymous namespace
 
@@ -234,7 +217,7 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
     Reference< XExceptionThrower > xThrower;
     uno2cpp.mapInterface(
         reinterpret_cast< void ** >( &xThrower ),
-        static_cast< uno_Interface * >( ExceptionThrower::get() ),
+        static_cast< uno_Interface * >( &theExceptionThrower::get() ),
         ExceptionThrower::getCppuType() );
     OSL_ASSERT( xThrower.is() );
     xThrower->throwException( exc );
@@ -265,7 +248,7 @@ Any SAL_CALL getCaughtException()
     UnoInterfaceReference unoI;
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
-        static_cast< XExceptionThrower * >( ExceptionThrower::get() ), pTD );
+        static_cast< XExceptionThrower * >( &theExceptionThrower::get() ), pTD );
     OSL_ASSERT( unoI.is() );
 
     typelib_TypeDescription * pMemberTD = 0;

@@ -35,6 +35,7 @@
 #include "osl/module.hxx"
 #include "rtl/unload.h"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/instance.hxx"
 #include "uno/environment.h"
 #include "uno/mapping.hxx"
 #include "cppuhelper/factory.hxx"
@@ -71,21 +72,20 @@ static inline void out( const OUString & r ) throw ()
 }
 #endif
 
-//------------------------------------------------------------------------------
-static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
+namespace
 {
-    static ::std::vector< OUString > * s_p = 0;
-    static bool s_bInit = false;
-
-    if (! s_bInit)
+    class buildAccessDPath
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_bInit)
+    private:
+        ::std::vector< OUString > m_aAccessDPath;
+        bool m_bCPLD_ACCESSPATHSet;
+    public:
+        buildAccessDPath() : m_bCPLD_ACCESSPATHSet(false)
         {
             const char * pEnv = ::getenv( "CPLD_ACCESSPATH" );
             if (pEnv)
             {
-                static ::std::vector< OUString > s_v;
+                m_bCPLD_ACCESSPATHSet = true;
 
                 OString aEnv( pEnv );
                 sal_Int32 nIndex = 0;
@@ -100,34 +100,39 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                     {
                         OSL_ASSERT(false);
                     }
-                    s_v.push_back( aFileUrl );
+                    m_aAccessDPath.push_back( aFileUrl );
                 } while( nIndex != -1 );
-#if OSL_DEBUG_LEVEL > 1
+    #if OSL_G_LEVEL > 1
                 out( "> cpld: acknowledged following access path(s): \"" );
-                ::std::vector< OUString >::const_iterator iPos( s_v.begin() );
-                while (iPos != s_v.end())
+                ::std::vector< OUString >::const_iterator iPos( m_aAccessDPath.begin() );
+                while (iPos != m_aAccessDPath.end())
                 {
                     out( *iPos );
                     ++iPos;
-                    if (iPos != s_v.end())
+                    if (iPos != m_aAccessDPath.end())
                         out( ";" );
                 }
                 out( "\"\n" );
-#endif
-                s_p = & s_v;
+    #endif
             }
             else
             {
                 // no access path env set
-#if OSL_DEBUG_LEVEL > 1
+    #if OSL_G_LEVEL > 1
                 out( "=> no CPLD_ACCESSPATH set.\n" );
-#endif
+    #endif
             }
-            s_bInit = true;
         }
-    }
+        ::std::vector< OUString >* getAccessDPath() { return m_bCPLD_ACCESSPATHSet ? &m_aAccessDPath : NULL; }
+    };
 
-    return s_p;
+    class theAccessDPath : public rtl::Static<buildAccessDPath, theAccessDPath> {};
+}
+
+//------------------------------------------------------------------------------
+static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
+{
+    return theAccessDPath::get().getAccessDPath();
 }
 
 //------------------------------------------------------------------------------

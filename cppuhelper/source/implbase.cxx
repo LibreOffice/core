@@ -31,6 +31,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/diagnose.h>
+#include <rtl/instance.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -41,22 +42,17 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+    class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};
+}
+
 namespace cppu
 {
 //==================================================================================================
 Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () )
 {
-    static Mutex * s_pMutex = 0;
-    if (! s_pMutex)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pMutex)
-        {
-            static Mutex s_aMutex;
-            s_pMutex = & s_aMutex;
-        }
-    }
-    return * s_pMutex;
+    return theImplHelperInitMutex::get();
 }
 
 // ClassDataBase
