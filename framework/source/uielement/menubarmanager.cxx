@@ -1813,14 +1813,10 @@ void MenuBarManager::FillMenu(
                         pMenu->SetItemBits( nId, nBits );
                     }
 
-                    if ( bShow )
-                        pMenu->ShowItem( nId );
-                    else
+                    if ( !bShow )
                         pMenu->HideItem( nId );
 
-                    if ( bEnabled)
-                        pMenu->EnableItem( nId, sal_True );
-                    else
+                    if ( !bEnabled)
                         pMenu->EnableItem( nId, sal_False );
 
                     if ( xIndexContainer.is() )
