@@ -208,6 +208,9 @@ namespace rtl_DoubleLocking
                 pThread->terminate();
                 p2Thread->terminate();
 
+                pThread->join();
+                p2Thread->join();
+
                 sal_Int32 nValueOK = 0;
                 nValueOK = pThread->getOK();
 
@@ -231,9 +234,6 @@ namespace rtl_DoubleLocking
                 printf("Fails in Thread #1 is %d\n", nValueFails);
                 printf("Fails in Thread #2 is %d\n", nValueFails2);
 #endif
-
-                pThread->join();
-                p2Thread->join();
 
                 delete pThread;
                 delete p2Thread;
