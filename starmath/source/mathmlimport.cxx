@@ -68,6 +68,7 @@ one go*/
 #include <xmloff/xmlmetai.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <memory>
 
@@ -436,20 +437,14 @@ SmXMLImport::SmXMLImport(
 {
 }
 
+namespace
+{
+    class theSmXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmXMLImportUnoTunnelId> {};
+}
+
 const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if ( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSmXMLImportUnoTunnelId::get().getSeq();
 }
 
 OUString SAL_CALL SmXMLImport_getImplementationName() throw()
