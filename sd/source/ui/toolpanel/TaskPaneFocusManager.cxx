@@ -69,27 +69,19 @@ class FocusManager::LinkMap
 {
 };
 
+struct FocusManagerCreator
+{
+    FocusManager m_aFocusManager;
+};
 
+namespace
+{
+    class theFocusManagerInstance : public rtl::Static< FocusManagerCreator, theFocusManagerInstance> {};
+}
 
 FocusManager& FocusManager::Instance (void)
 {
-    static FocusManager* spInstance = NULL;
-
-    if (spInstance == NULL)
-    {
-        ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
-        if (spInstance == NULL)
-        {
-            static FocusManager aInstance;
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            spInstance = &aInstance;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return *spInstance;
+    return theFocusManagerInstance::get().m_aFocusManager;
 }
 
 

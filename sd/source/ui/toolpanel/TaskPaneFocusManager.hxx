@@ -104,6 +104,8 @@ public:
     bool TransferFocus (::Window* pSource, const KeyCode& rCode);
 
 private:
+    friend struct FocusManagerCreator;
+
     class LinkMap;
     ::std::auto_ptr<LinkMap> mpLinks;
 

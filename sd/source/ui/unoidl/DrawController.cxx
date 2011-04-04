@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -612,20 +613,14 @@ Reference<XModuleController> SAL_CALL
 
 //===== XUnoTunnel ============================================================
 
+namespace
+{
+    class theDrawControllerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theDrawControllerUnoTunnelId> {};
+}
+
 const Sequence<sal_Int8>& DrawController::getUnoTunnelId (void)
 {
-    static ::com::sun::star::uno::Sequence<sal_Int8>* pSequence = NULL;
-    if (pSequence == NULL)
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-        if (pSequence == NULL)
-        {
-            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
-            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
-            pSequence = &aSequence;
-        }
-    }
-    return *pSequence;
+    return theDrawControllerUnoTunnelId::get().getSeq();
 }
 
 

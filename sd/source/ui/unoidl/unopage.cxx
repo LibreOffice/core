@@ -339,20 +339,14 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
     return pRet;
 }
 
+namespace
+{
+    class theSdGenericDrawPageUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdGenericDrawPageUnoTunnelId> {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw()
 {
-        static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-        if( !pSeq )
-        {
-                ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-                if( !pSeq )
-                {
-                        static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-                        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-                        pSeq = &aSeq;
-                }
-        }
-        return *pSeq;
+    return theSdGenericDrawPageUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
