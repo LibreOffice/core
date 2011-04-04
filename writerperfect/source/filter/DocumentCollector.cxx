@@ -459,7 +459,7 @@ void DocumentCollector::openPageSpan(const WPXPropertyList &propList)
 static bool
 isOccurrenceEven (const WPXPropertyList &propList)
 {
-    const WPXProperty *occurance = propList["libwpd:occurrence"];
+    const WPXProperty *occurance = propList["libwpd:occurence"];
     return occurance && occurance->getStr() == "even";
 }
 
