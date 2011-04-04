@@ -158,7 +158,7 @@ public class LocaleCodes extends Resource
         Ids[94] = "Slovenian;sl;1060";
         Ids[95] = "Slovak;sk;1051";
         Ids[96] = "Sorbian;sb;1070";
-        Ids[97] = "Spanish - Spain;es-es;1034";
+        Ids[97] = "Spanish - Spain;es-es;3082";
         Ids[98] = "Spanish - Argentina;es-ar;11274";
         Ids[99] = "Spanish - Bolivia;es-bo;16394";
         Ids[100] = "Spanish - Chile;es-cl;13322";
