@@ -200,44 +200,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        /** CollectingProcessor2D class
-
-            A processor which just collects all primitives given to it in
-            process(..) calls to maPrimitive2DSequence. This can e.g. be used to
-            hand around as instance over various methods where every called
-            method can add graphic content to it.
-         */
-        class DRAWINGLAYER_DLLPUBLIC CollectingProcessor2D : public BaseProcessor2D
-        {
-        private:
-            primitive2d::Primitive2DSequence                        maPrimitive2DSequence;
-
-        public:
-            CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation);
-            virtual ~CollectingProcessor2D();
-
-            /// the central processing method
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
-
-            /// helpers for adding to local sequence
-            void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource)
-            {
-                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
-            }
-
-            /// data access and reset
-            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            void reset() { maPrimitive2DSequence = primitive2d::Primitive2DSequence(); }
-        };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 
 // eof
