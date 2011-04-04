@@ -44,6 +44,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <rtl/instance.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
