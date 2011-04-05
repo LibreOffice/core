@@ -2344,7 +2344,7 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
     return false;
 }
 
-void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
+void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
@@ -2355,43 +2355,43 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     bool bHidden = false;
-    bool bRepeat = (rAlignParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rAlignParam.mbBreak);
-    bool bShrink = !rAlignParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rAlignParam.mpPattern, ATTR_SHRINKTOFIT, rAlignParam.mpCondSet);
-    long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rAlignParam.mpPattern, ATTR_ROTATE_VALUE, rAlignParam.mpCondSet);
+    bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
+    long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
-    if ( rAlignParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
+    if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
     {
         // ignore orientation/rotation if "repeat" is active
-        rAlignParam.meOrient = SVX_ORIENTATION_STANDARD;
+        rParam.meOrient = SVX_ORIENTATION_STANDARD;
         nAttrRotate = 0;
 
         // #i31843# "repeat" with "line breaks" is treated as default alignment
         // (but rotation is still disabled)
-        if ( rAlignParam.mbBreak )
-            rAlignParam.meHorJust = SVX_HOR_JUSTIFY_STANDARD;
+        if ( rParam.mbBreak )
+            rParam.meHorJust = SVX_HOR_JUSTIFY_STANDARD;
     }
-    if ( rAlignParam.meOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
+    if ( rParam.meOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
     {
         //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
         //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
-        bHidden = sal_True;     // gedreht wird getrennt ausgegeben
+        bHidden = true;     // gedreht wird getrennt ausgegeben
     }
 
-    rAlignParam.mbAsianVertical = (rAlignParam.meOrient == SVX_ORIENTATION_STACKED) &&
-        lcl_GetBoolValue(*rAlignParam.mpPattern, ATTR_VERTICAL_ASIAN, rAlignParam.mpCondSet);
+    rParam.mbAsianVertical = (rParam.meOrient == SVX_ORIENTATION_STACKED) &&
+        lcl_GetBoolValue(*rParam.mpPattern, ATTR_VERTICAL_ASIAN, rParam.mpCondSet);
 
-    if ( rAlignParam.mbAsianVertical )
+    if ( rParam.mbAsianVertical )
     {
         // in asian mode, use EditEngine::SetVertical instead of EE_CNTRL_ONECHARPERLINE
-        rAlignParam.meOrient = SVX_ORIENTATION_STANDARD;
+        rParam.meOrient = SVX_ORIENTATION_STANDARD;
         // default alignment for asian vertical mode is top-right
-        if ( rAlignParam.meHorJust == SVX_HOR_JUSTIFY_STANDARD )
-            rAlignParam.meHorJust = SVX_HOR_JUSTIFY_RIGHT;
+        if ( rParam.meHorJust == SVX_HOR_JUSTIFY_STANDARD )
+            rParam.meHorJust = SVX_HOR_JUSTIFY_RIGHT;
     }
 
     SvxCellHorJustify eOutHorJust =
-        ( rAlignParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rAlignParam.meHorJust :
-        ( rAlignParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT );
+        ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
+        ( rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT );
 
     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
@@ -2401,19 +2401,19 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
         //! mirror margin values for RTL?
         //! move margin down to after final GetOutputArea call
         long nTopM, nLeftM, nBottomM, nRightM;
-        rAlignParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, nPPTX, nPPTY);
+        rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, nPPTX, nPPTY);
 
-        SCCOL nXForPos = rAlignParam.mnX;
+        SCCOL nXForPos = rParam.mnX;
         if ( nXForPos < nX1 )
         {
             nXForPos = nX1;
-            rAlignParam.mnPosX = rAlignParam.mnInitPosX;
+            rParam.mnPosX = rParam.mnInitPosX;
         }
-        SCSIZE nArrYForPos = rAlignParam.mnArrY;
+        SCSIZE nArrYForPos = rParam.mnArrY;
         if ( nArrYForPos < 1 )
         {
             nArrYForPos = 1;
-            rAlignParam.mnPosY = nScrY;
+            rParam.mnPosY = nScrY;
         }
 
         OutputAreaParam aAreaParam;
@@ -2423,99 +2423,99 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
         //
 
         Size aPaperSize = Size( 1000000, 1000000 );
-        if (rAlignParam.hasLineBreak())
+        if (rParam.hasLineBreak())
         {
             //  call GetOutputArea with nNeeded=0, to get only the cell width
 
             //! handle nArrY == 0
-            GetOutputArea( nXForPos, nArrYForPos, rAlignParam.mnPosX, rAlignParam.mnPosY, rAlignParam.mnCellX, rAlignParam.mnCellY, 0,
-                           *rAlignParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                           rAlignParam.mbCellIsValue, true, false, aAreaParam );
+            GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, 0,
+                           *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
+                           rParam.mbCellIsValue, true, false, aAreaParam );
 
             //! special ScEditUtil handling if formatting for printer
-            rAlignParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, nPPTX, nPPTY);
+            rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, nPPTX, nPPTY);
         }
-        if (rAlignParam.mbPixelToLogic)
+        if (rParam.mbPixelToLogic)
         {
             Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
-            if ( rAlignParam.mbBreak && !rAlignParam.mbAsianVertical && pRefDevice != pFmtDevice )
+            if ( rParam.mbBreak && !rParam.mbAsianVertical && pRefDevice != pFmtDevice )
             {
                 // #i85342# screen display and formatting for printer,
                 // use same GetEditArea call as in ScViewData::SetEditEngine
 
                 Fraction aFract(1,1);
-                Rectangle aUtilRect = ScEditUtil( pDoc, rAlignParam.mnCellX, rAlignParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rAlignParam.mpPattern, false );
+                Rectangle aUtilRect = ScEditUtil( pDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
                 aLogicSize.Width() = aUtilRect.GetWidth();
             }
-            rAlignParam.mpEngine->SetPaperSize(aLogicSize);
+            rParam.mpEngine->SetPaperSize(aLogicSize);
         }
         else
-            rAlignParam.mpEngine->SetPaperSize(aPaperSize);
+            rParam.mpEngine->SetPaperSize(aPaperSize);
 
         //
         //  Fill the EditEngine (cell attributes and text)
         //
 
         // default alignment for asian vertical mode is top-right
-        if ( rAlignParam.mbAsianVertical && rAlignParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
-            rAlignParam.meVerJust = SVX_VER_JUSTIFY_TOP;
+        if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
+            rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
 
         // syntax highlighting mode is ignored here
         // StringDiffer doesn't look at hyphenate, language items
-        if ( rAlignParam.mpPattern != rAlignParam.mpOldPattern || rAlignParam.mpCondSet != rAlignParam.mpOldCondSet )
+        if ( rParam.mpPattern != rParam.mpOldPattern || rParam.mpCondSet != rParam.mpOldCondSet )
         {
-            SfxItemSet* pSet = new SfxItemSet( rAlignParam.mpEngine->GetEmptyItemSet() );
-            rAlignParam.mpPattern->FillEditItemSet( pSet, rAlignParam.mpCondSet );
+            SfxItemSet* pSet = new SfxItemSet( rParam.mpEngine->GetEmptyItemSet() );
+            rParam.mpPattern->FillEditItemSet( pSet, rParam.mpCondSet );
 
-            rAlignParam.mpEngine->SetDefaults( pSet );
-            rAlignParam.mpOldPattern = rAlignParam.mpPattern;
-            rAlignParam.mpOldCondSet = rAlignParam.mpCondSet;
+            rParam.mpEngine->SetDefaults( pSet );
+            rParam.mpOldPattern = rParam.mpPattern;
+            rParam.mpOldCondSet = rParam.mpCondSet;
 
-            sal_uLong nControl = rAlignParam.mpEngine->GetControlWord();
-            if (rAlignParam.meOrient==SVX_ORIENTATION_STACKED)
+            sal_uLong nControl = rParam.mpEngine->GetControlWord();
+            if (rParam.meOrient==SVX_ORIENTATION_STACKED)
                 nControl |= EE_CNTRL_ONECHARPERLINE;
             else
                 nControl &= ~EE_CNTRL_ONECHARPERLINE;
-            rAlignParam.mpEngine->SetControlWord( nControl );
+            rParam.mpEngine->SetControlWord( nControl );
 
-            if ( !rAlignParam.mbHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+            if ( !rParam.mbHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
             {
                 //  set hyphenator the first time it is needed
                 com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
-                rAlignParam.mpEngine->SetHyphenator( xXHyphenator );
-                rAlignParam.mbHyphenatorSet = sal_True;
+                rParam.mpEngine->SetHyphenator( xXHyphenator );
+                rParam.mbHyphenatorSet = true;
             }
 
             Color aBackCol = ((const SvxBrushItem&)
-                rAlignParam.mpPattern->GetItem( ATTR_BACKGROUND, rAlignParam.mpCondSet )).GetColor();
+                rParam.mpPattern->GetItem( ATTR_BACKGROUND, rParam.mpCondSet )).GetColor();
             if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
                 aBackCol.SetColor( nConfBackColor );
-            rAlignParam.mpEngine->SetBackgroundColor( aBackCol );
+            rParam.mpEngine->SetBackgroundColor( aBackCol );
         }
 
-        rAlignParam.setAlignmentItems(rAlignParam.mpEngine, rAlignParam.mpCell);
+        rParam.setAlignmentItems(rParam.mpEngine, rParam.mpCell);
 
         //  Read content from cell
 
-        sal_Bool bWrapFields = false;
-        if (rAlignParam.mpCell)
+        bool bWrapFields = false;
+        if (rParam.mpCell)
         {
-            if (rAlignParam.mpCell->GetCellType() == CELLTYPE_EDIT)
+            if (rParam.mpCell->GetCellType() == CELLTYPE_EDIT)
             {
                 const EditTextObject* pData;
-                ((ScEditCell*)rAlignParam.mpCell)->GetData(pData);
+                ((ScEditCell*)rParam.mpCell)->GetData(pData);
 
                 if (pData)
                 {
-                    rAlignParam.mpEngine->SetText(*pData);
+                    rParam.mpEngine->SetText(*pData);
 
-                    if ( rAlignParam.mbBreak && !rAlignParam.mbAsianVertical && pData->HasField() )
+                    if ( rParam.mbBreak && !rParam.mbAsianVertical && pData->HasField() )
                     {
                         //  Fields aren't wrapped, so clipping is enabled to prevent
                         //  a field from being drawn beyond the cell size
 
-                        bWrapFields = sal_True;
+                        bWrapFields = true;
                     }
                 }
                 else
@@ -2525,63 +2525,63 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             }
             else
             {
-                sal_uLong nFormat = rAlignParam.mpPattern->GetNumberFormat(
-                                            pDoc->GetFormatTable(), rAlignParam.mpCondSet );
+                sal_uLong nFormat = rParam.mpPattern->GetNumberFormat(
+                                            pDoc->GetFormatTable(), rParam.mpCondSet );
                 String aString;
                 Color* pColor;
-                ScCellFormat::GetString( rAlignParam.mpCell,
+                ScCellFormat::GetString( rParam.mpCell,
                                          nFormat,aString, &pColor,
                                          *pDoc->GetFormatTable(),
                                          bShowNullValues,
                                          bShowFormulas,
                                          ftCheck );
 
-                rAlignParam.mpEngine->SetText(aString);
+                rParam.mpEngine->SetText(aString);
                 if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
-                    lcl_SetEditColor( *rAlignParam.mpEngine, *pColor );
+                    lcl_SetEditColor( *rParam.mpEngine, *pColor );
             }
 
             if ( bSyntaxMode )
-                SetEditSyntaxColor( *rAlignParam.mpEngine, rAlignParam.mpCell );
+                SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
             else if ( bUseStyleColor && bForceAutoColor )
-                lcl_SetEditColor( *rAlignParam.mpEngine, COL_AUTO );        //! or have a flag at EditEngine
+                lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
         }
         else
         {
             OSL_FAIL("pCell == NULL");
         }
 
-        rAlignParam.mpEngine->SetUpdateMode( true );        // after SetText, before CalcTextWidth/GetTextHeight
+        rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
         //
         //  Get final output area using the calculated width
         //
 
         long nEngineWidth, nEngineHeight;
-        rAlignParam.getEngineSize(rAlignParam.mpEngine, nEngineWidth, nEngineHeight);
+        rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
 
         long nNeededPixel = nEngineWidth;
-        if (rAlignParam.mbPixelToLogic)
+        if (rParam.mbPixelToLogic)
             nNeededPixel = pRefDevice->LogicToPixel(Size(nNeededPixel,0)).Width();
         nNeededPixel += nLeftM + nRightM;
 
-        if ( ( !rAlignParam.mbBreak && rAlignParam.meOrient != SVX_ORIENTATION_STACKED ) || rAlignParam.mbAsianVertical || bShrink )
+        if ( ( !rParam.mbBreak && rParam.meOrient != SVX_ORIENTATION_STACKED ) || rParam.mbAsianVertical || bShrink )
         {
             // for break, the first GetOutputArea call is sufficient
-            GetOutputArea( nXForPos, nArrYForPos, rAlignParam.mnPosX, rAlignParam.mnPosY, rAlignParam.mnCellX, rAlignParam.mnCellY, nNeededPixel,
-                           *rAlignParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                           rAlignParam.mbCellIsValue || bRepeat || bShrink, false, false, aAreaParam );
+            GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
+                           *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
+                           rParam.mbCellIsValue || bRepeat || bShrink, false, false, aAreaParam );
 
             if ( bShrink )
             {
-                sal_Bool bWidth = ( rAlignParam.meOrient == SVX_ORIENTATION_STANDARD && !rAlignParam.mbAsianVertical );
-                ShrinkEditEngine( *rAlignParam.mpEngine, aAreaParam.maAlignRect,
+                bool bWidth = ( rParam.meOrient == SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical );
+                ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
                     nLeftM, nTopM, nRightM, nBottomM, bWidth,
-                    sal::static_int_cast<sal_uInt16>(rAlignParam.meOrient), 0, rAlignParam.mbPixelToLogic,
+                    sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
                     nEngineWidth, nEngineHeight, nNeededPixel,
                     aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
             }
-            if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip && rAlignParam.mpEngine->GetParagraphCount() == 1 )
+            if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip && rParam.mpEngine->GetParagraphCount() == 1 )
             {
                 // First check if twice the space for the formatted text is available
                 // (otherwise just keep it unchanged).
@@ -2591,11 +2591,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 if ( nAvailable >= 2 * nFormatted )
                 {
                     // "repeat" is handled with unformatted text (for performance reasons)
-                    String aCellStr = rAlignParam.mpEngine->GetText();
-                    rAlignParam.mpEngine->SetText( aCellStr );
+                    String aCellStr = rParam.mpEngine->GetText();
+                    rParam.mpEngine->SetText( aCellStr );
 
-                    long nRepeatSize = (long) rAlignParam.mpEngine->CalcTextWidth();
-                    if (rAlignParam.mbPixelToLogic)
+                    long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
+                    if (rParam.mbPixelToLogic)
                         nRepeatSize = pRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
                     if ( pFmtDevice != pRefDevice )
                         ++nRepeatSize;
@@ -2607,11 +2607,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                             String aRepeated = aCellStr;
                             for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                                 aRepeated.Append( aCellStr );
-                            rAlignParam.mpEngine->SetText( aRepeated );
+                            rParam.mpEngine->SetText( aRepeated );
 
-                            nEngineHeight = rAlignParam.mpEngine->GetTextHeight();
-                            nEngineWidth = (long) rAlignParam.mpEngine->CalcTextWidth();
-                            if (rAlignParam.mbPixelToLogic)
+                            nEngineHeight = rParam.mpEngine->GetTextHeight();
+                            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
+                            if (rParam.mbPixelToLogic)
                                 nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
                             else
                                 nNeededPixel = nEngineWidth;
@@ -2621,11 +2621,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 }
             }
 
-            if ( rAlignParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
+            if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
             {
-                rAlignParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
-                nEngineWidth = (long) rAlignParam.mpEngine->CalcTextWidth();
-                if (rAlignParam.mbPixelToLogic)
+                rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+                nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
+                if (rParam.mbPixelToLogic)
                     nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
                 else
                     nNeededPixel = nEngineWidth;
@@ -2634,13 +2634,13 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 //  No clip marks if "###" doesn't fit (same as in DrawStrings)
             }
 
-            if ( eOutHorJust != SVX_HOR_JUSTIFY_LEFT && rAlignParam.meOrient == SVX_ORIENTATION_STANDARD )
+            if ( eOutHorJust != SVX_HOR_JUSTIFY_LEFT && rParam.meOrient == SVX_ORIENTATION_STANDARD )
             {
                 aPaperSize.Width() = nNeededPixel + 1;
-                if (rAlignParam.mbPixelToLogic)
-                    rAlignParam.mpEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
+                if (rParam.mbPixelToLogic)
+                    rParam.mpEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
                 else
-                    rAlignParam.mpEngine->SetPaperSize(aPaperSize);
+                    rParam.mpEngine->SetPaperSize(aPaperSize);
             }
         }
 
@@ -2650,14 +2650,14 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
         long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
         long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
-        if ( rAlignParam.mbBreak || rAlignParam.meOrient != SVX_ORIENTATION_STANDARD || rAlignParam.mbAsianVertical )
+        if ( rParam.mbBreak || rParam.meOrient != SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical )
         {
             //  text with automatic breaks is aligned only within the
             //  edit engine's paper size, the output of the whole area
             //  is always left-aligned
 
             nStartX += nLeftM;
-            if (rAlignParam.meOrient == SVX_ORIENTATION_TOPBOTTOM && rAlignParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK)
+            if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM && rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK)
                 nStartX += aPaperSize.Height();
         }
         else
@@ -2670,7 +2670,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 nStartX += nLeftM;
         }
 
-        sal_Bool bOutside = ( aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW );
+        bool bOutside = ( aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW );
         if ( aAreaParam.maClipRect.Left() < nScrX )
         {
             aAreaParam.maClipRect.Left() = nScrX;
@@ -2685,27 +2685,27 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
         if ( !bHidden && !bOutside )
         {
             bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
-            sal_Bool bSimClip = false;
+            bool bSimClip = false;
 
             if ( bWrapFields )
             {
                 //  Fields in a cell with automatic breaks: clip to cell width
-                bClip = sal_True;
+                bClip = true;
             }
 
             if ( aAreaParam.maClipRect.Top() < nScrY )
             {
                 aAreaParam.maClipRect.Top() = nScrY;
-                bClip = sal_True;
+                bClip = true;
             }
             if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
             {
                 aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-                bClip = sal_True;
+                bClip = true;
             }
 
             Size aCellSize;         // output area, excluding margins, in logical units
-            if (rAlignParam.mbPixelToLogic)
+            if (rParam.mbPixelToLogic)
                 aCellSize = pRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
             else
                 aCellSize = Size( nOutWidth, nOutHeight );
@@ -2713,19 +2713,19 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
             {
                 const ScMergeAttr* pMerge =
-                        (ScMergeAttr*)&rAlignParam.mpPattern->GetItem(ATTR_MERGE);
-                sal_Bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
+                        (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
+                bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
                 //  Don't clip for text height when printing rows with optimal height,
                 //  except when font size is from conditional formatting.
                 //! Allow clipping when vertically merged?
                 if ( eType != OUTTYPE_PRINTER ||
-                    ( pDoc->GetRowFlags( rAlignParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-                    ( rAlignParam.mpCondSet && SFX_ITEM_SET ==
-                        rAlignParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, sal_True) ) )
-                    bClip = sal_True;
+                    ( pDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+                    ( rParam.mpCondSet && SFX_ITEM_SET ==
+                        rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+                    bClip = true;
                 else
-                    bSimClip = sal_True;
+                    bSimClip = true;
 
                 //  Show clip marks if height is at least 5pt too small and
                 //  there are several lines of text.
@@ -2734,22 +2734,22 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 //  Only with automatic line breaks, to avoid having to find
                 //  the cells with the horizontal end of the text again.
                 if ( nEngineHeight - aCellSize.Height() > 100 &&
-                     ( rAlignParam.mbBreak || rAlignParam.meOrient == SVX_ORIENTATION_STACKED ) &&
-                     !rAlignParam.mbAsianVertical && bMarkClipped &&
-                     ( rAlignParam.mpEngine->GetParagraphCount() > 1 || rAlignParam.mpEngine->GetLineCount(0) > 1 ) )
+                     ( rParam.mbBreak || rParam.meOrient == SVX_ORIENTATION_STACKED ) &&
+                     !rParam.mbAsianVertical && bMarkClipped &&
+                     ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
                 {
                     CellInfo* pClipMarkCell = NULL;
                     if ( bMerged )
                     {
                         //  anywhere in the merged area...
-                        SCCOL nClipX = ( rAlignParam.mnX < nX1 ) ? nX1 : rAlignParam.mnX;
-                        pClipMarkCell = &pRowInfo[(rAlignParam.mnArrY != 0) ? rAlignParam.mnArrY : 1].pCellInfo[nClipX+1];
+                        SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
+                        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
                     }
                     else
-                        pClipMarkCell = &rAlignParam.mpThisRowInfo->pCellInfo[rAlignParam.mnX+1];
+                        pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
 
                     pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
-                    bAnyClipped = sal_True;
+                    bAnyClipped = true;
 
                     long nMarkPixel = (long)( SC_CLIPMARK_SIZE * nPPTX );
                     if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
@@ -2762,7 +2762,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             {
                 // Clip marks are already handled in GetOutputArea
 
-                if (rAlignParam.mbPixelToLogic)
+                if (rParam.mbPixelToLogic)
                     aLogicClip = pRefDevice->PixelToLogic( aAreaParam.maClipRect );
                 else
                     aLogicClip = aAreaParam.maClipRect;
@@ -2780,57 +2780,57 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             }
 
             Point aLogicStart;
-            if (rAlignParam.mbPixelToLogic)
+            if (rParam.mbPixelToLogic)
                 aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
             else
                 aLogicStart = Point(nStartX, nStartY);
-            if ( rAlignParam.meOrient!=SVX_ORIENTATION_STANDARD || rAlignParam.mbAsianVertical || !rAlignParam.mbBreak )
+            if ( rParam.meOrient!=SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical || !rParam.mbBreak )
             {
                 long nAvailWidth = aCellSize.Width();
                 // space for AutoFilter is already handled in GetOutputArea
 
                 //  horizontal alignment
 
-                if (rAlignParam.meOrient==SVX_ORIENTATION_STANDARD && !rAlignParam.mbAsianVertical)
+                if (rParam.meOrient==SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical)
                 {
-                    if (rAlignParam.adjustHorAlignment(rAlignParam.mpEngine))
+                    if (rParam.adjustHorAlignment(rParam.mpEngine))
                         // reset adjustment for the next cell
-                        rAlignParam.mpOldPattern = NULL;
+                        rParam.mpOldPattern = NULL;
                 }
                 else
                 {
-                    if (rAlignParam.meHorJust==SVX_HOR_JUSTIFY_RIGHT)
+                    if (rParam.meHorJust==SVX_HOR_JUSTIFY_RIGHT)
                         aLogicStart.X() += nAvailWidth - nEngineWidth;
-                    else if (rAlignParam.meHorJust==SVX_HOR_JUSTIFY_CENTER)
+                    else if (rParam.meHorJust==SVX_HOR_JUSTIFY_CENTER)
                         aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
                 }
             }
 
-            if ( rAlignParam.mbAsianVertical )
+            if ( rParam.mbAsianVertical )
             {
                 // paper size is subtracted below
                 aLogicStart.X() += nEngineWidth;
             }
 
-            if ( (rAlignParam.mbAsianVertical || rAlignParam.isVerticallyOriented()) && rAlignParam.mbBreak )
+            if ( (rParam.mbAsianVertical || rParam.isVerticallyOriented()) && rParam.mbBreak )
             {
                 // vertical adjustment is within the EditEngine
-                if (rAlignParam.mbPixelToLogic)
+                if (rParam.mbPixelToLogic)
                     aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
                 else
                     aLogicStart.Y() += nTopM;
             }
 
-            if (!rAlignParam.mbAsianVertical && !rAlignParam.isVerticallyOriented() &&
-                (rAlignParam.meOrient == SVX_ORIENTATION_STANDARD || rAlignParam.meOrient == SVX_ORIENTATION_STACKED || !rAlignParam.mbBreak))
+            if (!rParam.mbAsianVertical && !rParam.isVerticallyOriented() &&
+                (rParam.meOrient == SVX_ORIENTATION_STANDARD || rParam.meOrient == SVX_ORIENTATION_STACKED || !rParam.mbBreak))
             {
-                if (rAlignParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-                    rAlignParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
+                if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
+                    rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
                 {
                     //! if pRefDevice != pFmtDevice, keep heights in logic units,
                     //! only converting margin?
 
-                    if (rAlignParam.mbPixelToLogic)
+                    if (rParam.mbPixelToLogic)
                         aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM +
                                         pRefDevice->LogicToPixel(aCellSize).Height() -
                                         pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
@@ -2838,9 +2838,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                     else
                         aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
                 }
-                else if (rAlignParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
+                else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
                 {
-                    if (rAlignParam.mbPixelToLogic)
+                    if (rParam.mbPixelToLogic)
                         aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM + (
                                         pRefDevice->LogicToPixel(aCellSize).Height() -
                                         pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
@@ -2850,7 +2850,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                 }
                 else        // top
                 {
-                    if (rAlignParam.mbPixelToLogic)
+                    if (rParam.mbPixelToLogic)
                         aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
                     else
                         aLogicStart.Y() += nTopM;
@@ -2860,22 +2860,22 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
             short nOriVal = 0;
-            if (rAlignParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
+            if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
             {
                 nOriVal = 2700;
-                if (rAlignParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
+                if (rParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
                 {
                     aLogicStart.X() += nEngineWidth;
-                    if (!rAlignParam.mbBreak)
+                    if (!rParam.mbBreak)
                     {
                         // Set the paper width to text size.
-                        Size aPSize = rAlignParam.mpEngine->GetPaperSize();
-                        aPSize.Width() = rAlignParam.mpEngine->CalcTextWidth();
-                        rAlignParam.mpEngine->SetPaperSize(aPSize);
+                        Size aPSize = rParam.mpEngine->GetPaperSize();
+                        aPSize.Width() = rParam.mpEngine->CalcTextWidth();
+                        rParam.mpEngine->SetPaperSize(aPSize);
 
                         long nGap = 0;
                         long nTopOffset = 0; // offset by top margin
-                        if (rAlignParam.mbPixelToLogic)
+                        if (rParam.mbPixelToLogic)
                         {
                             nGap = pRefDevice->LogicToPixel(aPSize).Width() - pRefDevice->LogicToPixel(aCellSize).Height();
                             nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
@@ -2888,7 +2888,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                         }
                         aLogicStart.Y() += nTopOffset;
 
-                        switch (rAlignParam.meVerJust)
+                        switch (rParam.meVerJust)
                         {
                             case SVX_VER_JUSTIFY_STANDARD:
                             case SVX_VER_JUSTIFY_BOTTOM:
@@ -2908,53 +2908,53 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
                     }
                 }
             }
-            else if (rAlignParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
+            else if (rParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
             {
                 nOriVal = 900;
                 aLogicStart.Y() +=
-                    rAlignParam.mbBreak ? rAlignParam.mpEngine->GetPaperSize().Width() : nEngineHeight;
+                    rParam.mbBreak ? rParam.mpEngine->GetPaperSize().Width() : nEngineHeight;
             }
-            else if (rAlignParam.meOrient == SVX_ORIENTATION_STACKED)
+            else if (rParam.meOrient == SVX_ORIENTATION_STACKED)
             {
-                Size aPaperLogic = rAlignParam.mpEngine->GetPaperSize();
+                Size aPaperLogic = rParam.mpEngine->GetPaperSize();
                 aPaperLogic.Width() = nEngineWidth;
-                rAlignParam.mpEngine->SetPaperSize(aPaperLogic);
+                rParam.mpEngine->SetPaperSize(aPaperLogic);
             }
 
-            if ( rAlignParam.mpEngine->IsRightToLeft( 0 ) )
+            if ( rParam.mpEngine->IsRightToLeft( 0 ) )
             {
                 //  For right-to-left, EditEngine always calculates its lines
                 //  beginning from the right edge, but EditLine::nStartPosX is
                 //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
-                Size aLogicPaper = rAlignParam.mpEngine->GetPaperSize();
+                Size aLogicPaper = rParam.mpEngine->GetPaperSize();
                 if ( aLogicPaper.Width() > USHRT_MAX )
                 {
                     aLogicPaper.Width() = USHRT_MAX;
-                    rAlignParam.mpEngine->SetPaperSize(aLogicPaper);
+                    rParam.mpEngine->SetPaperSize(aLogicPaper);
                 }
             }
 
             // bMoveClipped handling has been replaced by complete alignment
             // handling (also extending to the left).
 
-            if ( bSimClip && !nOriVal && !rAlignParam.mbAsianVertical )
+            if ( bSimClip && !nOriVal && !rParam.mbAsianVertical )
             {
                 //  kein hartes Clipping, aber nur die betroffenen
                 //  Zeilen ausgeben
 
                 Point aDocStart = aLogicClip.TopLeft();
                 aDocStart -= aLogicStart;
-                rAlignParam.mpEngine->Draw( pDev, aLogicClip, aDocStart, false );
+                rParam.mpEngine->Draw( pDev, aLogicClip, aDocStart, false );
             }
             else
             {
-                if (rAlignParam.mbAsianVertical)
+                if (rParam.mbAsianVertical)
                 {
                     //  with SetVertical, the start position is top left of
                     //  the whole output area, not the text itself
-                    aLogicStart.X() -= rAlignParam.mpEngine->GetPaperSize().Width();
+                    aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
                 }
-                rAlignParam.mpEngine->Draw( pDev, aLogicStart, nOriVal );
+                rParam.mpEngine->Draw( pDev, aLogicStart, nOriVal );
             }
 
             if (bClip)
@@ -2966,27 +2966,27 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
             }
 
             // PDF: whole-cell hyperlink from formula?
-            bool bHasURL = pPDFData && rAlignParam.mpCell && rAlignParam.mpCell->GetCellType() == CELLTYPE_FORMULA &&
-                            static_cast<ScFormulaCell*>(rAlignParam.mpCell)->IsHyperLinkCell();
+            bool bHasURL = pPDFData && rParam.mpCell && rParam.mpCell->GetCellType() == CELLTYPE_FORMULA &&
+                            static_cast<ScFormulaCell*>(rParam.mpCell)->IsHyperLinkCell();
             if ( bHasURL )
             {
-                long nURLWidth = (long) rAlignParam.mpEngine->CalcTextWidth();
-                long nURLHeight = rAlignParam.mpEngine->GetTextHeight();
-                if ( rAlignParam.mbBreak )
+                long nURLWidth = (long) rParam.mpEngine->CalcTextWidth();
+                long nURLHeight = rParam.mpEngine->GetTextHeight();
+                if ( rParam.mbBreak )
                 {
-                    Size aPaper = rAlignParam.mpEngine->GetPaperSize();
-                    if ( rAlignParam.mbAsianVertical )
+                    Size aPaper = rParam.mpEngine->GetPaperSize();
+                    if ( rParam.mbAsianVertical )
                         nURLHeight = aPaper.Height();
                     else
                         nURLWidth = aPaper.Width();
                 }
-                if ( rAlignParam.isVerticallyOriented() )
+                if ( rParam.isVerticallyOriented() )
                     std::swap( nURLWidth, nURLHeight );
-                else if ( rAlignParam.mbAsianVertical )
+                else if ( rParam.mbAsianVertical )
                     aURLStart.X() -= nURLWidth;
 
                 Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
-                lcl_DoHyperlinkResult( pDev, aURLRect, rAlignParam.mpCell );
+                lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
             }
         }
     }
@@ -3124,28 +3124,28 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
-                        DrawEditParam aAlignParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
-                        aAlignParam.mbPixelToLogic = bPixelToLogic;
-                        aAlignParam.mbHyphenatorSet = bHyphenatorSet;
-                        aAlignParam.mpEngine = pEngine;
-                        aAlignParam.mpCell = pCell;
-                        aAlignParam.mnArrY = nArrY;
-                        aAlignParam.mnX = nX;
-                        aAlignParam.mnY = nY;
-                        aAlignParam.mnCellX = nCellX;
-                        aAlignParam.mnCellY = nCellY;
-                        aAlignParam.mnPosX = nPosX;
-                        aAlignParam.mnPosY = nPosY;
-                        aAlignParam.mnInitPosX = nInitPosX;
-                        aAlignParam.mpOldPattern = pOldPattern;
-                        aAlignParam.mpOldCondSet = pOldCondSet;
-                        aAlignParam.mpThisRowInfo = pThisRowInfo;
-                        DrawEditStandard(aAlignParam);
+                        DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
+                        aParam.mbPixelToLogic = bPixelToLogic;
+                        aParam.mbHyphenatorSet = bHyphenatorSet;
+                        aParam.mpEngine = pEngine;
+                        aParam.mpCell = pCell;
+                        aParam.mnArrY = nArrY;
+                        aParam.mnX = nX;
+                        aParam.mnY = nY;
+                        aParam.mnCellX = nCellX;
+                        aParam.mnCellY = nCellY;
+                        aParam.mnPosX = nPosX;
+                        aParam.mnPosY = nPosY;
+                        aParam.mnInitPosX = nInitPosX;
+                        aParam.mpOldPattern = pOldPattern;
+                        aParam.mpOldCondSet = pOldCondSet;
+                        aParam.mpThisRowInfo = pThisRowInfo;
+                        DrawEditStandard(aParam);
 
                         // Retrieve parameters for next iteration.
-                        pOldPattern = aAlignParam.mpOldPattern;
-                        pOldCondSet = aAlignParam.mpOldCondSet;
-                        bHyphenatorSet = aAlignParam.mbHyphenatorSet;
+                        pOldPattern = aParam.mpOldPattern;
+                        pOldCondSet = aParam.mpOldCondSet;
+                        bHyphenatorSet = aParam.mbHyphenatorSet;
                     }
                 }
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;

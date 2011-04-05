@@ -235,7 +235,7 @@ private:
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
-    void DrawEditStandard(DrawEditParam& rAlignParam);
+    void DrawEditStandard(DrawEditParam& rParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
