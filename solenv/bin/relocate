@@ -34,6 +34,8 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
+# written substantially, if not entirely by non-Sun volunteers
+#
 #*************************************************************************
 
 sub sniff_set($)
@@ -105,30 +107,63 @@ sub rewrite_set($$$)
     sed_file ("$new_root/$set", \&rewrite_value, \%state);
 }
 
-sub find_old_root($$)
+sub read_set($$)
 {
     my $new_root = shift;
     my $set = shift;
     my $fname = "$new_root/$set";
-    my $old_root;
     my $file;
+    my %env_keys;
 
     open ($file, $fname) || die "Can't open $fname: $!";
-    
+
     while (<$file>) {
 	if (/\s*([^=]+)\s*=\s*\"([^\"]+)\"/) {
 	    my ($name, $value) = ($1, $2);
 
-	    if ($name eq 'SRC_ROOT') {
-		$old_root = $value;
-		last;
-	    }
+	    $env_keys{$name} = $value;
 	}
     }
-    
+
     close ($file) || die "Failed to close $fname: $!";
 
-    return $old_root;
+    return \%env_keys;
+}
+
+sub sed_file_no_touch($$$)
+{
+    my ($new_root, $old_root, $file) = @_;
+    my ($fin, $fout);
+
+    ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+     $atime,$mtime,$ctime,$blksize,$blocks) = stat ($file);
+
+    open ($fin, $file) || die "Can't open $fin: $!";
+    open ($fout, ">$file.sed.bak") || die "Can't open $file.sed.bak: $!";
+    while (<$fin>) {
+	s/$old_root/$new_root/g;
+	print $fout $_;
+    }
+    close ($fin);
+    close ($fout);
+    rename ("$file.sed.bak", $file);
+#    print "rename $file.sed.bak to $file\n";
+
+    utime $atime, $mtime, $file;
+}
+
+sub sed_no_touch_recursive ($$$)
+{
+    my ($new_root, $old_root, $dir) = @_;
+    my $dh;
+    opendir ($dh, $dir) || die "Can't open dir: $dir: $!";
+    while (my $entry = readdir ($dh)) {
+	$entry =~ /^\./ && next;
+	my $path = "$dir/$entry";
+	sed_no_touch_recursive ($new_root, $old_root, $path) if (-d $path);
+	sed_file_no_touch ($new_root, $old_root, $path) if (-f $path);
+    }
+    closedir ($dh);
 }
 
 sub rewrite_product_deps($$$)
@@ -144,8 +179,8 @@ sub rewrite_product_deps($$$)
     while ($name = readdir ($misc_dir)) {
 # Should try re-writing these - but perhaps this would
 # screw with timestamps ?
-    if ($name =~ m/\.dpcc$/ || $name =~ m/\.dpslo$/ || $name =~ m/\.dpobj$/) {
-		unlink ("$path/$name");
+	if ($name =~ m/\.dpcc$/ || $name =~ m/\.dpslo$/ || $name =~ m/\.dpobj$/) {
+	    sed_file_no_touch ($new_root, $old_root, "$path/$name");
 	}
     }
     closedir ($misc_dir);
@@ -177,6 +212,7 @@ sub rewrite_dpcc($$)
 	closedir ($sub_dir);
     }
     closedir ($top_dir);
+    print "\n";
 }
 
 sub rewrite_bootstrap($$)
@@ -210,7 +246,9 @@ substr ($OOO_BUILD, 0, 1) eq '/' || die "relocate requires absolute paths";
 my $set;
 
 $set = sniff_set($OOO_BUILD) || die "Can't find env. set";
-$OLD_ROOT = find_old_root($OOO_BUILD, $set);
+my $env_keys = read_set ($OOO_BUILD, $set);
+$OLD_ROOT = $env_keys->{'SRC_ROOT'};
+my $solver = $env_keys->{SOLARVER} . "/" . $env_keys->{INPATH};
 
 print "Relocate: $OLD_ROOT -> $OOO_BUILD\n";
 
@@ -222,5 +260,9 @@ rewrite_bootstrap($OOO_BUILD, $OLD_ROOT);
 print "re-writing dependencies:\n";
 
 rewrite_dpcc($OOO_BUILD, $OLD_ROOT);
+
+print "re-writing new dependencies:\n";
+
+sed_no_touch_recursive ($OOO_BUILD, $OLD_ROOT, "$solver/workdir/Dep");
 
 print "done.\n";
