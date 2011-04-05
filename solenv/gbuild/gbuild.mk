@@ -208,15 +208,13 @@ ifneq ($(strip $(SOLAR_JAVA)),)
 gb_GLOBALDEFS += -DSOLAR_JAVA
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_GLOBALDEFS += \
-	-DDEBUG \
-
-else
+ifeq ($(gb_DEBUGLEVEL),0)
 gb_GLOBALDEFS += \
 	-DOPTIMIZE \
 	-DNDEBUG \
-
+else ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
+gb_GLOBALDEFS += \
+	-DDEBUG \
 endif
 
 ifneq ($(strip $(ENABLE_GTK)),)
