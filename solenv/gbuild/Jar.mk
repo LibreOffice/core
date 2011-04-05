@@ -56,16 +56,10 @@ endef
 $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname,%))
 	$(call gb_Output_announce,$*,$(false),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -rf $(dir $(call gb_Jar_get_target,$*)) && \
-		rm -f $(call gb_Jar_get_final_target,$*) && \
-		rm -f $(call gb_Jar_get_outdir_target,$*))
+		rm -f $(call gb_Jar_get_target,$*) $(call gb_Jar_get_outdir_target,$*))
 
-# the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
 # the outdir target depends on the workdir target and is built by delivering the latter
 # the workdir target is created by cd'ing to the target directory and adding/updating the files
-$(call gb_Jar_get_final_target,%) : $(call gb_Jar_get_outdir_target,%)
-	$(call gb_Helper_abbreviate_dirs,\
-		touch $@)
 
 # rule for creating the jar file using the command defined above
 $(call gb_Jar_get_target,%) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,%))
@@ -82,7 +76,7 @@ $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)),$(2))
-$(eval $(call gb_Module_register_target,$(call gb_Jar_get_final_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 
