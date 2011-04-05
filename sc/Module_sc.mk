@@ -23,13 +23,15 @@
 $(eval $(call gb_Module_Module,sc))
 
 $(eval $(call gb_Module_add_targets,sc,\
-        AllLangResTarget_sc \
-        Library_sc \
-        Library_scd \
-        Library_scfilt \
-        Library_scui \
-        Library_vbaobj \
-        Package_uiconfig \
-        Package_xml \
+	AllLangResTarget_sc \
+	Library_sc \
+	Library_scd \
+	Library_scfilt \
+	Library_scui \
+	Library_vbaobj \
+	Package_uiconfig \
+	Package_xml \
 ))
+#	CppunitTest_sc_ucalc \
 
+# vim: set noet ts=4 sw=4:
