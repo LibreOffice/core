@@ -167,6 +167,12 @@ gb_Library_TARGETS := $(filter-out rdf,$(gb_Library_TARGETS))
 endif
 
 ifeq ($(SYSTEM_ICU),YES)
+gb_Library_TARGETS := $(filter-out icudata,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out icui18n,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out icuio,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out icule,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out iculx,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out icutu,$(gb_Library_TARGETS))
 gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
 endif
 
