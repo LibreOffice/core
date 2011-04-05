@@ -93,9 +93,26 @@ private:
         SvxCellJustifyMethod    meHorJustMethod;
         SvxCellJustifyMethod    meVerJustMethod;
         SvxCellOrientation      meOrient;
+        SCSIZE                  mnArrY;
+        SCCOL                   mnX;
+        SCROW                   mnY;
+        SCCOL                   mnCellX;
+        SCROW                   mnCellY;
+        long                    mnPosX;
+        long                    mnPosY;
+        long                    mnInitPosX;
         bool                    mbBreak;
         bool                    mbCellIsValue;
         bool                    mbAsianVertical;
+        bool                    mbPixelToLogic;
+        bool                    mbHyphenatorSet;
+        ScFieldEditEngine*      mpEngine;
+        ScBaseCell*             mpCell;
+        const ScPatternAttr*    mpPattern;
+        const SfxItemSet*       mpCondSet;
+        const ScPatternAttr*    mpOldPattern;
+        const SfxItemSet*       mpOldCondSet;
+        const RowInfo*          mpThisRowInfo;
 
         explicit EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
@@ -114,10 +131,6 @@ private:
 
         void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
-
-    private:
-        const ScPatternAttr*    mpPattern;
-        const SfxItemSet*       mpCondSet;
     };
 
     OutputDevice* pDev;         // Device
@@ -222,7 +235,7 @@ private:
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
-    void DrawEditStandard(EditAlignmentParam* pAlignParam);
+    void DrawEditStandard(EditAlignmentParam& rAlignParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
