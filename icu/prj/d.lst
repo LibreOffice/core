@@ -8,6 +8,8 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\lib\icuin.lib %_DEST%\lib%_EXT%\iicui18n.lib
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 
