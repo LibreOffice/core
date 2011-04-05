@@ -43,7 +43,8 @@ namespace
             rtl_memory_fini();
         }
     };
-    class theMemorySingleton : public rtl::Static<rtlMemorySingleton, theMemorySingleton>{};
+    class theMemorySingleton
+        : public rtl::Static<rtlMemorySingleton, theMemorySingleton>{};
 }
 extern "C" void ensureMemorySingleton()
 {
@@ -65,7 +66,8 @@ namespace
             rtl_cache_fini();
         }
     };
-    class theCacheSingleton : public rtl::Static<rtlCacheSingleton, theCacheSingleton>{};
+    class theCacheSingleton
+        : public rtl::Static<rtlCacheSingleton, theCacheSingleton>{};
 }
 extern "C" void ensureCacheSingleton()
 {
@@ -87,11 +89,35 @@ namespace
             rtl_arena_fini();
         }
     };
-    class theArenaSingleton : public rtl::Static<rtlArenaSingleton, theArenaSingleton>{};
+    class theArenaSingleton
+        : public rtl::Static<rtlArenaSingleton, theArenaSingleton>{};
 }
 extern "C" void ensureArenaSingleton()
 {
     theArenaSingleton::get();
+}
+
+extern "C" void rtl_locale_fini (void);
+extern "C" void rtl_locale_init (void);
+namespace
+{
+    struct rtlLocaleSingleton
+    {
+        rtlLocaleSingleton()
+        {
+            rtl_locale_init();
+        }
+        ~rtlLocaleSingleton()
+        {
+            rtl_locale_fini();
+        }
+    };
+    class theLocaleSingleton
+        : public rtl::Static<rtlLocaleSingleton, theLocaleSingleton>{};
+}
+extern "C" void ensureLocaleSingleton()
+{
+    theLocaleSingleton::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

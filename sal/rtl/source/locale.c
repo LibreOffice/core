@@ -58,8 +58,6 @@ static RTL_HASHTABLE* g_pLocaleTable = NULL;
 
 static rtl_Locale* g_pDefaultLocale = NULL;
 
-static int rtl_locale_init (void);
-
 /*************************************************************************
  */
 void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
@@ -228,29 +226,15 @@ sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hash
 /*************************************************************************
  *  rtl_locale_init
  */
-static void rtl_locale_once_init (void)
+void rtl_locale_init (void)
 {
   OSL_ASSERT(g_pLocaleTable == 0);
   rtl_hashtable_init(&g_pLocaleTable, 1);
 }
 
-static int rtl_locale_init (void)
-{
-  static sal_once_type g_once = SAL_ONCE_INIT;
-  SAL_ONCE(&g_once, rtl_locale_once_init);
-  return (g_pLocaleTable != 0);
-}
-
 /*************************************************************************
  *  rtl_locale_fini
  */
-#if defined(__GNUC__)
-static void rtl_locale_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_locale_fini)
-static void rtl_locale_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
-
 void rtl_locale_fini (void)
 {
   if (g_pLocaleTable != 0)
@@ -259,6 +243,8 @@ void rtl_locale_fini (void)
     g_pLocaleTable = 0;
   }
 }
+
+extern void ensureLocaleSingleton();
 
 /*************************************************************************
  *  rtl_locale_register
@@ -278,7 +264,8 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
     if ( !variant )
         variant = &c;
 
-    if (!rtl_locale_init())
+    ensureLocaleSingleton();
+    if (!g_pLocaleTable)
       return NULL;
 
     hashCode = rtl_ustr_hashCode(language) ^ rtl_ustr_hashCode(country) ^ rtl_ustr_hashCode(variant);
