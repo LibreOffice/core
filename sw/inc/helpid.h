@@ -497,7 +497,6 @@
 #define HID_REFRESH_VIEW                                        "SW_HID_REFRESH_VIEW"
 #define HID_RIBBON                                              "SW_HID_RIBBON"
 #define HID_RULER                                               "SW_HID_RULER"
-#define HID_STATUSBAR                                           "SW_HID_STATUSBAR"
 #define HID_TOOLBOX                                             "SW_HID_TOOLBOX"
 #define HID_VIEW_BOUNDS                                         "SW_HID_VIEW_BOUNDS"
 #define HID_VIEW_FIELDS                                         "SW_HID_VIEW_FIELDS"
