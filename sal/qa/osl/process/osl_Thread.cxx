@@ -2059,6 +2059,7 @@ namespace osl_ThreadData
                     cData1 == 'a' && cData2 == 'b' && aChar == 'm'
                     );
 
+                delete [] pc;
             }
         /** setData the second time, and then getData
          */
