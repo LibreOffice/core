@@ -70,6 +70,8 @@ class SdrPaintWindow;
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
+class ScFieldEditEngine;
+
 class ScOutputData
 {
 friend class ScDrawStringsVars;
@@ -81,6 +83,41 @@ private:
         long        mnColWidth;
         bool        mbLeftClip;
         bool        mbRightClip;
+    };
+
+    class EditAlignmentParam
+    {
+    public:
+        SvxCellHorJustify       meHorJust;
+        SvxCellVerJustify       meVerJust;
+        SvxCellJustifyMethod    meHorJustMethod;
+        SvxCellJustifyMethod    meVerJustMethod;
+        SvxCellOrientation      meOrient;
+        bool                    mbBreak;
+        bool                    mbCellIsValue;
+        bool                    mbAsianVertical;
+
+        explicit EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+
+        void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
+        void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+        void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
+        long getEngineWidth(ScFieldEditEngine* pEngine) const;
+        bool hasLineBreak() const;
+
+        /**
+         * When the text is vertically oriented, the text is either rotated 90
+         * degrees to the right or 90 degrees to the left.   Note that this is
+         * different from being vertically stacked.
+         */
+        bool isVerticallyOriented() const;
+
+        void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
+        bool adjustHorAlignment(ScFieldEditEngine* pEngine);
+
+    private:
+        const ScPatternAttr*    mpPattern;
+        const SfxItemSet*       mpCondSet;
     };
 
     OutputDevice* pDev;         // Device
@@ -184,6 +221,8 @@ private:
     void            DrawRotatedFrame( const Color* pForceColor );       // pixel
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
+
+    void DrawEditStandard(EditAlignmentParam* pAlignParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,

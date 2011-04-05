@@ -2114,44 +2114,7 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlig
     }
 }
 
-namespace {
-
-class EditAlignmentParam
-{
-public:
-    SvxCellHorJustify       meHorJust;
-    SvxCellVerJustify       meVerJust;
-    SvxCellJustifyMethod    meHorJustMethod;
-    SvxCellJustifyMethod    meVerJustMethod;
-    SvxCellOrientation      meOrient;
-    bool                    mbBreak;
-    bool                    mbCellIsValue;
-    bool                    mbAsianVertical;
-
-    explicit EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
-
-    void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
-    void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
-    void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
-    long getEngineWidth(ScFieldEditEngine* pEngine) const;
-    bool hasLineBreak() const;
-
-    /**
-     * When the text is vertically oriented, the text is either rotated 90
-     * degrees to the right or 90 degrees to the left.   Note that this is
-     * different from being vertically stacked.
-     */
-    bool isVerticallyOriented() const;
-
-    void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
-    bool adjustHorAlignment(ScFieldEditEngine* pEngine);
-
-private:
-    const ScPatternAttr*    mpPattern;
-    const SfxItemSet*       mpCondSet;
-};
-
-EditAlignmentParam::EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
+ScOutputData::EditAlignmentParam::EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
     meHorJust( lcl_GetValue<SvxHorJustifyItem, SvxCellHorJustify>(*pPattern, ATTR_HOR_JUSTIFY, pCondSet) ),
     meVerJust( lcl_GetValue<SvxVerJustifyItem, SvxCellVerJustify>(*pPattern, ATTR_VER_JUSTIFY, pCondSet) ),
     meHorJustMethod( lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_HOR_JUSTIFY_METHOD, pCondSet) ),
@@ -2163,7 +2126,7 @@ EditAlignmentParam::EditAlignmentParam(const ScPatternAttr* pPattern, const SfxI
     mpCondSet(pCondSet)
 {}
 
-void EditAlignmentParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
+void ScOutputData::EditAlignmentParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
 {
     const SvxMarginItem& rMargin =
         static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
@@ -2178,7 +2141,7 @@ void EditAlignmentParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, 
     rBottomM = static_cast<long>((rMargin.GetBottomMargin() * nPPTY));
 }
 
-void EditAlignmentParam::calcPaperSize(
+void ScOutputData::EditAlignmentParam::calcPaperSize(
     Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const
 {
     long nTopM, nLeftM, nBottomM, nRightM;
@@ -2205,7 +2168,7 @@ void EditAlignmentParam::calcPaperSize(
     }
 }
 
-void EditAlignmentParam::getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const
+void ScOutputData::EditAlignmentParam::getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const
 {
     long nEngineWidth = 0;
     if (!mbBreak || meOrient == SVX_ORIENTATION_STACKED || mbAsianVertical)
@@ -2227,7 +2190,7 @@ void EditAlignmentParam::getEngineSize(ScFieldEditEngine* pEngine, long& rWidth,
     rHeight = nEngineHeight;
 }
 
-long EditAlignmentParam::getEngineWidth(ScFieldEditEngine* pEngine) const
+long ScOutputData::EditAlignmentParam::getEngineWidth(ScFieldEditEngine* pEngine) const
 {
     if (mbBreak && meOrient != SVX_ORIENTATION_STACKED && !mbAsianVertical)
         return 0;
@@ -2235,17 +2198,17 @@ long EditAlignmentParam::getEngineWidth(ScFieldEditEngine* pEngine) const
         return static_cast<long>(pEngine->CalcTextWidth());
 }
 
-bool EditAlignmentParam::hasLineBreak() const
+bool ScOutputData::EditAlignmentParam::hasLineBreak() const
 {
     return (mbBreak || (meOrient == SVX_ORIENTATION_STACKED) || mbAsianVertical);
 }
 
-bool EditAlignmentParam::isVerticallyOriented() const
+bool ScOutputData::EditAlignmentParam::isVerticallyOriented() const
 {
     return (meOrient == SVX_ORIENTATION_TOPBOTTOM || meOrient == SVX_ORIENTATION_BOTTOMTOP);
 }
 
-void EditAlignmentParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell)
+void ScOutputData::EditAlignmentParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell)
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
@@ -2354,7 +2317,7 @@ void EditAlignmentParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCel
     }
 }
 
-bool EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
+bool ScOutputData::EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
 {
     if (meHorJust == SVX_HOR_JUSTIFY_RIGHT || meHorJust == SVX_HOR_JUSTIFY_CENTER ||
         (meHorJust == SVX_HOR_JUSTIFY_STANDARD && mbCellIsValue))
@@ -2370,6 +2333,8 @@ bool EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
     return false;
 }
 
+void ScOutputData::DrawEditStandard(EditAlignmentParam* pAlignParam)
+{
 }
 
 void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
@@ -2517,7 +2482,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
                         EditAlignmentParam aAlignParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
-
+                        DrawEditStandard(&aAlignParam);
                         bool bRepeat = (aAlignParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !aAlignParam.mbBreak);
                         bool bShrink = !aAlignParam.mbBreak && !bRepeat && lcl_GetBoolValue(*pPattern, ATTR_SHRINKTOFIT, pCondSet);
                         long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*pPattern, ATTR_ROTATE_VALUE, pCondSet);
