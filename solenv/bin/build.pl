@@ -3533,7 +3533,7 @@ sub check_partial_gnumake_build {
         print "This module has been migrated to GNU make.\n";
         print "You can only use build --all/--since here with build.pl.\n";
         print "To do the equivalent of 'build && deliver' call:\n";
-        print "\tmake -sr\n";
+        print "\t$ENV{GNUMAKE} -sr\n";
         print "in the module root (This will modify the solver).\n";
         exit 1;
     }
