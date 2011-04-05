@@ -1226,6 +1226,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         aMapVDev.EnableOutput(sal_False);
 
                         VirtualDevice   aPaintVDev; // into this one, we render.
+                        aPaintVDev.SetBackground( aBackgroundComponent.aBgColor );
 
                         rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
                         rOutMtf.AddAction( new MetaMapModeAction() );
