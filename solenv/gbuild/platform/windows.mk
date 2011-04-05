@@ -619,6 +619,7 @@ endef
 
 # CppunitTest class
 
+gb_CppunitTest_DEFS := -D_DLL
 gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib

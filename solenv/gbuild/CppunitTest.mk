@@ -59,6 +59,10 @@ endef
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
+$(call gb_LinkTarget_set_defs,$(2),\
+	$$(DEFS) \
+	$(gb_CppunitTest_DEFS) \
+)
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
