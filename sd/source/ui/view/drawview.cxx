@@ -555,7 +555,7 @@ sal_Bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 
 void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
-    if (!rRect.IsEmpty())
+    if (!rRect.IsEmpty() && mpDrawViewShell)
     {
         mpDrawViewShell->MakeVisible(rRect, rWin);
     }
