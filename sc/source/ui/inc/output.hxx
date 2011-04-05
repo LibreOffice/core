@@ -122,14 +122,14 @@ private:
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    sal_Bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
-    sal_Bool bSingleGrid;           // beim Gitter bChanged auswerten
+    bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
+    bool bSingleGrid;           // beim Gitter bChanged auswerten
 
-    sal_Bool bPagebreakMode;        // Seitenumbruch-Vorschau
-    sal_Bool bSolidBackground;      // weiss statt transparent
+    bool bPagebreakMode;        // Seitenumbruch-Vorschau
+    bool bSolidBackground;      // weiss statt transparent
 
-    sal_Bool bUseStyleColor;
-    sal_Bool bForceAutoColor;
+    bool bUseStyleColor;
+    bool bForceAutoColor;
 
     sal_Bool bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
@@ -138,18 +138,18 @@ private:
 
     Color   aGridColor;
 
-    sal_Bool    bShowNullValues;
-    sal_Bool    bShowFormulas;
-    sal_Bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
-    sal_Bool    bMarkClipped;
+    bool    bShowNullValues;
+    bool    bShowFormulas;
+    bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
+    bool    bMarkClipped;
 
-    sal_Bool    bSnapPixel;
+    bool    bSnapPixel;
 
-    sal_Bool    bAnyRotated;        // intern
-    sal_Bool    bAnyClipped;        // intern
-    sal_Bool    bTabProtected;
+    bool    bAnyRotated;        // intern
+    bool    bAnyClipped;        // intern
+    bool    bTabProtected;
     sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
-    sal_Bool    bLayoutRTL;
+    bool    bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
