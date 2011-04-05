@@ -68,12 +68,13 @@ for my $arg (@cmdline_args) {
 system ("touch ChangeLog");
 
 my $system = `uname -s`;
+chomp $system;
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
-$aclocal_flags = "-I ./m4/mac" if (!defined $aclocal_flags && $system eq 'Darwin');
-$aclocal_flags = "" if (!defined $aclocal_flags);
 
-$ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!$system eq 'Darwin');
+$aclocal_flags = "-I ./m4/mac" if (($aclocal_flags eq "") && ($system eq 'Darwin'));
+
+$ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
 system ("aclocal $aclocal_flags") && die "Failed to run aclocal";
 system ("autoconf") && die "Failed to run autoconf";
