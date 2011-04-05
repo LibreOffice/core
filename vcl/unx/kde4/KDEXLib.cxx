@@ -219,6 +219,16 @@ static bool qt_event_filter( void* m )
     return false;
 }
 
+static bool ( *old_qt_event_filter )( void* );
+static bool qt_event_filter( void* m )
+{
+    if( old_qt_event_filter != NULL && old_qt_event_filter( m ))
+        return true;
+    if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
+        return true;
+    return false;
+}
+
 void KDEXLib::setupEventLoop()
 {
     old_qt_event_filter = QAbstractEventDispatcher::instance()->setEventFilter( qt_event_filter );

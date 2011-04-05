@@ -433,6 +433,8 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
         clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
+        XRectangle xRect = { widgetRect.x(), widgetRect.y(), width, widgetRect.height() };
+        XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
 
         QStyleOption option;
         option.state = QStyle::State_Horizontal;

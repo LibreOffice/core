@@ -1079,7 +1079,7 @@ namespace cairocanvas
                     {
                         const sal_uInt32 nNextIndex((b + 1) % nPointCount);
                         aEdge.setB2DPoint(1, aCandidate.getB2DPoint(nNextIndex));
-                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(b));
+                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(b % nPointCount));
                         aEdge.setPrevControlPoint(1, aCandidate.getPrevControlPoint(nNextIndex));
 
                         doPolyPolygonImplementation( basegfx::B2DPolyPolygon(aEdge),

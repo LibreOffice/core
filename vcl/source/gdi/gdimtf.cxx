@@ -439,6 +439,8 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, sal_uLong nPos )
 
         rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
 
+        rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
+
         if( nPos > nObjCount )
             nPos = nObjCount;
 
