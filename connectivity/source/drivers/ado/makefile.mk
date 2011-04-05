@@ -70,13 +70,13 @@ EXCEPTIONSFILES= \
         $(SLO)$/AStatement.obj							\
         $(SLO)$/APreparedStatement.obj					\
         $(SLO)$/AResultSetMetaData.obj					\
-        $(SLO)$/ADriver.obj								\
-        $(SLO)$/Aservices.obj
+        $(SLO)$/ADriver.obj                             \
+        $(SLO)$/Aservices.obj                           \
+        $(SLO)$/Awrapado.obj                            \
+        $(SLO)$/adoimp.obj
 
 SLOFILES=\
-        $(EXCEPTIONSFILES)								\
-        $(SLO)$/Awrapado.obj							\
-        $(SLO)$/adoimp.obj
+        $(EXCEPTIONSFILES)
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(ADO_TARGET)$(DLLPOSTFIX)
