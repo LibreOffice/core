@@ -213,6 +213,16 @@ endif
 
 gb_COMPILERNOOPTFLAGS := -Od
 
+ifeq ($(gb_FULLDEPS),$(true))
+gb_COMPILERDEPFLAGS := -showIncludes
+define gb_create_deps
+| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3)
+endef
+else
+gb_COMPILERDEPFLAGS :=
+define gb_create_deps
+endef
+endif
 
 # Helper class
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
@@ -241,27 +251,6 @@ endef
 
 # CObject class
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_CObject_get_dep_target,$(2)))
-endef
-else
-CObject__command_deponcompile =
-endif
-
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -270,36 +259,15 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CC) \
 		$(DEFS) $(CFLAGS)  -Fd$(PDBFILE) \
 		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+		-Fo$(1)) $(call gb_create_deps,$(1),$(call gb_CObject_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 
 # CxxObject class
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CxxObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		 -v OBJECTFILE=$(1) \
-		 -v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		 -v REPODIR=$(REPODIR)/ \
-	> $(call gb_CxxObject_get_dep_target,$(2)))
- endef
-else
-gb_CxxObject__command_deponcompile =
-endif
 
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
@@ -309,11 +277,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CXX) \
 		$(DEFS) $(CXXFLAGS) -Fd$(PDBFILE)\
 		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+		-Fo$(1))  $(call gb_create_deps,$(1),$(call gb_CxxObject_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 
@@ -322,28 +290,6 @@ endef
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 									   -Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_PrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_PrecompiledHeader__command_deponcompile =
-endif
-
-
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -351,39 +297,17 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(6) \
 		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 										   -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_NoexPrecompiledHeader__command_deponcompile =
-endif
-
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -392,11 +316,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(6) \
 		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(realpath $(3)))
 endef
 
 
