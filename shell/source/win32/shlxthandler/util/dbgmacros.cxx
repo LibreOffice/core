@@ -41,20 +41,6 @@
 
 void DbgAssert(bool /*condition*/, const char* /*message*/)
 {
-
-    //if (!condition)
-    //{
-    //  char msg[1024];
-    //
-    //  sprintf(msg, "Assertion in file %s at line %d\n%s", __FILE__, __LINE__, message);
-
-    //  int nRet = MessageBoxA(
-    //      0,
-    //      msg,
-    //      "Assertion violation",
-    //      MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
-    //}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

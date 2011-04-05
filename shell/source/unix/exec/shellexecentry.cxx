@@ -56,8 +56,6 @@ using com::sun::star::system::XSystemShellExecute;
 #define SHELLEXEC_REGKEY_NAME   "/com.sun.star.comp.system.SystemShellExecute/UNO/SERVICES/com.sun.star.system.SystemShellExecute"
 
 //-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
 
 namespace
 {

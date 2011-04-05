@@ -66,13 +66,10 @@ class i_xml_parser_event_handler;
 class xml_parser
 {
 public:
-    //########################################################
     xml_parser(const XML_Char* EncodingName = 0);
 
-    //########################################################
     ~xml_parser();
 
-    //########################################################
     /** Parse a XML data stream
 
         @param      pXmlData
@@ -94,7 +91,6 @@ public:
                     contains detailed information about the error.  */
     void parse(const char* XmlData, size_t Length, bool IsFinal = true);
 
-    //########################################################
     /** Set a document handler
 
         @descr      A document handler implements the interface i_xml_parser_event_handler.
@@ -113,7 +109,6 @@ public:
         @postcond   currently used document handler == pSaxDocumentHandler  */
     void set_document_handler(i_xml_parser_event_handler* event_handler);
 
-    //########################################################
     /** Returns the currently used document handler or null if
         no document handler was set before. */
     i_xml_parser_event_handler* get_document_handler() const;

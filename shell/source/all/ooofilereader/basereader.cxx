@@ -43,8 +43,6 @@ m_ZipFile( DocumentName )
 }
 
 //------------------------------
-//
-//------------------------------
 
 CBaseReader::CBaseReader(void * sw, zlib_filefunc_def* fa):
 m_ZipFile( sw , fa )
@@ -52,23 +50,17 @@ m_ZipFile( sw , fa )
 }
 
 //------------------------------
-//
-//------------------------------
 
 CBaseReader::~CBaseReader()
 {
 }
 
 //------------------------------
-//
-//------------------------------
 
 void CBaseReader::start_document()
 {
 }
 
-//------------------------------
-//
 //------------------------------
 
 void CBaseReader::end_document()

@@ -30,11 +30,8 @@
 #include "precompiled_shell.hxx"
 
 //+-------------------------------------------------------------------------
-//
 //  File:       propspec.cxx
-//
 //  Contents:   C++ wrappers for FULLPROPSPEC
-//
 //--------------------------------------------------------------------------
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -50,12 +47,8 @@
 
 #include "propspec.hxx"
 
-//GUID CLSID_Storage = PSGUID_STORAGE;
-//
-//
 //refer to ms-help://MS.VSCC/MS.MSDNVS.2052/com/stgasstg_7agk.htm
 //FMTID_SummaryInformation
-//
 //GUID CLSID_SummaryInforation = {
 //    0xF29F85E0,
 //    0x4FF9,
@@ -63,13 +56,9 @@
 //    { 0xAB, 0x91, 0x08, 0x00, 0x2B, 0x27, 0xB3, 0xD9 }
 //};
 //+-------------------------------------------------------------------------
-//
 //  Member:     CFullPropSpec::CFullPropSpec, public
-//
 //  Synopsis:   Default constructor
-//
 //  Effects:    Defines property with null guid and propid 0
-//
 //--------------------------------------------------------------------------
 
 CFullPropSpec::CFullPropSpec()
@@ -79,14 +68,10 @@ CFullPropSpec::CFullPropSpec()
     _psProperty.propid = 0;
 }
 //+-------------------------------------------------------------------------
-//
 //  Member:     CFullPropSpec::CFullPropSpec, public
-//
 //  Synopsis:   Construct propid based propspec
-//
 //  Arguments:  [guidPropSet]  -- Property set
 //              [pidProperty] -- Property
-//
 //--------------------------------------------------------------------------
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
     _guidPropSet( guidPropSet )
@@ -95,14 +80,10 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
     _psProperty.propid = pidProperty;
 }
 //+-------------------------------------------------------------------------
-//
 //  Member:     CFullPropSpec::CFullPropSpec, public
-//
 //  Synopsis:   Construct name based propspec
-//
 //  Arguments:  [guidPropSet] -- Property set
 //              [wcsProperty] -- Property
-//
 //--------------------------------------------------------------------------
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
                               WCHAR const * wcsProperty ) :
@@ -112,13 +93,9 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
     SetProperty( wcsProperty );
 }
 //+-------------------------------------------------------------------------
-//
 //  Member:     CFullPropSpec::CFullPropSpec, public
-//
 //  Synopsis:   Copy constructor
-//
 //  Arguments:  [src] -- Source property spec
-//
 //--------------------------------------------------------------------------
 CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
     _guidPropSet( src._guidPropSet )
@@ -144,13 +121,9 @@ inline void * operator new( size_t /*size*/, void * p )
     return( p );
 }
 //+-------------------------------------------------------------------------
-//
 //  Member:     CFullPropSpec::operator=, public
-//
 //  Synopsis:   Assignment operator
-//
 //  Arguments:  [Property] -- Source property
-//
 //--------------------------------------------------------------------------
 CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
 {

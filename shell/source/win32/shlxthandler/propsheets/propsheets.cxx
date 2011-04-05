@@ -61,8 +61,6 @@
 ----------------------------------------------*/
 
 //-----------------------------
-//
-//-----------------------------
 
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -71,8 +69,6 @@ CPropertySheet::CPropertySheet(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 CPropertySheet::~CPropertySheet()
@@ -110,8 +106,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 {
@@ -119,8 +113,6 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
@@ -259,8 +251,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
@@ -268,8 +258,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     return E_NOTIMPL;
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
@@ -290,8 +278,6 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 
 
 //-----------------------------
-//
-//-----------------------------
 
 BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -310,8 +296,6 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -329,7 +313,6 @@ BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPAR
     return FALSE;
 }
 
-//##################################
 void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
     try

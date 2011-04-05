@@ -55,8 +55,6 @@ using namespace com::sun::star::uno;
 
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
     throw (RuntimeException)
@@ -65,8 +63,6 @@ void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
     m_aRecipient = aRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 ::rtl::OUString SAL_CALL CmdMailMsg::getRecipient(  )
@@ -77,8 +73,6 @@ void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
     throw (RuntimeException)
@@ -87,8 +81,6 @@ void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipie
     m_CcRecipients = aCcRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
@@ -99,8 +91,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
     throw (RuntimeException)
@@ -109,8 +99,6 @@ void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecip
     m_BccRecipients = aBccRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
@@ -121,8 +109,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
     throw (RuntimeException)
@@ -131,8 +117,6 @@ void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
     m_aOriginator = aOriginator;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 OUString SAL_CALL CmdMailMsg::getOriginator(  )
@@ -143,8 +127,6 @@ OUString SAL_CALL CmdMailMsg::getOriginator(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
     throw (RuntimeException)
@@ -153,8 +135,6 @@ void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
     m_aSubject = aSubject;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 OUString SAL_CALL CmdMailMsg::getSubject(  )
@@ -165,8 +145,6 @@ OUString SAL_CALL CmdMailMsg::getSubject(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachment )
     throw (IllegalArgumentException, RuntimeException)
@@ -176,8 +154,6 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAt
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
     throw (RuntimeException)
@@ -186,8 +162,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
     return m_Attachments;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
@@ -217,8 +191,6 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
         static_cast < XNameAccess * > (this) );
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
@@ -252,8 +224,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
  sal_Bool SAL_CALL CmdMailMsg::hasByName( const ::rtl::OUString& aName )
     throw (RuntimeException)
@@ -282,8 +252,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 Type SAL_CALL CmdMailMsg::getElementType(  )
     throw (RuntimeException)
@@ -292,8 +260,6 @@ Type SAL_CALL CmdMailMsg::getElementType(  )
     return Type();
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 sal_Bool SAL_CALL CmdMailMsg::hasElements(  )

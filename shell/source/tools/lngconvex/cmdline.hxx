@@ -12,17 +12,13 @@ class CommandLine
 {
 public:
 
-    //################################
     // Creation
-    //################################
 
 
     CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix = std::string("-"));
 
 
-    //################################
     // Query
-    //################################
 
 
     /** Return the argument count
@@ -70,9 +66,7 @@ public:
     std::string get_arg(const std::string& ArgumentName) const;
 
 
-    //################################
     // Command
-    //################################
 
 
     /** Set the prefix used to identify arguments in

@@ -39,19 +39,6 @@
 
 #include <stdio.h>
 #include <objidl.h>
-
-/*#include <string.h>
-#include <filter.h>
-#include <filterr.h>
-#include <ntquery.h>
-#include "assert.h"
-#include "propspec.hxx"
-#ifdef __MINGW32__
-#include <algorithm>
-using ::std::min;
-#endif
-*/
-
 #include "internal/stream_helper.hxx"
 
 extern "C" {

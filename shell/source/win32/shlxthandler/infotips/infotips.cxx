@@ -50,8 +50,6 @@
 const std::wstring WSPACE = std::wstring(SPACE);
 
 //-----------------------------
-//
-//-----------------------------
 
 CInfoTip::CInfoTip(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -60,8 +58,6 @@ CInfoTip::CInfoTip(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 CInfoTip::~CInfoTip()
@@ -98,16 +94,12 @@ HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *
 }
 
 //----------------------------
-//
-//----------------------------
 
 ULONG STDMETHODCALLTYPE CInfoTip::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
-//
 //----------------------------
 
 ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
@@ -285,7 +277,6 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     }
     catch (const std::exception&)
     {
-        //return E_FAIL;
     }
 
     //display file size, no matter other infomation is loaded successfully or not.
@@ -320,8 +311,6 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     return E_FAIL;
 }
 
-//----------------------------
-//
 //----------------------------
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
@@ -358,7 +347,6 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
     std::string fnameA = WStringToString(fname);
 
-    // #115531#
     // ZeroMemory because strncpy doesn't '\0'-terminates the destination
     // string; reserve the last place in the buffer for the final '\0'
     // that's why '(sizeof(m_szFileName) - 1)'
@@ -369,16 +357,12 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 }
 
 //----------------------------
-//
-//----------------------------
 
 HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty(void)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
-//
 //----------------------------
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
@@ -387,16 +371,12 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fReme
 }
 
 //----------------------------
-//
-//----------------------------
 
 HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
-//
 //----------------------------
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR * /*ppszFileName*/)

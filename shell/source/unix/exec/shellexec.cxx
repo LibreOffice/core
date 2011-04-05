@@ -103,8 +103,6 @@ void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
 }
 
 //-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper2< XSystemShellExecute, XServiceInfo >(),
@@ -128,8 +126,6 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     }
 }
 
-//-------------------------------------------------
-//
 //-------------------------------------------------
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )

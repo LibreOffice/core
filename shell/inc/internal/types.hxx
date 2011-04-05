@@ -41,13 +41,10 @@
 typedef std::vector<std::wstring> StringList_t;
 
 //+-------------------------------------------------------------------------
-//
 //  Declare:    XmlTagAttributes_t, xml tag attribute struct
 //              XmlTag_t, xml tag including content and attributes.
 //              XmlTags_t, tags defined with tag name and xml tag.
-//
 //  Contents:   Definitions of xml tag used in parser.
-//
 //--------------------------------------------------------------------------
 typedef std::wstring Name_t;
 typedef std::wstring Value_t;
@@ -60,13 +57,10 @@ typedef std::map<Name_t, XmlTag_t>                  XmlTags_t;
 const XmlTag_t EMPTY_XML_TAG = std::make_pair(std::wstring(), XmlTagAttributes_t());
 
 //+-------------------------------------------------------------------------
-//
 //  Declare:    Language_t, language of the Locale pair
 //              Country_t, country of the Local pair
 //              LocaleSet_t, Local pair
-//
 //  Contents:   Definitions of Chunk properties.
-//
 //--------------------------------------------------------------------------
 typedef ::std::wstring Language_t;
 typedef ::std::wstring Country_t;
@@ -80,12 +74,9 @@ const LocaleSet_t EMPTY_LOCALE = ::std::make_pair(::std::wstring(), ::std::wstri
 const Chunk_t EMPTY_CHUNK = ::std::make_pair( EMPTY_LOCALE, ::std::wstring());
 
 //+-------------------------------------------------------------------------
-//
 //  Declare:    StyleName_t, style name of a style-locale pair.
 //              StyleLocaleMap, the map of Styple-Locale pair.
-//
 //  Contents:   Definitions of Style Names.
-//
 //--------------------------------------------------------------------------
 typedef ::std::wstring StyleName_t;
 typedef ::std::pair <StyleName_t, LocaleSet_t> StyleLocalePair_t;

@@ -50,9 +50,7 @@
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
-//
 // Map of property keys to the locations of their value(s) in the .??? XML schema
-//
 struct PROPERTYMAP
 {
     PROPERTYKEY key;
@@ -72,8 +70,6 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
 size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 //----------------------------
-//
-//----------------------------
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     m_RefCnt( nRefCnt ),
@@ -83,8 +79,6 @@ CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//----------------------------
-//
 //----------------------------
 
 CPropertyHdl::~CPropertyHdl()
@@ -247,11 +241,6 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
             OutputDebugStringFormat( "CPropertyHdl::Initialize: Caught exception [%s]", e.what() );
             return E_FAIL;
         }
-/*
-    // load extended properties and search content
-    _LoadExtendedProperties();
-    _LoadSearchContent();
-*/
     }
 
     return S_OK;

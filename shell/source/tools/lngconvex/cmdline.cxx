@@ -37,9 +37,7 @@
 /** Simple command line abstraction
 */
 
-//################################
 // Creation
-//################################
 
 
 CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix) :
@@ -50,9 +48,7 @@ CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix
 }
 
 
-//################################
 // Query
-//################################
 
 
 /** Return the argument count
@@ -144,9 +140,7 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 }
 
 
-//################################
 // Command
-//################################
 
 
 /** Set the prefix used to identify arguments in

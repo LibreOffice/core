@@ -37,7 +37,6 @@
 namespace /* private */
 {
 
-    //######################################################
     /*  Extracts the local part of tag without
         namespace decoration e.g. meta:creator -> creator */
     const XML_Char COLON = (XML_Char)':';
@@ -60,14 +59,12 @@ namespace /* private */
         return p;
     }
 
-    //################################################
     inline xml_parser* get_parser_instance(void* data)
     {
         return reinterpret_cast<xml_parser*>(XML_GetUserData(
             reinterpret_cast<XML_Parser>(data)));
     }
 
-    //################################################
     bool has_only_whitespaces(const XML_Char* s, int len)
     {
         const XML_Char* p = s;
@@ -77,7 +74,6 @@ namespace /* private */
     }
 }
 
-//###################################################
 xml_parser::xml_parser(const XML_Char* EncodingName) :
     document_handler_(0),
     xml_parser_(XML_ParserCreate(EncodingName))
@@ -85,17 +81,14 @@ xml_parser::xml_parser(const XML_Char* EncodingName) :
     init();
 }
 
-//###################################################
 xml_parser::~xml_parser()
 {
     XML_ParserFree(xml_parser_);
 }
 
-//###################################################
 /* Callback functions will be called by the parser on
    different events */
 
-//###################################################
 extern "C"
 {
 
@@ -123,7 +116,6 @@ static void xml_start_element_handler(void* UserData, const XML_Char* name, cons
     }
 }
 
-//###################################################
 static void xml_end_element_handler(void* UserData, const XML_Char* name)
 {
     assert(UserData);
@@ -134,7 +126,6 @@ static void xml_end_element_handler(void* UserData, const XML_Char* name)
         pDocHdl->end_element(reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)));
 }
 
-//###################################################
 static void xml_character_data_handler(void* UserData, const XML_Char* s, int len)
 {
     assert(UserData);
@@ -150,7 +141,6 @@ static void xml_character_data_handler(void* UserData, const XML_Char* s, int le
     }
 }
 
-//###################################################
 static void xml_comment_handler(void* UserData, const XML_Char* Data)
 {
     assert(UserData);
@@ -163,7 +153,6 @@ static void xml_comment_handler(void* UserData, const XML_Char* Data)
 
 } // extern "C"
 
-//###################################################
 void xml_parser::init()
 {
     XML_SetUserData(xml_parser_, this);
@@ -188,7 +177,6 @@ void xml_parser::init()
         xml_comment_handler);
 }
 
-//###################################################
 void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 {
     if (0 == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
@@ -200,14 +188,12 @@ void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
             XML_GetCurrentByteIndex(xml_parser_));
 }
 
-//###################################################
 void xml_parser::set_document_handler(
     i_xml_parser_event_handler* event_handler)
 {
     document_handler_ = event_handler;
 }
 
-//###################################################
 i_xml_parser_event_handler* xml_parser::get_document_handler() const
 {
     return document_handler_;

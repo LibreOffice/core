@@ -39,14 +39,12 @@
 #include <stdlib.h>
 #include <iostream>
 
-//########################################
 using namespace osl;
 
 using ::rtl::OUString;
 
 namespace syssh = SystemShell;
 
-//########################################
 const OUString SXW_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.writer"));
 const OUString SXC_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.calc"));
 const OUString SXI_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.impress"));
@@ -218,7 +216,6 @@ public:
 };
 
 
-//#####################################
 // register test suites
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_AddToRecentDocs, "Test_AddToRecentDocs");
 

@@ -38,7 +38,6 @@ class CContentReader : public CBaseReader
 public:
     virtual ~CContentReader();
 
-    //CContentReader( const std::string& DocumentName );
     CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale );
 
     CContentReader( void* stream, LocaleSet_t const & DocumentLocale, zlib_filefunc_def* fa );

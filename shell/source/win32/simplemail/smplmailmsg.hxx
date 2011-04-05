@@ -50,8 +50,6 @@ public:
     CSmplMailMsg( );
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
 
     virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -59,8 +57,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
-    //
     //------------------------------------------------
 
     virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient )
@@ -70,8 +66,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
 
     virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -79,8 +73,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
-    //
     //------------------------------------------------
 
     virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator )
@@ -90,8 +82,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
 
     virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject )
         throw (::com::sun::star::uno::RuntimeException);
@@ -99,8 +89,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getSubject(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
-    //
     //------------------------------------------------
 
     virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement )

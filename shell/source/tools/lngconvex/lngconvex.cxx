@@ -69,7 +69,6 @@ namespace /* private */
 using rtl::OUString;
 using rtl::OString;
 
-//###########################################
 void ShowUsage()
 {
     std::cout << "Usage: -ulf ulf_file -rc rc_output_file -rct rc_template_file -rch rch_file -rcf rcf_file" << std::endl;
@@ -80,15 +79,12 @@ void ShowUsage()
     std::cout << "-rcf Name of the resource file footer" << std::endl;
 }
 
-//###########################################
 inline OUString OStringToOUString(const OString& str)
 { return rtl::OStringToOUString(str, osl_getThreadTextEncoding()); }
 
-//###########################################
 inline OString OUStringToOString(const OUString& str)
 { return rtl::OUStringToOString(str, osl_getThreadTextEncoding()); }
 
-//###########################################
 /** Get the directory where the module
     is located as system directory, the
     returned directory has a trailing '\'  */
@@ -102,7 +98,6 @@ OUString get_module_path()
     return module_path;
 }
 
-//###########################################
 /** Make the absolute directory of a base and
     a relative directory, if the relative
     directory is absolute the the relative
@@ -128,7 +123,6 @@ OUString get_absolute_path(
     return abs_sys_path;
 }
 
-//###########################################
 OString get_absolute_file_path(const std::string& file_name)
 {
     OUString fp = get_absolute_path(
@@ -136,7 +130,6 @@ OString get_absolute_file_path(const std::string& file_name)
     return OUStringToOString(fp);
 }
 
-//###########################################
 /** A helper class, enables stream exceptions
     on construction, restors the old exception
     state on destruction */
@@ -163,7 +156,6 @@ private:
 
 typedef std::vector<std::string> string_container_t;
 
-//###########################################
 class iso_lang_identifier
 {
 public:
@@ -209,7 +201,6 @@ private:
     OString country_;
 };
 
-//###########################################
 /** Convert a OUString to the MS resource
     file format string e.g.
     OUString -> L"\x1A00\x2200\x3400" */
@@ -228,14 +219,12 @@ std::string make_winrc_unicode_string(const OUString& str)
     return oss.str();
 }
 
-//###########################################
 std::string make_winrc_unicode_string(const std::string& str)
 {
     return make_winrc_unicode_string(
         OUString::createFromAscii(str.c_str()));
 }
 
-//################################################
 /** A replacement table contains pairs of
     placeholders and the appropriate substitute */
 class Substitutor
@@ -323,7 +312,6 @@ private:
 
 typedef std::map< unsigned short , std::string , std::less< unsigned short > > shortmap;
 
-//###########################################
 void add_group_entries(
     Config& aConfig,
     const ByteString& GroupName,
@@ -365,7 +353,6 @@ void add_group_entries(
     }
 }
 
-//###########################################
 void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 {
     // work-around for #i32420#
@@ -405,7 +392,6 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
             throw;
     }
 
-    //Config config(OStringToOUString(FileName.c_str()).getStr());
 
     // end work-around for #i32420#
 
@@ -415,7 +401,6 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         add_group_entries(config, config.GetGroupName(sal::static_int_cast<USHORT>(i)), Substitutor);
 }
 
-//###########################################
 void read_file(
     const std::string& fname,
     string_container_t& string_container)
@@ -436,7 +421,6 @@ void read_file(
     }
 }
 
-//###########################################
 /** A simple helper function that appens the
     content of one file to another one  */
 void concatenate_files(std::ostream& os, std::istream& is)
@@ -457,7 +441,6 @@ void concatenate_files(std::ostream& os, std::istream& is)
     }
 }
 
-//###########################################
 bool is_placeholder(const std::string& str)
 {
     return ((str.length() > 1) &&
@@ -465,7 +448,6 @@ bool is_placeholder(const std::string& str)
             ('%' == str[str.length() - 1]));
 }
 
-//###########################################
 void start_language_section(
     std::ostream_iterator<std::string>& ostream_iter, const iso_lang_identifier& iso_lang)
 {
@@ -482,7 +464,7 @@ void start_language_section(
     // Esp. for spanish we don't want to distinguish between trad.
     // and internatinal sorting ( which leads to two different sub languages )
     // Setting the sub language to neutral allows us to use one
-    // stringlist for all spanish variants ( see #123126# )
+    // stringlist for all spanish variants
     if ( ( primLangID == LANG_SPANISH ) &&
          ( subLangID == SUBLANG_SPANISH ) )
         subLangID = SUBLANG_NEUTRAL;
@@ -498,7 +480,6 @@ void start_language_section(
     ostream_iter = lang_section;
 }
 
-//###########################################
 /** Iterate all languages in the substitutor,
     replace the all placeholder and append the
     result to the output file */
@@ -533,7 +514,7 @@ void inflate_rc_template_to_file(
                 iss >> token;
                 substitutor.substitute(token);
 
-                // #110274# HACK for partially merged
+                // HACK for partially merged
                 // *.lng files where some strings have
                 // a particular language that others
                 // don't have in order to keep the
@@ -551,7 +532,6 @@ void inflate_rc_template_to_file(
 
 } // namespace /* private */
 
-//####################################################
 /* MAIN
    The file names provided via command line should be
    absolute or relative to the directory of this module.

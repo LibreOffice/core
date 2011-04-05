@@ -32,7 +32,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-//##################################
 // simple wrapper around the recently_used_file
 
 class recently_used_file

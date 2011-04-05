@@ -40,11 +40,9 @@
 #include "internal/config.hxx"
 #include "internal/iso8601_converter.hxx"
 
-//#####################################
 const bool READONLY  = false;
 const bool WRITEABLE = true;
 
-//#####################################
 document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor)
 {
     File_Type_t file_type = get_file_type(document_name);
@@ -58,17 +56,14 @@ document_statistic_reader_ptr create_document_statistic_reader(const std::string
 }
 
 
-//#####################################
 document_statistic_reader::document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_name_(document_name),
     meta_info_accessor_(meta_info_accessor)
 {}
 
-//#####################################
 document_statistic_reader::~document_statistic_reader()
 {}
 
-//#####################################
 void document_statistic_reader::read(statistic_group_list_t* group_list)
 {
     group_list->clear();
@@ -76,13 +71,11 @@ void document_statistic_reader::read(statistic_group_list_t* group_list)
     fill_origin_section(meta_info_accessor_, group_list);
 }
 
-//#####################################
 std::string document_statistic_reader::get_document_name() const
 {
     return document_name_;
 }
 
-//#####################################
 void document_statistic_reader::fill_origin_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
@@ -100,12 +93,10 @@ void document_statistic_reader::fill_origin_section(CMetaInfoReader *meta_info_a
     group_list->push_back(statistic_group_t(GetResString(IDS_ORIGIN), il));
 }
 
-//#####################################
 writer_document_statistic_reader::writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
-//#####################################
 void writer_document_statistic_reader::fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
@@ -125,13 +116,11 @@ void writer_document_statistic_reader::fill_description_section(CMetaInfoReader 
     group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }
 
-//#######################################
 calc_document_statistic_reader::calc_document_statistic_reader(
     const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
-//#######################################
 void calc_document_statistic_reader::fill_description_section(
     CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list)
 {
@@ -148,13 +137,11 @@ void calc_document_statistic_reader::fill_description_section(
     group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }
 
-//#######################################
 draw_impress_math_document_statistic_reader::draw_impress_math_document_statistic_reader(
     const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
-//#######################################
 void draw_impress_math_document_statistic_reader::fill_description_section(
     CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {

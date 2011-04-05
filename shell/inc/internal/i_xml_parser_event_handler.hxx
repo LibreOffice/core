@@ -44,7 +44,6 @@
 typedef std::map<string_t, string_t> xml_tag_attribute_container_t;
 
 
-//#########################################
 class i_xml_parser_event_handler
 {
 public:

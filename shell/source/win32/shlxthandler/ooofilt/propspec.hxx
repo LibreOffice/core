@@ -26,11 +26,8 @@
  *
  ************************************************************************/
 //+-------------------------------------------------------------------------
-//
 //  File:       propspec.hxx
-//
 //  Contents:   C++ wrapper(s) for FULLPROPSPEC
-//
 //-------------------------------------------------------------------------
 #pragma once
 #if defined _MSC_VER
@@ -43,30 +40,14 @@
 #pragma warning(pop)
 #endif
 //+-------------------------------------------------------------------------
-//
 //  Declare:    CLSID_SummaryInforation, GUID
 //              CLSID_Storage, GUID
-//
 //  Contents:   Definitions of OpenOffice.org Document properties
-//
 //--------------------------------------------------------------------------
 
-//extern GUID CLSID_Storage;
-//
-//extern GUID CLSID_SummaryInformation;
-//const PID_TITLE     = PIDSI_TITLE; // 2;
-//const PID_SUBJECT   = PIDSI_SUBJECT; // 3;
-//const PID_AUTHOR    = PIDSI_AUTHOR; // 4;
-//const PID_KEYWORDS  = PIDSI_KEYWORDS; // 5;
-//const PID_COMMENTS  = PIDSI_COMMENTS; //6;
-//const PID_REVNUMBER = PIDSI_REVNUMBER; //9;
-//const PID_WORDCOUNT = PIDSI_WORDCOUNT; //f;
 //+-------------------------------------------------------------------------
-//
 //  Class:      CFullPropertySpec
-//
 //  Purpose:    Describes full (PropertySet\Property) name of a property.
-//
 //--------------------------------------------------------------------------
 
 class CFullPropSpec

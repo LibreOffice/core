@@ -1,7 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // ZipException.h: interface for the ZipException class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #ifndef ZIPEXCPTN_HXX_INCLUDED
 #define ZIPEXCPTN_HXX_INCLUDED

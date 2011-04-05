@@ -289,7 +289,6 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
 
-//#########################################
 
 
 CThumbviewer::CThumbviewer(long RefCnt) :

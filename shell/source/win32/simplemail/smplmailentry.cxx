@@ -58,8 +58,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_REGKEY_NAME   "/com.sun.star.system.SimpleSystemMail/UNO/SERVICES/com.sun.star.system.SimpleSystemMail"
 
 //-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
 
 namespace
 {
@@ -70,7 +68,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 2 important functions which will be exported
 //-----------------------------------------------------------------------
 
 extern "C"

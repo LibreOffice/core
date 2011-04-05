@@ -31,16 +31,12 @@
 
 //--------------------------------------------------------------------------
 //  File:       ooofilt.cxx
-//
 //  Contents:   Filter Implementation for OpenOffice.Org Document using
 //              Indexing Service
-//
 //  Summary:    The OpenOffice.org filter reads OpenOffice.org files (with the
 //              extension .sxw .sxi, etc) and extract their content, author,
 //              keywords,subject,comments and title to be filtered.
-//
 //  Platform:   Windows 2000, Windows XP
-//
 //--------------------------------------------------------------------------
 #include "internal/contentreader.hxx"
 #include "internal/metainforeader.hxx"
@@ -48,9 +44,7 @@
 #include "internal/fileextensions.hxx"
 
 //--------------------------------------------------------------------------
-//
 //  Include file    Purpose
-//
 //  windows.h       Win32 declarations
 //  string.h        string wstring declarations
 //  filter.h        IFilter interface declarations
@@ -59,7 +53,6 @@
 //  assert.h        assertion function.
 //  ooofilt.hxx     OpenOffice.org filter declarations
 //  propspec.hxx    PROPSPEC
-//
 //--------------------------------------------------------------------------
 
 #if defined _MSC_VER
@@ -86,22 +79,14 @@ using ::std::min;
 #include "internal/stream_helper.hxx"
 
 //C-------------------------------------------------------------------------
-//
 //  Class:      COooFilter
-//
 //  Summary:    Implements OpenOffice.org filter class
-//
 //--------------------------------------------------------------------------
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::COooFilter
-//
 //  Summary:    Class constructor
-//
 //  Arguments:  void
-//
 //  Purpose:    Manages global instance count
-//
 //--------------------------------------------------------------------------
 COooFilter::COooFilter() :
     m_lRefs(1),
@@ -124,15 +109,10 @@ COooFilter::COooFilter() :
     InterlockedIncrement( &g_lInstances );
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::~COooFilter
-//
 //  Summary:    Class destructor
-//
 //  Arguments:  void
-//
 //  Purpose:    Manages global instance count and file handle
-//
 //--------------------------------------------------------------------------
 COooFilter::~COooFilter()
 {
@@ -147,21 +127,16 @@ COooFilter::~COooFilter()
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::QueryInterface      (IUnknown::QueryInterface)
-//
 //  Summary:    Queries for requested interface
-//
 //  Arguments:  riid
 //              [in] Reference IID of requested interface
 //              ppvObject
 //              [out] Address that receives requested interface pointer
-//
 //  Returns:    S_OK
 //              Interface is supported
 //              E_NOINTERFACE
 //              Interface is not supported
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
     REFIID riid,
@@ -188,30 +163,20 @@ SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::AddRef              (IUnknown::AddRef)
-//
 //  Summary:    Increments interface refcount
-//
 //  Arguments:  void
-//
 //  Returns:    Value of incremented interface refcount
-//
 //--------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE COooFilter::AddRef()
 {
     return InterlockedIncrement( &m_lRefs );
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Release             (IUnknown::Release)
-//
 //  Summary:    Decrements interface refcount, deleting if unreferenced
-//
 //  Arguments:  void
-//
 //  Returns:    Value of decremented interface refcount
-//
 //--------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE COooFilter::Release()
 {
@@ -222,11 +187,8 @@ ULONG STDMETHODCALLTYPE COooFilter::Release()
     return ulTmp;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Init                (IFilter::Init)
-//
 //  Summary:    Initializes OpenOffice.org filter instance
-//
 //  Arguments:  grfFlags
 //                  [in] Flags for filter behavior
 //              cAttributes
@@ -235,7 +197,6 @@ ULONG STDMETHODCALLTYPE COooFilter::Release()
 //                  [in] Array of requested attribute strings
 //              pFlags
 //                  [out] Pointer to return flags for additional properties
-//
 //  Returns:    S_OK
 //                  Initialization succeeded
 //              E_FAIL
@@ -246,7 +207,6 @@ ULONG STDMETHODCALLTYPE COooFilter::Release()
 //                  Unable to access file to be filtered
 //              FILTER_E_PASSWORD
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 const int COUNT_ATTRIBUTES = 5;
 
@@ -339,11 +299,8 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetChunk            (IFilter::GetChunk)
-//
 //  Summary:    Gets the next chunk
-//
 //  Arguments:  ppStat
 //                  [out] Pointer to description of current chunk
 //  Returns:    S_OK
@@ -360,7 +317,6 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
 //                  (not implemented)
 //              FILTER_E_PASSWORD
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
 {
@@ -445,24 +401,19 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
     }//for(;;)
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetText             (IFilter::GetText)
-//
 //  Summary:    Retrieves UNICODE text for index
-//
 //  Arguments:  pcwcBuffer
 //                  [in] Pointer to size of UNICODE buffer
 //                  [out] Pointer to count of UNICODE characters returned
 //              awcBuffer
 //                  [out] Pointer to buffer to receive UNICODE text
-//
 //  Returns:    S_OK
 //                  Text successfully retrieved, but text remains in chunk
 //              FILTER_E_NO_MORE_TEXT
 //                  All of the text in the current chunk has been returned
 //              FILTER_S_LAST_TEXT
 //                  Next call to GetText will return FILTER_E_NO_MORE_TEXT
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffer)
 {
@@ -496,17 +447,12 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
     }
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     GetMetaInfoNameFromPropertyId
-//
 //  Summary:    helper function to convert PropertyID into respective
 //              MetaInfo names.
-//
 //  Arguments:  ulPropID
 //                  [in] property ID
-//
 //  Returns:    corresponding metainfo names.
-//
 //--------------------------------------------------------------------------
 
 ::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
@@ -522,19 +468,14 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
     }
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetValue            (IFilter::GetValue)
-//
 //  Summary:    Retrieves properites for index
-//
 //  Arguments:  ppPropValue
 //                  [out] Address that receives pointer to property value
-//
 //  Returns:    FILTER_E_NO_VALUES
 //                  Always
 //              FILTER_E_NO_MORE_VALUES
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 
 SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
@@ -569,23 +510,18 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
         return E_FAIL;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::BindRegion          (IFilter::BindRegion)
-//
 //  Summary:    Creates moniker or other interface for indicated text
-//
 //  Arguments:  origPos
 //                  [in] Description of text location and extent
 //              riid
 //                  [in] Reference IID of specified interface
 //              ppunk
 //                  [out] Address that receives requested interface pointer
-//
 //  Returns:    E_NOTIMPL
 //                  Always
 //              FILTER_W_REGION_CLIPPED
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 
 SCODE STDMETHODCALLTYPE COooFilter::BindRegion(
@@ -597,14 +533,10 @@ SCODE STDMETHODCALLTYPE COooFilter::BindRegion(
     return E_NOTIMPL;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetClassID          (IPersist::GetClassID)
-//
 //  Summary:    Retrieves the class id of the filter class
-//
 //  Arguments:  pClassID
 //                  [out] Pointer to the class ID of the filter
-//
 //  Returns:    S_OK
 //                  Always
 //              E_FAIL
@@ -616,18 +548,13 @@ SCODE STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::IsDirty             (IPersistFile::IsDirty)
-//
 //  Summary:    Checks whether file has changed since last save
-//
 //  Arguments:  void
-//
 //  Returns:    S_FALSE
 //                  Always
 //              S_OK
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
 {
@@ -635,24 +562,19 @@ SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
     return S_FALSE;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Load                (IPersistFile::Load)
-//
 //  Summary:    Opens and initializes the specified file
-//
 //  Arguments:  pszFileName
 //                  [in] Pointer to zero-terminated string
 //                       of absolute path of file to open
 //              dwMode
 //                  [in] Access mode to open the file
-//
 //  Returns:    S_OK
 //                  File was successfully loaded
 //              E_OUTOFMEMORY
 //                  File could not be loaded due to insufficient memory
 //              E_FAIL
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
 {
@@ -677,22 +599,17 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Save                (IPersistFile::Save)
-//
 //  Summary:    Saves a copy of the current file being filtered
-//
 //  Arguments:  pszFileName
 //                  [in] Pointer to zero-terminated string of
 //                       absolute path of where to save file
 //              fRemember
 //                  [in] Whether the saved copy is made the current file
-//
 //  Returns:    E_FAIL
 //                  Always
 //              S_OK
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRemember*/)
 {
@@ -700,18 +617,13 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRememb
     return E_FAIL;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::SaveCompleted      (IPersistFile::SaveCompleted)
-//
 //  Summary:    Determines whether a file save is completed
-//
 //  Arguments:  pszFileName
 //                  [in] Pointer to zero-terminated string of
 //                       absolute path where file was previously saved
-//
 //  Returns:    S_OK
 //                  Always
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 {
@@ -720,20 +632,13 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Load      (IPersistStream::Load)
-//
 //  Summary:    Initializes an object from the stream where it was previously saved
-//
 //  Arguments:  pStm
 //                  [in] Pointer to stream from which object should be loaded
-//
-//
 //  Returns:    S_OK
 //              E_OUTOFMEMORY
 //              E_FAIL
-//
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 {
@@ -759,56 +664,37 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetSizeMax      (IPersistStream::GetSizeMax)
-//
 //  Summary:    Returns the size in bytes of the stream neede to save the object.
-//
 //  Arguments:  pcbSize
 //                  [out] Pointer to a 64 bit unsigned int indicating the size needed
-//
 //  Returns:    E_NOTIMPL
-//
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 {
-    //
     return E_NOTIMPL;
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::Save      (IPersistStream::Save)
-//
 //  Summary:    Save object to specified stream
-//
 //  Arguments:  pStm
 //                  [in] Pointer to stream
-//
 //              fClearDirty
 //                  [in] Indicates whether to clear dirty flag
-//
 //  Returns:    E_NOTIMPL
-//
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 {
-    //
     return E_NOTIMPL;
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilter::GetCurFile          (IPersistFile::GetCurFile)
-//
 //  Summary:    Returns a copy of the current file name
-//
 //  Arguments:  ppszFileName
 //                  [out] Address to receive pointer to zero-terminated
 //                        string for absolute path to current file
-//
 //  Returns:    S_OK
 //                  A valid absolute path was successfully returned
 //              S_FALSE
@@ -818,7 +704,6 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 //              E_FAIL
 //                  Operation failed due to some reason
 //                  other than insufficient memory
-//
 //-------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
 {
@@ -830,15 +715,10 @@ SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::COooFilterCF
-//
 //  Summary:    Class factory constructor
-//
 //  Arguments:  void
-//
 //  Purpose:    Manages global instance count
-//
 //--------------------------------------------------------------------------
 COooFilterCF::COooFilterCF() :
     m_lRefs(1)
@@ -846,36 +726,26 @@ COooFilterCF::COooFilterCF() :
     InterlockedIncrement( &g_lInstances );
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::~COooFilterCF
-//
 //  Summary:    Class factory destructor
-//
 //  Arguments:  void
-//
 //  Purpose:    Manages global instance count
-//
 //--------------------------------------------------------------------------
 COooFilterCF::~COooFilterCF()
 {
    InterlockedDecrement( &g_lInstances );
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::QueryInterface    (IUnknown::QueryInterface)
-//
 //  Summary:    Queries for requested interface
-//
 //  Arguments:  riid
 //                  [in] Reference IID of requested interface
 //              ppvObject
 //                  [out] Address that receives requested interface pointer
-//
 //  Returns:    S_OK
 //                  Interface is supported
 //              E_NOINTERFACE
 //                  Interface is not supported
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvObject)
 {
@@ -895,30 +765,20 @@ SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvOb
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::AddRef            (IUknown::AddRef)
-//
 //  Summary:    Increments interface refcount
-//
 //  Arguments:  void
-//
 //  Returns:    Value of incremented interface refcount
-//
 //-------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE COooFilterCF::AddRef()
 {
    return InterlockedIncrement( &m_lRefs );
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::Release           (IUnknown::Release)
-//
 //  Summary:    Decrements interface refcount, deleting if unreferenced
-//
 //  Arguments:  void
-//
 //  Returns:    Value of decremented refcount
-//
 //--------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 {
@@ -929,18 +789,14 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
     return ulTmp;
 }
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::CreateInstance (IClassFactory::CreateInstance)
-//
 //  Summary:    Creates new OpenOffice.org filter object
-//
 //  Arguments:  pUnkOuter
 //                  [in] Pointer to IUnknown interface of aggregating object
 //              riid
 //                  [in] Reference IID of requested interface
 //              ppvObject
 //                  [out] Address that receives requested interface pointer
-//
 //  Returns:    S_OK
 //                  OpenOffice.org filter object was successfully created
 //              CLASS_E_NOAGGREGATION
@@ -952,7 +808,6 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 //                  due to insufficient memory
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
     IUnknown * pUnkOuter,
@@ -982,14 +837,10 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
 }
 
 //M-------------------------------------------------------------------------
-//
 //  Method:     COooFilterCF::LockServer        (IClassFactory::LockServer)
-//
 //  Summary:    Forces/allows filter class to remain loaded/be unloaded
-//
 //  Arguments:  fLock
 //                  [in] TRUE to lock, FALSE to unlock
-//
 //  Returns:    S_OK
 //                  Always
 //              E_FAIL
@@ -998,7 +849,6 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
 //                  (not implemented)
 //              E_UNEXPECTED
 //                  (not implemented)
-//
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 {
@@ -1009,28 +859,20 @@ SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
     return S_OK;
 }
 //+-------------------------------------------------------------------------
-//
 //  DLL:        ooofilt.dll
-//
 //  Summary:    Implements Dynamic Link Library functions for OpenOffice.org filter
-//
 //--------------------------------------------------------------------------
 //F-------------------------------------------------------------------------
-//
 //  Function:   DllMain
-//
 //  Summary:    Called from C-Runtime on process/thread attach/detach
-//
 //  Arguments:  hInstance
 //                  [in] Handle to the DLL
 //              fdwReason
 //                  [in] Reason for calling DLL entry point
 //              lpReserve
 //                  [in] Details of DLL initialization and cleanup
-//
 //  Returns:    TRUE
 //                  Always
-//
 //--------------------------------------------------------------------------
 extern "C" BOOL WINAPI DllMain(
     HINSTANCE hInstance,
@@ -1043,18 +885,14 @@ extern "C" BOOL WINAPI DllMain(
     return TRUE;
 }
 //F-------------------------------------------------------------------------
-//
 //  Function:   DllGetClassObject
-//
 //  Summary:    Create OpenOffice.org filter class factory object
-//
 //  Arguments:  cid
 //                  [in] Class ID of class that class factory creates
 //              iid
 //                  [in] Reference IID of requested class factory interface
 //              ppvObj
 //                  [out] Address that receives requested interface pointer
-//
 //  Returns:    S_OK
 //                  Class factory object was created successfully
 //              CLASS_E_CLASSNOTAVAILABLE
@@ -1065,7 +903,6 @@ extern "C" BOOL WINAPI DllMain(
 //                  Insufficient memory to create the class factory object
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
-//
 //-------------------------------------------------------------------------
 extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     REFCLSID   cid,
@@ -1095,18 +932,13 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     return S_OK;
 }
 //F-------------------------------------------------------------------------
-//
 //  Function:   DllCanUnloadNow
-//
 //  Summary:    Indicates whether it is possible to unload DLL
-//
 //  Arguments:  void
-//
 //  Returns:    S_OK
 //                  DLL can be unloaded now
 //              S_FALSE
 //                  DLL must remain loaded
-//
 //--------------------------------------------------------------------------
 extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
 {
@@ -1116,12 +948,9 @@ extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
         return S_FALSE;
 }
 //F-------------------------------------------------------------------------
-//
 //  Function:   DllRegisterServer
 //              DllUnregisterServer
-//
 //  Summary:    Registers and unregisters DLL server
-//
 //  Returns:    DllRegisterServer
 //                  S_OK
 //                      Registration was successful
@@ -1147,14 +976,11 @@ extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
 //                      (not implemented)
 //                  E_UNEXPECTED
 //                      (not implemented)
-//
 //--------------------------------------------------------------------------
 
 
 //F-------------------------------------------------------------------------
-//
 //  helper functions to register the Indexing Service.
-//
 //--------------------------------------------------------------------------
 
 namespace /* private */
@@ -1427,66 +1253,13 @@ namespace /* private */
 
 STDAPI DllRegisterServer()
 {
-    /*
-    TCHAR ModuleFileName[MAX_PATH];
-
-    GetModuleFileName(
-        GetModuleHandle(MODULE_NAME_FILTER),
-        ModuleFileName,
-        sizeof(ModuleFileName));
-
-    HRESULT hr = S_OK;
-
-
-// register search handler
-#ifdef UNICODE
-    if (FAILED(RegisterSearchHandler(WStringToString(ModuleFileName).c_str())))
-        hr = E_FAIL;
-    if (FAILED(AddOrRemoveDllsToRegisterList(WStringToString(ModuleFileName).c_str(), true)))
-        hr = E_FAIL;
-#else
-    if (FAILED(RegisterSearchHandler(ModuleFileName)))
-        hr = E_FAIL;
-    if (FAILED(AddOrRemoveDllsToRegisterList(ModuleFileName, true)))
-        hr = E_FAIL;
-#endif
-
-
-    return hr;
-    */
     return S_OK;
 }
 
 //---------------------------
-//
-//---------------------------
 
 STDAPI DllUnregisterServer()
 {
-    /*
-    TCHAR ModuleFileName[MAX_PATH];
-
-    GetModuleFileName(
-        GetModuleHandle(MODULE_NAME_FILTER),
-        ModuleFileName,
-        sizeof(ModuleFileName));
-
-    HRESULT hr = S_OK;
-
-    // unregister search handler
-    if (FAILED(UnregisterSearchHandler()))
-        hr = E_FAIL;
-
-#ifdef UNICODE
-    if (FAILED(AddOrRemoveDllsToRegisterList(WStringToString(ModuleFileName).c_str(),false)))
-        hr = E_FAIL;
-#else
-    if (FAILED(AddOrRemoveDllsToRegisterList(ModuleFileName, false)))
-        hr = E_FAIL;
-#endif
-
-    return hr;
-    */
     return S_OK;
 }
 

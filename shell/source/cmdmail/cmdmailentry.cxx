@@ -57,8 +57,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_IMPL_NAME     "com.sun.star.comp.system.SimpleCommandMail"
 
 //-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
 
 namespace
 {
@@ -69,7 +67,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 2 important functions which will be exported
 //-----------------------------------------------------------------------
 
 extern "C"

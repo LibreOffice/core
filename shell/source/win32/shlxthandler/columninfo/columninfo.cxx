@@ -39,8 +39,6 @@
 #include <malloc.h>
 
 //----------------------------
-//
-//----------------------------
 
 namespace /* private */
 {
@@ -58,8 +56,6 @@ namespace /* private */
 }
 
 //----------------------------
-//
-//----------------------------
 
 CColumnInfo::CColumnInfo(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -67,8 +63,6 @@ CColumnInfo::CColumnInfo(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//----------------------------
-//
 //----------------------------
 
 CColumnInfo::~CColumnInfo()
@@ -96,16 +90,12 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
 }
 
 //----------------------------
-//
-//----------------------------
 
 ULONG STDMETHODCALLTYPE CColumnInfo::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
-//
 //----------------------------
 
 ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
@@ -145,13 +135,10 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
     wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle, (sizeof(psci->wszTitle) - 1));
 
-    //wcscpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle);
 
     return S_OK;
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
@@ -218,8 +205,6 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOL
     return S_FALSE;
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 bool CColumnInfo::IsOOFileExtension(wchar_t* Extension) const

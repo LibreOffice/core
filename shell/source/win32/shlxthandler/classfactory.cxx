@@ -42,13 +42,9 @@ using ::std::min;
 #include "internal/shlxthdl.hxx"
 
 //-----------------------------
-//
-//-----------------------------
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------
-//
 //-----------------------------
 
 CClassFactory::CClassFactory(const CLSID& clsid) :
@@ -58,8 +54,6 @@ CClassFactory::CClassFactory(const CLSID& clsid) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 CClassFactory::~CClassFactory()
@@ -87,16 +81,12 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
@@ -149,8 +139,6 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 {
@@ -162,8 +150,6 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 bool CClassFactory::IsLocked()

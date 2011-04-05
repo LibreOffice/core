@@ -49,14 +49,10 @@
 #endif
 
 //---------------------------------------
-//
-//---------------------------------------
 
 // Size of a CLSID as a string
 const int CLSID_STRING_SIZE = 39;
 
-//---------------------------------------
-//
 //---------------------------------------
 
 bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value)
@@ -78,8 +74,6 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     return (ERROR_SUCCESS == rc);
 }
 
-//---------------------------------------
-//
 //---------------------------------------
 
 bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
@@ -179,8 +173,6 @@ std::string ClsidToString(const CLSID& clsid)
     return std::string(buff);
 }
 
-//---------------------------------------
-//
 //---------------------------------------
 
 bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)

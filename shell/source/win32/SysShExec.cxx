@@ -189,7 +189,6 @@ namespace // private
     #define E_UNKNOWN_EXEC_ERROR -1
 
     //-----------------------------------------
-    //-----------------------------------------
 
     bool is_system_path(const OUString& path_or_uri)
     {
@@ -218,7 +217,6 @@ namespace // private
         return (jmp_mark > -1);
     }
 
-    //-----------------------------------------
     //-----------------------------------------
 
     bool is_existing_file(const OUString& file_name)
@@ -261,8 +259,6 @@ namespace // private
 } // end namespace
 
 //-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
 
 CSysShExec::CSysShExec( ) :
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex )
@@ -278,8 +274,6 @@ CSysShExec::CSysShExec( ) :
     CoInitialize( NULL );
 }
 
-//-------------------------------------------------
-//
 //-------------------------------------------------
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )

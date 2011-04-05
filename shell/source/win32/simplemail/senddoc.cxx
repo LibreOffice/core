@@ -264,7 +264,6 @@ void initParameter(int argc, char* argv[])
 */
 int main(int argc, char* argv[])
 {
-    //MessageBox(NULL, "Debug", "Debug", MB_OK);
 
     initParameter(argc, argv);
 
@@ -278,7 +277,7 @@ int main(int argc, char* argv[])
     {
         CSimpleMapi mapi;
 
-        // #93007# we have to set the flag MAPI_NEW_SESSION,
+        // we have to set the flag MAPI_NEW_SESSION,
         // because in the case Outlook xxx (not Outlook Express!)
         // is installed as Exchange and Mail Client a Profile
         // selection dialog must appear because we specify no

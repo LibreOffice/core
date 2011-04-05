@@ -60,8 +60,6 @@ CSmplMailMsg::CSmplMailMsg( )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
     throw (RuntimeException)
@@ -69,8 +67,6 @@ void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
     m_aRecipient = aRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 ::rtl::OUString SAL_CALL CSmplMailMsg::getRecipient(  )
@@ -80,8 +76,6 @@ void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
     throw (RuntimeException)
@@ -89,8 +83,6 @@ void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecip
     m_CcRecipients = aCcRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
@@ -100,8 +92,6 @@ Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
     throw (RuntimeException)
@@ -109,8 +99,6 @@ void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRec
     m_BccRecipients = aBccRecipient;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
@@ -120,8 +108,6 @@ Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
     throw (RuntimeException)
@@ -129,8 +115,6 @@ void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
     m_aOriginator = aOriginator;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 OUString SAL_CALL CSmplMailMsg::getOriginator(  )
@@ -140,8 +124,6 @@ OUString SAL_CALL CSmplMailMsg::getOriginator(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
     throw (RuntimeException)
@@ -149,8 +131,6 @@ void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
     m_aSubject = aSubject;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 OUString SAL_CALL CSmplMailMsg::getSubject(  )
@@ -160,8 +140,6 @@ OUString SAL_CALL CSmplMailMsg::getSubject(  )
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachement )
     throw (IllegalArgumentException, RuntimeException)
@@ -169,8 +147,6 @@ void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< ::rtl::OUString >& a
     m_Attachements = aAttachement;
 }
 
-//------------------------------------------------
-//
 //------------------------------------------------
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getAttachement(  )

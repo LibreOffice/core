@@ -271,7 +271,6 @@ void CSmplMailClient::validateParameter(
             static_cast<XSimpleMailClient*>(this),
             1);
 
-    // #93077#
     OSL_ENSURE(!(aFlag & NO_LOGON_DIALOG), "Flag NO_LOGON_DIALOG has currently no effect");
 
     // check the flags, the allowed range is 0 - (2^n - 1)

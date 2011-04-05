@@ -47,7 +47,6 @@
 #include <string.h>
 
 namespace /* private */ {
-    //########################################
     typedef std::vector<string_t> string_container_t;
 
     #define TAG_RECENT_FILES "RecentFiles"
@@ -219,11 +218,9 @@ namespace /* private */ {
     typedef std::vector<recently_used_item*> recently_used_item_list_t;
     typedef void (recently_used_item::* SET_COMMAND)(const string_t&);
 
-    //########################################
     // thrown if we encounter xml tags that we do not know
     class unknown_xml_format_exception {};
 
-    //########################################
     class recently_used_file_filter : public i_xml_parser_event_handler
     {
     public:
@@ -475,7 +472,6 @@ namespace /* private */ {
 
 } // namespace private
 
-//###########################################
 /*
    example (see http::www.freedesktop.org):
     <?xml version="1.0"?>
