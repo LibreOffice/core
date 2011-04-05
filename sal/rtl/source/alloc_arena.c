@@ -102,13 +102,6 @@ rtl_machdep_pagesize (void);
 rtl_arena_type * gp_default_arena = 0;
 
 
-/** rtl_arena_init()
- *  @internal
- */
-static int
-rtl_arena_init (void);
-
-
 /* ================================================================= */
 
 /** rtl_arena_segment_constructor()
@@ -921,6 +914,8 @@ rtl_arena_deactivate (
  *
  * ================================================================= */
 
+extern void ensureArenaSingleton();
+
 /** rtl_arena_create()
  */
 rtl_arena_type *
@@ -973,7 +968,8 @@ try_alloc:
     }
     else if (gp_arena_arena == 0)
     {
-        if (rtl_arena_init())
+        ensureArenaSingleton();
+        if (gp_arena_arena)
         {
             /* try again */
             goto try_alloc;
@@ -1279,8 +1275,8 @@ rtl_machdep_pagesize (void)
  *
  * ================================================================= */
 
-static void
-rtl_arena_once_init (void)
+void
+rtl_arena_init (void)
 {
     {
         /* list of arenas */
@@ -1342,35 +1338,10 @@ rtl_arena_once_init (void)
         );
         OSL_ASSERT(gp_arena_arena != 0);
     }
-}
-
-static int
-rtl_arena_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_arena_once_init);
-    return (gp_arena_arena != 0);
+    OSL_TRACE("rtl_arena_init completed");
 }
 
 /* ================================================================= */
-
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_arena_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
-static void rtl_arena_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_arena_fini)
-static void rtl_arena_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
 
 void
 rtl_arena_fini (void)
@@ -1394,6 +1365,7 @@ rtl_arena_fini (void)
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
+    OSL_TRACE("rtl_arena_fini completed");
 }
 
 /* ================================================================= */

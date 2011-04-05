@@ -26,33 +26,72 @@
  *
  ************************************************************************/
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Using a C++ dummy object instead.
-*/
+#include <rtl/instance.hxx>
 
 extern "C" void rtl_memory_fini (void);
-extern "C" void rtl_cache_fini (void);
-extern "C" void rtl_arena_fini (void);
-
-struct RTL_Alloc_Fini
+extern "C" void rtl_memory_init (void);
+namespace
 {
-  ~RTL_Alloc_Fini() ;
-};
-
-RTL_Alloc_Fini::~RTL_Alloc_Fini()
+    struct rtlMemorySingleton
+    {
+        rtlMemorySingleton()
+        {
+            rtl_memory_init();
+        }
+        ~rtlMemorySingleton()
+        {
+            rtl_memory_fini();
+        }
+    };
+    class theMemorySingleton : public rtl::Static<rtlMemorySingleton, theMemorySingleton>{};
+}
+extern "C" void ensureMemorySingleton()
 {
-  rtl_memory_fini();
-  rtl_cache_fini();
-  rtl_arena_fini();
+    theMemorySingleton::get();
 }
 
-static RTL_Alloc_Fini g_RTL_Alloc_Fini;
+extern "C" void rtl_cache_fini (void);
+extern "C" void rtl_cache_init (void);
+namespace
+{
+    struct rtlCacheSingleton
+    {
+        rtlCacheSingleton()
+        {
+            rtl_cache_init();
+        }
+        ~rtlCacheSingleton()
+        {
+            rtl_cache_fini();
+        }
+    };
+    class theCacheSingleton : public rtl::Static<rtlCacheSingleton, theCacheSingleton>{};
+}
+extern "C" void ensureCacheSingleton()
+{
+    theCacheSingleton::get();
+}
+
+extern "C" void rtl_arena_fini (void);
+extern "C" void rtl_arena_init (void);
+namespace
+{
+    struct rtlArenaSingleton
+    {
+        rtlArenaSingleton()
+        {
+            rtl_arena_init();
+        }
+        ~rtlArenaSingleton()
+        {
+            rtl_arena_fini();
+        }
+    };
+    class theArenaSingleton : public rtl::Static<rtlArenaSingleton, theArenaSingleton>{};
+}
+extern "C" void ensureArenaSingleton()
+{
+    theArenaSingleton::get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

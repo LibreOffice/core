@@ -100,12 +100,8 @@ SLOFILES=   \
             $(SLO)$/math.obj        \
             $(SLO)$/alloc_global.obj\
             $(SLO)$/alloc_cache.obj \
-            $(SLO)$/alloc_arena.obj
-
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
-SLOFILES+=$(SLO)$/alloc_fini.obj
-.ENDIF
-
+            $(SLO)$/alloc_arena.obj \
+            $(SLO)$/alloc_fini.obj
 
 OBJFILES=   \
             $(OBJ)$/memory.obj      \
@@ -132,11 +128,8 @@ OBJFILES=   \
             $(OBJ)$/math.obj \
             $(OBJ)$/alloc_global.obj\
             $(OBJ)$/alloc_cache.obj \
-            $(OBJ)$/alloc_arena.obj
-
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
-OBJFILES+=$(OBJ)$/alloc_fini.obj
-.ENDIF
+            $(OBJ)$/alloc_arena.obj \
+            $(OBJ)$/alloc_fini.obj
 
 
 APP1TARGET=gen_makefile

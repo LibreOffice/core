@@ -99,13 +99,6 @@ static rtl_cache_type * gp_cache_slab_cache = 0;
 static rtl_cache_type * gp_cache_bufctl_cache = 0;
 
 
-/** rtl_cache_init()
- *  @internal
- */
-static int
-rtl_cache_init (void);
-
-
 /* ================================================================= */
 
 /** RTL_CACHE_HASH_INDEX()
@@ -1119,6 +1112,8 @@ rtl_cache_deactivate (
  *
  * ================================================================= */
 
+extern void ensureCacheSingleton();
+
 /** rtl_cache_create()
  */
 rtl_cache_type *
@@ -1176,7 +1171,8 @@ try_alloc:
     }
     else if (gp_cache_arena == 0)
     {
-        if (rtl_cache_init())
+        ensureCacheSingleton();
+        if (gp_cache_arena)
         {
             /* try again */
             goto try_alloc;
@@ -1583,8 +1579,8 @@ rtl_cache_wsupdate_all (void * arg)
  *
  * ================================================================= */
 
-static void
-rtl_cache_once_init (void)
+void
+rtl_cache_init (void)
 {
     {
         /* list of caches */
@@ -1680,35 +1676,10 @@ rtl_cache_once_init (void)
     }
 
     rtl_cache_wsupdate_init();
-}
-
-static int
-rtl_cache_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_cache_once_init);
-    return (gp_cache_arena != 0);
+    OSL_TRACE("rtl_cache_init completed");
 }
 
 /* ================================================================= */
-
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_cache_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
-static void rtl_cache_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_cache_fini)
-static void rtl_cache_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
 
 void
 rtl_cache_fini (void)
@@ -1765,6 +1736,7 @@ rtl_cache_fini (void)
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
+    OSL_TRACE("rtl_cache_fini completed");
 }
 
 /* ================================================================= */

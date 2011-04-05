@@ -29,6 +29,7 @@
 #include "alloc_impl.h"
 #include "rtl/alloc.h"
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <string.h>
 #include <stdio.h>
@@ -66,7 +67,6 @@ static void determine_alloc_mode(void)
 
 #include "internal/once.h"
 #include "sal/macros.h"
-#include "osl/diagnose.h"
 
 /* ================================================================= *
  *
@@ -108,60 +108,7 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 
 static rtl_arena_type * gp_alloc_arena = 0;
 
-/* ================================================================= *
- *
- * custom allocator initialization / finalization.
- *
- * ================================================================= */
-
-static void
-rtl_memory_once_init (void)
-{
-    {
-        /* global memory arena */
-        OSL_ASSERT(gp_alloc_arena == 0);
-
-        gp_alloc_arena = rtl_arena_create (
-            "rtl_alloc_arena",
-            2048,     /* quantum */
-            0,        /* w/o quantum caching */
-            0,        /* default source */
-            rtl_arena_alloc,
-            rtl_arena_free,
-            0         /* flags */
-        );
-        OSL_ASSERT(gp_alloc_arena != 0);
-    }
-    {
-        sal_Size size;
-        int i, n = RTL_MEMORY_CACHED_SIZES;
-
-        for (i = 0; i < n; i++)
-        {
-            char name[RTL_CACHE_NAME_LENGTH + 1];
-            (void) snprintf (name, sizeof(name), "rtl_alloc_%lu", g_alloc_sizes[i]);
-            g_alloc_caches[i] = rtl_cache_create (name, g_alloc_sizes[i], 0, NULL, NULL, NULL, NULL, NULL, 0);
-        }
-
-        size = RTL_MEMALIGN;
-        for (i = 0; i < n; i++)
-        {
-            while (size <= g_alloc_sizes[i])
-            {
-                g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT] = g_alloc_caches[i];
-                size += RTL_MEMALIGN;
-            }
-        }
-    }
-}
-
-static int
-rtl_memory_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_memory_once_init);
-    return (gp_alloc_arena != 0);
-}
+extern void ensureMemorySingleton();
 
 /* ================================================================= *
  *
@@ -198,7 +145,8 @@ try_alloc:
         }
         else if (gp_alloc_arena == 0)
         {
-            if (rtl_memory_init())
+            ensureMemorySingleton();
+            if (gp_alloc_arena)
             {
                 /* try again */
                 goto try_alloc;
@@ -256,28 +204,58 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
 
 #endif
 
+/* ================================================================= *
+ *
+ * custom allocator initialization / finalization.
+ *
+ * ================================================================= */
+
+void rtl_memory_init (void)
+{
+#if !defined(FORCE_SYSALLOC)
+    {
+        /* global memory arena */
+        OSL_ASSERT(gp_alloc_arena == 0);
+
+        gp_alloc_arena = rtl_arena_create (
+            "rtl_alloc_arena",
+            2048,     /* quantum */
+            0,        /* w/o quantum caching */
+            0,        /* default source */
+            rtl_arena_alloc,
+            rtl_arena_free,
+            0         /* flags */
+        );
+        OSL_ASSERT(gp_alloc_arena != 0);
+    }
+    {
+        sal_Size size;
+        int i, n = RTL_MEMORY_CACHED_SIZES;
+
+        for (i = 0; i < n; i++)
+        {
+            char name[RTL_CACHE_NAME_LENGTH + 1];
+            (void) snprintf (name, sizeof(name), "rtl_alloc_%lu", g_alloc_sizes[i]);
+            g_alloc_caches[i] = rtl_cache_create (name, g_alloc_sizes[i], 0, NULL, NULL, NULL, NULL, NULL, 0);
+        }
+
+        size = RTL_MEMALIGN;
+        for (i = 0; i < n; i++)
+        {
+            while (size <= g_alloc_sizes[i])
+            {
+                g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT] = g_alloc_caches[i];
+                size += RTL_MEMALIGN;
+            }
+        }
+    }
+#endif
+    OSL_TRACE("rtl_memory_init completed");
+}
+
 /* ================================================================= */
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global
-  C++ object d'tors.
-
-  Delegated the call to "rtl_memory_fini" into a dummy C++ object,
-  see memory_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX) && !defined(AIX)
-static void rtl_memory_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_memory_fini)
-static void rtl_memory_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
-
-void
-rtl_memory_fini (void)
+void rtl_memory_fini (void)
 {
 #if !defined(FORCE_SYSALLOC)
     int i, n;
@@ -302,6 +280,7 @@ rtl_memory_fini (void)
         gp_alloc_arena = 0;
     }
 #endif
+    OSL_TRACE("rtl_memory_fini completed");
 }
 
 /* ================================================================= *
