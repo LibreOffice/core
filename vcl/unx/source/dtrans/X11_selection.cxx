@@ -1799,6 +1799,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                             fprintf( stderr, " \"%s\"", OUStringToOString( getString( pProps[i]), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
                         XFree( pProps );
                     }
+                    fprintf( stderr, "\n" );
                 }
 #endif
             }
