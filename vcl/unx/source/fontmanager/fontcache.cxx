@@ -410,7 +410,7 @@ void FontCache::read()
                 pFont->m_nPSName    = pAtoms->getAtom( ATOM_PSNAME, OUString( pLine + nTokenPos[1], nTokenPos[2]-nTokenPos[1]-1, RTL_TEXTENCODING_UTF8 ), sal_True );
                 pFont->m_eItalic    = (italic::type)atoi( pLine+nTokenPos[2] );
                 pFont->m_eWeight    = (weight::type)atoi( pLine+nTokenPos[3] );
-                pFont->m_eWidth     = (width::type)atoi( pLine+nTokenPos[4] );
+                pFont->m_eWidth     = (FontWidth)atoi( pLine+nTokenPos[4] );
                 pFont->m_ePitch     = (pitch::type)atoi( pLine+nTokenPos[5] );
                 pFont->m_aEncoding  = (rtl_TextEncoding)atoi( pLine+nTokenPos[6] );
                 pFont->m_nAscend    = atoi( pLine + nTokenPos[7] );

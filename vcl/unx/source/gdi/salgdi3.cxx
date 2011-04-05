@@ -1160,39 +1160,7 @@ ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, in
             break;
     }
     // set width
-    switch( rFontAttributes.GetWidthType() )
-    {
-        case WIDTH_ULTRA_CONDENSED:
-            aInfo.m_eWidth = psp::width::UltraCondensed;
-            break;
-        case WIDTH_EXTRA_CONDENSED:
-            aInfo.m_eWidth = psp::width::ExtraCondensed;
-            break;
-        case WIDTH_CONDENSED:
-            aInfo.m_eWidth = psp::width::Condensed;
-            break;
-        case WIDTH_SEMI_CONDENSED:
-            aInfo.m_eWidth = psp::width::SemiCondensed;
-            break;
-        case WIDTH_NORMAL:
-            aInfo.m_eWidth = psp::width::Normal;
-            break;
-        case WIDTH_SEMI_EXPANDED:
-            aInfo.m_eWidth = psp::width::SemiExpanded;
-            break;
-        case WIDTH_EXPANDED:
-            aInfo.m_eWidth = psp::width::Expanded;
-            break;
-        case WIDTH_EXTRA_EXPANDED:
-            aInfo.m_eWidth = psp::width::ExtraExpanded;
-            break;
-        case WIDTH_ULTRA_EXPANDED:
-            aInfo.m_eWidth = psp::width::UltraExpanded;
-            break;
-        default:
-            aInfo.m_eWidth = psp::width::Unknown;
-            break;
-    }
+    aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
     const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
     return rPFM.getFontOptions(aInfo, nSize, cairosubcallback);
@@ -1495,24 +1463,24 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
         }
     }
 
-    psp::width::type eWidth = psp::width::Unknown;
-    if( rFontSelData.GetWidthType() != WIDTH_DONTKNOW )
-    {
-        switch( rFontSelData.GetWidthType() )
-        {
-            case WIDTH_ULTRA_CONDENSED: eWidth = psp::width::UltraCondensed; break;
-            case WIDTH_EXTRA_CONDENSED: eWidth = psp::width::ExtraCondensed; break;
-            case WIDTH_CONDENSED:   eWidth = psp::width::Condensed; break;
-            case WIDTH_SEMI_CONDENSED:  eWidth = psp::width::SemiCondensed; break;
-            case WIDTH_NORMAL:      eWidth = psp::width::Normal; break;
-            case WIDTH_SEMI_EXPANDED:   eWidth = psp::width::SemiExpanded; break;
-            case WIDTH_EXPANDED:    eWidth = psp::width::Expanded; break;
-            case WIDTH_EXTRA_EXPANDED:  eWidth = psp::width::ExtraExpanded; break;
-            case WIDTH_ULTRA_EXPANDED:  eWidth = psp::width::UltraExpanded; break;
-            default:
-                break;
-        }
-    }
+    FontWidth eWidth = rFontSelData.GetWidthType();
+//     if( rFontSelData.GetWidthType() != WIDTH_DONTKNOW )
+//     {
+//         switch( rFontSelData.GetWidthType() )
+//         {
+//             case WIDTH_ULTRA_CONDENSED:  eWidth = psp::width::UltraCondensed; break;
+//             case WIDTH_EXTRA_CONDENSED: eWidth = psp::width::ExtraCondensed; break;
+//             case WIDTH_CONDENSED:    eWidth = psp::width::Condensed; break;
+//             case WIDTH_SEMI_CONDENSED:   eWidth = psp::width::SemiCondensed; break;
+//             case WIDTH_NORMAL:       eWidth = psp::width::Normal; break;
+//             case WIDTH_SEMI_EXPANDED:    eWidth = psp::width::SemiExpanded; break;
+//             case WIDTH_EXPANDED: eWidth = psp::width::Expanded; break;
+//             case WIDTH_EXTRA_EXPANDED:   eWidth = psp::width::ExtraExpanded; break;
+//             case WIDTH_ULTRA_EXPANDED:   eWidth = psp::width::UltraExpanded; break;
+//             default:
+//                 break;
+//         }
+//     }
 
     psp::pitch::type ePitch = psp::pitch::Unknown;
     if( rFontSelData.GetPitch() != PITCH_DONTKNOW )
@@ -1554,20 +1522,21 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
                 break;
     }
 
-    switch (eWidth)
-    {
-        case psp::width::UltraCondensed: aRet.meWidthType = WIDTH_ULTRA_CONDENSED; break;
-        case psp::width::ExtraCondensed: aRet.meWidthType = WIDTH_EXTRA_CONDENSED; break;
-        case psp::width::Condensed: aRet.meWidthType = WIDTH_CONDENSED; break;
-        case psp::width::SemiCondensed: aRet.meWidthType = WIDTH_SEMI_CONDENSED; break;
-        case psp::width::Normal: aRet.meWidthType = WIDTH_NORMAL; break;
-        case psp::width::SemiExpanded: aRet.meWidthType = WIDTH_SEMI_EXPANDED; break;
-        case psp::width::Expanded: aRet.meWidthType = WIDTH_EXPANDED; break;
-        case psp::width::ExtraExpanded: aRet.meWidthType = WIDTH_EXTRA_EXPANDED; break;
-        case psp::width::UltraExpanded: aRet.meWidthType = WIDTH_ULTRA_EXPANDED; break;
-        default:
-            break;
-    }
+    aRet.meWidthType = eWidth;
+//     switch (eWidth)
+//     {
+//         case psp::width::UltraCondensed: aRet.meWidthType = WIDTH_ULTRA_CONDENSED; break;
+//         case psp::width::ExtraCondensed: aRet.meWidthType = WIDTH_EXTRA_CONDENSED; break;
+//         case psp::width::Condensed: aRet.meWidthType = WIDTH_CONDENSED; break;
+//         case psp::width::SemiCondensed: aRet.meWidthType = WIDTH_SEMI_CONDENSED; break;
+//         case psp::width::Normal: aRet.meWidthType = WIDTH_NORMAL; break;
+//         case psp::width::SemiExpanded: aRet.meWidthType = WIDTH_SEMI_EXPANDED; break;
+//         case psp::width::Expanded: aRet.meWidthType = WIDTH_EXPANDED; break;
+//         case psp::width::ExtraExpanded: aRet.meWidthType = WIDTH_EXTRA_EXPANDED; break;
+//         case psp::width::UltraExpanded: aRet.meWidthType = WIDTH_ULTRA_EXPANDED; break;
+//         default:
+//             break;
+//     }
 
     switch (ePitch)
     {

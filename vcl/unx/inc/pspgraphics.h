@@ -34,6 +34,7 @@
 #include "vcl/salgdi.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/dllapi.h"
+#include "vcl/vclenum.hxx"
 
 namespace psp { struct JobData; class PrinterGfx; }
 
@@ -76,7 +77,6 @@ public:
 
     static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
     static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
-    static FontWidth    ToFontWidth (psp::width::type eWidth);
     static FontWeight   ToFontWeight (psp::weight::type eWeight);
     static FontPitch    ToFontPitch (psp::pitch::type ePitch);
     static FontItalic   ToFontItalic (psp::italic::type eItalic);

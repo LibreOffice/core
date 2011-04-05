@@ -36,7 +36,7 @@
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
-
+#include "vcl/vclenum.hxx"
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <vector>
@@ -162,7 +162,7 @@ struct FastPrintFontInfo
     std::list< rtl::OUString >          m_aAliases;
     family::type                        m_eFamilyStyle;
     italic::type                        m_eItalic;
-    width::type                         m_eWidth;
+    FontWidth                           m_eWidth;
     weight::type                        m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
@@ -174,7 +174,7 @@ struct FastPrintFontInfo
             m_eType( fonttype::Unknown ),
             m_eFamilyStyle( family::Unknown ),
             m_eItalic( italic::Unknown ),
-            m_eWidth( width::Unknown ),
+            m_eWidth( WIDTH_DONTKNOW ),
             m_eWeight( weight::Unknown ),
             m_ePitch( pitch::Unknown ),
             m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
@@ -276,7 +276,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int                                         m_nPSName;      // atom
         rtl::OUString                               m_aStyleName;
         italic::type                                m_eItalic;
-        width::type                                 m_eWidth;
+        FontWidth                                   m_eWidth;
         weight::type                                m_eWeight;
         pitch::type                                 m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
@@ -360,7 +360,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl::OString        aAddStyle;
         italic::type        eItalic;
         weight::type        eWeight;
-        width::type         eWidth;
+        FontWidth           eWidth;
         pitch::type         ePitch;
         rtl_TextEncoding    aEncoding;
 
@@ -521,10 +521,10 @@ public:
     }
 
     // get a specific fonts width type
-    width::type getFontWidth( fontID nFontID ) const
+    FontWidth getFontWidth( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWidth : width::Unknown;
+        return pFont ? pFont->m_eWidth : WIDTH_DONTKNOW;
     }
 
     // get a specific fonts weight type
@@ -737,7 +737,7 @@ public:
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
         const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
-        width::type& rWidth, pitch::type& rPitch) const;
+        FontWidth& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

@@ -1180,27 +1180,6 @@ void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 }
 // ----------------------------------------------------------------------------
 
-FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
-{
-    switch (eWidth)
-    {
-        case psp::width::UltraCondensed: return WIDTH_ULTRA_CONDENSED;
-        case psp::width::ExtraCondensed: return WIDTH_EXTRA_CONDENSED;
-        case psp::width::Condensed:      return WIDTH_CONDENSED;
-        case psp::width::SemiCondensed:  return WIDTH_SEMI_CONDENSED;
-        case psp::width::Normal:         return WIDTH_NORMAL;
-        case psp::width::SemiExpanded:   return WIDTH_SEMI_EXPANDED;
-        case psp::width::Expanded:       return WIDTH_EXPANDED;
-        case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
-        case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
-        case psp::width::Unknown:        return WIDTH_DONTKNOW;
-        default:
-            OSL_FAIL( "unknown width mapping" );
-            break;
-    }
-    return WIDTH_DONTKNOW;
-}
-
 FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
 {
     switch (eWeight)
@@ -1278,7 +1257,7 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.meFamily       = ToFontFamily (rInfo.m_eFamilyStyle);
     aDFA.meWeight       = ToFontWeight (rInfo.m_eWeight);
     aDFA.meItalic       = ToFontItalic (rInfo.m_eItalic);
-    aDFA.meWidthType    = ToFontWidth (rInfo.m_eWidth);
+    aDFA.meWidthType    = rInfo.m_eWidth;
     aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
     aDFA.mbSubsettable  = rInfo.m_bSubsettable;

@@ -188,30 +188,30 @@ static weight::type parseWeight( const ByteString& rWeight )
 
 // -------------------------------------------------------------------------
 
-static width::type parseWidth( const ByteString& rWidth )
+static FontWidth parseWidth( const ByteString& rWidth )
 {
-    width::type eWidth = width::Unknown;
+    FontWidth eWidth = WIDTH_DONTKNOW;
     if( rWidth.Equals( "bold" ) ||
         rWidth.Equals( "semiexpanded" ) )
-        eWidth = width::SemiExpanded;
+        eWidth = WIDTH_SEMI_EXPANDED;
     else if( rWidth.Equals( "condensed" ) ||
              rWidth.Equals( "narrow" ) )
-        eWidth = width::Condensed;
+        eWidth = WIDTH_CONDENSED;
     else if( rWidth.Equals( "double wide" ) ||
              rWidth.Equals( "extraexpanded" ) ||
              rWidth.Equals( "ultraexpanded" ) )
-        eWidth = width::UltraExpanded;
+        eWidth = WIDTH_ULTRA_EXPANDED;
     else if( rWidth.Equals( "expanded" ) ||
              rWidth.Equals( "wide" ) )
-        eWidth = width::Expanded;
+        eWidth = WIDTH_EXPANDED;
     else if( rWidth.Equals( "extracondensed" ) )
-        eWidth = width::ExtraCondensed;
+        eWidth = WIDTH_EXTRA_CONDENSED;
     else if( rWidth.Equals( "semicondensed" ) )
-        eWidth = width::SemiCondensed;
+        eWidth = WIDTH_SEMI_CONDENSED;
     else if( rWidth.Equals( "ultracondensed" ) )
-        eWidth = width::UltraCondensed;
+        eWidth = WIDTH_ULTRA_CONDENSED;
     else
-        eWidth = width::Normal;
+        eWidth = WIDTH_NORMAL;
 
     return eWidth;
 }
@@ -357,7 +357,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nFamilyName( 0 ),
         m_nPSName( 0 ),
         m_eItalic( italic::Unknown ),
-        m_eWidth( width::Unknown ),
+        m_eWidth( WIDTH_DONTKNOW ),
         m_eWeight( weight::Unknown ),
         m_ePitch( pitch::Unknown ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
@@ -1962,17 +1962,17 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
         switch( aInfo.width )
         {
-            case FWIDTH_ULTRA_CONDENSED:    pFont->m_eWidth = width::UltraCondensed; break;
-            case FWIDTH_EXTRA_CONDENSED:    pFont->m_eWidth = width::ExtraCondensed; break;
-            case FWIDTH_CONDENSED:          pFont->m_eWidth = width::Condensed; break;
-            case FWIDTH_SEMI_CONDENSED: pFont->m_eWidth = width::SemiCondensed; break;
-            case FWIDTH_SEMI_EXPANDED:      pFont->m_eWidth = width::SemiExpanded; break;
-            case FWIDTH_EXPANDED:           pFont->m_eWidth = width::Expanded; break;
-            case FWIDTH_EXTRA_EXPANDED: pFont->m_eWidth = width::ExtraExpanded; break;
-            case FWIDTH_ULTRA_EXPANDED: pFont->m_eWidth = width::UltraExpanded; break;
+            case FWIDTH_ULTRA_CONDENSED:    pFont->m_eWidth = WIDTH_ULTRA_CONDENSED; break;
+            case FWIDTH_EXTRA_CONDENSED:    pFont->m_eWidth = WIDTH_EXTRA_CONDENSED; break;
+            case FWIDTH_CONDENSED:          pFont->m_eWidth = WIDTH_CONDENSED; break;
+            case FWIDTH_SEMI_CONDENSED: pFont->m_eWidth = WIDTH_SEMI_CONDENSED; break;
+            case FWIDTH_SEMI_EXPANDED:      pFont->m_eWidth = WIDTH_SEMI_EXPANDED; break;
+            case FWIDTH_EXPANDED:           pFont->m_eWidth = WIDTH_EXPANDED; break;
+            case FWIDTH_EXTRA_EXPANDED: pFont->m_eWidth = WIDTH_EXTRA_EXPANDED; break;
+            case FWIDTH_ULTRA_EXPANDED: pFont->m_eWidth = WIDTH_ULTRA_EXPANDED; break;
 
             case FWIDTH_NORMAL:
-            default:                        pFont->m_eWidth = width::Normal; break;
+            default:                        pFont->m_eWidth = WIDTH_NORMAL; break;
         }
 
         pFont->m_ePitch = aInfo.pitch ? pitch::Fixed : pitch::Variable;
@@ -4016,7 +4016,7 @@ bool PrintFontManager::readOverrideMetrics()
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Italic" ) ) )
                 pFont->m_eItalic = static_cast<italic::type>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
-                pFont->m_eWidth = static_cast<width::type>(getInt(pProps[n].Value));
+                pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Weight" ) ) )
                 pFont->m_eWeight = static_cast<weight::type>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Pitch" ) ) )

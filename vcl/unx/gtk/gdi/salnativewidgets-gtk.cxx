@@ -45,6 +45,7 @@
 #include "saldata.hxx"
 #include "saldisp.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/vclenum.hxx"
 
 typedef struct _cairo_font_options cairo_font_options_t;
 
@@ -3416,15 +3417,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // set width
     switch( eStretch )
     {
-        case PANGO_STRETCH_ULTRA_CONDENSED: aInfo.m_eWidth = psp::width::UltraCondensed;break;
-        case PANGO_STRETCH_EXTRA_CONDENSED: aInfo.m_eWidth = psp::width::ExtraCondensed;break;
-        case PANGO_STRETCH_CONDENSED:       aInfo.m_eWidth = psp::width::Condensed;break;
-        case PANGO_STRETCH_SEMI_CONDENSED:  aInfo.m_eWidth = psp::width::SemiCondensed;break;
-        case PANGO_STRETCH_NORMAL:          aInfo.m_eWidth = psp::width::Normal;break;
-        case PANGO_STRETCH_SEMI_EXPANDED:   aInfo.m_eWidth = psp::width::SemiExpanded;break;
-        case PANGO_STRETCH_EXPANDED:        aInfo.m_eWidth = psp::width::Expanded;break;
-        case PANGO_STRETCH_EXTRA_EXPANDED:  aInfo.m_eWidth = psp::width::ExtraExpanded;break;
-        case PANGO_STRETCH_ULTRA_EXPANDED:  aInfo.m_eWidth = psp::width::UltraExpanded;break;
+        case PANGO_STRETCH_ULTRA_CONDENSED: aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;break;
+        case PANGO_STRETCH_EXTRA_CONDENSED: aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;break;
+        case PANGO_STRETCH_CONDENSED:       aInfo.m_eWidth = WIDTH_CONDENSED;break;
+        case PANGO_STRETCH_SEMI_CONDENSED:  aInfo.m_eWidth = WIDTH_SEMI_CONDENSED;break;
+        case PANGO_STRETCH_NORMAL:          aInfo.m_eWidth = WIDTH_NORMAL;break;
+        case PANGO_STRETCH_SEMI_EXPANDED:   aInfo.m_eWidth = WIDTH_SEMI_EXPANDED;break;
+        case PANGO_STRETCH_EXPANDED:        aInfo.m_eWidth = WIDTH_EXPANDED;break;
+        case PANGO_STRETCH_EXTRA_EXPANDED:  aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;break;
+        case PANGO_STRETCH_ULTRA_EXPANDED:  aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;break;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -3453,8 +3454,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != psp::weight::Unknown )
         aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
-    if( aInfo.m_eWidth != psp::width::Unknown )
-        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
+    if( aInfo.m_eWidth != WIDTH_DONTKNOW )
+        aFont.SetWidthType( aInfo.m_eWidth );
     if( aInfo.m_eItalic != psp::italic::Unknown )
         aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
     if( aInfo.m_ePitch != psp::pitch::Unknown )

@@ -32,6 +32,7 @@
 #include "vcl/fontmanager.hxx"
 #include "vcl/fontcache.hxx"
 #include "vcl/impfont.hxx"
+#include "vcl/vclenum.hxx"
 
 using namespace psp;
 
@@ -792,25 +793,26 @@ namespace
         return pitch::Variable;
     }
 
-    width::type convertWidth(int width)
+    // translation: fontconfig enum -> vcl enum
+    FontWidth convertWidth(int width)
     {
         if (width == FC_WIDTH_ULTRACONDENSED)
-            return width::UltraCondensed;
+            return WIDTH_ULTRA_CONDENSED;
         else if (width == FC_WIDTH_EXTRACONDENSED)
-            return width::ExtraCondensed;
+            return WIDTH_EXTRA_CONDENSED;
         else if (width == FC_WIDTH_CONDENSED)
-            return width::Condensed;
+            return WIDTH_CONDENSED;
         else if (width == FC_WIDTH_SEMICONDENSED)
-            return width::SemiCondensed;
+            return WIDTH_SEMI_CONDENSED;
         else if (width == FC_WIDTH_SEMIEXPANDED)
-            return width::SemiExpanded;
+            return WIDTH_SEMI_EXPANDED;
         else if (width == FC_WIDTH_EXPANDED)
-            return width::Expanded;
+            return WIDTH_EXPANDED;
         else if (width == FC_WIDTH_EXTRAEXPANDED)
-            return width::ExtraExpanded;
+            return WIDTH_EXTRA_EXPANDED;
         else if (width == FC_WIDTH_ULTRAEXPANDED)
-            return width::UltraExpanded;
-        return width::Normal;
+            return WIDTH_ULTRA_EXPANDED;
+        return WIDTH_NORMAL;
     }
 }
 
@@ -1039,7 +1041,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
 }
 
 static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
-    italic::type eItalic, weight::type eWeight, width::type eWidth, pitch::type ePitch)
+    italic::type eItalic, weight::type eWeight, FontWidth eWidth, pitch::type ePitch)
 {
     if( eItalic != italic::Unknown )
     {
@@ -1073,20 +1075,20 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
         }
         rWrapper.FcPatternAddInteger( pPattern, FC_WEIGHT, nWeight );
     }
-    if( eWidth != width::Unknown )
+    if( eWidth != WIDTH_DONTKNOW )
     {
         int nWidth = FC_WIDTH_NORMAL;
         switch( eWidth )
         {
-            case width::UltraCondensed: nWidth = FC_WIDTH_ULTRACONDENSED;break;
-            case width::ExtraCondensed: nWidth = FC_WIDTH_EXTRACONDENSED;break;
-            case width::Condensed:      nWidth = FC_WIDTH_CONDENSED;break;
-            case width::SemiCondensed:  nWidth = FC_WIDTH_SEMICONDENSED;break;
-            case width::Normal:         nWidth = FC_WIDTH_NORMAL;break;
-            case width::SemiExpanded:   nWidth = FC_WIDTH_SEMIEXPANDED;break;
-            case width::Expanded:       nWidth = FC_WIDTH_EXPANDED;break;
-            case width::ExtraExpanded:  nWidth = FC_WIDTH_EXTRAEXPANDED;break;
-            case width::UltraExpanded:  nWidth = FC_WIDTH_ULTRACONDENSED;break;
+            case WIDTH_ULTRA_CONDENSED: nWidth = FC_WIDTH_ULTRACONDENSED;break;
+            case WIDTH_EXTRA_CONDENSED: nWidth = FC_WIDTH_EXTRACONDENSED;break;
+            case WIDTH_CONDENSED:       nWidth = FC_WIDTH_CONDENSED;break;
+            case WIDTH_SEMI_CONDENSED:  nWidth = FC_WIDTH_SEMICONDENSED;break;
+            case WIDTH_NORMAL:          nWidth = FC_WIDTH_NORMAL;break;
+            case WIDTH_SEMI_EXPANDED:   nWidth = FC_WIDTH_SEMIEXPANDED;break;
+            case WIDTH_EXPANDED:        nWidth = FC_WIDTH_EXPANDED;break;
+            case WIDTH_EXTRA_EXPANDED:  nWidth = FC_WIDTH_EXTRAEXPANDED;break;
+            case WIDTH_ULTRA_EXPANDED:  nWidth = FC_WIDTH_ULTRACONDENSED;break;
             default:
                 break;
         }
@@ -1111,7 +1113,7 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
 rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
     italic::type &rItalic, weight::type &rWeight,
-    width::type &rWidth, pitch::type &rPitch) const
+    FontWidth &rWidth, pitch::type &rPitch) const
 {
     rtl::OUString aName;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -1427,7 +1429,7 @@ int PrintFontManager::FreeTypeCharIndex( void*, sal_uInt32 )
 }
 
 rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
-    rtl::OUString&, const rtl::OString&, italic::type, weight::type, width::type, pitch::type) const
+    rtl::OUString&, const rtl::OString&, italic::type, weight::type, FontWidth, pitch::type) const
 {
     rtl::OUString aName;
     return aName;
