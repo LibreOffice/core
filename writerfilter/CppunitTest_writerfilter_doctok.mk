@@ -36,8 +36,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
 	cppunit \
 	cppu \
 	sal \
-	ucbhelper \
-	writerfilter \
+	stl \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\

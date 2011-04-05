@@ -28,6 +28,7 @@
 WFDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 include $(WFDIR)generated.mk
+include $(GBUILDDIR)/gbuild_simple.mk
 
 # doctok
 
@@ -47,16 +48,16 @@ wf_GEN_doctok_Resources_hxx=doctok/resources.hxx
 wf_GEN_doctok_Resources_cxx=resources.cxx
 
 $(wf_GEN_doctok_SprmIds_hxx) : doctok $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model)) > $@
 
 $(wf_GEN_doctok_ResourceIds_hxx) : doctok $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model)) > $@
 
 $(wf_GEN_doctok_Resources_hxx) : doctok $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model)) > $@
 
 $(wf_GEN_doctok_Resources_cxx) : doctok $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model) $(wf_SRC_doctok_ResourceTools_xsl)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model)) > $@
 
 # ooxml
 
@@ -99,61 +100,61 @@ wf_GEN_ooxml_Status_stage3=ooxml/status_stage3.xml
 wf_GEN_ooxml_Status_todo=ooxml/todo.xml
 wf_GEN_ooxml_Status_efforts=ooxml/efforts.csv
 
-$(wf_GEN_ooxml_token_tmp) : $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/tokens.txt
-	cat $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
+$(wf_GEN_ooxml_token_tmp) : $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt
+	cat $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
 	| sed "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
 $(wf_GEN_ooxml_token_xml) : $(WFDIR)ooxml/tokenxmlheader $(wf_GEN_ooxml_token_tmp) $(WFDIR)ooxml/tokenxmlfooter
 	cat $(WFDIR)ooxml/tokenxmlheader $(wf_GEN_ooxml_token_tmp) $(WFDIR)ooxml/tokenxmlfooter > $@
 
 $(wf_GEN_ooxml_FastTokens_hxx) : $(wf_SRC_ooxml_FastTokens_xsl) $(wf_GEN_ooxml_token_xml)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_FastTokens_xsl) $(wf_GEN_ooxml_token_xml) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_FastTokens_xsl) $(wf_GEN_ooxml_token_xml)) > $@
 
 $(wf_GEN_ooxml_Factory_hxx) : $(WFDIR)ooxml/factoryinc.xsl $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $< $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $< $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_Factory_cxx) : $(WFDIR)ooxml/factoryimpl.xsl $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $< $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $< $(wf_GEN_ooxml_Model_processed)) > $@
 
 OOXMLFactory%.cxx : $(WFDIR)ooxml/factoryimpl_ns.xsl $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed)) > $@
 
 OOXMLFactory%.hxx : $(WFDIR)ooxml/factory_ns.xsl $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_FactoryValues_hxx) : $(wf_SRC_ooxml_FactoryValues_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_FactoryValues_xsl) $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_FactoryValues_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_FactoryValues_cxx) : $(wf_SRC_ooxml_FactoryValuesImpl_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_FactoryValuesImpl_xsl) $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_FactoryValuesImpl_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_ResourceIds_hxx) : ooxml $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_NamespaceIds_hxx) : $(wf_SRC_ooxml_NamespaceIds_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_NamespaceIds_xsl) $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_NamespaceIds_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_ooxml_GperfFastToken_hxx) : $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $(wf_GEN_ooxml_Model_processed) \
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $(wf_GEN_ooxml_Model_processed)) \
 	| tr -d '\r' | gperf -I -t -E -S1 -c -G -LC++ > $@
 
 $(wf_GEN_ooxml_Model_analyzed): $(wf_SRC_ooxml_Analyze_model_xsl) $(wf_SRC_ooxml_Model)
-	$(gb_XSLTPROC) $^ > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
 $(wf_GEN_ooxml_Status_stage1) : $(wf_GEN_ooxml_Model_analyzed) $(wf_SRC_ooxml_stage1_sh)
 	$(wf_SRC_ooxml_Status_stage1_sh) $(wf_GEN_ooxml_Model_analyzed) $(WFDIR)dmapper > $@
 
 $(wf_GEN_ooxml_Status_stage2) : $(wf_SRC_ooxml_Status_stage2_xsl) $(wf_GEN_ooxml_Status_stage1)
-	$(gb_XSLTPROC) $^ > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
 $(wf_GEN_ooxml_Status_stage3) : $(wf_SRC_ooxml_Status_stage3_xsl) $(wf_GEN_ooxml_Status_stage2)
-	$(gb_XSLTPROC) $^ > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
 $(wf_GEN_ooxml_Status_todo) : $(wf_SRC_ooxml_Status_todo_xsl) $(wf_GEN_ooxml_Status_stage3)
-	$(gb_XSLTPROC) $^ > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
 $(wf_GEN_ooxml_Status_efforts) : $(wf_SRC_ooxml_Status_efforts_xsl) $(wf_GEN_ooxml_Status_todo)
-	$(gb_XSLTPROC) $^ > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
 # rtftok
 
@@ -178,20 +179,20 @@ wf_SRC_doctok_QNameToStr_xsl=$(WFDIR)doctok/qnametostr.xsl
 wf_SRC_ooxml_QNameToStr_xsl=$(WFDIR)ooxml/qnametostr.xsl
 wf_SRC_model_NamespacePreprocess=$(WFDIR)resourcemodel/namespace_preprocess.pl
 wf_GEN_ooxml_Namespacesmap_xsl=namespacesmap.xsl
-wf_DEP_ooxml_namespaces_txt=$(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/namespaces.txt
+wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/namespaces.txt
 wf_GEN_ooxml_preprocess_xsl=modelpreprocess.xsl
 
 $(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
-	$(gb_XSLTPROC) $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
 $(wf_GEN_doctok_QnameToStr_tmp): $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model)) > $@
 
 $(wf_GEN_model_QNameToStr_cxx): $(wf_GEN_ooxml_QNameToStr_tmp) $(wf_GEN_doctok_QnameToStr_tmp) $(WFDIR)resourcemodel/qnametostrheader $(WFDIR)resourcemodel/qnametostrfooter $(wf_SRC_ooxml_FactoryTools_xsl) $(wf_SRC_doctok_ResourceTools_xsl)
 	cat $(WFDIR)resourcemodel/qnametostrheader $(wf_GEN_ooxml_QNameToStr_tmp) $(wf_GEN_doctok_QnameToStr_tmp) $(WFDIR)resourcemodel/qnametostrfooter > $@
 
 $(wf_GEN_model_SprmCodeToStr_tmp) : $(wf_SRC_doctok_SprmCodeToStr_xsl) $(wf_SRC_doctok_Model)
-	$(gb_XSLTPROC) $(wf_SRC_doctok_SprmCodeToStr_xsl) $(wf_SRC_doctok_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_SprmCodeToStr_xsl) $(wf_SRC_doctok_Model)) > $@
 
 $(wf_GEN_model_SprmCodeToStr_cxx): $(WFDIR)resourcemodel/sprmcodetostrheader $(wf_GEN_model_SprmCodeToStr_tmp) $(WFDIR)resourcemodel/sprmcodetostrfooter
 	cat $^ > $@
@@ -203,7 +204,7 @@ $(wf_GEN_ooxml_preprocess_xsl) : $(wf_SRC_ooxml_Preprocess_xsl)
 	cp -f $(wf_SRC_ooxml_Preprocess_xsl) $@
 
 $(wf_GEN_ooxml_Model_processed) : $(wf_GEN_ooxml_Namespacesmap_xsl) $(wf_GEN_ooxml_preprocess_xsl) $(wf_SRC_ooxml_Model)
-	$(gb_XSLTPROC) $(wf_GEN_ooxml_Namespacesmap_xsl) $(wf_SRC_ooxml_Model) > $@
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_GEN_ooxml_Namespacesmap_xsl) $(wf_SRC_ooxml_Model)) > $@
 
 # all
 
