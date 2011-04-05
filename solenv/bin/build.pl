@@ -1714,7 +1714,14 @@ sub cancel_build {
     print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
     print STDERR "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
     print STDERR "cd $module\n";
-    print STDERR "build\n";
+    if (is_gnumake_module($module))
+    {
+        print STDERR "make -r\n"
+    }
+    else
+    {
+        print STDERR "build\n";
+    }
     print STDERR "\n";
     print STDERR "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
     zenity_message("LibreOffice Build Failed!");
