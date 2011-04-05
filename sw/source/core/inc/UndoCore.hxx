@@ -122,31 +122,26 @@ class SwUndoFmtColl : public SwUndo, private SwUndRng
     String aFmtName;
     SwHistory* pHistory;
     SwFmtColl* pFmtColl;
-    // --> OD 2008-04-15 #refactorlists# - for correct <ReDo(..)> and <Repeat(..)>
+    // for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reseted at the nodes
     // before the format has been applied.
     const bool mbReset;
     // boolean, which indicates that the list attributes had been reseted at
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
-    // <--
 
     void DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM);
 
 public:
-    // --> OD 2008-04-15 #refactorlists#
-//    SwUndoFmtColl( const SwPaM&, SwFmtColl* );
     SwUndoFmtColl( const SwPaM&, SwFmtColl*,
                    const bool bReset,
                    const bool bResetListAttrs );
-    // <--
     virtual ~SwUndoFmtColl();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    // #111827#
     /**
        Returns the rewriter for this undo object.
 
@@ -208,9 +203,6 @@ public:
 };
 
 
-//--------------------------------------------------------------------
-
-// -> #111827#
 const int nUndoStringLength = 20;
 
 /**
@@ -238,9 +230,6 @@ const int nUndoStringLength = 20;
  */
 String
 ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
-// <- #111827#
-
-// #16487#
 /**
    Denotes special characters in a string.
 

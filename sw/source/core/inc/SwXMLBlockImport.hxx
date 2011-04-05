@@ -44,7 +44,6 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    // #110680#
     SwXMLBlockListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks &rBlocks );
@@ -72,8 +71,6 @@ protected:
 public:
     sal_Bool bTextOnly;
     String &m_rText;
-
-    // #110680#
     SwXMLTextBlockImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks &rBlocks, String &rNewText, sal_Bool bNewTextOnly );

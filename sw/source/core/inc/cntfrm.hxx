@@ -44,14 +44,13 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
 
-    // --> OD 2007-11-26 #b6614158#
     // parameter <bObjsInNewUpper>, indicating that objects are existing in
     // remaining area of new upper
     sal_Bool _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
                     sal_Bool bTstMove,
                     const bool bObjsInNewUpper );
-    // <--
+
     virtual void MakeAll();
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,

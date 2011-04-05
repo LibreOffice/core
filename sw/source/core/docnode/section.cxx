@@ -714,7 +714,7 @@ void SwSectionFmt::DelFrms()
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
-        // #147431# : First delete the <SwSectionFrm> of the <SwSectionFmt> instance
+        // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
         // mba: test iteration as objects are removed in iteration
         CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
 
@@ -1359,7 +1359,6 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     // set additional flag that links have been updated, in order to check this
     // during load.
     pDoc->SetLinksUpdated( sal_True );
-    // <--
 
     // Undo immer abschalten
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
@@ -1508,7 +1507,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                 {
                     pSrcDoc->GetLinkManager().UpdateAllLinks( sal_False, sal_True, sal_False, 0 );
                 }
-                // <--
+
                 if( pCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;

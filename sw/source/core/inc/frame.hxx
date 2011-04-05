@@ -207,32 +207,8 @@ struct SwRectFnCollection
 };
 
 typedef SwRectFnCollection* SwRectFn;
-/*
-extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
-#define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
-                            sal_Bool bRev = pFrm->IsReverse(); \
-                            SwRectFn fnRect = bVert ? \
-                                ( bRev ? fnRectVL2R : fnRectVert ): \
-                                ( bRev ? fnRectB2T : fnRectHori );
-#define SWRECTFNX( pFrm )   sal_Bool bVertX = pFrm->IsVertical(); \
-                            sal_Bool bRevX = pFrm->IsReverse(); \
-                            SwRectFn fnRectX = bVertX ? \
-                                ( bRevX ? fnRectVL2R : fnRectVert ): \
-                                ( bRevX ? fnRectB2T : fnRectHori );
-#define SWREFRESHFN( pFrm ) { if( bVert != pFrm->IsVertical() || \
-                                  bRev  != pFrm->IsReverse() ) \
-                                bVert = pFrm->IsVertical(); \
-                                bRev = pFrm->IsReverse(); \
-                                fnRect = bVert ? \
-                                    ( bRev ? fnRectVL2R : fnRectVert ): \
-                                    ( bRev ? fnRectB2T : fnRectHori ); }
-#define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
-                            sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
-                            SwRectFn fnRect = bVert == bNeighb ? \
-                                fnRectHori : fnRectVert;
-*/
 
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+// Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
 #define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
                             sal_Bool bRev = pFrm->IsReverse(); \
@@ -274,9 +250,6 @@ enum MakePageType
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
-// OD 2004-05-06 #i28701# - replaced by new class <SwSortedObjs>
-//typedef SdrObject* SdrObjectPtr;
-//SV_DECL_PTRARR(SwDrawObjs,SdrObjectPtr,1,1);
 
 class SwFrm: public SwClient, public SfxBroadcaster
 {
@@ -306,11 +279,10 @@ class SwFrm: public SwClient, public SfxBroadcaster
     //Cache fuer (Umrandungs-)Attribute.
     static SwCache *pCache;
 
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     // frame ID is now in general available - used for layout loop control
     static sal_uInt32 mnLastFrmId;
     const  sal_uInt32 mnFrmId;
-    // <--
 
     SwRootFrm   *mpRoot;
     SwLayoutFrm *pUpper;
@@ -323,7 +295,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     /** method to determine next content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
 
-        OD 2005-11-30 #i27138# - adding documentation:
+        #i27138# - adding documentation:
         Travelling downwards through the layout to determine the next content
         frame in the same environment. There are several environments in a
         document, which form a closed context regarding this function. These
@@ -334,12 +306,10 @@ class SwFrm: public SwClient, public SfxBroadcaster
         - Each group of linked fly frames
         - All footnotes
         - All document body frames
-        OD 2005-11-30 #i27138# - adding parameter <_bInSameFtn>
+        #i27138# - adding parameter <_bInSameFtn>
         Its default value is <false>. If its value is <true>, the environment
         'All footnotes' is no longer treated. Instead each footnote is treated
         as an own environment.
-
-        @author OD
 
         @param _bInSameFtn
         input parameter - boolean indicating, that the found next content
@@ -354,7 +324,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     /** method to determine previous content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
 
-        OD 2005-11-30 #i27138#
+        #i27138#
         Travelling upwards through the layout to determine the previous content
         frame in the same environment. There are several environments in a
         document, which form a closed context regarding this function. These
@@ -365,12 +335,10 @@ class SwFrm: public SwClient, public SfxBroadcaster
         - Each group of linked fly frames
         - All footnotes
         - All document body frames
-        OD 2005-11-30 #i27138# - adding parameter <_bInSameFtn>
+        #i27138# - adding parameter <_bInSameFtn>
         Its default value is <false>. If its value is <true>, the environment
         'All footnotes' is no longer treated. Instead each footnote is treated
         as an own environment.
-
-        @author OD
 
         @param _bInSameFtn
         input parameter - boolean indicating, that the found previous content
@@ -410,9 +378,8 @@ protected:
     sal_uInt16 bInvalidVert:    1;
     sal_uInt16 bDerivedVert:    1;
     sal_uInt16 bVertical:       1;
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     sal_uInt16 bVertLR:         1;
-    //End of SCMS
     sal_uInt16 nType:         4;  //Who am I?
 
     sal_Bool bValidPos:         1;
@@ -449,12 +416,11 @@ protected:
     void PrepareMake();
     void OptPrepareMake();
     void MakePos();
-    // --> OD 2005-09-28 #b6329202#
     // method formats next frame of table frame to assure keep attribute.
     // in case of nested tables method <SwFrm::MakeAll()> is called to
     // avoid format of superior table frame.
     friend SwFrm* lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
-    // <--
+
     virtual void MakeAll() = 0;
         //Adjustierung der Frames einer Seite
     SwTwips AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst = sal_False );
@@ -471,10 +437,7 @@ protected:
     void CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse );
 
     /** enumeration for the different invalidations
-
-        OD 2004-05-19 #i28701#
-
-        @author OD
+        #i28701#
     */
     enum InvalidationType
     {
@@ -482,20 +445,15 @@ protected:
     };
 
     /** method to determine, if an invalidation is allowed.
-
-        OD 2004-05-19 #i28701
-
-        @author OD
+        #i28701
     */
     virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const;
 
     /** method to perform additional actions on an invalidation
 
-        OD 2004-05-19 #i28701#
+        #i28701#
         Method has *only* to contain actions, which has to be performed on
         *every* assignment of the corresponding flag to <sal_False>.
-
-        @author OD
     */
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
 
@@ -547,17 +505,16 @@ public:
 
     sal_Bool WrongPageDesc( SwPageFrm* pNew );
 
-    // --> OD 2004-07-02 #i28701# - new methods to append/remove drawing objects
+    //#i28701# - new methods to append/remove drawing objects
     void AppendDrawObj( SwAnchoredObject& _rNewObj );
     void RemoveDrawObj( SwAnchoredObject& _rToRemoveObj );
-    // <--
 
     //Arbeiten mit der Kette der FlyFrms
     void  AppendFly( SwFlyFrm *pNew );
     void  RemoveFly( SwFlyFrm *pToRemove );
     const SwSortedObjs *GetDrawObjs() const { return pDrawObjs; }
           SwSortedObjs *GetDrawObjs()         { return pDrawObjs; }
-    // --> OD 2004-07-01 #i28701# - change purpose of method and adjust its name
+    // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bInvaPosOnly,
                          const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
@@ -611,14 +568,12 @@ public:
     inline sal_Bool IsReverse() const { return bReverse; }
     inline void SetReverse( sal_Bool bNew ){ bReverse = bNew ? 1 : 0; }
     inline sal_Bool IsVertical() const;
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     inline sal_Bool IsVertLR() const;
-    //End of SCMS
     inline sal_Bool GetVerticalFlag() const;
     inline void SetVertical( sal_Bool bNew ){ bVertical = bNew ? 1 : 0; }
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     inline void SetbVertLR( sal_Bool bNew ) { bVertLR = bNew ? 1 : 0; }
-    //End of SCMS
     inline void SetDerivedVert( sal_Bool bNew ){ bDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( sal_Bool bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline sal_Bool IsRightToLeft() const;
@@ -634,13 +589,10 @@ public:
 
     /** determine, if frame is moveable in given environment
 
-        OD 08.08.2003 #110978#
         method replaced 'old' method <sal_Bool IsMoveable() const>.
         Determines, if frame is moveable in given environment. if no environment
         is given (parameter _pLayoutFrm == 0L), the movability in the actual
         environment (<this->GetUpper()) is checked.
-
-        @author OD
 
         @param _pLayoutFrm
         input parameter - given environment (layout frame), in which the movability
@@ -693,9 +645,8 @@ public:
     inline SwFlyFrm     *FindFlyFrm();
     inline SwSectionFrm *FindSctFrm();
     inline SwFrm        *FindNext();
-    // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+    // #i27138# - add parameter <_bInSameFtn>
     inline SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
-    // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( sal_Bool bFtn = sal_False ) const;
@@ -706,17 +657,13 @@ public:
     inline const SwFlyFrm  *FindFlyFrm() const;
     inline const SwSectionFrm *FindSctFrm() const;
     inline const SwFrm     *FindNext() const;
-    // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+    // #i27138# - add parameter <_bInSameFtn>
     inline const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
-    // <--
     inline const SwFrm     *FindPrev() const;
            const SwFrm     *GetLower()  const;
 
     /** inline wrapper method for <_FindPrevCnt(..)>
-
-        OD 2005-11-30 #i27138#
-
-        @author OD
+        #i27138#
     */
     inline SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false )
     {
@@ -727,10 +674,7 @@ public:
     }
 
     /** inline const wrapper method for <_FindPrevCnt(..)>
-
-        OD 2005-11-30 #i27138#
-
-        @author OD
+        #i27138#
     */
     inline const SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false ) const
     {
@@ -740,12 +684,11 @@ public:
             return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
     }
 
-    // --> OD 2007-09-04 #i79774#, #b6596954#
+    // #i79774#
     SwFrm* _GetIndPrev() const;
     SwFrm* GetIndPrev() const
         { return ( pPrev || !IsInSct() ) ? pPrev : _GetIndPrev(); }
-//    const SwFrm* GetIndPrev() const { return ((SwFrm*)this)->GetIndPrev(); }
-    // <--
+
     SwFrm* GetIndNext()
         { return ( pNext || !IsInSct() ) ? pNext : _GetIndNext(); }
     const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
@@ -796,11 +739,11 @@ public:
     sal_Bool IsValid() const { return bValidPos && bValidSize && bValidPrtArea; }
 
     //Invalideren nur den Frm
-    // OD 2004-05-19 #i28701# - add call to method <_ActionOnInvalidation(..)>
+    // #i28701# - add call to method <_ActionOnInvalidation(..)>
     // for all invalidation methods.
-    // OD 2004-05-19 #i28701# - use method <_InvalidationAllowed(..)> to
+    // #i28701# - use method <_InvalidationAllowed(..)> to
     // decide, if invalidation will to be performed or not.
-    // --> OD 2004-10-08 #i26945# - no additional invalidation, if it's already
+    // #i26945# - no additional invalidation, if it's already
     // invalidate.
     void _InvalidateSize()
     {
@@ -843,7 +786,6 @@ public:
             _ActionOnInvalidation( INVALID_ALL );
         }
     }
-    // <--
     //Benachrichtigen gleich die Seite mit.
     inline void InvalidateSize();
     inline void InvalidatePrt();
@@ -859,10 +801,7 @@ public:
     void ImplInvalidateNextPos( sal_Bool bNoFtn = sal_False );
 
     /** method to invalidate printing area of next frame
-
-        OD 09.01.2004 #i11859#
-
-        @author OD
+        #i11859#
     */
     void InvalidateNextPrtArea();
 
@@ -949,10 +888,9 @@ public:
     inline sal_Bool IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? sal_True : sal_False; }
 
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
     inline sal_uInt32 GetLastFrmId() const { return mnLastFrmId; }
-    // <--
 
     // NEW TABELS
     // Some functions for covered/covering table cells. This way unnessessary
@@ -961,7 +899,7 @@ public:
     bool IsCoveredCell() const;
     bool IsInCoveredCell() const;
 
-    // FME 2007-08-30 #i81146# new loop control
+    // #i81146# new loop control
     bool KnowsFormat( const SwFmt& rFmt ) const;
     void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
@@ -1011,7 +949,7 @@ sal_Bool SwFrm::IsVertical() const
         ((SwFrm*)this)->SetDirFlags( sal_True );
     return bVertical != 0;
 }
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+//Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 inline sal_Bool SwFrm::IsVertLR() const
 {
     return bVertLR != 0;
@@ -1099,7 +1037,7 @@ inline void SwFrm::InvalidateAll()
             ImplInvalidatePos();
         bValidPrtArea = bValidSize = bValidPos = sal_False;
 
-        // OD 2004-05-19 #i28701#
+        // #i28701#
         _ActionOnInvalidation( INVALID_ALL );
     }
 }
@@ -1201,7 +1139,7 @@ inline const SwFrm *SwFrm::FindNext() const
     else
         return ((SwFrm*)this)->_FindNext();
 }
-// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+// #i27138# - add parameter <_bInSameFtn>
 inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
 {
     if ( pNext && pNext->IsCntntFrm() )
@@ -1209,8 +1147,7 @@ inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
     else
         return _FindNextCnt( _bInSameFtn );
 }
-// <--
-// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+// #i27138# - add parameter <_bInSameFtn>
 inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
 {
     if ( pNext && pNext->IsCntntFrm() )
@@ -1218,7 +1155,6 @@ inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
     else
         return ((SwFrm*)this)->_FindNextCnt( _bInSameFtn );
 }
-// <--
 inline SwFrm *SwFrm::FindPrev()
 {
     if ( pPrev && !pPrev->IsSctFrm() )

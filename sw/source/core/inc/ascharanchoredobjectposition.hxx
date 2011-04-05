@@ -81,8 +81,6 @@ namespace objectpositioning
 
             /** determine the relative position to base line for object position
 
-                @author OD
-
                 @param _ObjBoundHeight
                 height including corresponding spacing of the object, for which
                 the Y-position has to be calculated.
@@ -99,8 +97,6 @@ namespace objectpositioning
         public:
             /** construtor; provided object to be positioned and needed data
                 for calculation of the object position
-
-                OD 28.10.2003 #110978#
 
                 @param _rDrawObj
                 input parameter - object, that is be positioned.
@@ -121,8 +117,6 @@ namespace objectpositioning
                 @param _nLineAscent, _nLineDescent, _nLineAscentInclObjs,
                 _nLineDescentInclObjs - needed line values for the different
                 alignments.
-
-                @author OD
             */
             SwAsCharAnchoredObjectPosition( SdrObject&      _rDrawObj,
                                             const Point&    _rProposedAnchorPos,
@@ -138,33 +132,23 @@ namespace objectpositioning
                 members <maAnchorPos>, <mnRelPos>, <maObjBoundRect> and
                 <mnLineAlignment> are calculated.
                 calculated position is set at the given object.
-
-                @author OD
             */
             virtual void CalcPosition();
 
-            /** calculated anchored position for object position type AS_CHAR
+            // calculated anchored position for object position type AS_CHAR
 
-                @author OD
-            */
             Point GetAnchorPos() const;
 
-            /** calculated relative position to base line for object position type AS_CHAR
+           // calculated relative position to base line for object position type AS_CHAR
 
-                @author OD
-            */
             SwTwips GetRelPosY() const;
 
-            /** determined object rectangle including spacing for object position type AS_CHAR
+          // determined object rectangle including spacing for object position type AS_CHAR
 
-                @author OD
-            */
             SwRect GetObjBoundRectInclSpacing() const;
 
-            /** determined line alignment relative to line height
+          // determined line alignment relative to line height
 
-                @author OD
-            */
             sal_uInt8 GetLineAlignment() const;
     };
 } // namespace objectpositioning

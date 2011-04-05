@@ -28,7 +28,7 @@
 #ifndef _FLYFRMS_HXX
 #define _FLYFRMS_HXX
 #include "flyfrm.hxx"
-// --> #i28701#
+// #i28701#
 class SwFlyAtCntFrm;
 
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
@@ -37,15 +37,15 @@ class SwFlyFreeFrm : public SwFlyFrm
 {
     SwPageFrm *pPage;   //Bei dieser Seite ist der Fly angemeldet.
 
-    // --> #i34753# - flag for at-page anchored Writer fly frames
+    // #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.
     bool mbNoMakePos;
-    // <--
-    // --> #i37068# - flag to prevent move in method
+
+    // #i37068# - flag to prevent move in method
     // <CheckClip(..)>
     bool mbNoMoveOnCheckClip;
-    // <--
+
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
 
     /** determines, if direct environment of fly frame has 'auto' size
@@ -72,14 +72,14 @@ protected:
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
 public:
-    // --> #i28701#
+    // #i28701#
     TYPEINFO();
 
     virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll();
 
-    // --> #i37068# - accessors for member <mbNoMoveOnCheckClip>
+    // #i37068# - accessors for member <mbNoMoveOnCheckClip>
     inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
     {
         mbNoMoveOnCheckClip = _bNewNoMoveOnCheckClip;
@@ -88,8 +88,7 @@ public:
     {
         return mbNoMoveOnCheckClip;
     }
-    // <--
-    // --> #i34753# - accessors for member <mbNoMakePos>
+    // #i34753# - accessors for member <mbNoMakePos>
     inline void SetNoMakePos( const bool _bNoMakePos )
     {
         if ( IsFlyLayFrm() )
@@ -108,7 +107,6 @@ public:
             return false;
         }
     }
-    // <--
 
     /** method to determine, if a format on the Writer fly frame is possible
 
@@ -117,8 +115,6 @@ public:
         <SwFlyFrm::IsFormatPossible()> by:
         format isn't possible, if Writer fly frame isn't registered at a page frame
         and its anchor frame isn't inside another Writer fly frame.
-
-        @author OD
     */
     virtual bool IsFormatPossible() const;
 };
@@ -128,7 +124,7 @@ public:
 class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
-    // --> #i28701#
+    // #i28701#
     TYPEINFO();
 
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
@@ -150,14 +146,12 @@ protected:
         page frame
 
         #i28701#
-
-        @author OD
     */
     virtual void RegisterAtCorrectPage();
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    // --> #i28701#
+    // #i28701#
     TYPEINFO();
 
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
@@ -173,8 +167,6 @@ public:
         refine 'IsFormatPossible'-conditions of method
         <SwFlyFreeFrm::IsFormatPossible()> by:
         format isn't possible, if method <MakeAll()> is already in progress.
-
-        @author OD
     */
     virtual bool IsFormatPossible() const;
 };
@@ -195,7 +187,7 @@ protected:
     virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    // --> #i28701#
+    // #i28701#
     TYPEINFO();
 
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
@@ -231,11 +223,10 @@ public:
     // #i26791#
     virtual void MakeObjPos();
 
-    // --> #115759# - invalidate anchor frame on invalidation
+    // invalidate anchor frame on invalidation
     // of the position, because the position is calculated during the
     // format of the anchor frame
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
-    // <--
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const

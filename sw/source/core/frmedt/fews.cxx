@@ -751,14 +751,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     Point aPos;
     bool bVertic = false;
     sal_Bool bRTL = sal_False;
-    // --> OD 2009-09-01 #mongolianlayout#
     bool bVerticalL2R = false;
-    // <--
 
     if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
         const SwFrm* pTmp = pFrm;
-        // OD 06.11.2003 #i22305#
+        // #i22305#
         if ((FLY_AT_PAGE == _nAnchorId) ||
             ((FLY_AT_FLY == _nAnchorId) && !_bFollowTextFlow))
         {
@@ -778,14 +776,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
-        // --> OD 2009-09-01 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
-            // --> OD 2009-09-01 #mongolianlayout#
             bVertic = bVert ? true : false;
             bVerticalL2R = bVertL2R ? true : false;
-            // <--
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -834,9 +828,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 default:break;
             }
         }
-        // --> OD 2009-09-01 #mongolianlayout#
+
         if ( bVert && !bVertL2R )
-        // <--
         {
             switch ( _eVertRelOrient )
             {
@@ -848,7 +841,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // --> OD 2009-09-01 #mongolianlayout#
         else if ( bVertL2R )
         {
             switch ( _eVertRelOrient )
@@ -861,7 +853,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // <--
         else
         {
             switch ( _eVertRelOrient )
@@ -882,7 +873,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // <--
         if ( _opPercent )
             *_opPercent = pFrm->Prt().SSize();
     }
@@ -926,13 +916,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    // --> OD 2009-09-01 #mongolianlayout#
                     if ( bVert && !bVertL2R )
-                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                     }
-                    // --> OD 2009-09-01 #mongolianlayout#
                     else if ( bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
@@ -948,14 +935,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 OSL_ENSURE( rVertEnvironLayFrm.IsPageFrm(),
                         "<SwFEShell::CalcBoundRect(..)> - not following text flow, but vertical environment *not* page!" );
                 aVertEnvironRect = rVertEnvironLayFrm.Frm();
-                // OD 19.09.2003 #i18732# - adjustment vertical 'virtual' anchor position
+                // #i18732# - adjustment vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    // --> OD 2009-09-01 #mongolianlayout#
                     if ( bVert && !bVertL2R )
-                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -963,7 +948,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
                         }
                     }
-                    // --> OD 2009-09-01 #mongolianlayout#
                     else if ( bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
@@ -972,7 +956,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() += rVertEnvironLayFrm.GetLeftMargin();
                         }
                     }
-                    // <--
                     else
                     {
                         aPos.Y() = aVertEnvironRect.Top();
@@ -993,7 +976,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // #i22341# - adjust vertical 'virtual' anchor position
             // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
             // character and vertical aligned at character or top of line
-            // --> OD 2005-12-29 #125800#
             // <pFrm>, which is the anchor frame or the proposed anchor frame,
             // doesn't have to be a text frame (e.g. edit a to-page anchored
             // fly frame). Thus, assure this.
@@ -1032,7 +1014,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                         pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
                     }
                 }
-                // --> OD 2009-09-01 #mongolianlayout#
                 if ( bVert || bVertL2R )
                 {
                     aPos.X() = nTop;
@@ -1044,7 +1025,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
             }
 
-            // --> OD 2004-10-05 #i26945# - adjust horizontal 'virtual' anchor
+            // #i26945# - adjust horizontal 'virtual' anchor
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
             if ( pTxtFrm &&
@@ -1064,22 +1045,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
-                // --> OD 2009-09-01 #mongolianlayout#
                 if ( bVert || bVertL2R )
                 {
                     aPos.Y() = nLeft;
                 }
-                // <--
                 else
                 {
                     aPos.X() = nLeft;
                 }
             }
-            // <--
-
-            // --> OD 2009-09-01 #mongolianlayout#
             if ( bVert || bVertL2R )
-            // <--
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
                                   aHoriEnvironRect.Top(),
@@ -1113,9 +1088,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
             {
-                // --> OD 2009-09-01 #mongolianlayout#
                 if( bVert || bVertL2R )
-                // <--
                     _orRect.Width( (_orRect.Width()*9)/10 );
                 else
                     _orRect.Height( (_orRect.Height()*9)/10 );
@@ -1125,14 +1098,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
                                         ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
-        // --> OD 2009-09-01 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
-            // --> OD 2009-09-01 #mongolianlayout#
             bVertic = bVert ? true : false;
             bVerticalL2R = bVertL2R ? true : false;
-            // <--
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
@@ -1257,10 +1226,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     {
         if( bVertic && !bVerticalL2R )
             _orRect.Pos( aPos.X() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.Y() );
-        // --> OD 2009-09-01 #mongolianlayout#
         else if( bVerticalL2R )
             _orRect.Pos( _orRect.Left() - aPos.X(), _orRect.Top() - aPos.Y() );
-        // <--
         else if ( bRTL )
             _orRect.Pos( - ( _orRect.Right() - aPos.X() ), _orRect.Top() - aPos.Y() );
         else
@@ -1276,7 +1243,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly )
     {
-        // --> OD 2004-09-24 #i32951# - due to issue #i28701# no format of a
+        // #i32951# - due to issue #i28701# no format of a
         // newly inserted Writer fly frame or its anchor frame is performed
         // any more. Thus, it could be possible (e.g. on insert of a horizontal
         // line) that the anchor frame isn't formatted and its printing area
@@ -1289,7 +1256,6 @@ Size SwFEShell::GetGraphicDefaultSize() const
         {
             aRet = pAnchorFrm->GetUpper()->Prt().SSize();
         }
-        // <--
 
         SwRect aBound;
         CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
@@ -1301,8 +1267,6 @@ Size SwFEShell::GetGraphicDefaultSize() const
     return aRet;
 }
 
-// --> OD 2009-08-31 #mongolianlayou#
-// add output parameter <bVertL2R>
 sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
 {
     sal_Bool bVert = sal_False;
@@ -1345,7 +1309,6 @@ sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, s
 
     return bVert;
 }
-// <--
 
 void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
 {

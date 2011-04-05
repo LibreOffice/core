@@ -38,7 +38,6 @@ class SwXMLBlockListExport : public SvXMLExport
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    // #110680#
     SwXMLBlockListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks & rBlocks,
@@ -57,7 +56,6 @@ class SwXMLTextBlockExport : public SvXMLExport
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    // #110680#
     SwXMLTextBlockExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks & rBlocks,

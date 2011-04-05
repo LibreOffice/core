@@ -53,7 +53,6 @@ protected:
 public:
     virtual ~SwUndoBookmark();
 
-    // #111827#
     /**
        Returns the rewriter for this undo object.
 

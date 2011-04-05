@@ -47,7 +47,6 @@ class SwDrawView : public FmFormView
 
     /** determine maximal order number for a 'child' object of given 'parent' object
 
-        OD 2004-08-20 #110810#
         The maximal order number will be determined on the current object
         order hierarchy. It's the order number of the 'child' object with the
         highest order number. The calculation can be influenced by parameter
@@ -60,16 +59,12 @@ class SwDrawView : public FmFormView
         @param <_pExclChildObj>
         optional input parameter - 'child' object, which will not be considered
         on the calculation of the maximal order number
-
-        @author OD
     */
     sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
                                    const SdrObject* _pExclChildObj = 0L ) const;
 
     /** method to move 'repeated' objects of the given moved object to the
         according level
-
-        OD 2004-08-23 #110810#
 
         @param <_rMovedAnchoredObj>
         input parameter - moved object, for which the 'repeated' ones have also
@@ -78,8 +73,6 @@ class SwDrawView : public FmFormView
         @param <_rMovedChildsObjs>
         input parameter - data collection of moved 'child' objects - the 'repeated'
         ones of these 'childs' will also been moved.
-
-        @author OD
     */
     void _MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                             const std::vector<SdrObject*>& _rMovedChildObjs ) const;
@@ -118,14 +111,12 @@ public:
 
     virtual void DeleteMarked();
 
-    //JP 06.10.98: 2. Versuch
     inline void ValidateMarkList() { FlushComeBackTimer(); }
 
-    // --> OD 2009-03-05 #i99665#
+    // #i99665#
     sal_Bool IsAntiAliasing() const;
-    // <--
 
-    // OD 18.06.2003 #108784# - method to replace marked/selected <SwDrawVirtObj>
+    // method to replace marked/selected <SwDrawVirtObj>
     // by its reference object for delete of selection and group selection
     static void ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView );
 };

@@ -83,11 +83,10 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
                                 SwFrmFmt &rFmt1,
                                 SwFrmFmt &rFmt2 )
 {
-    // --> FME 2005-01-21 #i41075# Printer on demand
+    // --> #i41075# Printer on demand
     // This function does not require a printer anymore.
     // The default page size is obtained from the application
     //locale
-    // <--
 
     SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
@@ -147,7 +146,6 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                          const sal_Bool bPage = sal_True )
 {
 /////////////// !!!!!!!!!!!!!!!!
-//JP 03.03.99:
 // eigentlich sollte hier das Intersect von ItemSet benutzt werden, aber das
 // funktioniert nicht richtig, wenn man unterschiedliche WhichRanges hat.
 /////////////// !!!!!!!!!!!!!!!!
@@ -157,10 +155,9 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                                         RES_COL, RES_COL,
                                         RES_FRAMEDIR, RES_FRAMEDIR,
                                         RES_TEXTGRID, RES_TEXTGRID,
-                                        // --> FME 2005-04-18 #i45539#
+                                        // #i45539#
                                         RES_HEADER_FOOTER_EAT_SPACING,
                                         RES_HEADER_FOOTER_EAT_SPACING,
-                                        // <--
                                         RES_UNKNOWNATR_CONTAINER,
                                         RES_UNKNOWNATR_CONTAINER,
                                         0 };
@@ -170,12 +167,11 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     {
         for( sal_uInt16 nId = aIdArr[ n ]; nId <= aIdArr[ n+1]; ++nId )
         {
-            // --> FME 2005-04-18 #i45539#
+            // #i45539#
             // bPage == true:
             // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
             // bPage == false:
             // All in aIdArr except from RES_COL and RES_PAPER_BIN:
-            // <--
             if( (  bPage && RES_HEADER_FOOTER_EAT_SPACING != nId ) ||
                 ( !bPage && RES_COL != nId && RES_PAPER_BIN != nId ))
             {
@@ -199,7 +195,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     OSL_ENSURE( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
 
     SwPageDesc *pDesc = aPageDescs[i];
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -220,7 +216,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     if( rChged.GetNumType().GetNumberingType() != pDesc->GetNumType().GetNumberingType() )
     {
         pDesc->SetNumType( rChged.GetNumType() );
-        // JP 30.03.99: Bug 64121 - den Seitennummernfeldern bescheid sagen,
+        // den Seitennummernfeldern bescheid sagen,
         //      das sich das Num-Format geaendert hat
         GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
         GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
@@ -399,7 +395,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         //Layot benachrichtigen!
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080304
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
     }
 
     //Jetzt noch die Seiten-Attribute uebernehmen.
@@ -475,7 +471,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
             if( bHasLayout )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080228
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
             }
         }
     }
@@ -534,7 +530,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
 |*************************************************************************/
 
 sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
-                            sal_Bool bRegardLanguage, sal_Bool bBroadcast) // #116530#
+                            sal_Bool bRegardLanguage, sal_Bool bBroadcast)
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -569,7 +565,6 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // #116530#
         GetIDocumentUndoRedo().AppendUndo(new SwUndoPageDescCreate(pNew, this));
     }
 
@@ -602,11 +597,10 @@ void SwDoc::PrtDataChanged()
 {
 //!!!!!!!! Bei Aenderungen hier bitte ggf. InJobSetup im Sw3io mitpflegen
 
-    // --> FME 2005-01-21 #i41075#
+    // #i41075#
     OSL_ENSURE( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" );
-    // <--
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
     SwWait *pWait = 0;
     sal_Bool bEndAction = sal_False;
 
@@ -636,7 +630,7 @@ void SwDoc::PrtDataChanged()
             pFntCache->Flush();
 
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));//swmod 080304
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
 
             if ( pSh )
             {
@@ -649,7 +643,7 @@ void SwDoc::PrtDataChanged()
             }
 
         }
-    }   //swmod 080218
+    }
     if ( bDraw && pDrawModel )
     {
         const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
@@ -664,7 +658,7 @@ void SwDoc::PrtDataChanged()
     PrtOLENotify( sal_True );
 
     if ( bEndAction )
-        pTmpRoot->EndAllAction();   //swmod 080218
+        pTmpRoot->EndAllAction();
     delete pWait;
 }
 
@@ -689,7 +683,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
 
         if ( pSh->ISA(SwFEShell) )
             pShell = (SwFEShell*)pSh;
-    }   //swmod 071107//swmod 071225
+    }
     if ( !pShell )
     {
         //Das hat ohne Shell und damit ohne Client keinen Sinn, weil nur darueber
@@ -713,7 +707,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, pNodes->Count(), GetDocShell());
-            GetCurrentLayout()->StartAllAction();   //swmod 080218
+            GetCurrentLayout()->StartAllAction();
 
             for( sal_uInt16 i = 0; i < pNodes->Count(); ++i )
             {
@@ -756,7 +750,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                 }
             }
             delete pNodes;
-            GetCurrentLayout()->EndAllAction(); //swmod 080218
+            GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
         }
     }
@@ -774,7 +768,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, pNodes->Count(), GetDocShell());
-            GetCurrentLayout()->StartAllAction();   //swmod 080218
+            GetCurrentLayout()->StartAllAction();
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
             for( sal_uInt16 i = 0; i < pNodes->Count(); ++i )
@@ -791,7 +785,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                     pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
-            GetCurrentLayout()->EndAllAction(); //swmod 080218
+            GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
             delete pNodes;
         }
