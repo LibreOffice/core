@@ -2813,7 +2813,6 @@ void SvxNumPositionTabPage::InitControls()
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = USHRT_MAX;
-    long nFirstBorderText = 0;
     long nFirstBorderTextRelative = -1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -2821,16 +2820,7 @@ void SvxNumPositionTabPage::InitControls()
         if(nActNumLvl & nMask)
         {
             if(USHRT_MAX == nLvl)
-            {
                 nLvl = i;
-                if ( !bLabelAlignmentPosAndSpaceModeActive )
-                {
-                    nFirstBorderText = nLvl > 0 ?
-                        aNumFmtArr[nLvl]->GetAbsLSpace() + aNumFmtArr[nLvl]->GetFirstLineOffset() -
-                        aNumFmtArr[nLvl - 1]->GetAbsLSpace() + aNumFmtArr[nLvl - 1]->GetFirstLineOffset():
-                            aNumFmtArr[nLvl]->GetAbsLSpace() + aNumFmtArr[nLvl]->GetFirstLineOffset();
-                }
-            }
 
             if( i > nLvl)
             {
