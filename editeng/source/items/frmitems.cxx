@@ -1743,16 +1743,30 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
 
 }
 
-// -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+namespace
+{
+
+sal_Bool
+lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, sal_True);
+}
+    return bRet;
 }
 
 sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+// -----------------------------------------------------------------------
+sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     SvxBorderStyle nStyle = NO_STYLE;
+    switch ( rLine.LineStyle )
+
+sal_Bool
+SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+{
+    const bool bRet(lcl_lineToSvxLine(rLine, rSvxLine, bConvert));
+
     switch ( rLine.LineStyle )
     {
         default:
@@ -1806,7 +1820,6 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     {
         rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
         bGuessWidth = sal_False;
-    }
 
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);
 }
@@ -1814,6 +1827,46 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
 // -----------------------------------------------------------------------
 
 namespace
+{
+
+bool
+lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
+{
+    if (rAny >>= rLine)
+        return true;
+
+    table::BorderLine aBorderLine;
+    if (rAny >>= aBorderLine)
+    {
+        rLine.Color = aBorderLine.Color;
+        rLine.InnerLineWidth = aBorderLine.InnerLineWidth;
+        rLine.OuterLineWidth = aBorderLine.OuterLineWidth;
+        rLine.LineDistance = aBorderLine.LineDistance;
+        rLine.LineStyle = table::BorderLineStyle::SOLID;
+        return true;
+    }
+
+    return false;
+}
+
+template<typename Item>
+bool
+lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert)
+{
+    bool bDone = false;
+    table::BorderLine2 aBorderLine;
+    if (lcl_extractBorderLine(rAny, aBorderLine))
+    {
+        SvxBorderLine aLine;
+        bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
+        rItem.SetLine( bSet ? &aLine : NULL, nLine);
+        bDone = true;
+    }
+    return bDone;
+}
+
+}
+
 {
 
 bool
