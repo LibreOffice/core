@@ -62,11 +62,16 @@ $(eval $(call gb_Library_add_exception_objects,spa,\
     padmin/source/titlectrl \
 ))
 
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
+$(eval $(call gb_Library_add_linked_libs,spa,\
+    m \
+    pthread \
+))
+endif
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,spa,\
     dl \
-    m \
-    pthread \
 ))
 endif
 
