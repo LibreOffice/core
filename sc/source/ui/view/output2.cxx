@@ -2864,7 +2864,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    short nOriVal = 0;
+    short nOriVal = 0; // Angle of orientation
     if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
     {
         nOriVal = 2700;
@@ -2916,8 +2916,58 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     else if (rParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
     {
         nOriVal = 900;
-        aLogicStart.Y() +=
-            rParam.mbBreak ? rParam.mpEngine->GetPaperSize().Width() : nEngineHeight;
+        if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
+        {
+            aLogicStart.Y() +=
+                rParam.mbBreak ? rParam.mpEngine->GetPaperSize().Width() : nEngineHeight;
+        }
+        else
+        {
+            // Note that the "paper" is rotated 90 degrees to the left, so
+            // paper's width is in vertical direction.  Also, the whole text
+            // is on a single line, as text wrap is not in effect.
+
+            // Set the paper width to be the width of the text.
+            Size aPSize = rParam.mpEngine->GetPaperSize();
+            aPSize.Width() = rParam.mpEngine->CalcTextWidth();
+            rParam.mpEngine->SetPaperSize(aPSize);
+
+            long nGap = 0;
+            long nTopOffset = 0;
+            if (rParam.mbPixelToLogic)
+            {
+                nGap = pRefDevice->LogicToPixel(aCellSize).Height() - pRefDevice->LogicToPixel(aPSize).Width();
+                nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
+                nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+            }
+            else
+            {
+                nGap = aCellSize.Height() - aPSize.Width();
+                nTopOffset = nTopM;
+            }
+
+            // First, align text to bottom.
+            aLogicStart.Y() += aCellSize.Height();
+            aLogicStart.Y() += nTopOffset;
+
+            switch (rParam.meVerJust)
+            {
+                case SVX_VER_JUSTIFY_STANDARD:
+                case SVX_VER_JUSTIFY_BOTTOM:
+                    // align to bottom (do nothing).
+                break;
+                case SVX_VER_JUSTIFY_CENTER:
+                    // center it.
+                    aLogicStart.Y() -= nGap / 2;
+                break;
+                case SVX_VER_JUSTIFY_BLOCK:
+                case SVX_VER_JUSTIFY_TOP:
+                    // align to top
+                    aLogicStart.Y() -= nGap;
+                default:
+                    ;
+            }
+        }
     }
     else if (rParam.meOrient == SVX_ORIENTATION_STACKED)
     {
