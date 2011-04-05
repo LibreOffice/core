@@ -1716,7 +1716,7 @@ sub cancel_build {
     print STDERR "cd $module\n";
     if (is_gnumake_module($module))
     {
-        print STDERR "make -r\n"
+        print STDERR "$ENV{GNUMAKE} -r\n"
     }
     else
     {
