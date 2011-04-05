@@ -28,7 +28,7 @@
 $(eval $(call gb_Package_Package,oox_generated,$(WORKDIR)/CustomTarget/oox/source/token))
 
 $(eval $(call \
-	gb_Package_add_customtarget,oox_generated,oox/source/token))
+	gb_Package_add_customtarget,oox_generated,oox/source/token,SRCDIR))
 
 $(eval $(call \
 	gb_CustomTarget_add_dependencies,oox/source/token,\
