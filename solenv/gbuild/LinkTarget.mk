@@ -262,6 +262,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(call gb_LinkTarget_get_dep_target,$*) \
 		$(call gb_LinkTarget_get_headers_target,$*) \
 		$(call gb_LinkTarget_get_external_headers_target,$*) \
+		$(call gb_LinkTarget_get_objects_list,$*) \
 		$(DLLTARGET) \
 		$(AUXTARGETS)) && \
 	cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -f && \
@@ -284,8 +285,20 @@ $(call gb_Helper_abbreviate_dirs,\
 
 endef
 
+define gb_LinkTarget__command_objectlist
+TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+	$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object)))) && \
+$(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
+mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2)) 
+
+endef
+
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(call gb_LinkTarget__command,$@,$*)
+	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
@@ -387,6 +400,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS := 
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
@@ -408,6 +422,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS := 
 endif
 
 endef
@@ -573,6 +588,28 @@ endef
 
 define gb_LinkTarget_add_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
+endef
+
+define gb_LinkTarget_add_linktarget_objects
+$(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
+$(info gb_LinkTarget_add_linktarget_objects,$(1),$(2))
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
+
+endef
+
+define gb_LinkTarget_add_library_objects
+ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+endif
+$(info gb_LinkTarget_add_library_objects,$(1),$(2))
+$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
+
+endef
+
+define gb_LinkTarget_add_executable_objects
+$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach exe,$(2),$(call gb_Executable_get_linktargetname,$(lib))))
+
 endef
 
 define gb_LinkTarget_add_cxxobjects
