@@ -36,3 +36,26 @@
          template <int MaxDigits>
          inline bool allow_more_digits(std::size_t i)
          {
+--- misc/boost_1_44_0/boost/optional/optional.hpp	2011-04-05 13:19:01.223587256 +0100
++++ misc/build/boost_1_44_0/boost/optional/optional.hpp	2011-04-05 13:19:01.223587256 +0100
+@@ -31,6 +31,8 @@
+ 
+ #include "boost/optional/optional_fwd.hpp"
+ 
++#include <string.h>
++
+ #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+ // VC6.0 has the following bug:
+ //   When a templated assignment operator exist, an implicit conversion
+@@ -114,6 +116,11 @@
+ 
+   public:
+ 
++    aligned_storage()
++    {
++      memset(&dummy_, 0, sizeof(dummy_));
++    }
++
+     void const* address() const { return &dummy_.data[0]; }
+     void      * address()       { return &dummy_.data[0]; }
+ } ;
