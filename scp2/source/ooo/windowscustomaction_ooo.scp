@@ -54,6 +54,15 @@ WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And _IsSetupTypeMin<>\"Custom\"", "CostFinalize");
 End
 
+WindowsCustomAction gid_Customaction_Restoreregallmsdocdll
+    Name = "Restoreregallmsdocdll";
+    Typ = "65";
+    Source = "reg4allmsdoc.dll";
+    Target = "RestoreRegAllMSDoc";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
 WindowsCustomAction gid_Customaction_Regactivexdll1
 	Name = "Regactivexdll1";
 	Typ = "65";
