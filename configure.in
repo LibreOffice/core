@@ -4165,6 +4165,9 @@ dnl Check for system translate-toolkit
 dnl ===================================================================
 AC_MSG_CHECKING([which translate-toolkit to use])
 if test "$with_system_translate_toolkit" = "yes" ; then
+    AC_MSG_RESULT([system])
+    SYSTEM_TRANSLATE_TOOLKIT=YES
+
     AC_PATH_PROGS(OO2PO, oo2po)
     if test -z "$OO2PO"; then
         AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
@@ -4174,9 +4177,11 @@ if test "$with_system_translate_toolkit" = "yes" ; then
     if test -z "$PO2OO"; then
         AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
     fi
-    
-    AC_MSG_RESULT([system])
-    SYSTEM_TRANSLATE_TOOLKIT=YES
+
+    $PO2OO --help | grep -q '\-\-skipsource'
+    if test $? -ne 0 ;  then
+        AC_MSG_ERROR([$PO2OO does not support --skipsource; use translate-toolkit >= 1.9 or use --without-system-translate-toolkit])
+    fi
 else
    AC_MSG_RESULT([internal])
    SYSTEM_TRANSLATE_TOOLKIT=NO
