@@ -1,81 +1,95 @@
-#!/bin/sh
-# Run this to generate all the initial makefiles, etc.
+:
+    eval 'exec perl -S $0 ${1+"$@"}'
+        if 0;
 
-if test "z$1" = "z--clean"; then
-    echo "Cleaning"
+use strict;
 
-    rm -Rf autom4te.cache
-    rm -f missing install-sh mkinstalldirs libtool ltmain.sh
-    exit 1;
-fi
-
-requote()
+sub clean()
 {
-    out=""
-    for param in "$@" ; do
-    p=`echo "$param" | sed "s/'/'\\\\\\''/g"`
-    if test -z "$out" ; then
-        out="'$p'"
-    else
-        out="$out '$p'"
-    fi
-    done
-    echo "$out"
+    system ("rm -Rf autom4te.cache");
+    system ("rm -f missing install-sh mkinstalldirs libtool ltmain.sh");
+    print "cleaned the build tree\n";
 }
 
-distro()
+# one argument per line
+sub read_args($)
 {
-    name=''
-    for param in "$@" ; do
-    case "$param" in
-        --with-distro=*) name=${param#--with-distro=} ;;
-    esac
-    done
-    echo "$name"
+    my $file = shift;
+    my $fh;
+    my @lst;
+    open ($fh, $file) || die "can't open file: $file";
+    while (<$fh>) {
+    chomp();
+    push @lst, $_;
+    }
+    close ($fh);
+#    print "read args from file '$file': @lst\n";
+    return @lst;
 }
 
-old_args=""
-if test $# -eq 0 && test -f autogen.lastrun; then
-    old_args=$(cat autogen.lastrun)
-    echo "re-using arguments from last configure: $old_args";
-fi
+sub invalid_distro($$)
+{
+    my ($config, $distro) = @_;
+    print STDERR "can't find distro option set: $config\n";
+    print STDERR "valid values are:\n";
+    my $dirh;
+    opendir ($dirh, "distro-configs");
+    while (readdir ($dirh)) {
+    /(.*)\.conf$/ || next;
+    print STDERR "\t$1\n";
+    }
+    closedir ($dirh);
+    exit (1);
+}
 
-touch ChangeLog
+my @cmdline_args = ();
+if (!@ARGV) {
+    my $lastrun = "autogen.lastrun";
+    @cmdline_args = read_args ($lastrun) if (-f $lastrun);
+} else {
+    @cmdline_args = @ARGV;
+}
 
-if test "z$ACLOCAL_FLAGS" = "z" -a "z`uname -s`" = "zDarwin" ; then
-    ACLOCAL_FLAGS="-I ./m4/mac"
-fi
-if test "z`uname -s`" != "zDarwin" ; then
-    AUTOMAKE_EXTRA_FLAGS=--warnings=no-portability
-fi
+my @args;
+for my $arg (@cmdline_args) {
+    if ($arg eq '--clean') {
+    clean();
+    } elsif ($arg =~ m/--with-distro=(.*)$/) {
+    my $config = "distro-configs/$1.conf";
+    if (! -f $config) {
+        invalid_distro ($config, $1);
+    }
+    push @args, read_args ($config);
+    } else {
+    push @args, $arg;
+    }
+}
 
-conf_args=$(requote "$@")
-distro_name=$(distro "$@")
-if test "z${distro_name}" != "z" ; then
-    cumul=""
-    if test -f "./distro-configs/${distro_name}.conf" ; then
-        IFS=$'
-'
-        for opt in $(cat distro-configs/${distro_name}.conf) ; do cumul="$cumul $opt" ; done ;
-        unset IFS
-        conf_args=$(requote "$@" | sed -e "s/'--with-distro=[^']*'/$cumul/")
-    else
-        echo "Warning: there is no pre-set configuration for ${distro_name}, ignoring --with-distro=${distro_name}"
-    fi
-fi
+system ("touch ChangeLog");
 
-aclocal $ACLOCAL_FLAGS || exit 1;
-#automake --gnu --add-missing --copy || exit 1;
-#intltoolize --copy --force --automake
-autoconf || exit 1;
-if test "x$NOCONFIGURE" = "x"; then
-    if test -n "$old_args" ; then
-        eval `echo ./configure $old_args`
-    else
-        echo "$(requote "$@")" > autogen.lastrun
-        echo "./configure ${conf_args}"
-        eval `echo ./configure ${conf_args}`
-    fi
-else
-    echo "Skipping configure process."
-fi
+my $system = `uname -s`;
+
+my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
+$aclocal_flags = "-I ./m4/mac" if (!defined $aclocal_flags && $system eq 'Darwin');
+$aclocal_flags = "" if (!defined $aclocal_flags);
+
+$ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!$system eq 'Darwin');
+
+system ("aclocal $aclocal_flags") && die "Failed to run aclocal";
+system ("autoconf") && die "Failed to run autoconf";
+
+if (defined $ENV{NOCONFIGURE}) {
+    print "Skipping configure process.";
+} else {
+    if (@ARGV > 0) {
+    print "writing args to autogen.lastrun\n";
+    my $fh;
+    open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
+    for my $arg (@ARGV) {
+        print $fh "$arg\n";
+    }
+    close ($fh);
+    }
+    print "running ./configure with '" . join ("' '", @args), "'\n";
+    system ("./configure", @args);
+}
