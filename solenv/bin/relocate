@@ -215,6 +215,32 @@ sub rewrite_dpcc($$)
     print "\n";
 }
 
+sub rewrite_symlinks($$)
+{
+    my $new_root = shift;
+    my $old_root = shift;
+
+    my $dirh;
+    opendir ($dirh, $new_root);
+    while (my $ent = readdir ($dirh)) {
+	$ent =~ /^\./ && next;
+	my $link = "$new_root/$ent";
+	-l $link || next;
+	my $target = readlink ($link);
+	my $newtarget = $target;
+	$newtarget =~ s/$old_root/$new_root/;
+	print "Re-write link $target to $newtarget\n";
+	if ($newtarget eq $target) {
+	    print STDERR "unusual - possibly stale link: $target\n";
+	    if ($target =~ m/\/clone\//) { die "failed to rename link"; }
+	} else {
+	    unlink ($link);
+	    symlink ($newtarget, $link);
+	}
+    }
+    closedir ($dirh);
+}
+
 sub rewrite_bootstrap($$)
 {
     my $new_root = shift;
@@ -251,18 +277,22 @@ $OLD_ROOT = $env_keys->{'SRC_ROOT'};
 my $solver = $env_keys->{SOLARVER} . "/" . $env_keys->{INPATH};
 
 print "Relocate: $OLD_ROOT -> $OOO_BUILD\n";
+if ($OLD_ROOT eq $OOO_BUILD) {
+    print "nothing to do\n";
+    exit 0;
+}
 
-print "re-writing environment:\n";
-
-rewrite_set($OOO_BUILD, $OLD_ROOT, $set);
-rewrite_bootstrap($OOO_BUILD, $OLD_ROOT);
+print "re-writing symlinks\n";
+rewrite_symlinks($OOO_BUILD, $OLD_ROOT);
 
 print "re-writing dependencies:\n";
-
 rewrite_dpcc($OOO_BUILD, $OLD_ROOT);
 
 print "re-writing new dependencies:\n";
-
 sed_no_touch_recursive ($OOO_BUILD, $OLD_ROOT, "$solver/workdir/Dep");
+
+print "re-writing environment:\n";
+rewrite_set($OOO_BUILD, $OLD_ROOT, $set);
+rewrite_bootstrap($OOO_BUILD, $OLD_ROOT);
 
 print "done.\n";
