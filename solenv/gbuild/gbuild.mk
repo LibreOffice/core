@@ -335,11 +335,16 @@ INTERACTIVE VARIABLES:
                        If not empty, build with debug symbols. Automatically
                        enabled by DEBUG/debug.
        DBGLEVEL / dbglevel
-                       If not empty, force the debug level to the specified value.
+                       If not empty, force the debug level to the specified value. The
+                       debug level is passed to the source code through OSL_DEBUG_LEVEL
+                       macro.
                        0 = no debug
                        1 = symbols + no optimizations
-                       2 = symbols + no optimizations + extra debug output
-                           (OSL_DEBUG_LEVEL is set to 2)
+                       2 = symbols + no optimizations + extra debug output. OSL_TRACE
+                           starts being active on this level.
+                       3... = symbols + no optimizations + extra debug output (usually
+                              extremely verbose). Levels > 2 are not used very much.
+
        ENABLE_PCH      If not empty, use precompiled headers (Windows only).
        CFLAGS          Add as compiler flags for plain c compilation.
        CXXFLAGSX       Add as compiler flags for c++ compilation.
