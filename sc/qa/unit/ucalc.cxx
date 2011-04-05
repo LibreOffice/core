@@ -39,12 +39,8 @@
 //                 the need for manually calling regcomp and knowing what
 //                 services we need, and in what .so they are implemented
 
-#include "precompiled_sc.hxx"
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <sal/cppunit.h>
 
 #include <sal/config.h>
 #include <osl/file.hxx>
