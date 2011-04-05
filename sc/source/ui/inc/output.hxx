@@ -85,7 +85,7 @@ private:
         bool        mbRightClip;
     };
 
-    class EditAlignmentParam
+    class DrawEditParam
     {
     public:
         SvxCellHorJustify       meHorJust;
@@ -114,7 +114,7 @@ private:
         const SfxItemSet*       mpOldCondSet;
         const RowInfo*          mpThisRowInfo;
 
-        explicit EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
@@ -235,7 +235,7 @@ private:
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
-    void DrawEditStandard(EditAlignmentParam& rAlignParam);
+    void DrawEditStandard(DrawEditParam& rAlignParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,

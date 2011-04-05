@@ -2114,7 +2114,7 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlig
     }
 }
 
-ScOutputData::EditAlignmentParam::EditAlignmentParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
+ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
     meHorJust( lcl_GetValue<SvxHorJustifyItem, SvxCellHorJustify>(*pPattern, ATTR_HOR_JUSTIFY, pCondSet) ),
     meVerJust( lcl_GetValue<SvxVerJustifyItem, SvxCellVerJustify>(*pPattern, ATTR_VER_JUSTIFY, pCondSet) ),
     meHorJustMethod( lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_HOR_JUSTIFY_METHOD, pCondSet) ),
@@ -2137,7 +2137,7 @@ ScOutputData::EditAlignmentParam::EditAlignmentParam(const ScPatternAttr* pPatte
     mpThisRowInfo(NULL)
 {}
 
-void ScOutputData::EditAlignmentParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
+void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
 {
     const SvxMarginItem& rMargin =
         static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
@@ -2152,7 +2152,7 @@ void ScOutputData::EditAlignmentParam::calcMargins(long& rTopM, long& rLeftM, lo
     rBottomM = static_cast<long>((rMargin.GetBottomMargin() * nPPTY));
 }
 
-void ScOutputData::EditAlignmentParam::calcPaperSize(
+void ScOutputData::DrawEditParam::calcPaperSize(
     Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const
 {
     long nTopM, nLeftM, nBottomM, nRightM;
@@ -2179,7 +2179,7 @@ void ScOutputData::EditAlignmentParam::calcPaperSize(
     }
 }
 
-void ScOutputData::EditAlignmentParam::getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const
+void ScOutputData::DrawEditParam::getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const
 {
     long nEngineWidth = 0;
     if (!mbBreak || meOrient == SVX_ORIENTATION_STACKED || mbAsianVertical)
@@ -2201,7 +2201,7 @@ void ScOutputData::EditAlignmentParam::getEngineSize(ScFieldEditEngine* pEngine,
     rHeight = nEngineHeight;
 }
 
-long ScOutputData::EditAlignmentParam::getEngineWidth(ScFieldEditEngine* pEngine) const
+long ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine* pEngine) const
 {
     if (mbBreak && meOrient != SVX_ORIENTATION_STACKED && !mbAsianVertical)
         return 0;
@@ -2209,17 +2209,17 @@ long ScOutputData::EditAlignmentParam::getEngineWidth(ScFieldEditEngine* pEngine
         return static_cast<long>(pEngine->CalcTextWidth());
 }
 
-bool ScOutputData::EditAlignmentParam::hasLineBreak() const
+bool ScOutputData::DrawEditParam::hasLineBreak() const
 {
     return (mbBreak || (meOrient == SVX_ORIENTATION_STACKED) || mbAsianVertical);
 }
 
-bool ScOutputData::EditAlignmentParam::isVerticallyOriented() const
+bool ScOutputData::DrawEditParam::isVerticallyOriented() const
 {
     return (meOrient == SVX_ORIENTATION_TOPBOTTOM || meOrient == SVX_ORIENTATION_BOTTOMTOP);
 }
 
-void ScOutputData::EditAlignmentParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell)
+void ScOutputData::DrawEditParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell)
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
@@ -2328,7 +2328,7 @@ void ScOutputData::EditAlignmentParam::setAlignmentItems(ScFieldEditEngine* pEng
     }
 }
 
-bool ScOutputData::EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
+bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
 {
     if (meHorJust == SVX_HOR_JUSTIFY_RIGHT || meHorJust == SVX_HOR_JUSTIFY_CENTER ||
         (meHorJust == SVX_HOR_JUSTIFY_STANDARD && mbCellIsValue))
@@ -2344,7 +2344,7 @@ bool ScOutputData::EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEn
     return false;
 }
 
-void ScOutputData::DrawEditStandard(EditAlignmentParam& rAlignParam)
+void ScOutputData::DrawEditStandard(DrawEditParam& rAlignParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
@@ -3124,7 +3124,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
-                        EditAlignmentParam aAlignParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
+                        DrawEditParam aAlignParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
                         aAlignParam.mbPixelToLogic = bPixelToLogic;
                         aAlignParam.mbHyphenatorSet = bHyphenatorSet;
                         aAlignParam.mpEngine = pEngine;
