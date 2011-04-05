@@ -216,12 +216,12 @@ get_app_path( const char *pAppExec )
     char pRealPath[PATH_MAX];
     rtl_uString *pResult;
 
-    char *pPath = strdup( pAppExec );
-    pPath = dirname( pPath );
+    char *pOrigPath = strdup( pAppExec );
+    char *pPath = dirname( pOrigPath );
 
     realpath( pPath, pRealPath );
     pResult = charp_to_ustr( pRealPath );
-    free( pPath );
+    free( pOrigPath );
 
     return pResult;
 }
