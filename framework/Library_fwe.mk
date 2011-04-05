@@ -94,7 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
 ))
 
 #todo: ImageListDescriptor can't be exported completely without exporting everything
-ifeq ($(OS),LINUX)
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
 endif
 
