@@ -147,6 +147,14 @@ brofficewithjre: $(foreach,i,$(alllangiso) brofficewithjre_$i)
 
 broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
 
+oxygenoffice: $(foreach,i,$(alllangiso) oxygenoffice_$i)
+
+oxygenofficewithjre: $(foreach,i,$(alllangiso) oxygenofficewithjre_$i)
+
+oxygenofficelanguagepack : $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i)
+
+oxygenofficehelppack : $(foreach,i,$(alllangiso) oxygenofficehelppack_$i)
+
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIHELPPACKTEMPLATESOURCE=$(PRJ)$/inc_ooohelppack$/windows$/msi_templates
@@ -201,6 +209,14 @@ $(foreach,i,$(alllangiso) brofficedev_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) brofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) oxygenoffice_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) oxygenofficewithjre_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) oxygenofficehelppack_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -287,6 +303,29 @@ $(foreach,i,$(alllangiso) broolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 broolanguagepack_%{$(PKGFORMAT:^".")} :
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
+$(foreach,i,$(alllangiso) oxygenoffice_$i) : $$@{$(PKGFORMAT:^".")}
+.IF "$(MAKETARGETS)"!=""
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+$(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
+$(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS)"!=""
+oxygenoffice_%{$(PKGFORMAT:^".") .archive} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OxygenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/`date +%Y%m%d_%H%M`_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+
+$(foreach,i,$(alllangiso) oxygenofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
+oxygenofficewithjre_%{$(PKGFORMAT:^".")} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
+
+$(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
+oxygenofficelanguagepack_%{$(PKGFORMAT:^".")} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
+
+$(foreach,i,$(alllangiso) oxygenofficehelppack_$i) : $$@{$(PKGFORMAT:^".")}
+oxygenofficehelppack_%{$(PKGFORMAT:^".")} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIHELPPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -helppack -format $(@:e:s/.//) $(VERBOSESWITCH)
+
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
     @echo cannot pack nothing...
@@ -295,7 +334,7 @@ openoffice:
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py

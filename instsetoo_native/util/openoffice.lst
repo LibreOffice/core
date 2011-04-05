@@ -5,7 +5,7 @@ Globals
 		variables
 		{
 			OOOBASEVERSION 3.4
-			OOOPACKAGEVERSION 3.4.0
+  			OOOPACKAGEVERSION 3.4.0
 			UREPACKAGEVERSION 3.4.0
 			URELAYERVERSION 1
 			BASISROOTNAME LibreOffice
@@ -391,4 +391,143 @@ LibreOffice_Dev_SDK
         script sdkoo
         include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
     }
+}
+
+OxygenOffice
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME OxygenOffice
+			PRODUCTNAME_BR OxygenOffice
+			PRODUCTVERSION 3.3
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			SHORT_PRODUCTEXTENSION rc2
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
+			BRANDPACKAGEVERSION 3
+			USERDIRPRODUCTVERSION 3
+			ABOUTBOXPRODUCTVERSION 3.3.2
+			BASEPRODUCTVERSION 3.3
+            PCPFILENAME openoffice.pcp
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+			ADDSYSTEMINTEGRATION 1
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 3.3.2
+			PACKAGEREVISION {milestone}
+			LICENSENAME LGPL
+			SERVICESPROJEKT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
+			OPENSOURCE 1
+			SETSTATICPATH 1
+			OOODOWNLOADNAME 1
+			XPDINSTALLER 0
+			BETAUPGRADECODE
+			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 9.3.0
+			PATCHCODEFILE ooo_patchcodes.txt
+			DOWNLOADBANNER	ooobanner_ooop.bmp
+			DOWNLOADBITMAP	ooobitmap_ooop.bmp
+			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
+			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_LAYOUT_STYLE 0
+            REGISTRATION_PRODUCT OxygenOffice
+            REGISTRATION_CID 926117
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+		}
+		active			1
+		compression		5
+		script			setup_osl
+		downloadname	OOOP_{productversion}_{os}_install_{languages}
+		langpackdownloadname	OOOP_{productversion}_languagepack_{os}_install_{languages}
+		helppackdownloadname	OOOP_{productversion}_helppack_{os}_install_{languages}
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
+	}
+}
+
+OxygenOffice_wJRE
+{
+	Settings
+	{
+		variables
+		{
+			PRODUCTNAME OxygenOffice
+			PRODUCTNAME_BR OxygenOffice
+			PRODUCTVERSION 3.3
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			SHORT_PRODUCTEXTENSION rc2
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
+			BRANDPACKAGEVERSION 3
+			USERDIRPRODUCTVERSION 3
+			ABOUTBOXPRODUCTVERSION 3.3.2
+			BASEPRODUCTVERSION 3.3
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+			ADDSYSTEMINTEGRATION 1
+			EVAL
+			FILEFORMATNAME OpenOffice.org
+			FILEFORMATVERSION 1.0
+			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+			PACKAGEVERSION 3.3.2
+			PACKAGEREVISION {milestone}
+			LICENSENAME LGPL
+			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
+			GLOBALFILEGID gid_File_Lib_Vcl
+			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
+			OPENSOURCE 1
+			SETSTATICPATH 1
+			OOODOWNLOADNAME 1
+			XPDINSTALLER 1
+			BETAUPGRADECODE
+			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 9.3.0
+			PATCHCODEFILE ooo_patchcodes.txt
+			JAVAPRODUCT 1
+			DOWNLOADBANNER	ooobanner_ooop.bmp
+			DOWNLOADBITMAP	ooobitmap_ooop.bmp
+			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
+			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
+			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_LAYOUT_STYLE 0
+            REGISTRATION_PRODUCT OxygenOffice
+            REGISTRATION_CID 926117
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+		}
+		active			1
+		compression		5
+		script			setup_osljre
+		downloadname	OOOP_{productversion}_{os}_installwjre_{languages}
+		langpackdownloadname	OOOP_{productversion}_languagepack_{os}_installwjre_{languages}
+		helppackdownloadname	OOOP_{productversion}_helppack_{os}_installwjre_{languages}
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
+	}
 }
