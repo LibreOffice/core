@@ -347,7 +347,7 @@ INTERACTIVE VARIABLES:
 
        ENABLE_PCH      If not empty, use precompiled headers (Windows only).
        CFLAGS          Add as compiler flags for plain c compilation.
-       CXXFLAGSX       Add as compiler flags for c++ compilation.
+       CXXFLAGS        Add as compiler flags for c++ compilation.
        gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
        gb_COLOR        Use ASCII color output.
        gb_TITLES       Show progress in terminal title.
