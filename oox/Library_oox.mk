@@ -106,50 +106,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 	oox/source/core/xmlfilterbase \
 	oox/source/docprop/docprophandler \
 	oox/source/docprop/ooxmldocpropimport \
-	oox/source/drawingml/clrscheme \
-	oox/source/drawingml/clrschemecontext \
-	oox/source/drawingml/color \
-	oox/source/drawingml/colorchoicecontext \
-	oox/source/drawingml/connectorshapecontext \
-	oox/source/drawingml/customshapegeometry \
-	oox/source/drawingml/customshapeproperties \
-	oox/source/drawingml/drawingmltypes \
-	oox/source/drawingml/embeddedwavaudiofile \
-	oox/source/drawingml/fillproperties \
-	oox/source/drawingml/fillpropertiesgroupcontext \
-	oox/source/drawingml/graphicshapecontext \
-	oox/source/drawingml/guidcontext \
-	oox/source/drawingml/hyperlinkcontext \
-	oox/source/drawingml/lineproperties \
-	oox/source/drawingml/linepropertiescontext \
-	oox/source/drawingml/objectdefaultcontext \
-	oox/source/drawingml/shape \
-	oox/source/drawingml/shapecontext \
-	oox/source/drawingml/shapegroupcontext \
-	oox/source/drawingml/shapepropertiescontext \
-	oox/source/drawingml/shapestylecontext \
-	oox/source/drawingml/spdefcontext \
-	oox/source/drawingml/textbody \
-	oox/source/drawingml/textbodycontext \
-	oox/source/drawingml/textbodyproperties \
-	oox/source/drawingml/textbodypropertiescontext \
-	oox/source/drawingml/textcharacterproperties \
-	oox/source/drawingml/textcharacterpropertiescontext \
-	oox/source/drawingml/textfield \
-	oox/source/drawingml/textfieldcontext \
-	oox/source/drawingml/textfont \
-	oox/source/drawingml/textliststyle \
-	oox/source/drawingml/textliststylecontext \
-	oox/source/drawingml/textparagraph \
-	oox/source/drawingml/textparagraphproperties \
-	oox/source/drawingml/textparagraphpropertiescontext \
-	oox/source/drawingml/textrun \
-	oox/source/drawingml/textspacingcontext \
-	oox/source/drawingml/texttabstoplistcontext \
-	oox/source/drawingml/theme \
-	oox/source/drawingml/themeelementscontext \
-	oox/source/drawingml/themefragmenthandler \
-	oox/source/drawingml/transform2dcontext \
 	oox/source/drawingml/chart/axiscontext \
 	oox/source/drawingml/chart/axisconverter \
 	oox/source/drawingml/chart/axismodel \
@@ -177,12 +133,36 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 	oox/source/drawingml/chart/typegroupcontext \
 	oox/source/drawingml/chart/typegroupconverter \
 	oox/source/drawingml/chart/typegroupmodel \
+	oox/source/drawingml/clrscheme \
+	oox/source/drawingml/clrschemecontext \
+	oox/source/drawingml/color \
+	oox/source/drawingml/colorchoicecontext \
+	oox/source/drawingml/connectorshapecontext \
+	oox/source/drawingml/customshapegeometry \
+	oox/source/drawingml/customshapeproperties \
 	oox/source/drawingml/diagram/datamodelcontext \
 	oox/source/drawingml/diagram/diagram \
 	oox/source/drawingml/diagram/diagramdefinitioncontext \
 	oox/source/drawingml/diagram/diagramfragmenthandler \
 	oox/source/drawingml/diagram/diagramlayoutatoms \
 	oox/source/drawingml/diagram/layoutnodecontext \
+	oox/source/drawingml/drawingmltypes \
+	oox/source/drawingml/embeddedwavaudiofile \
+	oox/source/drawingml/fillproperties \
+	oox/source/drawingml/fillpropertiesgroupcontext \
+	oox/source/drawingml/graphicshapecontext \
+	oox/source/drawingml/guidcontext \
+	oox/source/drawingml/hyperlinkcontext \
+	oox/source/drawingml/lineproperties \
+	oox/source/drawingml/linepropertiescontext \
+	oox/source/drawingml/objectdefaultcontext \
+	oox/source/drawingml/shape \
+	oox/source/drawingml/shapecontext \
+	oox/source/drawingml/shapegroupcontext \
+	oox/source/drawingml/shapepropertiescontext \
+	oox/source/drawingml/shapepropertymap \
+	oox/source/drawingml/shapestylecontext \
+	oox/source/drawingml/spdefcontext \
 	oox/source/drawingml/table/tablebackgroundstylecontext \
 	oox/source/drawingml/table/tablecell \
 	oox/source/drawingml/table/tablecellcontext \
@@ -198,6 +178,27 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 	oox/source/drawingml/table/tablestylelistfragmenthandler \
 	oox/source/drawingml/table/tablestylepart \
 	oox/source/drawingml/table/tablestyletextstylecontext \
+	oox/source/drawingml/textbody \
+	oox/source/drawingml/textbodycontext \
+	oox/source/drawingml/textbodyproperties \
+	oox/source/drawingml/textbodypropertiescontext \
+	oox/source/drawingml/textcharacterproperties \
+	oox/source/drawingml/textcharacterpropertiescontext \
+	oox/source/drawingml/textfield \
+	oox/source/drawingml/textfieldcontext \
+	oox/source/drawingml/textfont \
+	oox/source/drawingml/textliststyle \
+	oox/source/drawingml/textliststylecontext \
+	oox/source/drawingml/textparagraph \
+	oox/source/drawingml/textparagraphproperties \
+	oox/source/drawingml/textparagraphpropertiescontext \
+	oox/source/drawingml/textrun \
+	oox/source/drawingml/textspacingcontext \
+	oox/source/drawingml/texttabstoplistcontext \
+	oox/source/drawingml/theme \
+	oox/source/drawingml/themeelementscontext \
+	oox/source/drawingml/themefragmenthandler \
+	oox/source/drawingml/transform2dcontext \
 	oox/source/dump/biffdumper \
 	oox/source/dump/dffdumper \
 	oox/source/dump/dumperbase \
@@ -288,7 +289,9 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 	oox/source/xls/connectionsbuffer \
 	oox/source/xls/connectionsfragment \
 	oox/source/xls/defnamesbuffer \
+	oox/source/xls/drawingbase \
 	oox/source/xls/drawingfragment \
+	oox/source/xls/drawingmanager \
 	oox/source/xls/excelchartconverter \
 	oox/source/xls/excelfilter \
 	oox/source/xls/excelhandlers \
@@ -310,9 +313,9 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 	oox/source/xls/richstringcontext \
 	oox/source/xls/scenariobuffer \
 	oox/source/xls/scenariocontext \
-	oox/source/xls/sharedformulabuffer \
 	oox/source/xls/sharedstringsbuffer \
 	oox/source/xls/sharedstringsfragment \
+	oox/source/xls/sheetdatabuffer \
 	oox/source/xls/sheetdatacontext \
 	oox/source/xls/stylesbuffer \
 	oox/source/xls/stylesfragment \
