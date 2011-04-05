@@ -82,24 +82,24 @@ $(eval $(foreach method,\
 	add_cobjects \
 	add_cxxobject \
 	add_cxxobjects \
+	add_exception_objects \
+	add_executable_objects \
+	add_library_objects \
+	add_linked_libs \
+	add_linked_static_libs \
+	add_noexception_objects \
 	add_objcxxobject \
 	add_objcxxobjects \
-	add_exception_objects \
-	add_noexception_objects \
+	add_package_headers \
+	add_precompiled_header \
+	add_sdi_headers \
 	set_cflags \
 	set_cxxflags \
-	set_objcxxflags \
 	set_defs \
 	set_include \
 	set_ldflags \
 	set_library_path_flags \
-	add_linked_libs \
-	add_linked_static_libs \
-	add_package_headers \
-	add_sdi_headers \
-	add_precompiled_header \
-	add_extra_object \
-	add_extra_objects \
+	set_objcxxflags \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))
