@@ -127,7 +127,7 @@ gb__ENV_CFLAGS := $(ENVCFLAGS)
 endif
 endif
 ifneq ($(strip $(CXXFLAGS)),)
-gb__ENV_CXXFLAGS := $(CFLAGS)
+gb__ENV_CXXFLAGS := $(CXXFLAGS)
 else
 # TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGSCXX)),)
