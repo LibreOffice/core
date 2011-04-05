@@ -3730,41 +3730,29 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
 
 void SelectionManager::dispatchEvent( int millisec )
 {
-    pollfd aPollFD;
-    XEvent event;
+    // acquire the mutex to prevent other threads
+    // from using the same X connection
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
-    // query socket handle to poll on
-    aPollFD.fd      = ConnectionNumber( m_pDisplay );
-    aPollFD.events  = POLLIN;
-    aPollFD.revents = 0;
-
-    // wait for activity (outside the xlib)
-    if( poll( &aPollFD, 1, millisec ) > 0 )
+    if( !XPending( m_pDisplay ))
+    { // wait for any events if none are already queued
+        pollfd aPollFD;
+        aPollFD.fd      = XConnectionNumber( m_pDisplay );
+        aPollFD.events  = POLLIN;
+        aPollFD.revents = 0;
+        // release mutex for the time of waiting for possible data
+        aGuard.clear();
+        if( poll( &aPollFD, 1, millisec ) <= 0 )
+            return;
+        aGuard.reset();
+    }
+    while( XPending( m_pDisplay ))
     {
-        // now acquire the mutex to prevent other threads
-        // from using the same X connection
-        osl::ResettableMutexGuard aGuard(m_aMutex);
-
-        // prevent that another thread already ate the input
-        // this can happen if e.g. another thread does
-        // an X request getting a response. the response
-        // would be removed from the queue and we would end up
-        // with an empty socket here
-        if( poll( &aPollFD, 1, 0 ) > 0 )
-        {
-            int nPending = 1;
-            while( nPending )
-            {
-                nPending = XPending( m_pDisplay );
-                if( nPending )
-                {
-                    XNextEvent( m_pDisplay, &event );
-                    aGuard.clear();
-                    handleXEvent( event );
-                    aGuard.reset();
-                }
-            }
-        }
+        XEvent event;
+        XNextEvent( m_pDisplay, &event );
+        aGuard.clear();
+        handleXEvent( event );
+        aGuard.reset();
     }
 }
 
