@@ -1435,7 +1435,7 @@ case "$host_os" in
         test_cups=no
         _os=GNU
         ;;
-    cygwin*) # Windows
+    cygwin*|interix*) # Windows
         test_cups=no
         test_randr=no
         test_freetype=no
