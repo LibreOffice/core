@@ -308,7 +308,7 @@ namespace dbaui
             if(xSupplier.is())
             {
                 m_pImpl->m_xFormatter = Reference< XNumberFormatter >(getORB()
-                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                    ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRING("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");
