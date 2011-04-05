@@ -73,7 +73,7 @@ endef
 define gb_Package_add_customtarget
 $(call gb_Package_get_preparation_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
 $(call gb_Package_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
-$(call gb_CustomTarget_CustomTarget,$(2))
+$(eval $(call gb_CustomTarget_CustomTarget,$(2),$(3)))
 
 endef
 
