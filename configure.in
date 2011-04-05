@@ -4117,11 +4117,12 @@ elif test -n "$with_system_python" -o -n "$with_system_libs" && \
    AC_MSG_RESULT([external])
    AM_PATH_PYTHON([2.2])
 
-   python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
-   python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
-   python_libs=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('LIBS');"`
+   python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
+   python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
+   python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
+   python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
    PYTHON_CFLAGS="-I$python_include"
-   PYTHON_LIBS="-lpython$python_version $python_libs"
+   PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
 fi
 if test "$with_system_python" = "yes" ; then
    SYSTEM_PYTHON=YES
