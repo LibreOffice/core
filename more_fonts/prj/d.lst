@@ -9,3 +9,4 @@ mkdir: %COMMON_DEST%\pck%_EXT%
 ..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\OFL.txt	%COMMON_DEST%\pck%_EXT%\LICENSE_gentium
 ..\%__SRC%\misc\build\LinLibertineG\*.ttf		%COMMON_DEST%\pck%_EXT%\*.ttf
 ..\%__SRC%\misc\build\LinLibertineG\OFL.txt	%COMMON_DEST%\pck%_EXT%\LICENSE_LinLibertineG
+..\%__SRC%\misc\build\agfa-monotype-fonts\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
