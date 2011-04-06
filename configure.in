@@ -577,6 +577,13 @@ AC_ARG_WITH(afms,
          are known to be available.]),
 ,)
 
+AC_ARG_WITH(agfa-monotype-fonts,
+     AS_HELP_STRING([--with-agfa-monotype-fonts],
+          [Do not include the proprietary Agfa Monotype fonts
+           (even if present) in the LibreOffice installation
+           set.])
+,)
+
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -7290,6 +7297,18 @@ else
   SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
 fi
 AC_SUBST(WITH_FONTS)
+
+AC_MSG_CHECKING([whether to include Agfa Monotype fonts])
+if test "$with_agfa_monotype_fonts" = "yes" ; then
+  AC_MSG_RESULT([yes])
+  WITH_AGFA_MONOTYPE_FONTS=YES
+  SCPDEFS="$SCPDEFS -DWITH_AGFA_MONOTYPE_FONTS"
+  BUILD_TYPE="$BUILD_TYPE AGFA_MONOTYPE_FONTS"
+else
+  AC_MSG_RESULT([no])
+  WITH_AGFA_MONOTYPE_FONTS=NO
+fi
+AC_SUBST(WITH_AGFA_MONOTYPE_FONTS)
 
 dnl ===================================================================
 dnl Test whether to include ppds
