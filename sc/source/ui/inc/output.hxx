@@ -237,6 +237,10 @@ private:
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
     void DrawEditStandard(DrawEditParam& rParam);
+    void DrawEditBottomTop(DrawEditParam& rParam);
+    void DrawEditTopBottom(DrawEditParam& rParam);
+    void DrawEditStacked(DrawEditParam& rParam);
+    void DrawEditAsianVertical(DrawEditParam& rParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,

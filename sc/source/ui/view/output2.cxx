@@ -2806,7 +2806,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                 // reset adjustment for the next cell
                 rParam.mpOldPattern = NULL;
         }
-        else
+        else if (!rParam.isVerticallyOriented())
         {
             if (rParam.meHorJust==SVX_HOR_JUSTIFY_RIGHT)
                 aLogicStart.X() += nAvailWidth - nEngineWidth;
@@ -3050,6 +3050,22 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
         lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
     }
+}
+
+void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
+{
+}
+
+void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
+{
+}
+
+void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
+{
+}
+
+void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
+{
 }
 
 void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
