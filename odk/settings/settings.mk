@@ -502,9 +502,11 @@ PLATFORM=kfreebsd
 ifeq "$(PROCTYPE)" "x86_64"
 PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
 UNOPKG_PLATFORM=kFreeBSD_x86_64
+STLPORT=no
 else
 PACKAGE_LIB_DIR=kfreebsd_x86.plt
 UNOPKG_PLATFORM=kFreeBSD_x86
+STLPORT=no
 endif
 else
 PLATFORM=freebsd
@@ -568,6 +570,10 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT)" "yes"
+endif
+else
+STLPORTLIB=
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
