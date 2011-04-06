@@ -209,8 +209,7 @@ sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
 
 sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
-        sal_Bool bRes = sal_False;
-    return bRes;
+    return sal_False;
 }
 
 
