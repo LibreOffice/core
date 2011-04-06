@@ -3066,18 +3066,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     {
         // ignore orientation/rotation if "repeat" is active
         rParam.meOrient = SVX_ORIENTATION_STANDARD;
-        nAttrRotate = 0;
-
-        // #i31843# "repeat" with "line breaks" is treated as default alignment
-        // (but rotation is still disabled)
-        if ( rParam.mbBreak )
-            rParam.meHorJust = SVX_HOR_JUSTIFY_STANDARD;
-    }
-    if ( rParam.meOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
-    {
-        //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
-        //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
-        bHidden = true;     // gedreht wird getrennt ausgegeben
+        DrawEditStandard(rParam);
+        return;
     }
 
     rParam.mbAsianVertical = (rParam.meOrient == SVX_ORIENTATION_STACKED) &&
@@ -3240,7 +3230,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         nNeededPixel = pRefDevice->LogicToPixel(Size(nNeededPixel,0)).Width();
     nNeededPixel += nLeftM + nRightM;
 
-    if ( ( !rParam.mbBreak && rParam.meOrient != SVX_ORIENTATION_STACKED ) || rParam.mbAsianVertical || bShrink )
+    if (!rParam.mbBreak || rParam.mbAsianVertical || bShrink)
     {
         // for break, the first GetOutputArea call is sufficient
         GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
@@ -3249,9 +3239,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
         if ( bShrink )
         {
-            bool bWidth = ( rParam.meOrient == SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical );
             ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
-                nLeftM, nTopM, nRightM, nBottomM, bWidth,
+                nLeftM, nTopM, nRightM, nBottomM, false,
                 sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
                 nEngineWidth, nEngineHeight, nNeededPixel,
                 aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
@@ -3308,15 +3297,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
-
-        if ( eOutHorJust != SVX_HOR_JUSTIFY_LEFT && rParam.meOrient == SVX_ORIENTATION_STANDARD )
-        {
-            aPaperSize.Width() = nNeededPixel + 1;
-            if (rParam.mbPixelToLogic)
-                rParam.mpEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
-            else
-                rParam.mpEngine->SetPaperSize(aPaperSize);
-        }
     }
 
     long nStartX = aAreaParam.maAlignRect.Left();
@@ -3325,15 +3305,13 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
     long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
-    if ( rParam.mbBreak || rParam.meOrient != SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical )
+    if ( rParam.mbBreak || rParam.mbAsianVertical )
     {
         //  text with automatic breaks is aligned only within the
         //  edit engine's paper size, the output of the whole area
         //  is always left-aligned
 
         nStartX += nLeftM;
-        if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM && rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK)
-            nStartX += aPaperSize.Height();
     }
     else
     {
@@ -3410,7 +3388,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         //  Only with automatic line breaks, to avoid having to find
         //  the cells with the horizontal end of the text again.
         if ( nEngineHeight - aCellSize.Height() > 100 &&
-             ( rParam.mbBreak || rParam.meOrient == SVX_ORIENTATION_STACKED ) &&
+             rParam.mbBreak &&
              !rParam.mbAsianVertical && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
@@ -3460,26 +3438,14 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
     else
         aLogicStart = Point(nStartX, nStartY);
-    if ( rParam.meOrient!=SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical || !rParam.mbBreak )
+    if (rParam.mbAsianVertical || !rParam.mbBreak)
     {
         long nAvailWidth = aCellSize.Width();
         // space for AutoFilter is already handled in GetOutputArea
 
         //  horizontal alignment
 
-        if (rParam.meOrient==SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical)
-        {
-            if (rParam.adjustHorAlignment(rParam.mpEngine))
-                // reset adjustment for the next cell
-                rParam.mpOldPattern = NULL;
-        }
-        else if (!rParam.isVerticallyOriented())
-        {
-            if (rParam.meHorJust==SVX_HOR_JUSTIFY_RIGHT)
-                aLogicStart.X() += nAvailWidth - nEngineWidth;
-            else if (rParam.meHorJust==SVX_HOR_JUSTIFY_CENTER)
-                aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
-        }
+        // (do nothing)
     }
 
     if ( rParam.mbAsianVertical )
@@ -3497,8 +3463,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             aLogicStart.Y() += nTopM;
     }
 
-    if (!rParam.mbAsianVertical && !rParam.isVerticallyOriented() &&
-        (rParam.meOrient == SVX_ORIENTATION_STANDARD || rParam.meOrient == SVX_ORIENTATION_STACKED || !rParam.mbBreak))
+    if (!rParam.mbAsianVertical && !rParam.isVerticallyOriented() && !rParam.mbBreak)
     {
         if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
             rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
@@ -3535,119 +3500,61 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    short nOriVal = 0; // Angle of orientation
-    if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
+    short nOriVal = 900; // Angle of orientation
+    if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
     {
-        nOriVal = 2700;
-        if (rParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
-        {
-            aLogicStart.X() += nEngineWidth;
-            if (!rParam.mbBreak)
-            {
-                // Set the paper width to text size.
-                Size aPSize = rParam.mpEngine->GetPaperSize();
-                aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-                rParam.mpEngine->SetPaperSize(aPSize);
-
-                long nGap = 0;
-                long nTopOffset = 0; // offset by top margin
-                if (rParam.mbPixelToLogic)
-                {
-                    nGap = pRefDevice->LogicToPixel(aPSize).Width() - pRefDevice->LogicToPixel(aCellSize).Height();
-                    nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
-                    nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-                }
-                else
-                {
-                    nGap = aPSize.Width() - aCellSize.Height();
-                    nTopOffset = nTopM;
-                }
-                aLogicStart.Y() += nTopOffset;
-
-                switch (rParam.meVerJust)
-                {
-                    case SVX_VER_JUSTIFY_STANDARD:
-                    case SVX_VER_JUSTIFY_BOTTOM:
-                        // align to bottom
-                        aLogicStart.Y() -= nGap;
-                    break;
-                    case SVX_VER_JUSTIFY_CENTER:
-                        // center it.
-                        aLogicStart.Y() -= nGap / 2;
-                    break;
-                    case SVX_VER_JUSTIFY_BLOCK:
-                    case SVX_VER_JUSTIFY_TOP:
-                        // align to top (do nothing)
-                    default:
-                        ;
-                }
-            }
-        }
+        Size aPSize = rParam.mpEngine->GetPaperSize();
+        aPSize.Width() = aCellSize.Height();
+        rParam.mpEngine->SetPaperSize(aPSize);
+        aLogicStart.Y() +=
+            rParam.mbBreak ? aPSize.Width() : nEngineHeight;
     }
-    else if (rParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
+    else
     {
-        nOriVal = 900;
-        if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
+        // Note that the "paper" is rotated 90 degrees to the left, so
+        // paper's width is in vertical direction.  Also, the whole text
+        // is on a single line, as text wrap is not in effect.
+
+        // Set the paper width to be the width of the text.
+        Size aPSize = rParam.mpEngine->GetPaperSize();
+        aPSize.Width() = rParam.mpEngine->CalcTextWidth();
+        rParam.mpEngine->SetPaperSize(aPSize);
+
+        long nGap = 0;
+        long nTopOffset = 0;
+        if (rParam.mbPixelToLogic)
         {
-            Size aPSize = rParam.mpEngine->GetPaperSize();
-            aPSize.Width() = aCellSize.Height();
-            rParam.mpEngine->SetPaperSize(aPSize);
-            aLogicStart.Y() +=
-                rParam.mbBreak ? aPSize.Width() : nEngineHeight;
+            nGap = pRefDevice->LogicToPixel(aCellSize).Height() - pRefDevice->LogicToPixel(aPSize).Width();
+            nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
+            nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
         }
         else
         {
-            // Note that the "paper" is rotated 90 degrees to the left, so
-            // paper's width is in vertical direction.  Also, the whole text
-            // is on a single line, as text wrap is not in effect.
-
-            // Set the paper width to be the width of the text.
-            Size aPSize = rParam.mpEngine->GetPaperSize();
-            aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-            rParam.mpEngine->SetPaperSize(aPSize);
-
-            long nGap = 0;
-            long nTopOffset = 0;
-            if (rParam.mbPixelToLogic)
-            {
-                nGap = pRefDevice->LogicToPixel(aCellSize).Height() - pRefDevice->LogicToPixel(aPSize).Width();
-                nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
-                nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-            }
-            else
-            {
-                nGap = aCellSize.Height() - aPSize.Width();
-                nTopOffset = nTopM;
-            }
-
-            // First, align text to bottom.
-            aLogicStart.Y() += aCellSize.Height();
-            aLogicStart.Y() += nTopOffset;
-
-            switch (rParam.meVerJust)
-            {
-                case SVX_VER_JUSTIFY_STANDARD:
-                case SVX_VER_JUSTIFY_BOTTOM:
-                    // align to bottom (do nothing).
-                break;
-                case SVX_VER_JUSTIFY_CENTER:
-                    // center it.
-                    aLogicStart.Y() -= nGap / 2;
-                break;
-                case SVX_VER_JUSTIFY_BLOCK:
-                case SVX_VER_JUSTIFY_TOP:
-                    // align to top
-                    aLogicStart.Y() -= nGap;
-                default:
-                    ;
-            }
+            nGap = aCellSize.Height() - aPSize.Width();
+            nTopOffset = nTopM;
         }
-    }
-    else if (rParam.meOrient == SVX_ORIENTATION_STACKED)
-    {
-        Size aPaperLogic = rParam.mpEngine->GetPaperSize();
-        aPaperLogic.Width() = nEngineWidth;
-        rParam.mpEngine->SetPaperSize(aPaperLogic);
+
+        // First, align text to bottom.
+        aLogicStart.Y() += aCellSize.Height();
+        aLogicStart.Y() += nTopOffset;
+
+        switch (rParam.meVerJust)
+        {
+            case SVX_VER_JUSTIFY_STANDARD:
+            case SVX_VER_JUSTIFY_BOTTOM:
+                // align to bottom (do nothing).
+            break;
+            case SVX_VER_JUSTIFY_CENTER:
+                // center it.
+                aLogicStart.Y() -= nGap / 2;
+            break;
+            case SVX_VER_JUSTIFY_BLOCK:
+            case SVX_VER_JUSTIFY_TOP:
+                // align to top
+                aLogicStart.Y() -= nGap;
+            default:
+                ;
+        }
     }
 
     if ( rParam.mpEngine->IsRightToLeft( 0 ) )
