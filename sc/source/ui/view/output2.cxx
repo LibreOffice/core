@@ -3070,18 +3070,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         return;
     }
 
-    rParam.mbAsianVertical = (rParam.meOrient == SVX_ORIENTATION_STACKED) &&
-        lcl_GetBoolValue(*rParam.mpPattern, ATTR_VERTICAL_ASIAN, rParam.mpCondSet);
-
-    if ( rParam.mbAsianVertical )
-    {
-        // in asian mode, use EditEngine::SetVertical instead of EE_CNTRL_ONECHARPERLINE
-        rParam.meOrient = SVX_ORIENTATION_STANDARD;
-        // default alignment for asian vertical mode is top-right
-        if ( rParam.meHorJust == SVX_HOR_JUSTIFY_STANDARD )
-            rParam.meHorJust = SVX_HOR_JUSTIFY_RIGHT;
-    }
-
     SvxCellHorJustify eOutHorJust =
         ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
         ( rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT );
@@ -3132,7 +3120,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     if (rParam.mbPixelToLogic)
     {
         Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
-        if ( rParam.mbBreak && !rParam.mbAsianVertical && pRefDevice != pFmtDevice )
+        if ( rParam.mbBreak && pRefDevice != pFmtDevice )
         {
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
@@ -3150,10 +3138,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //
     //  Fill the EditEngine (cell attributes and text)
     //
-
-    // default alignment for asian vertical mode is top-right
-    if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
-        rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
 
     rParam.updateEnginePattern(bUseStyleColor);
     rParam.setAlignmentItems();
@@ -3176,7 +3160,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         {
             rParam.mpEngine->SetText(*pData);
 
-            if ( rParam.mbBreak && !rParam.mbAsianVertical && pData->HasField() )
+            if ( rParam.mbBreak && pData->HasField() )
             {
                 //  Fields aren't wrapped, so clipping is enabled to prevent
                 //  a field from being drawn beyond the cell size
@@ -3230,7 +3214,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         nNeededPixel = pRefDevice->LogicToPixel(Size(nNeededPixel,0)).Width();
     nNeededPixel += nLeftM + nRightM;
 
-    if (!rParam.mbBreak || rParam.mbAsianVertical || bShrink)
+    if (!rParam.mbBreak || bShrink)
     {
         // for break, the first GetOutputArea call is sufficient
         GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
@@ -3305,7 +3289,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
     long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
-    if ( rParam.mbBreak || rParam.mbAsianVertical )
+    if (rParam.mbBreak)
     {
         //  text with automatic breaks is aligned only within the
         //  edit engine's paper size, the output of the whole area
@@ -3388,8 +3372,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         //  Only with automatic line breaks, to avoid having to find
         //  the cells with the horizontal end of the text again.
         if ( nEngineHeight - aCellSize.Height() > 100 &&
-             rParam.mbBreak &&
-             !rParam.mbAsianVertical && bMarkClipped &&
+             rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
             CellInfo* pClipMarkCell = NULL;
@@ -3438,7 +3421,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
     else
         aLogicStart = Point(nStartX, nStartY);
-    if (rParam.mbAsianVertical || !rParam.mbBreak)
+    if (!rParam.mbBreak)
     {
         long nAvailWidth = aCellSize.Width();
         // space for AutoFilter is already handled in GetOutputArea
@@ -3448,13 +3431,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         // (do nothing)
     }
 
-    if ( rParam.mbAsianVertical )
-    {
-        // paper size is subtracted below
-        aLogicStart.X() += nEngineWidth;
-    }
-
-    if ( (rParam.mbAsianVertical || rParam.isVerticallyOriented()) && rParam.mbBreak )
+    if (rParam.isVerticallyOriented() && rParam.mbBreak)
     {
         // vertical adjustment is within the EditEngine
         if (rParam.mbPixelToLogic)
@@ -3463,7 +3440,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             aLogicStart.Y() += nTopM;
     }
 
-    if (!rParam.mbAsianVertical && !rParam.isVerticallyOriented() && !rParam.mbBreak)
+    if (!rParam.isVerticallyOriented() && !rParam.mbBreak)
     {
         if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
             rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
@@ -3573,7 +3550,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     // bMoveClipped handling has been replaced by complete alignment
     // handling (also extending to the left).
 
-    if ( bSimClip && !nOriVal && !rParam.mbAsianVertical )
+    if ( bSimClip && !nOriVal)
     {
         //  kein hartes Clipping, aber nur die betroffenen
         //  Zeilen ausgeben
@@ -3584,12 +3561,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     }
     else
     {
-        if (rParam.mbAsianVertical)
-        {
-            //  with SetVertical, the start position is top left of
-            //  the whole output area, not the text itself
-            aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
-        }
         rParam.mpEngine->Draw( pDev, aLogicStart, nOriVal );
     }
 
@@ -3611,15 +3582,10 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         if ( rParam.mbBreak )
         {
             Size aPaper = rParam.mpEngine->GetPaperSize();
-            if ( rParam.mbAsianVertical )
-                nURLHeight = aPaper.Height();
-            else
-                nURLWidth = aPaper.Width();
+            nURLWidth = aPaper.Width();
         }
         if ( rParam.isVerticallyOriented() )
             std::swap( nURLWidth, nURLHeight );
-        else if ( rParam.mbAsianVertical )
-            aURLStart.X() -= nURLWidth;
 
         Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
         lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
