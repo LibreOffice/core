@@ -58,7 +58,7 @@ class SfxBindings;
 #endif /* !ENABLE_LAYOUT_SFX_TABDIALOG*/
 
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef sal_uInt16*     (*GetTabPageRanges)(); // liefert internationale Which-Wert
+typedef sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 class SfxUs_Impl;
 
@@ -122,9 +122,9 @@ friend class SfxTabDialogController;
 
 protected:
     virtual short               Ok();
-    // wird im Sfx gel"oscht!
+    // Is deleted in Sfx!
     virtual SfxItemSet*         CreateInputItemSet( sal_uInt16 nId );
-    // wird *nicht* im Sfx gel"oscht!
+    // Is not deleted in Sfx!
     virtual const SfxItemSet*   GetRefreshedSet();
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual long                Notify( NotifyEvent& rNEvt );
@@ -152,18 +152,18 @@ public:
 
     void                AddTabPage( sal_uInt16 nId,
                                     CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
+                                    GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False);
     void                AddTabPage( sal_uInt16 nId,
                                     const String &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
+                                    GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False,
                                     sal_uInt16 nPos = TAB_APPEND);
     void                AddTabPage( sal_uInt16 nId,
                                     const Bitmap &rRiderBitmap,
                                     CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // darf 0 sein
+                                    GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False,
                                     sal_uInt16 nPos = TAB_APPEND);
 
@@ -185,7 +185,7 @@ public:
                             { return aTabCtrl.GetCurPageId(); }
     void                ShowPage( sal_uInt16 nId );
 
-                        // liefert ggf. per Map konvertierte lokale Slots
+    // may provide local slots converted by Map
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
@@ -284,12 +284,11 @@ public:
                             { bHasExchangeSupport = bNew; }
 
     enum sfxpg {
-        KEEP_PAGE = 0x0000,     // Fehlerbehandlung; Seite nicht wechseln
-            // 2. F"ullen eines ItemSets f"ur die Aktualilsierung
-            // "ubergeordneter Beispiele; dieser Pointer kann immer
-            // NULL sein!!
+      KEEP_PAGE = 0x0000,      // Error handling; page does not change
+        // 2. Fill an itemset for update
+        // parent examples, this pointer can be NULL all the time!
         LEAVE_PAGE = 0x0001,
-            // Set aktualisieren und andere Page aktualisieren
+        // Set, refresh and update other Page
         REFRESH_SET = 0x0002
     };
 

@@ -84,10 +84,10 @@ class Window;
 #define SFXWB_READONLY          WB_READONLY                 // ((WinBits)0x02000000)
 #define SFXWB_PATHDIALOG        WB_PATH                     // ((WinBits)0x00100000)
 #define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_SHOWALLFOLDER     0x10000000L     // alle Ordner auch Mail/News/...
-#define SFXWB_MULTISELECTION    0x20000000L     // Multiselection an
+#define SFXWB_SHOWALLFOLDER     0x10000000L     // All folders also mail/news/...
+#define SFXWB_MULTISELECTION    0x20000000L
 #define SFXWB_NOREMOTE          0x40000000L
-#define SFXWB_SHOWVERSIONS      0x80000000L     // Versionsauswahl anzeigen
+#define SFXWB_SHOWVERSIONS      0x80000000L
 
 #define SFXWB_GRAPHIC           0x00800000L     // FileOpen with link and preview box
 #define SFXWB_SHOWSTYLES        0x01000000L     // FileOpen with link and preview box and styles

@@ -93,7 +93,7 @@ class Point;
 
 // From embobj.hxx
 #define ASPECT_CONTENT      1
-#define ASPECT_THUMBNAIL    2 /* 120 * 120, 6 Farben DIB in MetaFile */
+#define ASPECT_THUMBNAIL    2 /* 120 * 120, 6 Colors DIB in MetaFile */
 #define ASPECT_ICON         4
 #define ASPECT_DOCPRINT     8
 #define ASPECT_ALL      (ASPECT_CONTENT | ASPECT_THUMBNAIL | ASPECT_ICON | ASPECT_DOCPRINT)
@@ -148,7 +148,7 @@ typedef sal_uInt32 SfxObjectShellFlags;
 #define SFX_TITLE_CAPTION  5
 #define SFX_TITLE_PICKLIST 6
 #define SFX_TITLE_HISTORY  7
-#define SFX_TITLE_MAXLEN   10   // ab hier sind das L"angenbegrenzungen
+#define SFX_TITLE_MAXLEN   10   // this gives the limits on length
 
 #define SFX_LOADED_MAINDOCUMENT 1
 #define SFX_LOADED_IMAGES       2
@@ -182,9 +182,9 @@ enum SfxObjectCreateMode
 
 /*====================================================================
 
-Die Klasse SfxObjectShell ist die Basisklasse f"ur SFx-Objekte, also
-f"ur Dokumente und Teile von Dokumenten, die als selbst"andige Objekte
-in fremde Objekte integriert werden k"onnen.
+The class SfxObjectShell is the base class for SFx-objects, ie documents
+and parts of documents that can be integrated as separate objects
+into foreign objects.
 
 ----------------------------------------------------------------------*/
 
@@ -199,13 +199,15 @@ friend struct ModifyBlocker_Impl;
 friend class SfxObjectShellLock;
 
 private:
-    struct SfxObjectShell_Impl* pImp;               // interne Daten
+    struct SfxObjectShell_Impl* pImp;     // internal data
 
-    SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
+    SfxMedium *                 pMedium;  // Description of the file for example
+                                          // storage that contains the object
     SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
-    SfxObjectCreateMode         eCreateMode;        // Zweck des Objekts
-    sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
-                                bIsTmp :1;          // temp. Storage
+    SfxObjectCreateMode         eCreateMode;      // Purpose of the object
+    sal_Bool                    bHasName :1,      // sal_True  := existing object,
+                                                  // sal_False := new object
+                                bIsTmp :1;        // temporary Storage
 
 private:
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
@@ -465,7 +467,7 @@ public:
     // Naming Interface
     void                        SetTitle( const String& rTitle );
     String                      GetTitle( sal_uInt16 nMaxLen = 0 ) const;
-    void                        InvalidateName();   // Zuruecksetzen auf unbenannt
+    void                        InvalidateName();  // Re-set to unnamed
 
     // DDE-Interface
     virtual long                DdeExecute( const String& rCmd );
@@ -482,10 +484,10 @@ public:
 
     // Contents
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
-    void                    SetStyleSheetPool( SfxStyleSheetBasePool *pBasePool ) {
+    void                     SetStyleSheetPool(SfxStyleSheetBasePool *pBasePool ) {
                                         pStyleSheetPool = pBasePool; }
 
-    //determine the position of the "Automatic" filter in the stylist
+    // Determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
     sal_uInt16                  GetAutoStyleFilterIndex();
     virtual sal_Bool            HasBasic() const;
@@ -496,7 +498,7 @@ public:
                                 GetDialogContainer();
     StarBASIC*                  GetBasic() const;
 
-    // Interface Dok-Inhalte, Organizer
+    // Interface Document content, Organizer
 #define INDEX_IGNORE USHRT_MAX
 
 #define CONTENT_STYLE 0
@@ -550,18 +552,18 @@ public:
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );
 
-                                // F"ur Docs, die zum Formatieren die Viewgr"o\se
-                                // ben"otigen
+                                // Documents, for which to format the view size
+
     virtual SfxObjectShell*     GetObjectShell();
 
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
-    // Nur uebergangsweise fuer die Applikationen !!!
+    // Only temporarily for the applications!
     void                        SetBaseModel( SfxBaseModel* pModel );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
-    // Nur uebergangsweise fuer die Applikationen !!!
+    // Only temporarily for the applications!
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
 
@@ -710,7 +712,7 @@ public:
     SAL_DLLPRIVATE void ExecView_Impl(SfxRequest &);
     SAL_DLLPRIVATE void StateView_Impl(SfxItemSet &);
 
-    // Laden-speichern public internals
+    // Load/Save public internals
     SAL_DLLPRIVATE sal_Bool ImportFromGeneratedStream_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );

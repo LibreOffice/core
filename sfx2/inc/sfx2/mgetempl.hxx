@@ -39,9 +39,9 @@
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
 
-/* erwartet:
-    SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
-    SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
+/* expected:
+    SID_TEMPLATE_NAME   :   In: StringItem, Name of Template
+    SID_TEMPLATE_FAMILY :   In: Family of Template
 */
 
 class SfxStyleFamilies;
@@ -79,7 +79,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
     String aBuf;
     sal_Bool bModified;
 
-        // initiale Daten des Styles
+    // initial data for the style
     String aName;
     String aFollow;
     String aParent;

@@ -1559,7 +1559,6 @@ const SfxItemSet* SfxTabDialog::GetOutputItemSet
 
 (
     sal_uInt16 nId  // the Id, under which the page was added at AddTabPage().
-                // hinzugefügt wurde.
 ) const
 {
     Data_Impl* pDataObject = Find( *pImpl->pData, nId );

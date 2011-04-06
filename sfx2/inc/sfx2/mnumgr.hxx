@@ -57,9 +57,9 @@ class SfxMenuManager
 {
 friend class SfxPopupMenuManager;
 
-    SfxVirtualMenu*         pMenu;          // das eigentliche Menu
+    SfxVirtualMenu*  pMenu;     // the actual Menu
     SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
-    sal_Bool                    bMenuBar;       // Popup oder MenuBar
+    sal_Bool         bMenuBar;  // Popup or MenuBar
     SfxBindings*            pBindings;
     ResMgr*                 pResMgr;
     sal_uInt32              nType;

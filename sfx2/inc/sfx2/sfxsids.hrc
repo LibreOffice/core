@@ -65,7 +65,7 @@
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
 #define SID_EXITANDRETURN                   (SID_SFX_START + 303)
 
-// SID_TITLE steht unter diesem Wert in chaos/cntids.hrc!!
+// SID_TITLE, this value below is given in chaos/cntids.hrc!!
 //#define SID_TITLE             (SID_SFX_START + 307)
 
 #define SID_CONTEXT                         (SID_SFX_START + 310)
@@ -108,7 +108,7 @@
 #define SID_PROGFILENAME                    (SID_SFX_START + 342)
 #define SID_SELECTION                       (SID_SFX_START + 346)
 
-// 360-400 siehe SID_MAIL_...
+// 360-400 see SID_MAIL_...
 
 // default-ids for help
 #define SID_HELPONHELP                      (SID_SFX_START + 400)
@@ -186,7 +186,7 @@
 #define SID_BROWSER                         (SID_SFX_START + 1318)
 #define SID_MACROEXECMODE                   (SID_SFX_START + 1319)
 
-// die Id steht mit diesem Wert in chaos/cntids.hrc!!
+// The Id value is given in chaos/cntids.hrc!!
 //#define SID_INTERNET_ONLINE       (SID_SFX_START + 1370)
 
 #define SID_FILTER_DATA                     (SID_SFX_START + 1375)
@@ -380,7 +380,7 @@
 #define SID_JSCALL                          (SID_SFX_START + 1382)
 #define SID_AUTOPILOTMENU                   (SID_SFX_START + 1381)
 
-// Floating Window Vorlagen
+// Floating Window Template
 #define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
 
 // Organizer
@@ -500,7 +500,7 @@
 #define SID_COPY                            (SID_SFX_START + 711)
 #define SID_PASTE                           (SID_SFX_START + 712)
 
-// steht unter diesem Wert in chaos/cntids.hrc!!!
+// Value below given in chaos/cntids.hrc!!!
 //#define SID_DELETE                (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
@@ -583,7 +583,7 @@
 #define SID_AUTOHIDE                        (SID_SFX_START + 932)
 #define SID_TOGGLENAVBAR                    (SID_SFX_START + 1603)
 
-// Item-Id f"ur die Ereigniszuweisen-Tabpage
+// Item-Id for the assinged event Tabpage
 #define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)
 
 #define SID_SAVECONFIG                      (SID_SFX_START + 930)
@@ -830,7 +830,7 @@
 #define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
 #define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
 
-// Automatisches update von Styles - Verwalten-TabPage
+// Automatic update of Styles - manage TabPage
 #define SID_ATTR_AUTO_STYLE_UPDATE      (SID_OPTIONS_START + 65)
 
 #define SID_SECURE_URL                  (SID_OPTIONS_START + 66)
@@ -887,7 +887,7 @@
 #define FID_SVX_START                       (SID_LIB_START + 500)
 #define FID_SEARCH_NOW                      (FID_SVX_START + 2)
 
-// SlotIds f"ur Basic -------------------------------------------------------
+// SlotIds for Basic -------------------------------------------------------
 #define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )
 #define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
 #define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
@@ -938,7 +938,7 @@
 #define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
 #define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
 
-// SlotIds f"ur Apps --------------------------------------------------------
+// SlotIds for Apps --------------------------------------------------------
 #define FN_PARAM                            (SID_SW_START + 1100)
 #define FN_PARAM_1                          (FN_PARAM+60)
 #define FN_PARAM_2                          (FN_PARAM+61)
@@ -948,7 +948,7 @@
 #define FN_PARAM_6                          (FN_PARAM+65)
 #define FN_PARAM_7                          (FN_PARAM+66)
 #define FN_PARAM_8                          (FN_PARAM+67)
-#define FN_FAX                              (SID_SW_START + 28)   /* Faxen */
+#define FN_FAX                              (SID_SW_START + 28)   /* Fax */
 
 #define SID_KEYFUNC_START                   (SID_SC_START + 521)
 #define SID_CURSORDOWN_SEL                  (SID_KEYFUNC_START + 0)

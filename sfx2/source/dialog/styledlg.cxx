@@ -59,8 +59,8 @@ SfxStyleDialog::SfxStyleDialog
 
     SfxTabDialog( pParent, rResId,
                   rStyle.GetItemSet().Clone(),
-                  // auch ohne ParentSupport TRUE "ubergeben, aber erweitert
-                  // um den StandardButton zu unterdr"ucken
+                  // return TRUE also without ParentSupport , but extended
+                  // to suppress the standardButton
                   rStyle.HasParentSupport() ? sal_True : 2,
                   pUserBtnTxt ),
 

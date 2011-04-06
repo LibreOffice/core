@@ -71,7 +71,7 @@ class Dialog;
 class Menu;
 class NotifyEvent;
 
-#define SFX_PRINTER_PRINTER          1  // ohne JOBSETUP => temporaer
+#define SFX_PRINTER_PRINTER               1  // without JOB SETUP => Temporary
 #define SFX_PRINTER_JOBSETUP         2
 #define SFX_PRINTER_OPTIONS          4
 #define SFX_PRINTER_CHG_ORIENTATION  8
@@ -92,7 +92,7 @@ enum SfxScrollingMode
     SCROLLING_DEFAULT
 };
 
-// "Geeicht" mit www.apple.com und Netscape 3.01
+// "Verified" using www.apple.com and Netscape 3.01
 #define DEFAULT_MARGIN_WIDTH 8
 #define DEFAULT_MARGIN_HEIGHT 12
 
@@ -100,19 +100,19 @@ enum SfxScrollingMode
 
 //  @[SfxViewShell-Flags]
 
-#define SFX_VIEW_HAS_PRINTOPTIONS    0x0010 /*  Options-Button und Options-
-                                                Dialog im PrintDialog */
-#define SFX_VIEW_CAN_PRINT           0x0020 /*  enabled Printing ohne Printer
-                                                erzeugen zu m"ussen */
-#define SFX_VIEW_NO_SHOW             0x0040 /*  Window der ViewShell darf nicht
-                                                automatisch geshowed werden */
-#define SFX_VIEW_NO_NEWWINDOW       0x0100      /* keine weitere View erlauben */
+#define SFX_VIEW_HAS_PRINTOPTIONS  0x0010 /* Options-Button and Options-
+                                             Dialog in PrintDialog */
+#define SFX_VIEW_CAN_PRINT         0x0020 /* Printing enabled without having
+                                             to create a Printer */
+#define SFX_VIEW_NO_SHOW           0x0040 /* Window of the ViewShell shall
+                                             not be showed automatically */
+#define SFX_VIEW_NO_NEWWINDOW      0x0100 /* Allow N View */
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die SfxViewShell-Flags steuern das Verhalten der SfxViewShell f"ur die
-    Dauer ihrer Lebenszeit. Sie werden im Konstruktor der <SfxViewShell>
-    angegeben.
+    The SfxViewShell flags control the behavior of SfxViewShell for the
+    duration of its lifetime. They are defined in the constructor of
+    <SfxViewShell>.
 */
 
 //=========================================================================
@@ -186,7 +186,7 @@ public:
 
     static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
 
-    // Ctoren/Dtoren Initialisierung
+    // Initialize Constructors/Destructors
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
 
@@ -208,7 +208,7 @@ public:
     virtual void                JumpToMark( const String& rMark );
     void                        VisAreaChanged(const Rectangle& rRect);
 
-    // Verhaltens-Flags
+    // Behavior Flags
     SfxScrollingMode            GetScrollingMode() const;
     void                        SetScrollingMode( SfxScrollingMode eMode );
 
@@ -250,7 +250,7 @@ public:
     virtual JobSetup            GetJobSetup() const;
     Printer*                    GetActivePrinter() const;
 
-    // Workingset
+    // Working set
     virtual void                WriteUserData( String&, sal_Bool bBrowse = sal_False );
     virtual void                ReadUserData( const String&, sal_Bool bBrowse = sal_False );
     virtual void                WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -338,19 +338,18 @@ public:
 
 inline void SfxViewShell::LostFocus() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode mu\s vom Applikationsentwickler gerufen werden, wenn
-    das Edit-Window den Focus verloren hat. Der SFx hat so z.B. die
-    M"oglichkeit, den Accelerator auszuschalten, damit in bestimmten
-    Floating-Windows die Cursor-Tasten, die Delete-Taste etc. funktionieren,
-    obwohl sie "uber den Accelerator umdefiniert sind.
+    This method has to be  called by the application developer, if the edit
+    window has lost the focus. The SFx has for example the ability to turn off
+    the accelerator, so that the cursor keys, the Delete button, etc. work in
+    certain Floating-Windows, even though they are redefined by the
+    Accelerator.
 
+    [Note]
 
-    [Anmerkung]
-
-    <StarView> liefert leider keine M"oglichkeit, solche Events
-    'von der Seite' einzuh"angen.
+    <StarView> unfortunatly does not provide the possibility to define
+    such events 'from the side'.
 */
 
 {
@@ -360,16 +359,14 @@ inline void SfxViewShell::LostFocus() const
 
 inline SfxViewFrame* SfxViewShell::GetViewFrame() const
 
-/*  [Bechreibung]
+/*  [Description]
 
-    Diese Methode liefert einen Pointer auf die <SfxViewFrame>-Instanz,
-    in der diese SfxViewShell dargestellt wird. Dieses ist die Instanz,
-    die imKonstruktor durchgereicht wurde. Es ist gew"ahrleistet, da\s
-    der zur"uckgegebene Pointer auf eine g"ultige SfxViewFrame-Instanz
-    zeigt.
+    This method returns a pointer to the <SfxViewFrame> Instance in which
+    this SfxViewShell is displayed. This is the instance that was passed
+    on in the constructor. It is guaranteed that the returned pointer
+    points on the valid SfxViewFrame instance.
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxShell::GetFrame()const>
 */

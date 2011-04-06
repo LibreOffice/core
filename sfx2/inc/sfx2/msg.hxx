@@ -36,42 +36,51 @@
 
 //--------------------------------------------------------------------
 
-#define SFX_SLOT_CACHABLE          0x0001L // exklusiv zu VOLATILE, default
-#define SFX_SLOT_VOLATILE          0x0002L // per Timer alle 2s neu geholt, exklusiv zu CACHABLE
-#define SFX_SLOT_TOGGLE            0x0004L // invertiert bei Execute alten Wert
-#define SFX_SLOT_AUTOUPDATE        0x0008L // invalidiert den Status nach Execute automatisch
+#define SFX_SLOT_CACHABLE      0x0001L // exclusiv to VOLATILE, default
+#define SFX_SLOT_VOLATILE      0x0002L // per Timer every 2s get new,
+                                       // exclusiv to CACHABLE
+#define SFX_SLOT_TOGGLE        0x0004L // inverted for Execute old value
+#define SFX_SLOT_AUTOUPDATE    0x0008L // invalidated the status automatically
+                                       // after execute
 
-#define SFX_SLOT_SYNCHRON          0x0010L // exklusiv zu ASYNCHRON, default
-#define SFX_SLOT_ASYNCHRON         0x0020L // via Post-Message, exklusiv zu SYNCHRON
+#define SFX_SLOT_SYNCHRON      0x0010L // exclusiv to ASYNCHRON, default
+#define SFX_SLOT_ASYNCHRON     0x0020L // via Post-Message, exclusiv
+                                       // to SYNCHRON
 
-#define SFX_SLOT_HASCOREID         0x0040L // Slot-ID/Which-ID Mappting durchf"uhren
-#define SFX_SLOT_HASDIALOG         0x0080L // Punkte fuer Dialog nach recofig
+#define SFX_SLOT_HASCOREID     0x0040L // Slot-ID/Which-ID execute mapping
+#define SFX_SLOT_HASDIALOG     0x0080L // Coordinates for dialogue after recofig
 
-#define SFX_SLOT_NORECORD          0x0100L // kein Recording
-#define SFX_SLOT_RECORDPERITEM     0x0200L // je Item ein Statement
-#define SFX_SLOT_RECORDPERSET      0x0400L // das ganze Set ist ein Statement, def.
-#define SFX_SLOT_RECORDMANUAL      0x0800L // Recording vom Applikationsentwickler                                         iss-default
+#define SFX_SLOT_NORECORD      0x0100L // no recording
+#define SFX_SLOT_RECORDPERITEM 0x0200L // each item, one statement
+#define SFX_SLOT_RECORDPERSET  0x0400L // The whole Set is a Statement, default
+#define SFX_SLOT_RECORDMANUAL  0x0800L // Recording by the application
+                                       // developer is default
 
-#define SFX_SLOT_RECORDABSOLUTE 0x1000000L // Recording mit absolutem Target
+#define SFX_SLOT_RECORDABSOLUTE 0x1000000L // Recording with absolute Target
 #define SFX_SLOT_STANDARD       ( SFX_SLOT_CACHABLE | \
                                   SFX_SLOT_SYNCHRON | \
                                   SFX_SLOT_RECORDPERSET )
 
-#define SFX_SLOT_PROPGET          0x1000L  // abfragbares Property
-#define SFX_SLOT_PROPSET          0x2000L  // setzbares Property, exklusiv zu SFX_SLOT_METHOD
-#define SFX_SLOT_METHOD           0x4000L  // Methode, exklusiv zu SFX_SLOT_PROPSET
+#define SFX_SLOT_PROPGET       0x1000L  // get property
+#define SFX_SLOT_PROPSET       0x2000L  // set property, exclusiv to
+                                        // SFX_SLOT_METHOD
+#define SFX_SLOT_METHOD        0x4000L  // Method, exclusiv to SFX_SLOT_PROPSET
 
-#define SFX_SLOT_FASTCALL         0x8000L  // vor Execute keine Pr"ufung, ob disabled
+#define SFX_SLOT_FASTCALL      0x8000L  // No test if disabled before Execute
 
-#define SFX_SLOT_STATUSBARCONFIG 0x10000L  // konfigurierbar in Statuszeile
-#define SFX_SLOT_MENUCONFIG      0x20000L  // konfigurierbar im Men"u
-#define SFX_SLOT_TOOLBOXCONFIG   0x40000L  // konfigurierbar in Toolboxen
-#define SFX_SLOT_ACCELCONFIG     0x80000L  // konfigurierbar auf Tasten
+#define SFX_SLOT_STATUSBARCONFIG 0x10000L  // configurable status row
+#define SFX_SLOT_MENUCONFIG      0x20000L  // configurable Menu
+#define SFX_SLOT_TOOLBOXCONFIG   0x40000L  // configurable Toolboxen
+#define SFX_SLOT_ACCELCONFIG     0x80000L  // configurable keys
 
-#define SFX_SLOT_CONTAINER      0x100000L  // beim InPlace vom Container bedient
-#define SFX_SLOT_READONLYDOC    0x200000L  // auch bei readonly-Docs verf"ugbar
-#define SFX_SLOT_IMAGEROTATION  0x400000L  // bei Vertical/Bidi writing Image drehen
-#define SFX_SLOT_IMAGEREFLECTION  0x800000L  // bei Vertical/Bidi writing Image spiegeln
+#define SFX_SLOT_CONTAINER      0x100000L  // Operated by the container at
+                                           // InPlace
+#define SFX_SLOT_READONLYDOC    0x200000L  // also available for
+                                           // read-only Documents
+#define SFX_SLOT_IMAGEROTATION  0x400000L  // Rotate image on Vertical/
+                                           // Bi-directional writing
+#define SFX_SLOT_IMAGEREFLECTION  0x800000L // Mirror image on Vertical/
+                                           // Bi-directional writing
 
 //--------------------------------------------------------------------
 
@@ -239,9 +248,9 @@ class SfxPoolItem;
 
 struct SfxFormalArgument
 {
-    const SfxType*          pType;  // Typ des Parameters (SfxPoolItem Subklasse)
-    const char* pName;  // Name des Parameters
-    sal_uInt16                  nSlotId;// Slot-Id zur Identifikation des Parameters
+    const SfxType*  pType;    // Type of the parameter (SfxPoolItem subclass)
+    const char*     pName;    // Name of the sParameters
+    sal_uInt16      nSlotId;  // Slot-Id for identification of the Parameters
 
     const TypeId&           Type() const
                             { return pType->aTypeId; }
@@ -254,29 +263,30 @@ struct SfxFormalArgument
 class SfxSlot
 {
 public:
-    sal_uInt16                      nSlotId;        // in Shell eindeutige Slot-Id
-    sal_uInt16                      nGroupId;       // f"ur Konfigurations-Bereich
-    sal_uIntPtr                     nHelpId;        // i.d.R. == nSlotId
-    sal_uIntPtr                     nFlags;         // artihm. veroderte Flags
+    sal_uInt16    nSlotId;   // Unique slot-ID in Shell
+    sal_uInt16    nGroupId;  // for configuration region
+    sal_uIntPtr   nHelpId;   // Usually == nSlotId
+    sal_uIntPtr   nFlags;    // artihmetic ordered Flags
 
-    sal_uInt16                      nMasterSlotId;  // Enum-Slot bzw. Which-Id
-    sal_uInt16                      nValue;         // Wert, falls Enum-Slot
+    sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id
+    sal_uInt16    nValue;         // Value, in case of Enum-Slot
 
-    SfxExecFunc                 fnExec;         // Funktion zum Ausf"uhren
-    SfxStateFunc                fnState;        // Funktion f"ur Status
+    SfxExecFunc   fnExec;   // Function to be excecuted
+    SfxStateFunc  fnState;  // Function for Status
 
-    const SfxType*              pType;          // SfxPoolItem-Typ (Status)
-    const char*     pName;          // Name des Slots
-    const char*     pMethodName;    // Name der Method falls anders
+    const SfxType*  pType;        // SfxPoolItem-Type (Status)
+    const char*     pName;        // Name of the Slots
+    const char*     pMethodName;  // Name of the Method if different
 
-    const SfxSlot*              pLinkedSlot;    // Master-Slot f"ur Enum-Werte
-    const SfxSlot*              pNextSlot;      // mit derselben Status-Methode
+    const SfxSlot*  pLinkedSlot; // Master-Slot for Enum value
+    const SfxSlot*  pNextSlot;   // with the same Status-Method
 
-    const SfxFormalArgument*    pFirstArgDef;   // erste formale Argument-Definition
-    sal_uInt16                      nArgDefCount;   // Anzahl der formalen Argumente
-    long                        nDisableFlags;      // DisableFlags, die vorhanden sein
-                                                // m"ussen, damit der Slot enabled ist
-    const char*     pUnoName;       // UnoName des Slots
+    const SfxFormalArgument*  pFirstArgDef;  // first formal Argument-Definition
+    sal_uInt16                nArgDefCount;  // Number of formal Argumentents
+    long                      nDisableFlags; // DisableFlags that need to be
+                                             // present, so that the Slot
+                                             // can be enabled
+    const char*     pUnoName;      // UnoName for the Slots
 
 public:
 
@@ -291,8 +301,6 @@ public:
     sal_uInt16          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
-    SFX2_DLLPUBLIC rtl::OString    GetCommand() const;
-    SFX2_DLLPUBLIC rtl::OUString    GetCommandString() const;
 
     sal_uInt16          GetFormalArgumentCount() const { return nArgDefCount; }
     const SfxFormalArgument& GetFormalArgument( sal_uInt16 nNo ) const

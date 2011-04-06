@@ -99,16 +99,15 @@ typedef ::std::vector< String* > TargetList;
 #define SFXFRAME_HASTITLE     0x0001
 
 //==========================================================================
-// Ein SfxFrame ist eine Verwaltungsklasse f"ur Fenster und deren Inhalte.
-// Eine SfxApplication pr"asentiert sich als Hierarchie von SfxFrames, wobei
-// die konkreten Inhalte in den abgeleiteten Klassen festgelegt werden.
-// Die Basisklasse SfxFrame implementiert 2 Aspekte der Frames: Benennung und
-// Kontrolle der Lebensdauer.
-// Innerhalb einer Frames-Hierarchie kontrolliert immer der ParentFrame die
-// Lebensdauer seiner ChildFrames, auch wenn sie in der Regel gar nicht von
-// ihm selbst erzeugt wurden. Durch Aufruf vonn DoClose() an irgendeinem
-// Frame in der Hierarchie kann ein Teil des "Frameworks" entfernt werden,
-// wobei sich Frames an ihren ParentFrames selbst abmelden.
+// SfxFrame is a management class for windows and their content.
+// A SfxApplication represent a hierarchy of SfxFrames, with which the actual
+// content in the derived classes is defined. The base class SfxFrame
+// implements two aspects of frames: naming and control of its lifespan.
+// Inside a frame hierarchy the parent frame always controls the lifespan of
+// its child frames, even though they usually are not even produced by the
+// parent. By calling DoCloser() on any frame in the hierarchy,
+// a part of the "framework" can be removed, where frames unsubscribe
+// from their parent frames.
 //==========================================================================
 
 class SfxFrameArr_Impl;
@@ -195,7 +194,7 @@ public:
     SAL_DLLPRIVATE sal_Bool IsClosing_Impl() const;
     SAL_DLLPRIVATE void SetIsClosing_Impl();
 
-                        // Methoden f"ur den Zugriff auf das aktuelle Set
+    // Methods for accessing the current set
     SAL_DLLPRIVATE void SetDescriptor( SfxFrameDescriptor* );
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 

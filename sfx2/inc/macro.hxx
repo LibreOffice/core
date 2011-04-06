@@ -17,11 +17,11 @@ class SfxMacro;
 
 class SfxMacroStatement
 {
-    sal_uInt16              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs;      // aktuelle Parameter, falls nSlotId != 0
-    String              aStatement; // Statement in BASIC-Syntax (ggf. mit CR/LF)
-    sal_Bool                bDone;      // auskommentieren wenn kein Done() gerufen
-    void*               pDummy;     // f"ur alle F"alle zum kompatibel bleiben
+    sal_uInt16              nSlotId;    // performed Slot-Id or 0, if manually
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs;      // current Parameter, in case nSlotId != 0
+    String              aStatement; // Statement in BASIC-Syntax (if necessary with CR/LF)
+    sal_Bool                bDone;      // comment out if no Done() is called
+    void*               pDummy;     // for all cases, to remain compatible
 
 #ifdef _SFXMACRO_HXX
 private:
@@ -59,11 +59,10 @@ public:
 
 inline sal_uInt16 SfxMacroStatement::GetSlotId() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert die Slot-Id die das Statement beim Abspielen wieder ausf"uhren
-    soll oder 0, falls das Statement manuell (<SFX_SLOT_RECORDMANUAL>)
-    aufgezeichnet wurde.
+    Returns the Slot-Id which the Statement should redo when called or 0
+    if the Statement (<SFX_SLOT_RECORDMANUAL>) was recorded manually.
 */
 
 {
@@ -74,14 +73,13 @@ inline sal_uInt16 SfxMacroStatement::GetSlotId() const
 
 inline const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& SfxMacroStatement::GetArgs() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert die Parameter mit denen Statement ausgef"uhrt wurde oder 0,
-    falls das Statement manuell (<SFX_SLOT_RECORDMANUAL>) aufgezeichnet
-    wurde.
+    Returns the Parameter which was used in the call of the Statement or 0
+    if the Statement (<SFX_SLOT_RECORDMANUAL>) was recorded manually
 
-    Der R"uckgabewert geh"ort dem SfxMacroStatement und ist nur im
-    unmittelbar aufrufenden Stackframe g"ultig.
+    The returned value belongs to the SfxMacroStatement and is only valid
+    to the Stackframe.
 */
 
 {
@@ -92,11 +90,11 @@ inline const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::Property
 
 inline sal_Bool SfxMacroStatement::IsDone() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert TRUE, wenn das Statement wirklich ausgef"uhrt wurde,
-    also z.B. nicht vom Benutzer abgebrochen wurde. Wurde es nicht
-    wirklich ausgef"uhrt, dann wird es im BASIC-Source auskommentiert.
+    Returns TRUE only if the Statement really was excecuted, so for instance
+    not if it was canceled by the user. If it was not excecuted the
+    BASIC-Source would be commented out.
 */
 
 {
@@ -105,18 +103,18 @@ inline sal_Bool SfxMacroStatement::IsDone() const
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert das Statement in BASIC-Syntax. Wurde das Makro manuell erzeugt,
-    wird genau der im Konstruktor angegebene String zur"uckgegeben, sonst
-    der generierte Source-Code.
+    Returns the Statement in BASIC-Syntax. If the Macro was created manually,
+    the string will be returned exactly as given in the constructor, else the
+    generated Source-Code is returned.
 
-    Bei beiden Arten ist es m"oglich, da\s mehrere BASIC-Statements, jeweils
-    mit CR/LF getrennt in dem String enthalten sind, da ein SFx-Statement
-    ggf. in mehrere BASIC-Statements "ubersetzt wird.
+    It is possible in both of the above cases that several BASIC-Statements,
+    each contains CR / LF separators in the string, since a SFx statement
+    is translated if necessary into several BASIC statements.
 
-    Statements f"ur die nicht <SfxRequest::Done()> gerufen wurde, werden
-    mit einem vorangestellten 'rem' gekennzeichnet.
+    Statements for which <SfxRequest::Done()> was not called are marked
+    with a preceding 'rem'.
 */
 
 inline const String& SfxMacroStatement::GetStatement() const
@@ -128,41 +126,38 @@ inline const String& SfxMacroStatement::GetStatement() const
 
 enum SfxMacroMode
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit diesem enum wird bestimmt, ob eine <SfxMacro>-Instanz zum
-    absoluten oder relativen Recorden erzeugt wurde, oder um ein
-    existierendendes Makro zu Referenzieren.
+    By using this enum it is determined, if a <SfxMacro>-Instance was created
+    by absolute or relative recording, or to create a reference to a existing
+    macro.
 */
 
 {
-    SFX_MACRO_EXISTING,         /*  es handelt sich um ein bereits
-                                    exitistierendes Makro, welches lediglich
-                                    referenziert wird */
+    SFX_MACRO_EXISTING,           /* Indicates that it is a existing
+                                     macro, which will only referenced */
 
-    SFX_MACRO_RECORDINGABSOLUTE,/*  dieses Makro soll aufgezeichnet werden,
-                                    wobei die betroffenen Objekte m"oglichst
-                                    direkt angesprochen werden sollen
-                                    (Beispiel: "[doc.sdc]") */
+    SFX_MACRO_RECORDINGABSOLUTE,  /* This macro shall be recorded so that the
+                                     affected objects are to be addressed as
+                                     directly as possible (example: "[doc.sdc]") */
 
-    SFX_MACRO_RECORDINGRELATIVE/*   dieses Makro soll aufgezeichnet werden,
-                                    wobei die betroffenen Objekte so
-                                    angesprochen werden sollen, da\s sich das
-                                    Abspielen auf die dann g"ultige Selektion
-                                    bezieht (Beispiel: "ActiveDocument()") */
+    SFX_MACRO_RECORDINGRELATIVE   /* This macro is recorded and the affected
+                                     objects are addressed in such a way so
+                                     that when running the macro it refers to
+                                     a vaild selection
+                                     (example:" active document () ") */
 };
 
 //====================================================================
 
 class SfxMacro
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "Uber diese Klasse (bzw. genaugenommen ihre Subklassen) wird zum
-    einen die Lokation einer BASIC-Funktion (also in welcher Library,
-    in welchem Modul sowie der Funktions-Name) beschrieben, als auch
-    ein aufzuzeichnendes Makro w"ahrend der Aufzeichnung zwischen-
-    gespeichert.
+    Through using this class (and in fact its subclasses) the location of a
+    BASIC function will be discribed (also in which Library, in which module
+    and the Function name) as well as temporary storing a macro during the
+    recording.
 */
 
 {

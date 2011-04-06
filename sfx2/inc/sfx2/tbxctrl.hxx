@@ -104,9 +104,9 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 
 //------------------------------------------------------------------
 
-/*  FloatingWindows, die aus ToolBoxen abgerissen werden k"onnen, sollten
-    dieser Klasse abgeleitet werden. Da sie ebenfalls von SfxControllerItem
-    abgeleitet ist, erhalten ihre Instanzen auch die StateChanged Aufrufe.
+/* Floating windows that can be torn from tool boxes should be derived from
+   this class. Since it is also derived from SfxControllerItem, its instances
+   will also receive the StateChanged calls.
 */
 
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
@@ -183,14 +183,13 @@ public:
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
-/*  F"ur spezielle ToolBox-Controls, z.B. eine Font-Auswahl-Box oder
-    aus ToolBoxen abrei"sbare FloatingWindows mu"s passend zur Item-Subclass
-    eine Subclass von SfxTooBoxControl implementiert werden.
+/*  For special ToolBox controls, such as a font selection box or toolbox
+    tear-off floating windows, an appropriate Item-Subclass of SfxTooBoxControl
+    has to be implemented.
 
-    Diese Klasse mu"s in SfxApplication::Init() mit der statischen Methode
-    RegisterControl() registriert werden. Der SFx erzeugt dann automatisch
-    diese Controls in ToolBoxen, wenn die dazugeh"origen Slots von dem
-    angegebenen Typ sind.
+    This class has to be registered in SfxApplication:Init() with the static
+    control method RegisterControl(). The SFx then automatically creates these
+    controls in the toolbox, if the associated slots are of the specific type.
  */
 
 struct SfxToolBoxControl_Impl;
@@ -337,10 +336,10 @@ public:
 
 class SfxAppToolBoxControl_Impl : public SfxToolBoxControl
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Hilfsklasse f"ur um das Popup-Menu <AppMenu_Impl> unter Neu
-    im SDT zu starten.
+    Internal helper class for the pop-up menu <AppMenu_Impl> under new
+    start in the SDT.
 */
 
 {

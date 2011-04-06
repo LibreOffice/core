@@ -70,12 +70,12 @@ SV_DECL_PTRARR( SfxUnoControllerArr_Impl, SfxUnoControllerItemPtr, 20, 20 )
 //  defines
 //________________________________________________________________________________________________________________
 
-#define SFX_CALLMODE_SLOT           0x00    // sync/async vom Slot
-#define SFX_CALLMODE_SYNCHRON       0x01    // synchron im selben Stackframe
-#define SFX_CALLMODE_ASYNCHRON      0x02    // asynchron per AppEvent
-#define SFX_CALLMODE_RECORD         0x04    // beim Recorden ber"ucksichtigen
-#define SFX_CALLMODE_API            0x08    // Call von der API (silent)
-#define SFX_CALLMODE_MODAL          0x10    // trotz ModalMode
+#define SFX_CALLMODE_SLOT               0x00    // sync/async from Slot
+#define SFX_CALLMODE_SYNCHRON           0x01    // synchronously in the same Stackframe
+#define SFX_CALLMODE_ASYNCHRON          0x02    // asynchronously via AppEvent
+#define SFX_CALLMODE_RECORD             0x04    // take into accont while recording
+#define SFX_CALLMODE_API                0x08    // API call (silent)
+#define SFX_CALLMODE_MODAL              0x10    // despite ModalMode
 
 #define SFX_CALLMODE_STANDARD       SFX_CALLMODE_RECORD
 typedef sal_uInt16 SfxCallMode;
@@ -90,23 +90,22 @@ enum SfxPopupAction
 //====================================================================
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
-/*  [Beschreibung]
+/*  [Description]
 
-    In jeder SFx-Applikation existiert "uber die Laufzeit von vor
-    <SfxApplication::Init()> bis nach <SfxApplication::Exit()> eine Instanz
-    der Klasse SfxBindings. Sie wird von der SfxApplication automatisch
-    angelegt und zerst"ort. Instanzen werden aber i.d.R. "uber das
-    Makro <SFX_BINDINGS> oder den zugeh"origen <SfxViewFrame> besorgt
-    werden.
+    In each SFx application one instance of the SfxBindings-Class will
+    exists from <SfxApplication::Init()> until <SfxApplication::Exit()>.
+    This instance is automatically created and destroyed by SfxApplication.
+    However these instances will be handled by the Macro <SFX_BINDINGS>
+    or the associated <SfxViewFrame>.
 
-    Die SfxBindings verwalten alle in den an ihr angemeldeten Controllern
-    gebundenen Slot-Ids und cachen die jeweiligen <Slot-Server>
-    (so nenne wir die Kombination aus SfxShell-Instanz und SfxSlot).
-    In den SfxBindings ist gespeichert, ob und welche Controller dirty
-    sind sowie welche Slot-Server-Caches jeweils dirty sind. Sie fa"st
-    Status-Anfragen (Aufrufe der in der IDL genannten Status-Methoden)
-    zusammen, die von derselben Status-Methode bedient werden, und sorgt
-    f"ur die Simulation der <Pseudo-Slots>.
+    The SfxBindings manages all of its Slot-Ids bound by the registerd
+    controllers and keeps a cache of the <Slot-Server> respectively.
+    (it is what we call the combination of SfxShell instance and SfxSlot).
+    In the SfxBindings it is stored, if and in this case which controllers
+    that are dirty and which Slot-Server-Caches are dirty respectively.
+    It summarizes status queries (calls to the status methods specified
+    in the IDL) that are served by the same state methods, and handles
+    the simulation of <Pseudo-Slots>.
 */
 
 {
@@ -114,15 +113,15 @@ friend class SfxApplication;
 friend class SfxShell;
 friend class SfxBindings_Impl;
 
-    SfxBindings_Impl*pImp;          // Daten der Bindings-Instanz
-    SfxDispatcher*   pDispatcher;   // zu verwendender Dispatcher
-    sal_uInt16       nRegLevel;      // Lock-Level waehrend Reconfig
+    SfxBindings_Impl*pImp;           // Data of the Bindings instance
+    SfxDispatcher*   pDispatcher;    // Dispatcher, to be used
+    sal_uInt16       nRegLevel;      // Lock-Level while Reconfig
 
 private:
     SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
                                     SfxCallMode nCall, const SfxPoolItem **pInternalArgs, sal_Bool bGlobalOnly=sal_False);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
-    SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // SlotServer aktualisieren
+    SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
     SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl( SfxStateCache* &pCache,
                                     const SfxSlot* &pRealSlot,
                                     const SfxSlotServer**,
@@ -145,7 +144,7 @@ public:
 
     void             SetDispatcher(SfxDispatcher *pDisp);
 
-    void             Update( sal_uInt16 nId ); // z.B. aus Menu::Activate
+    void             Update( sal_uInt16 nId ); // For example, from  Menu::Activate
     void             Update();
     SAL_DLLPRIVATE void StartUpdate_Impl(sal_Bool bComplete=sal_False);
     void             Invalidate( sal_uInt16 nId );
@@ -232,21 +231,21 @@ public:
 
 inline int SfxBindings::IsInRegistrations() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Stellt fest, ob an der SfxBindings Instanz gerade <SfxContollerItems>
-    an- oder abgemeldet werden, also noch <SfxBindings::EnterRegistrations()>
-    Aufrufe nicht mit <SfxBindings::EnterRegistrations()> geschlo"sen wurden.
+    Determines whether the <SfxContollerItems> SfxBindings instance is
+    registerd or unregisted, i.e. <SfxBindings::EnterRegistrations()>
+    calls that have not been closed by <SfxBindings::LeaveRegistrations()>.
 
-    [R"uckgabewert]
+    [Return value]
 
     int                 sal_True
-                        Die SfxBindings Instanz ist gerade im Registrierungs-
-                        Modus. Es erfolgen also keine Status-Updates.
+                        The SfxBindings instance is currently in
+                        Registration-Mode. No status updates .
 
-                        sal_False
-                        Die SfxBindings Instanz ist gerade im normalen
-                        Modus. Es k"oennen also Status-Updates erfolgen.
+    int sal_False
+                        The SfxBindings instance is the normal mode.
+                        Status updates can be done.
 */
 
 {

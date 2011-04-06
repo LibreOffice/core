@@ -82,9 +82,8 @@ public:
     SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
     ~SfxNewFileDialog();
 
-        // Liefert sal_False, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() sal_True liefert, koennen Vorlagennamen
-        // erfragt werden
+    // Returns sal_False, when '- No -' is set as Template
+    // Template names can only be obtained when IsTemplate() returns sal_True.
     sal_Bool IsTemplate() const;
     String GetTemplateRegion() const;
     String GetTemplateName() const;

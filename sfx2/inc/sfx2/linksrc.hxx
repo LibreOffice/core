@@ -48,7 +48,7 @@ class Window;
 class String;
 
 #ifndef ADVISEMODE_NODATA
-// Muessen die gleichen Werte wie Ole2 ADVF_* sein
+// Must be the same value as Ole2 ADVF_*
 #define ADVISEMODE_NODATA       0x01
 //#define ADVISEMODE_PRIMEFIRST   0x02
 #define ADVISEMODE_ONLYONCE     0x04

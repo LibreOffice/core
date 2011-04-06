@@ -201,7 +201,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         mpDoc->OwnerLock(sal_False);
     }
     else if ( !mpDoc->Get_Impl()->bClosing )
-        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
+        // GCC crashes when already in the destructor, so first query the Flag
         mpDoc->DoClose();
 }
 

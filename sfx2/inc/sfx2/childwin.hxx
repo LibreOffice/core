@@ -48,17 +48,18 @@ class SfxChildWindow;
 class SfxChildWindowContext;
 class SfxChildWinContextArr_Impl;
 
-#define SFX_CHILDWIN_ZOOMIN       0x01      // ganz eingeklapptes Float
-#define SFX_CHILDWIN_SMALL        0x02      // halb eingeklapptes Float
-#define SFX_CHILDWIN_FORCEDOCK    0x04      // Float verboten
-#define SFX_CHILDWIN_AUTOHIDE     0x08      // DockingWindow im AutoHide-Modus
-#define SFX_CHILDWIN_TASK         0x10      // ChildWindow innerhalb der Task
-#define SFX_CHILDWIN_CANTGETFOCUS 0x20      // ChildWindow kann keinen Focus bekommen
+#define SFX_CHILDWIN_ZOOMIN          0x01  // Fully retracted Float
+#define SFX_CHILDWIN_SMALL           0x02  // Half retracted Float
+#define SFX_CHILDWIN_FORCEDOCK       0x04  // Float forbidden
+#define SFX_CHILDWIN_AUTOHIDE        0x08  // DockingWindow in AutoHide mode
+#define SFX_CHILDWIN_TASK            0x10  // ChildWindow inside the Task
+#define SFX_CHILDWIN_CANTGETFOCUS    0x20  // ChildWindow can not get focus
 #define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
-#define SFX_CHILDWIN_NEVERHIDE    0x80      // ChildWindow is can always made visible/is visible
+#define SFX_CHILDWIN_NEVERHIDE       0x80  // ChildWindow is can always made
+                                           // visible/is visible
 #define CHILDWIN_NOPOS            USHRT_MAX
 
-// Konfiguration eines ChildWindows
+// ChildWindow Configuration
 struct SfxChildWinInfo
 {
     sal_Bool                bVisible;
@@ -80,21 +81,21 @@ struct SfxChildWinInfo
                                            sal_uInt16               *pPos = 0 ) const;
 };
 
-// Factory-Methode eines ChildWindows
+// ChildWindow factory methods
 typedef SfxChildWindow* (*SfxChildWinCtor)( ::Window *pParentWindow,
                                             sal_uInt16 nId,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 
-// Factory-Methode eines ChildWindowsContexts
+// ChildWindowsContexts factory methods
 typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( ::Window *pParentWindow,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 struct SfxChildWinContextFactory
 {
-    SfxChildWinContextCtor  pCtor;      // Factory-Methode
-    sal_uInt16                  nContextId; // Identifier f"ur das SfxInterface
-    SfxChildWinInfo         aInfo;      // Konfiguration
+    SfxChildWinContextCtor  pCtor;      // Factory method
+    sal_uInt16              nContextId; // Idenifier for SfxInterface
+    SfxChildWinInfo         aInfo;      // Configuration
 
     SfxChildWinContextFactory( SfxChildWinContextCtor pTheCtor, sal_uInt16 nID )
         : pCtor(pTheCtor)
@@ -106,11 +107,11 @@ SV_DECL_PTRARR_DEL( SfxChildWinContextArr_Impl, SfxChildWinContextFactory*, 2, 2
 
 struct SfxChildWinFactory
 {
-    SfxChildWinCtor     pCtor;          // Factory-Methode
+    SfxChildWinCtor            pCtor;  // Factory method
     sal_uInt16              nId;            // ChildWindow-Id ( SlotId )
-    SfxChildWinInfo     aInfo;          // Konfiguration
-    sal_uInt16              nPos;           // ggf. Position im UI
-    SfxChildWinContextArr_Impl *pArr;   // Array f"ur Contexte
+    SfxChildWinInfo            aInfo;  // Configuration
+    sal_uInt16                  nPos;  // Position in UI
+    SfxChildWinContextArr_Impl *pArr;  // Array for Contexts
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
             sal_uInt16 n )
@@ -162,13 +163,13 @@ class SFX2_DLLPUBLIC SfxChildWindow
     sal_uInt16              nType;          // ChildWindow-Id
 
 protected:
-    SfxChildAlignment       eChildAlignment;// aktuelles ::com::sun::star::drawing::Alignment
-    ::Window*               pWindow;        // eigentlicher Inhalt
-    SfxChildWindow_Impl*    pImp;           // Imp-Daten
+    SfxChildAlignment           eChildAlignment; // Current ::com::sun::star::drawing::Alignment
+    ::Window*                   pWindow;         // actual contents
+    SfxChildWindow_Impl*        pImp;            // Implementation data
 
 private:
-    SfxChildWindowContext*  pContext;       // bei kontextsensitiven ChildWindows:
-                                            // weiteres window in pWindow
+    SfxChildWindowContext*      pContext;        // With context-sensitive ChildWindows:
+                                                 // Annother window in pWindow
     SAL_DLLPRIVATE SfxChildWindowContext*
                         GetContext() const
                         { return pContext; }
@@ -240,19 +241,19 @@ public:
 };
 
 //------------------------------------------------------------------
-//! demn"achst hinf"allig !
+//! soon obsolete !
 #define SFX_DECL_CHILDWINDOW_CONTEXT(Class) \
         static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(SfxModule *pMod=0); \
 
-//! Das Macro der Zukunft ...
+//! The Macro of the future ...
 #define SFX_DECL_CHILDWINDOWCONTEXT(Class) \
         static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(sal_uInt16, SfxModule *pMod=0); \
 
-//! demn"achst hinf"allig !
+//! soon obsolete !
 #define SFX_IMPL_CHILDWINDOW_CONTEXT(Class, MyID, ShellClass) \
         SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
@@ -270,9 +271,10 @@ public:
             SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, pFact); \
         }
 
-//! Das Macro der Zukunft ...
-// CreateImpl mu\s noch als Parameter die Factory mitbekommen wg. ContextId
-// Solange wird diese Id auf 0 gesetzt und in SfxChildWindow::CreateContext gepatched
+//! The Macro of the future ...
+// As a parameter and because of ContextId, CreateImpl must be handed the
+// factory. As long as Id is set to 0 and patched in
+// SfxChildWindow::CreateContext
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
         SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \

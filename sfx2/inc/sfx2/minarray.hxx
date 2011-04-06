@@ -282,7 +282,7 @@ void ARR::Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen ) \
     if ( nUnused == 0 ) \
     { \
         \
-        /* auf die naechste Grow-Grenze aufgerundet vergroeszern */ \
+        /* increase (round up) to the next Grow-limit  */       \
         sal_uInt16 nNewSize; \
         for ( nNewSize = nUsed+nGrow; nNewSize < (nUsed + nLen); ++nNewSize ) \
             /* empty loop */; \

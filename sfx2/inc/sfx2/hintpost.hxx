@@ -39,17 +39,16 @@ class SfxHint;
 
 class SfxHintPoster: public SvRefBase
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit Instanzen dieser Klasse k"onnen eindeutige Events per PostUserEvent
-    "uber die StarView-Application verschickt werden. Wenn das User-Event
-    ausgel"ost wird, wird der Handler <Event()> gerufen, dessen
-    Basisimplementierung den mit <SetEventHdl()> angegbenen Link ruft.
+    With instances of this class unique events per PostUserEvent can be sent
+    using the StarView-application. If the User-Event is triggered often,
+    the handler <Event()> is called, the base implementation with the
+    <SetEventHdl()> line is making these link calls.
 
-    Die Instanz wird via Ref-Count mindestens solange gehalten, wie
-    ein ggf. abgeschicktes Event noch nicht angekommen ist. Sollte das
-    Ziel vorher sterben, ist die Verbindung zuvor mit 'SetEventHdl(GenLink())'
-    zu kappen.
+    The instance are held via Ref-Count at least as long as a possible sent
+    event has not arrived yet. Should be killed before the goal, before the
+    connection is SetEventHdl (GenLink ()) .
 */
 
 {

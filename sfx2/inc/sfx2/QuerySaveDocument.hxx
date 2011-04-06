@@ -33,7 +33,7 @@
 
 class Window;
 class String;
-/** opens the generell query save document dialog.
+/** Opens the general query save document dialog.
     @param  _pParent
         The parent window.
     @_rTitle

@@ -87,16 +87,15 @@ public:
 
     String              GetDefaultTemplatePath(const String &rLongName);
 
-    // Pfad zur Vorlage geben lassen; logischer Name muss angegeben
-    // werden, damit beim Ueberschreiben einer Vorlage der
-    // richtige Dateiname gefunden werden kann
+    // Path to the template; the logical name must be given in order to find
+    // the correct file name when overwriting a template
     String              GetTemplatePath(sal_uInt16 nRegion, const String &rLongName) const;
 
     // Allows to retrieve the target template URL from the UCB
     ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                          const ::rtl::OUString& aTitle );
 
-    // Speichern als Vorlage hat geklappt -> Aktualisieren
+    // Save as template worked -> update
     void            NewTemplate(sal_uInt16 nRegion,
                                 const String &rLongName,
                                 const String &rFileName);

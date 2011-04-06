@@ -51,7 +51,7 @@ protected:
    SfxHTMLParser( rStream, bIsNewDoc, pMediumPtr ) {};
 
 public:
-    // Diese Methoden koennen auch von anderen Parsern benutzt werden
+    // These methods can also be used by other parsers.
     static void             ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions*, const String& );
 
 };
