@@ -42,7 +42,7 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
 
 ifneq (,$(strip $(OOO_JUNIT_JAR)))
 
-.PHONY : $(call gb_JunitTest_get_target,$(1))
+.PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
