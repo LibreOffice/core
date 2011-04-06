@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,11 +34,12 @@
 #include <vcl/button.hxx>
 #include <vcl/accel.hxx>
 #include <svtools/svmedit.hxx>
-#include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
+#include "svtools/fixedhyper.hxx"
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
+#include <vector>
 
-DECLARE_LIST( AccelList, Accelerator* )
+typedef ::std::vector< Accelerator* > AccelList;
 
 // class AboutDialog -----------------------------------------------------
 
@@ -47,15 +49,16 @@ private:
     OKButton        aOKButton;
     Image           aAppLogo;
 
-    FixedInfo       aVersionText;
-    MultiLineEdit   aCopyrightText;
-    FixedInfo       aBuildData;
+    MultiLineEdit       aVersionText;
+    MultiLineEdit       aCopyrightText;
+    svt::FixedHyperlink aInfoLink;
 
-    ResStringArray* pDeveloperAry;
-    String          aDevVersionStr;
+//    ResStringArray    aDeveloperAry; // RIP ...
     String          aAccelStr;
     String          aVersionData;
+    String          aVersionTextStr;
     String          aCopyrightTextStr;
+    String          aLinkStr;
 
     AccelList       aAccelList;
 
@@ -64,20 +67,20 @@ private:
     long            m_nDeltaWidth;
     int             m_nPendingScrolls;
 
-    sal_Bool            bNormal;
-
 protected:
-    virtual sal_Bool    Close();
-    virtual void    Paint( const Rectangle& );
+    virtual sal_Bool Close();
+    virtual void Paint( const Rectangle& rRect );
 
 public:
-    AboutDialog( Window* pParent, const ResId& nId );
+    AboutDialog( Window* pParent, const ResId& rId);
     ~AboutDialog();
 
     DECL_LINK( TimerHdl, Timer * );
     DECL_LINK( AccelSelectHdl, Accelerator * );
+    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 };
 
 #endif // #ifndef _ABOUT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

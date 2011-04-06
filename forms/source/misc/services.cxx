@@ -343,7 +343,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* _pImplN
     sal_Int32 nClasses = s_aClassImplementationNames.getLength();
     OSL_ENSURE((s_aClassServiceNames.getLength() == nClasses) &&
         (s_aFactories.getLength() == nClasses),
-        "forms::component_writeInfo : invalid class infos !");
+        "forms::component_getFactory : invalid class infos !");
 
     // loop through the sequences and register the service providers
     const ::rtl::OUString* pClasses = s_aClassImplementationNames.getConstArray();

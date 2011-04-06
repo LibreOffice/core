@@ -27,8 +27,12 @@
 
 #include <sfx2/sfx.hrc>
 
-#define ABOUT_BTN_OK                        1
-#define ABOUT_FTXT_VERSION                  1
-#define ABOUT_STR_ACCEL                     3
-#define ABOUT_FTXT_COPYRIGHT                    4
+#define ABOUT_BTN_OK        1
+#define ABOUT_FTXT_VERSION  2
+#define ABOUT_STR_ACCEL     3
+#define ABOUT_FTXT_COPYRIGHT    4
 
+#define ABOUT_FTXT_LINK     5
+#define ABOUT_STR_VERSION   6
+#define ABOUT_STR_COPYRIGHT 7
+#define ABOUT_STR_LINK      8
