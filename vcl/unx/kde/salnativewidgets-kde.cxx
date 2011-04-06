@@ -1766,15 +1766,15 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
-        aInfo.m_eWeight = psp::weight::Light;
+        aInfo.m_eWeight = WEIGHT_LIGHT;
     else if ( nWeight <= QFont::Normal )
-        aInfo.m_eWeight = psp::weight::Normal;
+        aInfo.m_eWeight = WEIGHT_NORMAL;
     else if ( nWeight <= QFont::DemiBold )
-        aInfo.m_eWeight = psp::weight::SemiBold;
+        aInfo.m_eWeight = WEIGHT_SEMIBOLD;
     else if ( nWeight <= QFont::Bold )
-        aInfo.m_eWeight = psp::weight::Bold;
+        aInfo.m_eWeight = WEIGHT_BOLD;
     else
-        aInfo.m_eWeight = psp::weight::UltraBold;
+        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
 
     // set width
     int nStretch = rQFont.stretch();
@@ -1817,10 +1817,10 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 
     // Create the font
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
-    if( aInfo.m_eWeight != psp::weight::Unknown )
-        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
+    if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
+        aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
-        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
+        aFont.SetWidthType( aInfo.m_eWidth );
     if( aInfo.m_eItalic != psp::italic::Unknown )
         aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
     if( aInfo.m_ePitch != psp::pitch::Unknown )

@@ -1123,42 +1123,7 @@ ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, in
             break;
     }
     // set weight
-    switch( rFontAttributes.GetWeight() )
-    {
-        case WEIGHT_THIN:
-            aInfo.m_eWeight = psp::weight::Thin;
-            break;
-        case WEIGHT_ULTRALIGHT:
-            aInfo.m_eWeight = psp::weight::UltraLight;
-            break;
-        case WEIGHT_LIGHT:
-            aInfo.m_eWeight = psp::weight::Light;
-            break;
-        case WEIGHT_SEMILIGHT:
-            aInfo.m_eWeight = psp::weight::SemiLight;
-            break;
-        case WEIGHT_NORMAL:
-            aInfo.m_eWeight = psp::weight::Normal;
-            break;
-        case WEIGHT_MEDIUM:
-            aInfo.m_eWeight = psp::weight::Medium;
-            break;
-        case WEIGHT_SEMIBOLD:
-            aInfo.m_eWeight = psp::weight::SemiBold;
-            break;
-        case WEIGHT_BOLD:
-            aInfo.m_eWeight = psp::weight::Bold;
-            break;
-        case WEIGHT_ULTRABOLD:
-            aInfo.m_eWeight = psp::weight::UltraBold;
-            break;
-        case WEIGHT_BLACK:
-            aInfo.m_eWeight = psp::weight::Black;
-            break;
-        default:
-            aInfo.m_eWeight = psp::weight::Unknown;
-            break;
-    }
+    aInfo.m_eWeight = rFontAttributes.GetWeight();
     // set width
     aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
@@ -1443,44 +1408,8 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
         }
     }
 
-    psp::weight::type eWeight = psp::weight::Unknown;
-    if( rFontSelData.GetWeight() != WEIGHT_DONTKNOW )
-    {
-        switch( rFontSelData.GetWeight() )
-        {
-            case WEIGHT_THIN:       eWeight = psp::weight::Thin; break;
-            case WEIGHT_ULTRALIGHT: eWeight = psp::weight::UltraLight; break;
-            case WEIGHT_LIGHT:      eWeight = psp::weight::Light; break;
-            case WEIGHT_SEMILIGHT:  eWeight = psp::weight::SemiLight; break;
-            case WEIGHT_NORMAL:     eWeight = psp::weight::Normal; break;
-            case WEIGHT_MEDIUM:     eWeight = psp::weight::Medium; break;
-            case WEIGHT_SEMIBOLD:   eWeight = psp::weight::SemiBold; break;
-            case WEIGHT_BOLD:       eWeight = psp::weight::Bold; break;
-            case WEIGHT_ULTRABOLD:  eWeight = psp::weight::UltraBold; break;
-            case WEIGHT_BLACK:      eWeight = psp::weight::Black; break;
-            default:
-                break;
-        }
-    }
-
+    FontWeight eWeight = rFontSelData.GetWeight();
     FontWidth eWidth = rFontSelData.GetWidthType();
-//     if( rFontSelData.GetWidthType() != WIDTH_DONTKNOW )
-//     {
-//         switch( rFontSelData.GetWidthType() )
-//         {
-//             case WIDTH_ULTRA_CONDENSED:  eWidth = psp::width::UltraCondensed; break;
-//             case WIDTH_EXTRA_CONDENSED: eWidth = psp::width::ExtraCondensed; break;
-//             case WIDTH_CONDENSED:    eWidth = psp::width::Condensed; break;
-//             case WIDTH_SEMI_CONDENSED:   eWidth = psp::width::SemiCondensed; break;
-//             case WIDTH_NORMAL:       eWidth = psp::width::Normal; break;
-//             case WIDTH_SEMI_EXPANDED:    eWidth = psp::width::SemiExpanded; break;
-//             case WIDTH_EXPANDED: eWidth = psp::width::Expanded; break;
-//             case WIDTH_EXTRA_EXPANDED:   eWidth = psp::width::ExtraExpanded; break;
-//             case WIDTH_ULTRA_EXPANDED:   eWidth = psp::width::UltraExpanded; break;
-//             default:
-//                 break;
-//         }
-//     }
 
     psp::pitch::type ePitch = psp::pitch::Unknown;
     if( rFontSelData.GetPitch() != PITCH_DONTKNOW )
@@ -1506,37 +1435,8 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
             break;
     }
 
-    switch (eWeight)
-    {
-        case psp::weight::Thin: aRet.meWeight = WEIGHT_THIN; break;
-        case psp::weight::UltraLight: aRet.meWeight = WEIGHT_ULTRALIGHT; break;
-        case psp::weight::Light: aRet.meWeight = WEIGHT_LIGHT; break;
-        case psp::weight::SemiLight: aRet.meWeight = WEIGHT_SEMILIGHT; break;
-        case psp::weight::Normal: aRet.meWeight = WEIGHT_NORMAL; break;
-        case psp::weight::Medium: aRet.meWeight = WEIGHT_MEDIUM; break;
-        case psp::weight::SemiBold: aRet.meWeight = WEIGHT_SEMIBOLD; break;
-        case psp::weight::Bold: aRet.meWeight = WEIGHT_BOLD; break;
-        case psp::weight::UltraBold: aRet.meWeight = WEIGHT_ULTRABOLD; break;
-        case psp::weight::Black: aRet.meWeight = WEIGHT_BLACK; break;
-        default:
-                break;
-    }
-
+    aRet.meWeight    = eWeight;
     aRet.meWidthType = eWidth;
-//     switch (eWidth)
-//     {
-//         case psp::width::UltraCondensed: aRet.meWidthType = WIDTH_ULTRA_CONDENSED; break;
-//         case psp::width::ExtraCondensed: aRet.meWidthType = WIDTH_EXTRA_CONDENSED; break;
-//         case psp::width::Condensed: aRet.meWidthType = WIDTH_CONDENSED; break;
-//         case psp::width::SemiCondensed: aRet.meWidthType = WIDTH_SEMI_CONDENSED; break;
-//         case psp::width::Normal: aRet.meWidthType = WIDTH_NORMAL; break;
-//         case psp::width::SemiExpanded: aRet.meWidthType = WIDTH_SEMI_EXPANDED; break;
-//         case psp::width::Expanded: aRet.meWidthType = WIDTH_EXPANDED; break;
-//         case psp::width::ExtraExpanded: aRet.meWidthType = WIDTH_EXTRA_EXPANDED; break;
-//         case psp::width::UltraExpanded: aRet.meWidthType = WIDTH_ULTRA_EXPANDED; break;
-//         default:
-//             break;
-//     }
 
     switch (ePitch)
     {

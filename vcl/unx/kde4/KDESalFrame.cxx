@@ -107,36 +107,36 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
-        aInfo.m_eWeight = psp::weight::Light;
+        aInfo.m_eWeight = WEIGHT_LIGHT;
     else if ( nWeight <= QFont::Normal )
-        aInfo.m_eWeight = psp::weight::Normal;
+        aInfo.m_eWeight = WEIGHT_NORMAL;
     else if ( nWeight <= QFont::DemiBold )
-        aInfo.m_eWeight = psp::weight::SemiBold;
+        aInfo.m_eWeight = WEIGHT_SEMIBOLD;
     else if ( nWeight <= QFont::Bold )
-        aInfo.m_eWeight = psp::weight::Bold;
+        aInfo.m_eWeight = WEIGHT_BOLD;
     else
-        aInfo.m_eWeight = psp::weight::UltraBold;
+        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
 
     // set width
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
-        aInfo.m_eWidth = psp::width::UltraCondensed;
+        aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
     else if ( nStretch <= QFont::ExtraCondensed )
-        aInfo.m_eWidth = psp::width::ExtraCondensed;
+        aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;
     else if ( nStretch <= QFont::Condensed )
-        aInfo.m_eWidth = psp::width::Condensed;
+        aInfo.m_eWidth = WIDTH_CONDENSED;
     else if ( nStretch <= QFont::SemiCondensed )
-        aInfo.m_eWidth = psp::width::SemiCondensed;
+        aInfo.m_eWidth = WIDTH_SEMI_CONDENSED;
     else if ( nStretch <= QFont::Unstretched )
-        aInfo.m_eWidth = psp::width::Normal;
+        aInfo.m_eWidth = WIDTH_NORMAL;
     else if ( nStretch <= QFont::SemiExpanded )
-        aInfo.m_eWidth = psp::width::SemiExpanded;
+        aInfo.m_eWidth = WIDTH_SEMI_EXPANDED;
     else if ( nStretch <= QFont::Expanded )
-        aInfo.m_eWidth = psp::width::Expanded;
+        aInfo.m_eWidth = WIDTH_EXPANDED;
     else if ( nStretch <= QFont::ExtraExpanded )
-        aInfo.m_eWidth = psp::width::ExtraExpanded;
+        aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;
     else
-        aInfo.m_eWidth = psp::width::UltraExpanded;
+        aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -158,10 +158,10 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 
     // Create the font
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
-    if( aInfo.m_eWeight != psp::weight::Unknown )
-        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
-    if( aInfo.m_eWidth != psp::width::Unknown )
-        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
+    if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
+        aFont.SetWeight( aInfo.m_eWeight );
+    if( aInfo.m_eWidth != WIDTH_DONTKNOW )
+        aFont.SetWidthType( aInfo.m_eWidth );
     if( aInfo.m_eItalic != psp::italic::Unknown )
         aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
     if( aInfo.m_ePitch != psp::pitch::Unknown )

@@ -149,40 +149,40 @@ static italic::type parseItalic( const ByteString& rItalic )
 
 // -------------------------------------------------------------------------
 
-static weight::type parseWeight( const ByteString& rWeight )
+static FontWeight parseWeight( const ByteString& rWeight )
 {
-    weight::type eWeight = weight::Unknown;
+    FontWeight eWeight = WEIGHT_DONTKNOW;
     if( rWeight.Search( "bold" ) != STRING_NOTFOUND )
     {
         if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
-            eWeight = weight::SemiBold;
+            eWeight = WEIGHT_SEMIBOLD;
         else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
-            eWeight = weight::UltraBold;
+            eWeight = WEIGHT_ULTRABOLD;
         else
-            eWeight = weight::Bold;
+            eWeight = WEIGHT_BOLD;
     }
     else if( rWeight.Search( "heavy" ) != STRING_NOTFOUND )
-        eWeight = weight::Bold;
+        eWeight = WEIGHT_BOLD;
     else if( rWeight.Search( "light" ) != STRING_NOTFOUND )
     {
         if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
-            eWeight = weight::SemiLight;
+            eWeight = WEIGHT_SEMILIGHT;
         else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
-            eWeight = weight::UltraLight;
+            eWeight = WEIGHT_ULTRALIGHT;
         else
-            eWeight = weight::Light;
+            eWeight = WEIGHT_LIGHT;
     }
     else if( rWeight.Search( "black" ) != STRING_NOTFOUND )
-        eWeight = weight::Black;
+        eWeight = WEIGHT_BLACK;
     else if( rWeight.Equals( "demi" ) )
-        eWeight = weight::SemiBold;
+        eWeight = WEIGHT_SEMIBOLD;
     else if( rWeight.Equals( "book" ) ||
              rWeight.Equals( "semicondensed" ) )
-        eWeight = weight::Light;
+        eWeight = WEIGHT_LIGHT;
     else if( rWeight.Equals( "medium" ) || rWeight.Equals( "roman" ) )
-        eWeight = weight::Medium;
+        eWeight = WEIGHT_MEDIUM;
     else
-        eWeight = weight::Normal;
+        eWeight = WEIGHT_NORMAL;
     return eWeight;
 }
 
@@ -358,7 +358,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nPSName( 0 ),
         m_eItalic( italic::Unknown ),
         m_eWidth( WIDTH_DONTKNOW ),
-        m_eWeight( weight::Unknown ),
+        m_eWeight( WEIGHT_DONTKNOW ),
         m_ePitch( pitch::Unknown ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
         m_bFontEncodingOnly( false ),
@@ -1695,16 +1695,16 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
     aXLFD.append( '-' );
     switch( pFont->m_eWeight )
     {
-        case weight::Thin:          aXLFD.append("thin");break;
-        case weight::UltraLight:    aXLFD.append("ultralight");break;
-        case weight::Light:         aXLFD.append("light");break;
-        case weight::SemiLight:     aXLFD.append("semilight");break;
-        case weight::Normal:        aXLFD.append("normal");break;
-        case weight::Medium:        aXLFD.append("medium");break;
-        case weight::SemiBold:      aXLFD.append("semibold");break;
-        case weight::Bold:          aXLFD.append("bold");break;
-        case weight::UltraBold:     aXLFD.append("ultrabold");break;
-        case weight::Black:         aXLFD.append("black");break;
+        case WEIGHT_THIN:          aXLFD.append("thin");break;
+        case WEIGHT_ULTRALIGHT:    aXLFD.append("ultralight");break;
+        case WEIGHT_LIGHT:         aXLFD.append("light");break;
+        case WEIGHT_SEMILIGHT:     aXLFD.append("semilight");break;
+        case WEIGHT_NORMAL:        aXLFD.append("normal");break;
+        case WEIGHT_MEDIUM:        aXLFD.append("medium");break;
+        case WEIGHT_SEMIBOLD:      aXLFD.append("semibold");break;
+        case WEIGHT_BOLD:          aXLFD.append("bold");break;
+        case WEIGHT_ULTRABOLD:     aXLFD.append("ultrabold");break;
+        case WEIGHT_BLACK:         aXLFD.append("black");break;
         default: break;
     }
     aXLFD.append('-');
@@ -1718,15 +1718,15 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
     aXLFD.append('-');
     switch( pFont->m_eWidth )
     {
-        case width::UltraCondensed: aXLFD.append("ultracondensed");break;
-        case width::ExtraCondensed: aXLFD.append("extracondensed");break;
-        case width::Condensed:      aXLFD.append("condensed");break;
-        case width::SemiCondensed:  aXLFD.append("semicondensed");break;
-        case width::Normal:         aXLFD.append("normal");break;
-        case width::SemiExpanded:   aXLFD.append("semiexpanded");break;
-        case width::Expanded:       aXLFD.append("expanded");break;
-        case width::ExtraExpanded:  aXLFD.append("extraexpanded");break;
-        case width::UltraExpanded:  aXLFD.append("ultraexpanded");break;
+        case WIDTH_ULTRA_CONDENSED: aXLFD.append("ultracondensed");break;
+        case WIDTH_EXTRA_CONDENSED: aXLFD.append("extracondensed");break;
+        case WIDTH_CONDENSED:       aXLFD.append("condensed");break;
+        case WIDTH_SEMI_CONDENSED:  aXLFD.append("semicondensed");break;
+        case WIDTH_NORMAL:          aXLFD.append("normal");break;
+        case WIDTH_SEMI_EXPANDED:   aXLFD.append("semiexpanded");break;
+        case WIDTH_EXPANDED:        aXLFD.append("expanded");break;
+        case WIDTH_EXTRA_EXPANDED:  aXLFD.append("extraexpanded");break;
+        case WIDTH_ULTRA_EXPANDED:  aXLFD.append("ultraexpanded");break;
         default: break;
     }
     aXLFD.append("-utf8-0-0-0-0-");
@@ -1947,17 +1947,17 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, String( ByteString( aInfo.psname ), aEncoding ), sal_True );
         switch( aInfo.weight )
         {
-            case FW_THIN:           pFont->m_eWeight = weight::Thin; break;
-            case FW_EXTRALIGHT: pFont->m_eWeight = weight::UltraLight; break;
-            case FW_LIGHT:          pFont->m_eWeight = weight::Light; break;
-            case FW_MEDIUM:     pFont->m_eWeight = weight::Medium; break;
-            case FW_SEMIBOLD:       pFont->m_eWeight = weight::SemiBold; break;
-            case FW_BOLD:           pFont->m_eWeight = weight::Bold; break;
-            case FW_EXTRABOLD:      pFont->m_eWeight = weight::UltraBold; break;
-            case FW_BLACK:          pFont->m_eWeight = weight::Black; break;
+            case FW_THIN:           pFont->m_eWeight = WEIGHT_THIN; break;
+            case FW_EXTRALIGHT: pFont->m_eWeight = WEIGHT_ULTRALIGHT; break;
+            case FW_LIGHT:          pFont->m_eWeight = WEIGHT_LIGHT; break;
+            case FW_MEDIUM:     pFont->m_eWeight = WEIGHT_MEDIUM; break;
+            case FW_SEMIBOLD:       pFont->m_eWeight = WEIGHT_SEMIBOLD; break;
+            case FW_BOLD:           pFont->m_eWeight = WEIGHT_BOLD; break;
+            case FW_EXTRABOLD:      pFont->m_eWeight = WEIGHT_ULTRABOLD; break;
+            case FW_BLACK:          pFont->m_eWeight = WEIGHT_BLACK; break;
 
             case FW_NORMAL:
-            default:        pFont->m_eWeight = weight::Normal; break;
+            default:        pFont->m_eWeight = WEIGHT_NORMAL; break;
         }
 
         switch( aInfo.width )
@@ -2466,7 +2466,7 @@ equalPitch (psp::pitch::type from, psp::pitch::type to)
 }
 
 inline bool
-equalWeight (psp::weight::type from, psp::weight::type to)
+equalWeight (FontWeight from, FontWeight to)
 {
     return from > to ? (from - to) <= 3 : (to - from) <= 3;
 }
@@ -2491,13 +2491,13 @@ namespace {
     {
         OUString            aFamily;
         italic::type        eItalic;
-        weight::type        eWeight;
+        FontWeight          eWeight;
         pitch::type         ePitch;
         rtl_TextEncoding    aEncoding;
 
         BuiltinFontIdentifier( const OUString& rFam,
                                italic::type eIt,
-                               weight::type eWg,
+                               FontWeight eWg,
                                pitch::type ePt,
                                rtl_TextEncoding enc ) :
             aFamily( rFam ),
@@ -4018,7 +4018,7 @@ bool PrintFontManager::readOverrideMetrics()
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
                 pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Weight" ) ) )
-                pFont->m_eWeight = static_cast<weight::type>(getInt(pProps[n].Value));
+                pFont->m_eWeight = static_cast<FontWeight>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Pitch" ) ) )
                 pFont->m_ePitch = static_cast<pitch::type>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encoding" ) ) )

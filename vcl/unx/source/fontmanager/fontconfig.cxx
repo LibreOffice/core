@@ -751,28 +751,28 @@ bool PrintFontManager::initFontconfig()
 
 namespace
 {
-    weight::type convertWeight(int weight)
+    FontWeight convertWeight(int weight)
     {
         // set weight
         if( weight <= FC_WEIGHT_THIN )
-            return weight::Thin;
+            return WEIGHT_THIN;
         else if( weight <= FC_WEIGHT_ULTRALIGHT )
-            return weight::UltraLight;
+            return WEIGHT_ULTRALIGHT;
         else if( weight <= FC_WEIGHT_LIGHT )
-            return weight::Light;
+            return WEIGHT_LIGHT;
         else if( weight <= FC_WEIGHT_BOOK )
-            return weight::SemiLight;
+            return WEIGHT_SEMILIGHT;
         else if( weight <= FC_WEIGHT_NORMAL )
-            return weight::Normal;
+            return WEIGHT_NORMAL;
         else if( weight <= FC_WEIGHT_MEDIUM )
-            return weight::Medium;
+            return WEIGHT_MEDIUM;
         else if( weight <= FC_WEIGHT_SEMIBOLD )
-            return weight::SemiBold;
+            return WEIGHT_SEMIBOLD;
         else if( weight <= FC_WEIGHT_BOLD )
-            return weight::Bold;
+            return WEIGHT_BOLD;
         else if( weight <= FC_WEIGHT_ULTRABOLD )
-            return weight::UltraBold;
-        return weight::Black;
+            return WEIGHT_ULTRABOLD;
+        return WEIGHT_BLACK;
     }
 
     italic::type convertSlant(int slant)
@@ -1041,7 +1041,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
 }
 
 static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
-    italic::type eItalic, weight::type eWeight, FontWidth eWidth, pitch::type ePitch)
+    italic::type eItalic, FontWeight eWeight, FontWidth eWidth, pitch::type ePitch)
 {
     if( eItalic != italic::Unknown )
     {
@@ -1055,21 +1055,21 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
         }
         rWrapper.FcPatternAddInteger( pPattern, FC_SLANT, nSlant );
     }
-    if( eWeight != weight::Unknown )
+    if( eWeight != WEIGHT_DONTKNOW )
     {
         int nWeight = FC_WEIGHT_NORMAL;
         switch( eWeight )
         {
-            case weight::Thin:          nWeight = FC_WEIGHT_THIN;break;
-            case weight::UltraLight:    nWeight = FC_WEIGHT_ULTRALIGHT;break;
-            case weight::Light:         nWeight = FC_WEIGHT_LIGHT;break;
-            case weight::SemiLight:     nWeight = FC_WEIGHT_BOOK;break;
-            case weight::Normal:        nWeight = FC_WEIGHT_NORMAL;break;
-            case weight::Medium:        nWeight = FC_WEIGHT_MEDIUM;break;
-            case weight::SemiBold:      nWeight = FC_WEIGHT_SEMIBOLD;break;
-            case weight::Bold:          nWeight = FC_WEIGHT_BOLD;break;
-            case weight::UltraBold:     nWeight = FC_WEIGHT_ULTRABOLD;break;
-            case weight::Black:         nWeight = FC_WEIGHT_BLACK;break;
+            case WEIGHT_THIN:           nWeight = FC_WEIGHT_THIN;break;
+            case WEIGHT_ULTRALIGHT:     nWeight = FC_WEIGHT_ULTRALIGHT;break;
+            case WEIGHT_LIGHT:          nWeight = FC_WEIGHT_LIGHT;break;
+            case WEIGHT_SEMILIGHT:      nWeight = FC_WEIGHT_BOOK;break;
+            case WEIGHT_NORMAL:         nWeight = FC_WEIGHT_NORMAL;break;
+            case WEIGHT_MEDIUM:         nWeight = FC_WEIGHT_MEDIUM;break;
+            case WEIGHT_SEMIBOLD:       nWeight = FC_WEIGHT_SEMIBOLD;break;
+            case WEIGHT_BOLD:           nWeight = FC_WEIGHT_BOLD;break;
+            case WEIGHT_ULTRABOLD:      nWeight = FC_WEIGHT_ULTRABOLD;break;
+            case WEIGHT_BLACK:          nWeight = FC_WEIGHT_BLACK;break;
             default:
                 break;
         }
@@ -1112,7 +1112,7 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
 
 rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
-    italic::type &rItalic, weight::type &rWeight,
+    italic::type &rItalic, FontWeight &rWeight,
     FontWidth &rWidth, pitch::type &rPitch) const
 {
     rtl::OUString aName;
@@ -1429,7 +1429,7 @@ int PrintFontManager::FreeTypeCharIndex( void*, sal_uInt32 )
 }
 
 rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
-    rtl::OUString&, const rtl::OString&, italic::type, weight::type, FontWidth, pitch::type) const
+    rtl::OUString&, const rtl::OString&, italic::type, FontWeight, FontWidth, pitch::type) const
 {
     rtl::OUString aName;
     return aName;

@@ -79,7 +79,6 @@ public:
                                   Ucs2UIntMap& rUnicodeEnc );
     static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
     static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
-    static FontWeight   ToFontWeight (psp::weight::type eWeight);
     static FontPitch    ToFontPitch (psp::pitch::type ePitch);
     static FontItalic   ToFontItalic (psp::italic::type eItalic);
     static FontFamily   ToFontFamily (psp::family::type eFamily);

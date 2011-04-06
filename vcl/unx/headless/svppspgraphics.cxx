@@ -730,7 +730,7 @@ sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel 
     }
     int nWeight = (int)pEntry->meWeight;
     int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-    if( nRealWeight <= (int)psp::weight::Medium && nWeight > (int)WEIGHT_MEDIUM )
+    if( nRealWeight <= (int)WEIGHT_MEDIUM && nWeight > (int)WEIGHT_MEDIUM )
     {
         bArtBold = true;
     }
@@ -1078,25 +1078,6 @@ void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 
 // ----------------------------------------------------------------------------
 
-FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
-{
-    switch (eWeight)
-    {
-        case psp::weight::Thin:       return WEIGHT_THIN;
-        case psp::weight::UltraLight: return WEIGHT_ULTRALIGHT;
-        case psp::weight::Light:      return WEIGHT_LIGHT;
-        case psp::weight::SemiLight:  return WEIGHT_SEMILIGHT;
-        case psp::weight::Normal:     return WEIGHT_NORMAL;
-        case psp::weight::Medium:     return WEIGHT_MEDIUM;
-        case psp::weight::SemiBold:   return WEIGHT_SEMIBOLD;
-        case psp::weight::Bold:       return WEIGHT_BOLD;
-        case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
-        case psp::weight::Black:      return WEIGHT_BLACK;
-        default: break;
-    }
-    return WEIGHT_DONTKNOW;
-}
-
 FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
 {
     switch (ePitch)
@@ -1141,7 +1122,7 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
     aDFA.maName         = rInfo.m_aFamilyName;
     aDFA.maStyleName    = rInfo.m_aStyleName;
     aDFA.meFamily       = ToFontFamily (rInfo.m_eFamilyStyle);
-    aDFA.meWeight       = ToFontWeight (rInfo.m_eWeight);
+    aDFA.meWeight       = rInfo.m_eWeight;
     aDFA.meItalic       = ToFontItalic (rInfo.m_eItalic);
     aDFA.meWidthType    = rInfo.m_eWidth;
     aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);

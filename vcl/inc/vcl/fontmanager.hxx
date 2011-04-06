@@ -67,45 +67,12 @@ enum type {
 };
 }
 
-namespace width
-{
-enum type {
-    Unknown = 0,
-    UltraCondensed = 1,
-    ExtraCondensed = 2,
-    Condensed = 3,
-    SemiCondensed = 4,
-    Normal = 5,
-    SemiExpanded = 6,
-    Expanded = 7,
-    ExtraExpanded = 8,
-    UltraExpanded = 9
-};
-}
-
 namespace pitch
 {
 enum type {
     Unknown = 0,
     Fixed = 1,
     Variable = 2
-};
-}
-
-namespace weight
-{
-enum type {
-    Unknown = 0,
-    Thin = 1,
-    UltraLight = 2,
-    Light = 3,
-    SemiLight = 4,
-    Normal = 5,
-    Medium = 6,
-    SemiBold = 7,
-    Bold = 8,
-    UltraBold = 9,
-    Black = 10
 };
 }
 
@@ -163,7 +130,7 @@ struct FastPrintFontInfo
     family::type                        m_eFamilyStyle;
     italic::type                        m_eItalic;
     FontWidth                           m_eWidth;
-    weight::type                        m_eWeight;
+    FontWeight                          m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
     bool                                m_bSubsettable;
@@ -175,7 +142,7 @@ struct FastPrintFontInfo
             m_eFamilyStyle( family::Unknown ),
             m_eItalic( italic::Unknown ),
             m_eWidth( WIDTH_DONTKNOW ),
-            m_eWeight( weight::Unknown ),
+            m_eWeight( WEIGHT_DONTKNOW ),
             m_ePitch( pitch::Unknown ),
             m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
@@ -277,7 +244,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl::OUString                               m_aStyleName;
         italic::type                                m_eItalic;
         FontWidth                                   m_eWidth;
-        weight::type                                m_eWeight;
+        FontWeight                                  m_eWeight;
         pitch::type                                 m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
         bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
@@ -359,7 +326,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl::OString        aFamily;
         rtl::OString        aAddStyle;
         italic::type        eItalic;
-        weight::type        eWeight;
+        FontWeight          eWeight;
         FontWidth           eWidth;
         pitch::type         ePitch;
         rtl_TextEncoding    aEncoding;
@@ -528,10 +495,10 @@ public:
     }
 
     // get a specific fonts weight type
-    weight::type getFontWeight( fontID nFontID ) const
+    FontWeight getFontWeight( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWeight : weight::Unknown;
+        return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
     }
 
     // get a specific fonts pitch type
@@ -736,7 +703,7 @@ public:
     ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
+        const rtl::OString& rLangAttrib, italic::type& rItalic, FontWeight& rWeight,
         FontWidth& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 

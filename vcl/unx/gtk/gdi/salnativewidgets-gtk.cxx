@@ -3405,15 +3405,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
     // set weight
     if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
-        aInfo.m_eWeight = psp::weight::UltraLight;
+        aInfo.m_eWeight = WEIGHT_ULTRALIGHT;
     else if( eWeight <= PANGO_WEIGHT_LIGHT )
-        aInfo.m_eWeight = psp::weight::Light;
+        aInfo.m_eWeight = WEIGHT_LIGHT;
     else if( eWeight <= PANGO_WEIGHT_NORMAL )
-        aInfo.m_eWeight = psp::weight::Normal;
+        aInfo.m_eWeight = WEIGHT_NORMAL;
     else if( eWeight <= PANGO_WEIGHT_BOLD )
-        aInfo.m_eWeight = psp::weight::Bold;
+        aInfo.m_eWeight = WEIGHT_BOLD;
     else
-        aInfo.m_eWeight = psp::weight::UltraBold;
+        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
     // set width
     switch( eStretch )
     {
@@ -3452,8 +3452,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         nPointHeight = nPangoHeight/PANGO_SCALE;
 
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
-    if( aInfo.m_eWeight != psp::weight::Unknown )
-        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
+    if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
+        aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
         aFont.SetWidthType( aInfo.m_eWidth );
     if( aInfo.m_eItalic != psp::italic::Unknown )
