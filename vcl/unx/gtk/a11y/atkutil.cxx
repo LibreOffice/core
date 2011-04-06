@@ -597,6 +597,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 {
+    try {
     switch (pEvent->GetId())
     {
     case VCLEVENT_WINDOW_SHOW:
@@ -662,6 +663,10 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 
     default:
         break;
+    }
+    } catch(lang::IndexOutOfBoundsException e)
+    {
+        g_warning("Focused object has invalid index in parent");
     }
     return 0;
 }
