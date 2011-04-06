@@ -4042,10 +4042,20 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
-                        if (aParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
-                            DrawEditBottomTop(aParam);
-                        else
-                            DrawEditStandard(aParam);
+                        switch (aParam.meOrient)
+                        {
+                            case SVX_ORIENTATION_BOTTOMTOP:
+                                DrawEditBottomTop(aParam);
+                            break;
+                            case SVX_ORIENTATION_TOPBOTTOM:
+                                DrawEditTopBottom(aParam);
+                            break;
+                            case SVX_ORIENTATION_STACKED:
+                                DrawEditStacked(aParam);
+                            break;
+                            default:
+                                DrawEditStandard(aParam);
+                        }
 
                         // Retrieve parameters for next iteration.
                         pOldPattern = aParam.mpOldPattern;
