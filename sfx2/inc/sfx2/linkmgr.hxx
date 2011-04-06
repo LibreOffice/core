@@ -170,7 +170,7 @@ public:
     // got the appropriate information as a string.
     // Is now required for FileObject in conjunction with JavaScript
     // this needs information about Load/Abort/Error
-    static ULONG  RegisterStatusInfoId();
+    static sal_uIntPtr RegisterStatusInfoId();
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
