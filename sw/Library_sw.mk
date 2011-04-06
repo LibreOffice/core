@@ -282,6 +282,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/calcmove \
     sw/source/core/layout/colfrm \
     sw/source/core/layout/dbg_lay \
+    sw/source/core/layout/dumpfilter \
     sw/source/core/layout/findfrm \
     sw/source/core/layout/flowfrm \
     sw/source/core/layout/fly \

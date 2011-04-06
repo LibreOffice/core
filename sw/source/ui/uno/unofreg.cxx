@@ -130,7 +130,12 @@ extern uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames(
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
-// --> OD 2007-05-24 #i73788#
+// Layout dump filter
+extern uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw();
+extern OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL LayoutDumpFilter_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
+
+// #i73788#
 #include "cppuhelper/implementationentry.hxx"
 namespace comp_FinalThreadManager {
 
@@ -141,9 +146,7 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _crea
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 
 }
-// <--
 
-//
 #ifdef __cplusplus
 extern "C"
 {
@@ -361,6 +364,14 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SwUnoModule_getImplementationName(),
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
+        }
+        else if( LayoutDumpFilter_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                LayoutDumpFilter_getImplementationName(),
+                LayoutDumpFilter_createInstance,
+                LayoutDumpFilter_getSupportedServiceNames() );
         }
         else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )

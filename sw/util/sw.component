@@ -25,9 +25,7 @@
 * for a copy of the LGPLv3 License.
 *
 **********************************************************************-->
-
-<component loader="com.sun.star.loader.SharedLibrary"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component xmlns="http://openoffice.org/2010/uno-components" loader="com.sun.star.loader.SharedLibrary">
   <implementation name="SwXAutoTextContainer">
     <service name="com.sun.star.text.AutoTextContainer"/>
   </implementation>
@@ -100,5 +98,8 @@
   </implementation>
   <implementation name="com.sun.star.util.comp.FinalThreadManager">
     <service name="com.sun.star.util.JobManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.LayoutDump">
+    <service name="com.sun.star.comp.Writer.LayoutDump"/>
   </implementation>
 </component>

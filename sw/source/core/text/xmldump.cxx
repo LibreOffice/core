@@ -128,21 +128,19 @@ class XmlPortionDumper:public SwPortionHandler
 
 };
 
-#if OSL_DEBUG_LEVEL > 1
-
 namespace
 {
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
-        xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
+        xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
         return writer;
     }
 
     void lcl_freeWriter( xmlTextWriterPtr writer )
     {
-       xmlTextWriterEndDocument(writer);
-       xmlFreeTextWriter( writer );
+        xmlTextWriterEndDocument( writer );
+        xmlFreeTextWriter( writer );
     }
 }
 
@@ -263,7 +261,5 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
