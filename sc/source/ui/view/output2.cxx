@@ -3057,10 +3057,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    bool bHidden = false;
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-    long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
     {
@@ -3076,9 +3074,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
-
-    if (bHidden)
-        return;
 
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
@@ -3421,15 +3416,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
     else
         aLogicStart = Point(nStartX, nStartY);
-    if (!rParam.mbBreak)
-    {
-        long nAvailWidth = aCellSize.Width();
-        // space for AutoFilter is already handled in GetOutputArea
-
-        //  horizontal alignment
-
-        // (do nothing)
-    }
 
     if (rParam.mbBreak)
     {
@@ -3442,7 +3428,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    short nOriVal = 900; // Angle of orientation
     if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
     {
         Size aPSize = rParam.mpEngine->GetPaperSize();
@@ -3512,22 +3497,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         }
     }
 
-    // bMoveClipped handling has been replaced by complete alignment
-    // handling (also extending to the left).
-
-    if ( bSimClip && !nOriVal)
-    {
-        //  kein hartes Clipping, aber nur die betroffenen
-        //  Zeilen ausgeben
-
-        Point aDocStart = aLogicClip.TopLeft();
-        aDocStart -= aLogicStart;
-        rParam.mpEngine->Draw( pDev, aLogicClip, aDocStart, false );
-    }
-    else
-    {
-        rParam.mpEngine->Draw( pDev, aLogicStart, nOriVal );
-    }
+    rParam.mpEngine->Draw(pDev, aLogicStart, 900);
 
     if (bClip)
     {
