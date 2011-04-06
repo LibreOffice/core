@@ -1544,6 +1544,8 @@ struct ShapeWritingVisitor
 
                 xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(x))+USTR("mm"));
                 xAttrs->AddAttribute( USTR( "svg:y" ), rtl::OUString::valueOf(pt2mm(y))+USTR("mm"));
+                (void)width;
+                (void)height;
                 xAttrs->AddAttribute( USTR( "draw:style-name" ), USTR("svggraphicstyle")+sStyleId );
 
                 mxDocumentHandler->startElement(USTR("draw:frame"),xUnoAttrs);
@@ -2475,6 +2477,8 @@ struct ShapeRenderingVisitor
                 mrOutDev.DrawText(Point(basegfx::fround(pt100thmm(x)),
                                         basegfx::fround(pt100thmm(y))),
                                   aText);
+                (void)width;
+                (void)height;
                 break;
             }
         }
