@@ -95,11 +95,11 @@ namespace svxform
     class FormScriptListener    :public FormScriptListener_Base
     {
     private:
-        ::osl::Mutex                                            m_aMutex;
-        ::rtl::Reference< FormScriptingEnvironment >            m_pScriptExecutor;
+        ::osl::Mutex m_aMutex;
+        FormScriptingEnvironment *m_pScriptExecutor;
 
     public:
-        FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor );
+        FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
         virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException);
@@ -128,7 +128,7 @@ namespace svxform
 
         /** determines whether the instance is already disposed
         */
-        bool    impl_isDisposed_nothrow() const { return !m_pScriptExecutor.is(); }
+        bool    impl_isDisposed_nothrow() const { return !m_pScriptExecutor; }
 
         /** fires the given script event in a thread-safe manner
 
@@ -195,8 +195,8 @@ namespace svxform
     //= FormScriptListener
     //====================================================================
     //--------------------------------------------------------------------
-    FormScriptListener::FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor )
-        :m_pScriptExecutor( _pScriptExecutor )
+    FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
+        :m_pScriptExecutor( pScriptExecutor )
     {
     }
 
@@ -231,11 +231,10 @@ namespace svxform
     //--------------------------------------------------------------------
     void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
-        OSL_PRECOND( m_pScriptExecutor.is(), "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
+        OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
 
-        ::rtl::Reference< FormScriptingEnvironment > pExecutor( m_pScriptExecutor );
         _rGuard.clear();
-        pExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
+        m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
     }
 
     //--------------------------------------------------------------------
