@@ -53,6 +53,44 @@
 #include "vcl/svapp.hxx"
 #include "osl/mutex.hxx"
 
+//TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
+class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star::beans::XPropertyChangeListener>
+{
+    private:
+        com::sun::star::uno::WeakReference<com::sun::star::beans::XPropertyChangeListener> mxOwner;
+
+    public:
+        WeakPropertyChangeListener(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner)
+            : mxOwner(xOwner)
+        {
+        }
+
+        virtual ~WeakPropertyChangeListener()
+        {
+        }
+
+        virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent &rEvent )
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->propertyChange(rEvent);
+
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->disposing(rEvent);
+
+        }
+};
+
 namespace css = com::sun::star;
 
 using sfx2::appl::ImeStatusWindow;
@@ -133,13 +171,13 @@ bool ImeStatusWindow::canToggle() const
 
 ImeStatusWindow::~ImeStatusWindow()
 {
-    if (m_xConfig.is())
+    if (m_xConfig.is() && m_xConfigListener.is())
         // We should never get here, but just in case...
         try
         {
             m_xConfig->removePropertyChangeListener(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowStatusWindow")),
-                this);
+                m_xConfigListener);
         }
         catch (css::uno::Exception &)
         {
@@ -221,12 +259,15 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
         xConfig = m_xConfig;
     }
     if (bAdd)
+    {
         // Exceptions here could be handled individually, to support graceful
         // degradation (no update notification mechanism in this case---but also
         // no dispose notifications):
+        m_xConfigListener = new WeakPropertyChangeListener(this);
         xConfig->addPropertyChangeListener(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowStatusWindow")),
-            this);
+            m_xConfigListener);
+    }
     return xConfig;
 }
 

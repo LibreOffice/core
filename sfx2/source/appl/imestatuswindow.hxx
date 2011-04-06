@@ -118,6 +118,8 @@ private:
     osl::Mutex m_aMutex;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
         m_xConfig;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >
+        m_xConfigListener;
     bool m_bDisposed;
 };
 
