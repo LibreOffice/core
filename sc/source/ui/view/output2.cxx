@@ -2260,7 +2260,7 @@ bool ScOutputData::DrawEditParam::isVerticallyOriented() const
     return (meOrient == SVX_ORIENTATION_TOPBOTTOM || meOrient == SVX_ORIENTATION_BOTTOMTOP);
 }
 
-void ScOutputData::DrawEditParam::setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell)
+void ScOutputData::DrawEditParam::setAlignmentItems()
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
@@ -2284,11 +2284,11 @@ void ScOutputData::DrawEditParam::setAlignmentItems(ScFieldEditEngine* pEngine, 
                 break;
         }
 
-        pEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
-        pEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
+        mpEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
+        mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
 
         if (meHorJust == SVX_HOR_JUSTIFY_BLOCK)
-            pEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+            mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
     }
     else
     {
@@ -2340,29 +2340,29 @@ void ScOutputData::DrawEditParam::setAlignmentItems(ScFieldEditEngine* pEngine, 
                 }
         }
 
-        pEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
+        mpEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
 
         if (mbAsianVertical)
         {
-            pEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
+            mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
             if (meHorJust == SVX_HOR_JUSTIFY_BLOCK)
-                pEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+                mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
         }
         else
         {
-            pEngine->SetDefaultItem( SvxJustifyMethodItem(meHorJustMethod, EE_PARA_JUST_METHOD) );
+            mpEngine->SetDefaultItem( SvxJustifyMethodItem(meHorJustMethod, EE_PARA_JUST_METHOD) );
             if (meVerJust == SVX_VER_JUSTIFY_BLOCK)
-                pEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+                mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
         }
     }
 
-    pEngine->SetVertical(mbAsianVertical);
-    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT)
+    mpEngine->SetVertical(mbAsianVertical);
+    if (mpCell && mpCell->GetCellType() == CELLTYPE_EDIT)
     {
         // We need to synchronize the vertical mode in the EditTextObject
         // instance too.  No idea why we keep this state in two separate
         // instances.
-        ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+        ScEditCell* pEditCell = static_cast<ScEditCell*>(mpCell);
         const EditTextObject* pData = pEditCell->GetData();
         if (pData)
             const_cast<EditTextObject*>(pData)->SetVertical(mbAsianVertical);
@@ -2499,8 +2499,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
 
     rParam.updateEnginePattern(bUseStyleColor);
-
-    rParam.setAlignmentItems(rParam.mpEngine, rParam.mpCell);
+    rParam.setAlignmentItems();
 
     //  Read content from cell
 

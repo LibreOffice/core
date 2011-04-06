@@ -130,7 +130,7 @@ private:
          */
         bool isVerticallyOriented() const;
 
-        void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
+        void setAlignmentItems();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
     };
 
