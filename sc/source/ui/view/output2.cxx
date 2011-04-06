@@ -2323,6 +2323,36 @@ bool ScOutputData::DrawEditParam::isVerticallyOriented() const
     return (meOrient == SVX_ORIENTATION_TOPBOTTOM || meOrient == SVX_ORIENTATION_BOTTOMTOP);
 }
 
+void ScOutputData::DrawEditParam::calcStartPosForVertical(
+    Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice)
+{
+    OSL_ENSURE(isVerticallyOriented(), "Use this only for vertically oriented cell!");
+
+    if (mbPixelToLogic)
+        rLogicStart = pRefDevice->PixelToLogic(rLogicStart);
+
+    if (mbBreak)
+    {
+        // vertical adjustment is within the EditEngine
+        if (mbPixelToLogic)
+            rLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+        else
+            rLogicStart.Y() += nTopM;
+
+        switch (meHorJust)
+        {
+            case SVX_HOR_JUSTIFY_CENTER:
+                rLogicStart.X() += (nCellWidth - nEngineWidth) / 2;
+            break;
+            case SVX_HOR_JUSTIFY_RIGHT:
+                rLogicStart.X() += nCellWidth - nEngineWidth;
+            break;
+            default:
+                ; // do nothing
+        }
+    }
+}
+
 void ScOutputData::DrawEditParam::setAlignmentItems()
 {
     if (isVerticallyOriented() || mbAsianVertical)
@@ -3130,7 +3160,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //
 
     Size aPaperSize = Size( 1000000, 1000000 );
-    if (rParam.hasLineBreak())
+    if (rParam.mbBreak)
     {
         //  call GetOutputArea with nNeeded=0, to get only the cell width
 
@@ -3145,16 +3175,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     if (rParam.mbPixelToLogic)
     {
         Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
-        if ( rParam.mbBreak && pRefDevice != pFmtDevice )
-        {
-            // #i85342# screen display and formatting for printer,
-            // use same GetEditArea call as in ScViewData::SetEditEngine
-
-            Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( pDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
-            aLogicSize.Width() = aUtilRect.GetWidth();
-        }
         rParam.mpEngine->SetPaperSize(aLogicSize);
     }
     else
@@ -3399,20 +3419,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         }
     }
 
-    Point aLogicStart;
-    if (rParam.mbPixelToLogic)
-        aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
-    else
-        aLogicStart = Point(nStartX, nStartY);
-
-    if (rParam.mbBreak)
-    {
-        // vertical adjustment is within the EditEngine
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-        else
-            aLogicStart.Y() += nTopM;
-    }
+    Point aLogicStart(nStartX, nStartY);
+    rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, pRefDevice);
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
@@ -3548,16 +3556,6 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     if (rParam.mbPixelToLogic)
     {
         Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
-        if ( rParam.mbBreak && pRefDevice != pFmtDevice )
-        {
-            // #i85342# screen display and formatting for printer,
-            // use same GetEditArea call as in ScViewData::SetEditEngine
-
-            Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( pDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
-            aLogicSize.Width() = aUtilRect.GetWidth();
-        }
         rParam.mpEngine->SetPaperSize(aLogicSize);
     }
     else
@@ -3804,20 +3802,8 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         }
     }
 
-    Point aLogicStart;
-    if (rParam.mbPixelToLogic)
-        aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
-    else
-        aLogicStart = Point(nStartX, nStartY);
-
-    if (rParam.mbBreak)
-    {
-        // vertical adjustment is within the EditEngine
-        if (rParam.mbPixelToLogic)
-            aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-        else
-            aLogicStart.Y() += nTopM;
-    }
+    Point aLogicStart(nStartX, nStartY);
+    rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, pRefDevice);
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 

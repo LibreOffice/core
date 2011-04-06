@@ -132,6 +132,16 @@ private:
          */
         bool isVerticallyOriented() const;
 
+        /**
+         * Calculate offset position for vertically oriented (either
+         * top-bottom or bottom-top orientation) text.
+         *
+         * @param rLogicStart initial position in pixels.  When the call is
+         *                    finished, this parameter will store the new
+         *                    position.
+         */
+        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice);
+
         void setAlignmentItems();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
         void adjustForRTL();
