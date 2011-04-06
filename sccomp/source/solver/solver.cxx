@@ -602,36 +602,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    // -------------------------------------------------------------------------
-
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-    {
-        if (pRegistryKey)
-        {
-            try
-            {
-                uno::Reference<registry::XRegistryKey> xNewKey;
-                sal_Int32                              nPos;
-
-                xNewKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey )->createKey( SolverComponent_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
-                const uno::Sequence< OUString > & rSNL1 = SolverComponent_getSupportedServiceNames();
-                const OUString * pArray1 = rSNL1.getConstArray();
-                for ( nPos = rSNL1.getLength(); nPos--; )
-                    xNewKey->createKey( pArray1[nPos] );
-
-                return sal_True;
-            }
-            catch (registry::InvalidRegistryException &)
-            {
-                OSL_FAIL( "### InvalidRegistryException!" );
-            }
-        }
-        return sal_False;
-    }
-
-    // -------------------------------------------------------------------------
-
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );

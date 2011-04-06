@@ -82,12 +82,10 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    sal_Bool            bDestPers;          // not saved
+    bool            bDestPers;          // not saved
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
-    SCROW           nDynamicEndRow;
-    bool            bUseDynamicRange;
 
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );

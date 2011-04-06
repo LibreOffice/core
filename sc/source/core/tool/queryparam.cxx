@@ -188,8 +188,7 @@ ScQueryParam::ScQueryParam() :
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
     ScQueryParamBase(r),
     ScQueryParamTable(r),
-    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow),
-    nDynamicEndRow(r.nDynamicEndRow), bUseDynamicRange(r.bUseDynamicRange)
+    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
 {
 }
 
@@ -199,9 +198,7 @@ ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
     bDestPers(true),
     nDestTab(0),
     nDestCol(0),
-    nDestRow(0),
-    nDynamicEndRow(0),
-    bUseDynamicRange(false)
+    nDestRow(0)
 {
 }
 
@@ -235,8 +232,6 @@ void ScQueryParam::ClearDestParams()
     nDestTab = 0;
     nDestCol = 0;
     nDestRow = 0;
-    nDynamicEndRow = 0;
-    bUseDynamicRange = false;
 }
 
 //------------------------------------------------------------------------
@@ -259,8 +254,6 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bDuplicate  = r.bDuplicate;
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
-    nDynamicEndRow = r.nDynamicEndRow;
-    bUseDynamicRange = r.bUseDynamicRange;
 
     maEntries = r.maEntries;
 
@@ -299,9 +292,7 @@ sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (bDestPers   == rOther.bDestPers)
         && (nDestTab    == rOther.nDestTab)
         && (nDestCol    == rOther.nDestCol)
-        && (nDestRow    == rOther.nDestRow)
-        && (nDynamicEndRow == rOther.nDynamicEndRow)
-        && (bUseDynamicRange == rOther.bUseDynamicRange) )
+        && (nDestRow    == rOther.nDestRow) )
     {
         bEqual = sal_True;
         for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
@@ -325,7 +316,6 @@ void ScQueryParam::MoveToDest()
         nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
         nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
         nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
-        nDynamicEndRow = sal::static_int_cast<SCROW>( nDynamicEndRow + nDifY );
         size_t n = maEntries.size();
         for (size_t i=0; i<n; i++)
             maEntries[i].nField += nDifX;

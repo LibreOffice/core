@@ -1465,9 +1465,6 @@ public:
                                         SCTAB nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
-    /** Update the dynamic end row position of a current data area. */
-    void            UpdateDynamicEndRow(ScDBData& rDBData) const;
-
     sal_Bool            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
     SC_DLLPUBLIC sal_Bool           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,

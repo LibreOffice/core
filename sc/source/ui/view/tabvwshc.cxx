@@ -103,6 +103,8 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     if(pCW)
         pCW->SetHideNotDelete(sal_True);
 
+    ScDocument* pDoc = GetViewData()->GetDocument();
+
     switch( nSlotId )
     {
         case FID_DEFINE_NAME:
@@ -125,7 +127,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 SCITEM_CONSOLIDATEDATA );
 
             const ScConsolidateParam* pDlgData =
-                            GetViewData()->GetDocument()->GetConsolidateDlgData();
+                            pDoc->GetConsolidateDlgData();
 
             if ( !pDlgData )
             {
@@ -175,9 +177,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
-            aQueryParam.bUseDynamicRange = true;
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
             ScRange aAdvSource;
@@ -201,9 +207,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
-            aQueryParam.bUseDynamicRange = true;
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
                                       GetViewData(),
@@ -254,7 +264,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             {
                 // Check for an existing datapilot output.
                 ScViewData* pViewData = GetViewData();
-                ScDPObject* pObj = GetViewData()->GetDocument()->GetDPAtCursor(
+                ScDPObject* pObj = pDoc->GetDPAtCursor(
                     pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
 
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
@@ -273,7 +283,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             ScViewData* pViewData = GetViewData();
 
-            ScDocument* pDoc = pViewData->GetDocument();
             const ScConditionalFormat* pForm = pDoc->GetCondFormat(
                 pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
 

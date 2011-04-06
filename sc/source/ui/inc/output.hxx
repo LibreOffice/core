@@ -70,6 +70,8 @@ class SdrPaintWindow;
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
+class ScFieldEditEngine;
+
 class ScOutputData
 {
 friend class ScDrawStringsVars;
@@ -81,6 +83,54 @@ private:
         long        mnColWidth;
         bool        mbLeftClip;
         bool        mbRightClip;
+    };
+
+    class DrawEditParam
+    {
+    public:
+        SvxCellHorJustify       meHorJust;
+        SvxCellVerJustify       meVerJust;
+        SvxCellJustifyMethod    meHorJustMethod;
+        SvxCellJustifyMethod    meVerJustMethod;
+        SvxCellOrientation      meOrient;
+        SCSIZE                  mnArrY;
+        SCCOL                   mnX;
+        SCROW                   mnY;
+        SCCOL                   mnCellX;
+        SCROW                   mnCellY;
+        long                    mnPosX;
+        long                    mnPosY;
+        long                    mnInitPosX;
+        bool                    mbBreak;
+        bool                    mbCellIsValue;
+        bool                    mbAsianVertical;
+        bool                    mbPixelToLogic;
+        bool                    mbHyphenatorSet;
+        ScFieldEditEngine*      mpEngine;
+        ScBaseCell*             mpCell;
+        const ScPatternAttr*    mpPattern;
+        const SfxItemSet*       mpCondSet;
+        const ScPatternAttr*    mpOldPattern;
+        const SfxItemSet*       mpOldCondSet;
+        const RowInfo*          mpThisRowInfo;
+
+        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+
+        void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
+        void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+        void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
+        long getEngineWidth(ScFieldEditEngine* pEngine) const;
+        bool hasLineBreak() const;
+
+        /**
+         * When the text is vertically oriented, the text is either rotated 90
+         * degrees to the right or 90 degrees to the left.   Note that this is
+         * different from being vertically stacked.
+         */
+        bool isVerticallyOriented() const;
+
+        void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
+        bool adjustHorAlignment(ScFieldEditEngine* pEngine);
     };
 
     OutputDevice* pDev;         // Device
@@ -122,14 +172,14 @@ private:
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    sal_Bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
-    sal_Bool bSingleGrid;           // beim Gitter bChanged auswerten
+    bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
+    bool bSingleGrid;           // beim Gitter bChanged auswerten
 
-    sal_Bool bPagebreakMode;        // Seitenumbruch-Vorschau
-    sal_Bool bSolidBackground;      // weiss statt transparent
+    bool bPagebreakMode;        // Seitenumbruch-Vorschau
+    bool bSolidBackground;      // weiss statt transparent
 
-    sal_Bool bUseStyleColor;
-    sal_Bool bForceAutoColor;
+    bool bUseStyleColor;
+    bool bForceAutoColor;
 
     sal_Bool bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
@@ -138,18 +188,18 @@ private:
 
     Color   aGridColor;
 
-    sal_Bool    bShowNullValues;
-    sal_Bool    bShowFormulas;
-    sal_Bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
-    sal_Bool    bMarkClipped;
+    bool    bShowNullValues;
+    bool    bShowFormulas;
+    bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
+    bool    bMarkClipped;
 
-    sal_Bool    bSnapPixel;
+    bool    bSnapPixel;
 
-    sal_Bool    bAnyRotated;        // intern
-    sal_Bool    bAnyClipped;        // intern
-    sal_Bool    bTabProtected;
+    bool    bAnyRotated;        // intern
+    bool    bAnyClipped;        // intern
+    bool    bTabProtected;
     sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
-    sal_Bool    bLayoutRTL;
+    bool    bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
@@ -184,6 +234,8 @@ private:
     void            DrawRotatedFrame( const Color* pForceColor );       // pixel
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
+
+    void DrawEditStandard(DrawEditParam& rParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
