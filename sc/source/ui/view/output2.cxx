@@ -2189,7 +2189,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
     return true;
 }
 
-void ScOutputData::DrawEditParam::updateEnginePattern(bool bUseStyleColor)
+void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 {
     // syntax highlighting mode is ignored here
     // StringDiffer doesn't look at hyphenate, language items
@@ -2353,7 +2353,7 @@ void ScOutputData::DrawEditParam::calcStartPosForVertical(
     }
 }
 
-void ScOutputData::DrawEditParam::setAlignmentItems()
+void ScOutputData::DrawEditParam::setAlignmentToEngine()
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
@@ -2634,8 +2634,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
         rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
 
-    rParam.updateEnginePattern(bUseStyleColor);
-    rParam.setAlignmentItems();
+    rParam.setPatternToEngine(bUseStyleColor);
+    rParam.setAlignmentToEngine();
 
     //  Read content from cell
 
@@ -3184,8 +3184,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //  Fill the EditEngine (cell attributes and text)
     //
 
-    rParam.updateEnginePattern(bUseStyleColor);
-    rParam.setAlignmentItems();
+    rParam.setPatternToEngine(bUseStyleColor);
+    rParam.setAlignmentToEngine();
 
     //  Read content from cell
 
@@ -3565,8 +3565,8 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     //  Fill the EditEngine (cell attributes and text)
     //
 
-    rParam.updateEnginePattern(bUseStyleColor);
-    rParam.setAlignmentItems();
+    rParam.setPatternToEngine(bUseStyleColor);
+    rParam.setAlignmentToEngine();
 
     //  Read content from cell
 
