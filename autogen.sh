@@ -20,7 +20,21 @@ sub read_args($)
     open ($fh, $file) || die "can't open file: $file";
     while (<$fh>) {
     chomp();
-    push @lst, $_;
+    # migrate from the old system
+    if ( substr($_, 0, 1) eq "'" ) {
+        print "Migrating options from the old autogen.lastrun format, using:\n";
+        my @opts;
+        @opts = split(/'/);
+        foreach my $opt (@opts) {
+        if ( substr($opt, 0, 1) eq "-" ) {
+            push @lst, $opt;
+            print "  $opt\n";
+        }
+        }
+    }
+    else {
+        push @lst, $_;
+    }
     }
     close ($fh);
 #    print "read args from file '$file': @lst\n";
@@ -82,11 +96,11 @@ system ("autoconf") && die "Failed to run autoconf";
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
-    if (@ARGV > 0) {
+    if ($#cmdline_args > 0) {
     print "writing args to autogen.lastrun\n";
     my $fh;
     open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
-    for my $arg (@ARGV) {
+    for my $arg (@cmdline_args) {
         print $fh "$arg\n";
     }
     close ($fh);
