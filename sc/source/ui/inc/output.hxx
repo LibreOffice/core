@@ -123,6 +123,7 @@ private:
         void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
         long getEngineWidth(ScFieldEditEngine* pEngine) const;
         bool hasLineBreak() const;
+        bool isHyperlinkCell() const;
 
         /**
          * When the text is vertically oriented, the text is either rotated 90
@@ -133,6 +134,7 @@ private:
 
         void setAlignmentItems();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
+        void adjustForRTL();
     };
 
     OutputDevice* pDev;         // Device

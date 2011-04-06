@@ -2307,6 +2307,17 @@ bool ScOutputData::DrawEditParam::hasLineBreak() const
     return (mbBreak || (meOrient == SVX_ORIENTATION_STACKED) || mbAsianVertical);
 }
 
+bool ScOutputData::DrawEditParam::isHyperlinkCell() const
+{
+    if (!mpCell)
+        return false;
+
+    if (mpCell->GetCellType() != CELLTYPE_FORMULA)
+        return false;
+
+    return static_cast<ScFormulaCell*>(mpCell)->IsHyperLinkCell();
+}
+
 bool ScOutputData::DrawEditParam::isVerticallyOriented() const
 {
     return (meOrient == SVX_ORIENTATION_TOPBOTTOM || meOrient == SVX_ORIENTATION_BOTTOMTOP);
@@ -2437,11 +2448,27 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
     return false;
 }
 
+void ScOutputData::DrawEditParam::adjustForRTL()
+{
+    if (!mpEngine->IsRightToLeft(0))
+        // No RTL mode.
+        return;
+
+    //  For right-to-left, EditEngine always calculates its lines
+    //  beginning from the right edge, but EditLine::nStartPosX is
+    //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
+    Size aLogicPaper = mpEngine->GetPaperSize();
+    if ( aLogicPaper.Width() > USHRT_MAX )
+    {
+        aLogicPaper.Width() = USHRT_MAX;
+        mpEngine->SetPaperSize(aLogicPaper);
+    }
+}
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     bool bHidden = false;
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
@@ -2993,18 +3020,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         rParam.mpEngine->SetPaperSize(aPaperLogic);
     }
 
-    if ( rParam.mpEngine->IsRightToLeft( 0 ) )
-    {
-        //  For right-to-left, EditEngine always calculates its lines
-        //  beginning from the right edge, but EditLine::nStartPosX is
-        //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
-        Size aLogicPaper = rParam.mpEngine->GetPaperSize();
-        if ( aLogicPaper.Width() > USHRT_MAX )
-        {
-            aLogicPaper.Width() = USHRT_MAX;
-            rParam.mpEngine->SetPaperSize(aLogicPaper);
-        }
-    }
+    rParam.adjustForRTL();
 
     // bMoveClipped handling has been replaced by complete alignment
     // handling (also extending to the left).
@@ -3038,8 +3054,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
 
     // PDF: whole-cell hyperlink from formula?
-    bool bHasURL = pPDFData && rParam.mpCell && rParam.mpCell->GetCellType() == CELLTYPE_FORMULA &&
-                    static_cast<ScFormulaCell*>(rParam.mpCell)->IsHyperLinkCell();
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    bool bHasURL = pPDFData && rParam.isHyperlinkCell();
     if ( bHasURL )
     {
         long nURLWidth = (long) rParam.mpEngine->CalcTextWidth();
@@ -3066,7 +3082,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
@@ -3452,19 +3467,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         }
     }
 
-    if ( rParam.mpEngine->IsRightToLeft( 0 ) )
-    {
-        //  For right-to-left, EditEngine always calculates its lines
-        //  beginning from the right edge, but EditLine::nStartPosX is
-        //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
-        Size aLogicPaper = rParam.mpEngine->GetPaperSize();
-        if ( aLogicPaper.Width() > USHRT_MAX )
-        {
-            aLogicPaper.Width() = USHRT_MAX;
-            rParam.mpEngine->SetPaperSize(aLogicPaper);
-        }
-    }
-
+    rParam.adjustForRTL();
     rParam.mpEngine->Draw(pDev, aLogicStart, 900);
 
     if (bClip)
@@ -3476,8 +3479,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     }
 
     // PDF: whole-cell hyperlink from formula?
-    bool bHasURL = pPDFData && rParam.mpCell && rParam.mpCell->GetCellType() == CELLTYPE_FORMULA &&
-                    static_cast<ScFormulaCell*>(rParam.mpCell)->IsHyperLinkCell();
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    bool bHasURL = pPDFData && rParam.isHyperlinkCell();
     if ( bHasURL )
     {
         long nURLWidth = (long) rParam.mpEngine->CalcTextWidth();
