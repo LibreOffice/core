@@ -200,16 +200,11 @@
 #define RID_DEFAULTINTRO                    (RID_SFX_START+0)
 #define RID_DEFAULTINTRO_ADABAS             (RID_SFX_START+1)
 #define RID_DEFAULTINTRO_PORTAL             (RID_SFX_START+2)
-#define RID_DEFAULT_ABOUT_BMP_LOGO          (RID_SFX_START+3)
 
 #define RID_STYLECATALOG                    (RID_SFX_START+1201)
 
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
-#define ABOUT_FTXT_LINK                     3
-#define ABOUT_STR_VERSION                   4
-#define ABOUT_STR_COPYRIGHT                 5
-#define ABOUT_STR_LINK                      6
 #define RID_APPTITLE                        (RID_SFX_START+4)
 
 #define RID_DOCALREADYLOADED_DLG            (RID_SFX_START+1)
