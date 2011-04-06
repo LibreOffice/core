@@ -2131,7 +2131,7 @@ if test "$_os" = "WINNT"; then
         else
             with_cl_home=`cygpath -u "$with_cl_home"`
         fi
-        AC_MSG_RESULT([done])
+        AC_MSG_RESULT([$with_cl_home])
 
         dnl ===========================================================
         dnl  Check for mspdb80.dll/mspdb100.dll
@@ -2172,27 +2172,29 @@ if test "$_os" = "WINNT"; then
         PATH="$MSPDB_PATH:$PATH"
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-        if test "$CL_X64" = ""; then
-            if test -x "$with_cl_home/bin/cl.exe"; then
-                CC="$with_cl_home/bin/cl.exe"
-            fi
-        else
-            if test -x "$with_cl_home/bin/amd64/cl.exe"; then
-                CC="$with_cl_home/bin/amd64/cl.exe"
-            fi
-        fi
         if test -z "$CC"; then
-            AC_PATH_PROG(CC, cl.exe)
-        fi
-
-          if test -e "$CC"; then
+            if test "$CL_X64" = ""; then
+                if test -x "$with_cl_home/bin/cl.exe"; then
+                    CC="$with_cl_home/bin/cl.exe"
+                fi
+            else
+                if test -x "$with_cl_home/bin/amd64/cl.exe"; then
+                    CC="$with_cl_home/bin/amd64/cl.exe"
+                fi
+            fi
+            if test -z "$CC"; then
+                AC_PATH_PROG(CC, cl.exe)
+            fi
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
+        fi
+
+        if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
             if test "$CL_X64" = ""; then
-                COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+                COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
                 if test -n "$with_cl_home"; then
                     COMPATH=`echo $with_cl_home`
@@ -2427,7 +2429,7 @@ dnl ===================================================================
 dnl Testing for c++ compiler and version...
 dnl ===================================================================
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-   if test -e "$CC"; then
+   if test -n "$CC" -a -z "$CXX"; then
       CXX="$CC"
    fi
 fi

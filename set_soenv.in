@@ -125,12 +125,8 @@ $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
 $MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
 $USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
-if ( $MINGW eq "yes" )
-{ $CC             = '@CC@';           # C compiler
-  $CXX            = '@CXX@'; }        # C++ compiler
-else
-{ $CC             = PathFormat('@CC@');           # C compiler
-  $CXX            = PathFormat('@CXX@'); }        # C++ compiler
+$CC             = '@CC@';            # C compiler
+$CXX            = '@CXX@';           # C++ compiler
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
