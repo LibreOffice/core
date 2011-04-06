@@ -114,7 +114,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     {
         try
         {
-            xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), uno::makeAny( sal_True ) );
+            xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )), uno::makeAny( sal_True ) );
         }
         catch( beans::UnknownPropertyException )
         {
@@ -160,7 +160,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     try
                     {
                         if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
-                            xLegendProps->setPropertyValue( rtl::OUString::createFromAscii( "Alignment" ), aAny );
+                            xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Alignment" )), aAny );
                     }
                     catch( beans::UnknownPropertyException )
                     {
@@ -205,7 +205,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         xLegendShape->setPosition( aLegendPos );
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue( rtl::OUString::createFromAscii( "Expansion" ), uno::makeAny(nLegendExpansion) );
+        xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Expansion" )), uno::makeAny(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 

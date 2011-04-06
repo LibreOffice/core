@@ -178,18 +178,18 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = OUString::createFromAscii( "HasXAxisTitle" );
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxisTitle" ));
             else
-                aPropName = OUString::createFromAscii( "HasSecondaryXAxisTitle" );
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxisTitle" ));
             break;
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = OUString::createFromAscii( "HasYAxisTitle" );
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxisTitle" ));
             else
-                aPropName = OUString::createFromAscii( "HasSecondaryYAxisTitle" );
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxisTitle" ));
             break;
         case SCH_XML_AXIS_Z:
-            aPropName = OUString::createFromAscii( "HasZAxisTitle" );
+            aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM( "HasZAxisTitle" ));
             break;
         case SCH_XML_AXIS_UNDEF:
             OSL_TRACE( "Invalid axis" );
@@ -212,21 +212,21 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
     {
         case SCH_XML_AXIS_X:
             if( bIsMajor )
-                aPropName = OUString::createFromAscii("HasXAxisGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxisGrid"));
             else
-                aPropName = OUString::createFromAscii("HasXAxisHelpGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxisHelpGrid"));
             break;
         case SCH_XML_AXIS_Y:
             if( bIsMajor )
-                aPropName = OUString::createFromAscii("HasYAxisGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxisGrid"));
             else
-                aPropName = OUString::createFromAscii("HasYAxisHelpGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxisHelpGrid"));
             break;
         case SCH_XML_AXIS_Z:
             if( bIsMajor )
-                aPropName = OUString::createFromAscii("HasZAxisGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxisGrid"));
             else
-                aPropName = OUString::createFromAscii("HasZAxisHelpGrid");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxisHelpGrid"));
             break;
         case SCH_XML_AXIS_UNDEF:
             OSL_TRACE( "Invalid axis" );
@@ -418,21 +418,21 @@ void SchXMLAxisContext::CreateAxis()
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = OUString::createFromAscii("HasXAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis"));
             else
-                aPropName = OUString::createFromAscii("HasSecondaryXAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis"));
             break;
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = OUString::createFromAscii("HasYAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis"));
             else
-                aPropName = OUString::createFromAscii("HasSecondaryYAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis"));
             break;
         case SCH_XML_AXIS_Z:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = OUString::createFromAscii("HasXAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis"));
             else
-                aPropName = OUString::createFromAscii("HasSecondaryXAxis");
+                aPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis"));
             break;
         case SCH_XML_AXIS_UNDEF:
             OSL_TRACE( "Invalid axis" );
@@ -468,7 +468,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         try
         {
-            xDiaProp->setPropertyValue( OUString::createFromAscii( "HasXAxis" ), uno::makeAny(sal_True) );
+            xDiaProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxis" )), uno::makeAny(sal_True) );
         }
         catch( beans::UnknownPropertyException & )
         {
@@ -486,13 +486,13 @@ void SchXMLAxisContext::CreateAxis()
         m_xAxisProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
                                      uno::makeAny( COL_BLACK ));
 
-        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "DisplayLabels" ), aFalseBool );
+        m_xAxisProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "DisplayLabels" )), aFalseBool );
 
         // #88077# AutoOrigin 'on' is default
-        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
+        m_xAxisProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoOrigin" )), aTrueBool );
 
         if( m_bAxisTypeImported )
-            m_xAxisProps->setPropertyValue( OUString::createFromAscii( "AxisType" ), uno::makeAny(m_nAxisType) );
+            m_xAxisProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "AxisType" )), uno::makeAny(m_nAxisType) );
 
         if( m_aAutoStyleName.getLength())
         {
@@ -548,7 +548,7 @@ void SchXMLAxisContext::CreateAxis()
                         Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
                         if( xNewAxisProp.is() )
                         {
-                            xNewAxisProp->setPropertyValue( OUString::createFromAscii("LineStyle")
+                            xNewAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle"))
                                 , uno::makeAny(drawing::LineStyle_NONE));
                         }
                     }
@@ -794,31 +794,31 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                         chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
                         if( 0 == rChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) ) )
                         {
-                            xMainYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                            xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE) );
                             double fCrossoverValue = 0.0;
                             aMainXScale.Origin >>= fCrossoverValue;
-                            xMainYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverValue")
+                            xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverValue"))
                                     , uno::makeAny( fCrossoverValue ) );
 
                             if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                             {
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("LabelPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LabelPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("MarkPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MarkPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
                                 if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                    xSecondaryYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
                             }
                             else
                             {
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("LabelPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LabelPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("MarkPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MarkPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
                                 if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                    xSecondaryYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
                             }
                         }
@@ -826,48 +826,48 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                         {
                             if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                             {
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
                                 if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                    xSecondaryYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                         , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
                             }
                             else
                             {
-                                xMainYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                xMainYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
                                 if( xSecondaryYAxisProp.is() )
-                                    xSecondaryYAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                    xSecondaryYAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                         , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
                             }
                         }
 
                         chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
-                        xMainXAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                        xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
                         aMainYScale.Origin >>= fCrossoverValue;
-                        xMainXAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverValue")
+                        xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverValue"))
                                 , uno::makeAny( fCrossoverValue ) );
 
                         if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainXAxisProp->setPropertyValue( OUString::createFromAscii("LabelPosition")
+                            xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LabelPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                            xMainXAxisProp->setPropertyValue( OUString::createFromAscii("MarkPosition")
+                            xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MarkPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryXAxisProp.is() )
-                                xSecondaryXAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                xSecondaryXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainXAxisProp->setPropertyValue( OUString::createFromAscii("LabelPosition")
+                            xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LabelPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                            xMainXAxisProp->setPropertyValue( OUString::createFromAscii("MarkPosition")
+                            xMainXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MarkPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryXAxisProp.is() )
-                                xSecondaryXAxisProp->setPropertyValue( OUString::createFromAscii("CrossoverPosition")
+                                xSecondaryXAxisProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CrossoverPosition"))
                                 , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
                         }
                     }
@@ -990,7 +990,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
 
     bool bSetNewIncrement=false;
     chart::TimeIncrement aIncrement;
-    m_xAxisProps->getPropertyValue( OUString::createFromAscii( "TimeIncrement" )) >>= aIncrement;
+    m_xAxisProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "TimeIncrement" ))) >>= aIncrement;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1047,7 +1047,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
     }
 
     if( bSetNewIncrement )
-        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "TimeIncrement" ), uno::makeAny( aIncrement ) );
+        m_xAxisProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "TimeIncrement" )), uno::makeAny( aIncrement ) );
 }
 
 // ========================================
