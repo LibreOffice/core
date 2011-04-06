@@ -3431,48 +3431,13 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         // (do nothing)
     }
 
-    if (rParam.isVerticallyOriented() && rParam.mbBreak)
+    if (rParam.mbBreak)
     {
         // vertical adjustment is within the EditEngine
         if (rParam.mbPixelToLogic)
             aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
         else
             aLogicStart.Y() += nTopM;
-    }
-
-    if (!rParam.isVerticallyOriented() && !rParam.mbBreak)
-    {
-        if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-            rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
-        {
-            //! if pRefDevice != pFmtDevice, keep heights in logic units,
-            //! only converting margin?
-
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM +
-                                pRefDevice->LogicToPixel(aCellSize).Height() -
-                                pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
-                                )).Height();
-            else
-                aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
-        }
-        else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
-        {
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM + (
-                                pRefDevice->LogicToPixel(aCellSize).Height() -
-                                pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
-                                / 2)).Height();
-            else
-                aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
-        }
-        else        // top
-        {
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-            else
-                aLogicStart.Y() += nTopM;
-        }
     }
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
@@ -3584,8 +3549,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             Size aPaper = rParam.mpEngine->GetPaperSize();
             nURLWidth = aPaper.Width();
         }
-        if ( rParam.isVerticallyOriented() )
-            std::swap( nURLWidth, nURLHeight );
+
+        std::swap( nURLWidth, nURLHeight ); // vertical orientation
 
         Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
         lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
