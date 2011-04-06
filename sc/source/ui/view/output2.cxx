@@ -2137,6 +2137,47 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpThisRowInfo(NULL)
 {}
 
+void ScOutputData::DrawEditParam::updateEnginePattern(bool bUseStyleColor)
+{
+    // syntax highlighting mode is ignored here
+    // StringDiffer doesn't look at hyphenate, language items
+
+    if (mpPattern == mpOldPattern && mpCondSet == mpOldCondSet)
+        return;
+
+    sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    bool bCellContrast = bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    SfxItemSet* pSet = new SfxItemSet( mpEngine->GetEmptyItemSet() );
+    mpPattern->FillEditItemSet( pSet, mpCondSet );
+
+    mpEngine->SetDefaults( pSet );
+    mpOldPattern = mpPattern;
+    mpOldCondSet = mpCondSet;
+
+    sal_uLong nControl = mpEngine->GetControlWord();
+    if (meOrient == SVX_ORIENTATION_STACKED)
+        nControl |= EE_CNTRL_ONECHARPERLINE;
+    else
+        nControl &= ~EE_CNTRL_ONECHARPERLINE;
+    mpEngine->SetControlWord( nControl );
+
+    if ( !mbHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+    {
+        //  set hyphenator the first time it is needed
+        com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+        mpEngine->SetHyphenator( xXHyphenator );
+        mbHyphenatorSet = true;
+    }
+
+    Color aBackCol = ((const SvxBrushItem&)mpPattern->GetItem( ATTR_BACKGROUND, mpCondSet )).GetColor();
+    if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
+        aBackCol.SetColor( nConfBackColor );
+    mpEngine->SetBackgroundColor( aBackCol );
+}
+
 void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
 {
     const SvxMarginItem& rMargin =
@@ -2348,12 +2389,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    bool bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     bool bHidden = false;
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
@@ -2462,38 +2498,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
         rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
 
-    // syntax highlighting mode is ignored here
-    // StringDiffer doesn't look at hyphenate, language items
-    if ( rParam.mpPattern != rParam.mpOldPattern || rParam.mpCondSet != rParam.mpOldCondSet )
-    {
-        SfxItemSet* pSet = new SfxItemSet( rParam.mpEngine->GetEmptyItemSet() );
-        rParam.mpPattern->FillEditItemSet( pSet, rParam.mpCondSet );
-
-        rParam.mpEngine->SetDefaults( pSet );
-        rParam.mpOldPattern = rParam.mpPattern;
-        rParam.mpOldCondSet = rParam.mpCondSet;
-
-        sal_uLong nControl = rParam.mpEngine->GetControlWord();
-        if (rParam.meOrient==SVX_ORIENTATION_STACKED)
-            nControl |= EE_CNTRL_ONECHARPERLINE;
-        else
-            nControl &= ~EE_CNTRL_ONECHARPERLINE;
-        rParam.mpEngine->SetControlWord( nControl );
-
-        if ( !rParam.mbHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
-        {
-            //  set hyphenator the first time it is needed
-            com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
-            rParam.mpEngine->SetHyphenator( xXHyphenator );
-            rParam.mbHyphenatorSet = true;
-        }
-
-        Color aBackCol = ((const SvxBrushItem&)
-            rParam.mpPattern->GetItem( ATTR_BACKGROUND, rParam.mpCondSet )).GetColor();
-        if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
-            aBackCol.SetColor( nConfBackColor );
-        rParam.mpEngine->SetBackgroundColor( aBackCol );
-    }
+    rParam.updateEnginePattern(bUseStyleColor);
 
     rParam.setAlignmentItems(rParam.mpEngine, rParam.mpCell);
 
@@ -2918,8 +2923,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         nOriVal = 900;
         if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
         {
+            Size aPSize = rParam.mpEngine->GetPaperSize();
+            aPSize.Width() = aCellSize.Height();
+            rParam.mpEngine->SetPaperSize(aPSize);
             aLogicStart.Y() +=
-                rParam.mbBreak ? rParam.mpEngine->GetPaperSize().Width() : nEngineHeight;
+                rParam.mbBreak ? aPSize.Width() : nEngineHeight;
         }
         else
         {
