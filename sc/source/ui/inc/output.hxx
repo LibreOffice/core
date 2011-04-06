@@ -135,6 +135,7 @@ private:
         void setAlignmentItems();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
         void adjustForRTL();
+        void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
     };
 
     OutputDevice* pDev;         // Device

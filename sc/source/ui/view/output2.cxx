@@ -2465,6 +2465,33 @@ void ScOutputData::DrawEditParam::adjustForRTL()
     }
 }
 
+void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev)
+{
+    // PDF: whole-cell hyperlink from formula?
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    bool bHasURL = pPDFData && isHyperlinkCell();
+    if (!bHasURL)
+        return;
+
+    long nURLWidth = (long) mpEngine->CalcTextWidth();
+    long nURLHeight = mpEngine->GetTextHeight();
+    if (mbBreak)
+    {
+        Size aPaper = mpEngine->GetPaperSize();
+        if ( mbAsianVertical )
+            nURLHeight = aPaper.Height();
+        else
+            nURLWidth = aPaper.Width();
+    }
+    if (isVerticallyOriented())
+        std::swap( nURLWidth, nURLHeight );
+    else if (mbAsianVertical)
+        aURLStart.X() -= nURLWidth;
+
+    Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
+    lcl_DoHyperlinkResult( pDev, aURLRect, mpCell );
+}
+
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
@@ -3053,29 +3080,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             pDev->SetClipRegion();
     }
 
-    // PDF: whole-cell hyperlink from formula?
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    bool bHasURL = pPDFData && rParam.isHyperlinkCell();
-    if ( bHasURL )
-    {
-        long nURLWidth = (long) rParam.mpEngine->CalcTextWidth();
-        long nURLHeight = rParam.mpEngine->GetTextHeight();
-        if ( rParam.mbBreak )
-        {
-            Size aPaper = rParam.mpEngine->GetPaperSize();
-            if ( rParam.mbAsianVertical )
-                nURLHeight = aPaper.Height();
-            else
-                nURLWidth = aPaper.Width();
-        }
-        if ( rParam.isVerticallyOriented() )
-            std::swap( nURLWidth, nURLHeight );
-        else if ( rParam.mbAsianVertical )
-            aURLStart.X() -= nURLWidth;
-
-        Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
-        lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
-    }
+    rParam.adjustForHyperlinkInPDF(aURLStart, pDev);
 }
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
@@ -3478,24 +3483,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             pDev->SetClipRegion();
     }
 
-    // PDF: whole-cell hyperlink from formula?
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    bool bHasURL = pPDFData && rParam.isHyperlinkCell();
-    if ( bHasURL )
-    {
-        long nURLWidth = (long) rParam.mpEngine->CalcTextWidth();
-        long nURLHeight = rParam.mpEngine->GetTextHeight();
-        if ( rParam.mbBreak )
-        {
-            Size aPaper = rParam.mpEngine->GetPaperSize();
-            nURLWidth = aPaper.Width();
-        }
-
-        std::swap( nURLWidth, nURLHeight ); // vertical orientation
-
-        Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
-        lcl_DoHyperlinkResult( pDev, aURLRect, rParam.mpCell );
-    }
+    rParam.adjustForHyperlinkInPDF(aURLStart, pDev);
 }
 
 void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
