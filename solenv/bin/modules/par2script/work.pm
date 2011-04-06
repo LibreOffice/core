@@ -169,7 +169,10 @@ sub collect_definitions
         $oneitem = $1;
         $gid = $2;
     } else {
-        par2script::exiter::exit_program("ERROR: malformed par file, expecting <token> <gid> but saw '$line'", "test_par_syntax");
+        chomp ($line);
+        my $invalid = $line;
+        $invalid =~ s/[\s\w]*//g;
+        par2script::exiter::exit_program("ERROR: malformed par file, invalid character '$invalid', expecting <token> <gid> but saw '$line'", "test_par_syntax");
     }
 #   print STDERR "line '$line' -> '$oneitem' '$gid'\n";
 

@@ -35,6 +35,8 @@ use strict;
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
+# This file substantially, if not wholely written by volunteers, not Oracle
+#
 #*************************************************************************
 
 # ends up in program/ooenv

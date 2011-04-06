@@ -577,6 +577,13 @@ AC_ARG_WITH(afms,
          are known to be available.]),
 ,)
 
+AC_ARG_WITH(agfa-monotype-fonts,
+     AS_HELP_STRING([--with-agfa-monotype-fonts],
+          [Do not include the proprietary Agfa Monotype fonts
+           (even if present) in the LibreOffice installation
+           set.])
+,)
+
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -1437,7 +1444,7 @@ case "$host_os" in
         test_cups=no
         _os=GNU
         ;;
-    cygwin*) # Windows
+    cygwin*|interix*) # Windows
         test_cups=no
         test_randr=no
         test_freetype=no
@@ -4189,6 +4196,9 @@ dnl Check for system translate-toolkit
 dnl ===================================================================
 AC_MSG_CHECKING([which translate-toolkit to use])
 if test "$with_system_translate_toolkit" = "yes" ; then
+    AC_MSG_RESULT([system])
+    SYSTEM_TRANSLATE_TOOLKIT=YES
+
     AC_PATH_PROGS(OO2PO, oo2po)
     if test -z "$OO2PO"; then
         AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
@@ -4198,9 +4208,11 @@ if test "$with_system_translate_toolkit" = "yes" ; then
     if test -z "$PO2OO"; then
         AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
     fi
-    
-    AC_MSG_RESULT([system])
-    SYSTEM_TRANSLATE_TOOLKIT=YES
+
+    $PO2OO --help | grep -q '\-\-skipsource'
+    if test $? -ne 0 ;  then
+        AC_MSG_ERROR([$PO2OO does not support --skipsource; use translate-toolkit >= 1.9 or use --without-system-translate-toolkit])
+    fi
 else
    AC_MSG_RESULT([internal])
    SYSTEM_TRANSLATE_TOOLKIT=NO
@@ -7310,6 +7322,18 @@ else
 fi
 AC_SUBST(WITH_FONTS)
 
+AC_MSG_CHECKING([whether to include Agfa Monotype fonts])
+if test "$with_agfa_monotype_fonts" = "yes" ; then
+  AC_MSG_RESULT([yes])
+  WITH_AGFA_MONOTYPE_FONTS=YES
+  SCPDEFS="$SCPDEFS -DWITH_AGFA_MONOTYPE_FONTS"
+  BUILD_TYPE="$BUILD_TYPE AGFA_MONOTYPE_FONTS"
+else
+  AC_MSG_RESULT([no])
+  WITH_AGFA_MONOTYPE_FONTS=NO
+fi
+AC_SUBST(WITH_AGFA_MONOTYPE_FONTS)
+
 dnl ===================================================================
 dnl Test whether to include ppds
 dnl ===================================================================
@@ -7706,6 +7730,17 @@ dnl Dealing with l10n options
 dnl ===================================================================
 GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
 AC_MSG_CHECKING([which languages to be built])
+# get list of all languages
+# generate shell variable from completelangiso= from solenv/inc/postset.mk
+# the sed command does the following:
+#   + if a line ends with a backslash, append the next line to it
+#   + adds " on the beginning of the value (after =)
+#   + adds " at the end of the value
+#   + removes en-US; we want to put it on the beginning
+#   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
+[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/postset.mk)]
+ALL_LANGS="en-US $completelangiso"
+# check the configured localizations
 WITH_LANG="$with_lang"
 if test -z "$WITH_LANG"; then
    AC_MSG_RESULT([en-US])
@@ -7713,6 +7748,15 @@ else
    AC_MSG_RESULT([$WITH_LANG])
    GIT_REPO_NAMES="$GIT_REPO_NAMES translations"
 fi
+# check that the list is valid
+for lang in $WITH_LANG ; do
+   test "$lang" = "ALL" && continue;
+   # need to check for the exact string, so add space before and after the list of all languages
+   all_langs=" $ALL_LANGS "
+   test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
+   AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
+done
+AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(GIT_REPO_NAMES)
 

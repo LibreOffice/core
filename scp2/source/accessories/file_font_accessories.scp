@@ -485,174 +485,174 @@ STD_FONT_FILE( gid_File_Fnt_zorque, zorque.ttf, Zorque )
 
 /* Additional fonts for 2.0.3 */
 
-/* -URW-Gothic L */ 
+/* URW Gothic L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Gothic_L_Avantgarde, a010013l.ttf, -URW-Gothic L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Gothic_L_Avantgarde, a010013l.ttf, URW Gothic L ) 
 #endif
  
-/* -URW-Gothic L Bold */ 
+/* URW Gothic L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Gothic_L_Bold_Avantgarde, a010015l.ttf, -URW-Gothic L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Gothic_L_Bold_Avantgarde, a010015l.ttf, URW Gothic L Bold ) 
 #endif
  
-/* -URW-Gothic L Italic */ 
+/* URW Gothic L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Gothic_L_Italic_Avantgarde, a010033l.ttf, -URW-Gothic L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Gothic_L_Italic_Avantgarde, a010033l.ttf, URW Gothic L Italic ) 
 #endif
  
-/* -URW-Gothic L Bold Italic */ 
+/* URW Gothic L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Gothic_L_Bold_Italic_Avantgarde, a010035l.ttf, -URW-Gothic L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Gothic_L_Bold_Italic_Avantgarde, a010035l.ttf, URW Gothic L Bold Italic ) 
 #endif
  
-/* -URW-Bookman L */ 
+/* URW Bookman L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Bookman_L_Bookman, b018012l.ttf, -URW-Bookman L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Bookman_L_Bookman, b018012l.ttf, URW Bookman L ) 
 #endif
  
-/* -URW-Bookman L Bold */ 
+/* URW Bookman L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Bookman_L_Bold_Bookman, b018015l.ttf, -URW-Bookman L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Bookman_L_Bold_Bookman, b018015l.ttf, URW Bookman L Bold ) 
 #endif
  
-/* -URW-Bookman L Italic */ 
+/* URW Bookman L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Bookman_L_Italic_Bookman, b018032l.ttf, -URW-Bookman L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Bookman_L_Italic_Bookman, b018032l.ttf, URW Bookman L Italic ) 
 #endif
  
-/* -URW-Bookman L Bold Italic */ 
+/* URW Bookman L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Bookman_L_Bold_Italic_Bookman, b018035l.ttf, -URW-Bookman L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Bookman_L_Bold_Italic_Bookman, b018035l.ttf, URW Bookman L Bold Italic ) 
 #endif
  
-/* -URW-Century Schoolbook L */ 
+/* URW Century Schoolbook L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Century_Schoolbook_L_New_Century_SchoolBook, c059013l.ttf, -URW-Century Schoolbook L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Century_Schoolbook_L_New_Century_SchoolBook, c059013l.ttf, URW Century Schoolbook L ) 
 #endif
  
-/* -URW-Century Schoolbook L Bold */ 
+/* URW Century Schoolbook L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Century_Schoolbook_L_Bold_New_Century_SchoolBook, c059016l.ttf, -URW-Century Schoolbook L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Century_Schoolbook_L_Bold_New_Century_SchoolBook, c059016l.ttf, URW Century Schoolbook L Bold ) 
 #endif
  
-/* -URW-Century Schoolbook L Italic */ 
+/* URW Century Schoolbook L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Century_Schoolbook_L_Italic_New_Century_SchoolBook, c059033l.ttf, -URW-Century Schoolbook L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Century_Schoolbook_L_Italic_New_Century_SchoolBook, c059033l.ttf, URW Century Schoolbook L Italic ) 
 #endif
  
-/* -URW-Century Schoolbook L Bold Italic */ 
+/* URW Century Schoolbook L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Century_Schoolbook_L_Bold_Italic_New_Century_SchoolBook, c059036l.ttf, -URW-Century Schoolbook L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Century_Schoolbook_L_Bold_Italic_New_Century_SchoolBook, c059036l.ttf, URW Century Schoolbook L Bold Italic ) 
 #endif
  
-/* -URW-Nimbus Sans L */ 
+/* URW Nimbus Sans L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Helvetica, n019003l.ttf, -URW-Nimbus Sans L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Helvetica, n019003l.ttf, URW Nimbus Sans L ) 
 #endif
  
-/* -URW-Nimbus Sans L Bold */ 
+/* URW Nimbus Sans L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Bold_Helvetica, n019004l.ttf, -URW-Nimbus Sans L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Bold_Helvetica, n019004l.ttf, URW Nimbus Sans L Bold ) 
 #endif
  
-/* -URW-Nimbus Sans L Italic */ 
+/* URW Nimbus Sans L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Italic_Helvetica, n019023l.ttf, -URW-Nimbus Sans L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Italic_Helvetica, n019023l.ttf, URW Nimbus Sans L Italic ) 
 #endif
  
-/* -URW-Nimbus Sans L Bold Italic */ 
+/* URW Nimbus Sans L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Bold_Italic_Helvetica, n019024l.ttf, -URW-Nimbus Sans L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Bold_Italic_Helvetica, n019024l.ttf, URW Nimbus Sans L Bold Italic ) 
 #endif
  
-/* -URW-Nimbus Sans L Condensed */ 
+/* URW Nimbus Sans L Condensed */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Helvetica_Condensed, n019043l.ttf, -URW-Nimbus Sans L Condensed ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Helvetica_Condensed, n019043l.ttf, URW Nimbus Sans L Condensed ) 
 #endif
  
-/* -URW-Nimbus Sans L Bold Condensed */ 
+/* URW Nimbus Sans L Bold Condensed */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Bold_Helvetica_Condensed, n019044l.ttf, -URW-Nimbus Sans L Bold Condensed ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Bold_Helvetica_Condensed, n019044l.ttf, URW Nimbus Sans L Bold Condensed ) 
 #endif
  
-/* -URW-Nimbus Sans L Italic Condensed */ 
+/* URW Nimbus Sans L Italic Condensed */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Italic_Helvetica_Condensed, n019063l.ttf, -URW-Nimbus Sans L Italic Condensed ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Italic_Helvetica_Condensed, n019063l.ttf, URW Nimbus Sans L Italic Condensed ) 
 #endif
  
-/* -URW-Nimbus Sans L Bold Italic Condensed */ 
+/* URW Nimbus Sans L Bold Italic Condensed */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Sans_L_Bold_Italic_Helvetica_Condensed, n019064l.ttf, -URW-Nimbus Sans L Bold Italic Condensed ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Sans_L_Bold_Italic_Helvetica_Condensed, n019064l.ttf, URW Nimbus Sans L Bold Italic Condensed ) 
 #endif
  
-/* -URW-Nimbus Roman No9 L */ 
+/* URW Nimbus Roman No9 L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Roman_No9_L_Times, n021003l.ttf, -URW-Nimbus Roman No9 L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Roman_No9_L_Times, n021003l.ttf, URW Nimbus Roman No9 L ) 
 #endif
  
-/* -URW-Nimbus Roman No9 L Bold */ 
+/* URW Nimbus Roman No9 L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Roman_No9_L_Bold_Times, n021004l.ttf, -URW-Nimbus Roman No9 L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Roman_No9_L_Bold_Times, n021004l.ttf, URW Nimbus Roman No9 L Bold ) 
 #endif
  
-/* -URW-Nimbus Roman No9 L Italic */ 
+/* URW Nimbus Roman No9 L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Roman_No9_L_Italic_Times, n021023l.ttf, -URW-Nimbus Roman No9 L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Roman_No9_L_Italic_Times, n021023l.ttf, URW Nimbus Roman No9 L Italic ) 
 #endif
  
-/* -URW-Nimbus Roman No9 L Bold Italic */ 
+/* URW Nimbus Roman No9 L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Roman_No9_L_Bold_Italic_Times, n021024l.ttf, -URW-Nimbus Roman No9 L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Roman_No9_L_Bold_Italic_Times, n021024l.ttf, URW Nimbus Roman No9 L Bold Italic ) 
 #endif
  
-/* -URW-Nimbus Mono L */ 
+/* URW Nimbus Mono L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Mono_L_Courier, n022003l.ttf, -URW-Nimbus Mono L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Mono_L_Courier, n022003l.ttf, URW Nimbus Mono L ) 
 #endif
  
-/* -URW-Nimbus Mono L Bold */ 
+/* URW Nimbus Mono L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Mono_L_Bold_Courier, n022004l.ttf, -URW-Nimbus Mono L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Mono_L_Bold_Courier, n022004l.ttf, URW Nimbus Mono L Bold ) 
 #endif
  
-/* -URW-Nimbus Mono LK Italic */ 
+/* URW Nimbus Mono LK Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Mono_LK_Italic_Courier, n022023l.ttf, -URW-Nimbus Mono LK Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Mono_LK_Italic_Courier, n022023l.ttf, URW Nimbus Mono LK Italic ) 
 #endif
  
-/* -URW-Nimbus Mono L Bold Italic */ 
+/* URW Nimbus Mono L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Nimbus_Mono_L_Bold_Italic_Courier, n022024l.ttf, -URW-Nimbus Mono L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Nimbus_Mono_L_Bold_Italic_Courier, n022024l.ttf, URW Nimbus Mono L Bold Italic ) 
 #endif
  
-/* -URW-Palladio L */ 
+/* URW Palladio L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Palladio_L_Palitino, p052003l.ttf, -URW-Palladio L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Palladio_L_Palitino, p052003l.ttf, URW Palladio L ) 
 #endif
  
-/* -URW-Palladio L Bold */ 
+/* URW Palladio L Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Palladio_L_Bold_Palitino, p052004l.ttf, -URW-Palladio L Bold ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Palladio_L_Bold_Palitino, p052004l.ttf, URW Palladio L Bold ) 
 #endif
  
-/* -URW-Palladio L Italic */ 
+/* URW Palladio L Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Palladio_L_Italic_Palitino, p052023l.ttf, -URW-Palladio L Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Palladio_L_Italic_Palitino, p052023l.ttf, URW Palladio L Italic ) 
 #endif
  
-/* -URW-Palladio L Bold Italic */ 
+/* URW Palladio L Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Palladio_L_Bold_Italic_Palitino, p052024l.ttf, -URW-Palladio L Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Palladio_L_Bold_Italic_Palitino, p052024l.ttf, URW Palladio L Bold Italic ) 
 #endif
  
-/* -URW-Standard Symbols L */ 
+/* URW Standard Symbols L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Standard_Symbols_L_Symbol, s050000l.ttf, -URW-Standard Symbols L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Standard_Symbols_L_Symbol, s050000l.ttf, URW Standard Symbols L ) 
 #endif
  
-/* -URW-Chancery L */ 
+/* URW Chancery L */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_-URW-Chancery_L_Zapf_Chancery, z003034l.ttf, -URW-Chancery L ) 
+STD_FONT_FILE( gid_File_Fnt_URW_Chancery_L_Zapf_Chancery, z003034l.ttf, URW Chancery L ) 
 #endif
  
 /* Dingbats */ 
@@ -772,32 +772,32 @@ STD_FONT_FILE( gid_File_Fnt_DTPDingbats, DTPDingbats.ttf, DTP Dingbats )
 
 /* Justus Bold */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-Bold, Justus-Bold.ttf, Justus Bold ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_Bold, Justus-Bold.ttf, Justus Bold ) 
 #endif
 
 /* Justus Italic Oldstyle */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-ItalicOldstyle, Justus-ItalicOldstyle.ttf, Justus Italic Oldstyle ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_ItalicOldstyle, Justus-ItalicOldstyle.ttf, Justus Italic Oldstyle ) 
 #endif
 
 /* Justus Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-Italic, Justus-Italic.ttf, Justus Italic ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_Italic, Justus-Italic.ttf, Justus Italic ) 
 #endif
 
 /* Justus Oldstyle */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-Oldstyle, Justus-Oldstyle.ttf, Justus Oldstyle ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_Oldstyle, Justus-Oldstyle.ttf, Justus Oldstyle ) 
 #endif
 
 /* Justus Roman */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-Roman, Justus-Roman.ttf, Justus Roman ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_Roman, Justus-Roman.ttf, Justus Roman ) 
 #endif
 
 /* Justus Versalitas */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Justus-Versalitas, Justus-Versalitas.ttf, Justus Versalitas ) 
+STD_FONT_FILE( gid_File_Fnt_Justus_Versalitas, Justus-Versalitas.ttf, Justus Versalitas ) 
 #endif
 
 /* Let's trace basic */ 
@@ -812,7 +812,7 @@ STD_FONT_FILE( gid_File_Fnt_Lets_trace_ruled, letstraceruled.ttf, Lets trace rul
 
 /* Tuffy Bold Italic */ 
 #ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_Tuffy_Bold_Italic.ttf, Tuffy_Bold_Italic.ttf, Tuffy Bold Italic ) 
+STD_FONT_FILE( gid_File_Fnt_Tuffy_Bold_Italic, Tuffy_Bold_Italic.ttf, Tuffy Bold Italic ) 
 #endif
 
 /* Tuffy Bold */ 
