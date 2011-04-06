@@ -7697,7 +7697,15 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
         grep org/junit/Before.class > /dev/null 2>&5
     if test $? -eq 0; then
-        AC_MSG_RESULT([$OOO_JUNIT_JAR])
+        # check if either class-path entry is available for hamcrest or
+        # it's bundled
+        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |grep hamcrest || \
+            "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |grep -q 'Class-Path: hamcrest'; then
+            AC_MSG_RESULT([$OOO_JUNIT_JAR])
+        else
+            AC_MSG_ERROR([your junit jar neither sets a classpath nor includes hamcrest; please
+provide a full junit jar or use --without-junit])
+        fi
     else
         AC_MSG_RESULT([no])
         AC_MSG_ERROR([cannot find JUnit 4 jar; please install one in the default
