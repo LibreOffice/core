@@ -54,6 +54,8 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
                 BASE_DEPENDENCIES_LIBS=" " \
+		GDK_PIXBUF_XLIB_DEP_CFLAGS="-I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
+		GDK_PIXBUF_XLIB_DEP_LIBS=" " \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/libjpeg" \
