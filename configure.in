@@ -964,8 +964,10 @@ AC_ARG_WITH(system-mozilla,
 WITH_SYSTEM_MOZILLA=no)
 
 AC_ARG_WITH(linker-hash-style,
-[  --with-linker-hash-style
-], WITH_LINKER_HASH_STYLE=$withval, WITH_LINKER_HASH_STYLE=gnu)
+    AS_HELP_STRING([--with-linker-hash-style],
+        [Use linker with --hash-style=<style> when linking shared objects.
+         Possible values: "sysv", "gnu", "both". The default value is "gnu"
+         if supported on the build system, and "sysv" otherwise.]))
 
 AC_ARG_WITH(stlport,
     AS_HELP_STRING([--with-stlport],
@@ -2028,21 +2030,43 @@ if test "$_os" = "SunOS"; then
    fi
 fi
 
-if test "$GCC" = "yes"; then
-   AC_MSG_CHECKING( for --hash-style=$WITH_LINKER_HASH_STYLE linker support )
-   hash_style_ldflags_save=$LDFLAGS
-   LDFLAGS="$LDFLAGS -Wl,--hash-style=$WITH_LINKER_HASH_STYLE"
-   AC_LINK_IFELSE([AC_LANG_PROGRAM([
-   #include <stdio.h>
-   ],[
-    printf ("hello world\n");
-   ])], HAVE_LD_HASH_STYLE=TRUE, HAVE_LD_HASH_STYLE=FALSE)
-   if test "z$HAVE_LD_HASH_STYLE" = "zTRUE"; then
-     AC_MSG_RESULT( found )
+HAVE_LD_HASH_STYLE=FALSE
+WITH_LINKER_HASH_STYLE=
+AC_MSG_CHECKING( for --hash-style gcc linker support )
+if test "$GCC" = "yes" ; then
+   if test -z "$with_linker_hash_style" -o "$with_linker_hash_style" = "yes" ; then
+      hash_styles="gnu sysv"
+   elif test "$with_linker_hash_style" = "no" ; then
+      hash_styles=
    else
-     AC_MSG_RESULT( not found )
+      hash_styles="$with_linker_hash_style"
+   fi
+   
+   for hash_style in $hash_styles ; do
+      test "$HAVE_LD_HASH_STYLE" = "TRUE" && continue
+      hash_style_ldflags_save=$LDFLAGS
+      LDFLAGS="$LDFLAGS -Wl,--hash-style=$hash_style"
+
+      AC_TRY_RUN([
+#include <stdio.h>
+
+int main(char argc, char** argv) {
+   printf ("hello world\n");
+   return 0;
+}
+       ], HAVE_LD_HASH_STYLE=TRUE; WITH_LINKER_HASH_STYLE=$hash_style, HAVE_LD_HASH_STYLE=FALSE)
+
+       LDFLAGS=$hash_style_ldflags_save
+   done
+   
+   if test "$HAVE_LD_HASH_STYLE" = "TRUE"; then
+     AC_MSG_RESULT( $WITH_LINKER_HASH_STYLE )
+   else
+     AC_MSG_RESULT( no )
    fi
    LDFLAGS=$hash_style_ldflags_save
+else
+    AC_MSG_RESULT( no )
 fi
 AC_SUBST(HAVE_LD_HASH_STYLE)
 AC_SUBST(WITH_LINKER_HASH_STYLE)
