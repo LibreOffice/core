@@ -131,9 +131,9 @@ item_about_to_show (DbusmenuMenuitem *item, gpointer user_data)
     FrameHelper *helper = (FrameHelper*)user_data;
     Reference < XFrame > xFrame  = helper->getFrame ();
     Reference< XPropertySet > frameProps (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                 UNO_QUERY);
-    Reference < XUIElement > menuBar(xLayoutManager->getElement (OUString::createFromAscii("private:resource/menubar/menubar")),
+    Reference < XUIElement > menuBar(xLayoutManager->getElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"))),
                                      UNO_QUERY);
     Reference < XPropertySet > menuPropSet (menuBar, UNO_QUERY);
 
@@ -142,7 +142,7 @@ item_about_to_show (DbusmenuMenuitem *item, gpointer user_data)
         return FALSE;
     }
 
-    Reference < XMenu > xMenu(menuPropSet->getPropertyValue(OUString::createFromAscii("XMenuBar")),
+    Reference < XMenu > xMenu(menuPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("XMenuBar"))),
                               UNO_QUERY);
     if (!xMenu.is())
     {
@@ -204,14 +204,14 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     this->m_server = server;
 
     //Get xUICommands database (to retrieve labels, see FrameJob::getLabelFromCommandURL ())
-    Reference < XNameAccess > xNameAccess (m_xMSF->createInstance(OUString::createFromAscii("com.sun.star.frame.UICommandDescription")),
+    Reference < XNameAccess > xNameAccess (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"))),
                                            UNO_QUERY);
-    m_xMM = Reference < XModuleManager> (m_xMSF->createInstance(OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
+    m_xMM = Reference < XModuleManager> (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),
                                        UNO_QUERY);
     xNameAccess->getByName(m_xMM->identify(xFrame)) >>= m_xUICommands;
 
     m_xdp = Reference < XDispatchProvider > (xFrame, UNO_QUERY);
-    m_xTrans = Reference < XURLTransformer > (m_xMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY);
+    m_xTrans = Reference < XURLTransformer > (m_xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" ))), UNO_QUERY);
 
     m_xSL = (XStatusListener*)new MenuItemStatusListener (this);
 
@@ -219,7 +219,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     getAcceleratorConfigurations (xFrame->getController()->getModel (), m_xMM);
 
     // This information is needed for the dynamic submenus
-    m_xPCF = Reference < XMultiComponentFactory > (m_xMSF->createInstance(OUString::createFromAscii("com.sun.star.frame.PopupMenuControllerFactory")),
+    m_xPCF = Reference < XMultiComponentFactory > (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))),
                                                  UNO_QUERY);
 
 
@@ -234,11 +234,11 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     m_args = Sequence < Any > (2);
     PropertyValue item;
 
-    item.Name = OUString::createFromAscii("ModuleName");
+    item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleName"));
     item.Value <<= m_xMM->identify (xFrame);
     m_args[0] <<= item;
 
-    item.Name = OUString::createFromAscii("Frame");
+    item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Frame"));
     item.Value <<= xFrame;
     m_args[1] <<= item;
 
@@ -343,9 +343,9 @@ FrameHelper::frameAction(const FrameActionEvent& action) throw (RuntimeException
 
         m_xFrame->removeFrameActionListener (this);
         Reference< XPropertySet > frameProps (m_xFrame, UNO_QUERY);
-        Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+        Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                     UNO_QUERY);
-        xLayoutManager->showElement (OUString::createFromAscii("private:resource/menubar/menubar"));
+        xLayoutManager->showElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar")));
 
         unsigned long xid = getXID();
 
@@ -447,7 +447,7 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
             continue;
 
         // We drop the WindowList, doesn't work properly and it's useless anyhow
-        if (oUCommand.equals (OUString::createFromAscii (".uno:WindowList")))
+        if (oUCommand.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:WindowList"))))
             continue;
 
         //We set the default properties (in case it was not visible or a separator)
@@ -551,7 +551,7 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
         if (isSpecialSubmenu (oUCommand))
         {
             Reference < XPropertySet > xMSFProps (m_xMSF, UNO_QUERY);
-            Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString::createFromAscii ("DefaultContext")),
+            Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
                                                     UNO_QUERY);
 
             Reference < XPopupMenuController > xRFC (m_xPCF->createInstanceWithArgumentsAndContext(oUCommand,
@@ -559,7 +559,7 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
                                                                                                  xContext),
                                                      UNO_QUERY);
 
-            Reference < XPopupMenu > xPO (m_xMSF->createInstance(OUString::createFromAscii ("stardiv.Toolkit.VCLXPopupMenu")),
+            Reference < XPopupMenu > xPO (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXPopupMenu"))),
                                           UNO_QUERY);
 
             if (xRFC.is () && xPO.is ())
@@ -636,16 +636,16 @@ FrameHelper::rebuildMenuFromRoot ()
 {
     Reference < XFrame >         xFrame = getFrame ();
     Reference < XPropertySet >   frameProps     (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager (frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+    Reference < XLayoutManager > xLayoutManager (frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")=),
                                                  UNO_QUERY);
-    Reference < XUIElement >   menuBar     (xLayoutManager->getElement (OUString::createFromAscii("private:resource/menubar/menubar")),
+    Reference < XUIElement >   menuBar     (xLayoutManager->getElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"))),
                                             UNO_QUERY);
     Reference < XPropertySet > menuPropSet (menuBar, UNO_QUERY);
 
     if (!menuPropSet.is ())
         return;
 
-    Reference < XMenu > xMenu (menuPropSet->getPropertyValue(OUString::createFromAscii("XMenuBar")),
+    Reference < XMenu > xMenu (menuPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("XMenuBar"))),
                                UNO_QUERY);
     if (!xMenu.is ())
         return;
@@ -680,15 +680,13 @@ FrameHelper::isSpecialSubmenu (OUString command)
 void
 FrameHelper::dispatchCommand (OUString command)
 {
-    OUString target = OUString::createFromAscii ("");
+    OUString target = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
     Reference < XDispatchHelper > xdh (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))),
                                        UNO_QUERY);
 
-    //g_debug ("%s", OUStringToOString (command, RTL_TEXTENCODING_ASCII_US).getStr());
-
     // This is a special case, we don't want the helper to be disconnected from the frame
     // when PrintPreview dettaches. See the frameAction method.
-    if (command.equals (OUString::createFromAscii (".uno:PrintPreview")))
+    if (command.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PrintPreview"))))
     {
         m_blockDetach = TRUE;
     }
@@ -696,18 +694,18 @@ FrameHelper::dispatchCommand (OUString command)
     // This is a special case for the recentfilelist
     if (command.matchAsciiL ("vnd.sun.star.popup:RecentFileList", 33, 0))
     {
-        target = OUString::createFromAscii ("_default");
+        target = OUString(RTL_CONSTASCII_USTRINGPARAM("_default"));
 
         Reference < XPropertySet > xMSFProps (m_xMSF, UNO_QUERY);
-        Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString::createFromAscii ("DefaultContext")),
+        Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
                                                 UNO_QUERY);
-        Reference < XPopupMenuController > xRFC (m_xPCF->createInstanceWithArgumentsAndContext(OUString::createFromAscii (".uno:RecentFileList"),
+        Reference < XPopupMenuController > xRFC (m_xPCF->createInstanceWithArgumentsAndContext(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecentFileList")),
                                                                                              m_args,
                                                                                              xContext),
                                                  UNO_QUERY);
         Reference < XMenuListener > xML (xRFC, UNO_QUERY);
 
-        Reference < XPopupMenu > xPO (m_xMSF->createInstance(OUString::createFromAscii ("stardiv.Toolkit.VCLXPopupMenu")),
+        Reference < XPopupMenu > xPO (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXPopupMenu"))),
                                       UNO_QUERY);
 
         if (xRFC.is () && xPO.is ())
@@ -736,7 +734,7 @@ FrameHelper::dispatchCommand (OUString command)
     }
 
     if (command.matchAsciiL ("private:factory/", 16, 0))
-        target = OUString::createFromAscii ("_blank");
+        target = OUString(RTL_CONSTASCII_USTRINGPARAM("_blank"));
 
     xdh->executeDispatch (Reference < XDispatchProvider > (m_xFrame, UNO_QUERY),
                           command,
@@ -757,14 +755,14 @@ FrameHelper::getAcceleratorConfigurations (Reference < XModel >        xModel,
     this->m_docAccelConf = docAccelConf;
 
     //Get module shurtcut database
-    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier(m_xMSF->createInstance(OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
+    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
                                                                      UNO_QUERY);
     Reference< XUIConfigurationManager >   modUIManager = modUISupplier->getUIConfigurationManager(xModuleManager->identify(m_xFrame));
     Reference< XAcceleratorConfiguration > modAccelConf(modUIManager->getShortCutManager(), UNO_QUERY);
     this->m_modAccelConf = modAccelConf;
 
     //Get global shortcut database
-    Reference< XAcceleratorConfiguration > globAccelConf(m_xMSF->createInstance(OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration")),
+    Reference< XAcceleratorConfiguration > globAccelConf(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"))),
                                                          UNO_QUERY);
     this->m_globAccelConf = globAccelConf;
 }
@@ -821,7 +819,7 @@ FrameHelper::findShortcutForCommand (OUString command)
     {}
 
     //NOTE: For some reason this item does not return its shortcut. Setting manually:
-    if (command.equals (OUString::createFromAscii (".uno:HelpIndex")))
+    if (command.equals (OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:HelpIndex"))))
     {
         kev.KeyCode = awt::Key::F1;
     }

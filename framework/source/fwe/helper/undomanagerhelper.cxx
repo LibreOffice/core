@@ -651,7 +651,7 @@ namespace framework
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
         if ( nElements == 0 )
-            throw EmptyUndoStackException( ::rtl::OUString::createFromAscii( "stack is empty" ), getXUndoManager() );
+            throw EmptyUndoStackException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stack is empty" )), getXUndoManager() );
 
         aGuard.clear();
         // <--- SYNCHRONIZED
@@ -1116,7 +1116,7 @@ namespace framework
 
         IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsUndoEnabled() )
-            throw NotLockedException( ::rtl::OUString::createFromAscii( "Undo manager is not locked" ), m_pImpl->getXUndoManager() );
+            throw NotLockedException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Undo manager is not locked" )), m_pImpl->getXUndoManager() );
         rUndoManager.EnableUndo( true );
         // <--- SYNCHRONIZED
     }

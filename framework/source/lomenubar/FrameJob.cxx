@@ -190,9 +190,9 @@ on_registrar_available (GDBusConnection * /*connection*/,
     //Hide menubar
     Reference < XFrame > xFrame  = helper->getFrame ();
     Reference< XPropertySet > frameProps (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                 UNO_QUERY);
-    xLayoutManager->hideElement (OUString::createFromAscii("private:resource/menubar/menubar"));
+    xLayoutManager->hideElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar")));
 
     return;
 }
@@ -209,9 +209,9 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
     FrameHelper *helper = (FrameHelper*)user_data;
     Reference < XFrame > xFrame  = helper->getFrame ();
     Reference< XPropertySet > frameProps (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                 UNO_QUERY);
-    xLayoutManager->showElement (OUString::createFromAscii("private:resource/menubar/menubar"));
+    xLayoutManager->showElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar")));
     return;
 }
 // ------------------------------- FrameJob --------------------------------------------
@@ -270,7 +270,7 @@ FrameJob::exportMenus (Reference < XFrame > xFrame)
 
 
     Reference< XPropertySet > frameProps (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString::createFromAscii("LayoutManager")),
+    Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                 UNO_QUERY);
     if (!xLayoutManager.is())
     {
@@ -278,7 +278,7 @@ FrameJob::exportMenus (Reference < XFrame > xFrame)
         return;
     }
 
-    Reference < XUIElement > menuBar(xLayoutManager->getElement (OUString::createFromAscii("private:resource/menubar/menubar")),
+    Reference < XUIElement > menuBar(xLayoutManager->getElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"))),
                                      UNO_QUERY);
     Reference < XPropertySet > menuPropSet (menuBar, UNO_QUERY);
 
@@ -288,7 +288,7 @@ FrameJob::exportMenus (Reference < XFrame > xFrame)
         return;
     }
 
-    Reference < XMenu > xMenu (menuPropSet->getPropertyValue(OUString::createFromAscii("XMenuBar")),
+    Reference < XMenu > xMenu (menuPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("XMenuBar"))),
                                UNO_QUERY);
 
     if (!xMenu.is ())

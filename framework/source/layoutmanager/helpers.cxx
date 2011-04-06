@@ -381,7 +381,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::lang::XMul
         xDispatcher->executeDispatch(
             xProvider,
             aDockWinCommand,
-            ::rtl::OUString::createFromAscii("_self"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
             0,
             aArgs);
     }
