@@ -2316,7 +2316,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         return;
 
     chart::TimeIncrement aIncrement;
-    if( (xAxisProps->getPropertyValue( OUString::createFromAscii( "TimeIncrement" )) >>= aIncrement) )
+    if( (xAxisProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "TimeIncrement" ))) >>= aIncrement) )
     {
         sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::DAY;
         if( aIncrement.TimeResolution >>= nTimeResolution )
@@ -2440,7 +2440,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
     bool bExportContent )
 {
-    static const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
+    static const OUString sNumFormat( OUString(RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" )));
     std::vector< XMLPropertyState > aPropertyStates;
     SvXMLElementExport* pAxis = NULL;
 
