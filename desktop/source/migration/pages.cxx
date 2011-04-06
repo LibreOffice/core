@@ -117,7 +117,7 @@ void WelcomePage::checkEval()
 {
     Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     Reference< XMaterialHolder > xHolder(xFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.tab.tabreg")), UNO_QUERY);
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.tab.tabreg"))), UNO_QUERY);
     if (xHolder.is()) {
         Any aData = xHolder->getMaterial();
         Sequence < NamedValue > aSeq;
@@ -562,9 +562,9 @@ void RegistrationPage::ActivatePage()
 
 void RegistrationPage::impl_retrieveConfigurationData()
 {
-    static ::rtl::OUString PACKAGE = ::rtl::OUString::createFromAscii("org.openoffice.FirstStartWizard");
-    static ::rtl::OUString PATH    = ::rtl::OUString::createFromAscii("TabPages/Registration/RegistrationOptions/NeverButton");
-    static ::rtl::OUString KEY     = ::rtl::OUString::createFromAscii("Visible");
+    static ::rtl::OUString PACKAGE(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.FirstStartWizard"));
+    static ::rtl::OUString PATH(RTL_CONSTASCII_USTRINGPARAM("TabPages/Registration/RegistrationOptions/NeverButton"));
+    static ::rtl::OUString KEY(RTL_CONSTASCII_USTRINGPARAM("Visible"));
 
     ::com::sun::star::uno::Any aValue;
     try
