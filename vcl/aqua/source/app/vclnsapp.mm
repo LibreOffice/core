@@ -453,36 +453,50 @@
 - (void)applicationWillBecomeActive:(NSNotification *)pNotification
 {
     (void)pNotification;
-    if (GetSalData()->mpMainController->remoteControl) {
-
+    SalData* pSalData = GetSalData();
+    if (pSalData->mpMainController->remoteControl)
+    {
         // [remoteControl startListening: self];
         // does crash because the right thing to do is 
         // [GetSalData()->mpMainController->remoteControl startListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [GetSalData()->mpMainController->remoteControl startListening: self];
+        [pSalData->mpMainController->remoteControl startListening: self];
 #ifdef DEBUG
         NSLog(@"Apple Remote will become active - Using remote controls");
 #endif
+    }
+    for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
+         it != pSalData->maPresentationFrames.end(); ++it )
+    {
+        [(*it)->mpWindow setLevel: NSPopUpMenuWindowLevel];
+        if( [(*it)->mpWindow isVisible] )
+            [(*it)->mpWindow orderFront: NSApp];
     }
 }
 
 - (void)applicationWillResignActive:(NSNotification *)pNotification
 {
     (void)pNotification;
-    if (GetSalData()->mpMainController->remoteControl) {
-
+    SalData* pSalData = GetSalData();
+    if (pSalData->mpMainController->remoteControl)
+    {
         // [remoteControl stopListening: self];
         // does crash because the right thing to do is 
         // [GetSalData()->mpMainController->remoteControl stopListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [GetSalData()->mpMainController->remoteControl stopListening: self]; 
+        [pSalData->mpMainController->remoteControl stopListening: self]; 
 #ifdef DEBUG
         NSLog(@"Apple Remote will resign active - Releasing remote controls");
 #endif
+    }
+    for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
+         it != pSalData->maPresentationFrames.end(); ++it )
+    {
+        [(*it)->mpWindow setLevel: NSNormalWindowLevel];
     }
 }
 
