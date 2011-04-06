@@ -92,6 +92,7 @@
 #include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -122,13 +123,18 @@ using namespace ::com::sun::star::beans;
 #include <sfx2/appuno.hxx>
 #include <sfx2/viewfrm.hxx>
 
+namespace
+{
+    class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
+}
+
 static SfxFilterList_Impl* pFilterArr = 0;
 static sal_Bool bFirstRead = sal_True;
 
 static void CreateFilterArr()
 {
     pFilterArr = new SfxFilterList_Impl;
-    new SfxFilterListener();
+    theSfxFilterListener::get();
 }
 
 //----------------------------------------------------------------

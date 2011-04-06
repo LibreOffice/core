@@ -49,6 +49,39 @@
 //*****************************************************************************************************************
 using namespace ::com::sun::star;
 
+
+class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::XRefreshListener>
+{
+    private:
+        SfxFilterListener *m_pOwner;
+
+    public:
+        SfxRefreshListener(SfxFilterListener *pOwner)
+            : m_pOwner(pOwner)
+        {
+        }
+
+        virtual ~SfxRefreshListener()
+        {
+        }
+
+        // util.XRefreshListener
+        virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& rEvent )
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            m_pOwner->refreshed(rEvent);
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            m_pOwner->disposing(rEvent);
+        }
+};
+
+
+
 //*****************************************************************************************************************
 //  definitions
 //*****************************************************************************************************************
@@ -85,7 +118,8 @@ SfxFilterListener::SfxFilterListener()
         if( xNotifier.is() == sal_True )
         {
             m_xFilterCache = xNotifier;
-            m_xFilterCache->addRefreshListener( this );
+            m_xFilterCacheListener = new SfxRefreshListener(this);
+            m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
         }
     }
 }

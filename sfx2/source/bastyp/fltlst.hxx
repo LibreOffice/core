@@ -42,28 +42,23 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-//*****************************************************************************************************************
-//  declarations
-//*****************************************************************************************************************
-class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XRefreshListener >
+class SfxFilterListener
 {
-    // member
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >  m_xFilterCache;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >  m_xFilterCacheListener;
 
-    // c++ interface
     public:
-              SfxFilterListener();
-             ~SfxFilterListener();
+        SfxFilterListener();
+        ~SfxFilterListener();
 
-    // uno interface
     public:
         // XRefreshListener
         virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
 
-};  // SfxFilterListener
+};
 
 #endif // _SFX_FLTLST_HXX
 
