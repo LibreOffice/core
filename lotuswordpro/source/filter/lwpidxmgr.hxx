@@ -112,7 +112,7 @@ protected:
 public:
     void Read( LwpSvStream *pStrm );
     sal_uInt32 GetObjOffset( LwpObjectID objid );
-    sal_uInt32 GetObjTime( sal_uInt16 index ) { return m_TimeTable[index-1]; }
+    sal_uInt32 GetObjTime( sal_uInt16 index ) { return m_TimeTable.at(index-1); }
 };
 #endif
 

@@ -148,11 +148,11 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
-        m_nLow =  pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
+        m_nLow = pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
     }
     else
     {
-         pStrm->QuickRead(&m_nLow, sizeof(m_nLow));
+        pStrm->QuickRead(&m_nLow, sizeof(m_nLow));
     }
     pStrm->QuickRead(&m_nHigh, sizeof(m_nHigh));
     return DiskSizeIndexed();
