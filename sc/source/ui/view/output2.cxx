@@ -2137,6 +2137,58 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpThisRowInfo(NULL)
 {}
 
+bool ScOutputData::DrawEditParam::readCellContent(
+    ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
+{
+    if (!mpCell)
+    {
+        OSL_FAIL("pCell == NULL");
+        return false;
+    }
+
+    if (mpCell->GetCellType() == CELLTYPE_EDIT)
+    {
+        const EditTextObject* pData;
+        ((ScEditCell*)mpCell)->GetData(pData);
+
+        if (pData)
+        {
+            mpEngine->SetText(*pData);
+
+            if ( mbBreak && !mbAsianVertical && pData->HasField() )
+            {
+                //  Fields aren't wrapped, so clipping is enabled to prevent
+                //  a field from being drawn beyond the cell size
+
+                rWrapFields = true;
+            }
+        }
+        else
+        {
+            OSL_FAIL("pData == 0");
+            return false;
+        }
+    }
+    else
+    {
+        sal_uLong nFormat = mpPattern->GetNumberFormat(
+                                    pDoc->GetFormatTable(), mpCondSet );
+        String aString;
+        Color* pColor;
+        ScCellFormat::GetString( mpCell,
+                                 nFormat,aString, &pColor,
+                                 *pDoc->GetFormatTable(),
+                                 bShowNullValues,
+                                 bShowFormulas,
+                                 ftCheck );
+
+        mpEngine->SetText(aString);
+        if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
+            lcl_SetEditColor( *mpEngine, *pColor );
+    }
+    return true;
+}
+
 void ScOutputData::DrawEditParam::updateEnginePattern(bool bUseStyleColor)
 {
     // syntax highlighting mode is ignored here
@@ -2504,51 +2556,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.mpCell)
-    {
-        OSL_FAIL("pCell == NULL");
+    if (!rParam.readCellContent(pDoc, bShowNullValues, bShowFormulas, bSyntaxMode, bUseStyleColor, bForceAutoColor, bWrapFields))
+        // Failed to read cell content.  Bail out.
         return;
-    }
-
-    if (rParam.mpCell->GetCellType() == CELLTYPE_EDIT)
-    {
-        const EditTextObject* pData;
-        ((ScEditCell*)rParam.mpCell)->GetData(pData);
-
-        if (pData)
-        {
-            rParam.mpEngine->SetText(*pData);
-
-            if ( rParam.mbBreak && !rParam.mbAsianVertical && pData->HasField() )
-            {
-                //  Fields aren't wrapped, so clipping is enabled to prevent
-                //  a field from being drawn beyond the cell size
-
-                bWrapFields = true;
-            }
-        }
-        else
-        {
-            OSL_FAIL("pData == 0");
-        }
-    }
-    else
-    {
-        sal_uLong nFormat = rParam.mpPattern->GetNumberFormat(
-                                    pDoc->GetFormatTable(), rParam.mpCondSet );
-        String aString;
-        Color* pColor;
-        ScCellFormat::GetString( rParam.mpCell,
-                                 nFormat,aString, &pColor,
-                                 *pDoc->GetFormatTable(),
-                                 bShowNullValues,
-                                 bShowFormulas,
-                                 ftCheck );
-
-        rParam.mpEngine->SetText(aString);
-        if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
-            lcl_SetEditColor( *rParam.mpEngine, *pColor );
-    }
 
     if ( bSyntaxMode )
         SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
@@ -3140,51 +3150,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.mpCell)
-    {
-        OSL_FAIL("pCell == NULL");
+    if (!rParam.readCellContent(pDoc, bShowNullValues, bShowFormulas, bSyntaxMode, bUseStyleColor, bForceAutoColor, bWrapFields))
+        // Failed to read cell content.  Bail out.
         return;
-    }
-
-    if (rParam.mpCell->GetCellType() == CELLTYPE_EDIT)
-    {
-        const EditTextObject* pData;
-        ((ScEditCell*)rParam.mpCell)->GetData(pData);
-
-        if (pData)
-        {
-            rParam.mpEngine->SetText(*pData);
-
-            if ( rParam.mbBreak && pData->HasField() )
-            {
-                //  Fields aren't wrapped, so clipping is enabled to prevent
-                //  a field from being drawn beyond the cell size
-
-                bWrapFields = true;
-            }
-        }
-        else
-        {
-            OSL_FAIL("pData == 0");
-        }
-    }
-    else
-    {
-        sal_uLong nFormat = rParam.mpPattern->GetNumberFormat(
-                                    pDoc->GetFormatTable(), rParam.mpCondSet );
-        String aString;
-        Color* pColor;
-        ScCellFormat::GetString( rParam.mpCell,
-                                 nFormat,aString, &pColor,
-                                 *pDoc->GetFormatTable(),
-                                 bShowNullValues,
-                                 bShowFormulas,
-                                 ftCheck );
-
-        rParam.mpEngine->SetText(aString);
-        if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
-            lcl_SetEditColor( *rParam.mpEngine, *pColor );
-    }
 
     if ( bSyntaxMode )
         SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
