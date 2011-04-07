@@ -45,7 +45,7 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* E3dSphereObj::CreateObjectSpecificViewContact()
 {
@@ -63,19 +63,15 @@ sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(E3dSphereObj, E3dCompoundObject);
 
-/*************************************************************************
-|*
-|* Kugel aus Polygonfacetten nach Laengen und Breitengrad aufbauen
-|*
-\************************************************************************/
+
+// Build Sphere from polygon facets in latitude and longitude
 
 E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize)
 :   E3dCompoundObject(rDefault)
 {
-    // Defaults setzen
+    // Set defaults
     SetDefaultAttributes(rDefault);
 
-    // Uebergebene drueberbuegeln
     aCenter = rCenter;
     aSize = r3DSize;
 }
@@ -83,62 +79,46 @@ E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoi
 E3dSphereObj::E3dSphereObj()
 :   E3dCompoundObject()
 {
-    // Defaults setzen
+    // Set defaults
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
 
-/*************************************************************************
-|*
-|* Kugel erzeugen ohne die Polygone darin zu erzeugen
-|*
-\************************************************************************/
 
-// FG: Dieser Aufruf erfolgt von der 3D-Object Factory (objfac3d.cxx) und zwar ausschliesslich beim
-//     laden von Dokumenten. Hier braucht man keinen CreateSphere-Aufruf, denn die wirkliche
-//     Anzahl Segmente ist ja noch nicht bekannt. Dies war bis zum 10.2.97 ein (kleines)
-//     Speicherleck.
-E3dSphereObj::E3dSphereObj(int /*dummy*/) // den Parameter braucht es um unterscheiden zu koennen, welcher
-{                                     // der beiden Konstruktoren gemeint ist. Der obige halt per Default
-    // Defaults setzen
+// Create Sphere without creating the Polygons within
+
+// This call is from the 3D Object Factory (objfac3d.cxx) and only when loading
+// of documents. Here you do not need CreateSphere call, since the real number
+// of segments is not even known yet. This was until 10.02.1997 a (small)
+// memory leak.
+
+E3dSphereObj::E3dSphereObj(int /*dummy*/)
+// the parameters it needs to be able to distinguish which
+// constructors of the two is meant. The above is the default.
+{
+    // Set defaults
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
 
 void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
-    // Defaults setzen
+    // Set defaults
     aCenter = rDefault.GetDefaultSphereCenter();
     aSize = rDefault.GetDefaultSphereSize();
 }
-
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
 
 sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 {
     return E3D_SPHEREOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Wandle das Objekt in ein Gruppenobjekt bestehend aus n Polygonen
-|*
-\************************************************************************/
+// Convert the object into a group object consisting of n polygons
 
 SdrObject *E3dSphereObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
-
-/*************************************************************************
-|*
-|* Leer-Konstruktor
-|*
-\************************************************************************/
 
 void E3dSphereObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
 {
@@ -156,11 +136,7 @@ E3dSphereObj* E3dSphereObj::Clone() const
     return CloneHelper< E3dSphereObj >();
 }
 
-/*************************************************************************
-|*
-|* Lokale Parameter setzen mit Geometrieneuerzeugung
-|*
-\************************************************************************/
+// Set local parameters with geometry re-creating
 
 void E3dSphereObj::SetCenter(const basegfx::B3DPoint& rNew)
 {
@@ -180,11 +156,7 @@ void E3dSphereObj::SetSize(const basegfx::B3DVector& rNew)
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (singular)
-|*
-\************************************************************************/
+// Get the name of the object (singular)
 
 void E3dSphereObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -200,11 +172,7 @@ void E3dSphereObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (plural)
-|*
-\************************************************************************/
+// Get the name of the object (plural)
 
 void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
 {

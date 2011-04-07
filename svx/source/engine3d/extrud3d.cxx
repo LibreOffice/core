@@ -49,7 +49,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
 {
@@ -67,12 +67,8 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 
-/*************************************************************************
-|*
-|* Konstruktor, erzeugt zwei Deckelflaechen-PolyPolygone und (PointCount-1)
-|* Seitenflaechen-Rechtecke aus dem uebergebenen PolyPolygon
-|*
-\************************************************************************/
+// Constructor creates a two cover surface PolyPolygon and (point-count 1) side
+// surfaces rectangles from the passed PolyPolygon
 
 E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
 :   E3dCompoundObject(rDefault),
@@ -83,7 +79,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
     aMirrorY.scale(1.0, -1.0);
     maExtrudePolygon.transform(aMirrorY);
 
-    // Defaults setzen
+    // Set Defaults
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
@@ -93,7 +89,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
 E3dExtrudeObj::E3dExtrudeObj()
 :   E3dCompoundObject()
 {
-    // Defaults setzen
+    // Set Defaults
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -106,16 +102,10 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(rDefault.GetDefaultExtrudeCloseFront()));
     GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultExtrudeCloseBack()));
 
-    // Bei extrudes defaultmaessig StdTexture in X und Y
+    // For extrudes use StdTexture in X and Y by default
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(1));
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(1));
 }
-
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
 
 sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
 {
@@ -127,11 +117,8 @@ E3dExtrudeObj* E3dExtrudeObj::Clone() const
     return CloneHelper< E3dExtrudeObj >();
 }
 
-/*************************************************************************
-|*
-|* Lokale Parameter setzen mit Geometrieneuerzeugung
-|*
-\************************************************************************/
+
+// Set local parameters with geometry re-creating
 
 void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
 {
@@ -142,11 +129,7 @@ void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (singular)
-|*
-\************************************************************************/
+// Get the name of the object (singular)
 
 void E3dExtrudeObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -162,22 +145,12 @@ void E3dExtrudeObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (plural)
-|*
-\************************************************************************/
+// Get the name of the object (plural)
 
 void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNamePluralExtrude3d);
 }
-
-/*************************************************************************
-|*
-|* Aufbrechen
-|*
-\************************************************************************/
 
 sal_Bool E3dExtrudeObj::IsBreakObjPossible()
 {

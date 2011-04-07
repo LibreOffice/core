@@ -35,13 +35,8 @@
 #include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 
-/*************************************************************************
-|*
-|* Klasse zum verwalten der 3D-Default Attribute
-|*
-\************************************************************************/
+// Class to manage the 3D default attributes
 
-// Konstruktor
 E3dDefaultAttributes::E3dDefaultAttributes()
 {
     Reset();
@@ -49,21 +44,21 @@ E3dDefaultAttributes::E3dDefaultAttributes()
 
 void E3dDefaultAttributes::Reset()
 {
-    // Compound-Objekt
+    // Compound object
     bDefaultCreateNormals = sal_True;
     bDefaultCreateTexture = sal_True;
 
-    // Cube-Objekt
+    // Cube object
     aDefaultCubePos = basegfx::B3DPoint(-500.0, -500.0, -500.0);
     aDefaultCubeSize = basegfx::B3DVector(1000.0, 1000.0, 1000.0);
     nDefaultCubeSideFlags = CUBE_FULL;
     bDefaultCubePosIsCenter = sal_False;
 
-    // Sphere-Objekt
+    // Sphere object
     aDefaultSphereCenter = basegfx::B3DPoint(0.0, 0.0, 0.0);
     aDefaultSphereSize = basegfx::B3DPoint(1000.0, 1000.0, 1000.0);
 
-    // Lathe-Objekt
+    // Lathe object
     nDefaultLatheEndAngle = 3600;
     bDefaultLatheSmoothed = sal_True;
     bDefaultLatheSmoothFrontBack = sal_False;
@@ -71,7 +66,7 @@ void E3dDefaultAttributes::Reset()
     bDefaultLatheCloseFront = sal_True;
     bDefaultLatheCloseBack = sal_True;
 
-    // Extrude-Objekt
+    // Extrude object
     bDefaultExtrudeSmoothed = sal_True;
     bDefaultExtrudeSmoothFrontBack = sal_False;
     bDefaultExtrudeCharacterMode = sal_False;

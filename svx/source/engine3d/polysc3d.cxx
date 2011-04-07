@@ -61,12 +61,6 @@ E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
 {
 }
 
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
-
 sal_uInt16 E3dPolyScene::GetObjIdentifier() const
 {
     return E3D_POLYSCENE_ID;

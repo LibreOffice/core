@@ -173,7 +173,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         QuickHelpText [ en-US ] = "Assign" ;
     };
-     // Unterer Teil
+     // Lower part
     ImageButton BTN_CHANGE_TO_3D
     {
         HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_CHANGE_TO_3D";
@@ -333,7 +333,7 @@ DockingWindow RID_SVXFLOAT_3D
         Size = FIXED_LINE_SIZE;
         Text [ en-US ] = "Segments" ;
     };
-     // Geometrie
+     // Geometry
     FixedText FT_HORIZONTAL
     {
         Pos = MAP_APPFONT ( FT_INDENT , SEGMENTS_START_Y+13 ) ;
@@ -461,7 +461,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ en-US ] = "Double-Sided" ;
     };
 
-    // Darstellung
+    // Representation
     FixedText FT_SHADEMODE
     {
         Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
@@ -588,7 +588,7 @@ DockingWindow RID_SVXFLOAT_3D
         Size = FIXED_LINE_SIZE;
         Text [ en-US ] = "Shading" ;
     };
-     // Beleuchtung
+     // Lighting
     FixedText FT_LIGHTSOURCE
     {
         Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
@@ -819,7 +819,7 @@ DockingWindow RID_SVXFLOAT_3D
         Size = FIXED_LINE_SIZE ;
         Text [ en-US ] = "Illumination" ;
     };
-     // Texturen
+     // Textures
     FixedText FT_TEX_KIND
     {
         Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;

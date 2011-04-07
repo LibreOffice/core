@@ -39,12 +39,6 @@
 #include "svx/objfac3d.hxx"
 #include <svx/svdobj.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 static sal_Bool bInit = sal_False;
 
 E3dObjFactory::E3dObjFactory()
@@ -56,21 +50,11 @@ E3dObjFactory::E3dObjFactory()
     }
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 E3dObjFactory::~E3dObjFactory()
 {
 }
 
-/*************************************************************************
-|*
-|* Chart-interne Objekte erzeugen
-|*
-\************************************************************************/
+// Generate chart internal objects
 
 IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
@@ -88,10 +72,11 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
                 pObjFactory->pNewObj = new E3dCubeObj();
                 break;
             case E3D_SPHEREOBJ_ID:
-                    // FG: ruft den dummy constructor, da dieser Aufruf nur beim Laden von Dokumenten erfolgt.
-                    //     die wirkliche Anzahkl Segmente wird aber erst nach dem Laden der Member festgelegt.
-                    //     dies hat zur Folge das die erste Kugel gleich wieder zerstoert wird, obwohl sie nie
-                    //     gebraucht worden ist.
+                // Gets the dummy constructor, as this is only called when
+                // loading documents. The actual number of segments is however
+                // determined only after loading the members. This will result
+                // in that the first sphere will be immediately destroyed,
+                // although it was never used.
                 pObjFactory->pNewObj = new E3dSphereObj(123);
                 break;
             case E3D_EXTRUDEOBJ_ID:

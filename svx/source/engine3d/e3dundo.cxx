@@ -39,20 +39,12 @@
 
 TYPEINIT1(E3dUndoAction, SfxUndoAction);
 
-/************************************************************************\
-|*
-|* Destruktor der Basisklasse
-|*
-\************************************************************************/
 E3dUndoAction::~E3dUndoAction ()
 {
 }
 
-/************************************************************************\
-|*
-|* Repeat gibt es nicht
-|*
-\************************************************************************/
+// Repeat does not exist
+
 sal_Bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
     return sal_False;
@@ -68,50 +60,30 @@ TYPEINIT1(E3dRotateUndoAction, E3dUndoAction);
 
 ************************************************************************/
 
-/************************************************************************\
-|*
-|* Undodestruktor fuer 3D-Rotation
-|*
-\************************************************************************/
+// Undo destructor for 3D-Rotation
+
 E3dRotateUndoAction::~E3dRotateUndoAction ()
 {
 }
 
-/************************************************************************\
-|*
-|* Undo fuer 3D-Rotation ueber die Rotationsmatrizen
-|*
-\************************************************************************/
+// Undo for 3D-Rotation on the Rotation matrix
+
 void E3dRotateUndoAction::Undo ()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyOldRotation);
 }
 
-/************************************************************************\
-|*
-|* Undo fuer 3D-Rotation ueber die Rotationsmatrizen
-|*
-\************************************************************************/
+// Redo for 3D-Rotation on the Rotation matrix
+
 void E3dRotateUndoAction::Redo ()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyNewRotation);
 }
 
-/*************************************************************************
-|*
-|* E3dAttributesUndoAction
-|*
-\************************************************************************/
-
 TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
     E3dView*    p3dView,
     E3dObject*  pInObject,
@@ -127,54 +99,34 @@ E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 E3dAttributesUndoAction::~E3dAttributesUndoAction()
 {
 }
 
-/*************************************************************************
-|*
-|* Undo()
-|* Implementiert ueber Set3DAttributes(), um die Attribute nur an einer
-|* Stelle pflegen zu muessen!
-|*
-\************************************************************************/
+// Undo() implemented through Set3DAttributes() to only maintain the attributes
+// in one place
+
 void E3dAttributesUndoAction::Undo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aOldSet);
 }
 
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 void E3dAttributesUndoAction::Redo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aNewSet);
 }
 
-/*************************************************************************
-|*
-|* Mehrfaches Undo nicht moeglich
-|*
-\************************************************************************/
+// Multiple Undo is not possible
+
 sal_Bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|* Mehrfaches Undo nicht moeglich
-|*
-\************************************************************************/
+// Multiple Undo is not possible
+
 void E3dAttributesUndoAction::Repeat()
 {
 }

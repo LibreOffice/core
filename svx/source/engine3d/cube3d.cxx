@@ -38,7 +38,7 @@
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
 {
@@ -47,29 +47,20 @@ sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
 
 TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 
-/*************************************************************************
-|*
-|* Konstruktor:                                                 |
-|* 3D-Quader erzeugen; aPos: Zentrum oder links, unten, hinten  |__
-|*                           (abhaengig von bPosIsCenter)      /
-|*
-\************************************************************************/
-
 E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
 :   E3dCompoundObject(rDefault)
 {
-    // Defaults setzen
+    // Set Defaults
     SetDefaultAttributes(rDefault);
 
-    // uebergebene drueberbuegeln
-    aCubePos = aPos;
+    aCubePos = aPos; // position centre or left, bottom, back (dependant on bPosIsCenter)
     aCubeSize = r3DSize;
 }
 
 E3dCubeObj::E3dCubeObj()
 :   E3dCompoundObject()
 {
-    // Defaults setzen
+    // Set Defaults
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -82,22 +73,12 @@ void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     bPosIsCenter = rDefault.GetDefaultCubePosIsCenter();
 }
 
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
-
 sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 {
     return E3D_CUBEOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Wandle das Objekt in ein Gruppenobjekt bestehend aus 6 Polygonen
-|*
-\************************************************************************/
+// Convert the object into a group object consisting of 6 polygons
 
 SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
@@ -109,11 +90,7 @@ E3dCubeObj* E3dCubeObj::Clone() const
     return CloneHelper< E3dCubeObj >();
 }
 
-/*************************************************************************
-|*
-|* Lokale Parameter setzen mit Geometrieneuerzeugung
-|*
-\************************************************************************/
+// Set local parameters with geometry re-creating
 
 void E3dCubeObj::SetCubePos(const basegfx::B3DPoint& rNew)
 {
@@ -151,11 +128,7 @@ void E3dCubeObj::SetSideFlags(sal_uInt16 nNew)
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (singular)
-|*
-\************************************************************************/
+// Get the name of the object (singular)
 
 void E3dCubeObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -171,11 +144,7 @@ void E3dCubeObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (plural)
-|*
-\************************************************************************/
+// Get the name of the object (plural)
 
 void E3dCubeObj::TakeObjNamePlural(XubString& rName) const
 {

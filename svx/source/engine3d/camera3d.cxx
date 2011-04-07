@@ -136,12 +136,12 @@ void Camera3D::SetBankAngle(double fAngle)
         }
     }
 
-    // von aDiff nach oben zeigenden View-Up-Vektor berechnen
+    // Calculate from aDiff to uppwards pointing View-Up-Vector
     aPrj = aPrj.getPerpendicular(aDiff);
     aPrj = aPrj.getPerpendicular(aDiff);
     aDiff.normalize();
 
-    // auf Z-Achse rotieren, dort um BankAngle drehen und zurueck
+    // Rotate on Z axis, to rotate the BankAngle and back
     basegfx::B3DHomMatrix aTf;
     const double fV(sqrt(aDiff.getY() * aDiff.getY() + aDiff.getZ() * aDiff.getZ()));
 
@@ -204,12 +204,6 @@ void Camera3D::SetBankAngle(double fAngle)
     SetVUV(aTf * aPrj);
 }
 
-/*************************************************************************
-|*
-|* Brennweite setzen
-|*
-\************************************************************************/
-
 void Camera3D::SetFocalLength(double fLen)
 {
     if ( fLen < 5 )
@@ -218,11 +212,7 @@ void Camera3D::SetFocalLength(double fLen)
     fFocalLength = fLen;
 }
 
-/*************************************************************************
-|*
-|* Um die Kameraposition drehen, LookAt wird dabei veraendert
-|*
-\************************************************************************/
+// To rotate the camera position, this changes LookAt
 
 void Camera3D::Rotate(double fHAngle, double fVAngle)
 {
@@ -270,12 +260,7 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
     SetLookAt(aPosition + aDiff);
 }
 
-
-/*************************************************************************
-|*
-|* Um den Blickpunkt drehen, Position wird dabei veraendert
-|*
-\************************************************************************/
+// To rotate the view point, this changes the position
 
 void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 {
@@ -323,11 +308,7 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
     SetPosition(aLookAt + aDiff);
 }
 
-/*************************************************************************
-|*
-|* FG: ??? Setzt wohl die Projektionsebene in eine bestimmte Tiefe
-|*
-\************************************************************************/
+// ??? this probably sets the projection plane in a certain depth
 
 void Camera3D::SetFocalLengthWithCorrect(double fLen)
 {

@@ -53,12 +53,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-/*************************************************************************
-|*
-|* Konvertierung in Polygone
-|*
-\************************************************************************/
-
 void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
 {
     SdrObject* pNewObj = NULL;
@@ -86,12 +80,6 @@ void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
         SdrView::ConvertMarkedToPolyObj(bLineToArea);
     }
 }
-
-/*************************************************************************
-|*
-|* Get3DAttributes
-|*
-\************************************************************************/
 
 void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 {
@@ -121,7 +109,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 
 SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/) const
 {
-    // ItemSet mit entspr. Bereich anlegen
+    // Creating itemset with corresponding field
     SfxItemSet aSet(
         pMod->GetItemPool(),
         SDRATTR_START,      SDRATTR_END,
@@ -151,34 +139,28 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
         }
     }
 
-    // setze SID_ATTR_3D_INTERN auf den Status der selektierten Objekte
+    // Set SID_ATTR_3D_INTERN on the status of the selected objects
     aSet.Put(SfxUInt32Item(SID_ATTR_3D_INTERN, nSelectedItems));
 
-    // DefaultValues pflegen
+    // maintain default values
     if(!nSelectedItems  && !pInScene)
     {
-        // Defaults holen und hinzufuegen
+        // Get defaults and apply
         SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
-        // ... aber keine Linien fuer 3D
+        // ... but no lines for 3D
         aSet.Put(XLineStyleItem (XLINE_NONE));
 
-        // #84061# new defaults for distance and focal length
+        // new defaults for distance and focal length
         aSet.Put(Svx3DDistanceItem(100));
         aSet.Put(Svx3DFocalLengthItem(10000));
     }
 
-    // ItemSet zurueckgeben
+    // return ItemSet
     return(aSet);
 }
-
-/*************************************************************************
-|*
-|* Set3DAttributes:
-|*
-\************************************************************************/
 
 void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_Bool bReplaceAll)
 {
@@ -186,7 +168,6 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
 
     if(pInScene)
     {
-        //pInScene->SetItemSetAndBroadcast(rAttr, bReplaceAll);
         pInScene->SetMergedItemSetAndBroadcast(rAttr, bReplaceAll);
     }
     else
@@ -208,10 +189,10 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
         }
     }
 
-    // DefaultValues pflegen
+    // Maintain default values
     if(!nSelectedItems && !pInScene)
     {
-        // Defaults setzen
+        // Set defaults
         SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);

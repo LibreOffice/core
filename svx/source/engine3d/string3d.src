@@ -28,7 +28,7 @@
 #include <svx/dialogs.hrc>
  // pragma -------------------------------------------------------------------
 
- // Strings fuer die Draw-Dialoge --------------------------------------------
+ // Strings for the Draw Dialog --------------------------------------------
 String RID_SVX_3D_CREATE_LATHE
 {
     Text [ en-US ] = "Create 3D rotation object" ;

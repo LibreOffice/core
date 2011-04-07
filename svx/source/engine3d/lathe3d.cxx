@@ -47,7 +47,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
 {
@@ -65,12 +65,7 @@ sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
-/*************************************************************************
-|*
-|* Konstruktor aus 3D-Polygon, Scale gibt den Umrechnungsfaktor fuer
-|* die Koordinaten an
-|*
-\************************************************************************/
+// Constructor from 3D polygon, scale is the conversion factor for the coordinates
 
 E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
 :   E3dCompoundObject(rDefault),
@@ -81,11 +76,11 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
     aMirrorY.scale(1.0, -1.0);
     maPolyPoly2D.transform(aMirrorY);
 
-    // Defaults setzen
+    // Set Defaults
     SetDefaultAttributes(rDefault);
 
-    // Ueberfluessige Punkte entfernen, insbesondere doppelte
-    // Start- und Endpunkte verhindern
+    // Superfluous items removed, in particular to prevent duplicate
+    // start and end points
     maPolyPoly2D.removeDoublePoints();
 
     if(maPolyPoly2D.count())
@@ -102,16 +97,10 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
     }
 }
 
-/*************************************************************************
-|*
-|* Leer-Konstruktor
-|*
-\************************************************************************/
-
 E3dLatheObj::E3dLatheObj()
 :    E3dCompoundObject()
 {
-    // Defaults setzen
+    // Set Defaults
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -125,12 +114,6 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultLatheCloseBack()));
 }
 
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
-
 sal_uInt16 E3dLatheObj::GetObjIdentifier() const
 {
     return E3D_LATHEOBJ_ID;
@@ -141,22 +124,12 @@ E3dLatheObj* E3dLatheObj::Clone() const
     return CloneHelper< E3dLatheObj >();
 }
 
-/*************************************************************************
-|*
-|* Wandle das Objekt in ein Gruppenobjekt bestehend aus n Polygonen
-|*
-\************************************************************************/
+// Convert the object to group object consisting of n polygons
 
 SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
-
-/*************************************************************************
-|*
-|* Neue Segmentierung (Beschreibung siehe Header-File)
-|*
-\************************************************************************/
 
 void E3dLatheObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
 {
@@ -170,11 +143,7 @@ void E3dLatheObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
     }
 }
 
-/*************************************************************************
-|*
-|* Lokale Parameter setzen mit Geometrieneuerzeugung
-|*
-\************************************************************************/
+// Set Local parameters set to re-create geometry
 
 void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 {
@@ -200,11 +169,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (singular)
-|*
-\************************************************************************/
+// Get the name of the object (singular)
 
 void E3dLatheObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -220,22 +185,12 @@ void E3dLatheObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-/*************************************************************************
-|*
-|* Get the name of the object (plural)
-|*
-\************************************************************************/
+// Get the name of the object (plural)
 
 void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNamePluralLathe3d);
 }
-
-/*************************************************************************
-|*
-|* Aufbrechen
-|*
-\************************************************************************/
 
 sal_Bool E3dLatheObj::IsBreakObjPossible()
 {
@@ -251,10 +206,10 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
 
     if(pPathObj)
     {
-        // Attribute setzen
+        // Set Attribute
         SfxItemSet aSet(GetObjectItemSet());
 
-        // Linien aktivieren, um Objekt garantiert sichtbar zu machen
+        // Enable lines to guarantee that the object becomes visible
         aSet.Put(XLineStyleItem(XLINE_SOLID));
 
         pPathObj->SetMergedItemSet(aSet);
