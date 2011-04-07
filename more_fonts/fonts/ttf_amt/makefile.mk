@@ -54,6 +54,6 @@ BUILD_FLAGS=
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 
-.IF "$(WITH_AGFA_MONOTYPE_FONTS)"!="NO"
+.IF "$(WITH_AGFA_MONOTYPE_FONTS)" == "YES"
 .INCLUDE : tg_ext.mk
 .ENDIF
