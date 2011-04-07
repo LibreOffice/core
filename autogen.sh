@@ -57,7 +57,7 @@ sub invalid_distro($$)
 }
 
 my @cmdline_args = ();
-if (!@ARGV) {
+if (@ARGV == 0) {
     my $lastrun = "autogen.lastrun";
     @cmdline_args = read_args ($lastrun) if (-f $lastrun);
 } else {
@@ -91,12 +91,14 @@ $aclocal_flags = "-I ./m4/mac" if (($aclocal_flags eq "") && ($system eq 'Darwin
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
 system ("aclocal $aclocal_flags") && die "Failed to run aclocal";
+unlink ("configure");
 system ("autoconf") && die "Failed to run autoconf";
+die "failed to generate configure" if (! -x "configure");
 
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
-    if ($#cmdline_args > 0) {
+    if (@ARGV > 0) {
     print "writing args to autogen.lastrun\n";
     my $fh;
     open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
