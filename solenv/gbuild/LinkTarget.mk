@@ -48,11 +48,11 @@ endif
 
 define gb_CObject__rules
 $$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
-    $$(call gb_CObject__command,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
+	$$(call gb_CObject__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_source,$(1),%)
-    $$(call gb_CObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
+	$$(call gb_CObject__command_dep,$$@,$$*,$$<)
 endif
 
 endef
@@ -192,11 +192,11 @@ endif
 
 define gb_ObjCxxObject__rules
 $$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-    $$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-    $$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+	$$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<)
 endif
 
 endef
