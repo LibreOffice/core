@@ -660,7 +660,7 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     SCROW nRow1a = nStartRow, nRow2a = nEndRow;
     pDoc->GetDataArea(nTable, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
     nEndRow = nRow2a;
-    fprintf(stdout, "ScDBData::ExtendDataArea:   new end row = %d\n", nEndRow);
+    fprintf(stdout, "ScDBData::ExtendDataArea:   new end row = %"SAL_PRIdINT32"\n", nEndRow);
 }
 
 namespace {
