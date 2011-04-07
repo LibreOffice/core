@@ -652,7 +652,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
 
     //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
 }
-#include <stdio.h>
+
 void ScDBData::ExtendDataArea(ScDocument* pDoc)
 {
     // Extend the DB area to include data rows immediately below.
@@ -660,7 +660,6 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     SCROW nRow1a = nStartRow, nRow2a = nEndRow;
     pDoc->GetDataArea(nTable, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
     nEndRow = nRow2a;
-    fprintf(stdout, "ScDBData::ExtendDataArea:   new end row = %d\n", nEndRow);
 }
 
 namespace {
