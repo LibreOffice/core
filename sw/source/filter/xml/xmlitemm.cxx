@@ -58,7 +58,7 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     // RES_PAPER_BIN
     // not required
     // TODO: RES_LR_SPACE
-    M_E_SE( FO,     MARGIN,             -1,     MID_SW_FLAG_NO_ITEM_IMPORT),
+    M_E_SE( FO,     MARGIN,         0xFFFF/*invalid*/, MID_SW_FLAG_NO_ITEM_IMPORT),
     M_E_SIE( FO,    MARGIN_LEFT,        RES_LR_SPACE,   MID_L_MARGIN ),
     M_E_SIE( FO,    MARGIN_RIGHT,       RES_LR_SPACE,   MID_R_MARGIN ),
     // RES_UL_SPACE
