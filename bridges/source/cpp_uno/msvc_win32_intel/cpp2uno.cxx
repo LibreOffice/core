@@ -267,7 +267,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-    typelib_TypeClass eRet;
+    typelib_TypeClass eRet = typelib_TypeClass_VOID;
     switch (aMemberDescr.get()->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -353,8 +353,6 @@ static typelib_TypeClass __cdecl cpp_mediate(
         throw RuntimeException(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("no member description found!") ),
             (XInterface *)pThis );
-        // is here for dummy
-        eRet = typelib_TypeClass_VOID;
     }
     }
 
