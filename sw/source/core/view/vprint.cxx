@@ -456,17 +456,13 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
 
-    ViewShell *pShell;
-    SwDoc *pOutDevDoc;
-
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.
     // (see XRenderable implementation in unotxdoc.cxx)
     // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here.
-    pOutDevDoc = GetDoc();
-    pShell = new ViewShell( *this, 0, pOutDev );
+    ViewShell *pShell = new ViewShell( *this, 0, pOutDev );
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
