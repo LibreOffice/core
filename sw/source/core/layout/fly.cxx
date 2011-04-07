@@ -125,15 +125,12 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
-    sal_Bool bVert = sal_False;
     sal_uInt16 nDir =
         ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
         bDerivedVert = 1;
         bDerivedR2L = 1;
-        if( pAnch && pAnch->IsVertical() )
-            bVert = sal_True;
     }
     else
     {
@@ -166,7 +163,6 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
             }
         }
 
-        bVert = bVertical;
         bInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
             bRightToLeft = 1;
