@@ -27,7 +27,7 @@
 #ifndef __ooo_vba_excel_XWorkbook_idl__
 #define __ooo_vba_excel_XWorkbook_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XUnoTunnel.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
 //=============================================================================
@@ -40,8 +40,11 @@ interface XWorksheet;
 interface XWorksheets;
 interface XStyles;
 
-interface XWorkbook : com::sun::star::uno::XInterface
+interface XWorkbook
 {
+
+    interface ::com::sun::star::lang::XUnoTunnel;
+
     [attribute, readonly] boolean ProtectStructure;
     [attribute, readonly] XWorksheet ActiveSheet;
     [attribute, readonly] string  CodeName;
