@@ -3110,8 +3110,9 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     if ( !aMiscOptions.IsExperimentalMode() ||
                          ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
-                        rSet.DisableItem( nWhich );
-                        break;
+                       rSet.DisableItem( nWhich );
+                       rSet.Put(SfxVisibilityItem(nWhich, sal_False));
+                       break;
                     }
 
                     ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
