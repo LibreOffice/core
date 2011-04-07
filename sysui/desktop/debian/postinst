@@ -154,6 +154,7 @@ application/vnd.writerperfect; %PREFIX -view %s
 application/wordperfect5.1; %PREFIX -view %s
 application/x-wordperfect; %PREFIX -view %s
 application/wordperfect; %PREFIX -view %s
+application/vnd.lotus-wordpro; %PREFIX -view %s
 application/wpwin; %PREFIX -view %s
 application/vnd.openofficeorg.extension; %PREFIX %s
 END

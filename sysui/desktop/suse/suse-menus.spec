@@ -231,6 +231,7 @@ application/vnd.wordperfect; %unixfilename -view %s
 application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
+application/vnd.lotus-wordpro; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
 application/vnd.openofficeorg.extension; %unixfilename %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; %unixfilename -view %s
