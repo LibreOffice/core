@@ -32,7 +32,8 @@ T4_WRITER = \
     writer_MS_Word_2007_XML \
     writer_MS_Word_2007_XML_Template \
     writer_OOXML \
-    writer_OOXML_Template
+    writer_OOXML_Template \
+    writer_layout_dump_xml
 
 # -----------------------------------------------
 # count = 39
@@ -66,7 +67,8 @@ F4_WRITER = \
     MS_Word_2007_XML \
     MS_Word_2007_XML_Template \
     OOXML_Text \
-    OOXML_Text_Template
+    OOXML_Text_Template \
+    writer_layout_dump
 
 # -----------------------------------------------
 # count = 14
