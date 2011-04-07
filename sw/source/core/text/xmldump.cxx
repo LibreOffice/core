@@ -29,6 +29,8 @@
 #include "precompiled_sw.hxx"
 
 #include "frame.hxx"
+#include "sectfrm.hxx"
+#include "tabfrm.hxx"
 #include "txtfrm.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"
@@ -260,6 +262,29 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+
+    if ( pPrecede != NULL )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTxtFrm*)pPrecede );
+}
+
+void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+{
+    SwFrm::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+
+    if ( pPrecede != NULL )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwSectionFrm*)pPrecede );
+}
+
+void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+{
+    SwFrm::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+
+    if ( pPrecede != NULL )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTabFrm*)pPrecede );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

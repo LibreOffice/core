@@ -128,6 +128,8 @@ public:
 
     bool IsBalancedSection() const;
 
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
 };
 

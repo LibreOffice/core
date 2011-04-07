@@ -115,6 +115,7 @@ class SwFlowFrm
 protected:
 
     SwFlowFrm *pFollow;
+    SwFlowFrm *pPrecede;
 
     sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
@@ -171,7 +172,11 @@ public:
     const  SwFlowFrm *GetFollow() const    { return pFollow;   }
            SwFlowFrm *GetFollow()          { return pFollow;   }
            sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
-    inline void       SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
+    inline void       SetFollow( SwFlowFrm *pNew );
+
+    const  SwFlowFrm *GetPrecede() const   { return pPrecede;   }
+           SwFlowFrm *GetPrecede()         { return pPrecede;   }
+
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
@@ -249,6 +254,12 @@ inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
     return rThis.GetIndPrev() != 0;
 }
 
+inline void SwFlowFrm::SetFollow( SwFlowFrm *pNew )
+{
+    pFollow = pNew;
+    if ( pFollow != NULL )
+        pFollow->pPrecede = this;
+}
 
 #endif
 

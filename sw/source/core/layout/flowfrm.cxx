@@ -691,16 +691,12 @@ SwTxtFrm* SwCntntFrm::FindMaster() const
 {
     OSL_ENSURE( IsFollow(), "SwCntntFrm::FindMaster(): !IsFollow" );
 
-    const SwCntntFrm* pCnt = GetPrevCntntFrm();
+    const SwCntntFrm* pPrec = GetPrecede();
 
-    while ( pCnt )
+    if ( pPrec && pPrec->HasFollow() && pPrec->GetFollow() == this )
     {
-        if ( pCnt->HasFollow() && pCnt->GetFollow() == this )
-        {
-            OSL_ENSURE( pCnt->IsTxtFrm(), "NoTxtFrm with follow found" );
-            return (SwTxtFrm*)pCnt;
-        }
-        pCnt = pCnt->GetPrevCntntFrm();
+        OSL_ENSURE( pPrec->IsTxtFrm(), "NoTxtFrm with follow found" );
+        return ( SwTxtFrm* )pPrec;
     }
 
     OSL_FAIL( "Follow ist lost in Space." );

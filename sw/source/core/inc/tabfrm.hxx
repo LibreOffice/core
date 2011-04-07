@@ -216,6 +216,8 @@ public:
     sal_uInt16 GetBottomLineSize() const;
     // <-- collapsing
 
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };
 

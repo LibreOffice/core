@@ -83,6 +83,8 @@ public:
 
     inline const SwCntntFrm *GetFollow() const;
     inline       SwCntntFrm *GetFollow();
+    inline const SwCntntFrm *GetPrecede() const;
+    inline       SwCntntFrm *GetPrecede();
     SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
@@ -145,6 +147,14 @@ inline const SwCntntFrm *SwCntntFrm::GetFollow() const
 inline SwCntntFrm *SwCntntFrm::GetFollow()
 {
     return (SwCntntFrm*)SwFlowFrm::GetFollow();
+}
+inline const SwCntntFrm *SwCntntFrm::GetPrecede() const
+{
+    return (const SwCntntFrm*)SwFlowFrm::GetPrecede();
+}
+inline SwCntntFrm *SwCntntFrm::GetPrecede()
+{
+    return (SwCntntFrm*)SwFlowFrm::GetPrecede();
 }
 
 #endif
