@@ -57,7 +57,7 @@ class EDITENG_DLLPUBLIC SvxSpellWrapper {
 private:
     friend class SvxSpellCheckDialog;
     friend class SvxHyphenWordDialog;
-    friend class SvxHyphenWordDialog_Impl;
+    friend struct SvxHyphenWordDialog_Impl;
 
     Window*     pWin;
     ::com::sun::star::uno::Reference<
