@@ -38,6 +38,8 @@
 
 #include <comphelper/mediadescriptor.hxx>
 
+#include <libxml/xmlwriter.h>
+
 using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw( uno::RuntimeException )

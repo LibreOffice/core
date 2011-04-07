@@ -38,10 +38,8 @@
 #include <svl/brdcst.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
-#endif
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -905,13 +903,11 @@ public:
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
 public:
-#if OSL_DEBUG_LEVEL > 1
     /** if writer is NULL, dumps the layout structure as XML in layout.xml
       */
     virtual void dumpAsXml(xmlTextWriterPtr writer = NULL );
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
     void dumpChildrenAsXml(xmlTextWriterPtr writer);
-#endif
     bool IsCollapse() const;
 };
 

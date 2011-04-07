@@ -610,9 +610,7 @@ public:
 
     static void repaintTextFrames( const SwTxtNode& rNode );
 
-#if OSL_DEBUG_LEVEL > 1
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
-#endif
 };
 
 /*************************************************************************
