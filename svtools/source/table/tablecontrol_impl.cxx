@@ -1072,6 +1072,7 @@ namespace svt { namespace table
                 while ( startOver );
 
                 // are there pixels left (might be caused by rounding errors)?
+                distributePixel = gridWidthPixel - ::std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 );
                 while ( ( distributePixel > 0 ) && ( flexibleColumnCount > 0 ) )
                 {
                     // yes => ignore relative flexibilities, and subsequently distribute single pixels to all flexible
@@ -1146,6 +1147,7 @@ namespace svt { namespace table
                 while ( startOver );
 
                 // are there pixels left (might be caused by rounding errors)?
+                takeAwayPixel = ::std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 ) - gridWidthPixel;
                 while ( ( takeAwayPixel > 0 ) && ( flexibleColumnCount > 0 ) )
                 {
                     // yes => ignore relative flexibilities, and subsequently take away pixels from all flexible
