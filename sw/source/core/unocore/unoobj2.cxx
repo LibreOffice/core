@@ -1876,7 +1876,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
         {
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
-            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
+            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor(), sal_False, sal_True);
             for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
             {
                 SwPosFlyFrm* pPosFly = aFlyFrms[i];
@@ -1887,20 +1887,6 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                     new SwDepend(m_pImpl.get(), pFrmFmt);
                 m_pImpl->m_Frames.push_back(
                         ::boost::shared_ptr<SwDepend>(pNewDepend) );
-            }
-            //created from any text range
-            if (m_pImpl->GetCursor()->HasMark())
-            {
-                m_pImpl->GetCursor()->Normalize();
-                do
-                {
-                    lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(),
-                            m_pImpl->m_Frames);
-                    m_pImpl->GetCursor()->Right(
-                            1, CRSR_SKIP_CHARS, sal_False, sal_False);
-                }
-                while (*m_pImpl->GetCursor()->GetPoint() <
-                        *m_pImpl->GetCursor()->GetMark());
             }
         }
         lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);
