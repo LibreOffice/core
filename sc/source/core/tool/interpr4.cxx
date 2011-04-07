@@ -238,6 +238,18 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
 
 double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
+#if 1
+    // We keep this code until we provide a friendly way to convert string
+    // numbers into numbers in the UI.
+    double fValue = 0.0;
+    sal_uInt32 nFIndex = 0;
+    if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
+    {
+        SetError(errNoValue);
+        fValue = 0.0;
+    }
+    return fValue;
+#else
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
     if (mnStringNoValueError == errCellNoValue)
@@ -407,6 +419,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
             fValue = 0.0;
     }
     return fValue;
+#endif
 }
 
 
