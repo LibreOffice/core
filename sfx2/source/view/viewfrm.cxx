@@ -3111,6 +3111,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                          ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
+                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
                         break;
                     }
 
