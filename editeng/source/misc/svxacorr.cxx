@@ -49,6 +49,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/i18n/XOrdinalSuffix.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -510,48 +511,58 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nEndPos - 1 ) ))
             break;
 
-    if( 2 < nEndPos - nSttPos &&
-        rCC.isDigit( rTxt, nEndPos - 3 ) )
+
+    // Get the last number in the string to check
+    xub_StrLen nNumEnd = nEndPos;
+    bool foundEnd = false;
+    bool validNumber = true;
+    xub_StrLen i = nEndPos;
+
+    do
     {
-        static sal_Char const
-            sAll[]      = "th",         /* rest */
-            sFirst[]    = "st",         /* 1 */
-            sSecond[]   = "nd",         /* 2 */
-            sThird[]    = "rd";         /* 3 */
-        static const sal_Char* const aNumberTab[ 4 ] =
+        i--;
+        bool isDigit = rCC.isDigit( rTxt, i );
+        if ( foundEnd )
+            validNumber |= isDigit;
+
+        if ( isDigit && !foundEnd )
         {
-            sAll, sFirst, sSecond, sThird
-        };
+            foundEnd = true;
+            nNumEnd = i;
+        }
+    }
+    while ( i > nSttPos );
 
-        sal_Unicode c = rTxt.GetChar( nEndPos - 3 );
-        if( ( c -= '0' ) > 3 )
-            c = 0;
+    if ( foundEnd && validNumber ) {
+        sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );
 
-        bChg = ( ((sal_Unicode)*((aNumberTab[ c ])+0)) ==
-                                        rTxt.GetChar( nEndPos - 2 ) &&
-                 ((sal_Unicode)*((aNumberTab[ c ])+1)) ==
-                                         rTxt.GetChar( nEndPos - 1 )) ||
-               ( 3 < nEndPos - nSttPos &&
-                ( ((sal_Unicode)*(sAll+0)) == rTxt.GetChar( nEndPos - 2 ) &&
-                  ((sal_Unicode)*(sAll+1)) == rTxt.GetChar( nEndPos - 1 )));
+        // Check if the characters after that number correspond to the ordinal suffix
+        rtl::OUString sServiceName = rtl::OUString::createFromAscii( "com.sun.star.i18n.OrdinalSuffix" );
+        uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
+                comphelper::createProcessComponent( sServiceName ),
+                uno::UNO_QUERY );
 
-        if( bChg )
+        if ( xOrdSuffix.is( ) )
         {
-            // then check to the start, if all are numbers
-            for( xub_StrLen n = nEndPos - 3; nSttPos < n; )
-                if( !rCC.isDigit( rTxt, --n ) )
-                {
-                    bChg = !rCC.isLetter( rTxt, n );
-                    break;
-                }
-
-            if( bChg )      // then set the escapement attribute
+            uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLocale( ) );
+            for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
             {
-                SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
-                                                    DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
-                rDoc.SetAttr( nEndPos - 2, nEndPos,
-                                SID_ATTR_CHAR_ESCAPEMENT,
-                                aSvxEscapementItem);
+                String sSuffix( aSuffixes[ nSuff ] );
+                String sEnd = rTxt.Copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
+
+                if ( sSuffix == sEnd )
+                {
+                    // Check if the ordinal suffix has to be set as super script
+                    if ( rCC.isLetter( sSuffix ) )
+                    {
+                        // Do the change
+                        SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
+                                                            DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
+                        rDoc.SetAttr( nNumEnd + 1 , nEndPos,
+                                        SID_ATTR_CHAR_ESCAPEMENT,
+                                        aSvxEscapementItem);
+                    }
+                }
             }
         }
 

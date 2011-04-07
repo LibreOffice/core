@@ -479,7 +479,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
                             }
-                            catch ( Exception& )
+                            catch ( Exception& e )
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
                             }
