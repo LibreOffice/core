@@ -68,6 +68,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/passwd.hxx>
 #include "helper.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -790,6 +791,7 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     aBmp1           ( this, SfxResId( BMP_FILE_1 ) ),
     aNameED         ( this, SfxResId( ED_FILE_NAME ) ),
+    aChangePassBtn  ( this, SfxResId( BTN_CHANGE_PASS ) ),
 
     aLine1FL        ( this, SfxResId( FL_FILE_1 ) ),
     aTypeFT         ( this, SfxResId( FT_FILE_TYP ) ),
@@ -832,8 +834,10 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     FreeResource();
 
     ImplUpdateSignatures();
+    ImplCheckPasswordState();
     aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
     aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    aChangePassBtn.SetClickHdl( LINK( this, SfxDocumentPage, ChangePassHdl ) );
 
     // if the button text is too wide, then broaden it
     const long nOffset = 12;
@@ -909,6 +913,32 @@ IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( SfxDocumentPage, ChangePassHdl, PushButton*, EMPTYARG )
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    do
+    {
+        if (!pShell)
+            break;
+
+        SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
+        if (!pMedSet)
+            break;
+
+        ::std::auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(this));
+        pDlg->SetMinLen(1);
+        pDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
+        if (pDlg->Execute() != RET_OK)
+            break;
+
+        String aNewPass = pDlg->GetPassword();
+        pMedSet->Put( SfxStringItem(SID_PASSWORD, aNewPass) );
+        pShell->SetModified(true);
+    }
+    while (false);
+    return 0;
+}
+
 void SfxDocumentPage::ImplUpdateSignatures()
 {
     SfxObjectShell* pDoc = SfxObjectShell::Current();
@@ -942,6 +972,34 @@ void SfxDocumentPage::ImplUpdateSignatures()
             }
         }
     }
+}
+
+void SfxDocumentPage::ImplCheckPasswordState()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    do
+    {
+        if (!pShell)
+            break;
+
+        SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
+        if (!pMedSet)
+            break;
+
+        const SfxPoolItem* pItem;
+        if (!pMedSet->GetItemState(SID_PASSWORD, true, &pItem))
+            break;
+
+        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+        if (!pStrItem)
+            break;
+
+        String aPass = pStrItem->GetValue();
+        aChangePassBtn.Enable();
+        return;
+    }
+    while (false);
+    aChangePassBtn.Disable();
 }
 
 //------------------------------------------------------------------------
