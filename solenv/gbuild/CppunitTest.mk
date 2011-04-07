@@ -32,11 +32,15 @@
 DBGSV_ERROR_OUT := shell
 export DBGSV_ERROR_OUT
 
+ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
+gb_CppunitTest_GDBTRACE := gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
+endif
+
 # defined by platform
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_CPPTESTTARGET)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_CPPTESTTARGET)
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
