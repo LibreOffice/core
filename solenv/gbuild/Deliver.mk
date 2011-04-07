@@ -44,14 +44,20 @@ $(if $(gb_HIRESTIME),,.LOW_RESOLUTION_TIME : $(1))
 endef
 
 ifeq ($(strip $(gb_Deliver_GNUCOPY)),)
-define gb_Deliver_deliver
+define gb_Deliver__deliver
 mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 else
-define gb_Deliver_deliver
+define gb_Deliver__deliver
 mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --force --preserve=timestamps $(1) $(2)
 endef
 endif
+
+define gb_Deliver_deliver
+$(if $(1),$(call gb_Deliver__deliver,$(1),$(2)),\
+ $(error gb_Deliver_deliver:\
+  file does not exist in solver, and cannot be delivered: $(2)))
+endef
 
 
 # We are currently only creating a deliver.log, if only one module gets build.
