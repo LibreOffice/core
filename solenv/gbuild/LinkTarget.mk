@@ -25,6 +25,17 @@
 #
 #*************************************************************************
 
+# CFLAGS from environment override debug/optimization flags
+ifeq ($(gb_DEBUGLEVEL),2)
+CFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
+CXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
+OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
+else
+CFLAGS ?= $(gb_COMPILEROPTFLAGS)
+CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
+OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
+endif
+
 
 # CObject class
 
@@ -214,6 +225,9 @@ gb_ObjCxxObject_ObjCxxObject =
 
 # LinkTarget class
 
+# need an alias for global CXXFLAGS in gb_LinkTarget_add_exception_object etc.
+gb_CXXFLAGS_TOO := $(CXXFLAGS)
+
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 # defined by platform
 #  gb_LinkTarget_CXXFLAGS
@@ -326,6 +340,13 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # Therefore it is important that objects are only directly depended on by the
 # linktarget. This for example means that you cannot build a single object
 # alone, because then you would directly depend on the object.
+#
+# A note about flags: here the global variable CFLAGS is overridden by a target
+# local variable of the same name.  The $(CFLAGS) on the rhs refers to the
+# global variable.  (same thing for OBJCXXFLAGS)
+# CXXFLAGS is slightly different, because it is not set at the link target,
+# but only when using gb_LinkTarget_add_{no,}exception_object etc., to
+# provide a mechanism that disables optimization for a specific file.
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
@@ -339,12 +360,12 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : CFLAGS := $$(gb_LinkTarget_CFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : override CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : override CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
-$(call gb_LinkTarget_get_target,$(1)) : OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : override OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -375,10 +396,10 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : CFLAGS := $$(gb_LinkTarget_CFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -403,29 +424,29 @@ endif
 endef
 
 define gb_LinkTarget_set_cflags
-$(call gb_LinkTarget_get_target,$(1)) : CFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : override CFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : CFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override CFLAGS := $(2)
 endif
 
 endef
 
 define gb_LinkTarget_set_cxxflags
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : override CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $(2)
 endif
 
 endef
 
 define gb_LinkTarget_set_objcxxflags
-$(call gb_LinkTarget_get_target,$(1)) : OBJCXXFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : override OBJCXXFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : override OBJCXXFLAGS := $(2)
 endif
 
 endef
@@ -490,7 +511,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CObject_get_target,$(2))
 $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CObject_get_target,$(2)) : CFLAGS += $(3)
+$(call gb_CObject_get_target,$(2)) : override CFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
@@ -505,7 +526,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CxxObject_get_target,$(2))
 $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CxxObject_get_target,$(2)) : CXXFLAGS += $(3)
+$(call gb_CxxObject_get_target,$(2)) : override CXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
@@ -520,7 +541,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCxxObject_get_target,$(2))
 $(call gb_ObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_ObjCxxObject_get_target,$(2)) : OBJCXXFLAGS += $(3)
+$(call gb_ObjCxxObject_get_target,$(2)) : override OBJCXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
@@ -535,7 +556,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3) $(gb_COMPILEROPTFLAGS)
+$(call gb_GenCxxObject_get_target,$(2)) : override CXXFLAGS += $(3) $(gb_CXXFLAGS_TOO)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -545,11 +566,11 @@ endif
 endef
 
 define gb_LinkTarget_add_noexception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(gb_CXXFLAGS_TOO))
 endef
 
 define gb_LinkTarget_add_exception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_CXXFLAGS_TOO))
 endef
 
 define gb_LinkTarget_add_cobjects

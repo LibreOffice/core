@@ -130,6 +130,8 @@ gb_LinkTarget_LDFLAGS := \
     $(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
+gb_DEBUG_CFLAGS := -g
+
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
 else
@@ -223,15 +225,9 @@ define gb_LinkTarget__get_installname
 $(if $(2),-install_name '$(2)$(1)',)
 endef
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
-
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CFLAGS += -g
-gb_LinkTarget_CXXFLAGS += -g
-gb_LinkTarget_OBJCXXFLAGS += -g
-endif
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS)
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))

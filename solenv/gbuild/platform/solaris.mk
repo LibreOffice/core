@@ -108,6 +108,9 @@ gb_LinkTarget_LDFLAGS := \
     -PIC \
     -library=no%Cstd \
 
+
+gb_DEBUG_CFLAGS := -g
+
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS :=
 else
@@ -187,13 +190,9 @@ gb_LinkTarget__RPATHS := \
     SDKBIN:\dORIGIN/../../ure-link/lib \
     NONEBIN:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CXXFLAGS += -g
-gb_LinkTarget_CFLAGS += -g
-endif
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
