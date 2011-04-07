@@ -158,8 +158,12 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
     {
         try
         {
-            return xOrdinalSuffix->getOrdinalSuffix( nNumber,
+            uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                     ScGlobal::pLocaleData->getLocale());
+            if ( aSuffixes.getLength() > 0 )
+                return aSuffixes[0];
+            else
+                return String();
         }
         catch ( Exception& )
         {
