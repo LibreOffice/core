@@ -213,6 +213,22 @@ ScVbaWorksheet::~ScVbaWorksheet()
 {
 }
 
+const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq;
+
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+
+    return aSeq;
+}
+
 ::rtl::OUString
 ScVbaWorksheet::getName() throw (uno::RuntimeException)
 {
@@ -573,7 +589,8 @@ ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno
         return;
     }
 
-    ScVbaWorksheet* pDestSheet = static_cast< ScVbaWorksheet* >(xSheet.get());
+    ScVbaWorksheet* pDestSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+
     uno::Reference <sheet::XSpreadsheetDocument> xDestDoc( pDestSheet->getModel(), uno::UNO_QUERY );
     uno::Reference <sheet::XSpreadsheetDocument> xSrcDoc( getModel(), uno::UNO_QUERY );
 
@@ -1116,6 +1133,17 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
+}
+
+sal_Int64 SAL_CALL
+ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId) throw(uno::RuntimeException)
+{
+    if (rId.getLength() == 16 &&
+        0 == rtl_compareMemory( ScVbaWorksheet::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ))
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
 }
 
 namespace worksheet

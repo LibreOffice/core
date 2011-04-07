@@ -924,8 +924,7 @@ ScVbaApplication::setIteration(sal_Bool bIteration) throw (uno::RuntimeException
         uno::Reference< ooo::vba::excel::XWorkbook > xWorkbook;
         uno::Any aWorkbook = xWorkbooks->Item(uno::makeAny(i), uno::Any());
         aWorkbook >>= xWorkbook;
-        ScVbaWorkbook* pWorkbook = static_cast< ScVbaWorkbook* > ( xWorkbook.get() );
-
+        ScVbaWorkbook* pWorkbook = excel::getImplFromDocModuleWrapper<ScVbaWorkbook>( xWorkbook );
         uno::Reference< frame::XModel > xModel( pWorkbook->getDocModel(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( aPropName, aIteration );

@@ -35,6 +35,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <formula/grammar.hxx>
 
@@ -84,6 +85,19 @@ public:
     static SfxItemSet* GetDataSet( ScCellRangesBase* pRangeObj );
 };
 
+// Extracts a implementation object ( via XUnoTunnel ) from an uno object
+// by default will throw if unsuccessful.
+template < typename ImplObject >
+    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf, bool bThrow = true ) throw (css::uno::RuntimeException)
+    {
+        ImplObject* pObj = NULL;
+        css::uno::Reference< css::lang::XUnoTunnel >  xTunnel( rxWrapperIf, css::uno::UNO_QUERY );
+        if ( xTunnel.is() )
+            pObj = reinterpret_cast<ImplObject*>( xTunnel->getSomething(ImplObject::getUnoTunnelId()));
+        if ( bThrow && !pObj )
+            throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Internal error, can't exctract implementation object" ) ), rxWrapperIf );
+        return pObj;
+    }
 // ============================================================================
 
 } // namespace excel

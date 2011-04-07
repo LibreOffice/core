@@ -407,18 +407,14 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
         uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
-        ScVbaWorksheet* pSheet = dynamic_cast< ScVbaWorksheet* >( xSheet.get() );
-        if ( pSheet )
+        ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+        if ( bSelectSingle )
         {
-            if ( bSelectSingle )
-            {
-                rMarkData.SelectOneTable( static_cast< SCTAB >( pSheet->getSheetID() ) );
-                bSelectSingle = false;
-            }
-            else
-                rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
-
+            rMarkData.SelectOneTable( static_cast< SCTAB >( pSheet->getSheetID() ) );
+            bSelectSingle = false;
         }
+        else
+            rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
     }
 
 
@@ -440,13 +436,10 @@ ScVbaWorksheets::Item( const uno::Any& Index, const uno::Any& Index2  ) throw (u
         for( sal_Int32 index = 0; index < nElems; ++index )
         {
             uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( sIndices[ index ], Index2 ), uno::UNO_QUERY_THROW );
-            ScVbaWorksheet* pWorkSheet = dynamic_cast< ScVbaWorksheet* >( xWorkSheet.get() );
-            if ( pWorkSheet )
-            {
-                uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
-                mSheets.push_back( xSheet );
-            }
+            ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );
+            uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
+            mSheets.push_back( xSheet );
         }
         uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( mSheets );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( this->getParent(), mxContext, xIndexAccess, mxModel ) );
