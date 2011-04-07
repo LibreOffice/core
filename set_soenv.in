@@ -1857,6 +1857,7 @@ ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
 ToFile( "MOZ_NSS_LIBS",      "@MOZ_NSS_LIBS@",     "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
+ToFile( "WITH_AGFA_MONOTYPE_FONTS",  "@WITH_AGFA_MONOTYPE_FONTS@", "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
