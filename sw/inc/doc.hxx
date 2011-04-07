@@ -1023,7 +1023,8 @@ public:
     // ( Start < Pos < End ) !!!
     // (Required for Writers.)
     void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
-                        sal_Bool bDrawAlso = sal_False ) const;
+                        sal_Bool bDrawAlso = sal_False,
+                        sal_Bool bAsCharAlso = sal_False ) const;
 
     // Because swrtf.cxx and define private public here now.
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);

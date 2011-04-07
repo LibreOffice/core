@@ -1027,7 +1027,8 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
 }
 
 void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
-                           const SwPaM* pCmpRange, sal_Bool bDrawAlso ) const
+                           const SwPaM* pCmpRange, sal_Bool bDrawAlso,
+                           sal_Bool bAsCharAlso ) const
 {
     SwPosFlyFrm *pFPos = 0;
     SwFrmFmt *pFly;
@@ -1045,7 +1046,8 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
             if (pAPos &&
                 ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
                  (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_CHAR == rAnchor.GetAnchorId())))
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                 ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
             {
                 if( pCmpRange &&
                     !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
