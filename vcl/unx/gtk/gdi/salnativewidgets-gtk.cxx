@@ -96,6 +96,7 @@ struct NWFWidgetData
     GtkWidget *  gMenuItemMenuWidget;
     GtkWidget *  gMenuItemCheckMenuWidget;
     GtkWidget *  gMenuItemRadioMenuWidget;
+    GtkWidget *  gMenuItemSeparatorMenuWidget;
     GtkWidget *  gImageMenuItem;
     GtkWidget *  gTooltipPopup;
     GtkWidget *  gProgressBar;
@@ -135,6 +136,7 @@ struct NWFWidgetData
         gMenuItemMenuWidget( NULL ),
         gMenuItemCheckMenuWidget( NULL ),
         gMenuItemRadioMenuWidget( NULL ),
+        gMenuItemSeparatorMenuWidget( NULL ),
         gImageMenuItem( NULL ),
         gTooltipPopup( NULL ),
         gProgressBar( NULL ),
@@ -583,6 +585,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
                 ||  (nPart==PART_MENU_ITEM)
                 ||  (nPart==PART_MENU_ITEM_CHECK_MARK)
                 ||  (nPart==PART_MENU_ITEM_RADIO_MARK)
+                ||  (nPart==PART_MENU_SEPARATOR)
                 )
                                                                 )   ||
         ((nType == CTRL_PROGRESS) &&
@@ -849,6 +852,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType,
     || (nPart == PART_MENU_ITEM)
     || (nPart == PART_MENU_ITEM_CHECK_MARK)
     || (nPart == PART_MENU_ITEM_RADIO_MARK)
+    || (nPart == PART_MENU_SEPARATOR)
     )
     )
     {
@@ -2805,6 +2809,16 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                                   x, y, w, h );
             }
         }
+        else if( nPart == PART_MENU_SEPARATOR )
+        {
+            gtk_paint_hline( gWidgetData[m_nScreen].gMenuItemSeparatorMenuWidget->style,
+                             gdkDrawable,
+                             GTK_STATE_NORMAL,
+                             &clipRect,
+                             gWidgetData[m_nScreen].gMenuItemSeparatorMenuWidget,
+                             "menuitem",
+                             x, x + w, y + h / 2);
+        }
     }
 
     return( sal_True );
@@ -3943,15 +3957,17 @@ static void NWEnsureGTKMenu( int nScreen )
 {
     if( !gWidgetData[nScreen].gMenuWidget )
     {
-        gWidgetData[nScreen].gMenuWidget              = gtk_menu_new();
-        gWidgetData[nScreen].gMenuItemMenuWidget      = gtk_menu_item_new_with_label( "b" );
-        gWidgetData[nScreen].gMenuItemCheckMenuWidget = gtk_check_menu_item_new_with_label( "b" );
-        gWidgetData[nScreen].gMenuItemRadioMenuWidget = gtk_radio_menu_item_new_with_label( NULL, "b" );
-        gWidgetData[nScreen].gImageMenuItem           = gtk_image_menu_item_new();
+        gWidgetData[nScreen].gMenuWidget                  = gtk_menu_new();
+        gWidgetData[nScreen].gMenuItemMenuWidget          = gtk_menu_item_new_with_label( "b" );
+        gWidgetData[nScreen].gMenuItemCheckMenuWidget     = gtk_check_menu_item_new_with_label( "b" );
+        gWidgetData[nScreen].gMenuItemRadioMenuWidget     = gtk_radio_menu_item_new_with_label( NULL, "b" );
+        gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_menu_item_new();
+        gWidgetData[nScreen].gImageMenuItem               = gtk_image_menu_item_new();
 
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemCheckMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gImageMenuItem );
 
         // do what NWAddWidgetToCacheWindow does except adding to def container
@@ -3967,6 +3983,9 @@ static void NWEnsureGTKMenu( int nScreen )
         gtk_widget_realize( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
         gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
 
+        gtk_widget_realize( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+
         gtk_widget_realize( gWidgetData[nScreen].gImageMenuItem );
         gtk_widget_ensure_style( gWidgetData[nScreen].gImageMenuItem );
 
@@ -3974,6 +3993,7 @@ static void NWEnsureGTKMenu( int nScreen )
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemCheckMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemRadioMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemSeparatorMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gImageMenuItem ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
     }
 }
