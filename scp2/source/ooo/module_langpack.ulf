@@ -26,817 +26,817 @@
  ************************************************************************/
  
 [STR_NAME_MODULE_ROOT_LANGPACK]
-en-US = "Additional language packs"
+en-US = "Additional user interface languages"
 
 [STR_DESC_MODULE_ROOT_LANGPACK]
-en-US = "Additional language packs"
+en-US = "Additional user interface languages"
 
 [STR_NAME_MODULE_LANGPACK_EN_US]
 en-US = "English"
 
 [STR_DESC_MODULE_LANGPACK_EN_US]
-en-US = "Installs English support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the English user interface"
 
 [STR_NAME_MODULE_LANGPACK_DE]
 en-US = "German"
 
 [STR_DESC_MODULE_LANGPACK_DE]
-en-US = "Installs German support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the German user interface"
 
 [STR_NAME_MODULE_LANGPACK_FR]
 en-US = "French"
 
 [STR_DESC_MODULE_LANGPACK_FR]
-en-US = "Installs French support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the French user interface"
 
 [STR_NAME_MODULE_LANGPACK_IT]
 en-US = "Italian"
 
 [STR_DESC_MODULE_LANGPACK_IT]
-en-US = "Installs Italian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Italian user interface"
 
 [STR_NAME_MODULE_LANGPACK_ES]
 en-US = "Spanish"
 
 [STR_DESC_MODULE_LANGPACK_ES]
-en-US = "Installs Spanish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Spanish user interface"
 
 [STR_NAME_MODULE_LANGPACK_SV]
 en-US = "Swedish"
 
 [STR_DESC_MODULE_LANGPACK_SV]
-en-US = "Installs Swedish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Swedish user interface"
 
 [STR_NAME_MODULE_LANGPACK_PT]
 en-US = "Portuguese"
 
 [STR_DESC_MODULE_LANGPACK_PT]
-en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Portuguese user interface"
 
 [STR_NAME_MODULE_LANGPACK_PT_BR]
 en-US = "Portuguese (Brazil)"
 
 [STR_DESC_MODULE_LANGPACK_PT_BR]
-en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Portuguese user interface"
 
 [STR_NAME_MODULE_LANGPACK_JA]
 en-US = "Japanese"
 
 [STR_DESC_MODULE_LANGPACK_JA]
-en-US = "Installs Japanese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Japanese user interface"
 
 [STR_NAME_MODULE_LANGPACK_KO]
 en-US = "Korean"
 
 [STR_DESC_MODULE_LANGPACK_KO]
-en-US = "Installs Korean support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Korean user interface"
 
 [STR_NAME_MODULE_LANGPACK_ZH_CN]
 en-US = "Chinese (simplified)"
 
 [STR_DESC_MODULE_LANGPACK_ZH_CN]
-en-US = "Installs Chinese (simplified) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Chinese (simplified) user interface"
 
 [STR_NAME_MODULE_LANGPACK_ZH_TW]
 en-US = "Chinese (traditional)"
 
 [STR_DESC_MODULE_LANGPACK_ZH_TW]
-en-US = "Installs Chinese (traditional) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Chinese (traditional) user interface"
 
 [STR_NAME_MODULE_LANGPACK_NL]
 en-US = "Dutch"
 
 [STR_DESC_MODULE_LANGPACK_NL]
-en-US = "Installs Dutch support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Dutch user interface"
 
 [STR_NAME_MODULE_LANGPACK_HU]
 en-US = "Hungarian"
 
 [STR_DESC_MODULE_LANGPACK_HU]
-en-US = "Installs Hungarian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Hungarian user interface"
 
 [STR_NAME_MODULE_LANGPACK_PL]
 en-US = "Polish"
 
 [STR_DESC_MODULE_LANGPACK_PL]
-en-US = "Installs Polish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Polish user interface"
 
 [STR_NAME_MODULE_LANGPACK_RU]
 en-US = "Russian"
 
 [STR_DESC_MODULE_LANGPACK_RU]
-en-US = "Installs Russian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Russian user interface"
 
 [STR_NAME_MODULE_LANGPACK_TR]
 en-US = "Turkish"
 
 [STR_DESC_MODULE_LANGPACK_TR]
-en-US = "Installs Turkish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Turkish user interface"
 
 [STR_NAME_MODULE_LANGPACK_EL]
 en-US = "Greek"
 
 [STR_DESC_MODULE_LANGPACK_EL]
-en-US = "Installs Greek support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Greek user interface"
 
 [STR_NAME_MODULE_LANGPACK_TH]
 en-US = "Thai"
 
 [STR_DESC_MODULE_LANGPACK_TH]
-en-US = "Installs Thai support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Thai user interface"
 
 [STR_NAME_MODULE_LANGPACK_CS]
 en-US = "Czech"
 
 [STR_DESC_MODULE_LANGPACK_CS]
-en-US = "Installs Czech support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Czech user interface"
 
 [STR_NAME_MODULE_LANGPACK_SK]
 en-US = "Slovak"
 
 [STR_DESC_MODULE_LANGPACK_SK]
-en-US = "Installs Slovak support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Slovak user interface"
 
 [STR_NAME_MODULE_LANGPACK_HR]
 en-US = "Croatian"
 
 [STR_DESC_MODULE_LANGPACK_HR]
-en-US = "Installs Croatian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Croatian user interface"
 
 [STR_NAME_MODULE_LANGPACK_ET]
 en-US = "Estonian"
 
 [STR_DESC_MODULE_LANGPACK_ET]
-en-US = "Installs Estonian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Estonian user interface"
 
 [STR_NAME_MODULE_LANGPACK_VI]
 en-US = "Vietnamese"
 
 [STR_DESC_MODULE_LANGPACK_VI]
-en-US = "Installs Vietnamese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Vietnamese user interface"
 
 [STR_NAME_MODULE_LANGPACK_BG]
 en-US = "Bulgarian"
 
 [STR_DESC_MODULE_LANGPACK_BG]
-en-US = "Installs Bulgarian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bulgarian user interface"
 
 [STR_NAME_MODULE_LANGPACK_KM]
 en-US = "Khmer"
 
 [STR_DESC_MODULE_LANGPACK_KM]
-en-US = "Installs Khmer support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Khmer user interface"
 
 [STR_NAME_MODULE_LANGPACK_PA_IN]
 en-US = "Punjabi"
 
 [STR_DESC_MODULE_LANGPACK_PA_IN]
-en-US = "Installs Punjabi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Punjabi user interface"
 
 [STR_NAME_MODULE_LANGPACK_GU_IN]
 en-US = "Gujarati"
 
 [STR_DESC_MODULE_LANGPACK_GU_IN]
-en-US = "Installs Gujarati support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Gujarati user interface"
 
 [STR_NAME_MODULE_LANGPACK_TA]
 en-US = "Tamil"
 
 [STR_DESC_MODULE_LANGPACK_TA]
-en-US = "Installs Tamil support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tamil user interface"
 
 [STR_NAME_MODULE_LANGPACK_TA_IN]
 en-US = "Tamil"
 
 [STR_DESC_MODULE_LANGPACK_TA_IN]
-en-US = "Installs Tamil support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tamil user interface"
 
 [STR_NAME_MODULE_LANGPACK_HI]
 en-US = "Hindi"
 
 [STR_DESC_MODULE_LANGPACK_HI]
-en-US = "Installs Hindi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Hindi user interface"
 
 [STR_NAME_MODULE_LANGPACK_HI_IN]
 en-US = "Hindi"
 
 [STR_DESC_MODULE_LANGPACK_HI_IN]
-en-US = "Installs Hindi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Hindi user interface"
 
 [STR_NAME_MODULE_LANGPACK_ST]
 en-US = "Southern Sotho (Sutu)"
 
 [STR_DESC_MODULE_LANGPACK_ST]
-en-US = "Installs Southern Sotho (Sutu) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Southern Sotho (Sutu) user interface"
 
 [STR_NAME_MODULE_LANGPACK_TN]
 en-US = "Tswana"
 
 [STR_DESC_MODULE_LANGPACK_TN]
-en-US = "Installs Tswana support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tswana user interface"
 
 [STR_NAME_MODULE_LANGPACK_XH]
 en-US = "Xhosa"
 
 [STR_DESC_MODULE_LANGPACK_XH]
-en-US = "Installs Xhosa support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Xhosa user interface"
 
 [STR_NAME_MODULE_LANGPACK_ZU]
 en-US = "Zulu"
 
 [STR_DESC_MODULE_LANGPACK_ZU]
-en-US = "Installs Zulu support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Zulu user interface"
 
 [STR_NAME_MODULE_LANGPACK_AF]
 en-US = "Afrikaans"
 
 [STR_DESC_MODULE_LANGPACK_AF]
-en-US = "Installs Afrikaans support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Afrikaans user interface"
 
 [STR_NAME_MODULE_LANGPACK_SW]
 en-US = "Swahili"
 
 [STR_DESC_MODULE_LANGPACK_SW]
-en-US = "Installs Swahili support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Swahili user interface"
 
 [STR_NAME_MODULE_LANGPACK_SW_TZ]
 en-US = "Swahili"
 
 [STR_DESC_MODULE_LANGPACK_SW_TZ]
-en-US = "Installs Swahili support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Swahili user interface"
 
 [STR_NAME_MODULE_LANGPACK_LO]
 en-US = "Lao"
 
 [STR_DESC_MODULE_LANGPACK_LO]
-en-US = "Installs Lao support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Lao user interface"
 
 [STR_NAME_MODULE_LANGPACK_NS]
 en-US = "Northern Sotho"
 
 [STR_DESC_MODULE_LANGPACK_NS]
-en-US = "Installs Northern Sotho support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Northern Sotho user interface"
 
 [STR_NAME_MODULE_LANGPACK_BN]
 en-US = "Bengali"
 
 [STR_DESC_MODULE_LANGPACK_BN]
-en-US = "Installs Bengali support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bengali user interface"
 
 [STR_NAME_MODULE_LANGPACK_BN_BD]
 en-US = "Bengali (Bangladesh)"
 
 [STR_DESC_MODULE_LANGPACK_BN_BD]
-en-US = "Installs Bengali (Bangladesh) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bengali (Bangladesh) user interface"
 
 [STR_NAME_MODULE_LANGPACK_BN_IN]
 en-US = "Bengali (India)"
 
 [STR_DESC_MODULE_LANGPACK_BN_IN]
-en-US = "Installs Bengali (India) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bengali (India) user interface"
 
 [STR_NAME_MODULE_LANGPACK_OR]
 en-US = "Oriya"
 
 [STR_DESC_MODULE_LANGPACK_OR]
-en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Oriya user interface"
 
 [STR_NAME_MODULE_LANGPACK_OR_IN]
 en-US = "Oriya"
 
 [STR_DESC_MODULE_LANGPACK_OR_IN]
-en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Oriya user interface"
 
 [STR_NAME_MODULE_LANGPACK_MR]
 en-US = "Marathi"
 
 [STR_DESC_MODULE_LANGPACK_MR]
-en-US = "Installs Marathi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Marathi user interface"
 
 [STR_NAME_MODULE_LANGPACK_MR_IN]
 en-US = "Marathi"
 
 [STR_DESC_MODULE_LANGPACK_MR_IN]
-en-US = "Installs Marathi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Marathi user interface"
 
 [STR_NAME_MODULE_LANGPACK_NE]
 en-US = "Nepali"
 
 [STR_DESC_MODULE_LANGPACK_NE]
-en-US = "Installs Nepali support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Nepali user interface"
 
 [STR_NAME_MODULE_LANGPACK_AR]
 en-US = "Arabic"
 
 [STR_DESC_MODULE_LANGPACK_AR]
-en-US = "Installs Arabic support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Arabic user interface"
 
 [STR_NAME_MODULE_LANGPACK_AR_SA]
 en-US = "Arabic"
 
 [STR_DESC_MODULE_LANGPACK_AR_SA]
-en-US = "Installs Arabic support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Arabic user interface"
 
 [STR_NAME_MODULE_LANGPACK_CA]
 en-US = "Catalan"
 
 [STR_DESC_MODULE_LANGPACK_CA]
-en-US = "Installs Catalan support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Catalan user interface"
 
 [STR_NAME_MODULE_LANGPACK_CA_XV]
 en-US = "Catalan (Valencian)"
 
 [STR_DESC_MODULE_LANGPACK_CA_XV]
-en-US = "Installs Catalan (Valencian) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Catalan (Valencian) user interface"
 
 [STR_NAME_MODULE_LANGPACK_DA]
 en-US = "Danish"
 
 [STR_DESC_MODULE_LANGPACK_DA]
-en-US = "Installs Danish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Danish user interface"
 
 [STR_NAME_MODULE_LANGPACK_FI]
 en-US = "Finnish"
 
 [STR_DESC_MODULE_LANGPACK_FI]
-en-US = "Installs Finnish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Finnish user interface"
 
 [STR_NAME_MODULE_LANGPACK_HE]
 en-US = "Hebrew"
 
 [STR_DESC_MODULE_LANGPACK_HE]
-en-US = "Installs Hebrew support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Hebrew user interface"
 
 [STR_NAME_MODULE_LANGPACK_IS]
 en-US = "Icelandic"
 
 [STR_DESC_MODULE_LANGPACK_IS]
-en-US = "Installs Icelandic support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Icelandic user interface"
 
 [STR_NAME_MODULE_LANGPACK_NB]
 en-US = "Norwegian (Bokmål)"
 
 [STR_DESC_MODULE_LANGPACK_NB]
-en-US = "Installs Norwegian (Bokmål) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Norwegian (Bokmål) user interface"
 
 [STR_NAME_MODULE_LANGPACK_NN]
 en-US = "Norwegian (Nynorsk)"
 
 [STR_DESC_MODULE_LANGPACK_NN]
-en-US = "Installs Norwegian (Nynorsk) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Norwegian (Nynorsk) user interface"
 
 [STR_NAME_MODULE_LANGPACK_RM]
 en-US = "Rhaeto-Romance"
 
 [STR_DESC_MODULE_LANGPACK_RM]
-en-US = "Installs Rhaeto-Romance support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Rhaeto-Romance user interface"
 
 [STR_NAME_MODULE_LANGPACK_RO]
 en-US = "Romanian"
 
 [STR_DESC_MODULE_LANGPACK_RO]
-en-US = "Installs Romanian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Romanian user interface"
 
 [STR_NAME_MODULE_LANGPACK_SQ]
 en-US = "Albanian"
 
 [STR_DESC_MODULE_LANGPACK_SQ]
-en-US = "Installs Albanian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Albanian user interface"
 
 [STR_NAME_MODULE_LANGPACK_UR]
 en-US = "Urdu"
 
 [STR_DESC_MODULE_LANGPACK_UR]
-en-US = "Installs Urdu support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Urdu user interface"
 
 [STR_NAME_MODULE_LANGPACK_ID]
 en-US = "Indonesian"
 
 [STR_DESC_MODULE_LANGPACK_ID]
-en-US = "Installs Indonesian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Indonesian user interface"
 
 [STR_NAME_MODULE_LANGPACK_UK]
 en-US = "Ukrainian"
 
 [STR_DESC_MODULE_LANGPACK_UK]
-en-US = "Installs Ukrainian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Ukrainian user interface"
 
 [STR_NAME_MODULE_LANGPACK_BE_BY]
 en-US = "Belarusian"
 
 [STR_DESC_MODULE_LANGPACK_BE_BY]
-en-US = "Installs Belarusian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Belarusian user interface"
 
 [STR_NAME_MODULE_LANGPACK_SL]
 en-US = "Slovenian"
 
 [STR_DESC_MODULE_LANGPACK_SL]
-en-US = "Installs Slovenian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Slovenian user interface"
 
 [STR_NAME_MODULE_LANGPACK_LV]
 en-US = "Latvian"
 
 [STR_DESC_MODULE_LANGPACK_LV]
-en-US = "Installs Latvian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Latvian user interface"
 
 [STR_NAME_MODULE_LANGPACK_LT]
 en-US = "Lithuanian"
 
 [STR_DESC_MODULE_LANGPACK_LT]
-en-US = "Installs Lithuanian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Lithuanian user interface"
 
 [STR_NAME_MODULE_LANGPACK_HY]
 en-US = "Armenian"
 
 [STR_DESC_MODULE_LANGPACK_HY]
-en-US = "Installs Armenian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Armenian user interface"
 
 [STR_NAME_MODULE_LANGPACK_EU]
 en-US = "Basque"
 
 [STR_DESC_MODULE_LANGPACK_EU]
-en-US = "Installs Basque support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Basque user interface"
 
 [STR_NAME_MODULE_LANGPACK_MK]
 en-US = "Macedonian"
 
 [STR_DESC_MODULE_LANGPACK_MK]
-en-US = "Installs Macedonian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Macedonian user interface"
 
 [STR_NAME_MODULE_LANGPACK_MT]
 en-US = "Maltese"
 
 [STR_DESC_MODULE_LANGPACK_MT]
-en-US = "Installs Maltese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Maltese user interface"
 
 [STR_NAME_MODULE_LANGPACK_CY]
 en-US = "Welsh"
 
 [STR_DESC_MODULE_LANGPACK_CY]
-en-US = "Installs Welsh support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Welsh user interface"
 
 [STR_NAME_MODULE_LANGPACK_GL]
 en-US = "Galician"
 
 [STR_DESC_MODULE_LANGPACK_GL]
-en-US = "Installs Galician support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Galician user interface"
 
 [STR_NAME_MODULE_LANGPACK_SH_YU]
 en-US = "Serbian (Latin)"
 
 [STR_DESC_MODULE_LANGPACK_SH_YU]
-en-US = "Installs Serbian (Latin) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Serbian (Latin) user interface"
 
 [STR_NAME_MODULE_LANGPACK_SH]
 en-US = "Serbian (Latin)"
 
 [STR_DESC_MODULE_LANGPACK_SH]
-en-US = "Installs Serbian (Latin) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Serbian (Latin) user interface"
 
 [STR_NAME_MODULE_LANGPACK_GA]
 en-US = "Irish"
 
 [STR_DESC_MODULE_LANGPACK_GA]
-en-US = "Installs Irish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Irish user interface"
 
 [STR_NAME_MODULE_LANGPACK_SR_CS]
 en-US = "Serbian (Cyrillic)"
 
 [STR_DESC_MODULE_LANGPACK_SR_CS]
-en-US = "Installs Serbian (Cyrillic) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Serbian (Cyrillic) user interface"
 
 [STR_NAME_MODULE_LANGPACK_SR]
 en-US = "Serbian (Cyrillic)"
 
 [STR_DESC_MODULE_LANGPACK_SR]
-en-US = "Installs Serbian (Cyrillic) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Serbian (Cyrillic) user interface"
 
 [STR_NAME_MODULE_LANGPACK_BS]
 en-US = "Bosnian"
 
 [STR_DESC_MODULE_LANGPACK_BS]
-en-US = "Installs Bosnian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bosnian user interface"
 
 [STR_NAME_MODULE_LANGPACK_AS_IN]
 en-US = "Assamese"
 
 [STR_DESC_MODULE_LANGPACK_AS_IN]
-en-US = "Installs Assamese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Assamese user interface"
 
 [STR_NAME_MODULE_LANGPACK_AST]
 en-US = "Asturian"
 
 [STR_DESC_MODULE_LANGPACK_AST]
-en-US = "Installs Asturian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Asturian user interface"
 
 [STR_NAME_MODULE_LANGPACK_RW]
 en-US = "Kinyarwanda"
 
 [STR_DESC_MODULE_LANGPACK_RW]
-en-US = "Installs Kinyarwanda support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kinyarwanda user interface"
 
 [STR_NAME_MODULE_LANGPACK_SA]
 en-US = "Sanskrit"
 
 [STR_DESC_MODULE_LANGPACK_SA]
-en-US = "Installs Sanskrit support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sanskrit user interface"
 
 [STR_NAME_MODULE_LANGPACK_FA]
 en-US = "Farsi"
 
 [STR_DESC_MODULE_LANGPACK_FA]
-en-US = "Installs Farsi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Farsi user interface"
 
 [STR_NAME_MODULE_LANGPACK_FO]
 en-US = "Faroese"
 
 [STR_DESC_MODULE_LANGPACK_FO]
-en-US = "Installs Faroese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Faroese user interface"
 
 [STR_NAME_MODULE_LANGPACK_SB]
 en-US = "Sorbian"
 
 [STR_DESC_MODULE_LANGPACK_SB]
-en-US = "Installs Sorbian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sorbian user interface"
 
 [STR_NAME_MODULE_LANGPACK_TT]
 en-US = "Tatar"
 
 [STR_DESC_MODULE_LANGPACK_TT]
-en-US = "Installs Tatar support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tatar user interface"
 
 [STR_NAME_MODULE_LANGPACK_TS]
 en-US = "Tsonga"
 
 [STR_DESC_MODULE_LANGPACK_TS]
-en-US = "Installs Tsonga support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tsonga user interface"
 
 [STR_NAME_MODULE_LANGPACK_YI]
 en-US = "Yiddish"
 
 [STR_DESC_MODULE_LANGPACK_YI]
-en-US = "Installs Yiddish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Yiddish user interface"
 
 [STR_NAME_MODULE_LANGPACK_BR]
 en-US = "Breton"
 
 [STR_DESC_MODULE_LANGPACK_BR]
-en-US = "Installs Breton support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Breton user interface"
 
 [STR_NAME_MODULE_LANGPACK_NR]
 en-US = "Ndebele South"
 
 [STR_DESC_MODULE_LANGPACK_NR]
-en-US = "Installs Ndebele South support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Ndebele South user interface"
 
 [STR_NAME_MODULE_LANGPACK_SS]
 en-US = "Swazi"
 
 [STR_DESC_MODULE_LANGPACK_SS]
-en-US = "Installs Swazi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Swazi user interface"
 
 [STR_NAME_MODULE_LANGPACK_VE]
 en-US = "Venda"
 
 [STR_DESC_MODULE_LANGPACK_VE]
-en-US = "Installs Venda support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Venda user interface"
 
 [STR_NAME_MODULE_LANGPACK_KN]
 en-US = "Kannada"
 
 [STR_DESC_MODULE_LANGPACK_KN]
-en-US = "Installs Kannada support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kannada user interface"
 
 [STR_NAME_MODULE_LANGPACK_MS]
 en-US = "Malay (Malaysian)"
 
 [STR_DESC_MODULE_LANGPACK_MS]
-en-US = "Installs Malay (Malaysian) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Malay (Malaysian) user interface"
 
 [STR_NAME_MODULE_LANGPACK_TG]
 en-US = "Tajik"
 
 [STR_DESC_MODULE_LANGPACK_TG]
-en-US = "Installs Tajik support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tajik user interface"
 
 [STR_NAME_MODULE_LANGPACK_KU]
 en-US = "Kurdish"
 
 [STR_DESC_MODULE_LANGPACK_KU]
-en-US = "Installs Kurdish support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kurdish user interface"
 
 [STR_NAME_MODULE_LANGPACK_DZ]
 en-US = "Dzongkha"
 
 [STR_DESC_MODULE_LANGPACK_DZ]
-en-US = "Installs Dzongkha support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Dzongkha user interface"
 
 [STR_NAME_MODULE_LANGPACK_KA]
 en-US = "Georgian"
 
 [STR_DESC_MODULE_LANGPACK_KA]
-en-US = "Installs Georgian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Georgian user interface"
 
 [STR_NAME_MODULE_LANGPACK_EO]
 en-US = "Esperanto"
 
 [STR_DESC_MODULE_LANGPACK_EO]
-en-US = "Installs Esperanto support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Esperanto user interface"
 
 [STR_NAME_MODULE_LANGPACK_GU]
 en-US = "Gujarati"
 
 [STR_DESC_MODULE_LANGPACK_GU]
-en-US = "Installs Gujarati support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Gujarati user interface"
 
 [STR_NAME_MODULE_LANGPACK_EN_ZA]
 en-US = "English (South Africa)"
 
 [STR_DESC_MODULE_LANGPACK_EN_ZA]
-en-US = "Installs English (South Africa) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the English (South Africa) user interface"
 
 [STR_NAME_MODULE_LANGPACK_EN_GB]
 en-US = "English (United Kingdom)"
 
 [STR_DESC_MODULE_LANGPACK_EN_GB]
-en-US = "Installs English (United Kingdom) support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the English (United Kingdom) user interface"
 
 [STR_NAME_MODULE_LANGPACK_UR_IN]
 en-US = "Urdu"
 
 [STR_DESC_MODULE_LANGPACK_UR_IN]
-en-US = "Installs Urdu support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Urdu user interface"
 
 [STR_NAME_MODULE_LANGPACK_ML_IN]
 en-US = "Malayalam"
 
 [STR_DESC_MODULE_LANGPACK_ML_IN]
-en-US = "Installs Malayalam support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Malayalam user interface"
 
 [STR_NAME_MODULE_LANGPACK_TE_IN]
 en-US = "Telugu"
 
 [STR_DESC_MODULE_LANGPACK_TE_IN]
-en-US = "Installs Telugu support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Telugu user interface"
 
 [STR_NAME_MODULE_LANGPACK_TI_ER]
 en-US = "Tigrinya"
 
 [STR_DESC_MODULE_LANGPACK_TI_ER]
-en-US = "Installs Tigrinya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tigrinya user interface"
 
 [STR_NAME_MODULE_LANGPACK_UZ]
 en-US = "Uzbek"
 
 [STR_DESC_MODULE_LANGPACK_UZ]
-en-US = "Installs Uzbek support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Uzbek user interface"
 
 [STR_NAME_MODULE_LANGPACK_MN]
 en-US = "Mongolian"
 
 [STR_DESC_MODULE_LANGPACK_MN]
-en-US = "Installs Mongolian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Mongolian user interface"
 
 [STR_NAME_MODULE_LANGPACK_BO]
 en-US = "Tibetan"
 
 [STR_DESC_MODULE_LANGPACK_BO]
-en-US = "Installs Tibetan support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tibetan user interface"
 
 [STR_NAME_MODULE_LANGPACK_OC]
 en-US = "Occitan"
 
 [STR_DESC_MODULE_LANGPACK_OC]
-en-US = "Installs Occitan support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Occitan user interface"
 
 [STR_NAME_MODULE_LANGPACK_OM]
 en-US = "Oromo"
 
 [STR_DESC_MODULE_LANGPACK_OM]
-en-US = "Installs Oromo support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Oromo user interface"
 
 [STR_NAME_MODULE_LANGPACK_SI]
 en-US = "Sinhala"
 
 [STR_DESC_MODULE_LANGPACK_SI]
-en-US = "Installs Sinhala support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sinhala user interface"
 
 [STR_NAME_MODULE_LANGPACK_UG]
 en-US = "Uyghur"
 
 [STR_DESC_MODULE_LANGPACK_UG]
-en-US = "Installs Uyghur support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Uyghur user interface"
 
 [STR_NAME_MODULE_LANGPACK_AS]
 en-US = "Assamese"
 
 [STR_DESC_MODULE_LANGPACK_AS]
-en-US = "Installs Assamese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Assamese user interface"
 
 [STR_NAME_MODULE_LANGPACK_BRX]
 en-US = "Bodo"
 
 [STR_DESC_MODULE_LANGPACK_BRX]
-en-US = "Installs Bodo support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Bodo user interface"
 
 [STR_NAME_MODULE_LANGPACK_DGO]
 en-US = "Dogri"
 
 [STR_DESC_MODULE_LANGPACK_DGO]
-en-US = "Installs Dogri support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Dogri user interface"
 
 [STR_NAME_MODULE_LANGPACK_GD]
 en-US = "Scottish Gaelic"
 
 [STR_DESC_MODULE_LANGPACK_GD]
-en-US = "Installs Scottish Gaelic support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Scottish Gaelic user interface"
 
 [STR_NAME_MODULE_LANGPACK_KK]
 en-US = "Kazakh"
 
 [STR_DESC_MODULE_LANGPACK_KK]
-en-US = "Installs Kazakh support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kazakh user interface"
 
 [STR_NAME_MODULE_LANGPACK_KOK]
 en-US = "Konkani"
 
 [STR_DESC_MODULE_LANGPACK_KOK]
-en-US = "Installs Konkani support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Konkani user interface"
 
 [STR_NAME_MODULE_LANGPACK_KS]
 en-US = "Kashmiri"
 
 [STR_DESC_MODULE_LANGPACK_KS]
-en-US = "Installs Kashmiri support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kashmiri user interface"
 
 [STR_NAME_MODULE_LANGPACK_KY]
 en-US = "Kyrgyz"
 
 [STR_DESC_MODULE_LANGPACK_KY]
-en-US = "Installs Kyrgyz support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Kyrgyz user interface"
 
 [STR_NAME_MODULE_LANGPACK_MAI]
 en-US = "Maithili"
 
 [STR_DESC_MODULE_LANGPACK_MAI]
-en-US = "Installs Maithili support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Maithili user interface"
 
 [STR_NAME_MODULE_LANGPACK_ML]
 en-US = "Malayalam"
 
 [STR_DESC_MODULE_LANGPACK_ML]
-en-US = "Installs Malayalam support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Malayalam user interface"
 
 [STR_NAME_MODULE_LANGPACK_MNI]
 en-US = "Manipuri"
 
 [STR_DESC_MODULE_LANGPACK_MNI]
-en-US = "Installs Manipuri support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Manipuri user interface"
 
 [STR_NAME_MODULE_LANGPACK_PAP]
 en-US = "Papiamento"
 
 [STR_DESC_MODULE_LANGPACK_PAP]
-en-US = "Installs Papiamento support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Papiamento user interface"
 
 [STR_NAME_MODULE_LANGPACK_PS]
 en-US = "Pashto"
 
 [STR_DESC_MODULE_LANGPACK_PS]
-en-US = "Installs Pashto support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Pashto user interface"
 
 [STR_NAME_MODULE_LANGPACK_SA_IN]
 en-US = "Sanskrit (India)"
 
 [STR_DESC_MODULE_LANGPACK_SA_IN]
-en-US = "Installs Sanskrit support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sanskrit user interface"
 
 [STR_NAME_MODULE_LANGPACK_SAT]
 en-US = "Santali"
 
 [STR_DESC_MODULE_LANGPACK_SAT]
-en-US = "Installs Santali support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Santali user interface"
 
 [STR_NAME_MODULE_LANGPACK_SC]
 en-US = "Sardinian"
 
 [STR_DESC_MODULE_LANGPACK_SC]
-en-US = "Installs Sardinian support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sardinian user interface"
 
 [STR_NAME_MODULE_LANGPACK_SD]
 en-US = "Sindhi"
 
 [STR_DESC_MODULE_LANGPACK_SD]
-en-US = "Installs Sindhi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Sindhi user interface"
 
 [STR_NAME_MODULE_LANGPACK_TE]
 en-US = "Telugu"
 
 [STR_DESC_MODULE_LANGPACK_TE]
-en-US = "Installs Telugu support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Telugu user interface"
 
 [STR_NAME_MODULE_LANGPACK_TI]
 en-US = "Tigrinya"
 
 [STR_DESC_MODULE_LANGPACK_TI]
-en-US = "Installs Tigrinya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs the Tigrinya user interface"
