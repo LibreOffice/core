@@ -810,16 +810,8 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             break;
         }
         case CTRL_MENU_POPUP:
-            //just limit the widget of the menu items
-            //OO isn't very flexible in all reguards with the menu
-            //so we do the best we can
-            if (part == PART_MENU_ITEM_CHECK_MARK)
-            {
-                contentRect.setWidth(contentRect.height());
-                retVal = true;
-            }
-            else if (part == PART_MENU_ITEM_RADIO_MARK)
-            {
+            if (part == PART_MENU_ITEM_CHECK_MARK || part == PART_MENU_ITEM_RADIO_MARK)
+            { // core uses this to detect radio/checkbox sizes, so just set a square
                 contentRect.setWidth(contentRect.height());
                 retVal = true;
             }
