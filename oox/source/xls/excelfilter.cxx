@@ -127,7 +127,12 @@ bool ExcelFilter::importDocument() throw()
         return false;
 
     WorkbookHelperRoot aHelper( *this );
-    return aHelper.isValid() && importFragment( new WorkbookFragment( aHelper, aWorkbookPath ) );
+    if( aHelper.isValid() && importFragment( new WorkbookFragment( aHelper, aWorkbookPath ) ) )
+    {
+        importDocumentProperties();
+        return true;
+    }
+    return false;
 }
 
 bool ExcelFilter::exportDocument() throw()
