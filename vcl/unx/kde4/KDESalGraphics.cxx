@@ -860,6 +860,35 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             }
             break;
         }
+        case CTRL_SCROLLBAR:
+        {
+            // core can't handle 3-button scrollbars well, so we fix that in hitTestNativeControl(),
+            // for the rest also provide the track area (i.e. area not taken by buttons)
+            if( part == PART_TRACK_VERT_AREA || part == PART_TRACK_HORZ_AREA )
+            {
+                QStyleOptionSlider option;
+                OSL_ASSERT( val.getType() == CTRL_SCROLLBAR );
+                const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&val);
+                option.orientation = ( part == PART_TRACK_HORZ_AREA ) ? Qt::Horizontal : Qt::Vertical;
+                option.minimum = sbVal->mnMin;
+                option.maximum = sbVal->mnMax;
+                option.sliderValue = sbVal->mnCur;
+                option.sliderPosition = sbVal->mnCur;
+                option.pageStep = sbVal->mnVisibleSize;
+                // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
+                // widget and screen coordinates the same. QStyle functions should use screen
+                // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
+                // and sometimes uses widget coordinates.
+                QRect rect = contentRect;
+                rect.moveTo( 0, 0 );
+                option.rect = rect;
+                rect = kapp->style()->subControlRect( QStyle::CC_ScrollBar, &option,
+                    QStyle::SC_ScrollBarGroove );
+                rect.translate( contentRect.topLeft()); // reverse the workaround above
+                contentRect = boundingRect = rect;
+                retVal = true;
+            }
+        }
         default:
             break;
     }
@@ -892,7 +921,8 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
     {
         if( nPart != PART_BUTTON_UP && nPart != PART_BUTTON_DOWN
             && nPart != PART_BUTTON_LEFT && nPart != PART_BUTTON_RIGHT )
-        { // we adjust only for buttons (because some scrollbars have 3 buttons)
+        { // we adjust only for buttons (because some scrollbars have 3 buttons,
+          // and LO core doesn't handle such scrollbars well)
             return FALSE;
         }
         rIsInside = FALSE;
