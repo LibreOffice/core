@@ -57,3 +57,4 @@ mkdir: %_DEST%\inc%_EXT%\sd
 
 ..\%__SRC%\misc\sd.component %_DEST%\xml%_EXT%\sd.component
 ..\%__SRC%\misc\sdd.component %_DEST%\xml%_EXT%\sdd.component
+..\%__SRC%\misc\sdfilt.component %_DEST%\xml%_EXT%\sdfilt.component

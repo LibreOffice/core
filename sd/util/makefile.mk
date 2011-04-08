@@ -280,7 +280,7 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @$(TYPE) sd.flt > $@
 
-ALLTAR : $(MISC)/sd.component $(MISC)/sdd.component
+ALLTAR : $(MISC)/sd.component $(MISC)/sdd.component $(MISC)/sdfilt.component
 
 $(MISC)/sd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         sd.component
@@ -293,3 +293,9 @@ $(MISC)/sdd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt sdd.component
+
+$(MISC)/sdfilt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sdfilt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sdfilt.component
