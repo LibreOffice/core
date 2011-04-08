@@ -262,7 +262,8 @@ static const struct {
     { "ur_PK",  lcl_DATA_OTHERS },
     { "ht_HT",  lcl_DATA_OTHERS },
     { "jbo",    lcl_DATA_OTHERS },
-    { "kab_DZ", lcl_DATA_OTHERS }
+    { "kab_DZ", lcl_DATA_OTHERS },
+    { "pt_AO",  lcl_DATA_OTHERS }
 };
 
 static const sal_Unicode under = sal_Unicode('_');

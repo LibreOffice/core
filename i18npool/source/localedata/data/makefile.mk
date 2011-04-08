@@ -297,6 +297,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_or_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_plt_MG.obj \
+    $(SLO)$/localedata_pt_AO.obj	\
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
     $(SLO)$/localedata_shs_CA.obj \
