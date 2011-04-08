@@ -40,6 +40,7 @@
 class KDESalGraphics : public X11SalGraphics
 {
     QImage* m_image;
+    QRect lastPopupRect;
 
     public:
         KDESalGraphics();
