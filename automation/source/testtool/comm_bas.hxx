@@ -41,7 +41,7 @@ class CommunicationWrapper : public SbxObject   // Einer f�r Manager und Links
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
-#if defined ( ICC ) || defined ( C50 ) || defined ( C52 )
+#if defined ( ICC ) || defined ( C50 )
 public:
 #endif
     typedef void( CommunicationWrapper::*pMeth )
