@@ -345,6 +345,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
+    style.SetMinThumbSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 
     rSettings.SetStyleSettings( style );
 }
