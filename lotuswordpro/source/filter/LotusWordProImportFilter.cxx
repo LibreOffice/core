@@ -315,7 +315,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     throw( com::sun::star::uno::RuntimeException )
 {
 
-    OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
+    OUString sTypeName(RTL_CONSTASCII_USTRINGPARAM("writer_LotusWordPro_Document"));
     sal_Int32 nLength = Descriptor.getLength();
     OUString sURL;
     const PropertyValue * pValue = Descriptor.getConstArray();
