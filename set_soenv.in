@@ -225,14 +225,8 @@ if ( $platform =~ m/solaris/ )
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
 
-   if ( $CC =~ "gcc") {
-       $COM            = "GCC";
-       $CVER           = "C300";
-   } else {
-       $COM            = "C52";
-       $CVER           = "C52";
-       $COMEX          = 4;
-   }
+   $COM            = "GCC";
+   $CVER           = "C300";
    $BIG_SVX        = "TRUE";
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
