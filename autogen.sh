@@ -48,7 +48,7 @@ sub invalid_distro($$)
     print STDERR "valid values are:\n";
     my $dirh;
     opendir ($dirh, "distro-configs");
-    while (readdir ($dirh)) {
+    while (($_ = readdir ($dirh))) {
     /(.*)\.conf$/ || next;
     print STDERR "\t$1\n";
     }
