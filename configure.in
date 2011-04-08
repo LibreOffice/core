@@ -894,7 +894,7 @@ AC_ARG_WITH(system-sane,
     AS_HELP_STRING([--with-system-sane-header],
         [Use sane.h already on system.]))
 
-AC_ARG_WITH(system-xrender,
+AC_ARG_WITH(system-xrender-headers,
     AS_HELP_STRING([--with-system-xrender-headers],
         [Use XRender headers already on system.]))
 
