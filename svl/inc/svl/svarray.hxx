@@ -743,7 +743,7 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#if defined (C40) || defined (C41) || defined (C42) || defined(C50) || defined(C52)
+#if defined (C40) || defined (C41) || defined (C42) || defined(C50)
 #define C40_INSERT( c, p, n) Insert( (c const *) p, n )
 #define C40_PTR_INSERT( c, p) Insert( (c const *) p )
 #define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
