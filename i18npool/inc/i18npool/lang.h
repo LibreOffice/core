@@ -522,6 +522,14 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
 #define LANGUAGE_USER_KABYLE                0x0659
 #define LANGUAGE_USER_HAITIAN               0x065A
+#define LANGUAGE_USER_BEEMBE                0x065B
+#define LANGUAGE_USER_BEKWEL                0x065C
+#define LANGUAGE_USER_KITUBA                0x065D
+#define LANGUAGE_USER_LARI                  0x065E
+#define LANGUAGE_USER_MBOCHI                0x065F
+#define LANGUAGE_USER_TEKE_IBALI            0x0660
+#define LANGUAGE_USER_TEKE_TYEE             0x0661
+#define LANGUAGE_USER_VILI                  0x0662
 
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
