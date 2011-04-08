@@ -160,10 +160,10 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart
 /// helper drawing methods
 namespace
 {
-    void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state )
+    void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
     {
         option->state |= state;
-        option->rect = image->rect();
+        option->rect = !rect.isNull() ? rect : image->rect();
 
         QPainter painter(image);
         kapp->style()->drawControl(element, option, &painter);
@@ -323,43 +323,63 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_MENU_POPUP)
     {
-        if (part == PART_MENU_ITEM)
+        if( part == PART_MENU_ITEM )
         {
             QStyleOptionMenuItem option;
+            // this is painted after popup frame, so highlight would be painted
+            // over popup border
+            int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
+            clipRegion = new QRegion( widgetRect.adjusted( fw, fw, -fw, -fw ));
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
-        else if (part == PART_MENU_ITEM_CHECK_MARK)
+        else if( part == PART_MENU_SEPARATOR )
         {
-            m_image->fill(Qt::transparent);
-            if(nControlState & CTRL_STATE_PRESSED) // at least Oxygen paints always as checked
-            {
-                QStyleOptionButton option;
-                draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image,
-                      vclStateValue2StateFlag(nControlState, value));
-            }
+            QStyleOptionMenuItem option;
+            option.menuItemType = QStyleOptionMenuItem::Separator;
+            // Painting the whole menu item area results in different background
+            // with at least Plastique style, so clip only to the separator itself
+            // (QSize( 2, 2 ) is hardcoded in Qt)
+            option.rect = m_image->rect();
+            QSize size = kapp->style()->sizeFromContents( QStyle::CT_MenuItem, &option, QSize( 2, 2 ));
+            QRect rect = m_image->rect();
+            QPoint center = rect.center();
+            rect.setHeight( size.height());
+            rect.moveCenter( center );
+            // don't paint over popup frame border
+            int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
+            clipRegion = new QRegion( rect.translated( widgetRect.topLeft()).adjusted( fw, 0, -fw, 0 ));
+            draw( QStyle::CE_MenuItem, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value), rect );
         }
-        else if (part == PART_MENU_ITEM_RADIO_MARK)
+        else if( part == PART_MENU_ITEM_CHECK_MARK || part == PART_MENU_ITEM_RADIO_MARK )
         {
-            m_image->fill(Qt::transparent);
-            QStyleOptionButton option;
-            // we get always passed BUTTONVALUE_DONTKNOW in 'value', and the checked
-            // state is actually CTRL_STATE_PRESSED
-            QStyle::State set = ( nControlState & CTRL_STATE_PRESSED ) ? QStyle::State_On : QStyle::State_Off;
-            draw( QStyle::PE_IndicatorRadioButton, &option, m_image,
-                  vclStateValue2StateFlag(nControlState, value) | set );
+            QStyleOptionMenuItem option;
+            option.checkType = ( part == PART_MENU_ITEM_CHECK_MARK )
+                ? QStyleOptionMenuItem::NonExclusive : QStyleOptionMenuItem::Exclusive;
+            option.checked = ( nControlState & CTRL_STATE_PRESSED );
+            // widgetRect is now the rectangle for the checkbox/radiobutton itself, but Qt
+            // paints the whole menu item, so translate position (and it'll be clipped);
+            // it is also necessary to fill the background transparently first, as this
+            // is painted after menuitem highlight, otherwise there would be a grey area
+            const MenupopupValue* menuVal = static_cast<const MenupopupValue*>(&value);
+            QRect menuItemRect( region2QRect( menuVal->maItemRect ));
+            QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),
+                widgetRect.size().expandedTo( menuItemRect.size()));
+            m_image->fill( Qt::transparent );
+            draw( QStyle::CE_MenuItem, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value), rect );
+        }
+        else if( part == PART_ENTIRE_CONTROL )
+        {
+            QStyleOptionMenuItem option;
+            draw( QStyle::PE_PanelMenu, &option, m_image, vclStateValue2StateFlag( nControlState, value ));
+            QStyleOptionFrame frame;
+            frame.lineWidth = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
+            draw( QStyle::PE_FrameMenu, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
         }
         else
-        {
-            #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-            QStyleOptionFrameV3 option;
-            option.frameShape = QFrame::StyledPanel;
-            #else
-            QStyleOptionFrameV2 option;
-            #endif
-            draw( QStyle::PE_FrameMenu, &option, m_image,
-                  vclStateValue2StateFlag(nControlState, value) );
-        }
+            returnVal = false;
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_BUTTON) )
     {
