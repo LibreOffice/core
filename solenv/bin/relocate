@@ -229,11 +229,13 @@ sub rewrite_symlinks($$)
 	my $target = readlink ($link);
 	my $newtarget = $target;
 	$newtarget =~ s/$old_root/$new_root/;
-	print "Re-write link $target to $newtarget\n";
-	if ($newtarget eq $target) {
+	if ($target =~ m/$new_root/) {
+	    print STDERR "skip correct link $target\n";
+	} elsif ($newtarget eq $target) {
 	    print STDERR "unusual - possibly stale link: $target\n";
 	    if ($target =~ m/\/clone\//) { die "failed to rename link"; }
 	} else {
+	    print "Re-write link $target to $newtarget\n";
 	    unlink ($link);
 	    symlink ($newtarget, $link);
 	}
@@ -288,8 +290,10 @@ rewrite_symlinks($OOO_BUILD, $OLD_ROOT);
 print "re-writing dependencies:\n";
 rewrite_dpcc($OOO_BUILD, $OLD_ROOT);
 
-print "re-writing new dependencies:\n";
-sed_no_touch_recursive ($OOO_BUILD, $OLD_ROOT, "$solver/workdir/Dep");
+if (-d "$solver/workdir/Dep") {
+    print "re-writing new dependencies:\n";
+    sed_no_touch_recursive ($OOO_BUILD, $OLD_ROOT, "$solver/workdir/Dep");
+}
 
 print "re-writing environment:\n";
 rewrite_set($OOO_BUILD, $OLD_ROOT, $set);
