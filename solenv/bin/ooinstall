@@ -78,7 +78,7 @@ if ( defined $ENV{DISABLE_STRIP} &&
     $strip = "-dontstrip";
 }
 
-print "Running OOo installer\n";
+print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l $langs -p LibreOffice " .
