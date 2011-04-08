@@ -459,24 +459,6 @@ WindowsCustomAction gid_Customaction_CheckVersions
 	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
 End
 
-WindowsCustomAction gid_Customaction_ShowReleaseNotes1
-	Name = "ShowReleaseNotesBefore";
-	Typ = "65";
-	Source = "relnotes.dll";
-	Target = "ShowReleaseNotesBefore";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "behind_InstallValidate");
-End
-
-WindowsCustomAction gid_Customaction_ShowReleaseNotes2
-	Name = "ShowReleaseNotesAfter";
-	Typ = "65";
-	Source = "relnotes.dll";
-	Target = "ShowReleaseNotesAfter";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_SelectLanguage
     Name = "SelectLanguage";
     Typ = "321";
