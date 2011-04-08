@@ -1,5 +1,23 @@
 --- misc/libloader-1.1.3/common_build.xml	2009-11-16 10:25:34.000000000 +0100
 +++ misc/build/libloader-1.1.3/common_build.xml	2009-12-04 10:22:24.277647200 +0100
+@@ -261,7 +261,7 @@ TYPICAL TARGET SEQUENCE
+   <property name="project.revision" value="${Implementation-Version}" description="Sets the version number of the project based on the Implementation-Version found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
+   <fail message="A project revision number has not been determined!">
+     <condition>
+-      <matches string="${project.revision}" pattern="\$\{.*\}" />
++      <contains string="${project.revision}" substring="\$\{" />
+     </condition>
+   </fail>
+ 
+@@ -270,7 +270,7 @@ TYPICAL TARGET SEQUENCE
+   <property name="impl.title" value="${Implementation-Title}" description="Sets the title of the project based on the Implementation-Title found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
+   <fail message="A project title has not been determined!">
+     <condition>
+-      <matches string="${impl.title}" pattern="\$\{.*\}" />
++      <contains string="${impl.title}" substring="\$\{" />
+     </condition>
+   </fail>
+ 
 @@ -497,7 +497,7 @@
          Sets a property build.id to the either "development" or the svn revision
          if in release mode
