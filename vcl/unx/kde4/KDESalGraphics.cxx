@@ -146,12 +146,13 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart
     if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
         return true;
 
+    if ( (type == CTRL_PROGRESS)    && (part == PART_ENTIRE_CONTROL) ) return true;
+
     return false;
 
     if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
     if ( (type == CTRL_TAB_PANE) && (part == PART_ENTIRE_CONTROL) ) return true;
     // no CTRL_TAB_BODY for KDE
-    if ( (type == CTRL_PROGRESS)    && (part == PART_ENTIRE_CONTROL) ) return true;
 
     return false;
 }
@@ -565,6 +566,18 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         option.orientation = (part == PART_TRACK_HORZ_AREA) ? Qt::Horizontal : Qt::Vertical;
 
         draw( QStyle::CC_Slider, &option, m_image, vclStateValue2StateFlag(nControlState, value) );
+    }
+    else if( type == CTRL_PROGRESS && part == PART_ENTIRE_CONTROL )
+    {
+        QStyleOptionProgressBarV2 option;
+        option.minimum = 0;
+        option.maximum = widgetRect.width();
+        option.progress = value.getNumericVal();
+        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
+        option.state = vclStateValue2StateFlag( nControlState, value );
+
+        draw( QStyle::CE_ProgressBar, &option, m_image,
+              vclStateValue2StateFlag(nControlState, value) );
     }
     else
     {
