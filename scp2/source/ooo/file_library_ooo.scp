@@ -807,17 +807,6 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_relnotes
-    BIN_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "relnotes.dll";
-End
-
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Patchmsi
     TXT_FILE_BODY;
     Name = "patchmsi.dll";

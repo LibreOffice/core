@@ -435,7 +435,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Lomenubar,
 #endif
     gid_File_Lib_sn_tools,
-    gid_File_Lib_relnotes,
     GID_FILE_LIB_WPD,
     gid_File_Lib_Mingw_GccS,
     gid_File_Lib_Mingw_Stdcpp,
