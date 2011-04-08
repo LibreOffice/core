@@ -67,7 +67,6 @@
 #define EQUAL_BOOKMARKS(a, b) a == b
 
 #define IFACECAST(c)          ((const Reference< XInterface >&)c)
- // SUN C52 has some ambiguities without this cast ....
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

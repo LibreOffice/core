@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#include <limits>  // included here to prevent problems if compiling with C52
 
 #ifdef GCC
 #include <iostream>

@@ -39,7 +39,7 @@ class ProcessWrapper : public SbxObject
 using SbxVariable::GetInfo;
 // Definition of a table entry. This is done here because
 // through this methods and property can declared as private.
-#if defined ( ICC ) || defined ( C50 ) || defined ( C52 )
+#if defined ( ICC ) || defined ( C50 )
 public:
 #endif
     typedef void( ProcessWrapper::*pMeth )
