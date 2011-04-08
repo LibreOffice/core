@@ -83,7 +83,7 @@ namespace dxcanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasCustomSprite::disposing()
+    void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -91,7 +91,7 @@ namespace dxcanvas
         mpSpriteCanvas.clear();
 
         // forward to parent
-        CanvasCustomSpriteBaseT::disposing();
+        CanvasCustomSpriteBaseT::disposeThis();
     }
 
 #define IMPLEMENTATION_NAME "DXCanvas.CanvasCustomSprite"

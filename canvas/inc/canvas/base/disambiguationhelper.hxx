@@ -26,30 +26,37 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CANVAS_BASEMUTEXHELPER_HXX
-#define INCLUDED_CANVAS_BASEMUTEXHELPER_HXX
+#ifndef INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX
+#define INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX
 
 #include <osl/mutex.hxx>
 
 
-/* Definition of the BaseMutexHelper class */
+/* Definition of the DisambiguationHelper class */
 
 namespace canvas
 {
-    /** Base class, deriving from ::comphelper::OBaseMutex and
-        initializing its own baseclass with m_aMutex.
+    /** Base class, initializing its own baseclass with m_aMutex.
 
         This is necessary to make the CanvasBase, GraphicDeviceBase,
         etc. classes freely combinable - letting them perform this
         initialization would prohibit deriving e.g. CanvasBase from
         GraphicDeviceBase.
+
+        On top of that, disambiguates XEventListener::disposing and
+        WeakComponentImplHelper::disposing.
+
+        Having two virtual methods with the same name, and not
+        overriding them in every derived class, will hide one of
+        them. Later trying to override the same method, will generate
+        a new vtable slot, and lead to very hard to spot errors.
      */
-    template< class Base > class BaseMutexHelper : public Base
+    template< class Base > class DisambiguationHelper : public Base
     {
     public:
         typedef Base BaseType;
 
-        /** Construct BaseMutexHelper
+        /** Construct DisambiguationHelper
 
             This method is the whole purpose of this template:
             initializing a base class with the provided m_aMutex
@@ -57,16 +64,27 @@ namespace canvas
             as they require the lifetime of the mutex to extend
             theirs).
          */
-        BaseMutexHelper() :
+        DisambiguationHelper() :
             BaseType( m_aMutex )
         {
         }
+
+        virtual void SAL_CALL disposing()
+        { disposeThis(); }
+
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+        { disposeEventSource(Source); }
+
+        virtual void disposeThis()
+        {}
+        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+        {}
 
 protected:
         mutable ::osl::Mutex m_aMutex;
     };
 }
 
-#endif /* INCLUDED_CANVAS_BASEMUTEXHELPER_HXX */
+#endif /* INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,7 @@ namespace cairocanvas
                                               ::com::sun::star::lang::XServiceInfo,
                                               ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
-        public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
+        public ::canvas::DisambiguationHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
     {
     };
@@ -87,7 +87,7 @@ namespace cairocanvas
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

@@ -78,7 +78,7 @@ namespace cairocanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasCustomSprite::disposing()
+    void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -86,7 +86,7 @@ namespace cairocanvas
         mpBufferSurface.reset();
 
         // forward to parent
-        CanvasCustomSpriteBaseT::disposing();
+        CanvasCustomSpriteBaseT::disposeThis();
     }
 
     void CanvasCustomSprite::redraw( const CairoSharedPtr& pCairo,

@@ -102,7 +102,7 @@ namespace cairocanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
+    void CanvasBitmap::disposeThis()
     {
         mpSurfaceProvider.clear();
 
@@ -110,7 +110,7 @@ namespace cairocanvas
         mpBufferSurface.reset();
 
         // forward to parent
-        CanvasBitmap_Base::disposing();
+        CanvasBitmap_Base::disposeThis();
     }
 
     SurfaceSharedPtr CanvasBitmap::getSurface()

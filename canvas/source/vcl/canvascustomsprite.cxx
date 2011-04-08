@@ -129,14 +129,6 @@ namespace vclcanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasCustomSprite::disposing()
-    {
-        SolarMutexGuard aGuard;
-
-        // forward to parent
-        CanvasCustomSpriteBaseT::disposing();
-    }
-
 #define IMPLEMENTATION_NAME "VCLCanvas.CanvasCustomSprite"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasCustomSprite"
 

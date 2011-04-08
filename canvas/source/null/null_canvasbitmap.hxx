@@ -40,6 +40,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <canvas/base/integerbitmapbase.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 
 #include "null_canvashelper.hxx"
 #include "null_spritecanvas.hxx"
@@ -53,7 +54,7 @@ namespace nullcanvas
     typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::lang::XServiceInfo >   CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+    typedef ::canvas::IntegerBitmapBase< ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
                                          CanvasHelper,
                                          ::osl::MutexGuard,
                                          ::cppu::OWeakObject >                          CanvasBitmap_Base;
@@ -75,7 +76,7 @@ namespace nullcanvas
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

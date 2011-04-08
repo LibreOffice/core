@@ -82,12 +82,6 @@ namespace vclcanvas
         maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
-    {
-        // forward to base
-        CanvasBitmap_Base::disposing();
-    }
-
 #define IMPLEMENTATION_NAME "VCLCanvas.CanvasBitmap"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
 

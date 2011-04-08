@@ -131,14 +131,14 @@ namespace cairocanvas
         OSL_TRACE( "CairoCanvas destroyed" );
     }
 
-    void SAL_CALL Canvas::disposing()
+    void Canvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mxComponentContext.clear();
 
         // forward to parent
-        CanvasBaseT::disposing();
+        CanvasBaseT::disposeThis();
     }
 
     ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)

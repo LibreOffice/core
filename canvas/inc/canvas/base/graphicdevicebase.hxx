@@ -95,7 +95,7 @@ namespace canvas
 
         @tpl Mutex
         Lock strategy to use. Defaults to using the
-        BaseMutexHelper-provided lock.  Everytime one of the methods is
+        DisambiguationHelper-provided lock.  Everytime one of the methods is
         entered, an object of type Mutex is created with m_aMutex as
         the sole parameter, and destroyed again when the method scope
         is left.
@@ -144,17 +144,14 @@ namespace canvas
                                                       _1)));
         }
 
-#if defined __SUNPRO_CC
-        using Base::disposing;
-#endif
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             maDeviceHelper.disposing();
 
             // pass on to base class
-            cppu::WeakComponentImplHelperBase::disposing();
+            BaseType::disposeThis();
         }
 
         // XGraphicDevice

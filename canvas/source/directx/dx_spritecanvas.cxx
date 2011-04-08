@@ -126,14 +126,14 @@ namespace dxcanvas
         maArguments.realloc(0);
     }
 
-    void SAL_CALL SpriteCanvas::disposing()
+    void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mxComponentContext.clear();
 
         // forward to parent
-        SpriteCanvasBaseT::disposing();
+        SpriteCanvasBaseT::disposeThis();
     }
 
     ::sal_Bool SAL_CALL SpriteCanvas::showBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)

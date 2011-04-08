@@ -45,7 +45,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include "null_spritecanvashelper.hxx"
@@ -63,7 +63,7 @@ namespace nullcanvas
                                                ::com::sun::star::awt::XWindowListener,
                                                ::com::sun::star::beans::XPropertySet,
                                                ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                    DeviceHelper,
                                                    ::osl::MutexGuard,
                                                    ::cppu::OWeakObject >    SpriteCanvasBase_Base;
@@ -114,12 +114,8 @@ namespace nullcanvas
 
         void initialize();
 
-#if defined __SUNPRO_CC
-        using SpriteCanvasBaseT::disposing;
-#endif
-
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

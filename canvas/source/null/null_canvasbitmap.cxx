@@ -53,12 +53,12 @@ namespace nullcanvas
                              bHasAlpha );
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
+    void CanvasBitmap::disposeThis()
     {
         mpDevice.clear();
 
         // forward to parent
-        CanvasBitmap_Base::disposing();
+        CanvasBitmap_Base::disposeThis();
     }
 
 #define IMPLEMENTATION_NAME "NullCanvas.CanvasBitmap"

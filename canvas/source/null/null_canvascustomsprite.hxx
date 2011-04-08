@@ -42,7 +42,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
 #include "sprite.hxx"
@@ -75,8 +75,8 @@ namespace nullcanvas
         remain a base class that provides implementation, not to
         enforce any specific interface on its derivees.
      */
-    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
-                                                 public Sprite
+    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::DisambiguationHelper< CanvasCustomSpriteBase_Base >,
+                                              public Sprite
     {
     };
 
@@ -109,7 +109,7 @@ namespace nullcanvas
         CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice );
 
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

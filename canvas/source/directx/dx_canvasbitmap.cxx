@@ -60,13 +60,13 @@ namespace dxcanvas
         maCanvasHelper.setTarget( mpBitmap );
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
+    void CanvasBitmap::disposeThis()
     {
         mpBitmap.reset();
         mpDevice.clear();
 
         // forward to parent
-        CanvasBitmap_Base::disposing();
+        CanvasBitmap_Base::disposeThis();
     }
 
     struct AlphaDIB

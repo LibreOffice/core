@@ -120,17 +120,14 @@ namespace canvas
         {
         }
 
-#if defined __SUNPRO_CC
-        using Base::disposing;
-#endif
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             maCanvasHelper.disposing();
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         // XCanvas

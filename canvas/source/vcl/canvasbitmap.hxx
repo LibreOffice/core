@@ -57,7 +57,7 @@ namespace vclcanvas
                                                ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::lang::XServiceInfo,
                                              ::com::sun::star::beans::XFastPropertySet >    CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+    typedef ::canvas::IntegerBitmapBase< ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
                                          CanvasBitmapHelper,
                                          tools::LocalGuard,
                                          ::cppu::OWeakObject >                          CanvasBitmap_Base;
@@ -86,9 +86,6 @@ namespace vclcanvas
         CanvasBitmap( const BitmapEx&                              rBitmap,
                       ::com::sun::star::rendering::XGraphicDevice& rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
-
-        // overridden because of mpDevice
-        virtual void SAL_CALL disposing();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

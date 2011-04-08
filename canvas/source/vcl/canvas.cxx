@@ -133,14 +133,14 @@ namespace vclcanvas
         OSL_TRACE( "Canvas destroyed" );
     }
 
-    void SAL_CALL Canvas::disposing()
+    void Canvas::disposeThis()
     {
         SolarMutexGuard aGuard;
 
         mxComponentContext.clear();
 
         // forward to parent
-        CanvasBaseT::disposing();
+        CanvasBaseT::disposeThis();
     }
 
     ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)

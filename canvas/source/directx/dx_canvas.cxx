@@ -124,14 +124,14 @@ namespace dxcanvas
         maArguments.realloc(0);
     }
 
-    void SAL_CALL Canvas::disposing()
+    void Canvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mxComponentContext.clear();
 
         // forward to parent
-        CanvasBaseT::disposing();
+        CanvasBaseT::disposeThis();
     }
 
     ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
@@ -201,7 +201,7 @@ namespace dxcanvas
         maArguments.realloc(0);
     }
 
-    void SAL_CALL BitmapCanvas::disposing()
+    void BitmapCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -209,7 +209,7 @@ namespace dxcanvas
         mxComponentContext.clear();
 
         // forward to parent
-        BitmapCanvasBaseT::disposing();
+        BitmapCanvasBaseT::disposeThis();
     }
 
     ::rtl::OUString SAL_CALL BitmapCanvas::getServiceName(  ) throw (uno::RuntimeException)

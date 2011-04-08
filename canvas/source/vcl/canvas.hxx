@@ -43,7 +43,7 @@
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/graphicdevicebase.hxx>
 
@@ -64,7 +64,7 @@ namespace vclcanvas
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
+    typedef ::canvas::GraphicDeviceBase< ::canvas::DisambiguationHelper< GraphicDeviceBase_Base >,
                                            DeviceHelper,
                                            tools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
@@ -96,12 +96,8 @@ namespace vclcanvas
         /// For resource tracking
         ~Canvas();
 
-#if defined __SUNPRO_CC
-        using CanvasBaseT::disposing;
-#endif
-
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

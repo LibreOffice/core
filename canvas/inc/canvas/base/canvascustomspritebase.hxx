@@ -103,14 +103,14 @@ namespace canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.disposing();
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking

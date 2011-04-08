@@ -183,10 +183,7 @@ namespace canvas
             return ::com::sun::star::uno::makeAny(mxWindow);
         }
 
-#if defined __SUNPRO_CC
-        using Base::disposing;
-#endif
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -197,7 +194,7 @@ namespace canvas
             }
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         ::com::sun::star::awt::Rectangle transformBounds( const ::com::sun::star::awt::Rectangle& rBounds )
@@ -234,12 +231,14 @@ namespace canvas
         }
 
         // XWindowListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL disposeEventSource( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             if( Source.Source == mxWindow )
                 mxWindow.clear();
+
+            BaseType::disposeEventSource(Source);
         }
 
         virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException)

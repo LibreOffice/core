@@ -45,7 +45,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include "dx_bitmapprovider.hxx"
@@ -66,7 +66,8 @@ namespace dxcanvas
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper<
+                                                 ::canvas::DisposingDisambiguate< WindowGraphicDeviceBase_Base > >,
                                                    SpriteDeviceHelper,
                                                    ::osl::MutexGuard,
                                                    ::cppu::OWeakObject >    SpriteCanvasBase_Base;
@@ -117,7 +118,7 @@ namespace dxcanvas
         void initialize();
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
