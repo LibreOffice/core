@@ -264,6 +264,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
+    if( lastPopupRect.isValid() && ( type != CTRL_MENU_POPUP || part != PART_MENU_ITEM ))
+        lastPopupRect = QRect();
+
     // put not implemented types here
     if (type == CTRL_SPINBUTTONS)
     {
@@ -323,15 +326,21 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_MENU_POPUP)
     {
+        OSL_ASSERT( part == PART_MENU_ITEM ? lastPopupRect.isValid() : !lastPopupRect.isValid());
         if( part == PART_MENU_ITEM )
         {
             QStyleOptionMenuItem option;
-            // this is painted after popup frame, so highlight would be painted
-            // over popup border
-            int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
-            clipRegion = new QRegion( widgetRect.adjusted( fw, fw, -fw, -fw ));
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
+            // HACK: LO core first paints the entire popup and only then it paints menu items,
+            // but QMenu::paintEvent() paints popup frame after all items. That means highlighted
+            // items here would paint the highlight over the frame border. Since calls to PART_MENU_ITEM
+            // are always preceded by calls to PART_ENTIRE_CONTROL, just remember the size for the whole
+            // popup (otherwise not possible to get here) and draw the border afterwards.
+            QRect framerect( lastPopupRect.topLeft() - widgetRect.topLeft(),
+                widgetRect.size().expandedTo( lastPopupRect.size()));
+            QStyleOptionFrame frame;
+            draw( QStyle::PE_FrameMenu, &frame, m_image, vclStateValue2StateFlag( nControlState, value ), framerect );
         }
         else if( part == PART_MENU_SEPARATOR )
         {
@@ -346,7 +355,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QPoint center = rect.center();
             rect.setHeight( size.height());
             rect.moveCenter( center );
-            // don't paint over popup frame border
+            // don't paint over popup frame border (like the hack above, but here it can be simpler)
             int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
             clipRegion = new QRegion( rect.translated( widgetRect.topLeft()).adjusted( fw, 0, -fw, 0 ));
             draw( QStyle::CE_MenuItem, &option, m_image,
@@ -375,8 +384,8 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionMenuItem option;
             draw( QStyle::PE_PanelMenu, &option, m_image, vclStateValue2StateFlag( nControlState, value ));
             QStyleOptionFrame frame;
-            frame.lineWidth = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
             draw( QStyle::PE_FrameMenu, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
+            lastPopupRect = widgetRect;
         }
         else
             returnVal = false;
