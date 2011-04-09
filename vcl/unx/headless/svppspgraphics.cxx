@@ -724,8 +724,8 @@ sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel 
     bool bArtBold = false;
     if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
     {
-        psp::italic::type eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
-        if( eItalic != psp::italic::Italic && eItalic != psp::italic::Oblique )
+        FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
+        if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
             bArtItalic = true;
     }
     int nWeight = (int)pEntry->meWeight;
@@ -1078,54 +1078,16 @@ void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 
 // ----------------------------------------------------------------------------
 
-FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
-{
-    switch (ePitch)
-    {
-        case psp::pitch::Fixed:     return PITCH_FIXED;
-        case psp::pitch::Variable:  return PITCH_VARIABLE;
-        default: break;
-    }
-    return PITCH_DONTKNOW;
-}
-
-FontItalic PspGraphics::ToFontItalic (psp::italic::type eItalic)
-{
-    switch (eItalic)
-    {
-        case psp::italic::Upright:  return ITALIC_NONE;
-        case psp::italic::Oblique:  return ITALIC_OBLIQUE;
-        case psp::italic::Italic:   return ITALIC_NORMAL;
-        default: break;
-    }
-    return ITALIC_DONTKNOW;
-}
-
-FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
-{
-    switch (eFamily)
-    {
-        case psp::family::Decorative: return FAMILY_DECORATIVE;
-        case psp::family::Modern:     return FAMILY_MODERN;
-        case psp::family::Roman:      return FAMILY_ROMAN;
-        case psp::family::Script:     return FAMILY_SCRIPT;
-        case psp::family::Swiss:      return FAMILY_SWISS;
-        case psp::family::System:     return FAMILY_SYSTEM;
-        default: break;
-    }
-    return FAMILY_DONTKNOW;
-}
-
 ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     ImplDevFontAttributes aDFA;
     aDFA.maName         = rInfo.m_aFamilyName;
     aDFA.maStyleName    = rInfo.m_aStyleName;
-    aDFA.meFamily       = ToFontFamily (rInfo.m_eFamilyStyle);
+    aDFA.meFamily       = rInfo.m_eFamilyStyle;
     aDFA.meWeight       = rInfo.m_eWeight;
-    aDFA.meItalic       = ToFontItalic (rInfo.m_eItalic);
+    aDFA.meItalic       = rInfo.m_eItalic;
     aDFA.meWidthType    = rInfo.m_eWidth;
-    aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
+    aDFA.mePitch        = rInfo.m_ePitch;
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
 
     switch( rInfo.m_eType )

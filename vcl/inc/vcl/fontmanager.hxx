@@ -57,38 +57,6 @@ class ImplFontOptions;
 namespace psp {
 class PPDParser; // see ppdparser.hxx
 
-namespace italic
-{
-enum type {
-    Upright = 0,
-    Oblique = 1,
-    Italic = 2,
-    Unknown = 3
-};
-}
-
-namespace pitch
-{
-enum type {
-    Unknown = 0,
-    Fixed = 1,
-    Variable = 2
-};
-}
-
-namespace family
-{
-enum type {
-    Unknown = 0,
-    Decorative = 1,
-    Modern = 2,
-    Roman = 3,
-    Script = 4,
-    Swiss = 5,
-    System = 6
-};
-}
-
 namespace fonttype
 {
 enum type {
@@ -96,15 +64,6 @@ enum type {
     Type1 = 1,
     TrueType = 2,
     Builtin = 3
-};
-}
-
-namespace fcstatus
-{
-enum type {
-    istrue,
-    isunset,
-    isfalse
 };
 }
 
@@ -127,11 +86,11 @@ struct FastPrintFontInfo
     rtl::OUString                       m_aFamilyName;
     rtl::OUString                       m_aStyleName;
     std::list< rtl::OUString >          m_aAliases;
-    family::type                        m_eFamilyStyle;
-    italic::type                        m_eItalic;
+    FontFamily                          m_eFamilyStyle;
+    FontItalic                          m_eItalic;
     FontWidth                           m_eWidth;
     FontWeight                          m_eWeight;
-    pitch::type                         m_ePitch;
+    FontPitch                           m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
     bool                                m_bSubsettable;
     bool                                m_bEmbeddable;
@@ -139,11 +98,11 @@ struct FastPrintFontInfo
     FastPrintFontInfo() :
             m_nID( 0 ),
             m_eType( fonttype::Unknown ),
-            m_eFamilyStyle( family::Unknown ),
-            m_eItalic( italic::Unknown ),
+            m_eFamilyStyle( FAMILY_DONTKNOW ),
+            m_eItalic( ITALIC_DONTKNOW ),
             m_eWidth( WIDTH_DONTKNOW ),
             m_eWeight( WEIGHT_DONTKNOW ),
-            m_ePitch( pitch::Unknown ),
+            m_ePitch( PITCH_DONTKNOW ),
             m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
 };
@@ -242,10 +201,10 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         std::list< int >                            m_aAliases;
         int                                         m_nPSName;      // atom
         rtl::OUString                               m_aStyleName;
-        italic::type                                m_eItalic;
+        FontItalic                                  m_eItalic;
         FontWidth                                   m_eWidth;
         FontWeight                                  m_eWeight;
-        pitch::type                                 m_ePitch;
+        FontPitch                                   m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
         bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
         CharacterMetric                             m_aGlobalMetricX;
@@ -325,10 +284,10 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl::OString        aFoundry;
         rtl::OString        aFamily;
         rtl::OString        aAddStyle;
-        italic::type        eItalic;
+        FontItalic          eItalic;
         FontWeight          eWeight;
         FontWidth           eWidth;
-        pitch::type         ePitch;
+        FontPitch           ePitch;
         rtl_TextEncoding    aEncoding;
 
         XLFDEntry() { nMask = 0; }
@@ -341,7 +300,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     fontID                                      m_nNextFontID;
     boost::unordered_map< fontID, PrintFont* >       m_aFonts;
-    boost::unordered_map< int, family::type >        m_aFamilyTypes;
+    boost::unordered_map< int, FontFamily >        m_aFamilyTypes;
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
@@ -383,7 +342,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID findFontFileID( int nDirID, const rtl::OString& rFile ) const;
     fontID findFontBuiltinID( int nPSNameAtom ) const;
 
-    family::type matchFamilyName( const rtl::OUString& rFamily ) const;
+    FontFamily matchFamilyName( const rtl::OUString& rFamily ) const;
 
     PrintFont* getFont( fontID nID ) const
     {
@@ -468,7 +427,7 @@ public:
     const rtl::OUString& getPSName( fontID nFontID ) const;
 
     // get a specific fonts style family
-    family::type getFontFamilyType( fontID nFontID ) const;
+    FontFamily getFontFamilyType( fontID nFontID ) const;
 
     // get a specific fonts family name aliases
     void getFontFamilyAliases( fontID nFontID ) const;
@@ -481,10 +440,10 @@ public:
     }
 
     // get a specific fonts italic type
-    italic::type getFontItalic( fontID nFontID ) const
+    FontItalic getFontItalic( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eItalic : italic::Unknown;
+        return pFont ? pFont->m_eItalic : ITALIC_DONTKNOW;
     }
 
     // get a specific fonts width type
@@ -502,10 +461,10 @@ public:
     }
 
     // get a specific fonts pitch type
-    pitch::type getFontPitch( fontID nFontID ) const
+    FontPitch getFontPitch( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_ePitch : pitch::Unknown;
+        return pFont ? pFont->m_ePitch : PITCH_DONTKNOW;
     }
 
     // get a specific fonts encoding
@@ -703,8 +662,8 @@ public:
     ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type& rItalic, FontWeight& rWeight,
-        FontWidth& rWidth, pitch::type& rPitch) const;
+        const rtl::OString& rLangAttrib, FontItalic& rItalic, FontWeight& rWeight,
+        FontWidth& rWidth, FontPitch& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

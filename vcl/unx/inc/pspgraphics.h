@@ -77,9 +77,6 @@ public:
 
     static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
     static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
-    static FontPitch    ToFontPitch (psp::pitch::type ePitch);
-    static FontItalic   ToFontItalic (psp::italic::type eItalic);
-    static FontFamily   ToFontFamily (psp::family::type eFamily);
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );

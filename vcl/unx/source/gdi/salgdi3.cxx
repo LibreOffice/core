@@ -1100,31 +1100,11 @@ void cairosubcallback( void* pPattern )
 
 ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
-    // TODO: get rid of these insane enum-conversions
-    // e.g. by using the classic vclenum values inside VCL
-
     psp::FastPrintFontInfo aInfo;
-    // set family name
+
     aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    // set italic
-    switch( rFontAttributes.GetSlant() )
-    {
-        case ITALIC_NONE:
-            aInfo.m_eItalic = psp::italic::Upright;
-            break;
-        case ITALIC_NORMAL:
-            aInfo.m_eItalic = psp::italic::Italic;
-            break;
-        case ITALIC_OBLIQUE:
-            aInfo.m_eItalic = psp::italic::Oblique;
-            break;
-        default:
-            aInfo.m_eItalic = psp::italic::Unknown;
-            break;
-    }
-    // set weight
+    aInfo.m_eItalic = rFontAttributes.GetSlant();
     aInfo.m_eWeight = rFontAttributes.GetWeight();
-    // set width
     aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
     const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
@@ -1395,56 +1375,18 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 
     const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
-    psp::italic::type eItalic = psp::italic::Unknown;
-    if( rFontSelData.GetSlant() != ITALIC_DONTKNOW )
-    {
-        switch( rFontSelData.GetSlant() )
-        {
-            case ITALIC_NONE:    eItalic = psp::italic::Upright; break;
-            case ITALIC_NORMAL:  eItalic = psp::italic::Italic; break;
-            case ITALIC_OBLIQUE: eItalic = psp::italic::Oblique; break;
-            default:
-                break;
-        }
-    }
-
+    FontItalic eItalic = rFontSelData.GetSlant();
     FontWeight eWeight = rFontSelData.GetWeight();
     FontWidth eWidth = rFontSelData.GetWidthType();
-
-    psp::pitch::type ePitch = psp::pitch::Unknown;
-    if( rFontSelData.GetPitch() != PITCH_DONTKNOW )
-    {
-        switch( rFontSelData.GetPitch() )
-        {
-            case PITCH_FIXED:    ePitch=psp::pitch::Fixed; break;
-            case PITCH_VARIABLE: ePitch=psp::pitch::Variable; break;
-            default:
-                break;
-        }
-    }
+    FontPitch ePitch = rFontSelData.GetPitch();
 
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch);
 
-    switch (eItalic)
-    {
-        case psp::italic::Upright: aRet.meItalic = ITALIC_NONE; break;
-        case psp::italic::Italic: aRet.meItalic = ITALIC_NORMAL; break;
-        case psp::italic::Oblique: aRet.meItalic = ITALIC_OBLIQUE; break;
-        default:
-            break;
-    }
-
+    aRet.meItalic    = eItalic;
     aRet.meWeight    = eWeight;
     aRet.meWidthType = eWidth;
-
-    switch (ePitch)
-    {
-        case psp::pitch::Fixed: aRet.mePitch = PITCH_FIXED; break;
-        case psp::pitch::Variable: aRet.mePitch = PITCH_VARIABLE; break;
-        default:
-            break;
-    }
+    aRet.mePitch     = ePitch;
 
     return aRet;
 }

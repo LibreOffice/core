@@ -3399,9 +3399,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // set italic
     switch( eStyle )
     {
-        case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = psp::italic::Upright;break;
-        case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = psp::italic::Italic;break;
-        case PANGO_STYLE_OBLIQUE:   aInfo.m_eItalic = psp::italic::Oblique;break;
+        case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = ITALIC_NONE;break;
+        case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = ITALIC_NORMAL;break;
+        case PANGO_STYLE_OBLIQUE:   aInfo.m_eItalic = ITALIC_OBLIQUE;break;
     }
     // set weight
     if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
@@ -3456,10 +3456,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
         aFont.SetWidthType( aInfo.m_eWidth );
-    if( aInfo.m_eItalic != psp::italic::Unknown )
-        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
-    if( aInfo.m_ePitch != psp::pitch::Unknown )
-        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
+    if( aInfo.m_eItalic != ITALIC_DONTKNOW )
+        aFont.SetItalic( aInfo.m_eItalic );
+    if( aInfo.m_ePitch != PITCH_DONTKNOW )
+        aFont.SetPitch( aInfo.m_ePitch );
 
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );

@@ -135,15 +135,15 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
     return nRet;
 }
 
-static italic::type parseItalic( const ByteString& rItalic )
+static FontItalic parseItalic( const ByteString& rItalic )
 {
-    italic::type eItalic = italic::Unknown;
+    FontItalic eItalic = ITALIC_DONTKNOW;
     if( rItalic.EqualsIgnoreCaseAscii( "i" ) )
-        eItalic = italic::Italic;
+        eItalic = ITALIC_NORMAL;
     else if( rItalic.EqualsIgnoreCaseAscii( "o" ) )
-        eItalic = italic::Oblique;
+        eItalic = ITALIC_OBLIQUE;
     else
-        eItalic = italic::Upright;
+        eItalic = ITALIC_NONE;
     return eItalic;
 }
 
@@ -356,10 +356,10 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_eType( eType ),
         m_nFamilyName( 0 ),
         m_nPSName( 0 ),
-        m_eItalic( italic::Unknown ),
+        m_eItalic( ITALIC_DONTKNOW ),
         m_eWidth( WIDTH_DONTKNOW ),
         m_eWeight( WEIGHT_DONTKNOW ),
-        m_ePitch( pitch::Unknown ),
+        m_ePitch( PITCH_DONTKNOW ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
         m_bFontEncodingOnly( false ),
         m_pMetrics( NULL ),
@@ -813,11 +813,11 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
     // italic
     if( pInfo->gfi->italicAngle > 0 )
-        m_eItalic = italic::Oblique;
+        m_eItalic = ITALIC_OBLIQUE;
     else if( pInfo->gfi->italicAngle < 0 )
-        m_eItalic = italic::Italic;
+        m_eItalic = ITALIC_NORMAL;
     else
-        m_eItalic = italic::Upright;
+        m_eItalic = ITALIC_NONE;
 
     // weight
     ByteString aLowerWeight( pInfo->gfi->weight );
@@ -825,7 +825,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_eWeight = parseWeight( aLowerWeight );
 
     // pitch
-    m_ePitch = pInfo->gfi->isFixedPitch ? pitch::Fixed : pitch::Variable;
+    m_ePitch = pInfo->gfi->isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE;
 
     // encoding - only set if unknown
     int nAdobeEncoding = 0;
@@ -1533,9 +1533,9 @@ bool PrintFontManager::parseXLFD( const OString& rXLFD, XLFDEntry& rEntry )
 
     // evaluate pitch
     if( aPitch.toChar() == 'c' || aPitch.toChar() == 'm' )
-        rEntry.ePitch = pitch::Fixed;
+        rEntry.ePitch = PITCH_FIXED;
     else
-        rEntry.ePitch = pitch::Variable;
+        rEntry.ePitch = PITCH_VARIABLE;
 
     OString aToken = aEnc.toAsciiLowerCase();
     // get encoding
@@ -1710,9 +1710,9 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
     aXLFD.append('-');
     switch( pFont->m_eItalic )
     {
-        case italic::Upright:       aXLFD.append('r');break;
-        case italic::Oblique:       aXLFD.append('o');break;
-        case italic::Italic:        aXLFD.append('i');break;
+        case ITALIC_NONE:       aXLFD.append('r');break;
+        case ITALIC_OBLIQUE:       aXLFD.append('o');break;
+        case ITALIC_NORMAL:        aXLFD.append('i');break;
         default: break;
     }
     aXLFD.append('-');
@@ -1730,7 +1730,7 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
         default: break;
     }
     aXLFD.append("-utf8-0-0-0-0-");
-    aXLFD.append( pFont->m_ePitch == pitch::Fixed ? "m" : "p" );
+    aXLFD.append( pFont->m_ePitch == PITCH_FIXED ? "m" : "p" );
     aXLFD.append("-0-");
     const char* pEnc = rtl_getBestUnixCharsetFromTextEncoding( pFont->m_aEncoding );
     if( ! pEnc )
@@ -1975,12 +1975,12 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
             default:                        pFont->m_eWidth = WIDTH_NORMAL; break;
         }
 
-        pFont->m_ePitch = aInfo.pitch ? pitch::Fixed : pitch::Variable;
-        pFont->m_eItalic = aInfo.italicAngle == 0 ? italic::Upright : ( aInfo.italicAngle < 0 ? italic::Italic : italic::Oblique );
+        pFont->m_ePitch = aInfo.pitch ? PITCH_FIXED : PITCH_VARIABLE;
+        pFont->m_eItalic = aInfo.italicAngle == 0 ? ITALIC_NONE : ( aInfo.italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE );
         // #104264# there are fonts that set italic angle 0 although they are
         // italic; use macstyle bit here
         if( aInfo.italicAngle == 0 && (aInfo.macStyle & 2) )
-            pFont->m_eItalic = italic::Italic;
+            pFont->m_eItalic = ITALIC_NORMAL;
 
         pFont->m_aEncoding = aInfo.symbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
 
@@ -2431,13 +2431,13 @@ void PrintFontManager::initialize()
     ::boost::unordered_map< fontID, PrintFont* >::iterator font_it;
     for (font_it = m_aFonts.begin(); font_it != m_aFonts.end(); ++font_it)
     {
-        ::boost::unordered_map< int, family::type >::const_iterator it =
+        ::boost::unordered_map< int, FontFamily >::const_iterator it =
               m_aFamilyTypes.find( font_it->second->m_nFamilyName );
         if (it != m_aFamilyTypes.end())
             continue;
         const ::rtl::OUString& rFamily =
             m_pAtoms->getString( ATOM_FAMILYNAME, font_it->second->m_nFamilyName);
-        family::type eType = matchFamilyName( rFamily );
+        FontFamily eType = matchFamilyName( rFamily );
         m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
     }
 
@@ -2460,7 +2460,7 @@ void PrintFontManager::initialize()
 
 // -------------------------------------------------------------------------
 inline bool
-equalPitch (psp::pitch::type from, psp::pitch::type to)
+equalPitch (FontPitch from, FontPitch to)
 {
     return from == to;
 }
@@ -2472,10 +2472,10 @@ equalWeight (FontWeight from, FontWeight to)
 }
 
 inline bool
-equalItalic (psp::italic::type from, psp::italic::type to)
+equalItalic (FontItalic from, FontItalic to)
 {
-    if ( (from == psp::italic::Italic) || (from == psp::italic::Oblique) )
-        return (to == psp::italic::Italic) || (to == psp::italic::Oblique);
+    if ( (from == ITALIC_NORMAL) || (from == ITALIC_OBLIQUE) )
+        return (to == ITALIC_NORMAL) || (to == ITALIC_OBLIQUE);
     return to == from;
 }
 inline bool
@@ -2490,15 +2490,15 @@ namespace {
     struct BuiltinFontIdentifier
     {
         OUString            aFamily;
-        italic::type        eItalic;
+        FontItalic          eItalic;
         FontWeight          eWeight;
-        pitch::type         ePitch;
+        FontPitch           ePitch;
         rtl_TextEncoding    aEncoding;
 
         BuiltinFontIdentifier( const OUString& rFam,
-                               italic::type eIt,
+                               FontItalic eIt,
                                FontWeight eWg,
-                               pitch::type ePt,
+                               FontPitch ePt,
                                rtl_TextEncoding enc ) :
             aFamily( rFam ),
             eItalic( eIt ),
@@ -2652,12 +2652,12 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const
 {
-    ::boost::unordered_map< int, family::type >::const_iterator style_it =
+    ::boost::unordered_map< int, FontFamily >::const_iterator style_it =
           m_aFamilyTypes.find( pFont->m_nFamilyName );
     rInfo.m_eType           = pFont->m_eType;
     rInfo.m_aFamilyName     = m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName );
     rInfo.m_aStyleName      = pFont->m_aStyleName;
-    rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : family::Unknown;
+    rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : FAMILY_DONTKNOW;
     rInfo.m_eItalic         = pFont->m_eItalic;
     rInfo.m_eWidth          = pFont->m_eWidth;
     rInfo.m_eWeight         = pFont->m_eWeight;
@@ -2796,42 +2796,42 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 // -------------------------------------------------------------------------
 
 
-family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
+FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
 {
     typedef struct {
         const char*  mpName;
         sal_uInt16   mnLength;
-        family::type meType;
+        FontFamily   meType;
     } family_t;
 
 #define InitializeClass( p, a ) p, sizeof(p) - 1, a
     const family_t pFamilyMatch[] =  {
-        { InitializeClass( "arial",                  family::Swiss )  },
-        { InitializeClass( "arioso",                 family::Script ) },
-        { InitializeClass( "avant garde",            family::Swiss )  },
-        { InitializeClass( "avantgarde",             family::Swiss )  },
-        { InitializeClass( "bembo",                  family::Roman )  },
-        { InitializeClass( "bookman",                family::Roman )  },
-        { InitializeClass( "conga",                  family::Roman )  },
-        { InitializeClass( "courier",                family::Modern ) },
-        { InitializeClass( "curl",                   family::Script ) },
-        { InitializeClass( "fixed",                  family::Modern ) },
-        { InitializeClass( "gill",                   family::Swiss )  },
-        { InitializeClass( "helmet",                 family::Modern ) },
-        { InitializeClass( "helvetica",              family::Swiss )  },
-        { InitializeClass( "international",          family::Modern ) },
-        { InitializeClass( "lucida",                 family::Swiss )  },
-        { InitializeClass( "new century schoolbook", family::Roman )  },
-        { InitializeClass( "palatino",               family::Roman )  },
-        { InitializeClass( "roman",                  family::Roman )  },
-        { InitializeClass( "sans serif",             family::Swiss )  },
-        { InitializeClass( "sansserif",              family::Swiss )  },
-        { InitializeClass( "serf",                   family::Roman )  },
-        { InitializeClass( "serif",                  family::Roman )  },
-        { InitializeClass( "times",                  family::Roman )  },
-        { InitializeClass( "utopia",                 family::Roman )  },
-        { InitializeClass( "zapf chancery",          family::Script ) },
-        { InitializeClass( "zapfchancery",           family::Script ) }
+        { InitializeClass( "arial",                  FAMILY_SWISS )  },
+        { InitializeClass( "arioso",                 FAMILY_SCRIPT ) },
+        { InitializeClass( "avant garde",            FAMILY_SWISS )  },
+        { InitializeClass( "avantgarde",             FAMILY_SWISS )  },
+        { InitializeClass( "bembo",                  FAMILY_ROMAN )  },
+        { InitializeClass( "bookman",                FAMILY_ROMAN )  },
+        { InitializeClass( "conga",                  FAMILY_ROMAN )  },
+        { InitializeClass( "courier",                FAMILY_MODERN ) },
+        { InitializeClass( "curl",                   FAMILY_SCRIPT ) },
+        { InitializeClass( "fixed",                  FAMILY_MODERN ) },
+        { InitializeClass( "gill",                   FAMILY_SWISS )  },
+        { InitializeClass( "helmet",                 FAMILY_MODERN ) },
+        { InitializeClass( "helvetica",              FAMILY_SWISS )  },
+        { InitializeClass( "international",          FAMILY_MODERN ) },
+        { InitializeClass( "lucida",                 FAMILY_SWISS )  },
+        { InitializeClass( "new century schoolbook", FAMILY_ROMAN )  },
+        { InitializeClass( "palatino",               FAMILY_ROMAN )  },
+        { InitializeClass( "roman",                  FAMILY_ROMAN )  },
+        { InitializeClass( "sans serif",             FAMILY_SWISS )  },
+        { InitializeClass( "sansserif",              FAMILY_SWISS )  },
+        { InitializeClass( "serf",                   FAMILY_ROMAN )  },
+        { InitializeClass( "serif",                  FAMILY_ROMAN )  },
+        { InitializeClass( "times",                  FAMILY_ROMAN )  },
+        { InitializeClass( "utopia",                 FAMILY_ROMAN )  },
+        { InitializeClass( "zapf chancery",          FAMILY_SCRIPT ) },
+        { InitializeClass( "zapfchancery",           FAMILY_SCRIPT ) }
     };
 
     rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
@@ -2858,20 +2858,20 @@ family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily )
                 return pHaystack->meType;
     }
 
-    return family::Unknown;
+    return FAMILY_DONTKNOW;
 }
 
 // -------------------------------------------------------------------------
 
-family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const
+FontFamily PrintFontManager::getFontFamilyType( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
     if( !pFont )
-        return family::Unknown;
+        return FAMILY_DONTKNOW;
 
-    ::boost::unordered_map< int, family::type >::const_iterator it =
+    ::boost::unordered_map< int, FontFamily >::const_iterator it =
           m_aFamilyTypes.find( pFont->m_nFamilyName );
-    return (it != m_aFamilyTypes.end()) ? it->second : family::Unknown;
+    return (it != m_aFamilyTypes.end()) ? it->second : FAMILY_DONTKNOW;
 }
 
 
@@ -4014,13 +4014,13 @@ bool PrintFontManager::readOverrideMetrics()
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StyleName" ) ) )
                 pFont->m_aStyleName = getString(pProps[n].Value);
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Italic" ) ) )
-                pFont->m_eItalic = static_cast<italic::type>(getInt(pProps[n].Value));
+                pFont->m_eItalic = static_cast<FontItalic>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
                 pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Weight" ) ) )
                 pFont->m_eWeight = static_cast<FontWeight>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Pitch" ) ) )
-                pFont->m_ePitch = static_cast<pitch::type>(getInt(pProps[n].Value));
+                pFont->m_ePitch = static_cast<FontPitch>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encoding" ) ) )
                 pFont->m_aEncoding = static_cast<rtl_TextEncoding>(getInt(pProps[n].Value));
             else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontEncodingOnly" ) ) )

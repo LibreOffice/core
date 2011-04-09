@@ -775,22 +775,22 @@ namespace
         return WEIGHT_BLACK;
     }
 
-    italic::type convertSlant(int slant)
+    FontItalic convertSlant(int slant)
     {
         // set italic
         if( slant == FC_SLANT_ITALIC )
-            return italic::Italic;
+            return ITALIC_NORMAL;
         else if( slant == FC_SLANT_OBLIQUE )
-            return italic::Oblique;
-        return italic::Upright;
+            return ITALIC_OBLIQUE;
+        return ITALIC_NONE;
     }
 
-    pitch::type convertSpacing(int spacing)
+    FontPitch convertSpacing(int spacing)
     {
         // set pitch
         if( spacing == FC_MONO || spacing == FC_CHARCELL )
-            return pitch::Fixed;
-        return pitch::Variable;
+            return PITCH_FIXED;
+        return PITCH_VARIABLE;
     }
 
     // translation: fontconfig enum -> vcl enum
@@ -1041,15 +1041,15 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
 }
 
 static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
-    italic::type eItalic, FontWeight eWeight, FontWidth eWidth, pitch::type ePitch)
+    FontItalic eItalic, FontWeight eWeight, FontWidth eWidth, FontPitch ePitch)
 {
-    if( eItalic != italic::Unknown )
+    if( eItalic != ITALIC_DONTKNOW )
     {
         int nSlant = FC_SLANT_ROMAN;
         switch( eItalic )
         {
-            case italic::Italic:        nSlant = FC_SLANT_ITALIC;break;
-            case italic::Oblique:       nSlant = FC_SLANT_OBLIQUE;break;
+            case ITALIC_NORMAL:     nSlant = FC_SLANT_ITALIC;break;
+            case ITALIC_OBLIQUE:        nSlant = FC_SLANT_OBLIQUE;break;
             default:
                 break;
         }
@@ -1094,13 +1094,13 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
         }
         rWrapper.FcPatternAddInteger( pPattern, FC_WIDTH, nWidth );
     }
-    if( ePitch != pitch::Unknown )
+    if( ePitch != PITCH_DONTKNOW )
     {
         int nSpacing = FC_PROPORTIONAL;
         switch( ePitch )
         {
-            case pitch::Fixed:          nSpacing = FC_MONO;break;
-            case pitch::Variable:       nSpacing = FC_PROPORTIONAL;break;
+            case PITCH_FIXED:           nSpacing = FC_MONO;break;
+            case PITCH_VARIABLE:        nSpacing = FC_PROPORTIONAL;break;
             default:
                 break;
         }
@@ -1112,8 +1112,8 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
 
 rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
-    italic::type &rItalic, FontWeight &rWeight,
-    FontWidth &rWidth, pitch::type &rPitch) const
+    FontItalic &rItalic, FontWeight &rWeight,
+    FontWidth &rWidth, FontPitch &rPitch) const
 {
     rtl::OUString aName;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -1429,7 +1429,7 @@ int PrintFontManager::FreeTypeCharIndex( void*, sal_uInt32 )
 }
 
 rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
-    rtl::OUString&, const rtl::OString&, italic::type, FontWeight, FontWidth, pitch::type) const
+    rtl::OUString&, const rtl::OString&, FontItalic, FontWeight, FontWidth, FontPitch) const
 {
     rtl::OUString aName;
     return aName;

@@ -102,7 +102,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     aInfo.m_aFamilyName = String( (const char *) rQFont.family().toUtf8(), RTL_TEXTENCODING_UTF8 );
 
     // set italic
-    aInfo.m_eItalic = ( qFontInfo.italic()? psp::italic::Italic: psp::italic::Upright );
+    aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
 
     // set weight
     int nWeight = qFontInfo.weight();
@@ -162,10 +162,10 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
         aFont.SetWidthType( aInfo.m_eWidth );
-    if( aInfo.m_eItalic != psp::italic::Unknown )
-        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
-    if( aInfo.m_ePitch != psp::pitch::Unknown )
-        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
+    if( aInfo.m_eItalic != ITALIC_DONTKNOW )
+        aFont.SetItalic( aInfo.m_eItalic );
+    if( aInfo.m_ePitch != PITCH_DONTKNOW )
+        aFont.SetPitch( aInfo.m_ePitch );
 
     return aFont;
 }
