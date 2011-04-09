@@ -112,9 +112,7 @@ File gid_File_Lib_Cli_Oootypes_Assembly
     Version = "${CLI_OOOTYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -130,9 +128,7 @@ File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     Version = "${CLI_OOOTYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -938,57 +934,6 @@ End
 #endif
 #endif
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -1013,23 +958,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
@@ -1709,8 +1637,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
-    !(defined M1400 && defined PROF_EDITION && !defined _DEBUG_RUNTIME)
+#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80

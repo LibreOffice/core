@@ -170,74 +170,6 @@ End
 
 // Public Dynamic Libraries:
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _DEBUG_RUNTIME
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
-#endif
-
 File gid_File_Dl_Cppu
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -529,9 +461,7 @@ File gid_File_Dl_Cli_Ure_Assembly
     Version = "${CLI_URE_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -548,9 +478,7 @@ File gid_File_Dl_Policy_Cli_Ure_Assembly
     Version = "${CLI_URE_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -579,9 +507,7 @@ File gid_File_Dl_Cli_Basetypes_Assembly
     Version = "${CLI_BASETYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -598,9 +524,7 @@ File gid_File_Dl_Policy_Cli_Basetypes_Assembly
     Version = "${CLI_BASETYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -629,9 +553,7 @@ File gid_File_Dl_Cli_Uretypes_Assembly
     Version = "${CLI_URETYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -648,9 +570,7 @@ File gid_File_Dl_Policy_Cli_Uretypes_Assembly
     Version = "${CLI_URETYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -679,9 +599,7 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
     Version = "${CLI_CPPUHELPER_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "x86";
-#endif
 End
 
 #endif
@@ -698,9 +616,7 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     Version = "${CLI_CPPUHELPER_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "x86";
-#endif
 End
 
 #endif
