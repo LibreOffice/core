@@ -521,7 +521,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     m_pOleComponent->CloseObject();
                 }
 
-                // GetRidOfComponent();
                 aGuard.clear();
                 StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
                 aGuard.reset();
@@ -700,7 +699,6 @@ namespace
 
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
-    //
     //On success a file is returned which must be removed by the caller
     rtl::OUString lcl_ExtractObject(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xObjectStream)
@@ -834,8 +832,6 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             throw;
         }
 
-        // the following notification will be done asynchronously
-        // StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
     }
     else
 #endif
@@ -1093,9 +1089,6 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
         nResult = m_nStatus;
     else if ( m_pOleComponent )
     {
-        // OLE should allow to get status even in loaded state
-        // if ( m_nObjectState == embed::EmbedStates::LOADED )
-        //  changeState( m_nObjectState == embed::EmbedStates::RUNNING );
 
         m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
         m_nStatusAspect = nAspect;

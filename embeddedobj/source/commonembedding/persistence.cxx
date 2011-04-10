@@ -552,7 +552,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         aLoadArgs.put( "InputStream", xTempInpStream );
     }
 
-    // aLoadArgs.put( "AsTemplate", sal_True );
 
     aLoadArgs.merge( m_aDocMediaDescriptor, true );
 
@@ -1844,7 +1843,6 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     /*sal_Bool bElExists =*/ xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-//  sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );

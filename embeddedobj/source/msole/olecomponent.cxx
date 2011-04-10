@@ -680,8 +680,6 @@ sal_Bool OleComponent::InitializeObject_Impl()
     if ( FAILED( hr ) || !m_pNativeImpl->m_pViewObject2 )
         return sal_False;
 
-    // not realy needed for now, since object is updated on saving
-    // m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, 0, m_pImplAdviseSink );
 
     // remove all the caches
     IOleCache* pIOleCache = NULL;
@@ -746,8 +744,6 @@ void OleComponent::LoadEmbeddedObject( const ::rtl::OUString& aTempURL )
     hr = OleLoad( m_pNativeImpl->m_pIStorage, IID_IUnknown, NULL, (void**)&m_pNativeImpl->m_pObj );
     if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
     {
-        // STATSTG aStat;
-        // m_pNativeImpl->m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
         throw uno::RuntimeException();
     }
 
@@ -1350,8 +1346,6 @@ void OleComponent::StoreOwnTmpIfNecessary()
         if ( FAILED( hr ) && hr != E_UNEXPECTED )
             throw io::IOException(); // TODO
 
-        // STATSTG aStat;
-        // m_pNativeImpl->m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
     }
 }
 

@@ -330,8 +330,6 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         return xStream;
     }
 
-//  sal_Bool bSetSizeToRepl = sal_False;
-//  awt::Size aSizeToSet;
 
     sal_uInt32 nHeaderOffset = 0;
     if ( ( nRead >= 8 && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1 )
@@ -352,19 +350,6 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
             nHeaderOffset += nLen - 4;
         }
 
-//      if ( aData[4] == 3 )
-//      {
-//          try
-//          {
-//
-//              aSizeToSet = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-//              aSizeToSet.Width /= 364; //2540; // let the size be in inches, as wmf requires
-//              aSizeToSet.Height /= 364; //2540; // let the size be in inches, as wmf requires
-//              bSetSizeToRepl = sal_True;
-//          }
-//          catch( uno::Exception& )
-//          {}
-//      }
     }
     else if ( nRead > 4 )
     {

@@ -73,7 +73,6 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 if( xGraphic.is() )
                 {
                     SvMemoryStream aNewStream( 65535, 65535 );
-//                  uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
                     uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
                     aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));

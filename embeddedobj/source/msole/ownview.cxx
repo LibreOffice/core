@@ -302,12 +302,6 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         // read the complete size of the Object Package
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return sal_False;
-/*
-        sal_uInt32 nLength = (sal_uInt8)aReadSeq[0]
-                            + (sal_uInt8)aReadSeq[1] * 0x100
-                            + (sal_uInt8)aReadSeq[2] * 0x10000
-                            + (sal_uInt8)aReadSeq[3] * 0x1000000;
-*/
         // read the first header ( have no idea what does this header mean )
         if ( xInStream->readBytes( aReadSeq, 2 ) != 2 || aReadSeq[0] != 2 || aReadSeq[1] != 0 )
             return sal_False;

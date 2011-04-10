@@ -93,8 +93,6 @@ sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 void OCommonEmbeddedObject::Deactivate()
 {
     uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-    //MBA if ( !xModif.is() )
-    //MBA    throw uno::RuntimeException();
 
     // no need to lock for the initialization
     uno::Reference< embed::XEmbeddedClient > xClientSite = m_xClientSite;

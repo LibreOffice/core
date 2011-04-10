@@ -165,8 +165,6 @@ public:
 
     void Show();
 
-    // sal_Bool SetVisArea( sal_Int64 nAspect, const ::com::sun::star::awt::Rectangle& aRect );
-    // sal_Bool GetVisArea( sal_Int64 nAspect, ::com::sun::star::awt::Rectangle *pRect );
     sal_Bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
     sal_Bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
 

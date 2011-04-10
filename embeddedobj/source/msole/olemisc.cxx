@@ -663,7 +663,6 @@ void SAL_CALL OleEmbeddedObject::translateAccelerators(
     }
     // end wrapping related part ====================
 
-    // throw embed::WrongStateException();
 }
 
 // XChild

@@ -363,7 +363,6 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
                                   aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
                                   awt::PosSize::POSSIZE );
 
-        // Window* pWindow = VCLUnoHelper::GetWindow( m_xOwnWindow );
 
         m_xHatchWindow->setPosSize( aHatchRect.X,
                                     aHatchRect.Y,
@@ -981,9 +980,6 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     }
 
     m_xComponent = xDoc;
-    // done outside currently uno::Reference < container::XChild > xChild( m_xComponent, uno::UNO_QUERY );
-    // done outside currently if ( xChild.is() && m_pEmbedObj )
-    // done outside currently   xChild->setParent( m_pEmbedObj->getParent() );
 
     m_bReadOnly = bReadOnly;
     m_bAllowClosing = sal_False;
@@ -1022,7 +1018,6 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "Model", m_xComponent );
             aArgs.put( "ReadOnly", m_bReadOnly );
-            //aArgs.put( "Hidden", sal_True );
             if ( bInPlace )
                 aArgs.put( "PluginMode", sal_Int16(1) );
             ::rtl::OUString sUrl;

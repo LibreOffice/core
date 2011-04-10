@@ -129,19 +129,6 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
 
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;
-    /*
-    OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
-    uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-    if ( !xTransferable.is() )
-        throw uno::RuntimeException();
-
-    datatransfer::DataFlavor aDataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" )),
-            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
-
-    aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
-    aVisualRepresentation.Flavor = aDataFlavor;*/
     return aVisualRepresentation;
 }
 
