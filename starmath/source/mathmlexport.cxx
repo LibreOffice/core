@@ -838,7 +838,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
     if (cTmp != 0)
         nArse[0] = cTmp;
-    OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
+    OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -1041,11 +1041,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
-        OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
-        OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
         pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
             sal_True,sal_True);

@@ -65,7 +65,7 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     sal_Bool bSuccess = sal_False;
 
     //
-    // code sniplet copied from MathType::Parse
+    // code snippet copied from MathType::Parse
     //
     SvStorageStreamRef xSrc = pStor->OpenSotStream(
         String::CreateFromAscii("Equation Native"),
