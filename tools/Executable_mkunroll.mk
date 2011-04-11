@@ -34,8 +34,7 @@ $(eval $(call gb_Executable_set_include,mkunroll,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,mkunroll,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,mkunroll,\
     -D_TOOLS_STRINGLIST \
 ))
 

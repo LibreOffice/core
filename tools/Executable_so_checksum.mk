@@ -34,8 +34,7 @@ $(eval $(call gb_Executable_set_include,so_checksum,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,so_checksum,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,so_checksum,\
     -D_TOOLS_STRINGLIST \
 ))
 

@@ -34,8 +34,7 @@ $(eval $(call gb_Executable_set_include,rscdep,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,rscdep,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,rscdep,\
     -D_TOOLS_STRINGLIST \
 ))
 
@@ -57,8 +56,7 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
 
 ifeq ($(OS),WNT)
 ifeq ($(HAVE_GETOPT),YES)
-$(eval $(call gb_Executable_set_cxxflags,rscdep,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,rscdep,\
     -DHAVE_GETOPT \
 ))
 else

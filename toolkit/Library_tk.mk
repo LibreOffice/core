@@ -160,8 +160,9 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
 ))
 
 ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_cxxflags,tk,\
-    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
+$(eval $(call gb_Library_add_cxxflags,tk,\
+	$(gb_OBJCXXFLAGS) \
+))
 endif
 
 ifeq ($(OS),LINUX)

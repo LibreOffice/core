@@ -33,10 +33,6 @@ $(eval $(call gb_Executable_set_include,spadmin.bin,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,spadmin.bin,\
-    $$(CXXFLAGS) \
-))
-
 $(eval $(call gb_Executable_add_linked_static_libs,spadmin.bin,\
     vclmain \
 ))
