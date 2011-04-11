@@ -441,15 +441,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#define VolumeInfoMask_Attributes             osl_VolumeInfo_Mask_Attributes
-#define VolumeInfoMask_TotalSpace             osl_VolumeInfo_Mask_TotalSpace
-#define VolumeInfoMask_UsedSpace              osl_VolumeInfo_Mask_UsedSpace
-#define VolumeInfoMask_FreeSpace              osl_VolumeInfo_Mask_FreeSpace
-#define VolumeInfoMask_MaxNameLength          osl_VolumeInfo_Mask_MaxNameLength
-#define VolumeInfoMask_MaxPathLength          osl_VolumeInfo_Mask_MaxPathLength
-#define VolumeInfoMask_FileSystemName         osl_VolumeInfo_Mask_FileSystemName
-#define VolumeInfoMask_FileSystemCaseHandling osl_VolumeInfo_Mask_FileSystemCaseHandling
-
 class Directory;
 
 /** The VolumeInfo class.

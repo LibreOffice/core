@@ -2055,7 +2055,7 @@ void VolumeInfoTest( void )
 
     printf( "\n" );
 
-    VolumeInfo rInfo( VolumeInfoMask_FreeSpace );
+    VolumeInfo rInfo( osl_VolumeInfo_Mask_FreeSpace );
     rc=Directory::getVolumeInfo( root , rInfo );
     print_error( rtl::OString( "GetVolumeInfo" ),rc );
 

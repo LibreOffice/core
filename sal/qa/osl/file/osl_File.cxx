@@ -1523,9 +1523,9 @@ namespace osl_VolumeInfo
 #if ( defined UNX ) || ( defined OS2 )
         void ctors_002( )
         {
-            ::osl::VolumeInfo   aVolumeInfo( VolumeInfoMask_TotalSpace |
-                                             VolumeInfoMask_UsedSpace |
-                                             VolumeInfoMask_FileSystemName );
+            ::osl::VolumeInfo   aVolumeInfo( osl_VolumeInfo_Mask_TotalSpace |
+                                             osl_VolumeInfo_Mask_UsedSpace |
+                                             osl_VolumeInfo_Mask_FileSystemName );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL4, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
             //CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
@@ -1549,7 +1549,7 @@ namespace osl_VolumeInfo
         void ctors_003( )
         {
 
-             sal_Int32 mask1 = VolumeInfoMask_FreeSpace;
+             sal_Int32 mask1 = osl_VolumeInfo_Mask_FreeSpace;
             ::osl::VolumeInfo aVolumeInfo1( mask1 );
             nError1 = ::osl::Directory::getVolumeInfo( aRootURL, aVolumeInfo1 );
             CPPUNIT_ASSERT( sal_True == aVolumeInfo1.isValid( mask1 ) );
@@ -1558,7 +1558,7 @@ namespace osl_VolumeInfo
             sal_uInt64 uiTotalSpace1 = aVolumeInfo1.getTotalSpace( );
             aUStr = aVolumeInfo1.getFileSystemName( );
 
-             sal_Int32 mask2 = VolumeInfoMask_TotalSpace;
+             sal_Int32 mask2 = osl_VolumeInfo_Mask_TotalSpace;
             ::osl::VolumeInfo aVolumeInfo2( mask2 );
             nError2 = ::osl::Directory::getVolumeInfo( aRootURL, aVolumeInfo2 );
             CPPUNIT_ASSERT( sal_True == aVolumeInfo2.isValid( mask2 ) );
@@ -1615,7 +1615,7 @@ namespace osl_VolumeInfo
 #if ( defined UNX ) || ( defined OS2 )
           void isValid_002( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes | VolumeInfoMask_TotalSpace | osl_VolumeInfo_Mask_UsedSpace |
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes | osl_VolumeInfo_Mask_TotalSpace | osl_VolumeInfo_Mask_UsedSpace |
                              osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_MaxNameLength |
                              osl_VolumeInfo_Mask_MaxPathLength | osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
@@ -1636,7 +1636,7 @@ namespace osl_VolumeInfo
          void isValid_003( )
         {
              ::osl::VolumeDevice aVolumeDevice1;
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo   aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1646,7 +1646,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
             sal_Bool bOk2 = aVolumeInfo.isValid( mask );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for isValid function: VolumeInfoMask_Attributes, it should be valid for some volume such as /, floppy, cdrom, etc. but it did not pass",
+            CPPUNIT_ASSERT_MESSAGE( "test for isValid function: osl_VolumeInfo_Mask_Attributes, it should be valid for some volume such as /, floppy, cdrom, etc. but it did not pass",
                                      ( sal_True == bOk1 ) && ( sal_True == bOk2 ) );
         }
 
@@ -1671,7 +1671,7 @@ namespace osl_VolumeInfo
         // test code.
         void getRemoteFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1684,7 +1684,7 @@ namespace osl_VolumeInfo
  #if ( defined UNX ) || ( defined OS2 ) //remote Volume is different in Solaris and Windows
         void getRemoteFlag_002( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL4, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1719,7 +1719,7 @@ namespace osl_VolumeInfo
         // test code.
         void getRemoveableFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1731,7 +1731,7 @@ namespace osl_VolumeInfo
 
         void getRemoveableFlag_002( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL2, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1759,7 +1759,7 @@ namespace osl_VolumeInfo
         // test code.
         void getCompactDiscFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1771,7 +1771,7 @@ namespace osl_VolumeInfo
 
         void getCompactDiscFlag_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_Attributes;
+             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL6, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1799,7 +1799,7 @@ namespace osl_VolumeInfo
         // test code.
         void getFloppyDiskFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1811,7 +1811,7 @@ namespace osl_VolumeInfo
 
         void getFloppyDiskFlag_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_Attributes;
+             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL2, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1839,7 +1839,7 @@ namespace osl_VolumeInfo
         // test code.
         void getFixedDiskFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL2, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1851,7 +1851,7 @@ namespace osl_VolumeInfo
 
         void getFixedDiskFlag_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_Attributes;
+             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1878,7 +1878,7 @@ namespace osl_VolumeInfo
         // test code.
         void getRAMDiskFlag_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1890,7 +1890,7 @@ namespace osl_VolumeInfo
 
         void getRAMDiskFlag_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_Attributes;
+             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1918,7 +1918,7 @@ namespace osl_VolumeInfo
         // test code.
         void getTotalSpace_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_TotalSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_TotalSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1932,7 +1932,7 @@ namespace osl_VolumeInfo
  #if defined( UNX )
         void getTotalSpace_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_TotalSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_TotalSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1962,7 +1962,7 @@ namespace osl_VolumeInfo
             statvfs( name, &aStatFS);
             sal_uInt64 TotalSpace = aStatFS.f_frsize * aStatFS.f_blocks ;
 
-             sal_Int32 mask = VolumeInfoMask_TotalSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_TotalSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -1999,7 +1999,7 @@ namespace osl_VolumeInfo
         // test code.
         void getFreeSpace_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_FreeSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FreeSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2013,7 +2013,7 @@ namespace osl_VolumeInfo
 #if defined( UNX )
           void getFreeSpace_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_FreeSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_FreeSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2042,7 +2042,7 @@ namespace osl_VolumeInfo
             statvfs( name, &aStatFS);
             sal_uInt64 FreeSpace = aStatFS.f_bfree * aStatFS.f_frsize  ;
 
-             sal_Int32 mask = VolumeInfoMask_FreeSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_FreeSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2080,7 +2080,7 @@ namespace osl_VolumeInfo
         // test code.
         void getUsedSpace_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_UsedSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_UsedSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2094,7 +2094,7 @@ namespace osl_VolumeInfo
 #if defined( UNX )
            void getUsedSpace_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_UsedSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_UsedSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2124,7 +2124,7 @@ namespace osl_VolumeInfo
             sal_uInt64 UsedSpace = ( aStatFS.f_blocks - aStatFS.f_bavail ) * aStatFS.f_frsize;
 
 
-             sal_Int32 mask = VolumeInfoMask_UsedSpace;
+             sal_Int32 mask = osl_VolumeInfo_Mask_UsedSpace;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2163,7 +2163,7 @@ namespace osl_VolumeInfo
         // test code.
         void getMaxNameLength_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_MaxNameLength;
+            sal_Int32 mask = osl_VolumeInfo_Mask_MaxNameLength;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2185,7 +2185,7 @@ namespace osl_VolumeInfo
             statvfs( name, &aStatFS);
             sal_uInt64 MaxNameLength = aStatFS.f_namemax;
 
-             sal_Int32 mask = VolumeInfoMask_MaxNameLength;
+             sal_Int32 mask = osl_VolumeInfo_Mask_MaxNameLength;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2222,7 +2222,7 @@ namespace osl_VolumeInfo
         // test code.
         void getMaxPathLength_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_MaxPathLength;
+            sal_Int32 mask = osl_VolumeInfo_Mask_MaxPathLength;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2237,7 +2237,7 @@ namespace osl_VolumeInfo
 #if ( defined UNX ) || ( defined OS2 )
          void getMaxPathLength_002( )
         {
-             sal_Int32 mask = VolumeInfoMask_MaxPathLength;
+             sal_Int32 mask = osl_VolumeInfo_Mask_MaxPathLength;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2276,7 +2276,7 @@ namespace osl_VolumeInfo
         // test code.
         void getFileSystemName_001( )
         {
-            sal_Int32 mask = VolumeInfoMask_FileSystemName;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2298,7 +2298,7 @@ namespace osl_VolumeInfo
             statvfs( name, &aStatFS);
             sal_Char * astrFileSystemName = aStatFS.f_basetype;
 
-             sal_Int32 mask = VolumeInfoMask_FileSystemName;
+             sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
@@ -2336,7 +2336,7 @@ namespace osl_VolumeInfo
         // test code.
         void getDeviceHandle_001( )
         {
-            ::osl::VolumeInfo   aVolumeInfo( VolumeInfoMask_Attributes );
+            ::osl::VolumeInfo   aVolumeInfo( osl_VolumeInfo_Mask_Attributes );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
 
@@ -5674,7 +5674,7 @@ namespace osl_Directory
         // test code.
         void checkValidMask(osl::VolumeInfo const& _aVolumeInfo, sal_Int32 _nMask)
             {
-                if (_nMask == VolumeInfoMask_FileSystemName)
+                if (_nMask == osl_VolumeInfo_Mask_FileSystemName)
         {
             //get file system name
             ::rtl::OUString aFileSysName( aNullURL );
@@ -5685,7 +5685,7 @@ namespace osl_Directory
                                     ( osl::FileBase::E_None == nError1 ) &&
                                             ( sal_False == bRes2 ) );
                 }
-                if (_nMask == VolumeInfoMask_Attributes)
+                if (_nMask == osl_VolumeInfo_Mask_Attributes)
                 {
                     sal_Bool b1 = _aVolumeInfo.getRemoteFlag();
                     sal_Bool b2 = _aVolumeInfo.getRemoveableFlag();
@@ -5704,33 +5704,33 @@ namespace osl_Directory
 
                     printf("Attributes: %s\n", sAttr.getStr() );
                 }
-                if (_nMask == VolumeInfoMask_TotalSpace)
+                if (_nMask == osl_VolumeInfo_Mask_TotalSpace)
                 {
                     // within Linux, df / * 1024 bytes is the result
                     sal_uInt64 nSize = _aVolumeInfo.getTotalSpace();
                     printf("Total space: %"SAL_PRIuUINT64"\n", nSize);
                 }
-                if (_nMask == VolumeInfoMask_UsedSpace)
+                if (_nMask == osl_VolumeInfo_Mask_UsedSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getUsedSpace();
                     printf(" Used space: %"SAL_PRIuUINT64"\n", nSize);
                 }
-                if (_nMask == VolumeInfoMask_FreeSpace)
+                if (_nMask == osl_VolumeInfo_Mask_FreeSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getFreeSpace();
                     printf(" Free space: %"SAL_PRIuUINT64"\n", nSize);
                 }
-                if (_nMask == VolumeInfoMask_MaxNameLength)
+                if (_nMask == osl_VolumeInfo_Mask_MaxNameLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxNameLength();
                     printf("max name length: %"SAL_PRIuUINT32"\n", nLength);
                 }
-                if (_nMask == VolumeInfoMask_MaxPathLength)
+                if (_nMask == osl_VolumeInfo_Mask_MaxPathLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxPathLength();
                     printf("max path length: %"SAL_PRIuUINT32"\n", nLength);
                 }
-                if (_nMask == VolumeInfoMask_FileSystemCaseHandling)
+                if (_nMask == osl_VolumeInfo_Mask_FileSystemCaseHandling)
                 {
                     bool bIsCase = _aVolumeInfo.isCaseSensitiveFileSystem();
                     printf("filesystem case sensitive: %s\n", bIsCase ? "yes" : "no");
@@ -5753,48 +5753,48 @@ namespace osl_Directory
 
         void getVolumeInfo_001_1( )
         {
-            sal_Int32 mask = VolumeInfoMask_FileSystemName;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_2( )
         {
-            sal_Int32 mask = VolumeInfoMask_Attributes;
+            sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_3( )
         {
-            sal_Int32 mask = VolumeInfoMask_TotalSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_TotalSpace;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_4( )
         {
-            sal_Int32 mask = VolumeInfoMask_UsedSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_UsedSpace;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_5( )
         {
-            sal_Int32 mask = VolumeInfoMask_FreeSpace;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FreeSpace;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_6( )
         {
-            sal_Int32 mask = VolumeInfoMask_MaxNameLength;
+            sal_Int32 mask = osl_VolumeInfo_Mask_MaxNameLength;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_7( )
         {
-            sal_Int32 mask = VolumeInfoMask_MaxPathLength;
+            sal_Int32 mask = osl_VolumeInfo_Mask_MaxPathLength;
             checkVolumeInfo(mask);
         }
         void getVolumeInfo_001_8( )
         {
-            sal_Int32 mask = VolumeInfoMask_FileSystemCaseHandling;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemCaseHandling;
             checkVolumeInfo(mask);
         }
 
         void getVolumeInfo_002( )
         {
-            sal_Int32 mask = VolumeInfoMask_FileSystemName;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
             //call getVolumeInfo here
 
@@ -5812,7 +5812,7 @@ namespace osl_Directory
 
         void getVolumeInfo_003( )
         {
-            sal_Int32 mask = VolumeInfoMask_FileSystemName;
+            sal_Int32 mask = osl_VolumeInfo_Mask_FileSystemName;
             ::osl::VolumeInfo aVolumeInfo( mask );
             //call getVolumeInfo here
             nError1 = ::osl::Directory::getVolumeInfo( aTmpName3, aVolumeInfo );
