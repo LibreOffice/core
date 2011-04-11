@@ -71,7 +71,7 @@ sub load_git_log($$$$)
 {
     my ($pdata, $repo_dir, $piece, $pgit_args) = @_;
 
-    my $cmd = "cd $repo_dir && git log " . join ' ', @{$pgit_args};
+    my $cmd = "cd $repo_dir && git rev-list --pretty=medium " . join ' ', @{$pgit_args};
     my $commit_id;
     my $summary;
 
@@ -312,7 +312,7 @@ sub usage()
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
           "      git_log_param  extra parameters passed to the git log command to define\n" .
           "                     the area of interest , e.g. --after=\"2010-09-27\" or\n" .
-          "                     TAG..HEAD";
+          "                     TAG..HEAD or origin/master ^origin/libreoffice-3-3";
 }
 
 
