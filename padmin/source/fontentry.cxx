@@ -107,35 +107,35 @@ String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile
     bool bWeight = true, bItalic = true, bWidth = true;
     switch( rInfo.m_eWeight )
     {
-        case weight::Thin:          aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
-        case weight::UltraLight:    aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
-        case weight::Light:         aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
-        case weight::SemiLight:     aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
-        case weight::SemiBold:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
-        case weight::Bold:          aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
-        case weight::UltraBold:     aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
+        case WEIGHT_THIN:           aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
+        case WEIGHT_ULTRALIGHT: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
+        case WEIGHT_LIGHT:          aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
+        case WEIGHT_SEMILIGHT:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
+        case WEIGHT_SEMIBOLD:       aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
+        case WEIGHT_BOLD:           aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
+        case WEIGHT_ULTRABOLD:      aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
         default:
             bWeight = false;
             break;
     }
     switch( rInfo.m_eItalic )
     {
-        case italic::Oblique:       aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
-        case italic::Italic:        aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
+        case ITALIC_OBLIQUE:        aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
+        case ITALIC_NORMAL:     aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
         default:
             bItalic = false;
             break;
     }
     switch( rInfo.m_eWidth )
     {
-        case width::UltraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
-        case width::ExtraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
-        case width::Condensed:      aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
-        case width::SemiCondensed:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
-        case width::SemiExpanded:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
-        case width::Expanded:       aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
-        case width::ExtraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
-        case width::UltraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
+        case WIDTH_ULTRA_CONDENSED: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
+        case WIDTH_EXTRA_CONDENSED: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
+        case WIDTH_CONDENSED:       aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
+        case WIDTH_SEMI_CONDENSED:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
+        case WIDTH_SEMI_EXPANDED:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
+        case WIDTH_EXPANDED:        aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
+        case WIDTH_EXTRA_EXPANDED:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
+        case WIDTH_ULTRA_EXPANDED:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
         default:
             bWidth = false;
             break;
