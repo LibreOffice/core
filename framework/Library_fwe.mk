@@ -94,8 +94,9 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
 ))
 
 #todo: ImageListDescriptor can't be exported completely without exporting everything
+# FIXME this should be fixed in m106 => remove this
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
+$(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(T_CXXFLAGS))))
 endif
 
 # vim: set noet sw=4 ts=4:

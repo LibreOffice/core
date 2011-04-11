@@ -35,8 +35,7 @@ $(eval $(call gb_Executable_set_include,svidl,\
 	-I$(SRCDIR)/idl/inc \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,svidl,\
-	$$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,svidl,\
 	-DIDL_COMPILER \
 ))
 

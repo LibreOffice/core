@@ -44,8 +44,7 @@ $(eval $(call gb_Library_set_defs,qstart_gtk,\
     -DENABLE_QUICKSTART_APPLET \
 ))
 
-$(eval $(call gb_Library_set_cflags,qstart_gtk,\
-    $$(CFLAGS) \
+$(eval $(call gb_Library_add_cflags,qstart_gtk,\
     $(filter-out -I%,$(GTK_CFLAGS)) \
 ))
 
