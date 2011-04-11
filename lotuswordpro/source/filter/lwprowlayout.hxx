@@ -85,7 +85,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ROW_LAYOUT;}
     sal_uInt16 GetRowID() { return crowid;}
     virtual void RegisterStyle();
-    inline LwpTableLayout * GetParentTableLayout(){return static_cast<LwpTableLayout *>(GetParent()->obj());}
+    inline LwpTableLayout * GetParentTableLayout(){return dynamic_cast<LwpTableLayout *>(GetParent()->obj());}
     void SetRowMap(void);
 protected:
     void Read();

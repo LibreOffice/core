@@ -157,24 +157,27 @@ void LwpParaStyle::Read()
     }
 }
 
-void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
+void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
+    if (!pParaStyle)
+        return;
+
     LwpVirtualPiece *pPiece = NULL;
     //alignment:
-    pPiece = (LwpVirtualPiece*)m_AlignmentStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_AlignmentStyle.obj());
     if( pPiece )
     {
-        LwpAlignmentOverride    *pAlign = (LwpAlignmentOverride*)pPiece->GetOverride();
+        LwpAlignmentOverride *pAlign = dynamic_cast<LwpAlignmentOverride*>(pPiece->GetOverride());
         if( pAlign )
                 ApplyAlignment(pParaStyle,pAlign);
     }
 
     //don't known top and bottom indent now.
-    pPiece = (LwpVirtualPiece*)m_IndentStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_IndentStyle.obj());
     if( pPiece )
     {
-        LwpIndentOverride   *pIndent = (LwpIndentOverride*)pPiece->GetOverride();
+        LwpIndentOverride   *pIndent = dynamic_cast<LwpIndentOverride*>(pPiece->GetOverride());
         if( pIndent )
         {
             if (!m_pBulletOverride->IsInValid())//Add by ,for remove bullet indent in named bullet style
@@ -189,29 +192,29 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         }
     }
     //shadow & borders.
-    pPiece = (LwpVirtualPiece*)m_BorderStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_BorderStyle.obj());
     if( pPiece )
     {
-        LwpParaBorderOverride *pBorder = (LwpParaBorderOverride*)pPiece->GetOverride();
+        LwpParaBorderOverride *pBorder = dynamic_cast<LwpParaBorderOverride*>(pPiece->GetOverride());
         if( pBorder )
         {
             this->ApplyParaBorder(pParaStyle, pBorder);
         }
     }
 
-    pPiece = (LwpVirtualPiece*)m_SpacingStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_SpacingStyle.obj());
     if (pPiece)
     {
-        LwpSpacingOverride  *pSpacing = (LwpSpacingOverride*)pPiece->GetOverride();
+        LwpSpacingOverride *pSpacing = dynamic_cast<LwpSpacingOverride*>(pPiece->GetOverride());
         if( pSpacing)
             ApplySpacing(NULL,pParaStyle,pSpacing);
     }
 
     //paragraph background.
-    pPiece = (LwpVirtualPiece*)m_BackgroundStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_BackgroundStyle.obj());
     if( pPiece )
     {
-        LwpBackgroundOverride *pBack = (LwpBackgroundOverride*)pPiece->GetOverride();
+        LwpBackgroundOverride *pBack = dynamic_cast<LwpBackgroundOverride*>(pPiece->GetOverride());
         if( pBack )
         {
             LwpColor color = pBack->GetBackColor();
@@ -222,19 +225,19 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 
 
     //add tab style
-    pPiece = (LwpVirtualPiece*)m_TabStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_TabStyle.obj());
     if( pPiece  )
     {
-        LwpTabOverride *pTab=(LwpTabOverride*)pPiece->GetOverride();
+        LwpTabOverride *pTab = dynamic_cast<LwpTabOverride*>(pPiece->GetOverride());
         if(pTab)
         {
             ApplyTab(pParaStyle,pTab);
         }
     }
-    pPiece = (LwpVirtualPiece*)m_BreaksStyle.obj();
+    pPiece = dynamic_cast<LwpVirtualPiece*>(m_BreaksStyle.obj());
     if( pPiece  )
     {
-        LwpBreaksOverride *pBreak=(LwpBreaksOverride*)pPiece->GetOverride();
+        LwpBreaksOverride *pBreak = dynamic_cast<LwpBreaksOverride*>(pPiece->GetOverride());
         if(pBreak)
         {
             ApplyBreaks(pParaStyle,pBreak);
@@ -587,7 +590,7 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     {
         if (below_val != -1)
             pPara->SetBelowSpacing(below_val);
-        LwpPara* pPrePara = static_cast<LwpPara*>(pPara->GetPrevious()->obj());
+        LwpPara* pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj());
         if (pPrePara && above_val != -1)
         {
             above_val += pPrePara->GetBelowSpacing();
@@ -613,7 +616,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
         return;
     }
 
-    LwpTabRack* pTabRack = static_cast<LwpTabRack*>(pTabRackID->obj());
+    LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(pTabRackID->obj());
     if(!pTabRack)
     {
         //assert(false);
@@ -701,58 +704,61 @@ void LwpParaStyle::RegisterStyle()
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
     pStyleMgr->AddStyle(*GetObjectID(), pStyle);
-
-/*  // add list style for bullet
-    if (!m_pBulletOverride)
-    {
-        return;
-    }
-    LwpSilverBullet* pSilverBullet = static_cast<LwpSilverBullet*>(m_pBulletOverride->GetSilverBullet().obj());
-    if (!pSilverBullet)
-    {
-        return;
-    }
-
-    pSilverBullet->SetFoundry(m_pFoundry);
-    pSilverBullet->RegisterStyle();*/
 }
 
 LwpAlignmentOverride* LwpParaStyle::GetAlignment()
 {
-    if (m_AlignmentStyle.obj()!= NULL)
-        return static_cast<LwpAlignmentOverride*>(static_cast<LwpAlignmentPiece*>(m_AlignmentStyle.obj())->GetOverride());
-    else
+    if (m_AlignmentStyle.obj() == NULL)
         return NULL;
+
+    LwpAlignmentPiece *pPiece = dynamic_cast<LwpAlignmentPiece*>(m_AlignmentStyle.obj());
+    if (pPiece)
+        return dynamic_cast<LwpAlignmentOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 LwpIndentOverride* LwpParaStyle::GetIndent()
 {
-    if (m_IndentStyle.obj() != NULL)
-        return static_cast<LwpIndentOverride*>(static_cast<LwpIndentPiece*>(m_IndentStyle.obj())->GetOverride());
-    else
+    if (m_IndentStyle.obj() == NULL)
         return NULL;
+
+    LwpIndentPiece *pPiece = dynamic_cast<LwpIndentPiece*>(m_IndentStyle.obj());
+    if (pPiece)
+        return dynamic_cast<LwpIndentOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 LwpSpacingOverride* LwpParaStyle::GetSpacing()
 {
-    if (m_SpacingStyle.obj() != NULL)
-        return static_cast<LwpSpacingOverride*>(static_cast<LwpSpacingPiece*>(m_SpacingStyle.obj())->GetOverride());
-    else
+    if (m_SpacingStyle.obj() == NULL)
         return NULL;
+
+    LwpSpacingPiece *pPiece = dynamic_cast<LwpSpacingPiece*>(m_SpacingStyle.obj());
+    if (pPiece)
+        return dynamic_cast<LwpSpacingOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 LwpParaBorderOverride* LwpParaStyle::GetParaBorder() const
 {
-    if(m_BorderStyle.IsNull()) return NULL;
-    return static_cast<LwpParaBorderOverride*>
-        (static_cast<LwpParaBorderPiece*>(m_BorderStyle.obj(VO_PARABORDERPIECE))->GetOverride());
+    if(m_BorderStyle.IsNull())
+        return NULL;
+
+    LwpParaBorderPiece *pPiece = dynamic_cast<LwpParaBorderPiece*>(m_BorderStyle.obj(VO_PARABORDERPIECE));
+    if (pPiece)
+        return dynamic_cast<LwpParaBorderOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 LwpBreaksOverride* LwpParaStyle::GetBreaks() const
 {
-    if(m_BreaksStyle.IsNull()) return NULL;
-    return static_cast<LwpBreaksOverride*>
-        (static_cast<LwpBreaksPiece*>(m_BreaksStyle.obj(VO_BREAKSPIECE))->GetOverride());
+    if(m_BreaksStyle.IsNull())
+        return NULL;
+
+    LwpBreaksPiece *pPiece = dynamic_cast<LwpBreaksPiece*>(m_BreaksStyle.obj(VO_BREAKSPIECE));
+    if (pPiece)
+        return dynamic_cast<LwpBreaksOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 LwpBulletOverride* LwpParaStyle::GetBulletOverride() const
@@ -762,9 +768,13 @@ LwpBulletOverride* LwpParaStyle::GetBulletOverride() const
 
 LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
 {
-    if(m_NumberingStyle.IsNull()) return NULL;
-    return static_cast<LwpNumberingOverride*>
-        (static_cast<LwpNumberingPiece*>(m_NumberingStyle.obj(VO_NUMBERINGPIECE))->GetOverride());
+    if(m_NumberingStyle.IsNull())
+        return NULL;
+
+    LwpNumberingPiece *pPiece = dynamic_cast<LwpNumberingPiece*>(m_NumberingStyle.obj(VO_NUMBERINGPIECE));
+    if (pPiece)
+        return dynamic_cast<LwpNumberingOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 
@@ -777,10 +787,12 @@ LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
 **************************************************************************/
 LwpTabOverride* LwpParaStyle::GetTabOverride() const
 {
-    if(m_TabStyle.obj() != NULL)
-        return (LwpTabOverride*)static_cast<LwpTabPiece*>(m_TabStyle.obj())->GetOverride();
-    else
+    if(m_TabStyle.obj() == NULL)
         return NULL;
+    LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabStyle.obj());
+    if (pPiece)
+        return dynamic_cast<LwpTabOverride*>(pPiece->GetOverride());
+    return NULL;
 }
 
 sal_Bool LwpParaStyle::IsNumberRight()

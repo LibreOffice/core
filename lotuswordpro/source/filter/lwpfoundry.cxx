@@ -75,7 +75,10 @@
 #include "lwpglobalmgr.hxx"
 
 LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
-    : m_pDoc(pDoc), m_pPieceMgr(NULL), m_pStyleMgr(NULL)
+    : m_pDoc(pDoc)
+    , m_bRegisteredAll(false)
+    , m_pPieceMgr(NULL)
+    , m_pStyleMgr(NULL)
 {
     Read(pStrm);
     m_pDropcapMgr = new LwpDropcapMgr;
@@ -184,6 +187,14 @@ void LwpFoundry::ReadStyles(LwpObjectStream *pStrm)
 
 void LwpFoundry::RegisterAllLayouts()
 {
+    if (m_bRegisteredAll)
+    {
+        OSL_FAIL("recursive LwpFoundry::RegisterAllLayouts!\n");
+        return;
+    }
+
+    m_bRegisteredAll = true;
+
     //Register CellStyle
     LwpObject* pStyle = m_CellStyle.obj();
     if( pStyle )
@@ -193,7 +204,7 @@ void LwpFoundry::RegisterAllLayouts()
     }
 
     //register content page layout list: Layout
-     pStyle = m_Layout.obj();
+    pStyle = m_Layout.obj();
     if( pStyle )
     {
         pStyle->SetFoundry(this);

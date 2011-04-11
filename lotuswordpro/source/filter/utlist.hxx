@@ -69,7 +69,10 @@ UtDefClassP(CUtComparableListElmt);
 class CUtListElmt
 {
 public: // Methods
-    CUtListElmt() { cpNext = NULL; }
+    CUtListElmt()
+        : cpNext(NULL)
+        , cpPrev(NULL)
+    {}
     CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
     CUtListElmt(pCUtList pList);
     virtual ~CUtListElmt();

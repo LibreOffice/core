@@ -256,22 +256,12 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue * pValue = aDescriptor.getConstArray();
     OUString sURL;
-    uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-        pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        pValue[i].Value >>= sURL;
+        //Note, we should attempt to use InputStream here first!
+        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+            pValue[i].Value >>= sURL;
     }
-    if ( !xInputStream.is() )
-    {
-        OSL_ASSERT( 0 );
-        return sal_False;
-    }
-
-    OString sFileName;
-    sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     SvFileStream inputStream( sURL, STREAM_READ );
     if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
@@ -282,13 +272,10 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
 
     uno::Reference< XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
+    if (xImporter.is())
         xImporter->setTargetDocument(mxDoc);
-/*
-    SimpleXMLImporter xmlImporter( xInternalHandler, inputStream );
-    xmlImporter.import();
-    return sal_True;
-*/
-    return ( ReadWordproFile( &inputStream, xInternalHandler) == 0 );
+
+    return ( ReadWordproFile( inputStream, xInternalHandler) == 0 );
 
 }
 
@@ -333,18 +320,18 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
     if (!xInputStream.is())
     {
-    try
-    {
-        ::ucbhelper::Content aContent(sURL, xEnv);
-                xInputStream = aContent.openStream();
-    }
-    catch ( Exception& )
-    {
-        return ::rtl::OUString();
-    }
+        try
+        {
+            ::ucbhelper::Content aContent(sURL, xEnv);
+            xInputStream = aContent.openStream();
+        }
+        catch ( Exception& )
+        {
+            return ::rtl::OUString();
+        }
 
-            if (!xInputStream.is())
-                return ::rtl::OUString();
+        if (!xInputStream.is())
+            return ::rtl::OUString();
     }
 
     Sequence< ::sal_Int8 > aData;

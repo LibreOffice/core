@@ -90,7 +90,8 @@
 
 LwpFribPtr::LwpFribPtr()
     : m_pFribs(NULL),m_pXFPara(NULL),m_pPara(NULL)
-{}
+{
+}
 
 LwpFribPtr::~LwpFribPtr()
 {
@@ -226,7 +227,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_PAGEBREAK:
         {
             LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-            LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
+            LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
             if(pLayout)
             {
                 pPageBreak->ParseLayout();
@@ -291,13 +292,8 @@ void LwpFribPtr::XFConvert()
         {
             LwpFribFrame* frameFrib= static_cast<LwpFribFrame*>(pFrib);
             LwpObject* pLayout = frameFrib->GetLayout();
-            if (pLayout->GetTag() == VO_DROPCAPLAYOUT)
-            {
+            if (pLayout && pLayout->GetTag() == VO_DROPCAPLAYOUT)
                 m_pPara->GetFoundry()->GetDropcapMgr()->SetXFPara(m_pXFPara);
-                //LwpObject* pDropCap = frameFrib->GetLayout();
-                //pDropCap ->XFConvert(m_pXFPara);
-            }
-            //pLayout->XFConvert(m_pXFPara);
             frameFrib->XFConvert(m_pXFPara);
         }
             break;
@@ -406,8 +402,9 @@ void LwpFribPtr::FindLayouts()
                             //StartWithinColume type not support now
                             break;
                         }
-                        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
-                        pStory->AddPageLayout(pSection->GetPageLayout());
+                        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
+                        if (pStory)
+                            pStory->AddPageLayout(pSection->GetPageLayout());
                     }
                 }
 
@@ -416,11 +413,12 @@ void LwpFribPtr::FindLayouts()
             case FRIB_TAG_PAGEBREAK:
             {
                 LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-                LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
+                LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
                 if(pLayout)
                 {
-                    LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
-                    pStory->AddPageLayout(pLayout);
+                    LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
+                    if (pStory)
+                        pStory->AddPageLayout(pLayout);
                 }
                 break;
             }
@@ -614,9 +612,9 @@ void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
             XFTextStyle* pFribStyle = pXFStyleManager->FindTextStyle(pFrib->GetStyleName());
             pFribStyle->GetFont()->SetFontSize(0);
 
-            LwpObject*  pObj= pStory->GetLayoutsWithMe()->GetOnlyLayout()->obj();
+            LwpDropcapLayout* pObj = dynamic_cast<LwpDropcapLayout*>(pStory->GetLayoutsWithMe()->GetOnlyLayout()->obj());
             if (pObj)
-                static_cast<LwpDropcapLayout*>(pObj)->SetChars(nLen);
+                pObj->SetChars(nLen);
         }
     }
 }
@@ -649,7 +647,7 @@ sal_Bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtua
             case FRIB_TAG_PAGEBREAK:
             {
                 LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-                pLayout = static_cast<LwpVirtualLayout*>(pPageBreak->GetLayout()->obj());
+                pLayout = dynamic_cast<LwpVirtualLayout*>(pPageBreak->GetLayout()->obj());
                 break;
             }
             default:

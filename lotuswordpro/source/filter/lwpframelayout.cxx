@@ -888,11 +888,16 @@ OUString LwpFrameLayout::GetNextLinkName()
     LwpObjectID* pObjectID = m_Link.GetNextLayout();
     if(!pObjectID->IsNull())
     {
-        LwpLayout* pLayout = static_cast<LwpLayout*>(pObjectID->obj());
-        aName = pLayout->GetName()->str();
-        //for division name confict
-        if(pLayout->GetStyleName().getLength() > 0)
-            aName = pLayout->GetStyleName();
+        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pObjectID->obj());
+        if (pLayout)
+        {
+            LwpAtomHolder *pHolder = pLayout->GetName();
+            if (pHolder)
+                aName = pHolder->str();
+            //for division name confict
+            if(pLayout->GetStyleName().getLength() > 0)
+                aName = pLayout->GetStyleName();
+        }
     }
     return aName;
 }

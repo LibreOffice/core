@@ -118,14 +118,14 @@ LwpTableLayout* LwpSuperTableLayout::GetTableLayout()
 
     while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj());
+        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pID->obj());
         if (!pLayout)
         {
             break;
         }
         if (pLayout->GetLayoutType() == LWP_TABLE_LAYOUT)
         {
-            return static_cast<LwpTableLayout *>(pLayout);
+            return dynamic_cast<LwpTableLayout *>(pLayout);
         }
         pID = pLayout->GetPrevious();
     }
@@ -142,7 +142,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 
     while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj());
+        LwpLayout * pLayout = dynamic_cast<LwpLayout *>(pID->obj());
         if (!pLayout)
         {
             break;
@@ -150,7 +150,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 
         if (pLayout->GetLayoutType() == LWP_TABLE_HEADING_LAYOUT)
         {
-            return static_cast<LwpTableHeadingLayout *>(pLayout);
+            return dynamic_cast<LwpTableHeadingLayout *>(pLayout);
         }
         pID = pLayout->GetPrevious();
     }
@@ -235,7 +235,7 @@ double LwpSuperTableLayout::GetTableWidth()
         for(sal_uInt16 i =0; i< nCol; i++)
         {
             LwpObjectID *pColumnID = pTableLayout->GetColumnLayoutHead();
-            LwpColumnLayout * pColumnLayout = static_cast<LwpColumnLayout *>(pColumnID->obj());
+            LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj());
             double dColumnWidth = dDefaultWidth;
             while (pColumnLayout)
             {
@@ -245,7 +245,7 @@ double LwpSuperTableLayout::GetTableWidth()
                     break;
                 }
                 pColumnID = pColumnLayout->GetNext();
-                pColumnLayout = static_cast<LwpColumnLayout *>(pColumnID->obj());
+                pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj());
             }
             dWidth += dColumnWidth;
         }
@@ -476,7 +476,7 @@ void LwpTableLayout::TraverseTable()
 
     // set value
     LwpObjectID *pRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     while (pRowLayout)
     {
         pRowLayout->SetRowMap();
@@ -487,7 +487,7 @@ void LwpTableLayout::TraverseTable()
         // end for 's analysis
 
         pRowID = pRowLayout->GetNext();
-        pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     }
 }
 
@@ -525,7 +525,7 @@ LwpObjectID * LwpTableLayout::SearchCellStoryMap(sal_uInt16 nRow, sal_uInt16 nCo
  */
 LwpSuperTableLayout * LwpTableLayout::GetSuperTableLayout()
 {
-    return static_cast<LwpSuperTableLayout *>(GetParent()->obj());
+    return dynamic_cast<LwpSuperTableLayout *>(GetParent()->obj());
 }
 /**
  * @short    Get table pointer
@@ -533,7 +533,7 @@ LwpSuperTableLayout * LwpTableLayout::GetSuperTableLayout()
  */
 LwpTable *  LwpTableLayout::GetTable()
 {
-    LwpTable *pTable = static_cast<LwpTable *>(m_Content.obj());
+    LwpTable *pTable = dynamic_cast<LwpTable *>(m_Content.obj());
     return pTable;
 }
 /**
@@ -585,7 +585,7 @@ void LwpTableLayout::RegisterColumns()
     // Get total width of justifiable columns
     // NOTICE: all default columns are regarded as justifiable columns
     LwpObjectID *pColumnID = GetColumnLayoutHead();
-    LwpColumnLayout * pColumnLayout = static_cast<LwpColumnLayout *>(pColumnID->obj());
+    LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj());
     while (pColumnLayout)
     {
         m_pColumns[pColumnLayout->GetColumnID()] = pColumnLayout;
@@ -597,7 +597,7 @@ void LwpTableLayout::RegisterColumns()
         }
 
         pColumnID = pColumnLayout->GetNext();
-        pColumnLayout = static_cast<LwpColumnLayout *>(pColumnID->obj());
+        pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj());
     }
 
     // if all columns are not justifiable, the rightmost column will be changed to justifiable
@@ -676,14 +676,14 @@ void LwpTableLayout::RegisterRows()
 
     // register style of rows
     LwpObjectID * pRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
         pRowID = pRowLayout->GetNext();
-        pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     }
 }
 /**
@@ -716,7 +716,7 @@ void LwpTableLayout::RegisterStyle()
     LwpObjectID * pID= pTable->GetDefaultCellStyle();
     if (pID)
     {
-        m_pDefaultCellLayout = static_cast<LwpCellLayout *>(pID->obj());
+        m_pDefaultCellLayout = dynamic_cast<LwpCellLayout *>(pID->obj());
     }
 
     // register columns styles
@@ -1261,7 +1261,7 @@ void LwpTableLayout::ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uIn
     {
         // add row to table
         LwpObjectID *pColID = GetColumnLayoutHead();
-        LwpColumnLayout * pColumnLayout = static_cast<LwpColumnLayout *>(pColID->obj());
+        LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColID->obj());
         while (pColumnLayout)
         {
             if (pColumnLayout->GetColumnID() == (iLoop+nStartCol))
@@ -1270,7 +1270,7 @@ void LwpTableLayout::ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uIn
                 break;
             }
             pColID = pColumnLayout->GetNext();
-            pColumnLayout = static_cast<LwpColumnLayout *>(pColID->obj());
+            pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColID->obj());
         }
         if (!pColumnLayout)
         {
@@ -1403,14 +1403,14 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
  LwpRowLayout* LwpTableLayout::GetRowLayout(sal_uInt16 nRow)
 {
     LwpObjectID *pRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     while (pRowLayout)
     {
         if(pRowLayout->GetRowID() == nRow)
             return pRowLayout;
 
         pRowID = pRowLayout->GetNext();
-        pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj());
     }
     return NULL;
 }
@@ -1488,7 +1488,7 @@ LwpRowHeadingLayout * LwpTableHeadingLayout::GetFirstRowHeadingLayout()
     LwpObjectID *pID = GetChildHead();
     if(pID && !pID->IsNull())
     {
-        LwpRowHeadingLayout * pHeadingRow = static_cast<LwpRowHeadingLayout *>(pID->obj());
+        LwpRowHeadingLayout * pHeadingRow = dynamic_cast<LwpRowHeadingLayout *>(pID->obj());
         return pHeadingRow;
     }
     return NULL;

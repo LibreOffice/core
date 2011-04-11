@@ -85,11 +85,9 @@ SvStream* LwpChartStreamTools::GetChartStream(LwpSvStream* pDocStream, const cha
     SvStream* pStream = NULL;
     pSvStream->Seek(0);
     OpenStormBento::LtcBenContainer* pContainer = NULL;;
-    ULONG nRet = OpenStormBento::BenOpenContainer(pSvStream,&pContainer);
-    if ( 0==nRet )
-    {
+    sal_uLong nRet = OpenStormBento::BenOpenContainer(pSvStream,&pContainer);
+    if (nRet != OpenStormBento::BenErr_OK)
         pStream = pContainer->FindValueStreamWithPropertyName(pChartName);
-    }
     return pStream;
 }
 

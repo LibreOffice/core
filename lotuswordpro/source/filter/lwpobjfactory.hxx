@@ -101,8 +101,8 @@ private:
                 return(rKey1==rKey2);
             }
     };
-    typedef boost::unordered_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpObjMap;
-    LwpObjMap m_ObjList;
+    typedef boost::unordered_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpIdToObjMap;
+    LwpIdToObjMap m_IdToObjList;
     LwpIndexManager m_IndexMgr;
     void ClearObjectMap();
 

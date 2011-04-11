@@ -112,7 +112,7 @@ private:
     };
 
 public:
-    void Read(LwpSvStream &pStrm);
+    bool Read(LwpSvStream &pStrm);
     inline sal_uInt32 GetTag();
     inline sal_uInt32 GetSize();
     inline LwpObjectID* GetID();
