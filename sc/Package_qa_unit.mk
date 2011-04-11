@@ -1,4 +1,3 @@
-#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,7 +11,11 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-# Norbert Thiebaud <nthiebaud@gmail.com> (C) 2010, All Rights Reserved.
+#        Bjoern Michaelsen <bjoern.michaelsen@canonical.com> (Canonical Ltd.)
+# Portions created by the Initial Developer are Copyright (C) 2011 the
+# Initial Developer. All Rights Reserved.
+#
+# Contributor(s): Bjoern Michaelsen <bjoern.michaelsen@canonical.com> (Canonical Ltd.)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 3 or later (the "GPLv3+"), or
@@ -20,22 +23,22 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sc))
+$(eval $(call gb_Package_Package,sc_qa_unit,$(WORKDIR)/CustomTarget/sc/qa/unit))
+$(eval $(call gb_Package_add_customtarget,sc_qa_unit,sc/qa/unit))
 
-$(eval $(call gb_Module_add_targets,sc,\
-        AllLangResTarget_sc \
-        Library_sc \
-        Library_scd \
-        Library_scfilt \
-        Library_scui \
-        Library_vbaobj \
-        Package_uiconfig \
-        Package_xml \
+# dependencies that cause the CustomTarget Makefile to be called recursively for
+# (re)build
+$(eval $(call gb_CustomTarget_add_outdir_dependencies,sc/qa/unit,\
+	$(foreach newcomponentfile,\
+		framework/util/fwk \
+		sfx2/util/sfx \
+		unoxml/source/service/unoxml,\
+	$(OUTDIR)/xml/component/$(newcomponentfile).component) \
+	$(foreach oldcomponentfile, \
+		i18npool \
+		ucb1 \
+		ucpfile1, \
+	$(OUTDIR)/xml/$(oldcomponentfile).component) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,sc,\
-	CppunitTest_sc_ucalc \
-	Package_qa_unit \
-))
-
-
+# vim: set noet sw=4:
