@@ -48,6 +48,10 @@ dummy:
 
 CFLAGS+= $(KDE_CFLAGS)
 
+.IF "$(COM)" == "GCC"
+CFLAGSCXX+=-Wno-shadow
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
