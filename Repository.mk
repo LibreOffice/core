@@ -61,6 +61,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwm \
     i18npaper \
     lng \
+    lwpft \
     msfilter \
     msword \
     oox \
@@ -105,6 +106,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     cppunit \
     fileacc \
     icui18n \
+    icule \
     icuuc \
     rdf \
     xslt \

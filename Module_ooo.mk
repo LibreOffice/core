@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     fileaccess \
     forms \
     framework \
+    lotuswordpro \
     padmin \
     sfx2 \
     sot \
