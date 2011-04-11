@@ -66,8 +66,7 @@ namespace dxcanvas
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper<
-                                                 ::canvas::DisposingDisambiguate< WindowGraphicDeviceBase_Base > >,
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                    SpriteDeviceHelper,
                                                    ::osl::MutexGuard,
                                                    ::cppu::OWeakObject >    SpriteCanvasBase_Base;
